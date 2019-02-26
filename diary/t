@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ $# != 1 ]; then
+	echo "USAGE: $0 title"
+	exit 1
+fi
+filename=`date +%Y-%m-%d`-$1
+week=`date +%A`
+
+if [ ! -e $filename ]; then
+	touch $filename.md
+	echo  "creating file $filename.md ok!!!!"
+	echo  "$filename	$week	weather:" > $filename.md
+	echo  "--------------------" >> $filename.md
+	echo  "# $1 \n" >> $filename.md
+	open $filename.md
+	exit
+fi
+echo "file $filename.md is exists"
+open $filename.md

@@ -1,0 +1,34 @@
+#!/bin/bash
+
+usage ()
+{
+	echo "USAGE: $0 category filename"
+}
+
+echo $1 $2
+if [ $# -ne 2 ]; then
+	usage
+	exit 1
+fi
+
+
+f=_posts/`date +%F`-$2.md
+echo $f
+t=`date +%F`" "`date +%T`
+if [ -e "$f" ]; then
+	echo "file "$f" is existed"
+	echo "Now open the "$f""
+	open "$f"
+	exit 1
+fi
+echo $t
+echo '---' > "$f"
+echo "title: $2" >> "$f"
+echo "categories:" >> "$f"
+echo "  - $1" >> "$f"
+echo "date: $t">> "$f"
+echo "updated: $t">> "$f"
+echo "tags: ">> "$f"
+echo "  - $1">> "$f"
+echo "---">> "$f"
+open "$f"
