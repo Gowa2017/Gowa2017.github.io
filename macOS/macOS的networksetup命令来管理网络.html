@@ -1,4 +1,417 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>macOS的networksetup命令来管理网络 | 退思园</title><link rel="stylesheet" type="text/css" href="//fonts.loli.net/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.3"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.3"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css?v=2.0.3"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js?v=2.0.3"></script><script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js?v=2.0.3"></script></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">macOS的networksetup命令来管理网络</h1><a id="logo" href="/.">退思园</a><p class="description">烦恼一般都是想太多了。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/workflow"><i class="fa fa-rss"> workflow</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="搜索"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">macOS的networksetup命令来管理网络</h1><div class="post-meta"><a href="/macOS/macOS的networksetup命令来管理网络.html#comments" class="comment-count"><i data-disqus-identifier="macOS/macOS的networksetup命令来管理网络.html" class="disqus-comment-count"></i>留言</a><p><span class="date">Nov 12, 2018</span><span><a href="/categories/macOS/" class="category">macOS</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><p>主要的原因是需要在电脑上同时连接内外网的时候，每次都需要在我所使用的 Wi-Fi 网卡上附加一个我们内网的 IP：172.28.20.1/16 之后再加上一个路由。但是每次重启电脑后都得重新添加。当然，我们可以以脚本的形式在登录时进行执行，或者用 automator 建立一个小程序，给用户进行 LoginItems 内弄上。但这觉得都不是根本的解决办法。<br><a id="more"></a></p>
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="macOS,networksetup,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="主要的原因是需要在电脑上同时连接内外网的时候，每次都需要在我所使用的 Wi-Fi 网卡上附加一个我们内网的 IP：172.28.20.1/16 之后再加上一个路由。但是每次重启电脑后都得重新添加。当然，我们可以以脚本的形式在登录时进行执行，或者用 automator 建立一个小程序，给用户进行 LoginItems 内弄上。但这觉得都不是根本的解决办法。">
+<meta name="keywords" content="macOS,networksetup">
+<meta property="og:type" content="article">
+<meta property="og:title" content="macOS的networksetup命令来管理网络">
+<meta property="og:url" content="https://gowa.club/macOS/macOS的networksetup命令来管理网络.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="主要的原因是需要在电脑上同时连接内外网的时候，每次都需要在我所使用的 Wi-Fi 网卡上附加一个我们内网的 IP：172.28.20.1/16 之后再加上一个路由。但是每次重启电脑后都得重新添加。当然，我们可以以脚本的形式在登录时进行执行，或者用 automator 建立一个小程序，给用户进行 LoginItems 内弄上。但这觉得都不是根本的解决办法。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-12T14:31:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="macOS的networksetup命令来管理网络">
+<meta name="twitter:description" content="主要的原因是需要在电脑上同时连接内外网的时候，每次都需要在我所使用的 Wi-Fi 网卡上附加一个我们内网的 IP：172.28.20.1/16 之后再加上一个路由。但是每次重启电脑后都得重新添加。当然，我们可以以脚本的形式在登录时进行执行，或者用 automator 建立一个小程序，给用户进行 LoginItems 内弄上。但这觉得都不是根本的解决办法。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '8LQ0Z7JZKO',
+      apiKey: '5d3485c20d60066c59575f644f5b3da9',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://gowa.club/macOS/macOS的networksetup命令来管理网络.html">
+
+
+
+
+
+  <title>macOS的networksetup命令来管理网络 | 退思园</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-137245514-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  
+  <div class="algolia-popup popup search-popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+  </div>
+
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/macOS/macOS的networksetup命令来管理网络.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">macOS的networksetup命令来管理网络</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-12T22:31:12+08:00">
+                2018-11-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/macOS/" itemprop="url" rel="index">
+                    <span itemprop="name">macOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/macOS/macOS的networksetup命令来管理网络.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="macOS/macOS的networksetup命令来管理网络.html" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>主要的原因是需要在电脑上同时连接内外网的时候，每次都需要在我所使用的 Wi-Fi 网卡上附加一个我们内网的 IP：172.28.20.1/16 之后再加上一个路由。但是每次重启电脑后都得重新添加。当然，我们可以以脚本的形式在登录时进行执行，或者用 automator 建立一个小程序，给用户进行 LoginItems 内弄上。但这觉得都不是根本的解决办法。<br><a id="more"></a></p>
 <h1 id="一句话介绍"><a href="#一句话介绍" class="headerlink" title="一句话介绍"></a>一句话介绍</h1><p>networksetup 是在系统偏好设置中对网络设定进行配置的工具。 networksetup 命令最少需要 <code>admin</code> 权限。 大多数的配置命令都需要 <code>root</code> 权限。</p>
 <p>在任何需要密码的地方，可以用 <code>-</code> 代替，表示从标准输入读入密码。</p>
 <h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">networksetup [-listnetworkserviceorder] [-listallnetworkservices] [-listallhardwareports] [-detectnewhardware] [-getmacaddress hardwareport]</span><br><span class="line">             [-getcomputername] [-setcomputername computername] [-getinfo networkservice] [-setmanual networkservice ip subnet router]</span><br><span class="line">             [-setdhcp networkservice [clientid]] [-setbootp networkservice] [-setmanualwithdhcprouter networkservice ip]</span><br><span class="line">             [-getadditionalroutes networkservice]</span><br><span class="line">             [-setadditionalroutes networkservice [dest1 mask1 gate1] [dest2 mask2 gate2] ... [destN maskN gateN]] [-setv4off networkservice]</span><br><span class="line">             [-setv6off networkservice] [-setv6automatic networkservice] [-setv6linklocal networkservice]</span><br><span class="line">             [-setv6manual networkservice address prefixLength router] [-getv6additionalroutes networkservice]</span><br><span class="line">             [-setv6additionalroutes networkservice [dest1 prefixlength1 gate1] [dest2 prefixlength2 gate2] ... [destN prefixlengthN gateN]]</span><br><span class="line">             [-getdnsservers networkservice] [-setdnsservers networkservice dns1 [dns2] [...]] [-getsearchdomains networkservice]</span><br><span class="line">             [-setsearchdomains networkservice domain1 [domain2] [...]] [-create6to4service networkservicename] [-set6to4automatic networkservice]</span><br><span class="line">             [-set6to4manual networkservice relayAddress] [-getftpproxy networkservice]</span><br><span class="line">             [-setftpproxy networkservice domain portnumber authenticated username password] [-setftpproxystate networkservice on | off]</span><br><span class="line">             [-getwebproxy networkservice] [-setwebproxy networkservice domain portnumber authenticated username password]</span><br><span class="line">             [-setwebproxystate networkservice on | off] [-getsecurewebproxy networkservice]</span><br><span class="line">             [-setsecurewebproxy networkservice domain portnumber authenticated username password] [-setsecurewebproxystate networkservice on | off]</span><br><span class="line">             [-getstreamingproxy networkservice] [-setstreamingproxy networkservice domain portnumber authenticated username password]</span><br><span class="line">             [-setstreamingproxystate networkservice on | off] [-getgopherproxy networkservice]</span><br><span class="line">             [-setgopherproxy networkservice domain portnumber authenticated username password] [-setgopherproxystate networkservice on | off]</span><br><span class="line">             [-getsocksfirewallproxy networkservice] [-setsocksfirewallproxy networkservice domain portnumber authenticated username password]</span><br><span class="line">             [-setsocksfirewallproxystate networkservice on | off] [-getproxybypassdomains networkservice]</span><br><span class="line">             [-setproxybypassdomains networkservice domain1 [domain2] [...]] [-getproxyautodiscovery networkservice]</span><br><span class="line">             [-setproxyautodiscovery networkservice on | off] [-getpassiveftp networkservice] [-setpassiveftp networkservice on | off]</span><br><span class="line">             [-getairportnetwork device] [-setairportnetwork device network [password]] [-getairportpower device] [-setairportpower device on | off]</span><br><span class="line">             [-listpreferredwirelessnetworks hardwareport] [-addpreferredwirelessnetworkatindex hardwareport network index securitytype [password]]</span><br><span class="line">             [-removepreferredwirelessnetwork hardwareport network] [-removeallpreferredwirelessnetworks hardwareport]</span><br><span class="line">             [-getnetworkserviceenabled networkservice] [-setnetworkserviceenabled networkservice on | off]</span><br><span class="line">             [-createnetworkservice networkservicename hardwareport] [-renamenetworkservice networkservice newnetworkservicename]</span><br><span class="line">             [-duplicatenetworkservice networkservice newnetworkservicename] [-removenetworkservice networkservice]</span><br><span class="line">             [-ordernetworkservices service1 [service2] [service3] [...]] [-getMTU hardwareport] [-setMTU hardwarePort value]</span><br><span class="line">             [-listvalidMTUrange hardwareport] [-getmedia hardwareport] [-setmedia hardwareport subtype [option1] [option2] [...]]</span><br><span class="line">             [-listvalidmedia hardwareport] [-createVLAN name parentdevice tag] [-deleteVLAN name parentdevice tag] [-listVLANs]</span><br><span class="line">             [-listdevicesthatsupportVLAN] [-isBondSupported device] [-createBond name [device1] [device2] [...]] [-deleteBond bond]</span><br><span class="line">             [-addDeviceToBond device bond] [-removeDeviceFromBond device bond] [-listBonds] [-showBondStatus bond] [-listpppoeservices]</span><br><span class="line">             [-showpppoestatus name] [-createpppoeservice device name account password [pppoeName]] [-deletepppoeservice service]</span><br><span class="line">             [-setpppoeaccountname service account] [-setpppoepassword service password] [-connectpppoeservice service]</span><br><span class="line">             [-disconnectpppoeservice service] [-listlocations] [-getcurrentlocation] [-createlocation location [populate]]</span><br><span class="line">             [-deletelocation location] [-switchtolocation location] [-listalluserprofiles] [-listloginprofiles service]</span><br><span class="line">             [-enablesystemprofile service on | off] [-enableloginprofile service profile on | off] [-enableuserprofile profile on | off]</span><br><span class="line">             [-import8021xProfiles service path] [-export8021xProfiles service path yes | no] [-export8021xUserProfiles path yes | no]</span><br><span class="line">             [-export8021xLoginProfiles service path yes | no] [-export8021xSystemProfile service path yes | no]</span><br><span class="line">             [-settlsidentityonsystemprofile service path passphrase] [-settlsidentityonuserprofile profile path passphrase]</span><br><span class="line">             [-deletesystemprofile service] [-deleteloginprofile service profile] [-deleteuserprofile profile] [-version] [-help] [-printcommands]</span><br></pre></td></tr></table></figure>
@@ -90,23 +503,470 @@
 <h3 id="createlocation-location-populate"><a href="#createlocation-location-populate" class="headerlink" title="-createlocation location [populate]"></a>-createlocation location [populate]</h3><p>创建位置</p>
 <h3 id="deletelocation-location"><a href="#deletelocation-location" class="headerlink" title="-deletelocation location"></a>-deletelocation location</h3><p>删除位置</p>
 <h3 id="switchtolocation-location"><a href="#switchtolocation-location" class="headerlink" title="-switchtolocation location"></a>-switchtolocation location</h3><p>切换位置。</p>
-</div><div class="post-copyright"><blockquote><p>原文作者: Gowa2017 Zhang</p><p>原文链接: <a href="https://gowa.club/macOS/macOS的networksetup命令来管理网络.html">https://gowa.club/macOS/macOS的networksetup命令来管理网络.html</a></p><p>版权声明: 转载请注明出处(必须保留作者署名及链接)</p></blockquote></div><div class="tags"><a href="/tags/macOS/">macOS</a><a href="/tags/networksetup/">networksetup</a></div><div class="post-share"><div class="social-share"><span>分享到:</span></div></div><div class="post-nav"><a href="/Android/Android的文件系统探究.html" class="pre">Android的文件系统探究</a><a href="/Python/TensorFlow中张量的stack与unstack.html" class="next">TensorFlow中的张量的stack与unstack</a></div><div id="comments"><div id="disqus_thread"></div></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一句话介绍"><span class="toc-text">一句话介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#概要"><span class="toc-text">概要</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络服务"><span class="toc-text">网络服务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#listnetworkserviceorder"><span class="toc-text">-listnetworkserviceorder</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#listallnetworkservices"><span class="toc-text">-listallnetworkservices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#listallhardwareports"><span class="toc-text">-listallhardwareports</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#detectnewhardware"><span class="toc-text">-detectnewhardware</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getmacaddress-hardwareport"><span class="toc-text">-getmacaddress hardwareport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getcomputername"><span class="toc-text">-getcomputername</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setcomputername"><span class="toc-text">-setcomputername</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getinfo-netwokservice"><span class="toc-text">-getinfo netwokservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setmanual-networkservice-ip-subnet-router"><span class="toc-text">-setmanual networkservice ip subnet router</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setdhcp-networkservice-clientid"><span class="toc-text">-setdhcp networkservice [clientid]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setbootp-networkservice"><span class="toc-text">-setbootp networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setmanualwithdhcprouter-networkservice-ip"><span class="toc-text">-setmanualwithdhcprouter networkservice ip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getadditionalroutes-networkservice"><span class="toc-text">-getadditionalroutes networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setadditionalroutes-networkservice-dest1-mask1-gate1-dest2-mask2-gate2-…-destN-maskN-gateN"><span class="toc-text">-setadditionalroutes networkservice [dest1 mask1 gate1] [dest2 mask2 gate2] … [destN maskN gateN]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setv-4-6-off-networkservice"><span class="toc-text">-setv{4 | 6}off networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setv6automatic-networkservice"><span class="toc-text">-setv6automatic networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setv6linklocal-networkservice"><span class="toc-text">-setv6linklocal networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setv6manual-ip-prefixlength-router"><span class="toc-text">-setv6manual ip prefixlength router</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getv6additionalroutes-networkservice"><span class="toc-text">-getv6additionalroutes networkservice</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#setv6additionalroutes-networkservice-dest1-prefixlength1-gate1-dest2-prefixlength2-gate2-…-destN-prefixlengthN-gateN"><span class="toc-text">-setv6additionalroutes networkservice [dest1 prefixlength1 gate1] [dest2 prefixlength2 gate2] … [destN prefixlengthN gateN]</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#getdnsservers-networkservice"><span class="toc-text">-getdnsservers networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setdnsservers-networkservice-dns1-dns2-…"><span class="toc-text">-setdnsservers networkservice dns1 [dns2] […]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getsearchdomains-networkservice"><span class="toc-text">-getsearchdomains networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setsearchdomains-networkservice-domain1-domain2-…"><span class="toc-text">-setsearchdomains networkservice domain1 [domain2] […]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#create6to4service"><span class="toc-text">-create6to4service -</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set6to4automatic"><span class="toc-text">-set6to4automatic -</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#set6to4manual"><span class="toc-text">-set6to4manual - -</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getftpproxy-networkservice"><span class="toc-text">-getftpproxy networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setftpproxy-networkservice-domain-portnumber-authenticated-username-password"><span class="toc-text">-setftpproxy networkservice domain portnumber authenticated username password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setftpproxystate-networkservice-on-off"><span class="toc-text">-setftpproxystate networkservice on | off</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getwebproxy-networkservice"><span class="toc-text">-getwebproxy networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setwebproxy-networkservice-domain-portnumber-authenticated-username-password"><span class="toc-text">-setwebproxy networkservice domain portnumber authenticated username password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setwebproxystate-networkservice-on-off"><span class="toc-text">-setwebproxystate networkservice on | off</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getsecurewebproxy-networkservice"><span class="toc-text">-getsecurewebproxy networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setsecurewebproxy-networkservice-domain-portnumber-authenticated-username-password"><span class="toc-text">-setsecurewebproxy networkservice domain portnumber authenticated username password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setsecurewebproxystate-networkservice-on-off"><span class="toc-text">-setsecurewebproxystate networkservice on | off</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getstreamingproxy-networkservice"><span class="toc-text">-getstreamingproxy networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setstreamingproxy-networkservice-domain-portnumber-authenticated-username-password"><span class="toc-text">-setstreamingproxy networkservice domain portnumber authenticated username password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setstreamingproxystate-networkservice-on-off"><span class="toc-text">-setstreamingproxystate networkservice on | off</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getgopherproxy-networkservice"><span class="toc-text">-getgopherproxy networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setgopherproxy-networkservice-domain-portnumber-authenticated-username-password"><span class="toc-text">-setgopherproxy networkservice domain portnumber authenticated username password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setgopherproxystate-networkservice-on-off"><span class="toc-text">-setgopherproxystate networkservice on | off</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getsocksfirewallproxy-networkservice"><span class="toc-text">-getsocksfirewallproxy networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setsocksfirewallproxy-networkservice-domain-portnumber-authenticated-username-password"><span class="toc-text">-setsocksfirewallproxy networkservice domain portnumber authenticated username password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setsocksfirewallproxystate-networkservice-on-off"><span class="toc-text">-setsocksfirewallproxystate networkservice on | off</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getproxybypassdomains-networkservice"><span class="toc-text">-getproxybypassdomains networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setproxybypassdomains-networkservice-domain1-domain2-…"><span class="toc-text">-setproxybypassdomains networkservice domain1 [domain2] […]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getproxyautodiscovery-networkservice"><span class="toc-text">-getproxyautodiscovery networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setproxyautodiscovery-networkservice-on-off"><span class="toc-text">-setproxyautodiscovery networkservice on | off</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getpassiveftp-networkservice"><span class="toc-text">-getpassiveftp networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setpassiveftp-networkservice-on-off"><span class="toc-text">-setpassiveftp networkservice {on | off}</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setautoproxyurl-networkservice-url"><span class="toc-text">-setautoproxyurl networkservice url</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getautoproxyurl-networkservice"><span class="toc-text">-getautoproxyurl networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setsocksfirewallproxystate-networkservice-on-off-1"><span class="toc-text">-setsocksfirewallproxystate networkservice on | off</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getairportnetwork-hardwareport"><span class="toc-text">-getairportnetwork hardwareport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setairportnetwork-hardwareport-network-password"><span class="toc-text">-setairportnetwork hardwareport network [password]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getairportpower-hardwareport"><span class="toc-text">-getairportpower hardwareport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setairportpower-hardwareport-on-off"><span class="toc-text">-setairportpower hardwareport on | off</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#listpreferredwirelessnetworks-hardwareport"><span class="toc-text">-listpreferredwirelessnetworks hardwareport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#addpreferredwirelessnetworkatindex-hardwareport-network-index-securitytype-password"><span class="toc-text">-addpreferredwirelessnetworkatindex hardwareport network index securitytype [password]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#removepreferredwirelessnetwork-hardwareport-network"><span class="toc-text">-removepreferredwirelessnetwork hardwareport network</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#removeallpreferredwirelessnetworks-hardwareport"><span class="toc-text">-removeallpreferredwirelessnetworks hardwareport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getnetworkserviceenabled-networkservice"><span class="toc-text">-getnetworkserviceenabled networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setnetworkserviceenabled-networkservice-on-off"><span class="toc-text">-setnetworkserviceenabled networkservice on | off</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#createnetworkservice-networkservicename-hardwareport"><span class="toc-text">-createnetworkservice networkservicename hardwareport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#renamenetworkservice-networkservice-newnetworkservicename"><span class="toc-text">-renamenetworkservice networkservice newnetworkservicename</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#duplicatenetworkservice-networkservice-newnetworkservicename"><span class="toc-text">-duplicatenetworkservice networkservice newnetworkservicename</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#removenetworkservice-networkservice"><span class="toc-text">-removenetworkservice networkservice</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ordernetworkservices-service1-service2-service3-…"><span class="toc-text">-ordernetworkservices service1 [service2] [service3] […]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getMTU-hardwareport"><span class="toc-text">-getMTU hardwareport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setMTU-hardwarePort-value"><span class="toc-text">-setMTU hardwarePort value</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#listValidMTURange-hardwareport"><span class="toc-text">-listValidMTURange hardwareport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getMedia-hardwareport"><span class="toc-text">-getMedia hardwareport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setMedia-hardwareport-subtype-option1-option2-…"><span class="toc-text">-setMedia hardwareport subtype [option1] [option2] […]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#listValidMedia-hardwareport"><span class="toc-text">-listValidMedia hardwareport</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#createVLAN-name-parentdevice-tag"><span class="toc-text">-createVLAN name parentdevice tag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#deleteVLAN-name-parentdevice-tag"><span class="toc-text">-deleteVLAN name parentdevice tag</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#listVLANs"><span class="toc-text">-listVLANs</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#listdevicesthatsupportVLAN"><span class="toc-text">-listdevicesthatsupportVLAN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#isBondSupported-device"><span class="toc-text">-isBondSupported device</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#createBond-name-device1-device2-…"><span class="toc-text">-createBond name [device1] [device2] […]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#deleteBond-bond"><span class="toc-text">-deleteBond bond</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#addDeviceToBond-device-bond"><span class="toc-text">-addDeviceToBond device bond</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#listBonds"><span class="toc-text">-listBonds</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#showBondStatus-bond"><span class="toc-text">-showBondStatus bond</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pppoe相关"><span class="toc-text">pppoe相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#listpppoeservices"><span class="toc-text">-listpppoeservices</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#showpppoestatus-name"><span class="toc-text">-showpppoestatus name</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#createpppoeservice-device-name-account-password-pppoeName"><span class="toc-text">-createpppoeservice device name account password [pppoeName]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#deletepppoeservice-service"><span class="toc-text">-deletepppoeservice service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setpppoeaccountname-service-account"><span class="toc-text">-setpppoeaccountname service account</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setpppoepassword-service-password"><span class="toc-text">-setpppoepassword service password</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#connectpppoeservice-service"><span class="toc-text">-connectpppoeservice service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#disconnectpppoeservice-service"><span class="toc-text">-disconnectpppoeservice service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#listlocations"><span class="toc-text">-listlocations</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getcurrentlocation"><span class="toc-text">-getcurrentlocation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#createlocation-location-populate"><span class="toc-text">-createlocation location [populate]</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#deletelocation-location"><span class="toc-text">-deletelocation location</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#switchtolocation-location"><span class="toc-text">-switchtolocation location</span></a></li></ol></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/Android/Hooking-Linux中的共享库函数.html">Hooking-Linux中的共享库函数</a></li><li class="post-list-item"><a class="post-list-link" href="/Android/Riru来注入Zygote进程.html">Riru来注入Zygote进程</a></li><li class="post-list-item"><a class="post-list-link" href="/Android/Android的权限检查过程.html">Android的权限检查过程</a></li><li class="post-list-item"><a class="post-list-link" href="/Android/Android的服务管理.html">Android的服务管理</a></li><li class="post-list-item"><a class="post-list-link" href="/Cpp/使用Clang进行交叉编译.html">使用Clang进行交叉编译</a></li><li class="post-list-item"><a class="post-list-link" href="/Cocos-Creator/Cocos-Creator安卓下的启动流程.html">Cocos-Creator安卓下的启动流程</a></li><li class="post-list-item"><a class="post-list-link" href="/Android/Android中模拟输入的实现.html">Android中模拟输入的实现</a></li><li class="post-list-item"><a class="post-list-link" href="/Lua/Lua中的协程.html">Lua中的协程</a></li><li class="post-list-item"><a class="post-list-link" href="/Android/Auto.js截图后在相册无法立即显示.html">Auto.js截图后在相册无法立即显示</a></li><li class="post-list-item"><a class="post-list-link" href="/Lua/luasocket中的http实现.html">luasocket中的http实现</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Android/">Android</a><span class="category-list-count">46</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Asm/">Asm</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Cocos-Creator/">Cocos Creator</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Cocos2d-X/">Cocos2d-X</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Cpp/">Cpp</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Device/">Device</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/GTD/">GTD</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/">Golang</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Java/">Java</a><span class="category-list-count">42</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Kindle/">Kindle</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux-Unix/">Linux/Unix</a><span class="category-list-count">46</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Lua/">Lua</a><span class="category-list-count">24</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Misc/">Misc</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python/">Python</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/RxJava/">RxJava</a><span class="category-list-count">10</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TCP-IP/">TCP/IP</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vim/">Vim</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Windows/">Windows</a><span class="category-list-count">16</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/macOS/">macOS</a><span class="category-list-count">9</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/数据库/">数据库</a><span class="category-list-count">25</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-biao"> 标签</i></div><div class="tagcloud"><a href="/tags/Dagger/" style="font-size: 15px;">Dagger</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/Vim/" style="font-size: 15px;">Vim</a> <a href="/tags/brew/" style="font-size: 15px;">brew</a> <a href="/tags/macOS/" style="font-size: 15px;">macOS</a> <a href="/tags/Java/" style="font-size: 15px;">Java</a> <a href="/tags/The-Java-Tutorial/" style="font-size: 15px;">The Java Tutorial</a> <a href="/tags/launchd/" style="font-size: 15px;">launchd</a> <a href="/tags/SED/" style="font-size: 15px;">SED</a> <a href="/tags/SHELL/" style="font-size: 15px;">SHELL</a> <a href="/tags/运维/" style="font-size: 15px;">运维</a> <a href="/tags/Golang/" style="font-size: 15px;">Golang</a> <a href="/tags/Lua/" style="font-size: 15px;">Lua</a> <a href="/tags/Skynet/" style="font-size: 15px;">Skynet</a> <a href="/tags/PIL/" style="font-size: 15px;">PIL</a> <a href="/tags/So/" style="font-size: 15px;">So</a> <a href="/tags/Cocos2d-X/" style="font-size: 15px;">Cocos2d-X</a> <a href="/tags/Apue/" style="font-size: 15px;">Apue</a> <a href="/tags/Rsync/" style="font-size: 15px;">Rsync</a> <a href="/tags/LVM/" style="font-size: 15px;">LVM</a> <a href="/tags/Android/" style="font-size: 15px;">Android</a> <a href="/tags/Svn/" style="font-size: 15px;">Svn</a> <a href="/tags/RxJava/" style="font-size: 15px;">RxJava</a> <a href="/tags/Thread/" style="font-size: 15px;">Thread</a> <a href="/tags/Git/" style="font-size: 15px;">Git</a> <a href="/tags/Docx4j/" style="font-size: 15px;">Docx4j</a> <a href="/tags/Docx/" style="font-size: 15px;">Docx</a> <a href="/tags/SpringMVC/" style="font-size: 15px;">SpringMVC</a> <a href="/tags/MVP/" style="font-size: 15px;">MVP</a> <a href="/tags/CentOS/" style="font-size: 15px;">CentOS</a> <a href="/tags/REST/" style="font-size: 15px;">REST</a> <a href="/tags/Maven/" style="font-size: 15px;">Maven</a> <a href="/tags/VNC/" style="font-size: 15px;">VNC</a> <a href="/tags/Poi/" style="font-size: 15px;">Poi</a> <a href="/tags/SSH/" style="font-size: 15px;">SSH</a> <a href="/tags/X5/" style="font-size: 15px;">X5</a> <a href="/tags/Tbs/" style="font-size: 15px;">Tbs</a> <a href="/tags/Retrofit/" style="font-size: 15px;">Retrofit</a> <a href="/tags/Cocos-Creator/" style="font-size: 15px;">Cocos Creator</a> <a href="/tags/TensorFlow/" style="font-size: 15px;">TensorFlow</a> <a href="/tags/Python/" style="font-size: 15px;">Python</a> <a href="/tags/Lsyncd/" style="font-size: 15px;">Lsyncd</a> <a href="/tags/ML/" style="font-size: 15px;">ML</a> <a href="/tags/Oracle/" style="font-size: 15px;">Oracle</a> <a href="/tags/Pandas/" style="font-size: 15px;">Pandas</a> <a href="/tags/KVM/" style="font-size: 15px;">KVM</a> <a href="/tags/Sqlplus/" style="font-size: 15px;">Sqlplus</a> <a href="/tags/networksetup/" style="font-size: 15px;">networksetup</a> <a href="/tags/php/" style="font-size: 15px;">php</a> <a href="/tags/apache/" style="font-size: 15px;">apache</a> <a href="/tags/Curl/" style="font-size: 15px;">Curl</a> <a href="/tags/PAC/" style="font-size: 15px;">PAC</a> <a href="/tags/NFS/" style="font-size: 15px;">NFS</a> <a href="/tags/JavaScript/" style="font-size: 15px;">JavaScript</a> <a href="/tags/Promise/" style="font-size: 15px;">Promise</a> <a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/Pomelo/" style="font-size: 15px;">Pomelo</a> <a href="/tags/Vue/" style="font-size: 15px;">Vue</a> <a href="/tags/Gson/" style="font-size: 15px;">Gson</a> <a href="/tags/GTD/" style="font-size: 15px;">GTD</a> <a href="/tags/Shell/" style="font-size: 15px;">Shell</a> <a href="/tags/Spring/" style="font-size: 15px;">Spring</a> <a href="/tags/Tomcat/" style="font-size: 15px;">Tomcat</a> <a href="/tags/VIM/" style="font-size: 15px;">VIM</a> <a href="/tags/Room/" style="font-size: 15px;">Room</a> <a href="/tags/Windows/" style="font-size: 15px;">Windows</a> <a href="/tags/MFC/" style="font-size: 15px;">MFC</a> <a href="/tags/Cpp/" style="font-size: 15px;">Cpp</a> <a href="/tags/ffmpeg/" style="font-size: 15px;">ffmpeg</a> <a href="/tags/逆向/" style="font-size: 15px;">逆向</a> <a href="/tags/Asm/" style="font-size: 15px;">Asm</a> <a href="/tags/JNI/" style="font-size: 15px;">JNI</a> <a href="/tags/Auto-js/" style="font-size: 15px;">Auto.js</a> <a href="/tags/Hooking/" style="font-size: 15px;">Hooking</a> <a href="/tags/Aix/" style="font-size: 15px;">Aix</a> <a href="/tags/RegEx/" style="font-size: 15px;">RegEx</a> <a href="/tags/Kindle/" style="font-size: 15px;">Kindle</a> <a href="/tags/DHCP/" style="font-size: 15px;">DHCP</a> <a href="/tags/TCP-IP/" style="font-size: 15px;">TCP/IP</a> <a href="/tags/F5/" style="font-size: 15px;">F5</a> <a href="/tags/负载均衡/" style="font-size: 15px;">负载均衡</a> <a href="/tags/AWK/" style="font-size: 15px;">AWK</a> <a href="/tags/Iptables/" style="font-size: 15px;">Iptables</a> <a href="/tags/Mysql/" style="font-size: 15px;">Mysql</a> <a href="/tags/OSPF/" style="font-size: 15px;">OSPF</a> <a href="/tags/数据库/" style="font-size: 15px;">数据库</a> <a href="/tags/Oralce/" style="font-size: 15px;">Oralce</a> <a href="/tags/PPPoE/" style="font-size: 15px;">PPPoE</a> <a href="/tags/Device/" style="font-size: 15px;">Device</a> <a href="/tags/Raid/" style="font-size: 15px;">Raid</a> <a href="/tags/磁盘阵列/" style="font-size: 15px;">磁盘阵列</a> <a href="/tags/Syslog/" style="font-size: 15px;">Syslog</a> <a href="/tags/Tcpdump/" style="font-size: 15px;">Tcpdump</a> <a href="/tags/Github/" style="font-size: 15px;">Github</a> <a href="/tags/Markdown/" style="font-size: 15px;">Markdown</a> <a href="/tags/Nginx/" style="font-size: 15px;">Nginx</a> <a href="/tags/Php/" style="font-size: 15px;">Php</a> <a href="/tags/设备信息查看/" style="font-size: 15px;">设备信息查看</a> <a href="/tags/Activiti/" style="font-size: 15px;">Activiti</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">十一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">十月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">九月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">八月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">四月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">十月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">九月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/08/">八月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">二月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">十一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">十一月 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">网站地图</a> |  <a href="/atom.xml">订阅本站</a> |  <a href="/about/">联系博主</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次，本站总访客数:<i id="busuanzi_container_site_uv"><i id="busuanzi_value_site_uv"></i></i>人</p><p><span> Copyright &copy;<a href="/." rel="nofollow">Gowa2017 Zhang.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-ga('create','UA-137245514-1','auto');ga('send','pageview');
-</script><script type="text/javascript" src="/js/search.json.js?v=2.0.3"></script><<<<<<< Updated upstream<script type="text/x-mathjax-config">MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    processEscapes: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/macOS/" rel="tag"># macOS</a>
+          
+            <a href="/tags/networksetup/" rel="tag"># networksetup</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/Python/TensorFlow中张量的stack与unstack.html" rel="next" title="TensorFlow中的张量的stack与unstack">
+                <i class="fa fa-chevron-left"></i> TensorFlow中的张量的stack与unstack
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/Android/Android的文件系统探究.html" rel="prev" title="Android的文件系统探究">
+                Android的文件系统探究 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">282</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">102</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/gowa2017" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:shouzheng.zhang@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-json"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一句话介绍"><span class="nav-number">1.</span> <span class="nav-text">一句话介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#概要"><span class="nav-number">2.</span> <span class="nav-text">概要</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络服务"><span class="nav-number">2.1.</span> <span class="nav-text">网络服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#listnetworkserviceorder"><span class="nav-number">2.1.1.</span> <span class="nav-text">-listnetworkserviceorder</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listallnetworkservices"><span class="nav-number">2.1.2.</span> <span class="nav-text">-listallnetworkservices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listallhardwareports"><span class="nav-number">2.1.3.</span> <span class="nav-text">-listallhardwareports</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#detectnewhardware"><span class="nav-number">2.1.4.</span> <span class="nav-text">-detectnewhardware</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getmacaddress-hardwareport"><span class="nav-number">2.1.5.</span> <span class="nav-text">-getmacaddress hardwareport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getcomputername"><span class="nav-number">2.1.6.</span> <span class="nav-text">-getcomputername</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setcomputername"><span class="nav-number">2.1.7.</span> <span class="nav-text">-setcomputername</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getinfo-netwokservice"><span class="nav-number">2.1.8.</span> <span class="nav-text">-getinfo netwokservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setmanual-networkservice-ip-subnet-router"><span class="nav-number">2.1.9.</span> <span class="nav-text">-setmanual networkservice ip subnet router</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setdhcp-networkservice-clientid"><span class="nav-number">2.1.10.</span> <span class="nav-text">-setdhcp networkservice [clientid]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setbootp-networkservice"><span class="nav-number">2.1.11.</span> <span class="nav-text">-setbootp networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setmanualwithdhcprouter-networkservice-ip"><span class="nav-number">2.1.12.</span> <span class="nav-text">-setmanualwithdhcprouter networkservice ip</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getadditionalroutes-networkservice"><span class="nav-number">2.1.13.</span> <span class="nav-text">-getadditionalroutes networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setadditionalroutes-networkservice-dest1-mask1-gate1-dest2-mask2-gate2-…-destN-maskN-gateN"><span class="nav-number">2.1.14.</span> <span class="nav-text">-setadditionalroutes networkservice [dest1 mask1 gate1] [dest2 mask2 gate2] … [destN maskN gateN]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setv-4-6-off-networkservice"><span class="nav-number">2.1.15.</span> <span class="nav-text">-setv{4 | 6}off networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setv6automatic-networkservice"><span class="nav-number">2.1.16.</span> <span class="nav-text">-setv6automatic networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setv6linklocal-networkservice"><span class="nav-number">2.1.17.</span> <span class="nav-text">-setv6linklocal networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setv6manual-ip-prefixlength-router"><span class="nav-number">2.1.18.</span> <span class="nav-text">-setv6manual ip prefixlength router</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getv6additionalroutes-networkservice"><span class="nav-number">2.1.19.</span> <span class="nav-text">-getv6additionalroutes networkservice</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setv6additionalroutes-networkservice-dest1-prefixlength1-gate1-dest2-prefixlength2-gate2-…-destN-prefixlengthN-gateN"><span class="nav-number">2.2.</span> <span class="nav-text">-setv6additionalroutes networkservice [dest1 prefixlength1 gate1] [dest2 prefixlength2 gate2] … [destN prefixlengthN gateN]</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#getdnsservers-networkservice"><span class="nav-number">2.2.1.</span> <span class="nav-text">-getdnsservers networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setdnsservers-networkservice-dns1-dns2-…"><span class="nav-number">2.2.2.</span> <span class="nav-text">-setdnsservers networkservice dns1 [dns2] […]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getsearchdomains-networkservice"><span class="nav-number">2.2.3.</span> <span class="nav-text">-getsearchdomains networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setsearchdomains-networkservice-domain1-domain2-…"><span class="nav-number">2.2.4.</span> <span class="nav-text">-setsearchdomains networkservice domain1 [domain2] […]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#create6to4service"><span class="nav-number">2.2.5.</span> <span class="nav-text">-create6to4service -</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set6to4automatic"><span class="nav-number">2.2.6.</span> <span class="nav-text">-set6to4automatic -</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set6to4manual"><span class="nav-number">2.2.7.</span> <span class="nav-text">-set6to4manual - -</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getftpproxy-networkservice"><span class="nav-number">2.2.8.</span> <span class="nav-text">-getftpproxy networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setftpproxy-networkservice-domain-portnumber-authenticated-username-password"><span class="nav-number">2.2.9.</span> <span class="nav-text">-setftpproxy networkservice domain portnumber authenticated username password</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setftpproxystate-networkservice-on-off"><span class="nav-number">2.2.10.</span> <span class="nav-text">-setftpproxystate networkservice on | off</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getwebproxy-networkservice"><span class="nav-number">2.2.11.</span> <span class="nav-text">-getwebproxy networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setwebproxy-networkservice-domain-portnumber-authenticated-username-password"><span class="nav-number">2.2.12.</span> <span class="nav-text">-setwebproxy networkservice domain portnumber authenticated username password</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setwebproxystate-networkservice-on-off"><span class="nav-number">2.2.13.</span> <span class="nav-text">-setwebproxystate networkservice on | off</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getsecurewebproxy-networkservice"><span class="nav-number">2.2.14.</span> <span class="nav-text">-getsecurewebproxy networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setsecurewebproxy-networkservice-domain-portnumber-authenticated-username-password"><span class="nav-number">2.2.15.</span> <span class="nav-text">-setsecurewebproxy networkservice domain portnumber authenticated username password</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setsecurewebproxystate-networkservice-on-off"><span class="nav-number">2.2.16.</span> <span class="nav-text">-setsecurewebproxystate networkservice on | off</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getstreamingproxy-networkservice"><span class="nav-number">2.2.17.</span> <span class="nav-text">-getstreamingproxy networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setstreamingproxy-networkservice-domain-portnumber-authenticated-username-password"><span class="nav-number">2.2.18.</span> <span class="nav-text">-setstreamingproxy networkservice domain portnumber authenticated username password</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setstreamingproxystate-networkservice-on-off"><span class="nav-number">2.2.19.</span> <span class="nav-text">-setstreamingproxystate networkservice on | off</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getgopherproxy-networkservice"><span class="nav-number">2.2.20.</span> <span class="nav-text">-getgopherproxy networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setgopherproxy-networkservice-domain-portnumber-authenticated-username-password"><span class="nav-number">2.2.21.</span> <span class="nav-text">-setgopherproxy networkservice domain portnumber authenticated username password</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setgopherproxystate-networkservice-on-off"><span class="nav-number">2.2.22.</span> <span class="nav-text">-setgopherproxystate networkservice on | off</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getsocksfirewallproxy-networkservice"><span class="nav-number">2.2.23.</span> <span class="nav-text">-getsocksfirewallproxy networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setsocksfirewallproxy-networkservice-domain-portnumber-authenticated-username-password"><span class="nav-number">2.2.24.</span> <span class="nav-text">-setsocksfirewallproxy networkservice domain portnumber authenticated username password</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setsocksfirewallproxystate-networkservice-on-off"><span class="nav-number">2.2.25.</span> <span class="nav-text">-setsocksfirewallproxystate networkservice on | off</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getproxybypassdomains-networkservice"><span class="nav-number">2.2.26.</span> <span class="nav-text">-getproxybypassdomains networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setproxybypassdomains-networkservice-domain1-domain2-…"><span class="nav-number">2.2.27.</span> <span class="nav-text">-setproxybypassdomains networkservice domain1 [domain2] […]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getproxyautodiscovery-networkservice"><span class="nav-number">2.2.28.</span> <span class="nav-text">-getproxyautodiscovery networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setproxyautodiscovery-networkservice-on-off"><span class="nav-number">2.2.29.</span> <span class="nav-text">-setproxyautodiscovery networkservice on | off</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getpassiveftp-networkservice"><span class="nav-number">2.2.30.</span> <span class="nav-text">-getpassiveftp networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setpassiveftp-networkservice-on-off"><span class="nav-number">2.2.31.</span> <span class="nav-text">-setpassiveftp networkservice {on | off}</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setautoproxyurl-networkservice-url"><span class="nav-number">2.2.32.</span> <span class="nav-text">-setautoproxyurl networkservice url</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getautoproxyurl-networkservice"><span class="nav-number">2.2.33.</span> <span class="nav-text">-getautoproxyurl networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setsocksfirewallproxystate-networkservice-on-off-1"><span class="nav-number">2.2.34.</span> <span class="nav-text">-setsocksfirewallproxystate networkservice on | off</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getairportnetwork-hardwareport"><span class="nav-number">2.2.35.</span> <span class="nav-text">-getairportnetwork hardwareport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setairportnetwork-hardwareport-network-password"><span class="nav-number">2.2.36.</span> <span class="nav-text">-setairportnetwork hardwareport network [password]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getairportpower-hardwareport"><span class="nav-number">2.2.37.</span> <span class="nav-text">-getairportpower hardwareport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setairportpower-hardwareport-on-off"><span class="nav-number">2.2.38.</span> <span class="nav-text">-setairportpower hardwareport on | off</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listpreferredwirelessnetworks-hardwareport"><span class="nav-number">2.2.39.</span> <span class="nav-text">-listpreferredwirelessnetworks hardwareport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#addpreferredwirelessnetworkatindex-hardwareport-network-index-securitytype-password"><span class="nav-number">2.2.40.</span> <span class="nav-text">-addpreferredwirelessnetworkatindex hardwareport network index securitytype [password]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#removepreferredwirelessnetwork-hardwareport-network"><span class="nav-number">2.2.41.</span> <span class="nav-text">-removepreferredwirelessnetwork hardwareport network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#removeallpreferredwirelessnetworks-hardwareport"><span class="nav-number">2.2.42.</span> <span class="nav-text">-removeallpreferredwirelessnetworks hardwareport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getnetworkserviceenabled-networkservice"><span class="nav-number">2.2.43.</span> <span class="nav-text">-getnetworkserviceenabled networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setnetworkserviceenabled-networkservice-on-off"><span class="nav-number">2.2.44.</span> <span class="nav-text">-setnetworkserviceenabled networkservice on | off</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#createnetworkservice-networkservicename-hardwareport"><span class="nav-number">2.2.45.</span> <span class="nav-text">-createnetworkservice networkservicename hardwareport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#renamenetworkservice-networkservice-newnetworkservicename"><span class="nav-number">2.2.46.</span> <span class="nav-text">-renamenetworkservice networkservice newnetworkservicename</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#duplicatenetworkservice-networkservice-newnetworkservicename"><span class="nav-number">2.2.47.</span> <span class="nav-text">-duplicatenetworkservice networkservice newnetworkservicename</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#removenetworkservice-networkservice"><span class="nav-number">2.2.48.</span> <span class="nav-text">-removenetworkservice networkservice</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ordernetworkservices-service1-service2-service3-…"><span class="nav-number">2.2.49.</span> <span class="nav-text">-ordernetworkservices service1 [service2] [service3] […]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getMTU-hardwareport"><span class="nav-number">2.2.50.</span> <span class="nav-text">-getMTU hardwareport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setMTU-hardwarePort-value"><span class="nav-number">2.2.51.</span> <span class="nav-text">-setMTU hardwarePort value</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listValidMTURange-hardwareport"><span class="nav-number">2.2.52.</span> <span class="nav-text">-listValidMTURange hardwareport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getMedia-hardwareport"><span class="nav-number">2.2.53.</span> <span class="nav-text">-getMedia hardwareport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setMedia-hardwareport-subtype-option1-option2-…"><span class="nav-number">2.2.54.</span> <span class="nav-text">-setMedia hardwareport subtype [option1] [option2] […]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listValidMedia-hardwareport"><span class="nav-number">2.2.55.</span> <span class="nav-text">-listValidMedia hardwareport</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#createVLAN-name-parentdevice-tag"><span class="nav-number">2.2.56.</span> <span class="nav-text">-createVLAN name parentdevice tag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deleteVLAN-name-parentdevice-tag"><span class="nav-number">2.2.57.</span> <span class="nav-text">-deleteVLAN name parentdevice tag</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listVLANs"><span class="nav-number">2.2.58.</span> <span class="nav-text">-listVLANs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listdevicesthatsupportVLAN"><span class="nav-number">2.2.59.</span> <span class="nav-text">-listdevicesthatsupportVLAN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#isBondSupported-device"><span class="nav-number">2.2.60.</span> <span class="nav-text">-isBondSupported device</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#createBond-name-device1-device2-…"><span class="nav-number">2.2.61.</span> <span class="nav-text">-createBond name [device1] [device2] […]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deleteBond-bond"><span class="nav-number">2.2.62.</span> <span class="nav-text">-deleteBond bond</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#addDeviceToBond-device-bond"><span class="nav-number">2.2.63.</span> <span class="nav-text">-addDeviceToBond device bond</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listBonds"><span class="nav-number">2.2.64.</span> <span class="nav-text">-listBonds</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#showBondStatus-bond"><span class="nav-number">2.2.65.</span> <span class="nav-text">-showBondStatus bond</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pppoe相关"><span class="nav-number">2.2.66.</span> <span class="nav-text">pppoe相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listpppoeservices"><span class="nav-number">2.2.67.</span> <span class="nav-text">-listpppoeservices</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#showpppoestatus-name"><span class="nav-number">2.2.68.</span> <span class="nav-text">-showpppoestatus name</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#createpppoeservice-device-name-account-password-pppoeName"><span class="nav-number">2.2.69.</span> <span class="nav-text">-createpppoeservice device name account password [pppoeName]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deletepppoeservice-service"><span class="nav-number">2.2.70.</span> <span class="nav-text">-deletepppoeservice service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setpppoeaccountname-service-account"><span class="nav-number">2.2.71.</span> <span class="nav-text">-setpppoeaccountname service account</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#setpppoepassword-service-password"><span class="nav-number">2.2.72.</span> <span class="nav-text">-setpppoepassword service password</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#connectpppoeservice-service"><span class="nav-number">2.2.73.</span> <span class="nav-text">-connectpppoeservice service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#disconnectpppoeservice-service"><span class="nav-number">2.2.74.</span> <span class="nav-text">-disconnectpppoeservice service</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#listlocations"><span class="nav-number">2.2.75.</span> <span class="nav-text">-listlocations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#getcurrentlocation"><span class="nav-number">2.2.76.</span> <span class="nav-text">-getcurrentlocation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#createlocation-location-populate"><span class="nav-number">2.2.77.</span> <span class="nav-text">-createlocation location [populate]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deletelocation-location"><span class="nav-number">2.2.78.</span> <span class="nav-text">-deletelocation location</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#switchtolocation-location"><span class="nav-number">2.2.79.</span> <span class="nav-text">-switchtolocation location</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
   }
-});</script><script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML" async></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.3" async></script><link rel="stylesheet" type="text/css" href="/share/css/share.css"><script type="text/javascript" src="/share/js/social-share.js" charset="utf-8"></script><script type="text/javascript" src="/share/js/qrcode.js" charset="utf-8"></script><script>var disqus_shortname = 'gowa-1';
-var disqus_identifier = 'macOS/macOS的networksetup命令来管理网络.html';
-var disqus_title = 'macOS的networksetup命令来管理网络';
-var disqus_url = 'https://gowa.club/macOS/macOS的networksetup命令来管理网络.html';
-(function() {
-  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script><script id="dsq-count-scr" src="//gowa-1.disqus.com/count.js" async></script><script type="text/javascript" src="//gowa-1.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></body></html>
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://gowa-1.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'https://gowa.club/macOS/macOS的networksetup命令来管理网络.html';
+          this.page.identifier = 'macOS/macOS的networksetup命令来管理网络.html';
+          this.page.title = 'macOS的networksetup命令来管理网络';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://gowa-1.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/algolia-instant-search/instantsearch.min.css">
+
+  
+  
+  <script src="/lib/algolia-instant-search/instantsearch.min.js"></script>
+  
+
+  <script src="/js/src/algolia-search.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
