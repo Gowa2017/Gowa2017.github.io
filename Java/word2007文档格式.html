@@ -48,7 +48,7 @@
 </script>
 
   <meta name="description" content="对于文书来说，有很多需要生成的，一直以来用的是POI，但是似乎对文档的控制粒度粗了一下，所以潜心下来看一下怎么样操作docx4j。">
-<meta name="keywords" content="Java,Android,Docx,Docx4j">
+<meta name="keywords" content="Java,Android,Docx4j,Docx">
 <meta property="og:type" content="article">
 <meta property="og:title" content="word2007文档格式">
 <meta property="og:url" content="https://gowa.club/Java/word2007文档格式.html">
@@ -310,7 +310,7 @@
 </ol>
 <p>一个 <em>run</em> 表示 story 中 具有共同属性集的文本区域. WordprocessingML 文档中的文本必须包含在 一个或多个 <em>run</em> 内。一个 <em>paragraph</em> 是一个或多个 <em>run</em> 以一个单元显示的集合。 <em>run</em>必须包含在 <em>paragraph</em>内。</p>
 <p>看看下面最简单的一个例子：</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span><span class="meta">?&gt;</span></span></span><br><span class="line">  <span class="tag">&lt;<span class="name">w:document</span> <span class="attr">xmlns:w</span>=<span class="string">"..."</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">w:body</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">w:p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">w:r</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">w:t</span>&gt;</span>Hello, world.<span class="tag">&lt;/<span class="name">w:t</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">w:r</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">w:p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">w:body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">w:document</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">&lt;?xml version="1.0"?&gt;</span><br><span class="line">  <span class="tag">&lt;<span class="name">w:document</span> <span class="attr">xmlns:w</span>=<span class="string">"..."</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">w:body</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">w:p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">w:r</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">w:t</span>&gt;</span>Hello, world.<span class="tag">&lt;/<span class="name">w:t</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">w:r</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">w:p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">w:body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">w:document</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <h2 id="Paragraphs"><a href="#Paragraphs" class="headerlink" title="Paragraphs"></a>Paragraphs</h2><p>WordprocessingML 文档内最基本的 块级别内容单元就是 <em>paragraphs</em>，其使用  <em>p</em> 元素来存储。一个 <em>paragraph</em> 定义了以一个新行开始的分隔区域。其可以包含三类信息：<em>可选的 段落属性，内联的内容（典型的是runs），及可选的用来比较两个文档内容的版本 IDs。</em></p>
 <p>考虑一个内容居中的段落片段 <em>The quick brown fox jumped …</em>。段落内所有的文本都使用 斜体，段落内容拥有 排版居中属性，段落中的每个 <em>run</em>都存储了这个斜体属性，例如： </p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">w:p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">w:pPr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">w:jc</span> <span class="attr">w:val</span>=<span class="string">"center"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">w:rPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">w:i</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">w:rPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">w:pPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">w:r</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">w:rPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">w:i</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">w:rPr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">w:t</span>&gt;</span>The</span><br><span class="line">  <span class="tag">&lt;/<span class="name">w:r</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">w:p</span>&gt;</span></span><br></pre></td></tr></table></figure>
@@ -500,8 +500,8 @@
           <div class="post-tags">
               <a href="/tags/Java/" rel="tag"># Java</a>
               <a href="/tags/Android/" rel="tag"># Android</a>
-              <a href="/tags/Docx/" rel="tag"># Docx</a>
               <a href="/tags/Docx4j/" rel="tag"># Docx4j</a>
+              <a href="/tags/Docx/" rel="tag"># Docx</a>
           </div>
 
         
@@ -578,7 +578,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">282</span>
+          <span class="site-state-item-count">283</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -591,7 +591,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">102</span>
+        <span class="site-state-item-count">104</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
