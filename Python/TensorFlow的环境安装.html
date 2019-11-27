@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="TensorFlow,Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TensorFlow的环境安装">
-<meta property="og:url" content="https://gowa.club/Python/TensorFlow的环境安装.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Python&#x2F;TensorFlow%E7%9A%84%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="也来学习一下机器学习的 TensorFlow 是什么。第一步当然是搭建环境了。据说大多数用的都是 Python 来使用这个库。所以我也这样想了。安装官方的教程，在 Mac 上进行安装。官方教程">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-09-06T06:36:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TensorFlow的环境安装">
-<meta name="twitter:description" content="也来学习一下机器学习的 TensorFlow 是什么。第一步当然是搭建环境了。据说大多数用的都是 Python 来使用这个库。所以我也这样想了。安装官方的教程，在 Mac 上进行安装。官方教程">
 
-<link rel="canonical" href="https://gowa.club/Python/TensorFlow的环境安装.html">
+<link rel="canonical" href="https://gowa.club/Python/TensorFlow%E7%9A%84%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow的环境安装.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow%E7%9A%84%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Python/TensorFlow的环境安装.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Python/TensorFlow%E7%9A%84%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/TensorFlow的环境安装.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -300,28 +298,40 @@
 <p>这就设置到要安装 Virtualenv 环境了。而这我看了一下教程，又是需要用 pip 来安装的。所以我们一步步来吧。</p>
 <h1 id="保证机器上有-Python-环境"><a href="#保证机器上有-Python-环境" class="headerlink" title="保证机器上有 Python 环境"></a>保证机器上有 Python 环境</h1><p>我的 Mac 已经有 2.7.10 的 Python 就不需要自己安装了。</p>
 <h1 id="安装-pip-包管理器"><a href="#安装-pip-包管理器" class="headerlink" title="安装 pip 包管理器"></a>安装 pip 包管理器</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py</span><br><span class="line">python get-pip.py</span><br><span class="line"></span><br><span class="line">Collecting pip</span><br><span class="line">  Downloading https://files.pythonhosted.org/packages/5f/25/e52d3f31441505a5f3af41213346e5b6c221c9e086a166f3703d2ddaf940/pip-18.0-py2.py3-none-any.whl (1.3MB)</span><br><span class="line">    100% |████████████████████████████████| 1.3MB 483kB/s</span><br><span class="line">Collecting wheel</span><br><span class="line">  Downloading https://files.pythonhosted.org/packages/81/30/e935244ca6165187ae8be876b6316ae201b71485538ffac1d718843025a9/wheel-0.31.1-py2.py3-none-any.whl (41kB)</span><br><span class="line">    100% |████████████████████████████████| 51kB 729kB/s</span><br><span class="line">Installing collected packages: pip, wheel</span><br><span class="line">Successfully installed pip-18.0 wheel-0.31.1</span><br></pre></td></tr></table></figure>
+
 <p>更详细的解释可以看 <a href="https://pip.pypa.io/en/stable/installing/" target="_blank" rel="noopener">这里</a></p>
 <h1 id="安装-virtualenv"><a href="#安装-virtualenv" class="headerlink" title="安装 virtualenv"></a>安装 virtualenv</h1><p>官方的安装教程在 <a href="https://virtualenv.pypa.io/en/stable/installation/" target="_blank" rel="noopener">这里</a></p>
 <p>简单的使用 pip 安装就好了。当然你也可以选择其他的方式。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sudo pip install virtualenv</span><br><span class="line"></span><br><span class="line">Collecting virtualenv</span><br><span class="line">  Downloading https://files.pythonhosted.org/packages/b6/30/96a02b2287098b23b875bc8c2f58071c35d2efe84f747b64d523721dc2b5/virtualenv-16.0.0-py2.py3-none-any.whl (1.9MB)</span><br><span class="line">    100% |████████████████████████████████| 1.9MB 286kB/s</span><br><span class="line">Installing collected packages: virtualenv</span><br><span class="line">Successfully installed virtualenv-16.0.0</span><br></pre></td></tr></table></figure>
+
 <h1 id="安装-TensorFlow"><a href="#安装-TensorFlow" class="headerlink" title="安装 TensorFlow"></a>安装 TensorFlow</h1><p>这个就可以完全按照官方教程来了：<a href="https://www.tensorflow.org/install/install_mac" target="_blank" rel="noopener">Virtualenv安装TensorFlow-Mac</a></p>
 <h2 id="建立-Virtualenv-环境"><a href="#建立-Virtualenv-环境" class="headerlink" title="建立 Virtualenv 环境"></a>建立 Virtualenv 环境</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">virtualenv --system-site-packages tensorflow</span><br></pre></td></tr></table></figure>
+
 <h2 id="激活-Virtualenv-环境："><a href="#激活-Virtualenv-环境：" class="headerlink" title="激活 Virtualenv 环境："></a>激活 Virtualenv 环境：</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> tensorflow</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">source</span> ./bin/activate      <span class="comment"># If using bash, sh, ksh, or zsh</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">source</span> ./bin/activate.csh  <span class="comment"># If using csh or tcsh</span></span></span><br></pre></td></tr></table></figure>
 <h2 id="确保安装-pip-8-1-或更高版本"><a href="#确保安装-pip-8-1-或更高版本" class="headerlink" title="确保安装 pip 8.1 或更高版本"></a>确保安装 pip 8.1 或更高版本</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">(targetDirectory)$</span><span class="bash"> easy_install -U pip</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="将-TensorFlow-及其所需的所有软件包安装到活动-Virtualenv-环境"><a href="#将-TensorFlow-及其所需的所有软件包安装到活动-Virtualenv-环境" class="headerlink" title="将 TensorFlow 及其所需的所有软件包安装到活动 Virtualenv 环境"></a>将 TensorFlow 及其所需的所有软件包安装到活动 Virtualenv 环境</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">(targetDirectory)$</span><span class="bash"> pip install --upgrade tensorflow      <span class="comment"># for Python 2.7</span></span></span><br><span class="line"><span class="meta">(targetDirectory)$</span><span class="bash"> pip3 install --upgrade tensorflow     <span class="comment"># for Python 3.n</span></span></span><br></pre></td></tr></table></figure>
+
 <h2 id="可选。如果第-6-步失败了（通常是因为您所调用的-pip-版本低于-8-1），请通过发出以下格式的命令在活动-Virtualenv-环境中安装-TensorFlow"><a href="#可选。如果第-6-步失败了（通常是因为您所调用的-pip-版本低于-8-1），请通过发出以下格式的命令在活动-Virtualenv-环境中安装-TensorFlow" class="headerlink" title="可选。如果第 6 步失败了（通常是因为您所调用的 pip 版本低于 8.1），请通过发出以下格式的命令在活动 Virtualenv 环境中安装 TensorFlow"></a>可选。如果第 6 步失败了（通常是因为您所调用的 pip 版本低于 8.1），请通过发出以下格式的命令在活动 Virtualenv 环境中安装 TensorFlow</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> pip install --upgrade tfBinaryURL   <span class="comment"># Python 2.7</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> pip3 install --upgrade tfBinaryURL  <span class="comment"># Python 3.n</span></span></span><br></pre></td></tr></table></figure>
+
+
 <h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><p>请注意，每次在新的 shell 中使用 TensorFlow 时，您都必须激活 Virtualenv 环境。如果 Virtualenv 环境当前未处于活动状态（即提示符不是 (<em>targetDirectory</em>)），请调用以下某个命令：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> targetDirectory</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">source</span> ./bin/activate      <span class="comment"># If using bash, sh, ksh, or zsh</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">source</span> ./bin/activate.csh  <span class="comment"># If using csh or tcsh</span></span></span><br></pre></td></tr></table></figure>
+
 <p>您的提示符将变成如下所示，这表示您的 tensorflow 环境已处于活动状态：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(targetDirectory)$</span><br></pre></td></tr></table></figure>
+
 <p>当 Virtualenv 环境处于活动状态时，您就可以从该 shell 运行 TensorFlow 程序了。</p>
 <p>用完 TensorFlow 后，可以通过发出以下命令来停用此环境：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">(targetDirectory)$ deactivate</span><br></pre></td></tr></table></figure>
+
 <p>提示符将恢复为您的默认提示符（由 PS1 所定义）。</p>
 <h1 id="验证安装-OK"><a href="#验证安装-OK" class="headerlink" title="验证安装 OK"></a>验证安装 OK</h1><p> 从 shell 中调用 Python，如下所示：</p>
  <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">python</span></span><br></pre></td></tr></table></figure>
+
 <p> 在 Python 交互式 shell 中输入以下几行简短的程序代码：</p>
  <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"> <span class="comment"># Python</span></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">hello = tf.constant(<span class="string">'Hello, TensorFlow!'</span>)</span><br><span class="line">sess = tf.Session()</span><br><span class="line">print(sess.run(hello))</span><br></pre></td></tr></table></figure>
+
 <p> 如果系统输出以下内容，则说明您可以开始编写 TensorFlow 程序了：</p>
  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hello, TensorFlow!</span><br></pre></td></tr></table></figure>
     </div>
@@ -340,7 +350,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Cocos-Creator/Cocos Creator生成项目的启动工作流程.html" rel="next" title="Cocos Creator生成项目的启动工作流程">
+                <a href="/Cocos-Creator/Cocos%20Creator%E7%94%9F%E6%88%90%E9%A1%B9%E7%9B%AE%E7%9A%84%E5%90%AF%E5%8A%A8%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.html" rel="next" title="Cocos Creator生成项目的启动工作流程">
                   <i class="fa fa-chevron-left"></i> Cocos Creator生成项目的启动工作流程
                 </a>
             </div>
@@ -348,7 +358,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/关于使用Lsyncd进行数据镜像同步.html" rel="prev" title="关于使用Lsyncd进行数据镜像同步">
+                <a href="/Linux-Unix/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8Lsyncd%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E9%95%9C%E5%83%8F%E5%90%8C%E6%AD%A5.html" rel="prev" title="关于使用Lsyncd进行数据镜像同步">
                   关于使用Lsyncd进行数据镜像同步 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -435,10 +445,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -467,10 +477,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -545,7 +555,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Python/TensorFlow的环境安装.html",
+            url: "https://gowa.club/Python/TensorFlow%E7%9A%84%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85.html",
             identifier: "Python/TensorFlow的环境安装.html",
             title: "TensorFlow的环境安装"
           }

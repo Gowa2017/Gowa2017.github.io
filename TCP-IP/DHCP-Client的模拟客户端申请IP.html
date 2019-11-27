@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="TCP&#x2F;IP,DHCP">
 <meta property="og:type" content="article">
 <meta property="og:title" content="DHCP Client的模拟客户端申请IP">
-<meta property="og:url" content="https://gowa.club/TCP-IP/DHCP-Client的模拟客户端申请IP.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;TCP-IP&#x2F;DHCP-Client%E7%9A%84%E6%A8%A1%E6%8B%9F%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%94%B3%E8%AF%B7IP.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Dhcp Client 用来模拟用户接入，发送各种报文到DHCP系统进行申请IP。现将其使用流程进行一下介绍。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.267Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DHCP Client的模拟客户端申请IP">
-<meta name="twitter:description" content="Dhcp Client 用来模拟用户接入，发送各种报文到DHCP系统进行申请IP。现将其使用流程进行一下介绍。">
 
-<link rel="canonical" href="https://gowa.club/TCP-IP/DHCP-Client的模拟客户端申请IP.html">
+<link rel="canonical" href="https://gowa.club/TCP-IP/DHCP-Client%E7%9A%84%E6%A8%A1%E6%8B%9F%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%94%B3%E8%AF%B7IP.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/TCP-IP/DHCP-Client的模拟客户端申请IP.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/TCP-IP/DHCP-Client%E7%9A%84%E6%A8%A1%E6%8B%9F%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%94%B3%E8%AF%B7IP.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -278,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/TCP-IP/DHCP-Client的模拟客户端申请IP.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/TCP-IP/DHCP-Client%E7%9A%84%E6%A8%A1%E6%8B%9F%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%94%B3%E8%AF%B7IP.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="TCP-IP/DHCP-Client的模拟客户端申请IP.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,14 +292,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Dhcp Client 用来模拟用户接入，发送各种报文到DHCP系统进行申请IP。现将其使用流程进行一下介绍。<br><a id="more"></a></p>
+        <p>Dhcp Client 用来模拟用户接入，发送各种报文到DHCP系统进行申请IP。现将其使用流程进行一下介绍。</p>
+<a id="more"></a>
 <h1 id="使用前的配置。"><a href="#使用前的配置。" class="headerlink" title="使用前的配置。"></a>使用前的配置。</h1><ul>
-<li>system.cfg 配置客户端、服务端信息。包括IP、端口、线程信息、日志记录级别等。</li>
-<li>create.cfg 指定构造报文的内容、模拟终端数、Option属性等属性。</li>
-<li>在create.cfg 里面配置 giaddr为<em>192.168.0.1</em>，然后在管理系统为这个设备、接口、这个来源地址分配一个地址段 <em>192.168.0.0/24</em></li>
-<li>option60配置为 <code>&quot;2(option60_user=&quot;iptvtest9&quot;,option60_pwd=&quot;123456&quot;,option60_realm=&quot;iptv.ha&quot;,option60_enterprise_code=&quot;61&quot;)&quot;</code></li>
-<li>option82配置为 <code>2(port_type=&quot;0&quot;,slot=&quot;1&quot;,subslot=&quot;1&quot;,port=&quot;2&quot;,vpi=&quot;100&quot;,vci=&quot;200&quot;,identifier=&quot;&quot;,rack=&quot;1&quot;,frame=&quot;1&quot;,slot=&quot;1&quot;,subslot=&quot;1&quot;,port=&quot;1&quot;,xpi=&quot;4000&quot;,xci=&quot;200&quot;)</code><br>配置完毕即可进行执行测试并抓包。   <h1 id="几种Option的说明"><a href="#几种Option的说明" class="headerlink" title="几种Option的说明"></a>几种Option的说明</h1></li>
-<li>Option60在IPoE认证流程中携带账号和密码及配置信息；MSE处理时，和MAC地址一起配合形成<strong>MAC@Option60</strong>格式Optioin60内容字段具体格式请参考《中国电信“我的e家”技术规范-e家终端（e8）》。</li>
+<li><p>system.cfg 配置客户端、服务端信息。包括IP、端口、线程信息、日志记录级别等。</p>
+</li>
+<li><p>create.cfg 指定构造报文的内容、模拟终端数、Option属性等属性。</p>
+</li>
+<li><p>在create.cfg 里面配置 giaddr为<em>192.168.0.1*，然后在管理系统为这个设备、接口、这个来源地址分配一个地址段 *192.168.0.0/24</em></p>
+</li>
+<li><p>option60配置为 <code>&quot;2(option60_user=&quot;iptvtest9&quot;,option60_pwd=&quot;123456&quot;,option60_realm=&quot;iptv.ha&quot;,option60_enterprise_code=&quot;61&quot;)&quot;</code></p>
+</li>
+<li><p>option82配置为 <code>2(port_type=&quot;0&quot;,slot=&quot;1&quot;,subslot=&quot;1&quot;,port=&quot;2&quot;,vpi=&quot;100&quot;,vci=&quot;200&quot;,identifier=&quot;&quot;,rack=&quot;1&quot;,frame=&quot;1&quot;,slot=&quot;1&quot;,subslot=&quot;1&quot;,port=&quot;1&quot;,xpi=&quot;4000&quot;,xci=&quot;200&quot;)</code><br>配置完毕即可进行执行测试并抓包。   </p>
+<h1 id="几种Option的说明"><a href="#几种Option的说明" class="headerlink" title="几种Option的说明"></a>几种Option的说明</h1></li>
+<li><p>Option60在IPoE认证流程中携带账号和密码及配置信息；MSE处理时，和MAC地址一起配合形成<strong>MAC@Option60</strong>格式Optioin60内容字段具体格式请参考《中国电信“我的e家”技术规范-e家终端（e8）》。</p>
+</li>
 <li><p>Option82在IPoE认证流程中，用于标识用户的线路信息，DHCPServer处理时，提取Option82信息形成相应的NAS-Port-ID属性；对于Option82的规范定义参照《中国电信宽带用户接入线路标识编码格式要求》以及《中国电信PON系统用户接入端口标识编码格式要求》定义，接入线路(端口)标识信息采用Sub-option1（即AgentCircuitIDSub-option）承载。DHCPServer处理Option82时，同样按照以上规范定义，从AgentCircuitIDSub-option中获取</p>
 <h1 id="业务规则的识别"><a href="#业务规则的识别" class="headerlink" title="业务规则的识别"></a>业务规则的识别</h1><p>IPoE方式可以设置为[不]认证[不]计费6种方式，选择规则是根据<strong>接口或业务类型或属地</strong>来选择。<br>可以根据报文中上来的<strong>vlan、域名、用户名前缀、侦听IP</strong>来识别属于是什么业务（ITV、IPTV、等等）。<br>然后获得每种业务的认证、计费参数，进行认证或计费。</p>
 <h1 id="IPoE的认证流程"><a href="#IPoE的认证流程" class="headerlink" title="IPoE的认证流程"></a>IPoE的认证流程</h1><p>（1）用户终端发起DHCP请求，Option60携带账号和密码信息；<br>（2）中间途经的网络设备根据相关规范标记Option82信息；<br>（3）BRAS/SR收到用户请求报文，标记相应的Option82信息(如果有需要)；同时直接转请求报文中继转发给相应的DHCPServer。<br>（4）DHCPServer收到用户请求报文，提取请求报文中的相关信息，构造认证所需Username和Nas-Port-ID。现阶段建议Username由MAC地址和Option60信息形成，格式为：MAC@Option60；密码为任意字符串；并将Option82信息转换为NAS-Port-ID信息，送到AAA认证。建议DHCPSERVER与AAA之间的接口采用标准Radius接口。<br>（5）AAA对Option60信息进行解析，获取账号和密码信息，对用户进行认证；认证通过后，则向DHCPServer发回认证通过信息，并携带用户一些相关属性。MAC地址只是作为内部用户标识，不作为认证校验信息。<br>（6）DHCPServer根据用户不同的业务信息分配相应的地址；用户可以正常使用业务。</p>
@@ -328,7 +333,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/TCP-IP/tcpdump的使用-过滤表达式.html" rel="next" title="tcpdump的使用-过滤表达式">
+                <a href="/TCP-IP/tcpdump%E7%9A%84%E4%BD%BF%E7%94%A8-%E8%BF%87%E6%BB%A4%E8%A1%A8%E8%BE%BE%E5%BC%8F.html" rel="next" title="tcpdump的使用-过滤表达式">
                   <i class="fa fa-chevron-left"></i> tcpdump的使用-过滤表达式
                 </a>
             </div>
@@ -336,7 +341,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/ntpd升级到最新4-2-8p9.html" rel="prev" title="ntpd升级到最新4.2.8p9">
+                <a href="/Linux-Unix/ntpd%E5%8D%87%E7%BA%A7%E5%88%B0%E6%9C%80%E6%96%B04-2-8p9.html" rel="prev" title="ntpd升级到最新4.2.8p9">
                   ntpd升级到最新4.2.8p9 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -423,10 +428,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -455,10 +460,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -533,7 +538,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/TCP-IP/DHCP-Client的模拟客户端申请IP.html",
+            url: "https://gowa.club/TCP-IP/DHCP-Client%E7%9A%84%E6%A8%A1%E6%8B%9F%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%94%B3%E8%AF%B7IP.html",
             identifier: "TCP-IP/DHCP-Client的模拟客户端申请IP.html",
             title: "DHCP Client的模拟客户端申请IP"
           }

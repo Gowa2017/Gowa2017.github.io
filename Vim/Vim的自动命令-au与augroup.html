@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -47,20 +47,18 @@
   };
 </script>
 
-  <meta name="description" content="还是在把 Vim 配置为 Go 的开发环境的时候看到使用了 augroup/autocmd 命令的。但是当时没有深究，后来在很多地方看到了，所以就想要看一下其到底有什么用的。">
+  <meta name="description" content="还是在把 Vim 配置为 Go 的开发环境的时候看到使用了 augroup&#x2F;autocmd 命令的。但是当时没有深究，后来在很多地方看到了，所以就想要看一下其到底有什么用的。">
 <meta name="keywords" content="Vim">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Vim的自动命令-au与augroup">
-<meta property="og:url" content="https://gowa.club/Vim/Vim的自动命令-au与augroup.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Vim&#x2F;Vim%E7%9A%84%E8%87%AA%E5%8A%A8%E5%91%BD%E4%BB%A4-au%E4%B8%8Eaugroup.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="还是在把 Vim 配置为 Go 的开发环境的时候看到使用了 augroup/autocmd 命令的。但是当时没有深究，后来在很多地方看到了，所以就想要看一下其到底有什么用的。">
+<meta property="og:description" content="还是在把 Vim 配置为 Go 的开发环境的时候看到使用了 augroup&#x2F;autocmd 命令的。但是当时没有深究，后来在很多地方看到了，所以就想要看一下其到底有什么用的。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-01-14T13:50:02.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Vim的自动命令-au与augroup">
-<meta name="twitter:description" content="还是在把 Vim 配置为 Go 的开发环境的时候看到使用了 augroup/autocmd 命令的。但是当时没有深究，后来在很多地方看到了，所以就想要看一下其到底有什么用的。">
 
-<link rel="canonical" href="https://gowa.club/Vim/Vim的自动命令-au与augroup.html">
+<link rel="canonical" href="https://gowa.club/Vim/Vim%E7%9A%84%E8%87%AA%E5%8A%A8%E5%91%BD%E4%BB%A4-au%E4%B8%8Eaugroup.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Vim/Vim的自动命令-au与augroup.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Vim/Vim%E7%9A%84%E8%87%AA%E5%8A%A8%E5%91%BD%E4%BB%A4-au%E4%B8%8Eaugroup.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Vim/Vim的自动命令-au与augroup.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Vim/Vim%E7%9A%84%E8%87%AA%E5%8A%A8%E5%91%BD%E4%BB%A4-au%E4%B8%8Eaugroup.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Vim/Vim的自动命令-au与augroup.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,7 +285,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>还是在把 Vim 配置为 Go 的开发环境的时候看到使用了 augroup/autocmd 命令的。但是当时没有深究，后来在很多地方看到了，所以就想要看一下其到底有什么用的。<br><a id="more"></a></p>
+        <p>还是在把 Vim 配置为 Go 的开发环境的时候看到使用了 augroup/autocmd 命令的。但是当时没有深究，后来在很多地方看到了，所以就想要看一下其到底有什么用的。</p>
+<a id="more"></a>
+
 <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>可以在读、写文件，进入或离开缓冲区，或者退出 Vim 的时候自动执行一些命令。命令的基本格式是：</p>
 <figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">:<span class="keyword">au</span>[tocmd] [group] &#123;event&#125; &#123;pat&#125; [nested] &#123;cmd&#125;</span><br></pre></td></tr></table></figure>
 <p>其基本意思就是：把 <em>{cmd}</em> 命令添加到 Vim 在一个文件匹配 <em>{pat}</em> 并遇到 <em>{event}</em> 事件时会自动执行的命令列表中。 Vim总是在已存在的自动命令后添加 <em>{cmd}</em>。</p>
@@ -303,8 +303,10 @@
 </ol>
 <p>例子：</p>
 <figure class="highlight vim"><table><tr><td class="code"><pre><span class="line">:<span class="keyword">augroup</span> uncompress</span><br><span class="line">:   au!</span><br><span class="line">:   <span class="keyword">au</span> BufEnter *.gz %!gunzip</span><br><span class="line">:<span class="keyword">augroup</span> END</span><br></pre></td></tr></table></figure>
+
 <p>这会防止自动命令被执行两次。（如 source .vimrc 两次或多次）。</p>
 <h1 id="augroup-go"><a href="#augroup-go" class="headerlink" title="augroup go"></a>augroup go</h1><figure class="highlight vim"><table><tr><td class="code"><pre><span class="line"><span class="keyword">augroup</span> <span class="keyword">go</span></span><br><span class="line">  autocmd!</span><br><span class="line">  <span class="comment">" 不在设置全局绑定</span></span><br><span class="line">  <span class="keyword">autocmd</span> FileType <span class="keyword">go</span> <span class="keyword">nmap</span> <span class="symbol">&lt;C-g&gt;</span> :GoDeclsDir<span class="symbol">&lt;cr&gt;</span></span><br><span class="line">  <span class="keyword">autocmd</span> FileType <span class="keyword">go</span> <span class="keyword">imap</span> <span class="symbol">&lt;C-g&gt;</span> <span class="symbol">&lt;esc&gt;</span>:<span class="symbol">&lt;C-u&gt;</span>GoDeclsDir<span class="symbol">&lt;cr&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">" Show by default 4 spaces for a tab</span></span><br><span class="line">  <span class="keyword">autocmd</span> BufNewFile,BufRead *.<span class="keyword">go</span> <span class="keyword">setlocal</span> noexpandtab tabstop=<span class="number">4</span> <span class="built_in">shiftwidth</span>=<span class="number">4</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">" :GoBuild and :GoTestCompile</span></span><br><span class="line">  <span class="keyword">autocmd</span> FileType <span class="keyword">go</span> <span class="keyword">nmap</span> <span class="symbol">&lt;leader&gt;</span><span class="keyword">b</span> :<span class="symbol">&lt;C-u&gt;</span><span class="keyword">call</span> <span class="symbol">&lt;SID&gt;</span>build_go_files()<span class="symbol">&lt;CR&gt;</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">" :GoTest</span></span><br><span class="line">  <span class="keyword">autocmd</span> FileType <span class="keyword">go</span> <span class="keyword">nmap</span> <span class="symbol">&lt;leader&gt;</span>t  <span class="symbol">&lt;Plug&gt;</span>(<span class="keyword">go</span>-test)</span><br><span class="line"></span><br><span class="line">  <span class="comment">" :GoRun</span></span><br><span class="line">  <span class="keyword">autocmd</span> FileType <span class="keyword">go</span> <span class="keyword">nmap</span> <span class="symbol">&lt;leader&gt;</span>r  <span class="symbol">&lt;Plug&gt;</span>(<span class="keyword">go</span>-run)</span><br><span class="line"></span><br><span class="line">  <span class="comment">" :GoDoc</span></span><br><span class="line">  <span class="keyword">autocmd</span> FileType <span class="keyword">go</span> <span class="keyword">nmap</span> <span class="symbol">&lt;Leader&gt;</span>d <span class="symbol">&lt;Plug&gt;</span>(<span class="keyword">go</span>-doc)</span><br><span class="line"></span><br><span class="line">  <span class="comment">" :GoCoverageToggle</span></span><br><span class="line">  <span class="keyword">autocmd</span> FileType <span class="keyword">go</span> <span class="keyword">nmap</span> <span class="symbol">&lt;Leader&gt;</span><span class="keyword">c</span> <span class="symbol">&lt;Plug&gt;</span>(<span class="keyword">go</span>-coverage-toggle)</span><br><span class="line"></span><br><span class="line">  <span class="comment">" :GoInfo</span></span><br><span class="line">  <span class="keyword">autocmd</span> FileType <span class="keyword">go</span> <span class="keyword">nmap</span> <span class="symbol">&lt;Leader&gt;</span>i <span class="symbol">&lt;Plug&gt;</span>(<span class="keyword">go</span>-info)</span><br><span class="line"></span><br><span class="line">  <span class="comment">" :GoMetaLinter</span></span><br><span class="line">  <span class="keyword">autocmd</span> FileType <span class="keyword">go</span> <span class="keyword">nmap</span> <span class="symbol">&lt;Leader&gt;</span><span class="keyword">l</span> <span class="symbol">&lt;Plug&gt;</span>(<span class="keyword">go</span>-metalinter)</span><br><span class="line"></span><br><span class="line">  <span class="comment">" :GoDef but opens in a vertical split</span></span><br><span class="line">  <span class="keyword">autocmd</span> FileType <span class="keyword">go</span> <span class="keyword">nmap</span> <span class="symbol">&lt;Leader&gt;</span>v <span class="symbol">&lt;Plug&gt;</span>(<span class="keyword">go</span>-def-<span class="keyword">vertical</span>)</span><br><span class="line">  <span class="comment">" :GoDef but opens in a horizontal split</span></span><br><span class="line">  <span class="keyword">autocmd</span> FileType <span class="keyword">go</span> <span class="keyword">nmap</span> <span class="symbol">&lt;Leader&gt;</span>s <span class="symbol">&lt;Plug&gt;</span>(<span class="keyword">go</span>-def-<span class="keyword">split</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment">" :GoAlternate  commands :A, :AV, :AS and :AT</span></span><br><span class="line">  <span class="keyword">autocmd</span> Filetype <span class="keyword">go</span> command! -bang A <span class="keyword">call</span> go#alternate#Switch(<span class="symbol">&lt;bang&gt;</span><span class="number">0</span>, <span class="string">'edit'</span>)</span><br><span class="line">  <span class="keyword">autocmd</span> Filetype <span class="keyword">go</span> command! -bang AV <span class="keyword">call</span> go#alternate#Switch(<span class="symbol">&lt;bang&gt;</span><span class="number">0</span>, <span class="string">'vsplit'</span>)</span><br><span class="line">  <span class="keyword">autocmd</span> Filetype <span class="keyword">go</span> command! -bang AS <span class="keyword">call</span> go#alternate#Switch(<span class="symbol">&lt;bang&gt;</span><span class="number">0</span>, <span class="string">'split'</span>)</span><br><span class="line">  <span class="keyword">autocmd</span> Filetype <span class="keyword">go</span> command! -bang AT <span class="keyword">call</span> go#alternate#Switch(<span class="symbol">&lt;bang&gt;</span><span class="number">0</span>, <span class="string">'tabe'</span>)</span><br><span class="line"><span class="keyword">augroup</span> END</span><br></pre></td></tr></table></figure>
+
 <p>上面就是一个不错的例子了</p>
 
     </div>
@@ -322,7 +324,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/Java中final语义.html" rel="next" title="Java中final语义">
+                <a href="/Java/Java%E4%B8%ADfinal%E8%AF%AD%E4%B9%89.html" rel="next" title="Java中final语义">
                   <i class="fa fa-chevron-left"></i> Java中final语义
                 </a>
             </div>
@@ -330,7 +332,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/谷歌的todo-mvp-dagger例子探究.html" rel="prev" title="谷歌的todo-mvp-dagger例子探究">
+                <a href="/Java/%E8%B0%B7%E6%AD%8C%E7%9A%84todo-mvp-dagger%E4%BE%8B%E5%AD%90%E6%8E%A2%E7%A9%B6.html" rel="prev" title="谷歌的todo-mvp-dagger例子探究">
                   谷歌的todo-mvp-dagger例子探究 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -417,10 +419,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -449,10 +451,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -527,7 +529,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Vim/Vim的自动命令-au与augroup.html",
+            url: "https://gowa.club/Vim/Vim%E7%9A%84%E8%87%AA%E5%8A%A8%E5%91%BD%E4%BB%A4-au%E4%B8%8Eaugroup.html",
             identifier: "Vim/Vim的自动命令-au与augroup.html",
             title: "Vim的自动命令-au与augroup"
           }

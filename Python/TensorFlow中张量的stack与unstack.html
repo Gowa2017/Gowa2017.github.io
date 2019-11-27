@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="TensorFlow,Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TensorFlow中的张量的stack与unstack">
-<meta property="og:url" content="https://gowa.club/Python/TensorFlow中张量的stack与unstack.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Python&#x2F;TensorFlow%E4%B8%AD%E5%BC%A0%E9%87%8F%E7%9A%84stack%E4%B8%8Eunstack.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="学习一个简单的例子，关于神经网络的，总是会看到关于 stack unstack 函数的使用。但这涉及到的东西实在是多，比如最基本的一个前提概念就是，Tensor 张量，非常难以理解这个东西。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-11-02T14:12:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TensorFlow中的张量的stack与unstack">
-<meta name="twitter:description" content="学习一个简单的例子，关于神经网络的，总是会看到关于 stack unstack 函数的使用。但这涉及到的东西实在是多，比如最基本的一个前提概念就是，Tensor 张量，非常难以理解这个东西。">
 
-<link rel="canonical" href="https://gowa.club/Python/TensorFlow中张量的stack与unstack.html">
+<link rel="canonical" href="https://gowa.club/Python/TensorFlow%E4%B8%AD%E5%BC%A0%E9%87%8F%E7%9A%84stack%E4%B8%8Eunstack.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow中张量的stack与unstack.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow%E4%B8%AD%E5%BC%A0%E9%87%8F%E7%9A%84stack%E4%B8%8Eunstack.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Python/TensorFlow中张量的stack与unstack.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Python/TensorFlow%E4%B8%AD%E5%BC%A0%E9%87%8F%E7%9A%84stack%E4%B8%8Eunstack.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/TensorFlow中张量的stack与unstack.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,6 +287,7 @@
       
         <p>学习一个简单的例子，关于神经网络的，总是会看到关于 stack unstack 函数的使用。但这涉及到的东西实在是多，比如最基本的一个前提概念就是，Tensor 张量，非常难以理解这个东西。</p>
 <a id="more"></a>
+
 <h1 id="张量"><a href="#张量" class="headerlink" title="张量"></a>张量</h1><p><a href="https://www.tensorflow.org/programmers_guide/tensors?hl=zh-cn" target="_blank" rel="noopener">张量 TensorFlow 定义</a></p>
 <p>TensorFlow 框架涉及到两个重要的元素：<strong>张量</strong> 和 <strong>操作</strong> 。</p>
 <p>按照定义，<strong>张量</strong> 是对矢量和矩阵向潜在更高维度的泛化。</p>
@@ -309,7 +308,6 @@
 <p>除了 tf.Variable ，张量的值不变。因此，执行一个任务的时候，张量只有一个值。但重复评估同一张量可能会有不同的值。</p>
 <h2 id="阶"><a href="#阶" class="headerlink" title="阶"></a>阶</h2><p><strong>张量</strong> 对象的 <strong>阶</strong> 是其本身的维数。其同义词包括：<strong>秩、等级或 n 维</strong>。 TensorFlow 中的阶与数学矩阵中的阶并不是同一概念。 TensorFlow中的每个阶都对应一个不同的数学实例。</p>
 <p>张量的 <strong>形状</strong> 中元素数量与阶（维数）相等。</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -317,8 +315,7 @@
 <th>数学实例</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>0</td>
 <td>标量（只有大小）</td>
 </tr>
@@ -338,34 +335,39 @@
 <td>n</td>
 <td>n阶张量（自行想象）</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h3 id="0-阶"><a href="#0-阶" class="headerlink" title="0 阶"></a>0 阶</h3><figure class="highlight py"><table><tr><td class="code"><pre><span class="line">mammal = tf.Variable(<span class="string">"Elephant"</span>, tf.string)</span><br><span class="line">ignition = tf.Variable(<span class="number">451</span>, tf.int16)</span><br><span class="line">floating = tf.Variable(<span class="number">3.14159265359</span>, tf.float64)</span><br><span class="line">its_complicated = tf.Variable(<span class="number">12.3</span> - <span class="number">4.85j</span>, tf.complex64)</span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>注意：字符串在 TensorFlow 中被视为单一项，而不是一连串字符串。TensorFlow 可以有标量字符串，字符串矢量，等等。</p>
 </blockquote>
 <h3 id="1-阶"><a href="#1-阶" class="headerlink" title="1 阶"></a>1 阶</h3><p>要建立 1 阶的 tf.Tensor 对象，可传递一个项目列表作为初值：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">mystr = tf.Variable([<span class="string">"Hello"</span>], tf.string)</span><br><span class="line">cool_numbers  = tf.Variable([<span class="number">3.14159</span>, <span class="number">2.71828</span>], tf.float32)</span><br><span class="line">first_primes = tf.Variable([<span class="number">2</span>, <span class="number">3</span>, <span class="number">5</span>, <span class="number">7</span>, <span class="number">11</span>], tf.int32)</span><br><span class="line">its_very_complicated = tf.Variable([<span class="number">12.3</span> - <span class="number">4.85j</span>, <span class="number">7.5</span> - <span class="number">6.23j</span>], tf.complex64)</span><br></pre></td></tr></table></figure>
+
 <h3 id="更高阶"><a href="#更高阶" class="headerlink" title="更高阶"></a>更高阶</h3><p>2 阶 tf.Tensor 对象至少包含一行和一列：</p>
-<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">mymat = tf.Variable([[<span class="number">7</span>],[<span class="number">11</span>]], tf.int16)</span><br><span class="line">myxor = tf.Variable([[<span class="keyword">False</span>, <span class="keyword">True</span>],[<span class="keyword">True</span>, <span class="keyword">False</span>]], tf.bool)</span><br><span class="line">linear_squares = tf.Variable([[<span class="number">4</span>], [<span class="number">9</span>], [<span class="number">16</span>], [<span class="number">25</span>]], tf.int32)</span><br><span class="line">squarish_squares = tf.Variable([ [<span class="number">4</span>, <span class="number">9</span>], [<span class="number">16</span>, <span class="number">25</span>] ], tf.int32)</span><br><span class="line">rank_of_squares = tf.rank(squarish_squares)</span><br><span class="line">mymatC = tf.Variable([[<span class="number">7</span>],[<span class="number">11</span>]], tf.int32)</span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">mymat = tf.Variable([[<span class="number">7</span>],[<span class="number">11</span>]], tf.int16)</span><br><span class="line">myxor = tf.Variable([[<span class="literal">False</span>, <span class="literal">True</span>],[<span class="literal">True</span>, <span class="literal">False</span>]], tf.bool)</span><br><span class="line">linear_squares = tf.Variable([[<span class="number">4</span>], [<span class="number">9</span>], [<span class="number">16</span>], [<span class="number">25</span>]], tf.int32)</span><br><span class="line">squarish_squares = tf.Variable([ [<span class="number">4</span>, <span class="number">9</span>], [<span class="number">16</span>, <span class="number">25</span>] ], tf.int32)</span><br><span class="line">rank_of_squares = tf.rank(squarish_squares)</span><br><span class="line">mymatC = tf.Variable([[<span class="number">7</span>],[<span class="number">11</span>]], tf.int32)</span><br></pre></td></tr></table></figure>
+
 <p>同样，更高阶的张量由一个 n 维数组组成。例如，在图像处理过程中，会使用许多 4 阶张量，维度对应批次大小、图像宽度、图像高度和颜色通道。</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">my_image = tf.zeros([<span class="number">10</span>, <span class="number">299</span>, <span class="number">299</span>, <span class="number">3</span>])  <span class="comment"># batch x height x width x color</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="获取-tf-Tensor-对象的阶"><a href="#获取-tf-Tensor-对象的阶" class="headerlink" title="获取 tf.Tensor 对象的阶"></a>获取 tf.Tensor 对象的阶</h2><p>要确定 tf.Tensor 对象的阶，需调用 tf.rank 方法。例如，以下方法以编程方式确定上一章节中所定义的 tf.Tensor 的阶：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">r = tf.rank(my_image)</span><br><span class="line"><span class="comment"># After the graph runs, r will hold the value 4.</span></span><br></pre></td></tr></table></figure>
+
 <h2 id="引用-tf-Tensor-切片"><a href="#引用-tf-Tensor-切片" class="headerlink" title="引用 tf.Tensor 切片"></a>引用 tf.Tensor 切片</h2><p>由于 tf.Tensor 是 n 维单元数组，要访问 tf.Tensor 中的某一单元，需要指定 n 个索引。</p>
 <p>0 阶张量（标量）不需要索引，因为其本身便是单一数字。</p>
 <p>对于 1 阶张量（矢量）来说，通过传递单一索引可以访问某个数字：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">my_scalar = my_vector[<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+
 <p>请注意，如果想从矢量中动态地选择元素，那么在 [] 内传递的索引本身可以是一个标量 tf.Tensor。</p>
 <p>对于 2 阶及以上的张量来说，情况更为有趣。对于 2 阶 tf.Tensor 来说，传递两个数字会如预期般返回一个标量：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">my_scalar = my_matrix[<span class="number">1</span>, <span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+
 <p>而传递一个数字则会返回一个矩阵子矢量，如下所示：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">my_row_vector = my_matrix[<span class="number">2</span>]</span><br><span class="line">my_column_vector = my_matrix[:, <span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+
 <p>符号 <strong>:</strong> 是 Python 切片语法，意味“不要触碰该维度”。这对更高阶的张量来说很有用，可以帮助访问其子矢量，子矩阵，甚至其他子张量。</p>
 <h2 id="形状"><a href="#形状" class="headerlink" title="形状"></a>形状</h2><p>张量的<strong>形状</strong>是每个维度中元素的数量。TensorFlow 在图的构建过程中自动推理形状。这些推理的形状可能具有已知或未知的阶。如果阶已知，则每个维度的大小可能已知或未知。</p>
 <p>TensorFlow 文件编制中通过三种符号约定来描述张量维度：阶，形状和维数。下表阐述了三者如何相互关联：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -375,8 +377,7 @@
 <th>示例</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>0</td>
 <td>[]</td>
 <td>0-D</td>
@@ -406,16 +407,16 @@
 <td>n维</td>
 <td>形状为 [D0,D1,…Dn-1]的张量</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>形状包含了两个属性，<em>dims, ndim</em></p>
 <h3 id="tf-TensorShape"><a href="#tf-TensorShape" class="headerlink" title="tf.TensorShape"></a>tf.TensorShape</h3><p>此是形状在内部的实现。<a href="https://www.tensorflow.org/api_docs/python/tf/TensorShape" target="_blank" rel="noopener">https://www.tensorflow.org/api_docs/python/tf/TensorShape</a></p>
-<h3 id="tf-shape"><a href="#tf-shape" class="headerlink" title="tf.shape()"></a>tf.shape()</h3><figure class="highlight py"><table><tr><td class="code"><pre><span class="line">tf.shape(</span><br><span class="line">    input,</span><br><span class="line">    name=<span class="keyword">None</span>,</span><br><span class="line">    out_type=tf.int32</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="tf-shape"><a href="#tf-shape" class="headerlink" title="tf.shape()"></a>tf.shape()</h3><figure class="highlight py"><table><tr><td class="code"><pre><span class="line">tf.shape(</span><br><span class="line">    input,</span><br><span class="line">    name=<span class="literal">None</span>,</span><br><span class="line">    out_type=tf.int32</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
 <p>返回张量的形状。</p>
 <p>这个操作会返回一个 1-D 整数张量，代表了 <em>input</em> 的形状。</p>
 <p>例如：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">t = tf.constant([[[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], [<span class="number">2</span>, <span class="number">2</span>, <span class="number">2</span>]], [[<span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>]]])</span><br><span class="line">tf.shape(t)  <span class="comment"># [2, 2, 3]</span></span><br></pre></td></tr></table></figure>
+
 <h1 id="tf-concat"><a href="#tf-concat" class="headerlink" title="tf.concat()"></a>tf.concat()</h1><p>要了解 <code>tf.stack()</code> 就必须要了解 <code>tf.concat()</code>。这函数会沿某一维度拼接张量。</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">tf.concat(</span><br><span class="line">    values,</span><br><span class="line">    axis,</span><br><span class="line">    name=<span class="string">'concat'</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -425,11 +426,13 @@
 <p>输入张量的维数必匹配，除了 <em>axis</em> 外的维度必须相等。</p>
 <p>例如：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">t1 = [[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]]</span><br><span class="line">t2 = [[<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>], [<span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>]]</span><br><span class="line">tf.concat([t1, t2], <span class="number">0</span>)  <span class="comment"># [[1, 2, 3], [4, 5, 6], [7, 8, 9], [10, 11, 12]]</span></span><br><span class="line">tf.concat([t1, t2], <span class="number">1</span>)  <span class="comment"># [[1, 2, 3, 7, 8, 9], [4, 5, 6, 10, 11, 12]]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># tensor t3 with shape [2, 3]</span></span><br><span class="line"><span class="comment"># tensor t4 with shape [2, 3]</span></span><br><span class="line">tf.shape(tf.concat([t3, t4], <span class="number">0</span>))  <span class="comment"># [4, 3]</span></span><br><span class="line">tf.shape(tf.concat([t3, t4], <span class="number">1</span>))  <span class="comment"># [2, 6]</span></span><br></pre></td></tr></table></figure>
+
 <p>而：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">tf.concat([tf.expand_dims(t, axis) <span class="keyword">for</span> t <span class="keyword">in</span> tensors], axis)</span><br><span class="line">tf.stack(tensors, axis=axis)</span><br></pre></td></tr></table></figure>
 <p>这两者是相等的。</p>
 <h1 id="tf-stack"><a href="#tf-stack" class="headerlink" title="tf.stack()"></a>tf.stack()</h1><p><a href="https://www.tensorflow.org/api_docs/python/tf/stack" target="_blank" rel="noopener">官方定义</a></p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">tf.stack(</span><br><span class="line">    values,</span><br><span class="line">    axis=<span class="number">0</span>,</span><br><span class="line">    name=<span class="string">'stack'</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
 <p>把一个 R 阶的张量列表堆成一个 R+1 阶的张量。</p>
 <p>通过沿 <em>axis</em> 方向，将 <em>values</em> 中的张量列表打包到一个比 <em>values</em> 中的任何一个张量高一阶的张量中。现在给定一个长度为 <em>N</em> 的列表，其中的张量形状为 <em>(A, B, C)</em>。</p>
 <ul>
@@ -438,15 +441,16 @@
 </ul>
 <p>例如：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">x = tf.constant([<span class="number">1</span>, <span class="number">4</span>])</span><br><span class="line">y = tf.constant([<span class="number">2</span>, <span class="number">5</span>])</span><br><span class="line">z = tf.constant([<span class="number">3</span>, <span class="number">6</span>])</span><br><span class="line">tf.stack([x, y, z])  <span class="comment"># [[1, 4], [2, 5], [3, 6]] (Pack along first dim.)</span></span><br><span class="line">tf.stack([x, y, z], axis=<span class="number">1</span>)  <span class="comment"># [[1, 2, 3], [4, 5, 6]]</span></span><br></pre></td></tr></table></figure>
+
 <p>理解的时候，我把 <em>[x, y, z]</em> 理解为一个张量了，而其实上，我不应该混淆，<strong>张量</strong> 与其在 Python 中的阵列实现混为一谈。这个时候，其只是作为一个 张量列表 传递给 stack() 函数的。</p>
-<p>列表中的张量其形状都是 <em>[2]</em>， 列表长度为 <em>3</em>，那么，stack() 后的张量形状应该为 <em>[3,2]</em>。而当 <em>axis = 1</em>，的时候，就应该是 <em>[2,3]</em></p>
+<p>列表中的张量其形状都是 <em>[2]<em>， 列表长度为 *3</em>，那么，stack() 后的张量形状应该为 *[3,2]<em>。而当 *axis = 1</em>，的时候，就应该是 *[2,3]</em></p>
 <p>这与 unstack 是相反的操作。这与 ：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">tf.stack([x, y, z]) = np.stack([x, y, z])</span><br></pre></td></tr></table></figure>
 <p>一致。</p>
 <p>参数：</p>
 <ul>
 <li><strong>values</strong> 具有相同形状和类型的<strong>张量</strong>对象列表</li>
-<li><strong>axis</strong> <em>int</em> 值。要压缩的轴方向。默认就是第一个。负值回绕，所以有效值就是 <em>[-(R+1), R+1)</em>。</li>
+<li><strong>axis</strong> <em>int</em> 值。要压缩的轴方向。默认就是第一个。负值回绕，所以有效值就是 *[-(R+1), R+1)*。</li>
 <li><strong>name</strong> 操作名称</li>
 </ul>
 <p>返回值：</p>
@@ -457,9 +461,10 @@
 <ul>
 <li><strong>ValueError</strong> 如果 <em>axis</em> 超过了范围 <em>[-(R+1), R+1)</em></li>
 </ul>
-<h1 id="tf-unstack"><a href="#tf-unstack" class="headerlink" title="tf.unstack()"></a>tf.unstack()</h1><figure class="highlight py"><table><tr><td class="code"><pre><span class="line">tf.unstack(</span><br><span class="line">    value,</span><br><span class="line">    num=<span class="keyword">None</span>,</span><br><span class="line">    axis=<span class="number">0</span>,</span><br><span class="line">    name=<span class="string">'unstack'</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h1 id="tf-unstack"><a href="#tf-unstack" class="headerlink" title="tf.unstack()"></a>tf.unstack()</h1><figure class="highlight py"><table><tr><td class="code"><pre><span class="line">tf.unstack(</span><br><span class="line">    value,</span><br><span class="line">    num=<span class="literal">None</span>,</span><br><span class="line">    axis=<span class="number">0</span>,</span><br><span class="line">    name=<span class="string">'unstack'</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
 <p>把 R 阶的张量解压为 R-1 阶。</p>
-<p>通过沿 <em>axis</em> 方向解开，从 <em>value</em> 张量内解压出 <em>num</em> 个张量。如果没有指定 <em>num（默认情况）</em>，这会从 <em>value</em> 的形状去推测出来。但如果 <em>value.shape[axis]</em> 是未知的，就会抛出 <em>ValueError</em> 错误。</p>
+<p>通过沿 <em>axis</em> 方向解开，从 <em>value</em> 张量内解压出 <em>num</em> 个张量。如果没有指定 <em>num（默认情况）*，这会从 *value</em> 的形状去推测出来。但如果 <em>value.shape[axis]</em> 是未知的，就会抛出 <em>ValueError</em> 错误。</p>
 <p>比如给出一个形状为 <strong>(A, B, C, D)</strong>的张量：</p>
 <p>如果 <strong>axis==0</strong>，那么 <strong>输出</strong> 的第 <em>i</em> 个张量就是切片 <strong>value[i, :, :, :]</strong>，且输出中的每个张量形状都是 <strong>(B, C, D)</strong>。<strong>注意，解压的轴消失了。这和 <code>split</code> 不一样</strong>。</p>
 <p>如果 <strong>axis==1</strong>，那么 <strong>输出</strong> 的第 <em>i</em> 个张量就是切片 <strong>value[:, i, :, :]</strong>，且输出中的每个张量形状都是 <strong>(A, C, D)</strong>。<strong>注意，解压的轴消失了。这和 <code>split</code> 不一样</strong>。</p>
@@ -489,7 +494,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/Android截图后相册没有立马到相册中.html" rel="next" title="Android截图后相册没有立马到相册中">
+                <a href="/Android/Android%E6%88%AA%E5%9B%BE%E5%90%8E%E7%9B%B8%E5%86%8C%E6%B2%A1%E6%9C%89%E7%AB%8B%E9%A9%AC%E5%88%B0%E7%9B%B8%E5%86%8C%E4%B8%AD.html" rel="next" title="Android截图后相册没有立马到相册中">
                   <i class="fa fa-chevron-left"></i> Android截图后相册没有立马到相册中
                 </a>
             </div>
@@ -497,7 +502,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/macOS/macOS的networksetup命令来管理网络.html" rel="prev" title="macOS的networksetup命令来管理网络">
+                <a href="/macOS/macOS%E7%9A%84networksetup%E5%91%BD%E4%BB%A4%E6%9D%A5%E7%AE%A1%E7%90%86%E7%BD%91%E7%BB%9C.html" rel="prev" title="macOS的networksetup命令来管理网络">
                   macOS的networksetup命令来管理网络 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -584,10 +589,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -616,10 +621,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -694,7 +699,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Python/TensorFlow中张量的stack与unstack.html",
+            url: "https://gowa.club/Python/TensorFlow%E4%B8%AD%E5%BC%A0%E9%87%8F%E7%9A%84stack%E4%B8%8Eunstack.html",
             identifier: "Python/TensorFlow中张量的stack与unstack.html",
             title: "TensorFlow中的张量的stack与unstack"
           }

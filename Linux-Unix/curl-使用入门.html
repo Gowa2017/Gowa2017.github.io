@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Curl">
 <meta property="og:type" content="article">
 <meta property="og:title" content="curl 使用入门">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/curl-使用入门.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;curl-%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="curl 是一个命令行工具和「库」，目的是用来通过urls传输数据。其支持多个协议，多用来在命令行或者脚本来传输数据。通过其官方的这个入门的Tutorial可见其用处的广泛。  最新版本的curl可以通过其官方网站 curl.haxx.se获取">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-12-22T06:45:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="curl 使用入门">
-<meta name="twitter:description" content="curl 是一个命令行工具和「库」，目的是用来通过urls传输数据。其支持多个协议，多用来在命令行或者脚本来传输数据。通过其官方的这个入门的Tutorial可见其用处的广泛。  最新版本的curl可以通过其官方网站 curl.haxx.se获取">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/curl-使用入门.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/curl-%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/curl-使用入门.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/curl-%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/curl-使用入门.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/curl-%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/curl-使用入门.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,131 +285,88 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>  curl 是一个命令行工具和「库」，目的是用来通过<code>urls</code>传输数据。其支持多个协议，多用来在命令行或者脚本来传输数据。通过其官方的这个入门的<code>Tutorial</code>可见其用处的广泛。<br>  最新版本的curl可以通过其官方网站 <a href="https://curl.haxx.se" target="_blank" rel="noopener">curl.haxx.se</a>获取<br><a id="more"></a></p>
+        <p>  curl 是一个命令行工具和「库」，目的是用来通过<code>urls</code>传输数据。其支持多个协议，多用来在命令行或者脚本来传输数据。通过其官方的这个入门的<code>Tutorial</code>可见其用处的广泛。<br>  最新版本的curl可以通过其官方网站 <a href="https://curl.haxx.se" target="_blank" rel="noopener">curl.haxx.se</a>获取</p>
+<a id="more"></a>
 <h1 id="简单用法"><a href="#简单用法" class="headerlink" title="简单用法"></a>简单用法</h1><p>  获取Netscape网站的首页：</p>
-<pre><code>    curl http://www.netscape.com/
-</code></pre><p>  获取某个FTP服务器上的README文件：</p>
-<pre><code>    curl ftp://ftp.funet.fi/README
-</code></pre><p>  获取使用非标准端口网站的首页：</p>
-<pre><code>    curl http://www.weirdserver.com:8000/
-</code></pre><p>  获取FTP服务器的目录列表：</p>
-<pre><code>    curl ftp://cool.haxx.se/
-</code></pre><p>  从一个词典网站获取对curl的定义：</p>
-<pre><code>    curl dict://dict.org/m:curl
-</code></pre><p>  同时获取两个文件：</p>
-<pre><code>    curl ftp://cool.haxx.se/ http://www.weirdserver.com:8000/
-</code></pre><p>  获取FTPS服务器上的文件：</p>
-<pre><code>    curl ftps://files.are.secure.com/secrets.txt
-</code></pre><p>  或者使用更适合的FTPS方式获取同样的文件：</p>
-<pre><code>    curl --ftp-ssl ftp://files.are.secure.com/secrets.txt
-</code></pre><p>  从SSH服务器上通过SFTP获取文件：</p>
-<pre><code>    curl -u username sftp://example.com/etc/issue
-</code></pre><p>  从SSH服务器上用SCP协议通过私钥（没有密码保护）认证获取文件：</p>
-<pre><code>    curl -u username: --key ~/.ssh/id_rsa \ 
-         scp://example.com/~/file.txt
-</code></pre><p>  从SSH服务器上用SCP协议通过私钥（有密码保护）认证获取文件： </p>
-<pre><code>    curl -u username: --key ~/.ssh/id_rsa --pass private_key_password \ 
-         scp://example.com/~/file.txt
-</code></pre><p>  获取IPv6网站的首页：</p>
-<pre><code>    curl &quot;http://[2001:1890:1112:1::20]/&quot;
-</code></pre><p>  从SMB服务器获取文件：</p>
-<pre><code>    curl -u &quot;domain\username:passwd&quot; smb://server.example.com/share/file.txt
-</code></pre><h1 id="下载到一个文件"><a href="#下载到一个文件" class="headerlink" title="下载到一个文件"></a>下载到一个文件</h1><p>  获取一个网页，然后保存到本地，用一个指定的名字：</p>
-<pre><code>    curl -o thatpage.html http://www.netscape.com/
-</code></pre><p>  保存为和服务器一样的名字：</p>
-<pre><code>    curl -O http://www.netscape.com/index.html
-</code></pre><p>  同时获取两个文件，但是保存名字不变：</p>
-<pre><code>    curl -O www.haxx.se/index.html -O curl.haxx.se/download.html
-</code></pre><h1 id="使用密码"><a href="#使用密码" class="headerlink" title="使用密码"></a>使用密码</h1><h2 id="FTP"><a href="#FTP" class="headerlink" title="FTP"></a>FTP</h2><p>有两种方式：</p>
-<pre><code>    curl ftp://name:passwd@machine.domain:port/full/path/to/file
-</code></pre><p>或者：</p>
-<pre><code>    curl -u name:passwd ftp://machine.domain:port/full/path/to/file
-</code></pre><h2 id="FTPS"><a href="#FTPS" class="headerlink" title="FTPS"></a>FTPS</h2><p>  和用FTP一样，但是你应该加上 SSL选项 <code>--ftp-ssl</code>。<br>  不建议用ftps:// 这样的方式，而建议使用：</p>
-<pre><code>curl --ftp-ssl ftp://  
-</code></pre><p>  这样的方式。</p>
+<pre><code>curl http://www.netscape.com/</code></pre><p>  获取某个FTP服务器上的README文件：</p>
+<pre><code>curl ftp://ftp.funet.fi/README</code></pre><p>  获取使用非标准端口网站的首页：</p>
+<pre><code>curl http://www.weirdserver.com:8000/</code></pre><p>  获取FTP服务器的目录列表：</p>
+<pre><code>curl ftp://cool.haxx.se/</code></pre><p>  从一个词典网站获取对curl的定义：</p>
+<pre><code>curl dict://dict.org/m:curl</code></pre><p>  同时获取两个文件：</p>
+<pre><code>curl ftp://cool.haxx.se/ http://www.weirdserver.com:8000/</code></pre><p>  获取FTPS服务器上的文件：</p>
+<pre><code>curl ftps://files.are.secure.com/secrets.txt</code></pre><p>  或者使用更适合的FTPS方式获取同样的文件：</p>
+<pre><code>curl --ftp-ssl ftp://files.are.secure.com/secrets.txt</code></pre><p>  从SSH服务器上通过SFTP获取文件：</p>
+<pre><code>curl -u username sftp://example.com/etc/issue</code></pre><p>  从SSH服务器上用SCP协议通过私钥（没有密码保护）认证获取文件：</p>
+<pre><code>curl -u username: --key ~/.ssh/id_rsa \ 
+     scp://example.com/~/file.txt</code></pre><p>  从SSH服务器上用SCP协议通过私钥（有密码保护）认证获取文件： </p>
+<pre><code>curl -u username: --key ~/.ssh/id_rsa --pass private_key_password \ 
+     scp://example.com/~/file.txt</code></pre><p>  获取IPv6网站的首页：</p>
+<pre><code>curl &quot;http://[2001:1890:1112:1::20]/&quot;</code></pre><p>  从SMB服务器获取文件：</p>
+<pre><code>curl -u &quot;domain\username:passwd&quot; smb://server.example.com/share/file.txt</code></pre><h1 id="下载到一个文件"><a href="#下载到一个文件" class="headerlink" title="下载到一个文件"></a>下载到一个文件</h1><p>  获取一个网页，然后保存到本地，用一个指定的名字：</p>
+<pre><code>curl -o thatpage.html http://www.netscape.com/</code></pre><p>  保存为和服务器一样的名字：</p>
+<pre><code>curl -O http://www.netscape.com/index.html</code></pre><p>  同时获取两个文件，但是保存名字不变：</p>
+<pre><code>curl -O www.haxx.se/index.html -O curl.haxx.se/download.html</code></pre><h1 id="使用密码"><a href="#使用密码" class="headerlink" title="使用密码"></a>使用密码</h1><h2 id="FTP"><a href="#FTP" class="headerlink" title="FTP"></a>FTP</h2><p>有两种方式：</p>
+<pre><code>curl ftp://name:passwd@machine.domain:port/full/path/to/file</code></pre><p>或者：</p>
+<pre><code>curl -u name:passwd ftp://machine.domain:port/full/path/to/file</code></pre><h2 id="FTPS"><a href="#FTPS" class="headerlink" title="FTPS"></a>FTPS</h2><p>  和用FTP一样，但是你应该加上 SSL选项 <code>--ftp-ssl</code>。<br>  不建议用ftps:// 这样的方式，而建议使用：</p>
+<pre><code>curl --ftp-ssl ftp://  </code></pre><p>  这样的方式。</p>
 <h2 id="SFTP-SCP"><a href="#SFTP-SCP" class="headerlink" title="SFTP / SCP"></a>SFTP / SCP</h2><p>   和FTP使用也类似，但是你可以用 <code>--key</code>选项指定一个私钥，而不使用密码。（私钥有可能是受密码保护的，这个时候就要用<code>--pass</code>选项来指定保护私钥的密码）。</p>
 <h2 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h2><p>  curl 也支持用户名和密码的网页，但是现在用得已经很少了。</p>
-<pre><code>    curl http://name:passwd@machige.domain/full/path/to/file
-</code></pre><p> 或者用<code>-u</code>指定用户名和密码：</p>
-<pre><code>    curl -u name:passwd http://machine.domain/full/path/to/file
-</code></pre><p>  HTTP支持很多不同方式的认证，curl支持其中的几种：<strong>Basic, Digest, NTLM和Negotiate</strong>。在没有指定方式的情况下，默认使用 <strong>Basic</strong>。可以通过<code>--anyauth</code>选项来让服务器选择哪一种方式。</p>
+<pre><code>curl http://name:passwd@machige.domain/full/path/to/file</code></pre><p> 或者用<code>-u</code>指定用户名和密码：</p>
+<pre><code>curl -u name:passwd http://machine.domain/full/path/to/file</code></pre><p>  HTTP支持很多不同方式的认证，curl支持其中的几种：<strong>Basic, Digest, NTLM和Negotiate</strong>。在没有指定方式的情况下，默认使用 <strong>Basic</strong>。可以通过<code>--anyauth</code>选项来让服务器选择哪一种方式。</p>
 <p>   根据 URL标准，HTTP URLS不能在连接内包含用户名和密码，通过代理的时候，这就会出问题。这时候，必须使用 <code>-u</code>这样的格式来指定。 </p>
 <h2 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h2><p>  看后面有介绍。 </p>
 <h1 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h1><p>  curl支持HTPP和SOCKS代理服务器，即使包括认证。FTP代理也是支持的，但是现在没有一个统一的标准，大多数情况下也能工作得很好。<br>  从ftp服务器上通过代理的888端口获取一个文件： </p>
-<pre><code>    curl -x my-proxy:888 ftp://ftp.leachsite.com/README
-</code></pre><p>  用和上面一样的代理从HTTP服务器通过用户名和密码进行认证获取文件：</p>
-<pre><code>    curl -u user:passwd -x my-proxy:888 http://www.get.this/
-</code></pre><p>  有些代理需要一些特定的认证，用<code>-U</code>选项进行指定： </p>
-<pre><code>    curl -U user:passwd -x my-proxy:888 http://www.get.this/
-</code></pre><p>  要指定某些域名或主机不使用认证的话可以像下面一样样<code>--noproxy</code>和逗号分割：</p>
-<pre><code>    curl --noproxy localhost,get.this -x my-proxy:888 http://www.get.this/
-</code></pre><p>  如果代理是用<code>--proxy1.0</code>指定，而不是用<code>--proxy</code>或<code>-x</code>，那么curl会使用HTTP/1.0，而不是HTTP/1.1。<br>  curl通过<code>--socks4</code>  <code>--socks5</code>支持 SOCKS4和SOCKS5代理。</p>
+<pre><code>curl -x my-proxy:888 ftp://ftp.leachsite.com/README</code></pre><p>  用和上面一样的代理从HTTP服务器通过用户名和密码进行认证获取文件：</p>
+<pre><code>curl -u user:passwd -x my-proxy:888 http://www.get.this/</code></pre><p>  有些代理需要一些特定的认证，用<code>-U</code>选项进行指定： </p>
+<pre><code>curl -U user:passwd -x my-proxy:888 http://www.get.this/</code></pre><p>  要指定某些域名或主机不使用认证的话可以像下面一样样<code>--noproxy</code>和逗号分割：</p>
+<pre><code>curl --noproxy localhost,get.this -x my-proxy:888 http://www.get.this/</code></pre><p>  如果代理是用<code>--proxy1.0</code>指定，而不是用<code>--proxy</code>或<code>-x</code>，那么curl会使用HTTP/1.0，而不是HTTP/1.1。<br>  curl通过<code>--socks4</code>  <code>--socks5</code>支持 SOCKS4和SOCKS5代理。</p>
 <p>  大多数FTP代理服务器被设置为在客户端看起来他们就像一个正常的FTP服务器，通过特定的命令来选择远程FTP服务器。<br>  curl支持<code>-u, -Q, --ftp-account</code>选项来设置通过很多ftp代理进行传输数据。举例说明，一个文件可以通过Blue Coat FTP代理传输到一个远程FTP服务器： </p>
-<p>   curl -u “Remote-FTP-Username@remote.ftp.server Proxy-Username:Remote-Pass” \<br>    —ftp-account Proxy-Password —upload-file local-file \<br>    ftp://my-ftp.proxy.server:21/remote/upload/path/</p>
+<p>   curl -u “<a href="mailto:Remote-FTP-Username@remote.ftp.server" target="_blank" rel="noopener">Remote-FTP-Username@remote.ftp.server</a> Proxy-Username:Remote-Pass” \<br>    –ftp-account Proxy-Password –upload-file local-file \<br>    <a href="ftp://my-ftp.proxy.server:21/remote/upload/path/" target="_blank" rel="noopener">ftp://my-ftp.proxy.server:21/remote/upload/path/</a></p>
 <p>  查看你的FTP代理手册来了解哪一种形式的传输，同时用curl <code>-v</code>选项看一下到底发送出去了什么。 </p>
 <h1 id="范围"><a href="#范围" class="headerlink" title="范围"></a>范围</h1><p>  HTTP 1.1 介绍了字节范围。通过这个，一个客户端可以请求获得某个文档的一个字节或者一部分。curl通过<code>-r</code>选项进行支持。</p>
 <p>  获取文档的前100个字节：</p>
-<pre><code>    curl -r 0-99 http://www.get.this/
-</code></pre><p> 获取文档的最后500字节：</p>
-<pre><code>    curl -r -500 http://www.get.this/
-</code></pre><p> curl同样支持简单的对FTP文件的范围指定。我们可以指定起止位置：<br> 获取开始的100字节通过FTP： </p>
-<pre><code>    curl -r 0-99 ftp://www.get.this/README
-</code></pre><h1 id="上传"><a href="#上传" class="headerlink" title="上传"></a>上传</h1><h2 id="FTP-FTPS-SFTP-SCP"><a href="#FTP-FTPS-SFTP-SCP" class="headerlink" title="FTP / FTPS / SFTP / SCP"></a>FTP / FTPS / SFTP / SCP</h2><p> 把标准输入的所有内容传输到一个服务器：</p>
-<pre><code>    curl -T - ftp://ftp.upload.com/myfile
-</code></pre><p> 通过用户名和密码登录，把某一文件进行上传：</p>
-<pre><code>    curl -T uploadfile -u user:passwd ftp://ftp.upload.com/myfile
-</code></pre><p> 上传一个本地文件到远程网站，文件名不变：</p>
-<pre><code>    curl -T uploadfile -u user:passwd ftp://ftp.upload.com/
-</code></pre><p> 上传一个本地文件，并附加到某一文件：</p>
-<pre><code>    curl -T localfile -a ftp://ftp.upload.com/remotefile
-</code></pre><p> curl也支持通过代理上传到FTP，但这样的前提是代理设置为允许这种隧道。如果这样设置了代理的话，可以用如下类似的方式上传：</p>
-<pre><code>    curl --proxytunnel -x proxy:port -T localfile ftp.upload.com
-</code></pre><h2 id="SMB-SMBS"><a href="#SMB-SMBS" class="headerlink" title="SMB / SMBS"></a>SMB / SMBS</h2><pre><code>    curl -T file.txt -u &quot;domain\username:passwd&quot;
-     smb://server.example.com/share/
-</code></pre><h2 id="HTTP-1"><a href="#HTTP-1" class="headerlink" title="HTTP"></a>HTTP</h2><p> 上传标准输入到一个HTTP网站：</p>
-<pre><code>    curl -T - http://www.upload.com/myfile
-</code></pre><blockquote>
+<pre><code>curl -r 0-99 http://www.get.this/</code></pre><p> 获取文档的最后500字节：</p>
+<pre><code>curl -r -500 http://www.get.this/</code></pre><p> curl同样支持简单的对FTP文件的范围指定。我们可以指定起止位置：<br> 获取开始的100字节通过FTP： </p>
+<pre><code>curl -r 0-99 ftp://www.get.this/README</code></pre><h1 id="上传"><a href="#上传" class="headerlink" title="上传"></a>上传</h1><h2 id="FTP-FTPS-SFTP-SCP"><a href="#FTP-FTPS-SFTP-SCP" class="headerlink" title="FTP / FTPS / SFTP / SCP"></a>FTP / FTPS / SFTP / SCP</h2><p> 把标准输入的所有内容传输到一个服务器：</p>
+<pre><code>curl -T - ftp://ftp.upload.com/myfile</code></pre><p> 通过用户名和密码登录，把某一文件进行上传：</p>
+<pre><code>curl -T uploadfile -u user:passwd ftp://ftp.upload.com/myfile</code></pre><p> 上传一个本地文件到远程网站，文件名不变：</p>
+<pre><code>curl -T uploadfile -u user:passwd ftp://ftp.upload.com/</code></pre><p> 上传一个本地文件，并附加到某一文件：</p>
+<pre><code>curl -T localfile -a ftp://ftp.upload.com/remotefile</code></pre><p> curl也支持通过代理上传到FTP，但这样的前提是代理设置为允许这种隧道。如果这样设置了代理的话，可以用如下类似的方式上传：</p>
+<pre><code>curl --proxytunnel -x proxy:port -T localfile ftp.upload.com</code></pre><h2 id="SMB-SMBS"><a href="#SMB-SMBS" class="headerlink" title="SMB / SMBS"></a>SMB / SMBS</h2><pre><code>curl -T file.txt -u &quot;domain\username:passwd&quot;
+ smb://server.example.com/share/</code></pre><h2 id="HTTP-1"><a href="#HTTP-1" class="headerlink" title="HTTP"></a>HTTP</h2><p> 上传标准输入到一个HTTP网站：</p>
+<pre><code>curl -T - http://www.upload.com/myfile</code></pre><blockquote>
 <p>注意：网站必须被配置为允许<code>put</code>。 </p>
 </blockquote>
 <p> 对于上传HTTP数据的其他方式，查看<strong>POST</strong>一节。</p>
 <h1 id="VERBOSE-DEBUG"><a href="#VERBOSE-DEBUG" class="headerlink" title="VERBOSE / DEBUG"></a>VERBOSE / DEBUG</h1><p>  这两个选项主要用来调试用：</p>
-<pre><code>    curl -v ftp://ftp.upload.com/
-</code></pre><p>  如果需要更加详细的信息，那么用<code>--trace 或者 --trace-ascii</code>选项来将信息保存到一个文件：</p>
-<pre><code>    curl --trace trace.txt www.haxx.se
-</code></pre><h1 id="DETAILED-INFORMATION"><a href="#DETAILED-INFORMATION" class="headerlink" title="DETAILED INFORMATION"></a>DETAILED INFORMATION</h1><p>  不同协议支持不同的方式来获取指定文档的详细信息。为了让curl来展示单独一个文件的详细信息，你要用<code>-I/--head</code>选项。这将会展示单独一个文件的所有可用信息（HTTP、FTP）。HTTP信息可是非常广泛的。</p>
+<pre><code>curl -v ftp://ftp.upload.com/</code></pre><p>  如果需要更加详细的信息，那么用<code>--trace 或者 --trace-ascii</code>选项来将信息保存到一个文件：</p>
+<pre><code>curl --trace trace.txt www.haxx.se</code></pre><h1 id="DETAILED-INFORMATION"><a href="#DETAILED-INFORMATION" class="headerlink" title="DETAILED INFORMATION"></a>DETAILED INFORMATION</h1><p>  不同协议支持不同的方式来获取指定文档的详细信息。为了让curl来展示单独一个文件的详细信息，你要用<code>-I/--head</code>选项。这将会展示单独一个文件的所有可用信息（HTTP、FTP）。HTTP信息可是非常广泛的。</p>
 <p>  对于 HTTP，我们用<code>-i/--include</code>选项可以让头部信息在数据之前显示。curl对FTP和HTTP协议识别<code>-D/--dump-header</code>选项，然后会把头部信息存放在这个选项指定的文件内。</p>
 <p> 存储HTTP头部在一个单独的文件（例子中是放在<code>headers.txt</code>中）：</p>
-<pre><code>    curl --dump-header headers.txt curl.haxx.se
-</code></pre><p> 将头部信息存放在一个单独我文件是非常有用的，特别是当你后面要让curl使用cookies的时候。更详细的查看<strong>cookies</strong>一节。</p>
+<pre><code>curl --dump-header headers.txt curl.haxx.se</code></pre><p> 将头部信息存放在一个单独我文件是非常有用的，特别是当你后面要让curl使用cookies的时候。更详细的查看<strong>cookies</strong>一节。</p>
 <h1 id="POST-HTTP"><a href="#POST-HTTP" class="headerlink" title="POST (HTTP)"></a>POST (HTTP)</h1><p> 通过curl来POST数据非常简单的。用<code>-d</code>选项就可以了，post过去的数据会被加密。</p>
 <p> Post一个简单的”name”和”phone”顾客表：</p>
-<pre><code>    curl -d &quot;name=Rafael%20Sagula&amp;phone=3320780&quot; \ 
-            http://www.where.com/guest.cgi
-</code></pre><p> 怎么样Post一个表单，请看 lesson #1:</p>
+<pre><code>curl -d &quot;name=Rafael%20Sagula&amp;phone=3320780&quot; \ 
+        http://www.where.com/guest.cgi</code></pre><p> 怎么样Post一个表单，请看 lesson #1:</p>
 <p>  找出想要填写表单的所有<input>标签。（有一个叫做<strong>formfind.pl</strong>的perl程序可以帮助我们，curl官方网站有下载）。</p>
 <p> 如果是一个”常规的“Post，使用<code>-d</code>选项。<code>-d</code>使用一个完整的”post string”，用下面这种形式：</p>
-<pre><code>    &lt;variable1&gt;=&lt;data1&gt;&amp;&lt;variable2&gt;=&lt;data2&gt;&amp;...
-</code></pre><p> ‘varialbe’名字是在<input>标签中的”name=”后面的值，数据就是你想要填进这个input里面的值。数据<strong>必须</strong>是 URL encoded。也就是说，用<code>-</code>来替换空格，然后用<strong>%XX</strong>这样的形式来代替奇怪的符号。</p>
+<pre><code>&lt;variable1&gt;=&lt;data1&gt;&amp;&lt;variable2&gt;=&lt;data2&gt;&amp;...</code></pre><p> ‘varialbe’名字是在<input>标签中的”name=”后面的值，数据就是你想要填进这个input里面的值。数据<strong>必须</strong>是 URL encoded。也就是说，用<code>-</code>来替换空格，然后用<strong>%XX</strong>这样的形式来代替奇怪的符号。</p>
 <p>  例子：</p>
 <p>  (page located at <a href="http://www.formpost.com/getthis/" target="_blank" rel="noopener">http://www.formpost.com/getthis/</a></p>
-<pre><code>    &lt;form action=&quot;post.cgi&quot; method=&quot;post&quot;&gt;
-    &lt;input name=user size=10&gt;
-    &lt;input name=pass type=password size=10&gt;
-    &lt;input name=id type=hidden value=&quot;blablabla&quot;&gt;
-    &lt;input name=ding value=&quot;submit&quot;&gt;
-    &lt;/form&gt;
-</code></pre><p>  我们想输入用户名’foobar’，密码’12345’。<br>  想要post这两个数据，我们可以： </p>
-<pre><code>    curl -d &quot;user=foobar&amp;pass=12345&amp;id=blablabla&amp;ding=submit&quot;  (continues)
-      http://www.formpost.com/getthis/post.cgi
-</code></pre><p>  <code>-F</code>选项接受像<code>-F &quot;name=contents&quot;</code>这样的参数。如果想要内容来自于文件的话，用<code>&lt;@filename&gt;</code>替代内容。当指定一个文件的时候，同时可以指定文件内容的类型，通过附加<code>:type=&lt;mime type&gt;</code>在文件名字后面。当然，我们也可以把几个文件在一个字段来进行post。比如，字段<strong>coolfiles</strong>被用来发送三个文件，但是文件具有不同的内容类型：</p>
-<pre><code>    curl -F &quot;coolfiles=@fil1.gif;type=image/gif,fil2.txt,fil3.html&quot; \ 
-    http://www.post.com/postit.cgi
-</code></pre><p> 如果内容类型没有指定，curl会尝试从文件的扩展名进行猜测（只有部分能猜出来），或者用之前指定的类型（从前些个指定的文件类型），或者使用默认的<strong>application/octet-stream</strong>类型。</p>
+<pre><code>&lt;form action=&quot;post.cgi&quot; method=&quot;post&quot;&gt;
+&lt;input name=user size=10&gt;
+&lt;input name=pass type=password size=10&gt;
+&lt;input name=id type=hidden value=&quot;blablabla&quot;&gt;
+&lt;input name=ding value=&quot;submit&quot;&gt;
+&lt;/form&gt;</code></pre><p>  我们想输入用户名’foobar’，密码’12345’。<br>  想要post这两个数据，我们可以： </p>
+<pre><code>curl -d &quot;user=foobar&amp;pass=12345&amp;id=blablabla&amp;ding=submit&quot;  (continues)
+  http://www.formpost.com/getthis/post.cgi</code></pre><p>  <code>-F</code>选项接受像<code>-F &quot;name=contents&quot;</code>这样的参数。如果想要内容来自于文件的话，用<code>&lt;@filename&gt;</code>替代内容。当指定一个文件的时候，同时可以指定文件内容的类型，通过附加<code>:type=&lt;mime type&gt;</code>在文件名字后面。当然，我们也可以把几个文件在一个字段来进行post。比如，字段<strong>coolfiles</strong>被用来发送三个文件，但是文件具有不同的内容类型：</p>
+<pre><code>curl -F &quot;coolfiles=@fil1.gif;type=image/gif,fil2.txt,fil3.html&quot; \ 
+http://www.post.com/postit.cgi</code></pre><p> 如果内容类型没有指定，curl会尝试从文件的扩展名进行猜测（只有部分能猜出来），或者用之前指定的类型（从前些个指定的文件类型），或者使用默认的<strong>application/octet-stream</strong>类型。</p>
 <p> 仿真一下用<code>-F</code>来填充一个表单。假设我们要填充某一表单的三个字段。文件名，用户名，文件描述。我们要post我们已经写好的名字叫<strong>cooltext.txt</strong>的文件。现在我们用curl而不是浏览器来完成这个任务，在此之前我们必须阅读一下这个表单页面的HTML源代码来找到输入字段的名字。我们的例子里，这三个输入字段分别为：file,yourname,filedescription。</p>
-<pre><code>    curl -F &quot;file=@cooltext.txt&quot; -F &quot;yourname=Daniel&quot; \ 
-         -F &quot;filedescription=Cool text file with cool text inside&quot; \ 
-         http://www.post.com/postit.cgi
-</code></pre><p> 如果想在一个POST请求中发送两个文件有两种方式可以做到：</p>
+<pre><code>curl -F &quot;file=@cooltext.txt&quot; -F &quot;yourname=Daniel&quot; \ 
+     -F &quot;filedescription=Cool text file with cool text inside&quot; \ 
+     http://www.post.com/postit.cgi</code></pre><p> 如果想在一个POST请求中发送两个文件有两种方式可以做到：</p>
 <ol>
 <li><p>在一个字段内指定多个文件：</p>
 <p>   curl -F “pictures=@dog.gif,cat.gif”</p>
@@ -422,251 +377,574 @@
 </li>
 </ol>
 <h1 id="REFERRER"><a href="#REFERRER" class="headerlink" title="REFERRER"></a>REFERRER</h1><p>  一个HTTP请求有应该包含从哪里链接到了实际的访问地址。curl可以让我们在命令行上就指定。这是非常实用的一个功能，可以用来愚弄依靠这个引用信息来返回一些信息的愚蠢的服务器或者CGI脚本。</p>
-<pre><code>    curl -e www.coolsite.com http://www.showme.com/
-</code></pre><p>  NOTE: The Referer: [sic] field is defined in the HTTP spec to be a full URL.</p>
+<pre><code>curl -e www.coolsite.com http://www.showme.com/</code></pre><p>  NOTE: The Referer: [sic] field is defined in the HTTP spec to be a full URL.</p>
 <h1 id="USER-AGENT"><a href="#USER-AGENT" class="headerlink" title="USER AGENT"></a>USER AGENT</h1><p> 一个HTTP请求有一个选项来包含是哪个浏览器产生了这个请求。curl可以通过命令行来指定。这个你懂的。</p>
 <p> 例子：</p>
-<p>  curl -A ‘Mozilla/3.0 (Win95; I)’ <a href="http://www.nationsbank.com/" target="_blank" rel="noopener">http://www.nationsbank.com/</a><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  Other common strings:</span><br><span class="line">    &apos;Mozilla/3.0 (Win95; I)&apos;     Netscape Version 3 for Windows 95</span><br><span class="line">    &apos;Mozilla/3.04 (Win95; U)&apos;    Netscape Version 3 for Windows 95</span><br><span class="line">    &apos;Mozilla/2.02 (OS/2; U)&apos;     Netscape Version 2 for OS/2</span><br><span class="line">    &apos;Mozilla/4.04 [en] (X11; U; AIX 4.2; Nav)&apos;           NS for AIX</span><br><span class="line">    &apos;Mozilla/4.05 [en] (X11; U; Linux 2.0.32 i586)&apos;      NS for Linux</span><br><span class="line">``` </span><br><span class="line">&gt;  Note that Internet Explorer tries hard to be compatible in every way:</span><br><span class="line">    &apos;Mozilla/4.0 (compatible; MSIE 4.01; Windows 95)&apos;    MSIE for W95</span><br><span class="line"> </span><br><span class="line">  Mozilla is not the only possible User-Agent name:</span><br></pre></td></tr></table></figure></p>
-<pre><code>&#39;Konqueror/1.0&#39;             KDE File Manager desktop client
-&#39;Lynx/2.7.1 libwww-FM/2.14&#39; Lynx command line browser
-</code></pre><p>``` </p>
-<h1 id="COOKIES"><a href="#COOKIES" class="headerlink" title="COOKIES"></a>COOKIES</h1><p>  Cookies经常被服务器用来保存客户端侧的状态信息。服务器通过在头部发送一个响应行，类似<code>Set-Cookie: &lt;data&gt;</code>，然后内数据部分典型的包含一系列 NAME=VALUE的键值对。（用;分割）<br>  服务器也能指定哪个路径使用这个cookie（path-value)，什么时候过期(expire=DATE)，哪个域名使用（domain=NAME），在安全连接上是否使用（secure）。</p>
-<p>  如果你收到了一个包含类似下面头部的页面：</p>
-<pre><code>    Set-Cookie: sessionid=boo123; path=&quot;/foo&quot;;
-</code></pre><p>  这是说服务器希望在get任何一个以/foo开头的路径是要通过sessionid boo123来匹配。</p>
-<p>  比如，获取一个希望名字进行匹配cookie的页面：</p>
-<pre><code>    curl -b &quot;name=Daniel&quot; www.sillypage.com
-</code></pre><p>  curl同样具有使在接下来的sessions里面使用以前接受到的cookies。如果你用下面的方式保存收到的cookies：</p>
-<pre><code>    curl --dump-header headers www.example.com
-</code></pre><p>  我们可以在马上用这个cookies来连接网站：</p>
-<pre><code>    curl -b headers www.example.com
-</code></pre><p> 把头部信息存储到一个文件是个保存cookies的一个方式，但却不是一个方便的方式。我们可以把cookies以广为人知的<code>netscape cookie</code>格式进行保存。</p>
-<pre><code>    curl -c cookies.txt www.example.com
-</code></pre><p> 注意，<code>-b</code>选项会启用<strong>cookie awareness</strong>，<code>-L</code>选项可以让curl跟随一个位置：（常常用来结合cookies使用）。因此如果一个站点发送了一个cookie和一个位置，我们就可以用一个不存在的文件来触发<strong>cookie awareness</strong>：</p>
-<pre><code>    curl -L -b empty.txt www.example.com
-</code></pre><p> 用来读取cookies的文件必须是HTTP头部信息格式或者netscape格式的cookie文件，curl通过内容来判定属于哪一种格式。在上面那个代码中，curl会解析头部并且存储从www.example.com收到的cookie信息。curl在请求匹配那个位置的时候把已保存的cookie发送到服务器。<code>empty.txt</code>文件必须保证是不存在的。</p>
-<p> 为了读写一个netscape的cookie文件，可以用<code>-b</code> 和<code>-c</code>选项在同一个文件上进行。</p>
-<pre><code>    curl -b cookies.txt -c cookies.txt www.example.com
-</code></pre><h2 id="PROGRESS-METER"><a href="#PROGRESS-METER" class="headerlink" title="PROGRESS METER"></a>PROGRESS METER</h2><p> 进度测量用来表明某些事情正在发生。不同的字段含有的意义如下：</p>
-<p>  % Total    % Received % Xferd  Average Speed          Time             Curr.<br>                                 Dload  Upload Total    Current  Left    Speed<br>  0  151M    0 38608    0     0   9406      0  4:41:43  0:00:04  4:41:39  9287</p>
-<p> 从左至右：<br>   %             - 整体完成百分比。<br>   Total         - 要求传输的全部大小。<br>   %             - 当前下载完成度<br>   Received      - 当前下载字节数。<br>   %             - 当前上传百分比<br>   Xferd         - 当前上传字节数。<br>   Average Speed<br>   Dload         - 平均下载速度<br>   Average Speed<br>   Upload        - 平均上传速度<br>   Time Total    - 预计完成时间<br>   Time Current  - 当前经过时间<br>   Time Left     - 预计剩余时间<br>   Curr.Speed    - 5秒内进行的平均速度。</p>
-<p> <code>-#</code>选项会显示更少的解释。</p>
-<h1 id="速度限制"><a href="#速度限制" class="headerlink" title="速度限制"></a>速度限制</h1><p> Curl允许我们设置继续传输必须匹配的条件。通过<code>-y</code>和<code>-Y</code>选项，我们可以让curl在某一连续时间内速度太慢的话就退出。</p>
-<p> 为了让在连续一分钟内速度低于3000b/s的时候curl中断下载，运行：</p>
-<pre><code>    curl -Y 3000 -y 60 www.far-away-site.com
-</code></pre><p> 进行超时设置也是一个非常不错的做法，让上面这个操作必须在30分钟内完成：</p>
-<pre><code>    curl -m 1800 -Y 3000 -y 60 www.far-away-site.com
-</code></pre><p> 强制要求curl必须不能超过一个给定的数值也是可以的，在你使用一个带宽受到限制的连接，你可能并不想让curl全部使用它。</p>
-<p> 让curl每秒的传输速度不要超过10KB：</p>
-<pre><code>    curl --limit-rate 10K www.far-away-site.com
+<p>  curl -A ‘Mozilla/3.0 (Win95; I)’ <a href="http://www.nationsbank.com/" target="_blank" rel="noopener">http://www.nationsbank.com/</a></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  Other common strings:</span><br><span class="line">    &apos;Mozilla/3.0 (Win95; I)&apos;     Netscape Version 3 for Windows 95</span><br><span class="line">    &apos;Mozilla/3.04 (Win95; U)&apos;    Netscape Version 3 for Windows 95</span><br><span class="line">    &apos;Mozilla/2.02 (OS/2; U)&apos;     Netscape Version 2 for OS/2</span><br><span class="line">    &apos;Mozilla/4.04 [en] (X11; U; AIX 4.2; Nav)&apos;           NS for AIX</span><br><span class="line">    &apos;Mozilla/4.05 [en] (X11; U; Linux 2.0.32 i586)&apos;      NS for Linux</span><br><span class="line">``` </span><br><span class="line">&gt;  Note that Internet Explorer tries hard to be compatible in every way:</span><br><span class="line">    &apos;Mozilla/4.0 (compatible; MSIE 4.01; Windows 95)&apos;    MSIE for W95</span><br><span class="line"> </span><br><span class="line">  Mozilla is not the only possible User-Agent name:</span><br></pre></td></tr></table></figure>
+<pre><code>&apos;Konqueror/1.0&apos;             KDE File Manager desktop client
+&apos;Lynx/2.7.1 libwww-FM/2.14&apos; Lynx command line browser</code></pre><pre><code>
+# COOKIES
 
-or
+  Cookies经常被服务器用来保存客户端侧的状态信息。服务器通过在头部发送一个响应行，类似`Set-Cookie: &lt;data&gt;`，然后内数据部分典型的包含一系列 NAME=VALUE的键值对。（用;分割）
+  服务器也能指定哪个路径使用这个cookie（path-value)，什么时候过期(expire=DATE)，哪个域名使用（domain=NAME），在安全连接上是否使用（secure）。
 
-    curl --limit-rate 10240 www.far-away-site.com
-</code></pre><p> 或者不让curl上传速度超过1M/s：</p>
-<pre><code>    curl -T upload --limit-rate 1M ftp://uploadshereplease.com
-</code></pre><h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><p> curl在启动时，会自动读取用户目录下的<code>.curlrc</code>文件（<code>_curlrc</code>在win32系统上）。</p>
-<p> 配置文件由常规命令行开关组成，但是我们也可以指定长选项来使其更具有可读性。可以把选项和参数用<strong>空格、=、：</strong>进行分隔。注释以<em>#</em>放在行首开始。</p>
-<p> 如果在参数内包含空格，必须用双引号来包围起来<code>&quot;</code>。在这个引用内，继续包含引用的话要用<code>\&quot;</code>。</p>
-<blockquote>
-<p>必须在同一行指定选项和参数。</p>
-</blockquote>
-<p> 举例，设置默认超时时间和代理在一个配置文件内：</p>
-<p> 我们需要超时时间是30分钟：</p>
-<pre><code>    -m 1800
-</code></pre><p> … 对所有的访问使用同一代理：</p>
-<pre><code>    proxy = proxy.our.domain.com:8080
-</code></pre><p> 行尾的空白符是重要的，但是所有行首字母前的空格都会被忽略。</p>
-<p> 有时候我们又不想让curl来读取默认的配置文件，那么可以将<code>-q</code>作为第一各选项：</p>
-<pre><code>    curl -q www.thatsite.com
-</code></pre><p> 在curl没有URL的时候，可以从个本地帮助页面获取并显示，可以这样进行配置：<br>  Force curl to get and display a local help page in case it is invoked<br>  without URL by making a config file similar to:</p>
-<p> 默认获取地址：</p>
-<pre><code>    url = &quot;http://help.with.curl.com/curlhelp.html&quot;
-</code></pre><p> 我们还可以通过<code>-K/--config</code>选项指定另外一个配置文件。如果我们把配置文件命名成<code>-</code>的话，curl就会从标准输入读入配置，当你想要在配置文件内隐藏某些东西的时候这是非常不错的办法：</p>
-<pre><code>    echo &quot;user = user:passwd&quot; | curl -K - http://that.secret.site.com
-</code></pre><h1 id="额外头部"><a href="#额外头部" class="headerlink" title="额外头部"></a>额外头部</h1><p> 在自定义的程序里面的时候可能会需要传输一些自己定义的头部信息。这时候我们就可以使用 <code>-H</code>标志。</p>
-<p> 比如，在获取一个页面的时候，发送头部”X-you-and-me: yes”：</p>
-<pre><code>    curl -H &quot;X-you-and-me: yes&quot; www.love.com
-</code></pre><p> 假入我们想让curl发送一个与正常情况不同的文本也是很实用的。<code>-H header</code>代替了curl在正常情况下要发送的信息。如果用空的来替代一个内部headr，就组织了这个头部信息的发送。我们想要阻止<code>Host:</code>头部被发送的话：</p>
-<pre><code>    curl -H &quot;Host:&quot; www.server.com
-</code></pre><h1 id="FTP-and-PATH-NAMES"><a href="#FTP-and-PATH-NAMES" class="headerlink" title="FTP and PATH NAMES"></a>FTP and PATH NAMES</h1><p> 要注意到当我们在用<code>ftp://URL</code>来获取文件的时候，后面的路径是相对于进入目录的。为了获取<code>README</code>文件，我们这样：</p>
-<pre><code>    curl ftp://user:passwd@my.site.com/README
-</code></pre><p> 但是如果我们想从根目录里面获取同样名字的文件的话，使用：</p>
-<pre><code>    curl ftp://user:passwd@my.site.com//README
-</code></pre><p> 在文件名前面加上一个斜线。</p>
-<h1 id="SFTP-and-SCP-and-PATH-NAMES"><a href="#SFTP-and-SCP-and-PATH-NAMES" class="headerlink" title="SFTP and SCP and PATH NAMES"></a>SFTP and SCP and PATH NAMES</h1><p> 对于<code>sftp:</code>和<code>scp:</code>的地址标识，给出的路径名应该是绝对路径名。如果想要获取远程机器用户目录下的一个文件，像下面这样：</p>
-<pre><code>    curl -u $USER sftp://home.example.com/~/.bashrc
-</code></pre><h1 id="FTP-and-firewalls"><a href="#FTP-and-firewalls" class="headerlink" title="FTP and firewalls"></a>FTP and firewalls</h1><p> FTP协议需要参与连接的一端在传输数据之前打开一个新的连接。有两个方式可以达成。</p>
-<p> curl默认的方式叫做<strong><code>PASV</code></strong>，这会让服务器来打开一个端口，让客户端来进行连接。在客户端在防火墙后的时候，这是非常实用的。</p>
-<pre><code>    curl ftp.download.com
-</code></pre><p> 如果是服务器在防火墙后面，被封禁了除21外其他所有端口的时候（或者只支持PASV命令），另外一种方式就是使用<code>PORT</code>命令让服务器来连接到给定的客户端了ip好端口。（和PORT命令类似）</p>
-<p> <code>-P</code>标志让curl支持一些不同的选项。我们的机器可能会拥有几个ip或者几个网卡，可以让curl来选择使用哪一个。默认的可以这样使用：</p>
-<pre><code>    curl -P - ftp.download.com
-</code></pre><p> 用PORT模式下载，但是使用’le0’网卡的IP地址（这种方式在windows下并不能工作）：</p>
-<pre><code>    curl -P le0 ftp.download.com
-</code></pre><p> 用PORT模式下载，但是用192.168.0.10作为我们的IP地址：</p>
-<pre><code>    curl -P 192.168.0.10 ftp.download.com
-</code></pre><h1 id="NETWORK-INTERFACE（网络接口）"><a href="#NETWORK-INTERFACE（网络接口）" class="headerlink" title="NETWORK INTERFACE（网络接口）"></a>NETWORK INTERFACE（网络接口）</h1><p> 从指定的接口接收一个网页：</p>
-<pre><code>    curl --interface eth0:1 http://www.netscape.com/
-</code></pre><p>  or</p>
-<pre><code>    curl --interface 192.168.1.10 http://www.netscape.com/
-</code></pre><h2 id="HTTPS-1"><a href="#HTTPS-1" class="headerlink" title="HTTPS"></a>HTTPS</h2><p>  安全HTTP要求在编译的时候安装SSL库。如果支持，curl就可以用过 https协议收发数据或文档。</p>
-<p>  比如：</p>
-<pre><code>    curl https://www.secure-site.com
-</code></pre><p>   Curl也支持使用合法的个人证书来 <strong>get/post</strong> 文件。唯一的缺点就是证书格式必须是<code>PEM</code>的。<strong>PEM</strong>是一个标准的、开放的存储证书的格式，但是并不并大多数浏览器所使用（Netscape和MSIE都使用的是PKCS#12）。如果你想让curl使用你在其他浏览器上已经使用的证书，那么你就得下载一个转换器来将它转换成<strong>PEM</strong>格式。这种工具在最近的OPENSSL工具里面已经包含了，老版本的话，有一个叫做SSLeay的工具可以使用。</p>
-<p>   下面是怎么样使用一个含有密码的证书来获取网站数据：</p>
-<pre><code>    curl -E /path/to/cert.pem:password https://secure.site.com/
-</code></pre><p>  If you neglect to specify the password on the command line, you will be<br>  prompted for the correct password before any data can be received.</p>
-<p>  Many older SSL-servers have problems with SSLv3 or TLS, which newer versions<br>  of OpenSSL etc use, therefore it is sometimes useful to specify what<br>  SSL-version curl should use. Use -3, -2 or -1 to specify that exact SSL<br>  version to use (for SSLv3, SSLv2 or TLSv1 respectively):</p>
-<pre><code>    curl -2 https://secure.site.com/
-</code></pre><p>  Otherwise, curl will first attempt to use v3 and then v2.</p>
-<p>  To use OpenSSL to convert your favourite browser’s certificate into a PEM<br>  formatted one that curl can use, do something like this:</p>
-<pre><code>In Netscape, you start with hitting the &#39;Security&#39; menu button.
+  如果你收到了一个包含类似下面头部的页面：
 
-Select &#39;certificates-&gt;yours&#39; and then pick a certificate in the list
+        Set-Cookie: sessionid=boo123; path=&quot;/foo&quot;;
 
-Press the &#39;Export&#39; button
+  这是说服务器希望在get任何一个以/foo开头的路径是要通过sessionid boo123来匹配。
 
-enter your PIN code for the certs
+  比如，获取一个希望名字进行匹配cookie的页面：
 
-select a proper place to save it
+        curl -b &quot;name=Daniel&quot; www.sillypage.com
 
-Run the &#39;openssl&#39; application to convert the certificate. If you cd to the
-openssl installation, you can do it like:
-</code></pre><h1 id="apps-openssl-pkcs12-in-file-you-saved-clcerts-out-PEMfile"><a href="#apps-openssl-pkcs12-in-file-you-saved-clcerts-out-PEMfile" class="headerlink" title="./apps/openssl pkcs12 -in [file you saved] -clcerts -out [PEMfile]"></a>./apps/openssl pkcs12 -in [file you saved] -clcerts -out [PEMfile]</h1><pre><code>In Firefox, select Options, then Advanced, then the Encryption tab,
-View Certificates. This opens the Certificate Manager, where you can
-Export. Be sure to select PEM for the Save as type.
+  curl同样具有使在接下来的sessions里面使用以前接受到的cookies。如果你用下面的方式保存收到的cookies：
 
-In Internet Explorer, select Internet Options, then the Content tab, then
-Certificates. Then you can Export, and depending on the format you may
-need to convert to PEM.
+        curl --dump-header headers www.example.com
 
-In Chrome, select Settings, then Show Advanced Settings. Under HTTPS/SSL
-select Manage Certificates.
-</code></pre><p>RESUMING FILE TRANSFERS</p>
-<p> To continue a file transfer where it was previously aborted, curl supports<br> resume on HTTP(S) downloads as well as FTP uploads and downloads.</p>
-<p> Continue downloading a document:</p>
-<pre><code>    curl -C - -o file ftp://ftp.server.com/path/file
-</code></pre><p> Continue uploading a document(*1):</p>
-<pre><code>    curl -C - -T file ftp://ftp.server.com/path/file
-</code></pre><p> Continue downloading a document from a web server(*2):</p>
-<pre><code>    curl -C - -o file http://www.server.com/
-</code></pre><p> (*1) = This requires that the FTP server supports the non-standard command<br>        SIZE. If it doesn’t, curl will say so.</p>
-<p> (*2) = This requires that the web server supports at least HTTP/1.1. If it<br>        doesn’t, curl will say so.</p>
-<p>TIME CONDITIONS</p>
-<p> HTTP allows a client to specify a time condition for the document it<br> requests. It is If-Modified-Since or If-Unmodified-Since. Curl allows you to<br> specify them with the -z/—time-cond flag.</p>
-<p> For example, you can easily make a download that only gets performed if the<br> remote file is newer than a local copy. It would be made like:</p>
-<pre><code>    curl -z local.html http://remote.server.com/remote.html
-</code></pre><p> Or you can download a file only if the local file is newer than the remote<br> one. Do this by prepending the date string with a ‘-‘, as in:</p>
-<pre><code>    curl -z -local.html http://remote.server.com/remote.html
-</code></pre><p> You can specify a “free text” date as condition. Tell curl to only download<br> the file if it was updated since January 12, 2012:</p>
-<pre><code>    curl -z &quot;Jan 12 2012&quot; http://remote.server.com/remote.html
-</code></pre><p> Curl will then accept a wide range of date formats. You always make the date<br> check the other way around by prepending it with a dash ‘-‘.</p>
-<p>DICT</p>
-<p>  For fun try</p>
-<pre><code>    curl dict://dict.org/m:curl
-    curl dict://dict.org/d:heisenbug:jargon
-    curl dict://dict.org/d:daniel:web1913
-</code></pre><p>  Aliases for ‘m’ are ‘match’ and ‘find’, and aliases for ‘d’ are ‘define’<br>  and ‘lookup’. For example,</p>
-<pre><code>    curl dict://dict.org/find:curl
-</code></pre><p>  Commands that break the URL description of the RFC (but not the DICT<br>  protocol) are</p>
-<pre><code>    curl dict://dict.org/show:db
-    curl dict://dict.org/show:strat
-</code></pre><p>  Authentication is still missing (but this is not required by the RFC)</p>
-<p>LDAP</p>
-<p>  If you have installed the OpenLDAP library, curl can take advantage of it<br>  and offer ldap:// support.<br>  On Windows, curl will use WinLDAP from Platform SDK by default.</p>
-<p>  Default protocol version used by curl is LDAPv3. LDAPv2 will be used as<br>  fallback mechanism in case if LDAPv3 will fail to connect.</p>
-<p>  LDAP is a complex thing and writing an LDAP query is not an easy task. I do<br>  advise you to dig up the syntax description for that elsewhere. One such<br>  place might be:</p>
-<p>  RFC 2255, “The LDAP URL Format” <a href="https://curl.haxx.se/rfc/rfc2255.txt" target="_blank" rel="noopener">https://curl.haxx.se/rfc/rfc2255.txt</a></p>
-<p>  To show you an example, this is how I can get all people from my local LDAP<br>  server that has a certain sub-domain in their email address:</p>
-<pre><code>    curl -B &quot;ldap://ldap.frontec.se/o=frontec??sub?mail=*sth.frontec.se&quot;
-</code></pre><p>  If I want the same info in HTML format, I can get it by not using the -B<br>  (enforce ASCII) flag.</p>
-<p>  You also can use authentication when accessing LDAP catalog:</p>
-<pre><code>  curl -u user:passwd &quot;ldap://ldap.frontec.se/o=frontec??sub?mail=*&quot;
-  curl &quot;ldap://user:passwd@ldap.frontec.se/o=frontec??sub?mail=*&quot;
-</code></pre><p>  By default, if user and password provided, OpenLDAP/WinLDAP will use basic<br>  authentication. On Windows you can control this behavior by providing<br>  one of —basic, —ntlm or —digest option in curl command line</p>
-<pre><code>  curl --ntlm &quot;ldap://user:passwd@ldap.frontec.se/o=frontec??sub?mail=*&quot;
-</code></pre><p>  On Windows, if no user/password specified, auto-negotiation mechanism will<br>  be used with current logon credentials (SSPI/SPNEGO).</p>
-<p>ENVIRONMENT VARIABLES</p>
-<p>  Curl reads and understands the following environment variables:</p>
-<pre><code>    http_proxy, HTTPS_PROXY, FTP_PROXY
-</code></pre><p>  They should be set for protocol-specific proxies. General proxy should be<br>  set with</p>
-<pre><code>    ALL_PROXY
-</code></pre><p>  A comma-separated list of host names that shouldn’t go through any proxy is<br>  set in (only an asterisk, ‘*’ matches all hosts)</p>
-<pre><code>    NO_PROXY
-</code></pre><p>  If the host name matches one of these strings, or the host is within the<br>  domain of one of these strings, transactions with that node will not be<br>  proxied. When a domain is used, it needs to start with a period. A user can<br>  specify that both www.example.com and foo.example.com should not uses a<br>  proxy by setting NO_PROXY to “.example.com”. By including the full name you<br>  can exclude specific host names, so to make www.example.com not use a proxy<br>  but still have foo.example.com do it, set NO_PROXY to “www.example.com”</p>
-<p>  The usage of the -x/—proxy flag overrides the environment variables.</p>
-<p>NETRC</p>
-<p>  Unix introduced the .netrc concept a long time ago. It is a way for a user<br>  to specify name and password for commonly visited FTP sites in a file so<br>  that you don’t have to type them in each time you visit those sites. You<br>  realize this is a big security risk if someone else gets hold of your<br>  passwords, so therefore most unix programs won’t read this file unless it is<br>  only readable by yourself (curl doesn’t care though).</p>
-<p>  Curl supports .netrc files if told to (using the -n/—netrc and<br>  —netrc-optional options). This is not restricted to just FTP,<br>  so curl can use it for all protocols where authentication is used.</p>
-<p>  A very simple .netrc file could look something like:</p>
-<pre><code>    machine curl.haxx.se login iamdaniel password mysecret
-</code></pre><p>CUSTOM OUTPUT</p>
-<p>  To better allow script programmers to get to know about the progress of<br>  curl, the -w/—write-out option was introduced. Using this, you can specify<br>  what information from the previous transfer you want to extract.</p>
-<p>  To display the amount of bytes downloaded together with some text and an<br>  ending newline:</p>
-<pre><code>    curl -w &#39;We downloaded %{size_download} bytes\n&#39; www.download.com
-</code></pre><p>KERBEROS FTP TRANSFER</p>
-<p>  Curl supports kerberos4 and kerberos5/GSSAPI for FTP transfers. You need<br>  the kerberos package installed and used at curl build time for it to be<br>  available.</p>
-<p>  First, get the krb-ticket the normal way, like with the kinit/kauth tool.<br>  Then use curl in way similar to:</p>
-<pre><code>    curl --krb private ftp://krb4site.com -u username:fakepwd
-</code></pre><p>  There’s no use for a password on the -u switch, but a blank one will make<br>  curl ask for one and you already entered the real password to kinit/kauth.</p>
-<p>TELNET</p>
-<p>  The curl telnet support is basic and very easy to use. Curl passes all data<br>  passed to it on stdin to the remote server. Connect to a remote telnet<br>  server using a command line similar to:</p>
-<pre><code>    curl telnet://remote.server.com
-</code></pre><p>  And enter the data to pass to the server on stdin. The result will be sent<br>  to stdout or to the file you specify with -o.</p>
-<p>  You might want the -N/—no-buffer option to switch off the buffered output<br>  for slow connections or similar.</p>
-<p>  Pass options to the telnet protocol negotiation, by using the -t option. To<br>  tell the server we use a vt100 terminal, try something like:</p>
-<pre><code>    curl -tTTYPE=vt100 telnet://remote.server.com
-</code></pre><p>  Other interesting options for it -t include:</p>
-<ul>
-<li><p>XDISPLOC=<x display> Sets the X display location.</x></p>
-</li>
-<li><p>NEW_ENV=<var,val> Sets an environment variable.</var,val></p>
-<p>NOTE: The telnet protocol does not specify any way to login with a specified<br>user and password so curl can’t do that automatically. To do that, you need<br>to track when the login prompt is received and send the username and<br>password accordingly.</p>
-</li>
-</ul>
-<p>PERSISTENT CONNECTIONS</p>
-<p>  Specifying multiple files on a single command line will make curl transfer<br>  all of them, one after the other in the specified order.</p>
-<p>  libcurl will attempt to use persistent connections for the transfers so that<br>  the second transfer to the same host can use the same connection that was<br>  already initiated and was left open in the previous transfer. This greatly<br>  decreases connection time for all but the first transfer and it makes a far<br>  better use of the network.</p>
-<p>  Note that curl cannot use persistent connections for transfers that are used<br>  in subsequence curl invokes. Try to stuff as many URLs as possible on the<br>  same command line if they are using the same host, as that’ll make the<br>  transfers faster. If you use an HTTP proxy for file transfers, practically<br>  all transfers will be persistent.</p>
-<p>MULTIPLE TRANSFERS WITH A SINGLE COMMAND LINE</p>
-<p>  As is mentioned above, you can download multiple files with one command line<br>  by simply adding more URLs. If you want those to get saved to a local file<br>  instead of just printed to stdout, you need to add one save option for each<br>  URL you specify. Note that this also goes for the -O option (but not<br>  —remote-name-all).</p>
-<p>  For example: get two files and use -O for the first and a custom file<br>  name for the second:</p>
-<pre><code>curl -O http://url.com/file.txt ftp://ftp.com/moo.exe -o moo.jpg
-</code></pre><p>  You can also upload multiple files in a similar fashion:</p>
-<pre><code>curl -T local1 ftp://ftp.com/moo.exe -T local2 ftp://ftp.com/moo2.txt
-</code></pre><p>IPv6</p>
-<p>  curl will connect to a server with IPv6 when a host lookup returns an IPv6<br>  address and fall back to IPv4 if the connection fails. The —ipv4 and —ipv6<br>  options can specify which address to use when both are available. IPv6<br>  addresses can also be specified directly in URLs using the syntax:</p>
-<pre><code>http://[2001:1890:1112:1::20]/overview.html
-</code></pre><p>  When this style is used, the -g option must be given to stop curl from<br>  interpreting the square brackets as special globbing characters.  Link local<br>  and site local addresses including a scope identifier, such as fe80::1234%1,<br>  may also be used, but the scope portion must be numeric or match an existing<br>  network interface on Linux and the percent character must be URL escaped. The<br>  previous example in an SFTP URL might look like:</p>
-<pre><code>sftp://[fe80::1234%251]/
-</code></pre><p>  IPv6 addresses provided other than in URLs (e.g. to the —proxy, —interface<br>  or —ftp-port options) should not be URL encoded.</p>
-<p>METALINK</p>
-<p>  Curl supports Metalink (both version 3 and 4 (RFC 5854) are supported), a way<br>  to list multiple URIs and hashes for a file. Curl will make use of the mirrors<br>  listed within for failover if there are errors (such as the file or server not<br>  being available). It will also verify the hash of the file after the download<br>  completes. The Metalink file itself is downloaded and processed in memory and<br>  not stored in the local file system.</p>
-<p>  Example to use a remote Metalink file:</p>
-<pre><code>curl --metalink http://www.example.com/example.metalink
-</code></pre><p>  To use a Metalink file in the local file system, use FILE protocol (file://):</p>
-<pre><code>curl --metalink file://example.metalink
-</code></pre><p>  Please note that if FILE protocol is disabled, there is no way to use a local<br>  Metalink file at the time of this writing. Also note that if —metalink and<br>  —include are used together, —include will be ignored. This is because including<br>  headers in the response will break Metalink parser and if the headers are included<br>  in the file described in Metalink file, hash check will fail.</p>
-<p>MAILING LISTS</p>
-<p>  For your convenience, we have several open mailing lists to discuss curl,<br>  its development and things relevant to this. Get all info at<br>  <a href="https://curl.haxx.se/mail/" target="_blank" rel="noopener">https://curl.haxx.se/mail/</a>. Some of the lists available are:</p>
-<p>  curl-users</p>
-<pre><code>Users of the command line tool. How to use it, what doesn&#39;t work, new
-features, related tools, questions, news, installations, compilations,
-running, porting etc.
-</code></pre><p>  curl-library</p>
-<pre><code>Developers using or developing libcurl. Bugs, extensions, improvements.
-</code></pre><p>  curl-announce</p>
-<pre><code>Low-traffic. Only receives announcements of new public versions. At worst,
-that makes something like one or two mails per month, but usually only one
-mail every second month.
-</code></pre><p>  curl-and-php</p>
-<pre><code>Using the curl functions in PHP. Everything curl with a PHP angle. Or PHP
-with a curl angle.
-</code></pre><p>  curl-and-python</p>
-<pre><code>Python hackers using curl with or without the python binding pycurl.
-</code></pre><p>  Please direct curl questions, feature requests and trouble reports to one of<br>  these mailing lists instead of mailing any individual.</p>
+  我们可以在马上用这个cookies来连接网站：
 
+        curl -b headers www.example.com
+
+ 把头部信息存储到一个文件是个保存cookies的一个方式，但却不是一个方便的方式。我们可以把cookies以广为人知的`netscape cookie`格式进行保存。
+
+        curl -c cookies.txt www.example.com
+
+ 注意，`-b`选项会启用**cookie awareness**，`-L`选项可以让curl跟随一个位置：（常常用来结合cookies使用）。因此如果一个站点发送了一个cookie和一个位置，我们就可以用一个不存在的文件来触发**cookie awareness**：
+
+        curl -L -b empty.txt www.example.com
+
+ 用来读取cookies的文件必须是HTTP头部信息格式或者netscape格式的cookie文件，curl通过内容来判定属于哪一种格式。在上面那个代码中，curl会解析头部并且存储从www.example.com收到的cookie信息。curl在请求匹配那个位置的时候把已保存的cookie发送到服务器。`empty.txt`文件必须保证是不存在的。
+
+ 为了读写一个netscape的cookie文件，可以用`-b` 和`-c`选项在同一个文件上进行。
+
+        curl -b cookies.txt -c cookies.txt www.example.com
+
+## PROGRESS METER
+
+ 进度测量用来表明某些事情正在发生。不同的字段含有的意义如下：
+
+  % Total    % Received % Xferd  Average Speed          Time             Curr.
+                                 Dload  Upload Total    Current  Left    Speed
+  0  151M    0 38608    0     0   9406      0  4:41:43  0:00:04  4:41:39  9287
+
+ 从左至右：
+   %             - 整体完成百分比。
+   Total         - 要求传输的全部大小。
+   %             - 当前下载完成度
+   Received      - 当前下载字节数。
+   %             - 当前上传百分比
+   Xferd         - 当前上传字节数。
+   Average Speed
+   Dload         - 平均下载速度
+   Average Speed
+   Upload        - 平均上传速度
+   Time Total    - 预计完成时间
+   Time Current  - 当前经过时间
+   Time Left     - 预计剩余时间
+   Curr.Speed    - 5秒内进行的平均速度。
+
+
+ `-#`选项会显示更少的解释。
+
+# 速度限制
+
+ Curl允许我们设置继续传输必须匹配的条件。通过`-y`和`-Y`选项，我们可以让curl在某一连续时间内速度太慢的话就退出。
+
+ 为了让在连续一分钟内速度低于3000b/s的时候curl中断下载，运行：
+
+        curl -Y 3000 -y 60 www.far-away-site.com
+
+ 进行超时设置也是一个非常不错的做法，让上面这个操作必须在30分钟内完成：
+
+        curl -m 1800 -Y 3000 -y 60 www.far-away-site.com
+
+ 强制要求curl必须不能超过一个给定的数值也是可以的，在你使用一个带宽受到限制的连接，你可能并不想让curl全部使用它。
+
+ 让curl每秒的传输速度不要超过10KB：
+
+        curl --limit-rate 10K www.far-away-site.com
+
+    or
+
+        curl --limit-rate 10240 www.far-away-site.com
+
+ 或者不让curl上传速度超过1M/s：
+
+        curl -T upload --limit-rate 1M ftp://uploadshereplease.com
+
+
+# 配置文件
+
+ curl在启动时，会自动读取用户目录下的`.curlrc`文件（`_curlrc`在win32系统上）。
+
+ 配置文件由常规命令行开关组成，但是我们也可以指定长选项来使其更具有可读性。可以把选项和参数用**空格、=、：**进行分隔。注释以*#*放在行首开始。
+
+ 如果在参数内包含空格，必须用双引号来包围起来`&quot;`。在这个引用内，继续包含引用的话要用`\&quot;`。
+
+ &gt;必须在同一行指定选项和参数。
+
+ 举例，设置默认超时时间和代理在一个配置文件内：
+
+ 我们需要超时时间是30分钟：
+
+        -m 1800
+
+ ... 对所有的访问使用同一代理：
+
+        proxy = proxy.our.domain.com:8080
+
+ 行尾的空白符是重要的，但是所有行首字母前的空格都会被忽略。
+
+ 有时候我们又不想让curl来读取默认的配置文件，那么可以将`-q`作为第一各选项：
+
+        curl -q www.thatsite.com
+
+ 在curl没有URL的时候，可以从个本地帮助页面获取并显示，可以这样进行配置：
+  Force curl to get and display a local help page in case it is invoked
+  without URL by making a config file similar to:
+
+ 默认获取地址：
+
+        url = &quot;http://help.with.curl.com/curlhelp.html&quot;
+
+ 我们还可以通过`-K/--config`选项指定另外一个配置文件。如果我们把配置文件命名成`-`的话，curl就会从标准输入读入配置，当你想要在配置文件内隐藏某些东西的时候这是非常不错的办法：
+
+        echo &quot;user = user:passwd&quot; | curl -K - http://that.secret.site.com
+
+# 额外头部
+
+ 在自定义的程序里面的时候可能会需要传输一些自己定义的头部信息。这时候我们就可以使用 `-H`标志。
+
+ 比如，在获取一个页面的时候，发送头部&quot;X-you-and-me: yes&quot;：
+
+        curl -H &quot;X-you-and-me: yes&quot; www.love.com
+
+ 假入我们想让curl发送一个与正常情况不同的文本也是很实用的。`-H header`代替了curl在正常情况下要发送的信息。如果用空的来替代一个内部headr，就组织了这个头部信息的发送。我们想要阻止`Host:`头部被发送的话：
+
+        curl -H &quot;Host:&quot; www.server.com
+
+# FTP and PATH NAMES
+
+ 要注意到当我们在用`ftp://URL`来获取文件的时候，后面的路径是相对于进入目录的。为了获取`README`文件，我们这样：
+
+        curl ftp://user:passwd@my.site.com/README
+
+ 但是如果我们想从根目录里面获取同样名字的文件的话，使用：
+
+        curl ftp://user:passwd@my.site.com//README
+
+ 在文件名前面加上一个斜线。
+
+# SFTP and SCP and PATH NAMES
+
+ 对于`sftp:`和`scp:`的地址标识，给出的路径名应该是绝对路径名。如果想要获取远程机器用户目录下的一个文件，像下面这样：
+
+        curl -u $USER sftp://home.example.com/~/.bashrc
+
+# FTP and firewalls
+
+ FTP协议需要参与连接的一端在传输数据之前打开一个新的连接。有两个方式可以达成。
+
+ curl默认的方式叫做**`PASV`**，这会让服务器来打开一个端口，让客户端来进行连接。在客户端在防火墙后的时候，这是非常实用的。
+
+        curl ftp.download.com
+
+ 如果是服务器在防火墙后面，被封禁了除21外其他所有端口的时候（或者只支持PASV命令），另外一种方式就是使用`PORT`命令让服务器来连接到给定的客户端了ip好端口。（和PORT命令类似）
+
+ `-P`标志让curl支持一些不同的选项。我们的机器可能会拥有几个ip或者几个网卡，可以让curl来选择使用哪一个。默认的可以这样使用：
+
+        curl -P - ftp.download.com
+
+ 用PORT模式下载，但是使用&apos;le0&apos;网卡的IP地址（这种方式在windows下并不能工作）：
+
+        curl -P le0 ftp.download.com
+
+ 用PORT模式下载，但是用192.168.0.10作为我们的IP地址：
+
+        curl -P 192.168.0.10 ftp.download.com
+
+# NETWORK INTERFACE（网络接口）
+
+ 从指定的接口接收一个网页：
+
+        curl --interface eth0:1 http://www.netscape.com/
+
+  or
+
+        curl --interface 192.168.1.10 http://www.netscape.com/
+
+## HTTPS
+
+  安全HTTP要求在编译的时候安装SSL库。如果支持，curl就可以用过 https协议收发数据或文档。
+
+  比如：
+
+        curl https://www.secure-site.com
+
+   Curl也支持使用合法的个人证书来 **get/post** 文件。唯一的缺点就是证书格式必须是`PEM`的。**PEM**是一个标准的、开放的存储证书的格式，但是并不并大多数浏览器所使用（Netscape和MSIE都使用的是PKCS#12）。如果你想让curl使用你在其他浏览器上已经使用的证书，那么你就得下载一个转换器来将它转换成**PEM**格式。这种工具在最近的OPENSSL工具里面已经包含了，老版本的话，有一个叫做SSLeay的工具可以使用。
+
+   下面是怎么样使用一个含有密码的证书来获取网站数据：
+
+
+        curl -E /path/to/cert.pem:password https://secure.site.com/
+
+  If you neglect to specify the password on the command line, you will be
+  prompted for the correct password before any data can be received.
+
+  Many older SSL-servers have problems with SSLv3 or TLS, which newer versions
+  of OpenSSL etc use, therefore it is sometimes useful to specify what
+  SSL-version curl should use. Use -3, -2 or -1 to specify that exact SSL
+  version to use (for SSLv3, SSLv2 or TLSv1 respectively):
+
+        curl -2 https://secure.site.com/
+
+  Otherwise, curl will first attempt to use v3 and then v2.
+
+  To use OpenSSL to convert your favourite browser&apos;s certificate into a PEM
+  formatted one that curl can use, do something like this:
+
+    In Netscape, you start with hitting the &apos;Security&apos; menu button.
+
+    Select &apos;certificates-&gt;yours&apos; and then pick a certificate in the list
+
+    Press the &apos;Export&apos; button
+
+    enter your PIN code for the certs
+
+    select a proper place to save it
+
+    Run the &apos;openssl&apos; application to convert the certificate. If you cd to the
+    openssl installation, you can do it like:
+
+# ./apps/openssl pkcs12 -in [file you saved] -clcerts -out [PEMfile]
+
+    In Firefox, select Options, then Advanced, then the Encryption tab,
+    View Certificates. This opens the Certificate Manager, where you can
+    Export. Be sure to select PEM for the Save as type.
+
+    In Internet Explorer, select Internet Options, then the Content tab, then
+    Certificates. Then you can Export, and depending on the format you may
+    need to convert to PEM.
+
+    In Chrome, select Settings, then Show Advanced Settings. Under HTTPS/SSL
+    select Manage Certificates.
+
+RESUMING FILE TRANSFERS
+
+ To continue a file transfer where it was previously aborted, curl supports
+ resume on HTTP(S) downloads as well as FTP uploads and downloads.
+
+ Continue downloading a document:
+
+        curl -C - -o file ftp://ftp.server.com/path/file
+
+ Continue uploading a document(*1):
+
+        curl -C - -T file ftp://ftp.server.com/path/file
+
+ Continue downloading a document from a web server(*2):
+
+        curl -C - -o file http://www.server.com/
+
+ (*1) = This requires that the FTP server supports the non-standard command
+        SIZE. If it doesn&apos;t, curl will say so.
+
+ (*2) = This requires that the web server supports at least HTTP/1.1. If it
+        doesn&apos;t, curl will say so.
+
+TIME CONDITIONS
+
+ HTTP allows a client to specify a time condition for the document it
+ requests. It is If-Modified-Since or If-Unmodified-Since. Curl allows you to
+ specify them with the -z/--time-cond flag.
+
+ For example, you can easily make a download that only gets performed if the
+ remote file is newer than a local copy. It would be made like:
+
+        curl -z local.html http://remote.server.com/remote.html
+
+ Or you can download a file only if the local file is newer than the remote
+ one. Do this by prepending the date string with a &apos;-&apos;, as in:
+
+        curl -z -local.html http://remote.server.com/remote.html
+
+ You can specify a &quot;free text&quot; date as condition. Tell curl to only download
+ the file if it was updated since January 12, 2012:
+
+        curl -z &quot;Jan 12 2012&quot; http://remote.server.com/remote.html
+
+ Curl will then accept a wide range of date formats. You always make the date
+ check the other way around by prepending it with a dash &apos;-&apos;.
+
+DICT
+
+  For fun try
+
+        curl dict://dict.org/m:curl
+        curl dict://dict.org/d:heisenbug:jargon
+        curl dict://dict.org/d:daniel:web1913
+
+  Aliases for &apos;m&apos; are &apos;match&apos; and &apos;find&apos;, and aliases for &apos;d&apos; are &apos;define&apos;
+  and &apos;lookup&apos;. For example,
+
+        curl dict://dict.org/find:curl
+
+  Commands that break the URL description of the RFC (but not the DICT
+  protocol) are
+
+        curl dict://dict.org/show:db
+        curl dict://dict.org/show:strat
+
+  Authentication is still missing (but this is not required by the RFC)
+
+LDAP
+
+  If you have installed the OpenLDAP library, curl can take advantage of it
+  and offer ldap:// support.
+  On Windows, curl will use WinLDAP from Platform SDK by default.
+
+  Default protocol version used by curl is LDAPv3. LDAPv2 will be used as
+  fallback mechanism in case if LDAPv3 will fail to connect.
+
+  LDAP is a complex thing and writing an LDAP query is not an easy task. I do
+  advise you to dig up the syntax description for that elsewhere. One such
+  place might be:
+
+  RFC 2255, &quot;The LDAP URL Format&quot; https://curl.haxx.se/rfc/rfc2255.txt
+
+  To show you an example, this is how I can get all people from my local LDAP
+  server that has a certain sub-domain in their email address:
+
+        curl -B &quot;ldap://ldap.frontec.se/o=frontec??sub?mail=*sth.frontec.se&quot;
+
+  If I want the same info in HTML format, I can get it by not using the -B
+  (enforce ASCII) flag.
+
+  You also can use authentication when accessing LDAP catalog:
+
+      curl -u user:passwd &quot;ldap://ldap.frontec.se/o=frontec??sub?mail=*&quot;
+      curl &quot;ldap://user:passwd@ldap.frontec.se/o=frontec??sub?mail=*&quot;
+
+  By default, if user and password provided, OpenLDAP/WinLDAP will use basic
+  authentication. On Windows you can control this behavior by providing
+  one of --basic, --ntlm or --digest option in curl command line
+
+      curl --ntlm &quot;ldap://user:passwd@ldap.frontec.se/o=frontec??sub?mail=*&quot;
+
+  On Windows, if no user/password specified, auto-negotiation mechanism will
+  be used with current logon credentials (SSPI/SPNEGO).
+
+ENVIRONMENT VARIABLES
+
+  Curl reads and understands the following environment variables:
+
+        http_proxy, HTTPS_PROXY, FTP_PROXY
+
+  They should be set for protocol-specific proxies. General proxy should be
+  set with
+
+        ALL_PROXY
+
+  A comma-separated list of host names that shouldn&apos;t go through any proxy is
+  set in (only an asterisk, &apos;*&apos; matches all hosts)
+
+        NO_PROXY
+
+  If the host name matches one of these strings, or the host is within the
+  domain of one of these strings, transactions with that node will not be
+  proxied. When a domain is used, it needs to start with a period. A user can
+  specify that both www.example.com and foo.example.com should not uses a
+  proxy by setting NO_PROXY to &quot;.example.com&quot;. By including the full name you
+  can exclude specific host names, so to make www.example.com not use a proxy
+  but still have foo.example.com do it, set NO_PROXY to &quot;www.example.com&quot;
+
+  The usage of the -x/--proxy flag overrides the environment variables.
+
+NETRC
+
+  Unix introduced the .netrc concept a long time ago. It is a way for a user
+  to specify name and password for commonly visited FTP sites in a file so
+  that you don&apos;t have to type them in each time you visit those sites. You
+  realize this is a big security risk if someone else gets hold of your
+  passwords, so therefore most unix programs won&apos;t read this file unless it is
+  only readable by yourself (curl doesn&apos;t care though).
+
+  Curl supports .netrc files if told to (using the -n/--netrc and
+  --netrc-optional options). This is not restricted to just FTP,
+  so curl can use it for all protocols where authentication is used.
+
+  A very simple .netrc file could look something like:
+
+        machine curl.haxx.se login iamdaniel password mysecret
+
+CUSTOM OUTPUT
+
+  To better allow script programmers to get to know about the progress of
+  curl, the -w/--write-out option was introduced. Using this, you can specify
+  what information from the previous transfer you want to extract.
+
+  To display the amount of bytes downloaded together with some text and an
+  ending newline:
+
+        curl -w &apos;We downloaded %{size_download} bytes\n&apos; www.download.com
+
+KERBEROS FTP TRANSFER
+
+  Curl supports kerberos4 and kerberos5/GSSAPI for FTP transfers. You need
+  the kerberos package installed and used at curl build time for it to be
+  available.
+
+  First, get the krb-ticket the normal way, like with the kinit/kauth tool.
+  Then use curl in way similar to:
+
+        curl --krb private ftp://krb4site.com -u username:fakepwd
+
+  There&apos;s no use for a password on the -u switch, but a blank one will make
+  curl ask for one and you already entered the real password to kinit/kauth.
+
+TELNET
+
+  The curl telnet support is basic and very easy to use. Curl passes all data
+  passed to it on stdin to the remote server. Connect to a remote telnet
+  server using a command line similar to:
+
+        curl telnet://remote.server.com
+
+  And enter the data to pass to the server on stdin. The result will be sent
+  to stdout or to the file you specify with -o.
+
+  You might want the -N/--no-buffer option to switch off the buffered output
+  for slow connections or similar.
+
+  Pass options to the telnet protocol negotiation, by using the -t option. To
+  tell the server we use a vt100 terminal, try something like:
+
+        curl -tTTYPE=vt100 telnet://remote.server.com
+
+  Other interesting options for it -t include:
+
+   - XDISPLOC=&lt;X display&gt; Sets the X display location.
+
+   - NEW_ENV=&lt;var,val&gt; Sets an environment variable.
+
+  NOTE: The telnet protocol does not specify any way to login with a specified
+  user and password so curl can&apos;t do that automatically. To do that, you need
+  to track when the login prompt is received and send the username and
+  password accordingly.
+
+PERSISTENT CONNECTIONS
+
+  Specifying multiple files on a single command line will make curl transfer
+  all of them, one after the other in the specified order.
+
+  libcurl will attempt to use persistent connections for the transfers so that
+  the second transfer to the same host can use the same connection that was
+  already initiated and was left open in the previous transfer. This greatly
+  decreases connection time for all but the first transfer and it makes a far
+  better use of the network.
+
+  Note that curl cannot use persistent connections for transfers that are used
+  in subsequence curl invokes. Try to stuff as many URLs as possible on the
+  same command line if they are using the same host, as that&apos;ll make the
+  transfers faster. If you use an HTTP proxy for file transfers, practically
+  all transfers will be persistent.
+
+MULTIPLE TRANSFERS WITH A SINGLE COMMAND LINE
+
+  As is mentioned above, you can download multiple files with one command line
+  by simply adding more URLs. If you want those to get saved to a local file
+  instead of just printed to stdout, you need to add one save option for each
+  URL you specify. Note that this also goes for the -O option (but not
+  --remote-name-all).
+
+  For example: get two files and use -O for the first and a custom file
+  name for the second:
+
+    curl -O http://url.com/file.txt ftp://ftp.com/moo.exe -o moo.jpg
+
+  You can also upload multiple files in a similar fashion:
+
+    curl -T local1 ftp://ftp.com/moo.exe -T local2 ftp://ftp.com/moo2.txt
+
+IPv6
+
+  curl will connect to a server with IPv6 when a host lookup returns an IPv6
+  address and fall back to IPv4 if the connection fails. The --ipv4 and --ipv6
+  options can specify which address to use when both are available. IPv6
+  addresses can also be specified directly in URLs using the syntax:
+
+    http://[2001:1890:1112:1::20]/overview.html
+
+  When this style is used, the -g option must be given to stop curl from
+  interpreting the square brackets as special globbing characters.  Link local
+  and site local addresses including a scope identifier, such as fe80::1234%1,
+  may also be used, but the scope portion must be numeric or match an existing
+  network interface on Linux and the percent character must be URL escaped. The
+  previous example in an SFTP URL might look like:
+
+    sftp://[fe80::1234%251]/
+
+  IPv6 addresses provided other than in URLs (e.g. to the --proxy, --interface
+  or --ftp-port options) should not be URL encoded.
+
+METALINK
+
+  Curl supports Metalink (both version 3 and 4 (RFC 5854) are supported), a way
+  to list multiple URIs and hashes for a file. Curl will make use of the mirrors
+  listed within for failover if there are errors (such as the file or server not
+  being available). It will also verify the hash of the file after the download
+  completes. The Metalink file itself is downloaded and processed in memory and
+  not stored in the local file system.
+
+  Example to use a remote Metalink file:
+
+    curl --metalink http://www.example.com/example.metalink
+
+  To use a Metalink file in the local file system, use FILE protocol (file://):
+
+    curl --metalink file://example.metalink
+
+  Please note that if FILE protocol is disabled, there is no way to use a local
+  Metalink file at the time of this writing. Also note that if --metalink and
+  --include are used together, --include will be ignored. This is because including
+  headers in the response will break Metalink parser and if the headers are included
+  in the file described in Metalink file, hash check will fail.
+
+MAILING LISTS
+
+  For your convenience, we have several open mailing lists to discuss curl,
+  its development and things relevant to this. Get all info at
+  https://curl.haxx.se/mail/. Some of the lists available are:
+
+  curl-users
+
+    Users of the command line tool. How to use it, what doesn&apos;t work, new
+    features, related tools, questions, news, installations, compilations,
+    running, porting etc.
+
+  curl-library
+
+    Developers using or developing libcurl. Bugs, extensions, improvements.
+
+  curl-announce
+
+    Low-traffic. Only receives announcements of new public versions. At worst,
+    that makes something like one or two mails per month, but usually only one
+    mail every second month.
+
+  curl-and-php
+
+    Using the curl functions in PHP. Everything curl with a PHP angle. Or PHP
+    with a curl angle.
+
+  curl-and-python
+
+    Python hackers using curl with or without the python binding pycurl.
+
+  Please direct curl questions, feature requests and trouble reports to one of
+  these mailing lists instead of mailing any individual.</code></pre>
     </div>
 
     
@@ -682,7 +960,7 @@ with a curl angle.
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Vim/vim-利用Vundle管理插件.html" rel="next" title="vim-利用Vundle管理插件">
+                <a href="/Vim/vim-%E5%88%A9%E7%94%A8Vundle%E7%AE%A1%E7%90%86%E6%8F%92%E4%BB%B6.html" rel="next" title="vim-利用Vundle管理插件">
                   <i class="fa fa-chevron-left"></i> vim-利用Vundle管理插件
                 </a>
             </div>
@@ -690,7 +968,7 @@ with a curl angle.
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/数据库/Mysql_backup_and_recovery-5.5.html" rel="prev" title="Mysql-Backup-and-Recovery 中文翻译">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql_backup_and_recovery-5.5.html" rel="prev" title="Mysql-Backup-and-Recovery 中文翻译">
                   Mysql-Backup-and-Recovery 中文翻译 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -738,7 +1016,7 @@ with a curl angle.
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简单用法"><span class="nav-number">1.</span> <span class="nav-text">简单用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#下载到一个文件"><span class="nav-number">2.</span> <span class="nav-text">下载到一个文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用密码"><span class="nav-number">3.</span> <span class="nav-text">使用密码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FTP"><span class="nav-number">3.1.</span> <span class="nav-text">FTP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FTPS"><span class="nav-number">3.2.</span> <span class="nav-text">FTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SFTP-SCP"><span class="nav-number">3.3.</span> <span class="nav-text">SFTP / SCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-number">3.4.</span> <span class="nav-text">HTTP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS"><span class="nav-number">3.5.</span> <span class="nav-text">HTTPS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代理"><span class="nav-number">4.</span> <span class="nav-text">代理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#范围"><span class="nav-number">5.</span> <span class="nav-text">范围</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上传"><span class="nav-number">6.</span> <span class="nav-text">上传</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FTP-FTPS-SFTP-SCP"><span class="nav-number">6.1.</span> <span class="nav-text">FTP / FTPS / SFTP / SCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SMB-SMBS"><span class="nav-number">6.2.</span> <span class="nav-text">SMB / SMBS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-1"><span class="nav-number">6.3.</span> <span class="nav-text">HTTP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VERBOSE-DEBUG"><span class="nav-number">7.</span> <span class="nav-text">VERBOSE / DEBUG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DETAILED-INFORMATION"><span class="nav-number">8.</span> <span class="nav-text">DETAILED INFORMATION</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#POST-HTTP"><span class="nav-number">9.</span> <span class="nav-text">POST (HTTP)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#REFERRER"><span class="nav-number">10.</span> <span class="nav-text">REFERRER</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#USER-AGENT"><span class="nav-number">11.</span> <span class="nav-text">USER AGENT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#COOKIES"><span class="nav-number">12.</span> <span class="nav-text">COOKIES</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PROGRESS-METER"><span class="nav-number">12.1.</span> <span class="nav-text">PROGRESS METER</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#速度限制"><span class="nav-number">13.</span> <span class="nav-text">速度限制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置文件"><span class="nav-number">14.</span> <span class="nav-text">配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#额外头部"><span class="nav-number">15.</span> <span class="nav-text">额外头部</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FTP-and-PATH-NAMES"><span class="nav-number">16.</span> <span class="nav-text">FTP and PATH NAMES</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SFTP-and-SCP-and-PATH-NAMES"><span class="nav-number">17.</span> <span class="nav-text">SFTP and SCP and PATH NAMES</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FTP-and-firewalls"><span class="nav-number">18.</span> <span class="nav-text">FTP and firewalls</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NETWORK-INTERFACE（网络接口）"><span class="nav-number">19.</span> <span class="nav-text">NETWORK INTERFACE（网络接口）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS-1"><span class="nav-number">19.1.</span> <span class="nav-text">HTTPS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#apps-openssl-pkcs12-in-file-you-saved-clcerts-out-PEMfile"><span class="nav-number">20.</span> <span class="nav-text">./apps/openssl pkcs12 -in [file you saved] -clcerts -out [PEMfile]</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简单用法"><span class="nav-number">1.</span> <span class="nav-text">简单用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#下载到一个文件"><span class="nav-number">2.</span> <span class="nav-text">下载到一个文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用密码"><span class="nav-number">3.</span> <span class="nav-text">使用密码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FTP"><span class="nav-number">3.1.</span> <span class="nav-text">FTP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FTPS"><span class="nav-number">3.2.</span> <span class="nav-text">FTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SFTP-SCP"><span class="nav-number">3.3.</span> <span class="nav-text">SFTP / SCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP"><span class="nav-number">3.4.</span> <span class="nav-text">HTTP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTPS"><span class="nav-number">3.5.</span> <span class="nav-text">HTTPS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代理"><span class="nav-number">4.</span> <span class="nav-text">代理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#范围"><span class="nav-number">5.</span> <span class="nav-text">范围</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#上传"><span class="nav-number">6.</span> <span class="nav-text">上传</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FTP-FTPS-SFTP-SCP"><span class="nav-number">6.1.</span> <span class="nav-text">FTP / FTPS / SFTP / SCP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SMB-SMBS"><span class="nav-number">6.2.</span> <span class="nav-text">SMB / SMBS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-1"><span class="nav-number">6.3.</span> <span class="nav-text">HTTP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VERBOSE-DEBUG"><span class="nav-number">7.</span> <span class="nav-text">VERBOSE / DEBUG</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DETAILED-INFORMATION"><span class="nav-number">8.</span> <span class="nav-text">DETAILED INFORMATION</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#POST-HTTP"><span class="nav-number">9.</span> <span class="nav-text">POST (HTTP)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#REFERRER"><span class="nav-number">10.</span> <span class="nav-text">REFERRER</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#USER-AGENT"><span class="nav-number">11.</span> <span class="nav-text">USER AGENT</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -777,10 +1055,10 @@ with a curl angle.
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -809,10 +1087,10 @@ with a curl angle.
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -887,7 +1165,7 @@ with a curl angle.
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/curl-使用入门.html",
+            url: "https://gowa.club/Linux-Unix/curl-%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8.html",
             identifier: "Linux-Unix/curl-使用入门.html",
             title: "curl 使用入门"
           }

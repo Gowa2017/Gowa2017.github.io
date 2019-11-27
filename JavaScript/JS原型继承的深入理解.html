@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JS原型继承的深入理解">
-<meta property="og:url" content="https://gowa.club/JavaScript/JS原型继承的深入理解.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;JavaScript&#x2F;JS%E5%8E%9F%E5%9E%8B%E7%BB%A7%E6%89%BF%E7%9A%84%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="JS 的继承是通过原型来实现的。每个对象都有一个原型属性  __proto__ ，然后，我们可以也多种方法来构造对象。但这中间有一些细节很值得我们深入了解。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-01-16T22:28:10.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JS原型继承的深入理解">
-<meta name="twitter:description" content="JS 的继承是通过原型来实现的。每个对象都有一个原型属性  __proto__ ，然后，我们可以也多种方法来构造对象。但这中间有一些细节很值得我们深入了解。">
 
-<link rel="canonical" href="https://gowa.club/JavaScript/JS原型继承的深入理解.html">
+<link rel="canonical" href="https://gowa.club/JavaScript/JS%E5%8E%9F%E5%9E%8B%E7%BB%A7%E6%89%BF%E7%9A%84%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/JS原型继承的深入理解.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/JS%E5%8E%9F%E5%9E%8B%E7%BB%A7%E6%89%BF%E7%9A%84%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/JavaScript/JS原型继承的深入理解.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/JavaScript/JS%E5%8E%9F%E5%9E%8B%E7%BB%A7%E6%89%BF%E7%9A%84%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/JS原型继承的深入理解.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,21 +287,26 @@
       
         <p>JS 的继承是通过原型来实现的。每个对象都有一个原型属性  <code>__proto__</code> ，然后，我们可以也多种方法来构造对象。但这中间有一些细节很值得我们深入了解。</p>
 <a id="more"></a>
+
 <h1 id="文前"><a href="#文前" class="headerlink" title="文前"></a>文前</h1><p>首先我们需要理解和区别，对象的原型属性(<code>__proto__</code>属性，或者通过 Object.getPrototypeOf()来获取) 与 函数的 prototype（此属性只有函数才有。prototype 属性的 constructor 指向函数本身）。</p>
 <p>我们可以把 <code>__proto__</code> 称为对象的原型，而把 prototype 称为函数的原型。</p>
 <h1 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h1><p>一般来说，构造函数的首字母会大写，以此来与其他一般的函数进行区分。</p>
 <p>我们定义一个构造函数：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">first, last, age, gender, interests</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = &#123;</span><br><span class="line">    first,</span><br><span class="line">    last</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">this</span>.age = age;</span><br><span class="line">  <span class="keyword">this</span>.gender = gender;</span><br><span class="line">  <span class="keyword">this</span>.interests = interests;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
 <p>函数，也是一个对象，其是一个 Function 的实例:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="keyword">typeof</span> Person);</span><br><span class="line"></span><br><span class="line"><span class="comment">// "function"。</span></span><br></pre></td></tr></table></figure>
+
 <p>函数，也有一个原型，我们这里并没有对他的原型做什么操作，所以其是默认的原生代码：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.getPrototypeOf(Person)</span><br><span class="line"></span><br><span class="line"><span class="comment">//ƒ () &#123; [native code] &#125;</span></span><br></pre></td></tr></table></figure>
+
 <p>可以看出，其原型是一个用原生代码编写的函数。 与 Object 的原型显示一样。</p>
 <p>我们可以调用  Person.valueOf() 这样的函数，正是因为这是从 Object 原型继承的。</p>
 <p>每一个函数对象，都有一个 prototype 属性（同时只有函数对象才有）。</p>
 <p><strong>因为：prototype 是定义在 Fuction 对象下的属性。</strong></p>
 <p>构造函数的 <em>prototype</em> 属性的构造方法（constructor），指向函数本身。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Person === Person.prototype.constructor。</span><br></pre></td></tr></table></figure>
+
 <p>我们可以进行验证：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Person.prototype</span><br><span class="line"></span><br><span class="line"><span class="comment">//&#123;constructor: ƒ&#125;</span></span><br><span class="line"><span class="comment">// constructor: ƒ Person(first, last, age, gender,interests)</span></span><br><span class="line"><span class="comment">//__proto__: Object</span></span><br><span class="line"></span><br><span class="line">Person === Person.prototype.constructor</span><br><span class="line"><span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 <h1 id="构造对象"><a href="#构造对象" class="headerlink" title="构造对象"></a>构造对象</h1><p>我们可以用 <code>new</code> 关键词来建立一个对象。</p>
@@ -315,21 +318,29 @@
 <li>执行构造函数。</li>
 </ol>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">p1 = <span class="keyword">new</span> Person();</span><br></pre></td></tr></table></figure>
+
 <p>我们可以更详细的看一下 p1 的内容：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Person &#123;<span class="attr">name</span>: &#123;…&#125;, <span class="attr">age</span>: <span class="literal">undefined</span>, <span class="attr">gender</span>: <span class="literal">undefined</span>, <span class="attr">interests</span>: <span class="literal">undefined</span>&#125;</span><br><span class="line">age: <span class="literal">undefined</span></span><br><span class="line">gender: <span class="literal">undefined</span></span><br><span class="line">interests: <span class="literal">undefined</span></span><br><span class="line">name: &#123;<span class="attr">first</span>: <span class="literal">undefined</span>, <span class="attr">last</span>: <span class="literal">undefined</span>&#125;</span><br><span class="line">__proto__:</span><br><span class="line">  <span class="keyword">constructor</span>: ƒ Person(first, last, age, gender, interests)</span><br><span class="line">  __proto__: Object</span><br></pre></td></tr></table></figure>
+
 <p>p1 对象的原型，实际上指向的是构造函数的 prototype 属性：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.getPrototypeOf(p1) === Person.prototype</span><br><span class="line"></span><br><span class="line"><span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+
 <h1 id="Object-create"><a href="#Object-create" class="headerlink" title="Object.create()"></a>Object.create()</h1><p>我们可以把一个对象作为原型来建立对象，而不使用构造函数：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">p2 = <span class="built_in">Object</span>.create(p1);</span><br></pre></td></tr></table></figure>
+
 <p>我们可以验证， p2 的原型就是 p1:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.getPrototypeOf(p2) === p1</span><br><span class="line"></span><br><span class="line"><span class="comment">//true</span></span><br></pre></td></tr></table></figure>
+
 <p>我们也可以看到  p2, p1 是不同的：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">p2</span><br><span class="line"><span class="comment">//Person &#123;&#125;__proto__: Personage: undefinedgender: undefinedinterests: undefinedname: &#123;first: undefined, last: undefined&#125;</span></span><br><span class="line"><span class="comment">//    __proto__: Object</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p1</span><br><span class="line"><span class="comment">//Person &#123;name: &#123;…&#125;, age: undefined, gender: undefined, interests: undefined&#125;</span></span><br><span class="line"><span class="comment">//  age: undefined</span></span><br><span class="line"><span class="comment">//  gender: undefined</span></span><br><span class="line"><span class="comment">//  interests: undefined</span></span><br><span class="line"><span class="comment">//  name: &#123;first: undefined, last: undefined&#125;</span></span><br><span class="line"><span class="comment">//  __proto__: Object</span></span><br></pre></td></tr></table></figure>
+
 <p>p2 本身没有任何属性，只有一个 _<em>proto_</em> 属性 指明其原型。其实就是指向 p1 的意思。</p>
 <p>我们改变 p1 的值， p2 也会变化：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">p1.age = <span class="number">20</span>;</span><br><span class="line">p2.age</span><br><span class="line"></span><br><span class="line"><span class="comment">//20</span></span><br></pre></td></tr></table></figure>
+
+
 <h1 id="class"><a href="#class" class="headerlink" title="class"></a>class</h1><p>ECMAScript6 引入了一套新的关键字用来实现 class。使用基于类语言的开发人员会对这些结构感到熟悉，但它们是不同的。JavaScript 仍然基于原型。这些新的关键字包括 class, constructor，static，extends 和 super。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="meta">"use strict"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Polygon</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(height, width) &#123;</span><br><span class="line">    <span class="keyword">this</span>.height = height;</span><br><span class="line">    <span class="keyword">this</span>.width = width;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Square</span> <span class="keyword">extends</span> <span class="title">Polygon</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(sideLength) &#123;</span><br><span class="line">    <span class="keyword">super</span>(sideLength, sideLength);</span><br><span class="line">  &#125;</span><br><span class="line">  get area() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.height * <span class="keyword">this</span>.width;</span><br><span class="line">  &#125;</span><br><span class="line">  set sideLength(newLength) &#123;</span><br><span class="line">    <span class="keyword">this</span>.height = newLength;</span><br><span class="line">    <span class="keyword">this</span>.width = newLength;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> square = <span class="keyword">new</span> Square(<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="meta">"use strict"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Polygon</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(height, width) &#123;</span><br><span class="line">    <span class="keyword">this</span>.height = height;</span><br><span class="line">    <span class="keyword">this</span>.width = width;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Square</span> <span class="keyword">extends</span> <span class="title">Polygon</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>(sideLength) &#123;</span><br><span class="line">    <span class="keyword">super</span>(sideLength, sideLength);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">get</span> area() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.height * <span class="keyword">this</span>.width;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">set</span> sideLength(newLength) &#123;</span><br><span class="line">    <span class="keyword">this</span>.height = newLength;</span><br><span class="line">    <span class="keyword">this</span>.width = newLength;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> square = <span class="keyword">new</span> Square(<span class="number">2</span>);</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -346,7 +357,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/JavaScript/JS中的变量基础.html" rel="next" title="JS中的变量基础">
+                <a href="/JavaScript/JS%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E5%9F%BA%E7%A1%80.html" rel="next" title="JS中的变量基础">
                   <i class="fa fa-chevron-left"></i> JS中的变量基础
                 </a>
             </div>
@@ -354,7 +365,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Cocos2d-X/关于使用PureMVC-LUA进行开发的一个过程.html" rel="prev" title="关于使用PureMVC-LUA进行开发的一个过程">
+                <a href="/Cocos2d-X/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8PureMVC-LUA%E8%BF%9B%E8%A1%8C%E5%BC%80%E5%8F%91%E7%9A%84%E4%B8%80%E4%B8%AA%E8%BF%87%E7%A8%8B.html" rel="prev" title="关于使用PureMVC-LUA进行开发的一个过程">
                   关于使用PureMVC-LUA进行开发的一个过程 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -441,10 +452,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -473,10 +484,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -551,7 +562,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/JavaScript/JS原型继承的深入理解.html",
+            url: "https://gowa.club/JavaScript/JS%E5%8E%9F%E5%9E%8B%E7%BB%A7%E6%89%BF%E7%9A%84%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3.html",
             identifier: "JavaScript/JS原型继承的深入理解.html",
             title: "JS原型继承的深入理解"
           }

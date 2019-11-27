@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Windows">
 <meta property="og:type" content="article">
 <meta property="og:title" content="COM在程序中的使用">
-<meta property="og:url" content="https://gowa.club/Windows/COM在程序中的使用.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Windows&#x2F;COM%E5%9C%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="COM 是一个规范，用来规定建立可复用的软件组件。很多我们在程序中使用的特性都是依赖于COM的如。  Graphics (Direct2D) Text (DirectWrite) The Windows Shell The Ribbon control UI animation">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-06-18T16:14:28.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="COM在程序中的使用">
-<meta name="twitter:description" content="COM 是一个规范，用来规定建立可复用的软件组件。很多我们在程序中使用的特性都是依赖于COM的如。  Graphics (Direct2D) Text (DirectWrite) The Windows Shell The Ribbon control UI animation">
 
-<link rel="canonical" href="https://gowa.club/Windows/COM在程序中的使用.html">
+<link rel="canonical" href="https://gowa.club/Windows/COM%E5%9C%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/COM在程序中的使用.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/COM%E5%9C%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Windows/COM在程序中的使用.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Windows/COM%E5%9C%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Windows/COM在程序中的使用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -296,6 +294,7 @@
 <li>UI animation</li>
 </ul>
 <a id="more"></a>
+
 <p>COM 因其难以学习而名声不好。写一个新的 COM 模块是有点恼火。但如果我们只是使用 COM的话，那我们就会发现 COM 就是非常简单的了。</p>
 <p>此节展示了怎么样在程序中使用 基于COM 的API。同时也描述了一些 COM 设计背后的原因。如果了解了为什么会设计出 COM，那就可以更搞笑的使用他了。接着也介绍了一推荐的使用 COM 的好的实践。</p>
 <p>COM 是一个二进制标准，而不是一个语言标准：其定义了应用与组件间的二进制接口。作为一个二进制标准， COM 与语言无关的，虽然其会映射到特定的 C++ 构造。本节着重于 COM 的三个目标：</p>
@@ -308,6 +307,7 @@
 <p>在 C++ 中，与接口最进的实现应该是 纯虚类了——一个只包含纯虚方法的类，没有任何其他成员。</p>
 <h1 id="初始化-COM-库"><a href="#初始化-COM-库" class="headerlink" title="初始化 COM 库"></a>初始化 COM 库</h1><p>必须通过 <code>CoInitializeEx()</code> 来初始化 COM 库。每个使用 COM 接口的线程都必须单独调用这个函数。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">HRESULT <span class="title">CoInitializeEx</span><span class="params">(LPVOID pvReserved, DWORD dwCoInit)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>第一个参数是保留的，必须是NULL。第二个参数指定了我们程序要使用的线程模型。COM 支持两个不同的线程模型，多线程与宿主线程。</p>
 <p>如果我们指定了 宿主线程模型，我们是在作出如下保证：</p>
 <ul>
@@ -322,6 +322,7 @@
 <p>通常，建立窗口的线程使用 <strong>COINIT_APARTMENTTHREADED</strong>，其他线程使用 <strong>COINIT_MULTITHREADED</strong>。但可能某些 COM 需要一个特定的线程模型。</p>
 <p>对于宿主线程模型：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">HRESULT hr = CoInitializeEx(<span class="literal">NULL</span>, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);</span><br></pre></td></tr></table></figure>
+
 <p>HRESULT返回值包含了成功或者失败的代码。</p>
 
     </div>
@@ -339,7 +340,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Windows/Windows-程序工作过程.html" rel="next" title="Windows-程序工作过程">
+                <a href="/Windows/Windows-%E7%A8%8B%E5%BA%8F%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B.html" rel="next" title="Windows-程序工作过程">
                   <i class="fa fa-chevron-left"></i> Windows-程序工作过程
                 </a>
             </div>
@@ -347,7 +348,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Windows/MFC基础概念及基础类.html" rel="prev" title="MFC基础概念及基本类">
+                <a href="/Windows/MFC%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E5%8F%8A%E5%9F%BA%E7%A1%80%E7%B1%BB.html" rel="prev" title="MFC基础概念及基本类">
                   MFC基础概念及基本类 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -434,10 +435,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -466,10 +467,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -544,7 +545,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Windows/COM在程序中的使用.html",
+            url: "https://gowa.club/Windows/COM%E5%9C%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8.html",
             identifier: "Windows/COM在程序中的使用.html",
             title: "COM在程序中的使用"
           }

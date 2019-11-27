@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android-Studio将一个项目以Module形式的引入及遇到的坑">
-<meta property="og:url" content="https://gowa.club/Android/Android-Studio将一个项目以Module形式的引入及遇到的坑.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Android-Studio%E5%B0%86%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%BB%A5Module%E5%BD%A2%E5%BC%8F%E7%9A%84%E5%BC%95%E5%85%A5%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="公司买了蓝牙指纹设备，需要在APP上集成，设备方提供了一个测试的APP及相关的代码。想着手动集成有点类，要是能把整个项目直接以Module形式或者是以Jar包的形式来处理的话，那就完毕了。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-11-15T14:05:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android-Studio将一个项目以Module形式的引入及遇到的坑">
-<meta name="twitter:description" content="公司买了蓝牙指纹设备，需要在APP上集成，设备方提供了一个测试的APP及相关的代码。想着手动集成有点类，要是能把整个项目直接以Module形式或者是以Jar包的形式来处理的话，那就完毕了。">
 
-<link rel="canonical" href="https://gowa.club/Android/Android-Studio将一个项目以Module形式的引入及遇到的坑.html">
+<link rel="canonical" href="https://gowa.club/Android/Android-Studio%E5%B0%86%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%BB%A5Module%E5%BD%A2%E5%BC%8F%E7%9A%84%E5%BC%95%E5%85%A5%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android-Studio将一个项目以Module形式的引入及遇到的坑.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android-Studio%E5%B0%86%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%BB%A5Module%E5%BD%A2%E5%BC%8F%E7%9A%84%E5%BC%95%E5%85%A5%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/Android-Studio将一个项目以Module形式的引入及遇到的坑.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/Android-Studio%E5%B0%86%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%BB%A5Module%E5%BD%A2%E5%BC%8F%E7%9A%84%E5%BC%95%E5%85%A5%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Android-Studio将一个项目以Module形式的引入及遇到的坑.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,20 +285,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>公司买了蓝牙指纹设备，需要在APP上集成，设备方提供了一个测试的APP及相关的代码。想着手动集成有点类，要是能把整个项目直接以Module形式或者是以Jar包的形式来处理的话，那就完毕了。<br><a id="more"></a><br>搜索了一下，还真有。但需要一步步来。</p>
+        <p>公司买了蓝牙指纹设备，需要在APP上集成，设备方提供了一个测试的APP及相关的代码。想着手动集成有点类，要是能把整个项目直接以Module形式或者是以Jar包的形式来处理的话，那就完毕了。</p>
+<a id="more"></a>
+<p>搜索了一下，还真有。但需要一步步来。</p>
 <h1 id="导入Module"><a href="#导入Module" class="headerlink" title="导入Module"></a>导入Module</h1><p>在 Android Studio 上点击 <strong>File -&gt; New -&gt; Import Module</strong> 现在我们要导入的项目 <strong>APP文件夹</strong> 路径。我的项目我把新的Module 名称叫做 fgtitReader。 </p>
 <h1 id="导入Module-build-gralde-修改"><a href="#导入Module-build-gralde-修改" class="headerlink" title="导入Module build.gralde 修改"></a>导入Module build.gralde 修改</h1><h2 id="修改应用插件"><a href="#修改应用插件" class="headerlink" title="修改应用插件"></a>修改应用插件</h2><p>将     <code>apply plugin: &#39;com.android.application&#39;</code>改为<br><code>apply plugin: &#39;com.android.library&#39;</code></p>
 <h2 id="删除-applicationId"><a href="#删除-applicationId" class="headerlink" title="删除 applicationId"></a>删除 applicationId</h2><p>在我们导入的 fgtitReader 的 build.gradle 内，删除调 applicationId 设备。</p>
 <h1 id="AndroidManifest-xml修改"><a href="#AndroidManifest-xml修改" class="headerlink" title="AndroidManifest.xml修改"></a>AndroidManifest.xml修改</h1><p>将这个文件中的登录 Activity 改为普通的 Activity。</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"android.intent.action.MAIN"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.LAUNCHER"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>把这几行去掉。</p>
 <h1 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h1><h2 id="编译出错"><a href="#编译出错" class="headerlink" title="编译出错"></a>编译出错</h2><p>编译的时候出错了：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Constant expression required </span><br><span class="line">Resource IDs cannot be used in a switch statement in Android library modules less... (⌘F1) </span><br><span class="line">Validates using resource IDs in a switch statement in Android library module. Resource IDs are non final in the library projects since SDK tools r14, means that the library code cannot treat these IDs as constants</span><br></pre></td></tr></table></figure>
+
 <p>哎哟，属于 library 库内的资源 ID 是不是 final 的，无法作为 switch 的 case 比较，而主模块中的就可以。</p>
 <p>那么，以 <code>if ... else ...</code> 来替换吧。</p>
 <p>把鼠标放在 case 语句上的时候，会出现一个感叹号，点击一下，就会出现一个替换语句。</p>
 <h1 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h1><p>以命令</p>
 <figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line">.<span class="regexp">/gradlew fgtitReader:assemble</span></span><br></pre></td></tr></table></figure>
+
 <p>会打包出来一个 aar 文件。</p>
 
     </div>
@@ -318,7 +321,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Python/TensorFlow中的反向传播.html" rel="next" title="TensorFlow中的反向传播">
+                <a href="/Python/TensorFlow%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD.html" rel="next" title="TensorFlow中的反向传播">
                   <i class="fa fa-chevron-left"></i> TensorFlow中的反向传播
                 </a>
             </div>
@@ -326,7 +329,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/macOS/在macOS上安装apache与php环境.html" rel="prev" title="在macOS上安装apache与php环境">
+                <a href="/macOS/%E5%9C%A8macOS%E4%B8%8A%E5%AE%89%E8%A3%85apache%E4%B8%8Ephp%E7%8E%AF%E5%A2%83.html" rel="prev" title="在macOS上安装apache与php环境">
                   在macOS上安装apache与php环境 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -413,10 +416,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -445,10 +448,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -523,7 +526,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/Android-Studio将一个项目以Module形式的引入及遇到的坑.html",
+            url: "https://gowa.club/Android/Android-Studio%E5%B0%86%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%BB%A5Module%E5%BD%A2%E5%BC%8F%E7%9A%84%E5%BC%95%E5%85%A5%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html",
             identifier: "Android/Android-Studio将一个项目以Module形式的引入及遇到的坑.html",
             title: "Android-Studio将一个项目以Module形式的引入及遇到的坑"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Android,Thread">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android中的线程">
-<meta property="og:url" content="https://gowa.club/Android/android中的线程.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;android%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="这文章是逐渐进行总结的，一直以来对于Java并不是很理解。参考了以前曾了解过的POSIX的线程机制来进行对比和印证一下。JAVA是在VM内执行代码的，其实也和在真实机器内类似，很多东西在概念上是相似的。 进程按 POSIX 的定义，以前来说，进程是内核最小的调度实体，不过在后面，已经可以到线程了。通过把线程调度在不同的CPU上来实现并行的运算。关于多进程还是多线程，优劣各有不同。线程概念的提出，在">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-08T12:54:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android中的线程">
-<meta name="twitter:description" content="这文章是逐渐进行总结的，一直以来对于Java并不是很理解。参考了以前曾了解过的POSIX的线程机制来进行对比和印证一下。JAVA是在VM内执行代码的，其实也和在真实机器内类似，很多东西在概念上是相似的。 进程按 POSIX 的定义，以前来说，进程是内核最小的调度实体，不过在后面，已经可以到线程了。通过把线程调度在不同的CPU上来实现并行的运算。关于多进程还是多线程，优劣各有不同。线程概念的提出，在">
 
-<link rel="canonical" href="https://gowa.club/Android/android中的线程.html">
+<link rel="canonical" href="https://gowa.club/Android/android%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android中的线程.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/android中的线程.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/android%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/android中的线程.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -303,12 +301,15 @@
 </ul>
 <p>有两种狠狠阿拉丁建立一个新线程。<strong>1、声明一个<code>Thread</code> 的子类</strong> 这个子类要重写<code>Thread</code>的<code>run()</code>方法。这个子类的实例就可以被分配和执行。例如，一个计算三次方大于一个指定值的类可以如下：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PrimeThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">	<span class="keyword">long</span> minPrime;</span><br><span class="line">	PrimeThread(<span class="keyword">long</span> minPrime) &#123;</span><br><span class="line">		<span class="keyword">this</span>.minPrime = minPrime;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="comment">// compute primes larger than minPrime</span></span><br><span class="line">		....</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>接下来的代码就会建立一个线程并执行：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">PrimeThread p = <span class="keyword">new</span> PrimeThread(<span class="number">143</span>);</span><br><span class="line">p.start();</span><br></pre></td></tr></table></figure>
+
 <p>另外一个建立线程的方法就是<strong>声明一个实现 <code>Runnable</code> 接口的类</strong>。这个类实现了 <code>run()</code> 方法。这个类的实例可以被分配，然后在作为 <code>Thread</code>参数来建立，接着执行。上面的例子可以这样改写：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PrimeRun</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">	<span class="keyword">long</span> minPrime;</span><br><span class="line">	PrimeRun(<span class="keyword">long</span> minPrime)&#123;</span><br><span class="line">		<span class="keyword">this</span>.minPrime = minPrime;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="comment">// compute primes larger than minPrime</span></span><br><span class="line">             . . .		</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
 <p>下面的代码同样这建立一个线程并执行：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">PrimeRun p =  <span class="keyword">new</span> PrimeRun(<span class="number">143</span>);</span><br><span class="line"><span class="keyword">new</span> Thread(p).start();</span><br></pre></td></tr></table></figure>
+
 <p>每个线程都有一个名字。多个线程可能有相同的名字。当一个线程被创建时没有指定名字，会自动生成一个新名字。</p>
 <blockquote>
 <p>在这个类中，传递一个 <code>null</code> 参数到构造器或方法将会导致一个 <code>NullPointerException</code>违例。</p>
@@ -324,8 +325,10 @@
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>AsyncTask必须通过子类使用，子类最少会重写一个方法<code>doInBackgroud(Params ...))</code>，通常也会重写 <code>onPostExecute(Result)</code>。</p>
 <p>一个例子：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">DownloadFilesTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">URL</span>, <span class="title">Integer</span>, <span class="title">Long</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">protected</span> Long <span class="title">doInBackground</span><span class="params">(URL... urls)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> count = urls.length;</span><br><span class="line">        <span class="keyword">long</span> totalSize = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            totalSize += Downloader.downloadFile(urls[i]);</span><br><span class="line">            publishProgress((<span class="keyword">int</span>) ((i / (<span class="keyword">float</span>) count) * <span class="number">100</span>));</span><br><span class="line">            <span class="comment">// Escape early if cancel() is called</span></span><br><span class="line">            <span class="keyword">if</span> (isCancelled()) <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> totalSize;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Integer... progress)</span> </span>&#123;</span><br><span class="line">        setProgressPercent(progress[<span class="number">0</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(Long result)</span> </span>&#123;</span><br><span class="line">        showDialog(<span class="string">"Downloaded "</span> + result + <span class="string">" bytes"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>一旦建立后，一个任务就会很容易的被执行：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> DownloadFilesTask().execute(url1, url2, url3);</span><br></pre></td></tr></table></figure>
+
 <h2 id="AsyncTask的一般类型"><a href="#AsyncTask的一般类型" class="headerlink" title="AsyncTask的一般类型"></a>AsyncTask的一般类型</h2><ul>
 <li><strong>Params</strong>  发送给任务的参数类型。</li>
 <li><strong>Progress</strong> 在后台计算时显示的进度单元类型。</li>
@@ -333,6 +336,7 @@
 </ul>
 <p>一般来说三个参数类型都会用到，如果其中一个不会用到，简单的使用类型 <code>Void</code>:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">Void</span>, <span class="title">Void</span>, <span class="title">Void</span>&gt; </span>&#123;....&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="4个步骤"><a href="#4个步骤" class="headerlink" title="4个步骤"></a>4个步骤</h2><p>当一个异步任务执行的时候，会经历四个步骤：</p>
 <ol>
 <li><strong>onPreExecute()</strong> 这个方法在任务没有执行前，在主线程中调用。常常用来设置任务，具体来说，比如在用户的UI上显示一个进度条。</li>
@@ -377,7 +381,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/RxJava/RxJava2简介.html" rel="next" title="RxJava2简介">
+                <a href="/RxJava/RxJava2%E7%AE%80%E4%BB%8B.html" rel="next" title="RxJava2简介">
                   <i class="fa fa-chevron-left"></i> RxJava2简介
                 </a>
             </div>
@@ -385,7 +389,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/进程和线程概念览.html" rel="prev" title="进程和线程概念览">
+                <a href="/Android/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A6%82%E5%BF%B5%E8%A7%88.html" rel="prev" title="进程和线程概念览">
                   进程和线程概念览 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -472,10 +476,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -504,10 +508,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -582,7 +586,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/android中的线程.html",
+            url: "https://gowa.club/Android/android%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html",
             identifier: "Android/android中的线程.html",
             title: "Android中的线程"
           }

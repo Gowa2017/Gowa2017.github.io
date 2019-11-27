@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,19 +51,17 @@
 <meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript的原型继承与原型链">
-<meta property="og:url" content="https://gowa.club/JavaScript/JavaScript的原型.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;JavaScript&#x2F;JavaScript%E7%9A%84%E5%8E%9F%E5%9E%8B.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Prototyes，原型，是 JavaScript 中一个对象从另外一个对象继承特性的方法。本文中来解释 原型链是怎么样工作的，还介绍一下怎么样对已存的构造器通过原型属性来添加方法。ES2015 添加了一个 class 关键词，但其实也是使用的基于原型来实现的类机制。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/js-obj-prototypes-1.png">
-<meta property="og:image" content="https://gowa.club/res/js-obj-prototypes.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;js-obj-prototypes-1.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;js-obj-prototypes.png">
 <meta property="og:updated_time" content="2018-12-15T07:33:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaScript的原型继承与原型链">
-<meta name="twitter:description" content="Prototyes，原型，是 JavaScript 中一个对象从另外一个对象继承特性的方法。本文中来解释 原型链是怎么样工作的，还介绍一下怎么样对已存的构造器通过原型属性来添加方法。ES2015 添加了一个 class 关键词，但其实也是使用的基于原型来实现的类机制。">
-<meta name="twitter:image" content="https://gowa.club/res/js-obj-prototypes-1.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;js-obj-prototypes-1.png">
 
-<link rel="canonical" href="https://gowa.club/JavaScript/JavaScript的原型.html">
+<link rel="canonical" href="https://gowa.club/JavaScript/JavaScript%E7%9A%84%E5%8E%9F%E5%9E%8B.html">
 
 
 <script id="page-configurations">
@@ -228,12 +226,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/JavaScript的原型.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/JavaScript%E7%9A%84%E5%8E%9F%E5%9E%8B.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -274,7 +272,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/JavaScript/JavaScript的原型.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/JavaScript/JavaScript%E7%9A%84%E5%8E%9F%E5%9E%8B.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/JavaScript的原型.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,20 +290,24 @@
       
         <p>Prototyes，原型，是 JavaScript 中一个对象从另外一个对象继承特性的方法。本文中来解释 原型链是怎么样工作的，还介绍一下怎么样对已存的构造器通过原型属性来添加方法。ES2015 添加了一个 class 关键词，但其实也是使用的基于原型来实现的类机制。</p>
 <a id="more"></a>
+
+
 <h1 id="基于原型的语言？"><a href="#基于原型的语言？" class="headerlink" title="基于原型的语言？"></a>基于原型的语言？</h1><p>JavaScript 经常被描述为<strong>基于原型的语言</strong> ————为了提供继承，对象可以有一个 <strong>原型对象</strong>，可以从这个原型对象继承方法和属性。<strong>原型对象</strong>也可能拥有一个原型对象。就可以被称做一个<strong>原型链</strong>了，这就解释了为什么某个对象可以拥有在其他对象内定义的属性和方法。几乎所有对象都是 Object 的一个实例。</p>
 <p>更准确一点，一个对象的属性和方法是在对象的构造方法上的<em>prototype</em>属性定义的，而不是在对象实例自身。</p>
-<p>在 JavaScript 中，在对象实例和其原型（<em><strong>proto</strong></em>属性，此属性从构造器的 <em>prototype</em> 属性衍生）间有一个链接，那么通过遍历对象的原型链就能获取所有的属性和方法了。</p>
+<p>在 JavaScript 中，在对象实例和其原型（<em><strong>proto</strong>*属性，此属性从构造器的 *prototype</em> 属性衍生）间有一个链接，那么通过遍历对象的原型链就能获取所有的属性和方法了。</p>
 <blockquote>
-<p>注意：要理解在对象的原型（通过 <code>Object.getPrototypeOf(obj)</code>获取，或通过已经过时的 <em><strong>proto</strong></em>属性）和构造函数的 <em>prototype</em> 属性的区别。<em><strong>proto</strong></em> 是每个实例的属性，后面一个是构造器的属性。这也就是说：<code>Object.getPrototypeOf(new Foobar())</code> 和 <code>Foobar.prototype</code> 引用同样一个对象。</p>
+<p>注意：要理解在对象的原型（通过 <code>Object.getPrototypeOf(obj)</code>获取，或通过已经过时的 <em><strong>proto</strong>*属性）和构造函数的 *prototype</em> 属性的区别。<em><strong>proto</strong></em> 是每个实例的属性，后面一个是构造器的属性。这也就是说：<code>Object.getPrototypeOf(new Foobar())</code> 和 <code>Foobar.prototype</code> 引用同样一个对象。</p>
 </blockquote>
 <h1 id="理解原型对象"><a href="#理解原型对象" class="headerlink" title="理解原型对象"></a>理解原型对象</h1><p>定义一个构造函数：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Person</span>(<span class="params">first, last, age, gender, interests</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name = &#123;</span><br><span class="line">    <span class="string">'first'</span>: first,</span><br><span class="line">    <span class="string">'last'</span> : last</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">this</span>.age = age;</span><br><span class="line">  <span class="keyword">this</span>.gender = gender;</span><br><span class="line">  <span class="keyword">this</span>.interests = interests;</span><br><span class="line">  <span class="keyword">this</span>.bio = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// First define a string, and make it equal to the part of</span></span><br><span class="line">    <span class="comment">// the bio that we know will always be the same.</span></span><br><span class="line">    <span class="keyword">var</span> string = <span class="keyword">this</span>.name.first + <span class="string">' '</span> + <span class="keyword">this</span>.name.last + <span class="string">' is '</span> + <span class="keyword">this</span>.age + <span class="string">' years old. '</span>;</span><br><span class="line">    <span class="comment">// define a variable that will contain the pronoun part of</span></span><br><span class="line">    <span class="comment">// the second sentence</span></span><br><span class="line">    <span class="keyword">var</span> pronoun;</span><br><span class="line">    <span class="comment">// check what the value of gender is, and set pronoun</span></span><br><span class="line">    <span class="comment">// to an appropriate value in each case</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.gender === <span class="string">'male'</span> || <span class="keyword">this</span>.gender === <span class="string">'Male'</span> || <span class="keyword">this</span>.gender === <span class="string">'m'</span> || <span class="keyword">this</span>.gender === <span class="string">'M'</span>) &#123;</span><br><span class="line">      pronoun = <span class="string">'He likes '</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">this</span>.gender === <span class="string">'female'</span> || <span class="keyword">this</span>.gender === <span class="string">'Female'</span> || <span class="keyword">this</span>.gender === <span class="string">'f'</span> || <span class="keyword">this</span>.gender === <span class="string">'F'</span>) &#123;</span><br><span class="line">      pronoun = <span class="string">'She likes '</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      pronoun = <span class="string">'They like '</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// add the pronoun string on to the end of the main string</span></span><br><span class="line">    string += pronoun;</span><br><span class="line">    <span class="comment">// use another conditional to structure the last part of the</span></span><br><span class="line">    <span class="comment">// second sentence depending on whether the number of interests</span></span><br><span class="line">    <span class="comment">// is 1, 2, or 3</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.interests.length === <span class="number">1</span>) &#123;</span><br><span class="line">      string += <span class="keyword">this</span>.interests[<span class="number">0</span>] + <span class="string">'.'</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">this</span>.interests.length === <span class="number">2</span>) &#123;</span><br><span class="line">      string += <span class="keyword">this</span>.interests[<span class="number">0</span>] + <span class="string">' and '</span> + <span class="keyword">this</span>.interests[<span class="number">1</span>] + <span class="string">'.'</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// if there are more than 2 interests, we loop through them</span></span><br><span class="line">      <span class="comment">// all, adding each one to the main string followed by a comma,</span></span><br><span class="line">      <span class="comment">// except for the last one, which needs an and &amp; a full stop</span></span><br><span class="line">      <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.interests.length; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span>(i === <span class="keyword">this</span>.interests.length - <span class="number">1</span>) &#123;</span><br><span class="line">          string += <span class="string">'and '</span> + <span class="keyword">this</span>.interests[i] + <span class="string">'.'</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          string += <span class="keyword">this</span>.interests[i] + <span class="string">', '</span>;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// finally, with the string built, we alert() it</span></span><br><span class="line">    alert(string);</span><br><span class="line">  &#125;;</span><br><span class="line">  <span class="keyword">this</span>.greeting = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    alert(<span class="string">'Hi! I\'m '</span> + <span class="keyword">this</span>.name.first + <span class="string">'.'</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
 <p>用此构造函数构造实例：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> person1 = <span class="keyword">new</span> Person(<span class="string">'Bob'</span>, <span class="string">'Smith'</span>, <span class="number">32</span>, <span class="string">'male'</span>, [<span class="string">'music'</span>, <span class="string">'skiing'</span>]);</span><br></pre></td></tr></table></figure>
+
 <p>在我们的 Chrome ，打开 Developer Tools ，进入 console 。执行上面的代码后，前敲入 ： <code>person1</code>。你会看到如下结果：</p>
-<p><img src="../res/js-obj-prototypes-1.png" alt></p>
+<p><img src="../res/js-obj-prototypes-1.png" alt=""></p>
 <p>但如果我们输入  <em>person1.</em> 的话，我们会看到更多的提示内容：</p>
-<p><img src="../res/js-obj-prototypes.png" alt></p>
+<p><img src="../res/js-obj-prototypes.png" alt=""></p>
 <p>这提示了更多的属性和方法。比如 <em>watch, valueOf</em> 等。这些不是由 <code>Person()</code> 定义的，而是由 <em>Object</em> 对象定义的。</p>
 <p>当我们调用类似 <code>person1.valueOf</code> 的时候发生了什么：？</p>
 <ol>
@@ -314,7 +316,9 @@
 </ol>
 <blockquote>
 <p>在这里，方法和属性不会从一个对象复制到另外一个，而只是通过原型链来访问。</p>
-<p>没有一个官方的，用来直接访问对象原型对象方式。根据 ECMAScript 的规范，我们把他叫做 <em>[[prototype]]</em>。现代浏览器很多都有一个 <em><strong>proto</strong></em> 参数来包含构造器的原型对象。自 ECMA2015 可以通过 Object.getPrototypeOf(obj) 来获取原型。</p>
+</blockquote>
+<blockquote>
+<p>没有一个官方的，用来直接访问对象原型对象方式。根据 ECMAScript 的规范，我们把他叫做 <em>[[prototype]]*。现代浏览器很多都有一个 *<strong>proto</strong></em> 参数来包含构造器的原型对象。自 ECMA2015 可以通过 Object.getPrototypeOf(obj) 来获取原型。</p>
 </blockquote>
 <h1 id="prototype-定义继承属性的地方"><a href="#prototype-定义继承属性的地方" class="headerlink" title="prototype :定义继承属性的地方"></a>prototype :定义继承属性的地方</h1><p>Object 对象有很多的属性和方法，但是我们的 person1 继承来的不多，这是为什么？</p>
 <p>上面提到，我们继承的属性，是原型对象定义在 <em>prototype</em> 属性内的。也就是说以 <em>Object.prototype</em> 开头，而不是  <em>Object.</em> 开头的属性。 <em>prototype</em> 属性的值是一个对象，用来存放我们希望可以被其他对象继承的属性和方法。</p>
@@ -323,26 +327,36 @@
 </blockquote>
 <p>我们可以检查我们现在对象的 prototype 属性来看看。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Person.prototype</span><br><span class="line">&#123;<span class="attr">constructor</span>: ƒ&#125;</span><br><span class="line"><span class="keyword">constructor</span>: ƒ Person(first, last, age, gender, interests)</span><br><span class="line">__proto__: Object</span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.prototype</span><br><span class="line">&#123;<span class="attr">constructor</span>: ƒ, <span class="attr">__defineGetter__</span>: ƒ, <span class="attr">__defineSetter__</span>: ƒ, <span class="attr">hasOwnProperty</span>: ƒ, <span class="attr">__lookupGetter__</span>: ƒ, …&#125;</span><br><span class="line"><span class="keyword">constructor</span>: ƒ Object()</span><br><span class="line">hasOwnProperty: ƒ hasOwnProperty()</span><br><span class="line">isPrototypeOf: ƒ isPrototypeOf()</span><br><span class="line">propertyIsEnumerable: ƒ propertyIsEnumerable()</span><br><span class="line">toLocaleString: ƒ toLocaleString()</span><br><span class="line">toString: ƒ toString()</span><br><span class="line">valueOf: ƒ valueOf()</span><br><span class="line">__defineGetter__: ƒ __defineGetter__()</span><br><span class="line">__defineSetter__: ƒ __defineSetter__()</span><br><span class="line">__lookupGetter__: ƒ __lookupGetter__()</span><br><span class="line">__lookupSetter__: ƒ __lookupSetter__()</span><br><span class="line">get __proto__: ƒ __proto__()</span><br><span class="line">set __proto__: ƒ __proto__()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">Object</span>.prototype</span><br><span class="line">&#123;<span class="attr">constructor</span>: ƒ, <span class="attr">__defineGetter__</span>: ƒ, <span class="attr">__defineSetter__</span>: ƒ, <span class="attr">hasOwnProperty</span>: ƒ, <span class="attr">__lookupGetter__</span>: ƒ, …&#125;</span><br><span class="line"><span class="keyword">constructor</span>: ƒ Object()</span><br><span class="line">hasOwnProperty: ƒ hasOwnProperty()</span><br><span class="line">isPrototypeOf: ƒ isPrototypeOf()</span><br><span class="line">propertyIsEnumerable: ƒ propertyIsEnumerable()</span><br><span class="line">toLocaleString: ƒ toLocaleString()</span><br><span class="line">toString: ƒ toString()</span><br><span class="line">valueOf: ƒ valueOf()</span><br><span class="line">__defineGetter__: ƒ __defineGetter__()</span><br><span class="line">__defineSetter__: ƒ __defineSetter__()</span><br><span class="line">__lookupGetter__: ƒ __lookupGetter__()</span><br><span class="line">__lookupSetter__: ƒ __lookupSetter__()</span><br><span class="line"><span class="keyword">get</span> __proto__: ƒ __proto__()</span><br><span class="line"><span class="keyword">set</span> __proto__: ƒ __proto__()</span><br></pre></td></tr></table></figure>
+
 <p>我们会发现一个问题，就是对于构造器函数 Person()，其 prototype 属性包含一个属性:<em>constructor</em>，其值就是构造函数本身。所以定义在构造函数内的所有属性，都能被构造出来的对象继承。</p>
 <h1 id="回顾-create"><a href="#回顾-create" class="headerlink" title="回顾 create()"></a>回顾 create()</h1><p>我们通过另外一种方式来实例化对象：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> person2 = <span class="built_in">Object</span>.create(person1);</span><br></pre></td></tr></table></figure>
+
 <p><code>create()</code> 做的事情就是从一个原型对象建立一个新对象。在这里，person2 使用  person1 作为原型对象。我们可以证明，确实是这样：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">person2.__proto__</span><br><span class="line">Person &#123;<span class="attr">name</span>: &#123;…&#125;, <span class="attr">age</span>: <span class="number">32</span>, <span class="attr">gender</span>: <span class="string">"male"</span>, <span class="attr">interests</span>: <span class="built_in">Array</span>(<span class="number">2</span>), <span class="attr">bio</span>: ƒ, …&#125;</span><br><span class="line">age: <span class="number">32</span></span><br><span class="line">bio: ƒ ()</span><br><span class="line">gender: <span class="string">"male"</span></span><br><span class="line">greeting: ƒ ()</span><br><span class="line">interests: (<span class="number">2</span>) [<span class="string">"music"</span>, <span class="string">"skiing"</span>]</span><br><span class="line">name: &#123;<span class="attr">first</span>: <span class="string">"Bob"</span>, <span class="attr">last</span>: <span class="string">"Smith"</span>&#125;</span><br><span class="line">__proto__: <span class="built_in">Object</span></span><br></pre></td></tr></table></figure>
+
 <p>这似乎和 person1.<strong>proto</strong> 有所不同：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">person1.__proto__</span><br><span class="line">&#123;<span class="attr">constructor</span>: ƒ&#125;</span><br><span class="line"><span class="keyword">constructor</span>: ƒ Person(first, last, age, gender, interests)</span><br><span class="line">__proto__: Object</span><br></pre></td></tr></table></figure>
+
 <p>但其实也表明了， person1 是通过 构造器函数建立的，而 person2 是通过对象建立的。</p>
 <h1 id="constructor-属性"><a href="#constructor-属性" class="headerlink" title="constructor 属性"></a>constructor 属性</h1><p>每个实例对象都从原型中继承了一个constructor属性，该属性指向了用于构造此实例对象的构造函数。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">person1.constructor</span><br><span class="line">person2.constructor</span><br></pre></td></tr></table></figure>
+
 <p>返回的都是 Person() 构造器。可以在 <code>constructor</code> 末尾添加 <code>()</code> 来调用构造器，构造一个新的实例。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> person3 = <span class="keyword">new</span> person1.constructor(<span class="string">'Karen'</span>, <span class="string">'Stephenson'</span>, <span class="number">26</span>, <span class="string">'female'</span>, [<span class="string">'playing drums'</span>, <span class="string">'mountain climbing'</span>]);</span><br><span class="line"></span><br><span class="line">person3</span><br></pre></td></tr></table></figure>
+
 <p>正常工作。通常你不会去用这种方法创建新的实例；但如果你刚好因为某些原因没有原始构造器的引用，那么这种方法就很有用了。</p>
 <p>此外，<em>constructor</em> 属性还有其他用途。比如，想要获得某个对象实例的构造器的名字，可以这么用：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">person1.constructor.name</span><br></pre></td></tr></table></figure>
+
 <h1 id="修改原型-prototype"><a href="#修改原型-prototype" class="headerlink" title="修改原型 prototype"></a>修改原型 prototype</h1><p>我们为上面的构造器函数 Person() 添加一个新的方法：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Person.prototype.farewell = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  alert(<span class="keyword">this</span>.name.first + <span class="string">' has left the building. Bye for now!'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>接着我们调用这个方法看一下：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">person1.farewell();</span><br></pre></td></tr></table></figure>
+
 <p>事实上，一种极其常见的对象定义模式是，在构造器（函数体）中定义属性、在 prototype 属性上定义方法。如此，构造器只包含属性定义，而方法则分装在不同的代码块，代码更具可读性。例如：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 构造器及其属性定义</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Test</span>(<span class="params">a,b,c,d</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// 属性定义</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义第一个方法</span></span><br><span class="line"></span><br><span class="line">Test.prototype.x = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义第二个方法</span></span><br><span class="line"></span><br><span class="line">Test.prototype.y = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; ... &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等等……</span></span><br></pre></td></tr></table></figure>
     </div>
@@ -360,7 +374,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/JavaScript/Nodes.js中的事件调度.html" rel="next" title="Nodes.js中的事件调度">
+                <a href="/JavaScript/Nodes.js%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E8%B0%83%E5%BA%A6.html" rel="next" title="Nodes.js中的事件调度">
                   <i class="fa fa-chevron-left"></i> Nodes.js中的事件调度
                 </a>
             </div>
@@ -368,7 +382,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/数据库/MySQL主从复制会出现的问题.html" rel="prev" title="MySQL主从复制会出现的问题">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html" rel="prev" title="MySQL主从复制会出现的问题">
                   MySQL主从复制会出现的问题 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -455,10 +469,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -487,10 +501,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -565,7 +579,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/JavaScript/JavaScript的原型.html",
+            url: "https://gowa.club/JavaScript/JavaScript%E7%9A%84%E5%8E%9F%E5%9E%8B.html",
             identifier: "JavaScript/JavaScript的原型.html",
             title: "JavaScript的原型继承与原型链"
           }

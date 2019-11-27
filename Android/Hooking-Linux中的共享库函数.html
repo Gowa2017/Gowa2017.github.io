@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Android,逆向,Hooking">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hooking-Linux中的共享库函数">
-<meta property="og:url" content="https://gowa.club/Android/Hooking-Linux中的共享库函数.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Hooking-Linux%E4%B8%AD%E7%9A%84%E5%85%B1%E4%BA%AB%E5%BA%93%E5%87%BD%E6%95%B0.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="函数 Hooking 指的是一系列的在运行时用来拦截和改变已存函数行为的技术。本节使用动态加载API来演示一个进行 Hooking 的办法，主要是利用了 LD_PRELOAD 环境变量。LD_PRELOAD环境变量用来指定一个首先被加载器加载的共享库。先加载我们自己的共享库就能使我们拦截函数调用，接着我们就可以使用动态加载器的API来将原始的函数绑定到一个 函数指针，之后继续调用这个函数指针。也就">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-20T02:55:12.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hooking-Linux中的共享库函数">
-<meta name="twitter:description" content="函数 Hooking 指的是一系列的在运行时用来拦截和改变已存函数行为的技术。本节使用动态加载API来演示一个进行 Hooking 的办法，主要是利用了 LD_PRELOAD 环境变量。LD_PRELOAD环境变量用来指定一个首先被加载器加载的共享库。先加载我们自己的共享库就能使我们拦截函数调用，接着我们就可以使用动态加载器的API来将原始的函数绑定到一个 函数指针，之后继续调用这个函数指针。也就">
 
-<link rel="canonical" href="https://gowa.club/Android/Hooking-Linux中的共享库函数.html">
+<link rel="canonical" href="https://gowa.club/Android/Hooking-Linux%E4%B8%AD%E7%9A%84%E5%85%B1%E4%BA%AB%E5%BA%93%E5%87%BD%E6%95%B0.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Hooking-Linux中的共享库函数.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Hooking-Linux%E4%B8%AD%E7%9A%84%E5%85%B1%E4%BA%AB%E5%BA%93%E5%87%BD%E6%95%B0.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -277,7 +275,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/Hooking-Linux中的共享库函数.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/Hooking-Linux%E4%B8%AD%E7%9A%84%E5%85%B1%E4%BA%AB%E5%BA%93%E5%87%BD%E6%95%B0.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Hooking-Linux中的共享库函数.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -293,10 +291,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>函数 Hooking 指的是一系列的在运行时用来拦截和改变已存函数行为的技术。本节使用动态加载API来演示一个进行 Hooking 的办法，主要是利用了 <strong>LD_PRELOAD</strong> 环境变量。<strong>LD_PRELOAD</strong>环境变量用来指定一个首先被加载器加载的共享库。先加载我们自己的共享库就能使我们拦截函数调用，接着我们就可以使用动态加载器的API来将原始的函数绑定到一个 <strong>函数指针</strong>，之后继续调用这个函数指针。也就是说对原来的函数做了一个包装。<br><a id="more"></a></p>
+        <p>函数 Hooking 指的是一系列的在运行时用来拦截和改变已存函数行为的技术。本节使用动态加载API来演示一个进行 Hooking 的办法，主要是利用了 <strong>LD_PRELOAD</strong> 环境变量。<strong>LD_PRELOAD</strong>环境变量用来指定一个首先被加载器加载的共享库。先加载我们自己的共享库就能使我们拦截函数调用，接着我们就可以使用动态加载器的API来将原始的函数绑定到一个 <strong>函数指针</strong>，之后继续调用这个函数指针。也就是说对原来的函数做了一个包装。</p>
+<a id="more"></a>
+
+
+
 <h1 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="built_in">puts</span>(<span class="string">"Hello world!n"</span>);</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <p>共享库代码：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">puts</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *message)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> (* o_puts)(<span class="keyword">const</span> <span class="keyword">char</span> *message);</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    o_puts = dlsym(RTLD_NEXT, <span class="string">"puts"</span>);</span><br><span class="line">    o_puts(<span class="string">"hooking"</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strcmp</span>(message,<span class="string">"Hello world!n"</span>) == <span class="number">0</span>)&#123;</span><br><span class="line">        ret = o_puts(<span class="string">"Good Bye curel world!n"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        ret = o_puts(message);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>这个例子中，我们要对 <code>puts</code> 进行 hook，有几点要说明一下：</p>
 <ul>
 <li>我们定义了一个与原来的函数签名一样的 <code>puts</code> 函数。</li>
@@ -304,8 +310,10 @@
 </ul>
 <h1 id="Compile"><a href="#Compile" class="headerlink" title="Compile"></a>Compile</h1><p>我们写了个自己的makefile文件：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PLAT:=$(shell uname)</span><br><span class="line">CFLAG=-fPIC -ldl</span><br><span class="line">SO_SUFF=so</span><br><span class="line">SO_OUT=puts.$&#123;SO_SUFF&#125;</span><br><span class="line">DYFMT=-shared</span><br><span class="line">   ENV=LD_PRELOAD=./$&#123;SO_OUT&#125;</span><br><span class="line">ifeq ($&#123;PLAT&#125;,Darwin)</span><br><span class="line">   DYFMT=-dynamiclib</span><br><span class="line">   SO_SUFF=dylib</span><br><span class="line">   ENV=DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES=$&#123;SO_OUT&#125; </span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">all: so a.c</span><br><span class="line">	cc a.c</span><br><span class="line">	$&#123;ENV&#125; ./a.out</span><br><span class="line">so: puts.c</span><br><span class="line">	cc $&#123;CFLAG&#125; $&#123;DYFMT&#125; -o puts.$&#123;SO_SUFF&#125; $?</span><br><span class="line">clean:</span><br><span class="line">	rm -f a.out *.o *.dylib</span><br></pre></td></tr></table></figure>
+
 <p>我们make 以后可以看到，输出了</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hooking</span><br><span class="line">Good Bye curel world!n</span><br></pre></td></tr></table></figure>
+
 <p>就是算注入进去了。</p>
 
     </div>
@@ -317,7 +325,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Android/" rel="tag"># Android</a>
-              <a href="/tags/逆向/" rel="tag"># 逆向</a>
+              <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"># 逆向</a>
               <a href="/tags/Hooking/" rel="tag"># Hooking</a>
           </div>
 
@@ -325,7 +333,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/Riru来注入Zygote进程.html" rel="next" title="Riru来注入Zygote进程">
+                <a href="/Android/Riru%E6%9D%A5%E6%B3%A8%E5%85%A5Zygote%E8%BF%9B%E7%A8%8B.html" rel="next" title="Riru来注入Zygote进程">
                   <i class="fa fa-chevron-left"></i> Riru来注入Zygote进程
                 </a>
             </div>
@@ -333,7 +341,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/RxJava/Retrofit-OkHttp请求过程-源码阅读md.html" rel="prev" title="Retrofit-OkHttp请求过程-源码阅读">
+                <a href="/RxJava/Retrofit-OkHttp%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BBmd.html" rel="prev" title="Retrofit-OkHttp请求过程-源码阅读">
                   Retrofit-OkHttp请求过程-源码阅读 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -420,10 +428,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -452,10 +460,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -530,7 +538,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/Hooking-Linux中的共享库函数.html",
+            url: "https://gowa.club/Android/Hooking-Linux%E4%B8%AD%E7%9A%84%E5%85%B1%E4%BA%AB%E5%BA%93%E5%87%BD%E6%95%B0.html",
             identifier: "Android/Hooking-Linux中的共享库函数.html",
             title: "Hooking-Linux中的共享库函数"
           }

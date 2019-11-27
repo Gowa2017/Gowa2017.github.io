@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java的接口与抽象类(Interface与Abstarct-Class)">
-<meta property="og:url" content="https://gowa.club/Java/Java的接口与抽象类(Interface与Abstarct-Class).html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;Java%E7%9A%84%E6%8E%A5%E5%8F%A3%E4%B8%8E%E6%8A%BD%E8%B1%A1%E7%B1%BB(Interface%E4%B8%8EAbstarct-Class).html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="在Java中感觉接口与抽象类非常的相似，但其实应该是有区别的，不然的话何必要设计出这两个东西来呢，所以呢仔细看了一下官方的文档，了解一下细节。 接口Interface在Java编程语言中，接口是一个引用类型，类似于一个类，它只能包含常量，方法签名，缺省方法，静态方法和嵌套类型。 方法体只存在于默认方法和静态方法中。 接口不能被实例化 - 它们只能由类实现或由其他接口扩展。  定义一个接口就和定义一">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-06-01T01:10:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java的接口与抽象类(Interface与Abstarct-Class)">
-<meta name="twitter:description" content="在Java中感觉接口与抽象类非常的相似，但其实应该是有区别的，不然的话何必要设计出这两个东西来呢，所以呢仔细看了一下官方的文档，了解一下细节。 接口Interface在Java编程语言中，接口是一个引用类型，类似于一个类，它只能包含常量，方法签名，缺省方法，静态方法和嵌套类型。 方法体只存在于默认方法和静态方法中。 接口不能被实例化 - 它们只能由类实现或由其他接口扩展。  定义一个接口就和定义一">
 
-<link rel="canonical" href="https://gowa.club/Java/Java的接口与抽象类(Interface与Abstarct-Class).html">
+<link rel="canonical" href="https://gowa.club/Java/Java%E7%9A%84%E6%8E%A5%E5%8F%A3%E4%B8%8E%E6%8A%BD%E8%B1%A1%E7%B1%BB(Interface%E4%B8%8EAbstarct-Class).html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Java的接口与抽象类(Interface与Abstarct-Class).html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Java%E7%9A%84%E6%8E%A5%E5%8F%A3%E4%B8%8E%E6%8A%BD%E8%B1%A1%E7%B1%BB(Interface%E4%B8%8EAbstarct-Class).html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/Java的接口与抽象类(Interface与Abstarct-Class).html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/Java%E7%9A%84%E6%8E%A5%E5%8F%A3%E4%B8%8E%E6%8A%BD%E8%B1%A1%E7%B1%BB(Interface%E4%B8%8EAbstarct-Class).html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Java的接口与抽象类(Interface与Abstarct-Class).html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -297,12 +295,15 @@
 <p>接口，只是方法的集合。任何实现了接口所定义方法的类或对象，都课被当做那个接口使用。还一个可实例化的类实现了一个接口，那么其应该为接口内的所有方法提供一个方法体。</p>
 <p>例如，下面这个类就实现了上述的接口：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OperateBMW760i</span> <span class="keyword">implements</span> <span class="title">OperateCar</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// the OperateCar method signatures, with implementation --</span></span><br><span class="line">    <span class="comment">// for example:</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">signalTurn</span><span class="params">(Direction direction, <span class="keyword">boolean</span> signalOn)</span> </span>&#123;</span><br><span class="line">       <span class="comment">// code to turn BMW's LEFT turn indicator lights on</span></span><br><span class="line">       <span class="comment">// code to turn BMW's LEFT turn indicator lights off</span></span><br><span class="line">       <span class="comment">// code to turn BMW's RIGHT turn indicator lights on</span></span><br><span class="line">       <span class="comment">// code to turn BMW's RIGHT turn indicator lights off</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// other members, as needed -- for example, helper classes not </span></span><br><span class="line">    <span class="comment">// visible to clients of the interface</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>在上面的机器人汽车示例中，实施接口的是汽车制造商。 当然，雪佛兰的实施将与丰田的实施大不相同，但两家制造商将坚持相同的接口。 作为接口客户的指导制造商将构建使用汽车位置GPS数据，数字街道地图和交通数据来驱动汽车的系统。 这样做时，指导系统将调用接口方法：转弯，改变车道，制动，加速等等。</p>
 <h1 id="抽象类Abstract-Class"><a href="#抽象类Abstract-Class" class="headerlink" title="抽象类Abstract Class"></a>抽象类Abstract Class</h1><p>抽象类的定义很简单，其实就是一个声明为 <strong>abstract</strong>的类，其可能，也可能不包含抽象方法。抽象类不能被实例化，但他们可以作为其他类的超类。</p>
 <p>抽象方法就是由关键字 <strong>abstract</strong> 修饰 的方法。其也不会有方法体：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">moveTo</span><span class="params">(<span class="keyword">double</span> deltaX, <span class="keyword">double</span> deltaY)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>如果一个类包含了抽象方法，那么它自己必须是 <strong>abstract</strong>的。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">GraphicObject</span> </span>&#123;</span><br><span class="line">   <span class="comment">// declare fields</span></span><br><span class="line">   <span class="comment">// declare nonabstract methods</span></span><br><span class="line">   <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>当一个抽象类被继承的时候，子类通常会提供所有抽象方法的实现。如果没有的话，子类也必须声明为 <strong>abstract</strong>。</p>
 <blockquote>
 <p>接口中没有被声明为 <code>defalut, static</code>的方法是 <strong>隐式</strong> 抽象的，所以 <code>abstract</code> 关键字没有被用来修饰接口方法。</p>
@@ -323,8 +324,8 @@
 <li>想要对一个具体的数据类型指定行为，但是并不在乎谁实现了它的行为。</li>
 <li>想要利用类型的多重继承优势。</li>
 </ul>
-<p>JDK中一个抽象类的例子是 <em>AbstractMap</em>，其是 <em>集合框架</em> 的一部分。其子类（<strong>HashMap, TreeMap, ConcurrentHashMap</strong>）共享很多方法（如 <em>get, put, containsKey, containsValue）</em>。</p>
-<p>JDK中一个实现了多个接口的例子就是 <strong>HashMap</strong>，其实现了接口 <em>Serializable, Cloneable, Map<k, v></k,></em>。通过阅读这些接口列表，我们可以推端一个 <em>HaspMap</em>的实例可以被克隆，序列化（可以被转换为一个字节流），并且拥有 map 的功能。此外，<em>Map<k,v></k,v></em>接口已经被增强了，提供了很多默认方法如 <em>merge, forEach</em>。</p>
+<p>JDK中一个抽象类的例子是 <em>AbstractMap*，其是 *集合框架</em> 的一部分。其子类（<strong>HashMap, TreeMap, ConcurrentHashMap</strong>）共享很多方法（如 <em>get, put, containsKey, containsValue）</em>。</p>
+<p>JDK中一个实现了多个接口的例子就是 <strong>HashMap</strong>，其实现了接口 <em>Serializable, Cloneable, Map&lt;K, V&gt;</em>。通过阅读这些接口列表，我们可以推端一个 <em>HaspMap</em>的实例可以被克隆，序列化（可以被转换为一个字节流），并且拥有 map 的功能。此外，<em>Map&lt;K,V&gt;</em>接口已经被增强了，提供了很多默认方法如 <em>merge, forEach</em>。</p>
 <blockquote>
 <p>很多库使用了 抽象类和接口。<em>HaspMap</em> 实现了几个接口，但也扩展了抽象类<em>AbstractMap</em>。</p>
 </blockquote>
@@ -344,7 +345,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/关于Java操纵word文书.html" rel="next" title="关于Java操纵word文书">
+                <a href="/Java/%E5%85%B3%E4%BA%8EJava%E6%93%8D%E7%BA%B5word%E6%96%87%E4%B9%A6.html" rel="next" title="关于Java操纵word文书">
                   <i class="fa fa-chevron-left"></i> 关于Java操纵word文书
                 </a>
             </div>
@@ -352,7 +353,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/Java中的定时器Timer与TimerTask.html" rel="prev" title="Java中的定时器Timer与TimerTask">
+                <a href="/Java/Java%E4%B8%AD%E7%9A%84%E5%AE%9A%E6%97%B6%E5%99%A8Timer%E4%B8%8ETimerTask.html" rel="prev" title="Java中的定时器Timer与TimerTask">
                   Java中的定时器Timer与TimerTask <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -439,10 +440,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -471,10 +472,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -549,7 +550,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/Java的接口与抽象类(Interface与Abstarct-Class).html",
+            url: "https://gowa.club/Java/Java%E7%9A%84%E6%8E%A5%E5%8F%A3%E4%B8%8E%E6%8A%BD%E8%B1%A1%E7%B1%BB(Interface%E4%B8%8EAbstarct-Class).html",
             identifier: "Java/Java的接口与抽象类(Interface与Abstarct-Class).html",
             title: "Java的接口与抽象类(Interface与Abstarct-Class)"
           }

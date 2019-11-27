@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="安卓原生模拟器进行root操作">
-<meta property="og:url" content="https://gowa.club/Android/安卓原生模拟器进行root操作.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;%E5%AE%89%E5%8D%93%E5%8E%9F%E7%94%9F%E6%A8%A1%E6%8B%9F%E5%99%A8%E8%BF%9B%E8%A1%8Croot%E6%93%8D%E4%BD%9C.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="自己用的这个手机，root 起来比较麻烦，但是又想看一下很多系统内部的内容，所以就考虑在模拟器内进行 root 来看一下了。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-10T13:06:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="安卓原生模拟器进行root操作">
-<meta name="twitter:description" content="自己用的这个手机，root 起来比较麻烦，但是又想看一下很多系统内部的内容，所以就考虑在模拟器内进行 root 来看一下了。">
 
-<link rel="canonical" href="https://gowa.club/Android/安卓原生模拟器进行root操作.html">
+<link rel="canonical" href="https://gowa.club/Android/%E5%AE%89%E5%8D%93%E5%8E%9F%E7%94%9F%E6%A8%A1%E6%8B%9F%E5%99%A8%E8%BF%9B%E8%A1%8Croot%E6%93%8D%E4%BD%9C.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/安卓原生模拟器进行root操作.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/%E5%AE%89%E5%8D%93%E5%8E%9F%E7%94%9F%E6%A8%A1%E6%8B%9F%E5%99%A8%E8%BF%9B%E8%A1%8Croot%E6%93%8D%E4%BD%9C.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/安卓原生模拟器进行root操作.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/%E5%AE%89%E5%8D%93%E5%8E%9F%E7%94%9F%E6%A8%A1%E6%8B%9F%E5%99%A8%E8%BF%9B%E8%A1%8Croot%E6%93%8D%E4%BD%9C.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/安卓原生模拟器进行root操作.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,6 +287,7 @@
       
         <p>自己用的这个手机，root 起来比较麻烦，但是又想看一下很多系统内部的内容，所以就考虑在模拟器内进行 root 来看一下了。</p>
 <a id="more"></a>
+
 <h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>整个过程的基本原理有几点内容需要注意就行了：</p>
 <ol>
 <li>以 root 权限启动 adbd</li>
@@ -297,6 +296,7 @@
 </ol>
 <h1 id="模拟器安装"><a href="#模拟器安装" class="headerlink" title="模拟器安装"></a>模拟器安装</h1><p>这个就不说了， Android Studio 上 GUI 操作，注意镜像不要选择 带 Google Apis 的就行了，这种貌似是无法获取 Root 权限的。</p>
 <h1 id="命令行启动模拟器"><a href="#命令行启动模拟器" class="headerlink" title="命令行启动模拟器"></a>命令行启动模拟器</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">emulator -list-avds	 <span class="comment"># 查看当前的模拟器列表		</span></span><br><span class="line">emulator -avd emu -writable-system <span class="comment"># 启动模拟器</span></span><br></pre></td></tr></table></figure>
+
 <h1 id="安装-Supersu"><a href="#安装-Supersu" class="headerlink" title="安装 Supersu"></a>安装 Supersu</h1><p>在 <a href="http://www.supersu.com/" target="_blank" rel="noopener">这个连接</a> 下载，下载的内容分两部分： apk 包是权限管理的，然后 zip 包内是对应的二进制可执行文件，相当于 bin 中的命令。我们要做的事情有两个：</p>
 <ol>
 <li>安装 apk 包。</li>
@@ -304,12 +304,18 @@
 </ol>
 <h2 id="安装-apk"><a href="#安装-apk" class="headerlink" title="安装 apk"></a>安装 apk</h2><p>这个很简单，直接 adb 命令就行了</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">adb install *.apk</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="安装可执行文件到系统目录"><a href="#安装可执行文件到系统目录" class="headerlink" title="安装可执行文件到系统目录"></a>安装可执行文件到系统目录</h2><p> 这一步就用到了我们启动模拟器时用到的 <code>-writable-system</code> 了，我们执行以下命令：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">adb root</span><br><span class="line">adb remount</span><br><span class="line">adb shell <span class="string">"setenforce 0"</span></span><br></pre></td></tr></table></figure>
+
 <p>这两步已经获取了可写权限，先我们直接用 adb push 命令将文件传上去：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">adb push xxx/x86/su.pie /system/bin/su</span><br><span class="line">adb push xxx/x86/su.pie /system/xbin/su</span><br></pre></td></tr></table></figure>
+
 <p>接着我们就要进去进行安装了：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">adb shell</span><br><span class="line">chmod 0755 /system/bin/su</span><br><span class="line">chmod 0755 /system/xbin/su</span><br><span class="line">su --install</span><br><span class="line">su --daemon&amp;</span><br></pre></td></tr></table></figure>
+
 <p>这样就获取 root 权限完成了，现在我们需要做的事情就是，在关闭模拟器的时候，点 叉叉，然后用命令行启动就行了。</p>
 <p>注意，在进入 supersu App 提示更新的时候不要更新。</p>
 <h1 id="关于-xposed-框架"><a href="#关于-xposed-框架" class="headerlink" title="关于  xposed 框架"></a>关于  xposed 框架</h1><p>尝试了，只有 x86 8.0 以下的才能安装，就不知道什么情况了。</p>
@@ -329,7 +335,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/epoll系统调用.html" rel="next" title="epoll系统调用">
+                <a href="/Linux-Unix/epoll%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.html" rel="next" title="epoll系统调用">
                   <i class="fa fa-chevron-left"></i> epoll系统调用
                 </a>
             </div>
@@ -337,7 +343,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/InputService-安卓的输入系统.html" rel="prev" title="InputService-安卓的输入系统">
+                <a href="/Android/InputService-%E5%AE%89%E5%8D%93%E7%9A%84%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F.html" rel="prev" title="InputService-安卓的输入系统">
                   InputService-安卓的输入系统 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -424,10 +430,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -456,10 +462,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -534,7 +540,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/安卓原生模拟器进行root操作.html",
+            url: "https://gowa.club/Android/%E5%AE%89%E5%8D%93%E5%8E%9F%E7%94%9F%E6%A8%A1%E6%8B%9F%E5%99%A8%E8%BF%9B%E8%A1%8Croot%E6%93%8D%E4%BD%9C.html",
             identifier: "Android/安卓原生模拟器进行root操作.html",
             title: "安卓原生模拟器进行root操作"
           }

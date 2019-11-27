@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Linux,Apue">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux的用户权限与Saved set-user-id">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/Linux的用户权限与Saved-set-user-id.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;Linux%E7%9A%84%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E4%B8%8ESaved-set-user-id.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Linux的程序、文件权限是一个很奇妙的设置，不进行一下深入的研究，总是会出现这样那样的疑问。特别是对s权限的疑问，估计很多人都想知道是为什么呢。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.269Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux的用户权限与Saved set-user-id">
-<meta name="twitter:description" content="Linux的程序、文件权限是一个很奇妙的设置，不进行一下深入的研究，总是会出现这样那样的疑问。特别是对s权限的疑问，估计很多人都想知道是为什么呢。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/Linux的用户权限与Saved-set-user-id.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/Linux%E7%9A%84%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E4%B8%8ESaved-set-user-id.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Linux的用户权限与Saved-set-user-id.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Linux%E7%9A%84%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E4%B8%8ESaved-set-user-id.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -278,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/Linux的用户权限与Saved-set-user-id.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/Linux%E7%9A%84%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E4%B8%8ESaved-set-user-id.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/Linux的用户权限与Saved-set-user-id.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,13 +292,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Linux的程序、文件权限是一个很奇妙的设置，不进行一下深入的研究，总是会出现这样那样的疑问。特别是对s权限的疑问，估计很多人都想知道是为什么呢。<br><a id="more"></a></p>
+        <p>Linux的程序、文件权限是一个很奇妙的设置，不进行一下深入的研究，总是会出现这样那样的疑问。特别是对s权限的疑问，估计很多人都想知道是为什么呢。</p>
+<a id="more"></a>
 <h1 id="fork函数"><a href="#fork函数" class="headerlink" title="fork函数"></a>fork函数</h1><p>看到 <strong>AUPE 8.10节 fork函数</strong> 的时候，对于调用一次返回两次感觉好奇妙，而且之后父、子进程会共同执行更是感觉不可思议。<br>执行<code>fork</code>后，父子进程继续执行fork命令后的指令，子进程是父进程的副本，有自己的 <strong>堆、栈和数据空间</strong> 但与父进程共享正文段。<br>由于fork后经常跟随着的是exec，所以进行堆、栈、数据空间的复制是一个不必要的操作，所以很多实现采用了 <strong>写时复制(Copy-On-Write, COW技术)</strong> 。<br>这些区域父子进程共享，并被内核设置为只读，只有当父、子进程试图进行修改的时候才会对那块区域做一个副本，通常是虚拟存储器的一”页”。<br>子进程对父进程打开的文件描述符拥有副本。</p>
-<p>在 <strong>3.14节</strong>，fcntl函数进行了定义：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;fcntl.h&gt;</span><br><span class="line">int fcntl(int fd, int cmd, .../* int arg */);</span><br></pre></td></tr></table></figure></p>
+<p>在 <strong>3.14节</strong>，fcntl函数进行了定义：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;fcntl.h&gt;</span><br><span class="line">int fcntl(int fd, int cmd, .../* int arg */);</span><br></pre></td></tr></table></figure>
 <p>出错返回-1,具体返回值依赖于cmd参数。<br>其中提到一个CMD，<code>FD_GETFD FD_SETFD</code>所返回的文件描述符标志<code>FD_CLOEXEC</code>(当前的文件描述符标志只有这一个)。<br>在fork后我们经常会执行exec，若设置了FD_CLOEXEC标志，子进程对父进程的文件描述符副本，被关闭。否则，将不关闭。<br>默认情况下，子进程调用exec并不关闭这些文件描述符副本，除非显式地用fcntl(fd,FD_SETFL,1)进行设置。<br>对于目录流，POSIX.1明确要求将此标志设置为1,通常，由opendir函数调用fcntl实现。</p>
 <h1 id="与进程关联的ID"><a href="#与进程关联的ID" class="headerlink" title="与进程关联的ID"></a>与进程关联的ID</h1><p>与一个进程关联的ID有6个。<br><code>real uid/real gid</code>  login时从登录文件取出，显然，你用什么用户登录系统，实际用户就是谁。<br><code>effective uid/effective gid/supplementary group IDs</code><br><code>saved set-user-ID/saved set-group-ID</code> 被exec函数保存的<code>saved set-user-ID/saved set-group-ID</code>。</p>
 <p>当一个程序被加载到内存执行的时候，通常用的是exec函数中的一个。<br>一般情况下，<code>real uid</code>与<code>effective uid</code>是相同的，你以什么身份执行一个程序，这个进程就属于谁。<br>但是：当<code>set-user-ID</code>位被设置，也就是文件权限位第三位是s的时候，exec将会：把进程的<code>effective user id</code> 设置为<code>文件所有者ID</code>。<br>这个时候，如果不属于当前用户的文件被执行，其<code>effective user id = 文件所有者ID</code>。<br>同时，exec还会将此文件所有者ID进行保存，所以，才叫<code>saved set-user-id</code><br>那么，当执行一个具有<code>set-user-id</code>位的程序的时候，进程的<code>real user id</code> 与 <code>effective user id</code> 是不一定相同的。</p>
-<p>我们可以用一个小程序来验证是否属实。<br>这个程序打印 程序运行时候的 <code>real user ID</code>与<code>effective user ID</code>。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int</span><br><span class="line">main(int argc, char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">puts(&quot;I am child process&quot;);</span><br><span class="line">printf(&quot;userId=%d,euserId=%d\n&quot;,getuid(),geteuid());</span><br><span class="line">return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们可以用一个小程序来验证是否属实。<br>这个程序打印 程序运行时候的 <code>real user ID</code>与<code>effective user ID</code>。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int</span><br><span class="line">main(int argc, char *argv[])</span><br><span class="line">&#123;</span><br><span class="line">puts(&quot;I am child process&quot;);</span><br><span class="line">printf(&quot;userId=%d,euserId=%d\n&quot;,getuid(),geteuid());</span><br><span class="line">return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>同时将其权限设置为 <code>-rwsr-xr-x</code> 中的’s’就是<code>saved-user-Id</code>，当执行此程序时将以超级用户权限执行。要想验证很简单。<br>编译后执行他。获得输出：</p>
 <blockquote>
 <p>I am child process<br>userId=500,euserId=0</p>
@@ -326,7 +327,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/Unix编程中exec函数族的一点疑问.html" rel="next" title="Unix编程中exec函数族的一点疑问">
+                <a href="/Linux-Unix/Unix%E7%BC%96%E7%A8%8B%E4%B8%ADexec%E5%87%BD%E6%95%B0%E6%97%8F%E7%9A%84%E4%B8%80%E7%82%B9%E7%96%91%E9%97%AE.html" rel="next" title="Unix编程中exec函数族的一点疑问">
                   <i class="fa fa-chevron-left"></i> Unix编程中exec函数族的一点疑问
                 </a>
             </div>
@@ -334,7 +335,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Golang/Lua与Go中的闭包.html" rel="prev" title="Go中的闭包">
+                <a href="/Golang/Lua%E4%B8%8EGo%E4%B8%AD%E7%9A%84%E9%97%AD%E5%8C%85.html" rel="prev" title="Go中的闭包">
                   Go中的闭包 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -421,10 +422,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -453,10 +454,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -531,7 +532,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/Linux的用户权限与Saved-set-user-id.html",
+            url: "https://gowa.club/Linux-Unix/Linux%E7%9A%84%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E4%B8%8ESaved-set-user-id.html",
             identifier: "Linux-Unix/Linux的用户权限与Saved-set-user-id.html",
             title: "Linux的用户权限与Saved set-user-id"
           }

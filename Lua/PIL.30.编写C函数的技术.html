@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Lua,PIL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PIL.30.编写C函数的技术">
-<meta property="og:url" content="https://gowa.club/Lua/PIL.30.编写C函数的技术.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Lua&#x2F;PIL.30.%E7%BC%96%E5%86%99C%E5%87%BD%E6%95%B0%E7%9A%84%E6%8A%80%E6%9C%AF.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="核心 API 和辅助库都提供了一些帮助写 C 函数的方法。在本章，覆盖了进行数组操作，字符串操作，和在 Lua 里面存储 C 值的方法。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-10-16T04:58:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PIL.30.编写C函数的技术">
-<meta name="twitter:description" content="核心 API 和辅助库都提供了一些帮助写 C 函数的方法。在本章，覆盖了进行数组操作，字符串操作，和在 Lua 里面存储 C 值的方法。">
 
-<link rel="canonical" href="https://gowa.club/Lua/PIL.30.编写C函数的技术.html">
+<link rel="canonical" href="https://gowa.club/Lua/PIL.30.%E7%BC%96%E5%86%99C%E5%87%BD%E6%95%B0%E7%9A%84%E6%8A%80%E6%9C%AF.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.30.编写C函数的技术.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.30.%E7%BC%96%E5%86%99C%E5%87%BD%E6%95%B0%E7%9A%84%E6%8A%80%E6%9C%AF.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/PIL.30.编写C函数的技术.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/PIL.30.%E7%BC%96%E5%86%99C%E5%87%BD%E6%95%B0%E7%9A%84%E6%8A%80%E6%9C%AF.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/PIL.30.编写C函数的技术.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,16 +285,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>核心 API 和辅助库都提供了一些帮助写 C 函数的方法。在本章，覆盖了进行数组操作，字符串操作，和在 Lua 里面存储 C 值的方法。<br><a id="more"></a></p>
+        <p>核心 API 和辅助库都提供了一些帮助写 C 函数的方法。在本章，覆盖了进行数组操作，字符串操作，和在 Lua 里面存储 C 值的方法。</p>
+<a id="more"></a>
+
 <h1 id="数组操作"><a href="#数组操作" class="headerlink" title="数组操作"></a>数组操作</h1><p>一个 <strong>数组</strong>，在 Lua 中，仅仅是一个特定方式使用的 表。我们可以使用操纵表的那些通用函数来操纵数组，比如 <code>lua_settable, lua_gettable</code>。然而，API 提供了几个特定的函数以整数为键来访问和更新表。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lua_geti</span> <span class="params">(lua_State *L, <span class="keyword">int</span> index, <span class="keyword">int</span> key)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">lua_seti</span> <span class="params">(lua_State *L, <span class="keyword">int</span> index, <span class="keyword">int</span> key)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>5.3 版本 Lua 只提供这些函数的 raw 版本，<code>lua_rawgeti, lua_rawseti</code>，不会访问 元表。当访问元表这个区别并不重要的适，raw 版本的会更快一些。</p>
 <p>对于 <code>lua_geti, lua_seti</code> 的描述有点让人迷惑，因为其涉及到了两个索引；<strong>index</strong> 指定要访问的是元素在栈上的位置，<strong>key</strong> 引用的是在 表中的元素。<code>lua_geti(L, t, key)</code> 在 <code>t</code> 是整数的时候，和下面的等价：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">lua_pushnumber(L, key);</span><br><span class="line">lua_gettable(L, t);</span><br></pre></td></tr></table></figure>
+
 <p><code>lua_seti(L, t, key)</code> 与下面代码等价：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">lua_pushnumber(L, key);</span><br><span class="line">lua_insert(L, <span class="number">-2</span>);  <span class="comment">/* put 'key' below previous value */</span></span><br><span class="line">lua_settable(L, t);</span><br></pre></td></tr></table></figure>
+
 <p>下面是一个比较完整的逦，在 C 中实现了一个 <strong>map</strong> 函数（对于数组的每个元素应用一个函数，然后将函数调用的结果替换原来元素的值）：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">                <span class="function"><span class="keyword">int</span> <span class="title">l_map</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">int</span> i, n;</span><br><span class="line">                <span class="comment">/* 1st argument must be a table (t) */</span></span><br><span class="line">                luaL_checktype(L, <span class="number">1</span>, LUA_TTABLE);</span><br><span class="line">                <span class="comment">/* 2nd argument must be a function (f) */</span></span><br><span class="line">                luaL_checktype(L, <span class="number">2</span>, LUA_TFUNCTION);</span><br><span class="line">                n = luaL_len(L, <span class="number">1</span>);  <span class="comment">/* get size of table */</span></span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">                  lua_pushvalue(L, <span class="number">2</span>);   <span class="comment">/* push f */</span></span><br><span class="line">                  lua_geti(L, <span class="number">1</span>, i);  <span class="comment">/* push t[i] */</span></span><br><span class="line">                  lua_call(L, <span class="number">1</span>, <span class="number">1</span>);     <span class="comment">/* call f(t[i]) */</span></span><br><span class="line">                  lua_seti(L, <span class="number">1</span>, i);  <span class="comment">/* t[i] = result */</span></span><br><span class="line">&#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">/* no results */</span></span><br><span class="line">              &#125;</span><br></pre></td></tr></table></figure>
+
 <p>这个函数引入了几个新的函数：</p>
 <ul>
 <li><code>luaL_checktype</code>(lauxlib.h)保证指定栈上位置的元素具有指定类型，否则就会产生一个错误。</li>
@@ -307,12 +311,15 @@
 <p>当想要从 C 中传递字符串给 Lua 的话就稍微麻烦一些。在这种情况下，由 C 代码来关注缓存区的分配与释放，缓冲区的溢出，以及一些其他 C 做起来比较可能的事情。因此 Lua API 提供了一些函数来帮助我们完成这些任务。</p>
 <p>标准的API 提供了两个最基本的字符串操作：字符串截取和字符串拼接。为了截取部分字符串，需要记住的是，<code>lua_pushlstring</code> 将字符串的长度作为一个额外的参数。因此，如果我们想从传递 Lua 字符串 <strong>s</strong> 从位置 [i,j] 的部分，可以这样做：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">lua_pushlstring(L, s + i, j - i + 1);</span><br></pre></td></tr></table></figure>
+
 <p>来个例子，如果我们想写一个用来根据指定的分隔符分隔字符串的函数，之后返回分隔后的子字符表。我们调用 <code>split(&quot;hi:ho:there&quot;,:)</code> 应该返回 表 {“hi”,”ho”,”table”}。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">      <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">l_split</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span> *s = luaL_checkstring(L, <span class="number">1</span>);      <span class="comment">/* subject */</span></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span> *sep = luaL_checkstring(L, <span class="number">2</span>);  <span class="comment">/* separator */</span></span><br><span class="line">        <span class="keyword">const</span> <span class="keyword">char</span> *e;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">1</span>;</span><br><span class="line">        lua_newtable(L);  <span class="comment">/* result table */</span></span><br><span class="line">        <span class="comment">/* repeat for each separator */</span></span><br><span class="line">        <span class="keyword">while</span> ((e = <span class="built_in">strchr</span>(s, *sep)) != <span class="literal">NULL</span>) &#123;</span><br><span class="line">          lua_pushlstring(L, s, e - s);  <span class="comment">/* push substring */</span></span><br><span class="line">          lua_rawseti(L, <span class="number">-2</span>, i++);   <span class="comment">/* insert it in table */</span></span><br><span class="line">          s = e + <span class="number">1</span>;  <span class="comment">/* skip separator */</span></span><br><span class="line">&#125;</span><br><span class="line">        <span class="comment">/* insert last substring */</span></span><br><span class="line">        lua_pushstring(L, s);</span><br><span class="line">        lua_rawseti(L, <span class="number">-2</span>, i);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">/* return the table */</span></span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
+
 <p>在这例子中，我们没有用到缓冲区，所以可以处理任意长度的字符串：Lua 自动会进行的内存的分配。（在我们创建表的时候，我们 知道其没有元表；所以我们可以用 raw 操作来进行操作）。</p>
 <p>为了拼接字符串，Lua 提供了一个特定函数，叫做 <code>lua_concat</code>。出与连接操作符 <code>..</code> 等价：其会将数字转换为字符串，必要的时候会触发元方法。而且，其能一次性就拼接多个字符串。<code>lua_concat(L, n)</code> 会拼接（并弹出）栈顶的 <strong>n</strong> 个元素，然后将应该压到栈上去。</p>
 <p>另外一个帮助函数是：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">char</span> *<span class="title">lua_pushfstring</span> <span class="params">(lua_State *L, <span class="keyword">const</span> <span class="keyword">char</span> *fmt, ...)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>这个看起来有点像 C 函数 <code>sprintf</code>，根据参数和格式来创建字符串。但与其不同的是，我们不需要分配缓冲区。Lua 为我们动态的创建这作品字符串。 这个函数会将结果压到栈上，并返回一个指向此字符串的指针。支持下面几个格式化符：</p>
 <ul>
 <li><strong>%s</strong> 插入以 ‘\0’ 结尾的字符串</li>
@@ -328,6 +335,7 @@
 <p>当我们想要拼接少数字符串的时候，<code>lua_concat, lua_pushfstring</code> 都是很有用的。然而，当我们需要拼接多个字符或者字符串的时候，一个一个的进行拼接是非常没有效率的。这样的情况下我们就使用 辅助库提供的 <strong>缓冲区特性</strong> 。</p>
 <p>在简单的情况下，缓冲区特性由两个函数进行工作：一个函数给予一个任意大小的缓冲区，我们在缓冲区内拼接字符；另外一个转换内容。下面例子是展示了用法：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">str_upper</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">size_t</span> l;</span><br><span class="line">                <span class="keyword">size_t</span> i;</span><br><span class="line">                luaL_Buffer b;</span><br><span class="line">                <span class="keyword">const</span> <span class="keyword">char</span> *s = luaL_checklstring(L, <span class="number">1</span>, &amp;l);</span><br><span class="line">                <span class="keyword">char</span> *p = luaL_buffinitsize(L, &amp;b, l);</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; l; i++)</span><br><span class="line">                  p[i] = <span class="built_in">toupper</span>(uchar(s[i]));</span><br><span class="line">                luaL_pushresultsize(&amp;b, l);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>第一步就是声明一个 luaL_Buffer 类型的变量，接着使用 <code>luaL_buffinitsize</code> 来获取一个缓冲区指针；后面我们就可以在这个缓冲区来拼接字符串。最后一步 <code>luaL_pushresultsize</code> 会将缓冲区的内容转换成一个 Lua String，并把它压到栈上。<code>luaL_pushresultsize</code> 调用中的大小就是字符串最终的大小。通常，在我们的例子也是这样，这个大小是和缓冲区的大小一致的，但也可能会更小。我们不是确切的知道缓冲区最终的大小，但是有一个最大值，我们可以分配一个更大的值。</p>
 <p>注意 <code>luaL_pushresultsize</code> 并没有接收一个 lua_State 作为参数，这是因为在 初始化后，缓冲区就持有了一个对 lua_State 的引用。</p>
 <p>我们也可以通过零散的向缓冲区添加内容，而不需要了解最终的字符串大小。辅助库就提供了几个函数来向缓冲区添加内容：</p>
@@ -338,14 +346,17 @@
 <li><strong>luaL_addchar</strong> 添加单个字符。</li>
 </ul>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">luaL_buffinit</span>   <span class="params">(lua_State *L, luaL_Buffer *B)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">luaL_addvalue</span>   <span class="params">(luaL_Buffer *B)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">luaL_addlstring</span> <span class="params">(luaL_Buffer *B, <span class="keyword">const</span> <span class="keyword">char</span> *s, <span class="keyword">size_t</span> l)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">luaL_addstring</span>  <span class="params">(luaL_Buffer *B, <span class="keyword">const</span> <span class="keyword">char</span> *s)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">luaL_addchar</span>    <span class="params">(luaL_Buffer *B, <span class="keyword">char</span> c)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">luaL_pushresult</span> <span class="params">(luaL_Buffer *B)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>下面是一个 table.concat 的简化版本：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">       <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">tconcat</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">                luaL_Buffer b;</span><br><span class="line">                <span class="keyword">int</span> i, n;</span><br><span class="line">                luaL_checktype(L, <span class="number">1</span>, LUA_TTABLE);</span><br><span class="line">                n = luaL_len(L, <span class="number">1</span>);</span><br><span class="line">                luaL_buffinit(L, &amp;b);</span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">                  lua_geti(L, <span class="number">1</span>, i);  <span class="comment">/* get string from table */</span></span><br><span class="line">                  luaL_addvalue(b);   <span class="comment">/* add it to the buffer */</span></span><br><span class="line">                &#125;</span><br><span class="line">                luaL_pushresult(&amp;b);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>在使用缓冲区的时候我们要考虑几个细节。我们在初始化一个缓冲区后，其很有可能在栈上维护一些内部的数据。因此可，我们不能假设我们的栈顶会和我们使用缓冲区前是一致的。尽管我们可以在使用缓冲区期间使用栈，对于 push/pop 的使用一定要是平衡的。但是 <code>luaL_addvalue</code> 一直假设我们要添加的字符串位于栈顶。</p>
 <h1 id="C-函数中存储状态"><a href="#C-函数中存储状态" class="headerlink" title="C 函数中存储状态"></a>C 函数中存储状态</h1><p>经常，C 函数需要保持一些非本地的数据，也就是说，在函数的调用生命周期之外的数据。在 C 中我们会使用 全局 (extern) 或者静态变量。当我们编写为 Lua 编写库函数的时候，这却不能工作。首先，我们不能将一个 通常意义上的 Lua 值存在到一个 C 变量中。然后，一个库函数在多个 lua_State 的时候使用这个变量就不能正常工作。</p>
 <p>更好的办法是向 Lua 寻求一下帮助。 一个 Lua 函数有两个地方可以存在非本地的数据：全局变量和非本地的变量。C API 提供了了个类似的地方来存非本地的数据：注册表与上值。</p>
 <h2 id="注册表"><a href="#注册表" class="headerlink" title="注册表"></a>注册表</h2><p>注册表是一个全局表，其只能通过 C 代码访问。通常，我们用他来存在需要在多个模块间共享的数据。</p>
 <p>注册表的索引总是位于 <strong>LUA_REGISTRYINDEX</strong> 这个伪索引。我们可以如同普通索引一样使用这个伪索引，唯一的例外就是对于操作栈本身的函数无法接受伪索引。例如 <code>lua_remote, lua_insert</code>。如果我们想要获取一个存在在注册表中的 <strong>Key</strong> 的值：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">lua_getfield(L, LUA_REGISTRYINDEX, <span class="string">"Key"</span>);</span><br></pre></td></tr></table></figure>
+
 <p>注册也是一普通的 Lua 表。因此我们可以用任何非 nil Lua 值进行索引。然而，因为所有的 C 模块都共享这个注册表，我们必须要谨慎的选择要用做索引的键来避免冲突。</p>
 <p>我们永远也不要使用数字在全局表中作为索引，这个这是 Lua <strong>引用系统</strong> 保留的做法。这个系统由一辅助库的一对函数组成，其允许我们不用担心如何创建唯一的键来在表中存在数据。<strong>luaL_ref</strong> 会创建一个新的引用：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> ref = luaL_ref(L, LUA_REGISTRYINDEX);</span><br></pre></td></tr></table></figure>
@@ -353,12 +364,16 @@
 <p>就和名字暗示的一样，我们使用这个引用主要是在我们需要 C 结构中引用一个 Lua 值的时候。我们不应该接收到 Lua 字符串参数的函数外存储字符串的指针。同时，Lua 并不提供指向其他对象的指针，比如表和函数的指针。因此，我们不能通过指针来访问 Lua 对象。这样的情况下我们就智能创建一个引用了。</p>
 <p>如果我们想要将引用所关联的值压到栈上，我们可以简单的这样做：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">lua_rawgeti(L, LUA_REGISTRYINDEX, ref);</span><br></pre></td></tr></table></figure>
+
 <p>如果我们想要释放引用和值，</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">luaL_unref(L, LUA_REGISTRYINDEX, ref);</span><br></pre></td></tr></table></figure>
+
 <p>引用系统将 nil 当做一个特殊情况。如果我们为 nil 值调用  <code>luaL_ref</code>，其不会创建新的索引，而是返回常索引 <strong>LUA_REFNIL</strong>，下面的调用没有任何影响：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">luaL_unref(L, LUA_REGISTRYINDEX, LUA_REFNIL);</span><br></pre></td></tr></table></figure>
+
 <p>下面的调用会压入一个 nil，如我们所期待的那样：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">lua_rawgeti(L, LUA_REGISTRYINDEX, LUA_REFNIL);</span><br></pre></td></tr></table></figure>
+
 <p>引用系统也定义了一个常量 <strong>LUA_NOREF</strong>，其也是一个整型，不过和任何有效的引用都不一样。这用来标示被当作引用的那个值是无效的。</p>
 <p>当我们建立一个 lua_State 的时候，有几个预定义的引用：</p>
 <ul>
@@ -367,19 +382,24 @@
 </ul>
 <p>另一个比较安全的在注册表内建立唯一键的方法是使用我们代码中静态变量地址作为键。C 的链接器会保证这个键在所有加载的库中唯一。为了使用这个选项，我们需要函数  <code>lua_pushlightuserdata</code>，会将一个代表 C 指针的值压到栈上。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* variable with a unique address */</span></span><br><span class="line"> <span class="keyword">static</span> <span class="keyword">char</span> Key = <span class="string">'k'</span>;</span><br><span class="line"> <span class="comment">/* store a string */</span></span><br><span class="line"> lua_pushlightuserdata(L, (<span class="keyword">void</span> *)&amp;Key);  <span class="comment">/* push address */</span></span><br><span class="line"> lua_pushstring(L, myStr);  <span class="comment">/* push value */</span></span><br><span class="line"> lua_settable(L, LUA_REGISTRYINDEX);  <span class="comment">/* registry[&amp;Key] = myStr */</span></span><br><span class="line"> <span class="comment">/* retrieve a string */</span></span><br><span class="line"> lua_pushlightuserdata(L, (<span class="keyword">void</span> *)&amp;Key);  <span class="comment">/* push address */</span></span><br><span class="line"> lua_gettable(L, LUA_REGISTRYINDEX);  <span class="comment">/* retrieve value */</span></span><br><span class="line"> myStr = lua_tostring(L, <span class="number">-1</span>);  <span class="comment">/* convert to string */</span></span><br></pre></td></tr></table></figure>
+
 <p>为了简化使用地址作为唯一键的方式，Lua 5.2 就提供了两个新的函数 ：<code>lua_rawgetp, luarawsetp</code>。这个和 <code>lua_rawgeti, lua_rawseti</code> 相似，但是其是使用 C 指针（Light userdata）作为键的。使用这两个函数 前面的例子就可以简化：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">char</span> Key = <span class="string">'k'</span>;</span><br><span class="line"><span class="comment">/* store a string */</span></span><br><span class="line">lua_pushstring(L, myStr);</span><br><span class="line">lua_rawsetp(L, LUA_REGISTRYINDEX, (<span class="keyword">void</span> *)&amp;Key);</span><br><span class="line"><span class="comment">/* retrieve a string */</span></span><br><span class="line">lua_rawgetp(L, LUA_REGISTRYINDEX, (<span class="keyword">void</span> *)&amp;Key);</span><br><span class="line">myStr = lua_tostring(L, <span class="number">-1</span>);</span><br></pre></td></tr></table></figure>
+
 <p>所有的函数都使用  raw 访问。由于注册表是没有元表的，raw 访问和常规的访问没有什么区别，只不过更高效一点。</p>
 <h1 id="上值"><a href="#上值" class="headerlink" title="上值"></a>上值</h1><p>注册表提供了类似全局变量的东西，而 <strong>上值</strong> 实现了与只能在一个函数可间的 C 静态变量等价的东西。每当我们在 Lua 创建一个 C 函数的时候，我们可以以任意多个上值关联给它，每个上值持有一个 Lua 值。在后续对这个函数的调用中，其可以自由的访问他的上值，（使用伪索引）。</p>
 <p>我们把这个将 C 函数与其上值的关联叫做 <strong>闭包</strong>。一个 C 闭包 是一个 C 对 Lua 闭包的近似。实际上，我们可以用相同的函数，不同的上值创建不同的闭包。</p>
 <p>看一个简单的例子：newCounter。这个函数是一个工厂函数，调用它 就会返回一个计数函数。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">c1 = newCount()</span><br><span class="line"><span class="built_in">print</span>(c1(), c1(), c1())   <span class="comment">--&gt; 1    2    3</span></span><br><span class="line">c2 = newCounter()</span><br><span class="line"><span class="built_in">print</span>(c2(), c2(), c1())   <span class="comment">--&gt; 1    2    4</span></span><br></pre></td></tr></table></figure>
+
 <p>尽管所有 counter 代码共享 同样的 C代码，但每个计数器都是独立的。工厂函数类似：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">      <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">counter</span> <span class="params">(lua_State *L)</span></span>;  <span class="comment">/* forward declaration */</span></span><br><span class="line">      <span class="function"><span class="keyword">int</span> <span class="title">newCounter</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">        lua_pushinteger(L, <span class="number">0</span>);</span><br><span class="line">        lua_pushcclosure(L, &amp;counter, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>关键之处在与 <code>lua_pushcclosure</code>，其会创建一个新的闭包。其第二个参数是一个基础函数，第三个参数是指定上值个数。</p>
 <p>在创建闭包前，我们必须将上值的初始值压到栈上。<code>lua_pushcclosure</code> 会将新的闭包留在栈上。</p>
 <p>现在我们来看看 counter 函数的定义：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">      <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">counter</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> val = lua_tointeger(L, lua_upvalueindex(<span class="number">1</span>));</span><br><span class="line">        lua_pushinteger(L, ++val);  <span class="comment">/* new value */</span></span><br><span class="line">        lua_copy(L, <span class="number">-1</span>, lua_upvalueindex(<span class="number">1</span>));  <span class="comment">/* update upvalue */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">/* return new value */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>这里的关键元素就是 <code>lua_upvalueindex</code>，其会对上值产生一个伪索引。实际上 <code>lua_upvalueindex(1)</code> 会产生运行函数第一个上值的伪索引。再次重复，伪索引也和正常的栈索引没有什么区别，只是其不存在与栈上而已。</p>
 
     </div>
@@ -398,7 +418,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Lua/PIL.32.Lua中的资源管理.html" rel="next" title="PIL.32.Lua中的资源管理">
+                <a href="/Lua/PIL.32.Lua%E4%B8%AD%E7%9A%84%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86.html" rel="next" title="PIL.32.Lua中的资源管理">
                   <i class="fa fa-chevron-left"></i> PIL.32.Lua中的资源管理
                 </a>
             </div>
@@ -406,7 +426,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/macOS/在macOS-Mojave上编译Lua失败的经历.html" rel="prev" title="在macOS-Mojave上编译Lua失败的经历">
+                <a href="/macOS/%E5%9C%A8macOS-Mojave%E4%B8%8A%E7%BC%96%E8%AF%91Lua%E5%A4%B1%E8%B4%A5%E7%9A%84%E7%BB%8F%E5%8E%86.html" rel="prev" title="在macOS-Mojave上编译Lua失败的经历">
                   在macOS-Mojave上编译Lua失败的经历 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -493,10 +513,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -525,10 +545,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -603,7 +623,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Lua/PIL.30.编写C函数的技术.html",
+            url: "https://gowa.club/Lua/PIL.30.%E7%BC%96%E5%86%99C%E5%87%BD%E6%95%B0%E7%9A%84%E6%8A%80%E6%9C%AF.html",
             identifier: "Lua/PIL.30.编写C函数的技术.html",
             title: "PIL.30.编写C函数的技术"
           }

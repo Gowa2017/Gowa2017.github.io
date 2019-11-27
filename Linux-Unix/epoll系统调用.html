@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="epoll系统调用">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/epoll系统调用.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;epoll%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="在进行多路复用的时候 select 最为人诟病的就是，每次有事件发生，其都必须要遍历其观察的文件描述符集，才能知道到底是哪里发生了事件。如果我们要关注一万个文件描述符，然后是第 9999 个发生了事件，那么他必须遍历到最后，这是非常可怕的事情。因此才有了 poll 的诞生。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-08T13:53:27.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="epoll系统调用">
-<meta name="twitter:description" content="在进行多路复用的时候 select 最为人诟病的就是，每次有事件发生，其都必须要遍历其观察的文件描述符集，才能知道到底是哪里发生了事件。如果我们要关注一万个文件描述符，然后是第 9999 个发生了事件，那么他必须遍历到最后，这是非常可怕的事情。因此才有了 poll 的诞生。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/epoll系统调用.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/epoll%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/epoll系统调用.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/epoll%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/epoll系统调用.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/epoll%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/epoll系统调用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,7 +287,9 @@
       
         <p>在进行多路复用的时候 select 最为人诟病的就是，每次有事件发生，其都必须要遍历其观察的文件描述符集，才能知道到底是哪里发生了事件。如果我们要关注一万个文件描述符，然后是第 9999 个发生了事件，那么他必须遍历到最后，这是非常可怕的事情。因此才有了 poll 的诞生。</p>
 <a id="more"></a>
+
 <h1 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/epoll.h&gt;</span></span></span><br></pre></td></tr></table></figure>
+
 <p>即可使用相关的函数了。</p>
 <p><code>epoll</code> API 进行和 <code>poll</code> 差不多的工作：监控多个文件描述符上面的 I/O 事件。<code>epoll</code> API 可以用来作为一个水平触发或者边缘触发的接口，同时对于数量巨大的文件描述符也会工作得很好。下面的几个系统调用用来建立和管理 <code>epoll</code> 实例：</p>
 <ul>
@@ -315,6 +315,7 @@
 <h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><p>一个典型的用法。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_EVENTS 10</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">epoll_event</span> <span class="title">ev</span>, <span class="title">events</span>[<span class="title">MAX_EVENTS</span>];</span></span><br><span class="line"><span class="keyword">int</span> listen_sock, conn_sock, nfds, epollfd;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Set up listening socket, 'listen_sock' (socket(),</span></span><br><span class="line"><span class="comment">   bind(), listen()) */</span></span><br><span class="line"></span><br><span class="line">epollfd = epoll_create(<span class="number">10</span>);</span><br><span class="line"><span class="keyword">if</span> (epollfd == <span class="number">-1</span>) &#123;</span><br><span class="line">    perror(<span class="string">"epoll_create"</span>);</span><br><span class="line">    <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ev.events = EPOLLIN;</span><br><span class="line">ev.data.fd = listen_sock;</span><br><span class="line"><span class="keyword">if</span> (epoll_ctl(epollfd, EPOLL_CTL_ADD, listen_sock, &amp;ev) == <span class="number">-1</span>) &#123;</span><br><span class="line">    perror(<span class="string">"epoll_ctl: listen_sock"</span>);</span><br><span class="line">    <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (;;) &#123;</span><br><span class="line">    nfds = epoll_wait(epollfd, events, MAX_EVENTS, <span class="number">-1</span>);</span><br><span class="line">    <span class="keyword">if</span> (nfds == <span class="number">-1</span>) &#123;</span><br><span class="line">        perror(<span class="string">"epoll_pwait"</span>);</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (n = <span class="number">0</span>; n &lt; nfds; ++n) &#123;</span><br><span class="line">        <span class="keyword">if</span> (events[n].data.fd == listen_sock) &#123;</span><br><span class="line">            conn_sock = accept(listen_sock,</span><br><span class="line">                            (struct sockaddr *) &amp;local, &amp;addrlen);</span><br><span class="line">            <span class="keyword">if</span> (conn_sock == <span class="number">-1</span>) &#123;</span><br><span class="line">                perror(<span class="string">"accept"</span>);</span><br><span class="line">                <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">            &#125;</span><br><span class="line">            setnonblocking(conn_sock);</span><br><span class="line">            ev.events = EPOLLIN | EPOLLET;</span><br><span class="line">            ev.data.fd = conn_sock;</span><br><span class="line">            <span class="keyword">if</span> (epoll_ctl(epollfd, EPOLL_CTL_ADD, conn_sock,</span><br><span class="line">                        &amp;ev) == <span class="number">-1</span>) &#123;</span><br><span class="line">                perror(<span class="string">"epoll_ctl: conn_sock"</span>);</span><br><span class="line">                <span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            do_use_fd(events[n].data.fd);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+
     </div>
 
     
@@ -330,7 +331,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Lua/JNI使用-LuaJava实现.html" rel="next" title="JNI使用-LuaJava实现">
+                <a href="/Lua/JNI%E4%BD%BF%E7%94%A8-LuaJava%E5%AE%9E%E7%8E%B0.html" rel="next" title="JNI使用-LuaJava实现">
                   <i class="fa fa-chevron-left"></i> JNI使用-LuaJava实现
                 </a>
             </div>
@@ -338,7 +339,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/安卓原生模拟器进行root操作.html" rel="prev" title="安卓原生模拟器进行root操作">
+                <a href="/Android/%E5%AE%89%E5%8D%93%E5%8E%9F%E7%94%9F%E6%A8%A1%E6%8B%9F%E5%99%A8%E8%BF%9B%E8%A1%8Croot%E6%93%8D%E4%BD%9C.html" rel="prev" title="安卓原生模拟器进行root操作">
                   安卓原生模拟器进行root操作 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -425,10 +426,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -457,10 +458,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -535,7 +536,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/epoll系统调用.html",
+            url: "https://gowa.club/Linux-Unix/epoll%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.html",
             identifier: "Linux-Unix/epoll系统调用.html",
             title: "epoll系统调用"
           }

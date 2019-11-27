@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Java,Android,Gson">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gson常规使用-fromJson()">
-<meta property="og:url" content="https://gowa.club/Java/Gson常规使用-fromJson().html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;Gson%E5%B8%B8%E8%A7%84%E4%BD%BF%E7%94%A8-fromJson().html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Gson 是一个非常棒的用来解析 Json 对象到 Java 对象的库，或者将 Java 对象转换成为 Json 的库。不过有些细节还值得探讨一下。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-21T13:26:33.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Gson常规使用-fromJson()">
-<meta name="twitter:description" content="Gson 是一个非常棒的用来解析 Json 对象到 Java 对象的库，或者将 Java 对象转换成为 Json 的库。不过有些细节还值得探讨一下。">
 
-<link rel="canonical" href="https://gowa.club/Java/Gson常规使用-fromJson().html">
+<link rel="canonical" href="https://gowa.club/Java/Gson%E5%B8%B8%E8%A7%84%E4%BD%BF%E7%94%A8-fromJson().html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Gson常规使用-fromJson().html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Gson%E5%B8%B8%E8%A7%84%E4%BD%BF%E7%94%A8-fromJson().html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/Gson常规使用-fromJson().html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/Gson%E5%B8%B8%E8%A7%84%E4%BD%BF%E7%94%A8-fromJson().html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Gson常规使用-fromJson().html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,27 +287,36 @@
       
         <p>Gson 是一个非常棒的用来解析 Json 对象到 Java 对象的库，或者将 Java 对象转换成为 Json 的库。不过有些细节还值得探讨一下。</p>
 <a id="more"></a>
+
 <h1 id="TypeToken"><a href="#TypeToken" class="headerlink" title="TypeToken"></a>TypeToken</h1><p><strong>TypeToken</strong> 代表了一个泛型。对于 Java 而言，因为泛型擦除的原因，在运行时是无法知道泛型信息的，但是 <strong>TypeToken</strong> 可以。</p>
 <p>例如我们可以这样来获取 <code>List&lt;String&gt;</code> 的泛型信息：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">TypeToken&lt;List&lt;String&gt;&gt; list = <span class="keyword">new</span> TypeToken&lt;List&lt;String&gt;&gt;()&#123;&#125;;</span><br></pre></td></tr></table></figure>
 <p>在这里要注意的是，因为 TypeToken 构造函数是 <code>protected</code> 的，所以只能用匿名内部类的形式进行构造。</p>
 <p>但对于类似  <code>Class &lt;?&gt;</code> 这样有通配符的泛型类是不行的。</p>
 <h2 id="TypeToken-1"><a href="#TypeToken-1" class="headerlink" title="TypeToken()"></a>TypeToken()</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="title">TypeToken</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.type = getSuperclassTypeParameter(getClass());</span><br><span class="line">  <span class="keyword">this</span>.rawType = (Class&lt;? <span class="keyword">super</span> T&gt;) $Gson$Types.getRawType(type);</span><br><span class="line">  <span class="keyword">this</span>.hashCode = type.hashCode();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在这里我们可以看到， RawType 表示的是接受了泛型参数而形成的泛型类。 Type 则是衍生后的那个类。例如，对于 List<string>。</string></p>
+
+<p>在这里我们可以看到， RawType 表示的是接受了泛型参数而形成的泛型类。 Type 则是衍生后的那个类。例如，对于 List<String>。</p>
 <ul>
-<li>Type = List<string></string></li>
+<li>Type = List<String></li>
 <li>RawType = List</li>
 </ul>
 <h1 id="fromJson"><a href="#fromJson" class="headerlink" title="fromJson"></a>fromJson</h1><p>通常，我们的做法是将 JSON 字符串转换为 Java 对象，其需要一个 Type 作为参数的。</p>
-<h2 id="根据-Class-来进行转换"><a href="#根据-Class-来进行转换" class="headerlink" title="根据 Class 来进行转换"></a>根据 Class 来进行转换</h2><p>实际上，也是强制将 Class 转换为一个 Type 后调用。<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">fromJson</span><span class="params">(String json, Class&lt;T&gt; classOfT)</span> <span class="keyword">throws</span> JsonSyntaxException </span>&#123;</span><br><span class="line">  Object object = fromJson(json, (Type) classOfT);</span><br><span class="line">  <span class="keyword">return</span> Primitives.wrap(classOfT).cast(object);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="根据-Class-来进行转换"><a href="#根据-Class-来进行转换" class="headerlink" title="根据 Class 来进行转换"></a>根据 Class 来进行转换</h2><p>实际上，也是强制将 Class 转换为一个 Type 后调用。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">fromJson</span><span class="params">(String json, Class&lt;T&gt; classOfT)</span> <span class="keyword">throws</span> JsonSyntaxException </span>&#123;</span><br><span class="line">  Object object = fromJson(json, (Type) classOfT);</span><br><span class="line">  <span class="keyword">return</span> Primitives.wrap(classOfT).cast(object);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="根据-Type-转换"><a href="#根据-Type-转换" class="headerlink" title="根据 Type 转换"></a>根据 Type 转换</h2><p>构造一个 StringReader 来进行转换。</p>
 <p>对于 StringReader 可以调用  <code>read()</code> 读取一个字符；或者调用  <code>read(char cbuf[], int off, int len)</code> 来从 <em>off</em> 便宜处读取 <em>len</em> 个字符到 <em>cbuff</em> 中。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">fromJson</span><span class="params">(String json, Type typeOfT)</span> <span class="keyword">throws</span> JsonSyntaxException </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (json == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  StringReader reader = <span class="keyword">new</span> StringReader(json);</span><br><span class="line">  T target = (T) fromJson(reader, typeOfT);</span><br><span class="line">  <span class="keyword">return</span> target;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="构造-JsonReader"><a href="#构造-JsonReader" class="headerlink" title="构造 JsonReader"></a>构造 JsonReader</h2><p>更进一步，以 StringReader 为基础，构造一个 JsonReader。 JsonReader 会从 StrinReader 中读取 Json 元素。<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">fromJson</span><span class="params">(Reader json, Type typeOfT)</span> <span class="keyword">throws</span> JsonIOException, JsonSyntaxException </span>&#123;</span><br><span class="line">  JsonReader jsonReader = newJsonReader(json);</span><br><span class="line">  T object = (T) fromJson(jsonReader, typeOfT);</span><br><span class="line">  assertFullConsumption(object, jsonReader);</span><br><span class="line">  <span class="keyword">return</span> object;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+<h2 id="构造-JsonReader"><a href="#构造-JsonReader" class="headerlink" title="构造 JsonReader"></a>构造 JsonReader</h2><p>更进一步，以 StringReader 为基础，构造一个 JsonReader。 JsonReader 会从 StrinReader 中读取 Json 元素。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">fromJson</span><span class="params">(Reader json, Type typeOfT)</span> <span class="keyword">throws</span> JsonIOException, JsonSyntaxException </span>&#123;</span><br><span class="line">  JsonReader jsonReader = newJsonReader(json);</span><br><span class="line">  T object = (T) fromJson(jsonReader, typeOfT);</span><br><span class="line">  assertFullConsumption(object, jsonReader);</span><br><span class="line">  <span class="keyword">return</span> object;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="最终转换"><a href="#最终转换" class="headerlink" title="最终转换"></a>最终转换</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">fromJson</span><span class="params">(JsonReader reader, Type typeOfT)</span> <span class="keyword">throws</span> JsonIOException, JsonSyntaxException </span>&#123;</span><br><span class="line">  <span class="keyword">boolean</span> isEmpty = <span class="keyword">true</span>;</span><br><span class="line">  <span class="keyword">boolean</span> oldLenient = reader.isLenient();</span><br><span class="line">  reader.setLenient(<span class="keyword">true</span>);</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    reader.peek();</span><br><span class="line">    isEmpty = <span class="keyword">false</span>;</span><br><span class="line">    TypeToken&lt;T&gt; typeToken = (TypeToken&lt;T&gt;) TypeToken.get(typeOfT);</span><br><span class="line">    TypeAdapter&lt;T&gt; typeAdapter = getAdapter(typeToken);</span><br><span class="line">    T object = typeAdapter.read(reader);</span><br><span class="line">    <span class="keyword">return</span> object;</span><br><span class="line">  &#125; <span class="keyword">catch</span> (EOFException e) &#123;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * For compatibility with JSON 1.5 and earlier, we return null for empty</span></span><br><span class="line"><span class="comment">     * documents instead of throwing.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">if</span> (isEmpty) &#123;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> JsonSyntaxException(e);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (IllegalStateException e) &#123;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> JsonSyntaxException(e);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">    <span class="comment">// TODO(inder): Figure out whether it is indeed right to rethrow this as JsonSyntaxException</span></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> JsonSyntaxException(e);</span><br><span class="line">  &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">    reader.setLenient(oldLenient);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h1 id="Map-的解析"><a href="#Map-的解析" class="headerlink" title="Map 的解析"></a>Map 的解析</h1><p>在我们安卓进行解析的时候，有一个比较蛋疼的事情就是，我们的解析器无法解析属于 Map 类型的返回值。</p>
 <p>因此我准备用 Gson 来解决这个问题，用 Gson 就很简单了。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> Gson().fromJson(strBody, <span class="keyword">new</span> TypeToken&lt;Map&lt;String,List&lt;SrvRes&gt;&gt;&gt;()&#123;&#125;.getType());</span><br></pre></td></tr></table></figure>
+
 <p>这样也就 OK  了。</p>
 
     </div>
@@ -329,7 +336,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/RecyclerView的converView与viewHolder.html" rel="next" title="RecyclerView的converView与viewHolder">
+                <a href="/Android/RecyclerView%E7%9A%84converView%E4%B8%8EviewHolder.html" rel="next" title="RecyclerView的converView与viewHolder">
                   <i class="fa fa-chevron-left"></i> RecyclerView的converView与viewHolder
                 </a>
             </div>
@@ -337,7 +344,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/IdeaVim的的一些使用.html" rel="prev" title="IdeaVim的的一些使用">
+                <a href="/Java/IdeaVim%E7%9A%84%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8.html" rel="prev" title="IdeaVim的的一些使用">
                   IdeaVim的的一些使用 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -424,10 +431,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -456,10 +463,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -534,7 +541,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/Gson常规使用-fromJson().html",
+            url: "https://gowa.club/Java/Gson%E5%B8%B8%E8%A7%84%E4%BD%BF%E7%94%A8-fromJson().html",
             identifier: "Java/Gson常规使用-fromJson().html",
             title: "Gson常规使用-fromJson()"
           }

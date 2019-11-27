@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Python,Pandas">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pandas类似于SQL一样的使用操作">
-<meta property="og:url" content="https://gowa.club/Python/pandas类似于SQL一样的使用操作.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Python&#x2F;pandas%E7%B1%BB%E4%BC%BC%E4%BA%8ESQL%E4%B8%80%E6%A0%B7%E7%9A%84%E4%BD%BF%E7%94%A8%E6%93%8D%E4%BD%9C.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="主要是企业为了对接数据，结构并不一致，感觉使用 SQL 实现起来是有点类的。有点为难 MySQL 了。还是准备打算用 Python 来使用。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-12-04T12:37:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pandas类似于SQL一样的使用操作">
-<meta name="twitter:description" content="主要是企业为了对接数据，结构并不一致，感觉使用 SQL 实现起来是有点类的。有点为难 MySQL 了。还是准备打算用 Python 来使用。">
 
-<link rel="canonical" href="https://gowa.club/Python/pandas类似于SQL一样的使用操作.html">
+<link rel="canonical" href="https://gowa.club/Python/pandas%E7%B1%BB%E4%BC%BC%E4%BA%8ESQL%E4%B8%80%E6%A0%B7%E7%9A%84%E4%BD%BF%E7%94%A8%E6%93%8D%E4%BD%9C.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/pandas类似于SQL一样的使用操作.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/pandas%E7%B1%BB%E4%BC%BC%E4%BA%8ESQL%E4%B8%80%E6%A0%B7%E7%9A%84%E4%BD%BF%E7%94%A8%E6%93%8D%E4%BD%9C.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Python/pandas类似于SQL一样的使用操作.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Python/pandas%E7%B1%BB%E4%BC%BC%E4%BA%8ESQL%E4%B8%80%E6%A0%B7%E7%9A%84%E4%BD%BF%E7%94%A8%E6%93%8D%E4%BD%9C.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/pandas类似于SQL一样的使用操作.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,31 +285,42 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>主要是企业为了对接数据，结构并不一致，感觉使用 SQL 实现起来是有点类的。有点为难 MySQL 了。还是准备打算用 Python 来使用。<br><a id="more"></a></p>
+        <p>主要是企业为了对接数据，结构并不一致，感觉使用 SQL 实现起来是有点类的。有点为难 MySQL 了。还是准备打算用 Python 来使用。</p>
+<a id="more"></a>
+
 <h1 id="Python-连接-MySQL"><a href="#Python-连接-MySQL" class="headerlink" title="Python 连接 MySQL"></a>Python 连接 MySQL</h1><p>我们可以使用包 pymysql。</p>
 <p>先安装 pymysql:</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install -U pymysql</span><br></pre></td></tr></table></figure>
+
 <p>在 py 脚本内使用</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line">pymysql.install_as_MySQLdb()</span><br><span class="line"><span class="keyword">import</span> MySQLdb</span><br></pre></td></tr></table></figure>
+
 <p>执行 <code>pymysql.install_as_MySQLdb()</code> 后，使用 MySQLdb 的地方会不知不觉的使用  pymysql 了。</p>
 <p>将我们 MySQL 的配置写在一个字典内：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">dbconf = &#123;</span><br><span class="line">    <span class="string">'host'</span>: <span class="string">'sunny-catalyst-130304.asia-east2.mysql</span></span><br><span class="line"><span class="string">'</span>,</span><br><span class="line">    <span class="string">'user'</span>: <span class="string">'google'</span>,</span><br><span class="line">    <span class="string">'password'</span>: <span class="string">'fajdlbudadf'</span>,</span><br><span class="line">    <span class="string">'db'</span>: <span class="string">'game'</span>,</span><br><span class="line">    <span class="string">'port'</span>: <span class="number">3306</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">db = MySQLdb.connect(**dbconf)</span><br></pre></td></tr></table></figure>
+
 <p>这样我们就可以连接我们的 MySQL 了。连接后返回的其实是一个 pymysql.connections 类的实例。我们就可以用他其中的很多方法了。</p>
 <p>其实现在的模块好像都有这样做法，或者说类。就是在实例内会有字段保存我们获取的结果等，通过方法来获取这样。</p>
 <h1 id="Connection-实例使用。"><a href="#Connection-实例使用。" class="headerlink" title="Connection 实例使用。"></a>Connection 实例使用。</h1><h2 id="query"><a href="#query" class="headerlink" title="query()"></a>query()</h2><p>本来我是看到返回的 db 有 query 方法的，我们也可以进行使用。但是又看到这个方面上的注释：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># The following methods are INTERNAL USE ONLY (called from Cursor)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">query</span><span class="params">(self, sql, unbuffered=False)</span>:</span></span><br><span class="line">    <span class="comment"># if DE<span class="doctag">BUG:</span></span></span><br><span class="line">    <span class="comment">#     print("DE<span class="doctag">BUG:</span> sending query:", sql)</span></span><br><span class="line">    <span class="keyword">if</span> isinstance(sql, text_type) <span class="keyword">and</span> <span class="keyword">not</span> (JYTHON <span class="keyword">or</span> IRONPYTHON):</span><br><span class="line">        <span class="keyword">if</span> PY2:</span><br><span class="line">            sql = sql.encode(self.encoding)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            sql = sql.encode(self.encoding, <span class="string">'surrogateescape'</span>)</span><br><span class="line">    self._execute_command(COMMAND.COM_QUERY, sql)</span><br><span class="line">    self._affected_rows = self._read_query_result(unbuffered=unbuffered)</span><br><span class="line">    <span class="keyword">return</span> self._affected_rows</span><br></pre></td></tr></table></figure>
+
 <p>嗷，这个方法是给 Cursor 来使用的。一般我们都是得到一个 Cursor 实例来执行查询的。</p>
 <h2 id="cursor"><a href="#cursor" class="headerlink" title="cursor()"></a>cursor()</h2><figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cursor</span><span class="params">(self, cursor=None)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Create a new cursor to execute queries with.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    :param cursor: The type of cursor to create; one of :py:class:`Cursor`,</span></span><br><span class="line"><span class="string">        :py:class:`SSCursor`, :py:class:`DictCursor`, or :py:class:`SSDictCursor`.</span></span><br><span class="line"><span class="string">        None means use Cursor.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">if</span> cursor:</span><br><span class="line">        <span class="keyword">return</span> cursor(self)</span><br><span class="line">    <span class="keyword">return</span> self.cursorclass(self)</span><br></pre></td></tr></table></figure>
+
 <p>然后才是我们调用 cursor 的方法来进行查询的：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">cur = db.cursor()</span><br><span class="line">cur.execute(<span class="string">'select sysdate() from dual'</span>)</span><br><span class="line">cur.fetchone()</span><br></pre></td></tr></table></figure>
+
 <p>注意：调用来 <code>fetchone(), fetchall(), fetchmany()</code> 这些方法后结果就会减少哦。</p>
 <h1 id="pd-read-sql-sql-db-index-col"><a href="#pd-read-sql-sql-db-index-col" class="headerlink" title="pd.read_sql(sql, db, index_col=)"></a>pd.read_sql(sql, db, index_col=)</h1><p>pandas 就更给力了，可以直接从 sql 进行查询获取得到结果的哦。</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">df = pd.read_sql(<span class="string">'select * from information_schema.TABLES'</span>,db)</span><br><span class="line">print(df)</span><br></pre></td></tr></table></figure>
+
 <p>这样我们就可以随便的像处理其他数据一样处理了。</p>
 <h1 id="列拆分"><a href="#列拆分" class="headerlink" title="列拆分"></a>列拆分</h1><p>我们构造一个一个字段逗号分隔存储多个值的情况：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">df = pd.DataFrame(&#123;<span class="string">'id'</span>:[<span class="string">'A'</span>,<span class="string">'B'</span>,<span class="string">'C'</span>],<span class="string">'item'</span>:[<span class="string">'1,2,3'</span>,<span class="string">'3,4,5,6,7'</span>,<span class="string">'101,102,103'</span>]&#125;)</span><br><span class="line">df = df.set_index(<span class="string">'id'</span>)</span><br><span class="line"></span><br><span class="line">id	item</span><br><span class="line">A	<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span></span><br><span class="line">B	<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span></span><br><span class="line">C	<span class="number">101</span>,<span class="number">102</span>,<span class="number">103</span></span><br></pre></td></tr></table></figure>
+
 <p>我们把 A 列当做字符串按 <code>,</code> 拆分的话，得到的是一个数组，我们可以提供一个额外参数 <em>expand=True</em> 来拆分结果也变成列：</p>
-<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">df.item.str.split(<span class="string">','</span>, expand=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">id	<span class="number">0</span>	<span class="number">1</span>	<span class="number">2</span>	<span class="number">3</span>	<span class="number">4</span>					</span><br><span class="line">A	<span class="number">1</span>	<span class="number">2</span>	<span class="number">3</span>	<span class="keyword">None</span>	<span class="keyword">None</span></span><br><span class="line">B	<span class="number">3</span>	<span class="number">4</span>	<span class="number">5</span>	<span class="number">6</span>	<span class="number">7</span></span><br><span class="line">C	<span class="number">101</span>	<span class="number">102</span>	<span class="number">103</span>	<span class="keyword">None</span>	<span class="keyword">None</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">df.item.str.split(<span class="string">','</span>, expand=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">id	<span class="number">0</span>	<span class="number">1</span>	<span class="number">2</span>	<span class="number">3</span>	<span class="number">4</span>					</span><br><span class="line">A	<span class="number">1</span>	<span class="number">2</span>	<span class="number">3</span>	<span class="literal">None</span>	<span class="literal">None</span></span><br><span class="line">B	<span class="number">3</span>	<span class="number">4</span>	<span class="number">5</span>	<span class="number">6</span>	<span class="number">7</span></span><br><span class="line">C	<span class="number">101</span>	<span class="number">102</span>	<span class="number">103</span>	<span class="literal">None</span>	<span class="literal">None</span></span><br></pre></td></tr></table></figure>
+
 <h1 id="pd-stack-函数"><a href="#pd-stack-函数" class="headerlink" title="pd.stack() 函数"></a>pd.stack() 函数</h1><p>这个函数，将列堆叠到指定索引级别。</p>
 <p>返回一个重新整形后的，具有一个多级索引的 帧 或 列，与当前的帧相比较，多级索引的内层索引级别最高。这通过旋转最当前帧的列来建立最内层的级别。</p>
 <ul>
@@ -323,9 +332,10 @@
 <li><strong>dropna</strong></li>
 </ul>
 <p>继续上面的例子：</p>
-<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">df.item.str.split(<span class="string">','</span>,expand=<span class="keyword">True</span>).stack()</span><br><span class="line">id   </span><br><span class="line">A   <span class="number">0</span>      <span class="number">1</span></span><br><span class="line">    <span class="number">1</span>      <span class="number">2</span></span><br><span class="line">    <span class="number">2</span>      <span class="number">3</span></span><br><span class="line">B   <span class="number">0</span>      <span class="number">3</span></span><br><span class="line">    <span class="number">1</span>      <span class="number">4</span></span><br><span class="line">    <span class="number">2</span>      <span class="number">5</span></span><br><span class="line">    <span class="number">3</span>      <span class="number">6</span></span><br><span class="line">    <span class="number">4</span>      <span class="number">7</span></span><br><span class="line">C   <span class="number">0</span>    <span class="number">101</span></span><br><span class="line">    <span class="number">1</span>    <span class="number">102</span></span><br><span class="line">    <span class="number">2</span>    <span class="number">103</span></span><br><span class="line">dtype: object</span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">df.item.str.split(<span class="string">','</span>,expand=<span class="literal">True</span>).stack()</span><br><span class="line">id   </span><br><span class="line">A   <span class="number">0</span>      <span class="number">1</span></span><br><span class="line">    <span class="number">1</span>      <span class="number">2</span></span><br><span class="line">    <span class="number">2</span>      <span class="number">3</span></span><br><span class="line">B   <span class="number">0</span>      <span class="number">3</span></span><br><span class="line">    <span class="number">1</span>      <span class="number">4</span></span><br><span class="line">    <span class="number">2</span>      <span class="number">5</span></span><br><span class="line">    <span class="number">3</span>      <span class="number">6</span></span><br><span class="line">    <span class="number">4</span>      <span class="number">7</span></span><br><span class="line">C   <span class="number">0</span>    <span class="number">101</span></span><br><span class="line">    <span class="number">1</span>    <span class="number">102</span></span><br><span class="line">    <span class="number">2</span>    <span class="number">103</span></span><br><span class="line">dtype: object</span><br></pre></td></tr></table></figure>
+
 <p>这样的情况下，我们就是一个具有两级索引的系列了，但我们不需要那个二级索引，所以要丢掉：</p>
-<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">df.item.str.split(<span class="string">','</span>,expand=<span class="keyword">True</span>).stack().reset_index(level=<span class="number">1</span>, drop=<span class="keyword">True</span>)</span><br><span class="line">id</span><br><span class="line">A      <span class="number">1</span></span><br><span class="line">A      <span class="number">2</span></span><br><span class="line">A      <span class="number">3</span></span><br><span class="line">B      <span class="number">3</span></span><br><span class="line">B      <span class="number">4</span></span><br><span class="line">B      <span class="number">5</span></span><br><span class="line">B      <span class="number">6</span></span><br><span class="line">B      <span class="number">7</span></span><br><span class="line">C    <span class="number">101</span></span><br><span class="line">C    <span class="number">102</span></span><br><span class="line">C    <span class="number">103</span></span><br><span class="line">dtype: object</span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">df.item.str.split(<span class="string">','</span>,expand=<span class="literal">True</span>).stack().reset_index(level=<span class="number">1</span>, drop=<span class="literal">True</span>)</span><br><span class="line">id</span><br><span class="line">A      <span class="number">1</span></span><br><span class="line">A      <span class="number">2</span></span><br><span class="line">A      <span class="number">3</span></span><br><span class="line">B      <span class="number">3</span></span><br><span class="line">B      <span class="number">4</span></span><br><span class="line">B      <span class="number">5</span></span><br><span class="line">B      <span class="number">6</span></span><br><span class="line">B      <span class="number">7</span></span><br><span class="line">C    <span class="number">101</span></span><br><span class="line">C    <span class="number">102</span></span><br><span class="line">C    <span class="number">103</span></span><br><span class="line">dtype: object</span><br></pre></td></tr></table></figure>
 <p><code>pd.reset_index(level= , drop=True)</code> 的意思是把对应级别的索引丢弃，drop=True的意思，是不要把丢弃的索引给插为新列。</p>
 <p>结果是一个系列，我们可以把列命名一下。</p>
 <p><code>series.reset_index(level=None, drop=False, inplace=False)</code> 方法会重新生成一个帧，把以前的索引变成一列。</p>
@@ -347,7 +357,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/数据库/MySQL将单列拆分为多个行.html" rel="next" title="MySQL将单列拆分为多个行">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E5%B0%86%E5%8D%95%E5%88%97%E6%8B%86%E5%88%86%E4%B8%BA%E5%A4%9A%E4%B8%AA%E8%A1%8C.html" rel="next" title="MySQL将单列拆分为多个行">
                   <i class="fa fa-chevron-left"></i> MySQL将单列拆分为多个行
                 </a>
             </div>
@@ -355,7 +365,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/利用NFS及LVM进行存储动态扩容.html" rel="prev" title="利用NFS及LVM进行存储动态扩容">
+                <a href="/Linux-Unix/%E5%88%A9%E7%94%A8NFS%E5%8F%8ALVM%E8%BF%9B%E8%A1%8C%E5%AD%98%E5%82%A8%E5%8A%A8%E6%80%81%E6%89%A9%E5%AE%B9.html" rel="prev" title="利用NFS及LVM进行存储动态扩容">
                   利用NFS及LVM进行存储动态扩容 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -442,10 +452,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -474,10 +484,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -552,7 +562,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Python/pandas类似于SQL一样的使用操作.html",
+            url: "https://gowa.club/Python/pandas%E7%B1%BB%E4%BC%BC%E4%BA%8ESQL%E4%B8%80%E6%A0%B7%E7%9A%84%E4%BD%BF%E7%94%A8%E6%93%8D%E4%BD%9C.html",
             identifier: "Python/pandas类似于SQL一样的使用操作.html",
             title: "pandas类似于SQL一样的使用操作"
           }

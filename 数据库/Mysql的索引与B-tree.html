@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,18 +51,16 @@
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mysql的索引与B-tree">
-<meta property="og:url" content="https://gowa.club/数据库/Mysql的索引与B-tree.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;Mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%B8%8EB-tree.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="MySQL查找效率的提高是通过为表建立索引来实现的，InnoDB更是如此，而其索引据说使用的是B-tree，一直不知道这是个什么东西，晚上抽空查看并了解了一下。 MySQL查询数据的过程试想，MySQL把数据存储到磁盘上，查询的时候需要读取数据，如果没有建立一个索引的情况下。那么MySQL不得不逐个读取存储在数据文件内的内容，然后与查询进行匹配也得出数据，这是极其没有效率的事情。 在建立了索引的情">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/20171231-b-tree-01.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;20171231-b-tree-01.jpg">
 <meta property="og:updated_time" content="2017-12-31T01:13:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mysql的索引与B-tree">
-<meta name="twitter:description" content="MySQL查找效率的提高是通过为表建立索引来实现的，InnoDB更是如此，而其索引据说使用的是B-tree，一直不知道这是个什么东西，晚上抽空查看并了解了一下。 MySQL查询数据的过程试想，MySQL把数据存储到磁盘上，查询的时候需要读取数据，如果没有建立一个索引的情况下。那么MySQL不得不逐个读取存储在数据文件内的内容，然后与查询进行匹配也得出数据，这是极其没有效率的事情。 在建立了索引的情">
-<meta name="twitter:image" content="https://gowa.club/res/20171231-b-tree-01.jpg">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;20171231-b-tree-01.jpg">
 
-<link rel="canonical" href="https://gowa.club/数据库/Mysql的索引与B-tree.html">
+<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%B8%8EB-tree.html">
 
 
 <script id="page-configurations">
@@ -227,12 +225,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/Mysql的索引与B-tree.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%B8%8EB-tree.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -258,7 +256,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -273,7 +271,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/数据库/Mysql的索引与B-tree.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%B8%8EB-tree.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/Mysql的索引与B-tree.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -332,7 +330,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/数据库/Mysql_backup_and_recovery-5.5.html" rel="next" title="Mysql-Backup-and-Recovery 中文翻译">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql_backup_and_recovery-5.5.html" rel="next" title="Mysql-Backup-and-Recovery 中文翻译">
                   <i class="fa fa-chevron-left"></i> Mysql-Backup-and-Recovery 中文翻译
                 </a>
             </div>
@@ -340,7 +338,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/macOS/关于macOS使用的工具.html" rel="prev" title="关于macOS使用的工具">
+                <a href="/macOS/%E5%85%B3%E4%BA%8EmacOS%E4%BD%BF%E7%94%A8%E7%9A%84%E5%B7%A5%E5%85%B7.html" rel="prev" title="关于macOS使用的工具">
                   关于macOS使用的工具 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -427,10 +425,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -459,10 +457,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -537,7 +535,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/数据库/Mysql的索引与B-tree.html",
+            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%B8%8EB-tree.html",
             identifier: "数据库/Mysql的索引与B-tree.html",
             title: "Mysql的索引与B-tree"
           }

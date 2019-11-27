@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="FragmentTabHost的使用">
-<meta property="og:url" content="https://gowa.club/Android/FragmentTabHost的使用.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;FragmentTabHost%E7%9A%84%E4%BD%BF%E7%94%A8.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="为了实现标签页切换。之前用过 TabLayout 但是似乎现在都淘汰了？所以看了一下官方介绍的 FragmentTabHost 看起来很简单的，但是想要定制的话就发现了些问题。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-03-13T14:56:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="FragmentTabHost的使用">
-<meta name="twitter:description" content="为了实现标签页切换。之前用过 TabLayout 但是似乎现在都淘汰了？所以看了一下官方介绍的 FragmentTabHost 看起来很简单的，但是想要定制的话就发现了些问题。">
 
-<link rel="canonical" href="https://gowa.club/Android/FragmentTabHost的使用.html">
+<link rel="canonical" href="https://gowa.club/Android/FragmentTabHost%E7%9A%84%E4%BD%BF%E7%94%A8.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/FragmentTabHost的使用.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/FragmentTabHost%E7%9A%84%E4%BD%BF%E7%94%A8.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/FragmentTabHost的使用.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/FragmentTabHost%E7%9A%84%E4%BD%BF%E7%94%A8.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/FragmentTabHost的使用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,13 +287,17 @@
       
         <p>为了实现标签页切换。之前用过 TabLayout 但是似乎现在都淘汰了？所以看了一下官方介绍的 FragmentTabHost 看起来很简单的，但是想要定制的话就发现了些问题。</p>
 <a id="more"></a>
+
 <p>事实上，FragmentTabHost 就是对 TabHost 类的一个继承，只不过，其是用 Fragment 来显示 Tab 内容。所以在查看相关知识例子的时候，谷歌看到大多是关于 TabHost的。</p>
 <h1 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h1><p>布局很简单，定义一个 FragmentTabHost，然后再用一个装载内容的 FrameLayout 视图就行了。</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">android.support.v4.app.FragmentTabHost</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:id</span>=<span class="string">"@+id/fth"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_below</span>=<span class="string">"@id/ll_status3"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">FrameLayout</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:id</span>=<span class="string">"@+id/fly"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<h1 id="代码应用"><a href="#代码应用" class="headerlink" title="代码应用"></a>代码应用</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">fth.setup(<span class="keyword">this</span>, getSupportFragmentManager(), R.id.fly); <span class="comment">// 设置内容容器ID 为 R.id.fly</span></span><br><span class="line"><span class="comment">// 添加两个 Tab setIndicator()可以用 View 作为参数 </span></span><br><span class="line">fth.addTab(fth.newTabSpec(<span class="string">"all"</span>).setIndicator(<span class="string">"全程"</span>), ComRegisterMainFragmentAllElectronic.class, <span class="keyword">null</span>);</span><br><span class="line">fth.addTab(fth.newTabSpec(<span class="string">"half"</span>).setIndicator(<span class="string">"半程"</span>), ComRegisterMainFragmentHalfElectronic.class, <span class="keyword">null</span>);</span><br></pre></td></tr></table></figure>
+
+<h1 id="代码应用"><a href="#代码应用" class="headerlink" title="代码应用"></a>代码应用</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">fth.setup(<span class="keyword">this</span>, getSupportFragmentManager(), R.id.fly); <span class="comment">// 设置内容容器ID 为 R.id.fly</span></span><br><span class="line"><span class="comment">// 添加两个 Tab setIndicator()可以用 View 作为参数 </span></span><br><span class="line">fth.addTab(fth.newTabSpec(<span class="string">"all"</span>).setIndicator(<span class="string">"全程"</span>), ComRegisterMainFragmentAllElectronic<span class="class">.<span class="keyword">class</span>, <span class="title">null</span>)</span>;</span><br><span class="line">fth.addTab(fth.newTabSpec(<span class="string">"half"</span>).setIndicator(<span class="string">"半程"</span>), ComRegisterMainFragmentHalfElectronic<span class="class">.<span class="keyword">class</span>, <span class="title">null</span>)</span>;</span><br></pre></td></tr></table></figure>
+
 <p>就是这么简单。</p>
 <p>但我遇到的问题是，我想要自定义 Tab 显示的颜色，背景，字体的时候没有找到好用的方法。其只提供了 View 相关的方法，关于一些具体实现 如 TextView 的方法无法获取到呢。</p>
 <h1 id="源码追踪"><a href="#源码追踪" class="headerlink" title="源码追踪"></a>源码追踪</h1><h2 id="FragmentTabHost-setup"><a href="#FragmentTabHost-setup" class="headerlink" title="FragmentTabHost.setup()"></a>FragmentTabHost.setup()</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setup</span><span class="params">(Context context, FragmentManager manager, <span class="keyword">int</span> containerId)</span> </span>&#123;</span><br><span class="line">    ensureHierarchy(context);  <span class="comment">// Ensure views required by super.setup()</span></span><br><span class="line">    <span class="keyword">super</span>.setup();</span><br><span class="line">    mContext = context;</span><br><span class="line">    mFragmentManager = manager;</span><br><span class="line">    mContainerId = containerId;</span><br><span class="line">    ensureContent();</span><br><span class="line">    mRealTabContent.setId(containerId);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// We must have an ID to be able to save/restore our state.  If</span></span><br><span class="line">    <span class="comment">// the owner hasn't set one at this point, we will set it ourselves.</span></span><br><span class="line">    <span class="keyword">if</span> (getId() == View.NO_ID) &#123;</span><br><span class="line">        setId(android.R.id.tabhost);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="TabHost-setup"><a href="#TabHost-setup" class="headerlink" title="TabHost.setup()"></a>TabHost.setup()</h2><p>从这个方法中可以看到：</p>
 <ol>
 <li>TabHost 使用  <em>com.android.internal.R.id.tabs</em> 作为 tabs 的容器。</li>
@@ -303,7 +305,9 @@
 </ol>
 <p>但这些内容从哪里来呢？在 FragmentTabHost 中已经默认为我们进行了设置。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    mTabWidget = findViewById(com.android.internal.R.id.tabs);</span><br><span class="line">    <span class="keyword">if</span> (mTabWidget == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(</span><br><span class="line">                <span class="string">"Your TabHost must have a TabWidget whose id attribute is 'android.R.id.tabs'"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// KeyListener to attach to all tabs. Detects non-navigation keys</span></span><br><span class="line">    <span class="comment">// and relays them to the tab content.</span></span><br><span class="line">    mTabKeyListener = <span class="keyword">new</span> OnKeyListener() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onKey</span><span class="params">(View v, <span class="keyword">int</span> keyCode, KeyEvent event)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">switch</span> (keyCode) &#123;</span><br><span class="line">                <span class="keyword">case</span> KeyEvent.KEYCODE_DPAD_CENTER:</span><br><span class="line">                <span class="keyword">case</span> KeyEvent.KEYCODE_DPAD_LEFT:</span><br><span class="line">                <span class="keyword">case</span> KeyEvent.KEYCODE_DPAD_RIGHT:</span><br><span class="line">                <span class="keyword">case</span> KeyEvent.KEYCODE_DPAD_UP:</span><br><span class="line">                <span class="keyword">case</span> KeyEvent.KEYCODE_DPAD_DOWN:</span><br><span class="line">                <span class="keyword">case</span> KeyEvent.KEYCODE_ENTER:</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            mTabContent.requestFocus(View.FOCUS_FORWARD);</span><br><span class="line">            <span class="keyword">return</span> mTabContent.dispatchKeyEvent(event);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    mTabWidget.setTabSelectionListener(<span class="keyword">new</span> TabWidget.OnTabSelectionChanged() &#123;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onTabSelectionChanged</span><span class="params">(<span class="keyword">int</span> tabIndex, <span class="keyword">boolean</span> clicked)</span> </span>&#123;</span><br><span class="line">            setCurrentTab(tabIndex);</span><br><span class="line">            <span class="keyword">if</span> (clicked) &#123;</span><br><span class="line">                mTabContent.requestFocus(View.FOCUS_FORWARD);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    mTabContent = findViewById(com.android.internal.R.id.tabcontent);</span><br><span class="line">    <span class="keyword">if</span> (mTabContent == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(</span><br><span class="line">                <span class="string">"Your TabHost must have a FrameLayout whose id attribute is "</span></span><br><span class="line">                        + <span class="string">"'android.R.id.tabcontent'"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="FragmentTabHost-ensureHierarchy"><a href="#FragmentTabHost-ensureHierarchy" class="headerlink" title="FragmentTabHost.ensureHierarchy()"></a>FragmentTabHost.ensureHierarchy()</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">ensureHierarchy</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// If owner hasn't made its own view hierarchy, then as a convenience</span></span><br><span class="line">    <span class="comment">// we will construct a standard one here.</span></span><br><span class="line">    <span class="keyword">if</span> (findViewById(android.R.id.tabs) == <span class="keyword">null</span>) &#123;</span><br><span class="line">        LinearLayout ll = <span class="keyword">new</span> LinearLayout(context);</span><br><span class="line">        ll.setOrientation(LinearLayout.VERTICAL);</span><br><span class="line">        addView(ll, <span class="keyword">new</span> FrameLayout.LayoutParams(</span><br><span class="line">                ViewGroup.LayoutParams.MATCH_PARENT,</span><br><span class="line">                ViewGroup.LayoutParams.MATCH_PARENT));</span><br><span class="line"></span><br><span class="line">        TabWidget tw = <span class="keyword">new</span> TabWidget(context);</span><br><span class="line">        tw.setId(android.R.id.tabs);</span><br><span class="line">        tw.setOrientation(TabWidget.HORIZONTAL);</span><br><span class="line">        ll.addView(tw, <span class="keyword">new</span> LinearLayout.LayoutParams(</span><br><span class="line">                ViewGroup.LayoutParams.MATCH_PARENT,</span><br><span class="line">                ViewGroup.LayoutParams.WRAP_CONTENT, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">        FrameLayout fl = <span class="keyword">new</span> FrameLayout(context);</span><br><span class="line">        fl.setId(android.R.id.tabcontent);</span><br><span class="line">        ll.addView(fl, <span class="keyword">new</span> LinearLayout.LayoutParams(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">        mRealTabContent = fl = <span class="keyword">new</span> FrameLayout(context);</span><br><span class="line">        mRealTabContent.setId(mContainerId);</span><br><span class="line">        ll.addView(fl, <span class="keyword">new</span> LinearLayout.LayoutParams(</span><br><span class="line">                LinearLayout.LayoutParams.MATCH_PARENT, <span class="number">0</span>, <span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><p>使用 newTabSpec(“all”).setIndicator( View ) 来实现我们自定义的视图。</p>
 
     </div>
@@ -321,7 +325,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/Android中APP的启动过程.html" rel="next" title="Android中APP的启动过程">
+                <a href="/Android/Android%E4%B8%ADAPP%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html" rel="next" title="Android中APP的启动过程">
                   <i class="fa fa-chevron-left"></i> Android中APP的启动过程
                 </a>
             </div>
@@ -329,7 +333,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/Gson使用泛型时候遇到问题.html" rel="prev" title="Gson使用泛型时候遇到问题">
+                <a href="/Java/Gson%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98.html" rel="prev" title="Gson使用泛型时候遇到问题">
                   Gson使用泛型时候遇到问题 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -416,10 +420,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -448,10 +452,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -526,7 +530,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/FragmentTabHost的使用.html",
+            url: "https://gowa.club/Android/FragmentTabHost%E7%9A%84%E4%BD%BF%E7%94%A8.html",
             identifier: "Android/FragmentTabHost的使用.html",
             title: "FragmentTabHost的使用"
           }

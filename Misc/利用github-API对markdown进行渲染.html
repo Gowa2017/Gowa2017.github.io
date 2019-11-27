@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Github,Markdown,Nginx,Php">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用github API对markdown进行渲染">
-<meta property="og:url" content="https://gowa.club/Misc/利用github-API对markdown进行渲染.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Misc&#x2F;%E5%88%A9%E7%94%A8github-API%E5%AF%B9markdown%E8%BF%9B%E8%A1%8C%E6%B8%B2%E6%9F%93.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="很喜欢github形式的markdown渲染，所以百度了一下，怎么样渲染成那样。结果还真有，github全占支持markdown，还提供了api接口。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-10-29T03:54:47.949Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="利用github API对markdown进行渲染">
-<meta name="twitter:description" content="很喜欢github形式的markdown渲染，所以百度了一下，怎么样渲染成那样。结果还真有，github全占支持markdown，还提供了api接口。">
 
-<link rel="canonical" href="https://gowa.club/Misc/利用github-API对markdown进行渲染.html">
+<link rel="canonical" href="https://gowa.club/Misc/%E5%88%A9%E7%94%A8github-API%E5%AF%B9markdown%E8%BF%9B%E8%A1%8C%E6%B8%B2%E6%9F%93.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Misc/利用github-API对markdown进行渲染.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Misc/%E5%88%A9%E7%94%A8github-API%E5%AF%B9markdown%E8%BF%9B%E8%A1%8C%E6%B8%B2%E6%9F%93.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -278,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Misc/利用github-API对markdown进行渲染.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Misc/%E5%88%A9%E7%94%A8github-API%E5%AF%B9markdown%E8%BF%9B%E8%A1%8C%E6%B8%B2%E6%9F%93.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Misc/利用github-API对markdown进行渲染.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,7 +292,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>很喜欢github形式的markdown渲染，所以百度了一下，怎么样渲染成那样。结果还真有，github全占支持markdown，还提供了api接口。<br><a id="more"></a></p>
+        <p>很喜欢github形式的markdown渲染，所以百度了一下，怎么样渲染成那样。结果还真有，github全占支持markdown，还提供了api接口。</p>
+<a id="more"></a>
 <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p><strong>OS: CentOS 5.10 x86_64</strong><br>个人比较喜欢nginx，所以就用了nginx + php来建立环境，不过在安装php-fpm的时候可能要花点力气，主要是因为用的是 CentOS 5.10的系统，源有点老。<br>这里就不赘述安装过程了，主要说一下配置的时候所遇到的蛋疼的问题。</p>
 <h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><h2 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a>nginx配置</h2><p>路径:/etc/nginx/conf.d/default.conf</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen       80 default_server;</span><br><span class="line">    #listen       [::]:80 default_server;</span><br><span class="line">    server_name  _;</span><br><span class="line">    root         /usr/share/nginx/html;</span><br><span class="line"></span><br><span class="line">    # Load configuration files for the default server block.</span><br><span class="line">    include /etc/nginx/default.d/*.conf;</span><br><span class="line"></span><br><span class="line">    location / &#123; </span><br><span class="line">        index index.html index.md README.md;</span><br><span class="line">    &#125;   </span><br><span class="line">        location ~ \.php$ &#123;</span><br><span class="line">            root           /usr/share/nginx/html;</span><br><span class="line">            fastcgi_pass   127.0.0.1:9000;</span><br><span class="line">            fastcgi_index  index.php;</span><br><span class="line">            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;</span><br><span class="line">            include        fastcgi_params;</span><br><span class="line">        &#125;   </span><br><span class="line">    location ~ \.md$ &#123;</span><br><span class="line">        rewrite ^/([^?]*)(?:\?(.*))? /md.php?f=$1&amp;$2 last; </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    error_page 404 /404.html;</span><br><span class="line">        error_page 500 502 503 504 /50x.html;</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -320,7 +319,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/ntpd升级到最新4-2-8p9.html" rel="next" title="ntpd升级到最新4.2.8p9">
+                <a href="/Linux-Unix/ntpd%E5%8D%87%E7%BA%A7%E5%88%B0%E6%9C%80%E6%96%B04-2-8p9.html" rel="next" title="ntpd升级到最新4.2.8p9">
                   <i class="fa fa-chevron-left"></i> ntpd升级到最新4.2.8p9
                 </a>
             </div>
@@ -328,7 +327,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/数据库/Oracle中的union和join.html" rel="prev" title="Oracle中的union和join">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E4%B8%AD%E7%9A%84union%E5%92%8Cjoin.html" rel="prev" title="Oracle中的union和join">
                   Oracle中的union和join <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -415,10 +414,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -447,10 +446,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -525,7 +524,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Misc/利用github-API对markdown进行渲染.html",
+            url: "https://gowa.club/Misc/%E5%88%A9%E7%94%A8github-API%E5%AF%B9markdown%E8%BF%9B%E8%A1%8C%E6%B8%B2%E6%9F%93.html",
             identifier: "Misc/利用github-API对markdown进行渲染.html",
             title: "利用github API对markdown进行渲染"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -47,22 +47,20 @@
   };
 </script>
 
-  <meta name="description" content="LVM是Linux内核中的一个 逻辑卷组管理工具；其管理磁盘驱动器或类似的块存储设备。其利用了内核的 device-mapper 特性来给系统提供独立于底层磁盘的分区。使用LVM，抽象了你的存储然后拥有的是虚拟分区，这使 扩展/收缩 更加容易。 基本概念 物理卷（PV/Physical volume）可在其上建立卷组的分区或硬盘。每个PV都有一个特殊的头部，并且被分隔成PE。把PV想象成用来建立硬">
+  <meta name="description" content="LVM是Linux内核中的一个 逻辑卷组管理工具；其管理磁盘驱动器或类似的块存储设备。其利用了内核的 device-mapper 特性来给系统提供独立于底层磁盘的分区。使用LVM，抽象了你的存储然后拥有的是虚拟分区*，这使 *扩展&#x2F;收缩 更加容易。 基本概念 物理卷（PV&#x2F;Physical volume）可在其上建立卷组的分区或硬盘。每个PV都有一个特殊的头部，并且被分隔成PE。把PV想象成用来建">
 <meta name="keywords" content="Linux,LVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LVM的介绍及使用">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/LVM的介绍及使用.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;LVM%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="LVM是Linux内核中的一个 逻辑卷组管理工具；其管理磁盘驱动器或类似的块存储设备。其利用了内核的 device-mapper 特性来给系统提供独立于底层磁盘的分区。使用LVM，抽象了你的存储然后拥有的是虚拟分区，这使 扩展/收缩 更加容易。 基本概念 物理卷（PV/Physical volume）可在其上建立卷组的分区或硬盘。每个PV都有一个特殊的头部，并且被分隔成PE。把PV想象成用来建立硬">
+<meta property="og:description" content="LVM是Linux内核中的一个 逻辑卷组管理工具；其管理磁盘驱动器或类似的块存储设备。其利用了内核的 device-mapper 特性来给系统提供独立于底层磁盘的分区。使用LVM，抽象了你的存储然后拥有的是虚拟分区*，这使 *扩展&#x2F;收缩 更加容易。 基本概念 物理卷（PV&#x2F;Physical volume）可在其上建立卷组的分区或硬盘。每个PV都有一个特殊的头部，并且被分隔成PE。把PV想象成用来建">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/Lvm-1.svg">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;Lvm-1.svg">
 <meta property="og:updated_time" content="2018-03-13T23:28:23.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="LVM的介绍及使用">
-<meta name="twitter:description" content="LVM是Linux内核中的一个 逻辑卷组管理工具；其管理磁盘驱动器或类似的块存储设备。其利用了内核的 device-mapper 特性来给系统提供独立于底层磁盘的分区。使用LVM，抽象了你的存储然后拥有的是虚拟分区，这使 扩展/收缩 更加容易。 基本概念 物理卷（PV/Physical volume）可在其上建立卷组的分区或硬盘。每个PV都有一个特殊的头部，并且被分隔成PE。把PV想象成用来建立硬">
-<meta name="twitter:image" content="https://gowa.club/res/Lvm-1.svg">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;Lvm-1.svg">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/LVM的介绍及使用.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/LVM%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8.html">
 
 
 <script id="page-configurations">
@@ -227,12 +225,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/LVM的介绍及使用.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/LVM%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -273,7 +271,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/LVM的介绍及使用.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/LVM%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/LVM的介绍及使用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,21 +287,26 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>LVM是Linux内核中的一个 逻辑卷组管理工具；其管理磁盘驱动器或类似的块存储设备。其利用了内核的 <code>device-mapper</code> 特性来给系统提供独立于底层磁盘的分区。使用LVM，抽象了你的存储然后拥有的是<em>虚拟分区</em>，这使 <em>扩展/收缩</em> 更加容易。</p>
+        <p>LVM是Linux内核中的一个 逻辑卷组管理工具；其管理磁盘驱动器或类似的块存储设备。其利用了内核的 <code>device-mapper</code> 特性来给系统提供独立于底层磁盘的分区。使用LVM，抽象了你的存储然后拥有的是<em>虚拟分区*，这使 *扩展/收缩</em> 更加容易。</p>
 <h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><ul>
 <li><p>物理卷（PV/Physical volume）<br>可在其上建立卷组的分区或硬盘。每个PV都有一个特殊的头部，并且被分隔成PE。把PV想象成用来建立硬盘驱动的巨大块。</p>
 </li>
 <li><p>卷组（VG/Volume group）<br>一组用来当作存储卷的PV（像一个硬盘一样提供服务）。其包含LV。可以把vg想象成硬盘驱动器。</p>
 </li>
-<li>逻辑卷（LV、Logical volume）<br>存在于卷组内的<code>虚拟/逻辑 分区</code>，由PE组成。把PV想象成常规分区。</li>
-<li>物理扩展（PE、Physical extend）<br>PV中的最小单位，可以被分配给LV（默认是 4MB）。PE是硬盘的一部分，然后可以被分配给任何分区。</li>
+<li><p>逻辑卷（LV、Logical volume）<br>存在于卷组内的<code>虚拟/逻辑 分区</code>，由PE组成。把PV想象成常规分区。</p>
+</li>
+<li><p>物理扩展（PE、Physical extend）<br>PV中的最小单位，可以被分配给LV（默认是 4MB）。PE是硬盘的一部分，然后可以被分配给任何分区。</p>
+</li>
 </ul>
 <p>例子<br><img src="/res/Lvm-1.svg" alt="Various elements of the LVM"></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Physical disks</span><br><span class="line">                </span><br><span class="line">  Disk1 (/dev/sda):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Partition1 50 GiB (Physical volume) |Partition2 80 GiB (Physical volume)     |</span><br><span class="line">    |/dev/sda1                           |/dev/sda2                               |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |</span><br><span class="line">                                  </span><br><span class="line">  Disk2 (/dev/sdb):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Partition1 120 GiB (Physical volume)                 |</span><br><span class="line">    |/dev/sdb1                                            |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LVM logical volumes</span><br><span class="line"></span><br><span class="line">  Volume Group1 (/dev/MyStorage/ = /dev/sda1 + /dev/sda2 + /dev/sdb1):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Logical volume1 15 GiB  |Logical volume2 35 GiB      |Logical volume3 200 GiB              |</span><br><span class="line">    |/dev/MyStorage/rootvol  |/dev/MyStorage/homevol      |/dev/MyStorage/mediavol              |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|</span><br><span class="line">```   </span><br><span class="line"> </span><br><span class="line">![nner workings of the version 1 of LVM. In this diagram, PE stands for a Physical Extent.](/res/500px-LVM1.svg.png)</span><br><span class="line"></span><br><span class="line"># LV类型</span><br><span class="line">除了简单的LV外，LVM支持 *snapshots（快照）、LV缓存（logical volume caching）、预分配的LV、RAID*，</span><br><span class="line"></span><br><span class="line">## Snapshots（快照）</span><br><span class="line">LVM允许你对系统以一个更效率的方式做快照。其利用了一种叫做 **COW（copy-on-write）**技术。初始建立的快照只是简单的包含对真实数据inodes的 **硬链接**。因此，如果数据一直没有改变，快照几乎只是包含了Inode的指针，而不是数据本身。当修改一个快照指向的文件或者目录，LVM会自动克隆被快照引用老的数据。所以，可以使用35GB来快照一个系统，当预计修改少于2GB的时候，可以只留下2G的空闲空间（在原始和快照分区上都要）。想要创建快照，必须在 VG内有未分配的空间。快照也会像其他卷一样消耗VG的空间。因此，如果想要使用快照来备份 root 分区，那么不要把VG的空间全部分配给 root LV。</span><br><span class="line"></span><br><span class="line">### 配置</span><br><span class="line">如此简单的就可以建立一个 快照LV：</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line">lvcreate --size 100M --snapshot --name snap01 /dev/mapper/vg0-vg</span><br></pre></td></tr></table></figure>
+
 <p>上面建立这个快照，在快照卷充满以前我们只能修改100M的数据。</p>
 <p>当 <em>snap01</em> 建立后就可以把 <em>pv</em> 这个LV恢复到之前的状态：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lvconvert --merge /dev/mapper/vg0-snap01</span><br></pre></td></tr></table></figure>
+
 <p>如果原始的LV是活跃的，合并会在下一次重启时发生。</p>
 <p>合并后 快照不会继续存在。</p>
 <p>可以建立多个快照，然后每个都可以任意合并到原始的LV。</p>
@@ -327,7 +330,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/rsync进行数据同步.html" rel="next" title="rsync进行数据同步">
+                <a href="/Linux-Unix/rsync%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5.html" rel="next" title="rsync进行数据同步">
                   <i class="fa fa-chevron-left"></i> rsync进行数据同步
                 </a>
             </div>
@@ -335,7 +338,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Vim/ultisnips的readme文档中文.html" rel="prev" title="ultisnips的readme文档中文">
+                <a href="/Vim/ultisnips%E7%9A%84readme%E6%96%87%E6%A1%A3%E4%B8%AD%E6%96%87.html" rel="prev" title="ultisnips的readme文档中文">
                   ultisnips的readme文档中文 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -422,10 +425,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -454,10 +457,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -532,7 +535,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/LVM的介绍及使用.html",
+            url: "https://gowa.club/Linux-Unix/LVM%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8.html",
             identifier: "Linux-Unix/LVM的介绍及使用.html",
             title: "LVM的介绍及使用"
           }

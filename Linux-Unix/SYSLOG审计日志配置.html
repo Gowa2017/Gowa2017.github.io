@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Linux,运维,Syslog">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SYSLOG审计日志配置">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/SYSLOG审计日志配置.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;SYSLOG%E5%AE%A1%E8%AE%A1%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="前言syslog是UNIX系统中提供的一种日志记录方法(RFC3164)，syslog本身是一个服务器，程序中凡是使用syslog记录的信息都会发送到该服务器，服务器根据配置决定此信息是否记录，是记录到磁盘文件还是其他地方，这样使系统内所有应用程序都能以统一的方式记录日志，为系统日志的统一审计提供了方便。AIX上同样提供这套服务。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.270Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SYSLOG审计日志配置">
-<meta name="twitter:description" content="前言syslog是UNIX系统中提供的一种日志记录方法(RFC3164)，syslog本身是一个服务器，程序中凡是使用syslog记录的信息都会发送到该服务器，服务器根据配置决定此信息是否记录，是记录到磁盘文件还是其他地方，这样使系统内所有应用程序都能以统一的方式记录日志，为系统日志的统一审计提供了方便。AIX上同样提供这套服务。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/SYSLOG审计日志配置.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/SYSLOG%E5%AE%A1%E8%AE%A1%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/SYSLOG审计日志配置.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/SYSLOG%E5%AE%A1%E8%AE%A1%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -278,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/SYSLOG审计日志配置.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/SYSLOG%E5%AE%A1%E8%AE%A1%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/SYSLOG审计日志配置.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,15 +292,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>syslog是UNIX系统中提供的一种日志记录方法(RFC3164)，syslog本身是一个服务器，程序中凡是使用syslog记录的信息都会发送到该服务器，服务器根据配置决定此信息是否记录，是记录到磁盘文件还是其他地方，这样使系统内所有应用程序都能以统一的方式记录日志，为系统日志的统一审计提供了方便。<br>AIX上同样提供这套服务。<br><a id="more"></a></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>syslog是UNIX系统中提供的一种日志记录方法(RFC3164)，syslog本身是一个服务器，程序中凡是使用syslog记录的信息都会发送到该服务器，服务器根据配置决定此信息是否记录，是记录到磁盘文件还是其他地方，这样使系统内所有应用程序都能以统一的方式记录日志，为系统日志的统一审计提供了方便。<br>AIX上同样提供这套服务。</p>
+<a id="more"></a>
 <h2 id="服务与配置"><a href="#服务与配置" class="headerlink" title="服务与配置"></a>服务与配置</h2><p>默认情况下，配置文件位于<strong>/etc/syslog.conf</strong>。但我们可以用-f选项来指定程序启动时读取的配置文件。<br>AIX使用</p>
 <pre><code>startsrc -s syslogd
-stopsrc -s syslogd
-</code></pre><p>来启动或者停止相应服务。</p>
+stopsrc -s syslogd</code></pre><p>来启动或者停止相应服务。</p>
 <h2 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h2><p>配置文件用来告诉syslogd服务将哪些程序产生的，什么等级的信息，写入到什么地方。<br>每行配置文件类似以下格式：</p>
 <pre><code>selection    action    rotation
-&lt;msg_src_list&gt; &lt;destination&gt; [rotate [size &lt;size&gt; k|m] [files &lt;files&gt;] [time &lt;time&gt; h|d|w|m|y] [compress] [archive &lt;archive&gt;]]
-</code></pre><h3 id="程序选择："><a href="#程序选择：" class="headerlink" title="程序选择："></a>程序选择：</h3><pre><code>kern    内核
+&lt;msg_src_list&gt; &lt;destination&gt; [rotate [size &lt;size&gt; k|m] [files &lt;files&gt;] [time &lt;time&gt; h|d|w|m|y] [compress] [archive &lt;archive&gt;]]</code></pre><h3 id="程序选择："><a href="#程序选择：" class="headerlink" title="程序选择："></a>程序选择：</h3><pre><code>kern    内核
 user    用户等级
 mail    邮件子系统
 daemon    守护程序
@@ -312,19 +309,13 @@ lpr    行式打印机
 news    新闻子系统
 uucp    uucp子系统
 local0-7    本地使用
-*    所有程序
-</code></pre><h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><p>emerg     指定紧急消息（LOG_EMERG）。这些消息并非分发给所有用户。可以将 LOG_EMERG 优先级消息记录到单独文件备查。<br>alert     指定重要的消息（LOG_ALERT），如严重的硬件错误。这些消息分发给所有用户。<br>crit     指定不列为错误的关键消息（LOG_CRIT），如不适当的登录尝试。LOG_CRIT 和较高优先级消息会发送到系统控制台。<br>err     指定表示错误情况的消息（LOG_ERR），例如失败的磁盘写入。<br>warning     指定反常但可恢复的情况的消息（LOG_WARNING）。<br>notice     指定重要的参考消息（LOG_NOTICE）。没有指定优先级的消息会映射为此优先级的消息。<br>info     指定参考消息（LOG_INFO）。这些消息可以废弃，但它们在分析系统是很有用。<br>debug     指定调试消息（LOG_DEBUG）。这些消息可以废弃。<br>none     排除选定的程序。只有在同一 selector 字段里跟在带有 *（星号）的条目后时，该优先级级别才有用。</p>
-<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p><strong> 1. 要在调试级别或更高级别将所有的邮件工具消息记录到文件 /tmp/mailsyslog，请输入以下命令：  </strong></p>
-<pre><code>mail.debug /tmp/mailsyslog
-</code></pre><p><strong> 2. 要将除来自邮件工具之外的所有系统消息发送到主机 rigil，请输入以下命令：  </strong></p>
-<pre><code>*.debug;mail.none @rigil
-</code></pre><p><strong> 3. 要将所有工具中优先级为 emerg 的消息和邮件工具与守护程序工具中优先级为 crit 及更高级别的消息发送到用户 nick 和 jam，请输入以下命令：  </strong></p>
-<pre><code>*.emerg;mail,daemon.crit nick, jam
-</code></pre><p><strong> 4. 要将所有邮件工具消息发送到所有用户的终端屏幕，请输入以下命令：  </strong></p>
-<pre><code>mail.debug *
-</code></pre><p><strong> 5. 要将调试级别或更高级别的工具消息记录到 /tmp/syslog.out，并且在下列情况下旋转文件：文件超过 500 KB，一周之后将旋转文件数限制为 10，使用压缩并使用 /syslogfiles 作为归档目录，请输入以下命令：  </strong></p>
-<pre><code>*.debug /tmp/syslog.out rotate size 500k time 1w files 10 compress archive /syslogfiles  &lt;S-Del&gt;
-</code></pre>
+*    所有程序</code></pre><h3 id="优先级"><a href="#优先级" class="headerlink" title="优先级"></a>优先级</h3><p>emerg     指定紧急消息（LOG_EMERG）。这些消息并非分发给所有用户。可以将 LOG_EMERG 优先级消息记录到单独文件备查。<br>alert     指定重要的消息（LOG_ALERT），如严重的硬件错误。这些消息分发给所有用户。<br>crit     指定不列为错误的关键消息（LOG_CRIT），如不适当的登录尝试。LOG_CRIT 和较高优先级消息会发送到系统控制台。<br>err     指定表示错误情况的消息（LOG_ERR），例如失败的磁盘写入。<br>warning     指定反常但可恢复的情况的消息（LOG_WARNING）。<br>notice     指定重要的参考消息（LOG_NOTICE）。没有指定优先级的消息会映射为此优先级的消息。<br>info     指定参考消息（LOG_INFO）。这些消息可以废弃，但它们在分析系统是很有用。<br>debug     指定调试消息（LOG_DEBUG）。这些消息可以废弃。<br>none     排除选定的程序。只有在同一 selector 字段里跟在带有 *（星号）的条目后时，该优先级级别才有用。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>** 1. 要在调试级别或更高级别将所有的邮件工具消息记录到文件 /tmp/mailsyslog，请输入以下命令：  **</p>
+<pre><code>mail.debug /tmp/mailsyslog</code></pre><p>** 2. 要将除来自邮件工具之外的所有系统消息发送到主机 rigil，请输入以下命令：  **</p>
+<pre><code>*.debug;mail.none @rigil</code></pre><p>** 3. 要将所有工具中优先级为 emerg 的消息和邮件工具与守护程序工具中优先级为 crit 及更高级别的消息发送到用户 nick 和 jam，请输入以下命令：  **</p>
+<pre><code>*.emerg;mail,daemon.crit nick, jam</code></pre><p>** 4. 要将所有邮件工具消息发送到所有用户的终端屏幕，请输入以下命令：  **</p>
+<pre><code>mail.debug *</code></pre><p>** 5. 要将调试级别或更高级别的工具消息记录到 /tmp/syslog.out，并且在下列情况下旋转文件：文件超过 500 KB，一周之后将旋转文件数限制为 10，使用压缩并使用 /syslogfiles 作为归档目录，请输入以下命令：  **</p>
+<pre><code>*.debug /tmp/syslog.out rotate size 500k time 1w files 10 compress archive /syslogfiles  &lt;S-Del&gt;</code></pre>
     </div>
 
     
@@ -334,7 +325,7 @@ local0-7    本地使用
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/运维/" rel="tag"># 运维</a>
+              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
               <a href="/tags/Syslog/" rel="tag"># Syslog</a>
           </div>
 
@@ -342,7 +333,7 @@ local0-7    本地使用
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/AIX-chsec命令修改配置文件.html" rel="next" title="AIX-chsec命令修改配置文件">
+                <a href="/Linux-Unix/AIX-chsec%E5%91%BD%E4%BB%A4%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html" rel="next" title="AIX-chsec命令修改配置文件">
                   <i class="fa fa-chevron-left"></i> AIX-chsec命令修改配置文件
                 </a>
             </div>
@@ -350,7 +341,7 @@ local0-7    本地使用
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/AIX用IPSec进行包过滤.html" rel="prev" title="AIX用IPSec进行包过滤">
+                <a href="/Linux-Unix/AIX%E7%94%A8IPSec%E8%BF%9B%E8%A1%8C%E5%8C%85%E8%BF%87%E6%BB%A4.html" rel="prev" title="AIX用IPSec进行包过滤">
                   AIX用IPSec进行包过滤 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -437,10 +428,10 @@ local0-7    本地使用
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -469,10 +460,10 @@ local0-7    本地使用
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -547,7 +538,7 @@ local0-7    本地使用
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/SYSLOG审计日志配置.html",
+            url: "https://gowa.club/Linux-Unix/SYSLOG%E5%AE%A1%E8%AE%A1%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE.html",
             identifier: "Linux-Unix/SYSLOG审计日志配置.html",
             title: "SYSLOG审计日志配置"
           }

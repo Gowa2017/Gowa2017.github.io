@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -47,20 +47,18 @@
   };
 </script>
 
-  <meta name="description" content="在 C/C++ 中来说，指针是最普通不过的东西，但是当想要与汇编中对应的指针这么一个概念对应起来，还需要花点心思。特别是对于多级指针的时候，会感觉更加的茫然。当然，这和对指针的理解本身就不深，也有点关系。">
+  <meta name="description" content="在 C&#x2F;C++ 中来说，指针是最普通不过的东西，但是当想要与汇编中对应的指针这么一个概念对应起来，还需要花点心思。特别是对于多级指针的时候，会感觉更加的茫然。当然，这和对指针的理解本身就不深，也有点关系。">
 <meta name="keywords" content="Asm,逆向">
 <meta property="og:type" content="article">
 <meta property="og:title" content="汇编中关于对于Pointer的一个描述">
-<meta property="og:url" content="https://gowa.club/Asm/汇编中关于对于Pointer的一个描述.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Asm&#x2F;%E6%B1%87%E7%BC%96%E4%B8%AD%E5%85%B3%E4%BA%8E%E5%AF%B9%E4%BA%8EPointer%E7%9A%84%E4%B8%80%E4%B8%AA%E6%8F%8F%E8%BF%B0.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="在 C/C++ 中来说，指针是最普通不过的东西，但是当想要与汇编中对应的指针这么一个概念对应起来，还需要花点心思。特别是对于多级指针的时候，会感觉更加的茫然。当然，这和对指针的理解本身就不深，也有点关系。">
+<meta property="og:description" content="在 C&#x2F;C++ 中来说，指针是最普通不过的东西，但是当想要与汇编中对应的指针这么一个概念对应起来，还需要花点心思。特别是对于多级指针的时候，会感觉更加的茫然。当然，这和对指针的理解本身就不深，也有点关系。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-10-20T15:24:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="汇编中关于对于Pointer的一个描述">
-<meta name="twitter:description" content="在 C/C++ 中来说，指针是最普通不过的东西，但是当想要与汇编中对应的指针这么一个概念对应起来，还需要花点心思。特别是对于多级指针的时候，会感觉更加的茫然。当然，这和对指针的理解本身就不深，也有点关系。">
 
-<link rel="canonical" href="https://gowa.club/Asm/汇编中关于对于Pointer的一个描述.html">
+<link rel="canonical" href="https://gowa.club/Asm/%E6%B1%87%E7%BC%96%E4%B8%AD%E5%85%B3%E4%BA%8E%E5%AF%B9%E4%BA%8EPointer%E7%9A%84%E4%B8%80%E4%B8%AA%E6%8F%8F%E8%BF%B0.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Asm/汇编中关于对于Pointer的一个描述.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Asm/%E6%B1%87%E7%BC%96%E4%B8%AD%E5%85%B3%E4%BA%8E%E5%AF%B9%E4%BA%8EPointer%E7%9A%84%E4%B8%80%E4%B8%AA%E6%8F%8F%E8%BF%B0.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Asm/汇编中关于对于Pointer的一个描述.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Asm/%E6%B1%87%E7%BC%96%E4%B8%AD%E5%85%B3%E4%BA%8E%E5%AF%B9%E4%BA%8EPointer%E7%9A%84%E4%B8%80%E4%B8%AA%E6%8F%8F%E8%BF%B0.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Asm/汇编中关于对于Pointer的一个描述.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,32 +287,41 @@
       
         <p>在 C/C++ 中来说，指针是最普通不过的东西，但是当想要与汇编中对应的指针这么一个概念对应起来，还需要花点心思。特别是对于多级指针的时候，会感觉更加的茫然。当然，这和对指针的理解本身就不深，也有点关系。</p>
 <a id="more"></a>
+
 <p>其实，站在汇编程序的角度，我们代码内的任何符号（变量名称）对它都是没有意义，其只会对内存进行操作。同时，我们预定义的任何值，都会被转换成内部在数据段内的一个符号。</p>
 <p>对于内存来说，一般会被内存进行分区，一部分存储代码（代码段），一部分存储的数据（数据段），代码在执行的时候，就是通过在数据段进行相关的数据获取，写入的。</p>
 <p>所以在看代码的时候，放弃我们已经固有的观念吧，把变量，指针什么的全部忘记，全部看内存地址就行了。</p>
 <h1 id="最简单的例子"><a href="#最简单的例子" class="headerlink" title="最简单的例子"></a>最简单的例子</h1><p>一个最简单的 C 例子，</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// t.c</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>利用 VS 的 <code>cl</code> 命令生成汇编代码：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cl /FAs t.c</span><br></pre></td></tr></table></figure>
 <p>结果：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PUBLIC	_main</span><br><span class="line">; Function compile flags: /Odtp</span><br><span class="line">; File d:\downloads\t.c</span><br><span class="line">_TEXT	SEGMENT</span><br><span class="line">_a$ = -4						; size = 4</span><br><span class="line">_main	PROC</span><br><span class="line"></span><br><span class="line">; 2    : int main()&#123;</span><br><span class="line"></span><br><span class="line">	push	ebp</span><br><span class="line">	mov	ebp, esp</span><br><span class="line">	push	ecx</span><br><span class="line"></span><br><span class="line">; 3    : 	int a = 1;</span><br><span class="line"></span><br><span class="line">	mov	DWORD PTR _a$[ebp], 1</span><br><span class="line"></span><br><span class="line">; 4    :     return 0;</span><br><span class="line"></span><br><span class="line">	xor	eax, eax</span><br><span class="line"></span><br><span class="line">; 5    : &#125;</span><br><span class="line"></span><br><span class="line">	mov	esp, ebp</span><br><span class="line">	pop	ebp</span><br><span class="line">	ret	0</span><br><span class="line">_main	ENDP</span><br><span class="line">_TEXT	ENDS</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+
 <p>这里完全没有什么符号的概念的，这里就我们代码每一行转换为的汇编代码都做了一个转换。</p>
 <h1 id="栈的结构"><a href="#栈的结构" class="headerlink" title="栈的结构"></a>栈的结构</h1><p>基本上，每个函数调用都会看到这样的代码</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">push ebp</span><br><span class="line">move ebp, esp</span><br></pre></td></tr></table></figure>
+
 <p>这两段代码什么意思呢？</p>
-<p>首先，每程序（线程）在执行的时候，都会有一个线程栈，在 <a href="/Windows/Windows中的线程.html" title="Windows中的线程">Windows中的线程</a> 我们谈到，当我们建立一个线程内核对象的时候，其含有一个 <strong>CONTEXT</strong> 结构，这个结构保留了此线程上一次被调度执行后的寄存器信息。线程栈是在创建线程对象的时候就会建立的，所有函数在调用的时候，都依赖于这个栈来进行参数的传递或者返回，自动变量的分配等。</p>
+<p>首先，每程序（线程）在执行的时候，都会有一个线程栈，在 <a href="/Windows/Windows%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html" title="Windows中的线程">Windows中的线程</a> 我们谈到，当我们建立一个线程内核对象的时候，其含有一个 <strong>CONTEXT</strong> 结构，这个结构保留了此线程上一次被调度执行后的寄存器信息。线程栈是在创建线程对象的时候就会建立的，所有函数在调用的时候，都依赖于这个栈来进行参数的传递或者返回，自动变量的分配等。</p>
 <p>寄存器 ESP, EBP 就是通过在这个栈上的上下来回移动，来实现函数栈帧的分配和回收。</p>
 <p>我们的栈一般来说，是从高地址，往低地址生长的，为什么需要这样干？这个就和函数调用的约定有关了，比如一个 <code>cdecl</code> 的函数，其最后一个参数会第一个入栈，第一个参数最后一个入栈，当我们传递的是不定数量的参数时，通过查看参数的地址是否到达栈顶，我们可以拿到所有的参数了。</p>
 <p><code>push ebp</code> 会将当前栈帧栈顶的值存入栈上，esp 自动往下移动 4 （32位）或 8字节（64位），<code>mov ebp, esp</code> 会让 ebp 指向当前栈帧的顶部。</p>
 <p>事实上我发现， ebp 在指向当前栈帧的栈顶后，基本上就不会再变化了。</p>
 <h1 id="参数的传递"><a href="#参数的传递" class="headerlink" title="参数的传递"></a>参数的传递</h1><p>对于  <code>cdel</code> 约定的函数来说，其参数约定最后一个先入栈，第一个最后入栈，由调用者来清理栈的信息，我们可以通过例子来看一下。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// t.c</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span> <span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">return</span> add(a,b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>其生成的汇编代码如下：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">PUBLIC	_add</span><br><span class="line">PUBLIC	_main</span><br><span class="line">; Function compile flags: /Odtp</span><br><span class="line">; File d:\downloads\t.c</span><br><span class="line">_TEXT	SEGMENT</span><br><span class="line">_a$ = -8						; size = 4</span><br><span class="line">_b$ = -4						; size = 4</span><br><span class="line">_main	PROC</span><br><span class="line"></span><br><span class="line">; 5    : int main()&#123;</span><br><span class="line"></span><br><span class="line">	push	ebp</span><br><span class="line">	mov	ebp, esp</span><br><span class="line">	sub	esp, 8 ; 下移8个字节，为两个自动变量 a, b 预留内存空间</span><br><span class="line"></span><br><span class="line">; 6    : 	int a = 1;</span><br><span class="line"></span><br><span class="line">	mov	DWORD PTR _a$[ebp], 1 ; PTR 表明 EBP 内存储的是一个内存地址， DWORD 表明这个内存地址处值的类型是 DWORD 4字节， [EBP] 表示取寄存器内存储地址处的值</span><br><span class="line"></span><br><span class="line">; 7    : 	int b = 2;</span><br><span class="line"></span><br><span class="line">	mov	DWORD PTR _b$[ebp], 2; 同上</span><br><span class="line"></span><br><span class="line">; 8    : 	return add(a,b);</span><br><span class="line"></span><br><span class="line">	mov	eax, DWORD PTR _b$[ebp]</span><br><span class="line">	push	eax			; 最后一个参数先入栈</span><br><span class="line">	mov	ecx, DWORD PTR _a$[ebp]</span><br><span class="line">	push	ecx			; 第一个参数最后入栈</span><br><span class="line">	call	_add</span><br><span class="line">	add	esp, 8 			;清理栈</span><br><span class="line"></span><br><span class="line">; 9    : &#125;</span><br><span class="line"></span><br><span class="line">	mov	esp, ebp</span><br><span class="line">	pop	ebp</span><br><span class="line">	ret	0</span><br><span class="line">_main	ENDP</span><br><span class="line">_TEXT	ENDS</span><br><span class="line">; Function compile flags: /Odtp</span><br><span class="line">; File d:\downloads\t.c</span><br><span class="line">_TEXT	SEGMENT</span><br><span class="line">_a$ = 8							; size = 4</span><br><span class="line">_b$ = 12						; size = 4</span><br><span class="line">_add	PROC</span><br><span class="line"></span><br><span class="line">; 1    : int add (int a, int b)&#123;</span><br><span class="line"></span><br><span class="line">	push	ebp</span><br><span class="line">	mov	ebp, esp</span><br><span class="line"></span><br><span class="line">; 2    : 	return a + b;</span><br><span class="line"></span><br><span class="line">	mov	eax, DWORD PTR _a$[ebp] ; 直接从栈上取值，因为 ebp 入栈了，所以栈当前的内容为 ：b, a, last ebp</span><br><span class="line">	add	eax, DWORD PTR _b$[ebp]</span><br><span class="line"></span><br><span class="line">; 3    : &#125;</span><br><span class="line"></span><br><span class="line">	pop	ebp</span><br><span class="line">	ret	0</span><br><span class="line">_add	ENDP</span><br><span class="line">_TEXT	ENDS</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+
 <h1 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> *a, <span class="keyword">int</span> *b)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> temp = *a;</span><br><span class="line">	*b = *a;</span><br><span class="line">	*a = temp;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">int</span> b = <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">return</span> swap(&amp;a,&amp;b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PUBLIC	_swap</span><br><span class="line">PUBLIC	_main</span><br><span class="line">; Function compile flags: /Odtp</span><br><span class="line">; File d:\downloads\t.c</span><br><span class="line">_TEXT	SEGMENT</span><br><span class="line">_a$ = -8						; size = 4</span><br><span class="line">_b$ = -4						; size = 4</span><br><span class="line">_main	PROC</span><br><span class="line"></span><br><span class="line">; 7    : int main()&#123;</span><br><span class="line"></span><br><span class="line">	push	ebp</span><br><span class="line">	mov	ebp, esp</span><br><span class="line">	sub	esp, 8</span><br><span class="line"></span><br><span class="line">; 8    : 	int a = 1;</span><br><span class="line"></span><br><span class="line">	mov	DWORD PTR _a$[ebp], 1</span><br><span class="line"></span><br><span class="line">; 9    : 	int b = 2;</span><br><span class="line"></span><br><span class="line">	mov	DWORD PTR _b$[ebp], 2</span><br><span class="line"></span><br><span class="line">; 10   : 	return swap(&amp;a,&amp;b);</span><br><span class="line"></span><br><span class="line">	lea	eax, DWORD PTR _b$[ebp] ; lea 取得 -4[ebp] 地址。为什么不直接传递  _b[ebp] 呢</span><br><span class="line">	push	eax</span><br><span class="line">	lea	ecx, DWORD PTR _a$[ebp]</span><br><span class="line">	push	ecx</span><br><span class="line">	call	_swap</span><br><span class="line">	add	esp, 8</span><br><span class="line">	xor	eax, eax</span><br><span class="line"></span><br><span class="line">; 11   : &#125;</span><br><span class="line"></span><br><span class="line">	mov	esp, ebp</span><br><span class="line">	pop	ebp</span><br><span class="line">	ret	0</span><br><span class="line">_main	ENDP</span><br><span class="line">_TEXT	ENDS</span><br><span class="line">; Function compile flags: /Odtp</span><br><span class="line">; File d:\downloads\t.c</span><br><span class="line">_TEXT	SEGMENT</span><br><span class="line">_temp$ = -4						; size = 4</span><br><span class="line">_a$ = 8							; size = 4</span><br><span class="line">_b$ = 12						; size = 4</span><br><span class="line">_swap	PROC</span><br><span class="line"></span><br><span class="line">; 1    : void swap(int *a, int *b)&#123;</span><br><span class="line"></span><br><span class="line">	push	ebp</span><br><span class="line">	mov	ebp, esp</span><br><span class="line">	push	ecx</span><br><span class="line"></span><br><span class="line">; 2    : 	int temp = *a;</span><br><span class="line"></span><br><span class="line">	mov	eax, DWORD PTR _a$[ebp]</span><br><span class="line">	mov	ecx, DWORD PTR [eax]</span><br><span class="line">	mov	DWORD PTR _temp$[ebp], ecx</span><br><span class="line"></span><br><span class="line">; 3    : 	*b = *a;</span><br><span class="line"></span><br><span class="line">	mov	edx, DWORD PTR _b$[ebp]</span><br><span class="line">	mov	eax, DWORD PTR _a$[ebp]</span><br><span class="line">	mov	ecx, DWORD PTR [eax]</span><br><span class="line">	mov	DWORD PTR [edx], ecx</span><br><span class="line"></span><br><span class="line">; 4    : 	*a = temp;</span><br><span class="line"></span><br><span class="line">	mov	edx, DWORD PTR _a$[ebp]</span><br><span class="line">	mov	eax, DWORD PTR _temp$[ebp]</span><br><span class="line">	mov	DWORD PTR [edx], eax</span><br><span class="line"></span><br><span class="line">; 5    : 	return;</span><br><span class="line">; 6    : &#125;</span><br><span class="line"></span><br><span class="line">	mov	esp, ebp</span><br><span class="line">	pop	ebp</span><br><span class="line">	ret	0</span><br><span class="line">_swap	ENDP</span><br><span class="line">_TEXT	ENDS</span><br><span class="line">END</span><br></pre></td></tr></table></figure>
+
 <p>可以看到，指针的操作稍微麻烦一些，首先，从栈上某个位置处拿到参数的的值，然后将这个值当作地址对待，再次寻址，拿到真正的值。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov	edx, DWORD PTR _b$[ebp] ; 先拿到 12[ebp] 处 四字节的内容</span><br><span class="line">mov	eax, DWORD PTR _a$[ebp] ; 拿到 8[ebp] 处 四字节的内容</span><br><span class="line">mov	ecx, DWORD PTR [eax] ; 间接寻址</span><br><span class="line">mov	DWORD PTR [edx], ecx ; 间接寻址</span><br></pre></td></tr></table></figure>
+
 <p>对于一个指针，需要读两次内存操作才能拿到具体的值。</p>
 <ol>
 <li>拿到为指针分配的内存处的值。</li>
@@ -333,14 +340,14 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Asm/" rel="tag"># Asm</a>
-              <a href="/tags/逆向/" rel="tag"># 逆向</a>
+              <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"># 逆向</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Asm/CheatEngine入门指南.html" rel="next" title="CheatEngine入门指南">
+                <a href="/Asm/CheatEngine%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97.html" rel="next" title="CheatEngine入门指南">
                   <i class="fa fa-chevron-left"></i> CheatEngine入门指南
                 </a>
             </div>
@@ -348,7 +355,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Asm/关于汇编中的PTR操作符.html" rel="prev" title="关于汇编中的PTR操作符">
+                <a href="/Asm/%E5%85%B3%E4%BA%8E%E6%B1%87%E7%BC%96%E4%B8%AD%E7%9A%84PTR%E6%93%8D%E4%BD%9C%E7%AC%A6.html" rel="prev" title="关于汇编中的PTR操作符">
                   关于汇编中的PTR操作符 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -435,10 +442,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -467,10 +474,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -545,7 +552,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Asm/汇编中关于对于Pointer的一个描述.html",
+            url: "https://gowa.club/Asm/%E6%B1%87%E7%BC%96%E4%B8%AD%E5%85%B3%E4%BA%8E%E5%AF%B9%E4%BA%8EPointer%E7%9A%84%E4%B8%80%E4%B8%AA%E6%8F%8F%E8%BF%B0.html",
             identifier: "Asm/汇编中关于对于Pointer的一个描述.html",
             title: "汇编中关于对于Pointer的一个描述"
           }

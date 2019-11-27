@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Docker">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker的overlay2简述">
-<meta property="og:url" content="https://gowa.club/Docker/Docker的overlay2简述.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Docker&#x2F;Docker%E7%9A%84overlay2%E7%AE%80%E8%BF%B0.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="话说 Docker 使用了一种 union FS 的分层文件系统，理解这个，是制作镜像和存储的关键，所以就一下官方文档的说明。 Docker 新的使用的是 overlay2 这个了。需要在一定的 Linux 内核上才能运行。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-26T14:49:46.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Docker的overlay2简述">
-<meta name="twitter:description" content="话说 Docker 使用了一种 union FS 的分层文件系统，理解这个，是制作镜像和存储的关键，所以就一下官方文档的说明。 Docker 新的使用的是 overlay2 这个了。需要在一定的 Linux 内核上才能运行。">
 
-<link rel="canonical" href="https://gowa.club/Docker/Docker的overlay2简述.html">
+<link rel="canonical" href="https://gowa.club/Docker/Docker%E7%9A%84overlay2%E7%AE%80%E8%BF%B0.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Docker/Docker的overlay2简述.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Docker/Docker%E7%9A%84overlay2%E7%AE%80%E8%BF%B0.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Docker/Docker的overlay2简述.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Docker/Docker%E7%9A%84overlay2%E7%AE%80%E8%BF%B0.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Docker/Docker的overlay2简述.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,6 +287,7 @@
       
         <p>话说 Docker 使用了一种 union FS 的分层文件系统，理解这个，是制作镜像和存储的关键，所以就一下官方文档的说明。 Docker 新的使用的是 overlay2 这个了。需要在一定的 Linux 内核上才能运行。</p>
 <a id="more"></a>
+
 <h1 id="overlay2-驱动工作原理"><a href="#overlay2-驱动工作原理" class="headerlink" title="overlay2 驱动工作原理"></a>overlay2 驱动工作原理</h1><p>先来区分几个概念。</p>
 <ul>
 <li>OverlayFS 指的是 Linux 的内核驱动</li>
@@ -297,21 +296,30 @@
 <p>OverlayFS 将单个 Linux 主机上的两个目录进行分层，然后将它们表示为一个目录。这些目录就叫做 <strong>layers</strong>，这个过程就被叫做 <strong>union mount</strong>。OverlayFS 将靠下一层的目录叫做 <strong>lowerdir</strong>，将靠上一层的叫做 <strong>upperdir</strong>。然后经过处理后我们看到的那个目录叫做 <strong>merged</strong>。</p>
 <h1 id="Images-磁盘分层"><a href="#Images-磁盘分层" class="headerlink" title="Images 磁盘分层"></a>Images 磁盘分层</h1><p>在我们下载一个 4 层的镜像后 <code>docker pull ubuntu</code>，我们会在 <strong>/var/lib/docker/overlay2</strong> 下面看到 5个目录</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">drwx------    4 root     root          4096 Nov 26 14:36 88894c3938bf75095725df436b51ccf84fe860a06789847849390273c2c656ca</span><br><span class="line">drwx------    3 root     root          4096 Nov 26 14:36 a4b654fa44aa1e2bbafa5d953afef7e4f0b069ceb1798d1657050e8b1d795d8a</span><br><span class="line">drwx------    4 root     root          4096 Nov 26 14:40 a5ac07700a22ac2e30b90b547e5e967944d987d9c424c45282840466b5fe131d</span><br><span class="line">drwx------    4 root     root          4096 Nov 26 14:36 efe208a758e893eda3a464fb338bbfc9628a03a9434f1e59dd32c2e79f87ea49</span><br><span class="line">drwx------    2 root     root          4096 Nov 27 01:24 l</span><br></pre></td></tr></table></figure>
+
 <p>小写的 <code>l</code> 中是对这 4 个层的符号链接，其只是为了减少 mount 参数可能达到的限制而已。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">lrwxrwxrwx    1 root     root            72 Nov 26 14:36 6HI34VCGTCFDV4JTCYDTOCC3DG -&gt; ../efe208a758e893eda3a464fb338bbfc9628a03a9434f1e59dd32c2e79f87ea49/diff</span><br><span class="line">lrwxrwxrwx    1 root     root            72 Nov 26 14:36 7FXGKUQN5DS26G42GP66EFRA4Y -&gt; ../88894c3938bf75095725df436b51ccf84fe860a06789847849390273c2c656ca/diff</span><br><span class="line">lrwxrwxrwx    1 root     root            72 Nov 26 14:36 7H77VL7XYJJYW22JCKZWBANAKN -&gt; ../a5ac07700a22ac2e30b90b547e5e967944d987d9c424c45282840466b5fe131d/diff</span><br><span class="line">lrwxrwxrwx    1 root     root            72 Nov 26 14:36 S2EFJV2TWAYK3YIRFVGA33NJQ3 -&gt; ../a4b654fa44aa1e2bbafa5d953afef7e4f0b069ceb1798d1657050e8b1d795d8a/diff</span><br></pre></td></tr></table></figure>
+
 <p>最底下的一层，有一个叫做 <strong>link</strong> 的文件，其内是一个短名字。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">88894c3938bf75095725df436b51ccf84fe860a06789847849390273c2c656ca:</span><br><span class="line">committed  diff       link       lower      work</span><br><span class="line"></span><br><span class="line">a4b654fa44aa1e2bbafa5d953afef7e4f0b069ceb1798d1657050e8b1d795d8a:</span><br><span class="line">committed  diff       link</span><br><span class="line"></span><br><span class="line">a5ac07700a22ac2e30b90b547e5e967944d987d9c424c45282840466b5fe131d:</span><br><span class="line">committed  diff       link       lower      work</span><br><span class="line"></span><br><span class="line">efe208a758e893eda3a464fb338bbfc9628a03a9434f1e59dd32c2e79f87ea49:</span><br><span class="line">committed  diff       link       lower      work</span><br><span class="line"></span><br><span class="line">l:</span><br><span class="line">6HI34VCGTCFDV4JTCYDTOCC3DG  7H77VL7XYJJYW22JCKZWBANAKN</span><br><span class="line">7FXGKUQN5DS26G42GP66EFRA4Y  S2EFJV2TWAYK3YIRFVGA33NJQ3</span><br></pre></td></tr></table></figure>
+
 <p> 文件 <strong>diff</strong> 就包含了层的内容。</p>
 <h1 id="Container"><a href="#Container" class="headerlink" title="Container"></a>Container</h1><p>现在我们来启动一个容器。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker run -it ubuntu bash</span><br></pre></td></tr></table></figure>
+
 <p>我们现在来观察现在 docker 的存储层情况。发觉其多了两个层：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">drwx------    5 root     root          4096 Nov 27 01:30 151f20b2b354325bc23bb37891c67faea9106dfc94e1835b901743a5d8997e0d</span><br><span class="line">drwx------    4 root     root          4096 Nov 27 01:30 151f20b2b354325bc23bb37891c67faea9106dfc94e1835b901743a5d8997e0d-init</span><br></pre></td></tr></table></figure>
+
 <p>这是为 contaner 建立的层。其内就会含有一个  merged 的目录，这就包含了与其父层内容整合后的内容。</p>
 <p>当我们启动一个container 的时候，我们看一下挂载的内容：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">overlay on /var/lib/docker/overlay2/151f20b2b354325bc23bb37891c67faea9106dfc94e1835b901743a5d8997e0d/merged <span class="built_in">type</span> overlay (rw,relatime,lowerdir=/var/lib/docker/overlay2/l/4E4WSPA2J6FBHHUAWTUCBRD7BF:/var/lib/docker/overlay2/l/7H77VL7XYJJYW22JCKZWBANAKN:/var/lib/docker/overlay2/l/6HI34VCGTCFDV4JTCYDTOCC3DG:/var/lib/docker/overlay2/l/7FXGKUQN5DS26G42GP66EFRA4Y:/var/lib/docker/overlay2/l/S2EFJV2TWAYK3YIRFVGA33NJQ3,upperdir=/var/lib/docker/overlay2/151f20b2b354325bc23bb37891c67faea9106dfc94e1835b901743a5d8997e0d/diff,workdir=/var/lib/docker/overlay2/151f20b2b354325bc23bb37891c67faea9106dfc94e1835b901743a5d8997e0d/work)</span><br></pre></td></tr></table></figure>
+
 <p>可以看到顶层就是 container layer ，其会有多个 lowerdir ，而只有一个 upperdir ，将整合后的 merged 给挂载起来了</p>
 <p>我们知道 diff 是层的内容，我们可以验证，这个时候  container layer 是空的：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ls  /var/lib/docker/overlay2/151f20b2b354325bc23bb37891c67faea9106dfc94e1835b901743a5d8997e0d/diff/</span><br></pre></td></tr></table></figure>
+
+
+
 <h1 id="Containers-对-overlay上文件的读写"><a href="#Containers-对-overlay上文件的读写" class="headerlink" title="Containers 对 overlay上文件的读写"></a>Containers 对 overlay上文件的读写</h1><h2 id="Read"><a href="#Read" class="headerlink" title="Read"></a>Read</h2><p>考虑 Containers 需要通过 overlay 来打开一个文件的情况：</p>
 <ol>
 <li>在 container layer 不存在，那么就会从 image layer 去读取。</li>
@@ -332,12 +340,17 @@
 <p>现在我们准备来对 /etc/host.conf 这个文件进行修改。看一下修改了以后我们的 container layer 是不是会有新文件，已经原来层的文件是否会改变。</p>
 <h2 id="修改前"><a href="#修改前" class="headerlink" title="修改前"></a>修改前</h2><p> container layer 是空的：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ls /var/lib/docker/overlay2/151f20b2b354325bc23bb37891c67faea9106dfc94e1835b901743a5d8997e0d/diff/</span><br></pre></td></tr></table></figure>
+
 <p>hostname 存在与镜像层：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cat /var/lib/docker/overlay2/a4b654fa44aa1e2bbafa5d953afef7e4f0b069ceb1798d1657050e8b1d795d8a/diff/etc/host.conf</span><br><span class="line"><span class="comment"># The "order" line is only used by old versions of the C library.</span></span><br><span class="line">order hosts,<span class="built_in">bind</span></span><br><span class="line">multi on</span><br></pre></td></tr></table></figure>
+
 <p>我们在 container 内进行修改，将第一行的注释干掉</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sed -i <span class="string">'1d'</span> /etc/host.conf</span><br></pre></td></tr></table></figure>
+
 <h2 id="修改后"><a href="#修改后" class="headerlink" title="修改后"></a>修改后</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cat /var/lib/docker/overlay2/151f20b2b354325bc23bb37891c67faea9106dfc94e1835b901743a5d8997e0d/diff/etc/host.conf</span><br><span class="line">order hosts,<span class="built_in">bind</span></span><br><span class="line">multi on</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cat /var/lib/docker/overlay2/a4b654fa44aa1e2bbafa5d953afef7e4f0b069ceb1798d1657050e8b1d795d8a/diff/etc/host.conf</span><br></pre></td></tr></table></figure>
+
 <p>镜像层内的内容并没有改变。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>OK，那么明白了。我们可以把所谓的层，都看做是一个有文件的目录，然后多个目录间有自下至上的依赖关系，然后最终合并成是一个视图，再将这个合并后的目录，挂载到 docker 进程内去。</p>
 <p>我们的写都是在 Container layer 上进行的，不会影响镜像层。另外，我们在里面删除 Image layer 文件并不是真正的删除文件，而是建立一个对应的文件来阻止对相关文件的访问。</p>
@@ -357,7 +370,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/Okio的概念和使用.html" rel="next" title="Okio的概念和使用">
+                <a href="/Android/Okio%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8.html" rel="next" title="Okio的概念和使用">
                   <i class="fa fa-chevron-left"></i> Okio的概念和使用
                 </a>
             </div>
@@ -449,10 +462,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -481,10 +494,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -559,7 +572,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Docker/Docker的overlay2简述.html",
+            url: "https://gowa.club/Docker/Docker%E7%9A%84overlay2%E7%AE%80%E8%BF%B0.html",
             identifier: "Docker/Docker的overlay2简述.html",
             title: "Docker的overlay2简述"
           }

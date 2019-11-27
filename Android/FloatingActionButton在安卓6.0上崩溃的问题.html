@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="FloatingActionButton在安卓6.0上崩溃的问题">
-<meta property="og:url" content="https://gowa.club/Android/FloatingActionButton在安卓6.0上崩溃的问题.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;FloatingActionButton%E5%9C%A8%E5%AE%89%E5%8D%936.0%E4%B8%8A%E5%B4%A9%E6%BA%83%E7%9A%84%E9%97%AE%E9%A2%98.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="这个问题其实不是什么大问题。6.0似乎用的人不多了没怎么在意。空的时候搜索了一下 stackoverflow 果然有人遇到相同问题。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-09-25T09:56:53.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="FloatingActionButton在安卓6.0上崩溃的问题">
-<meta name="twitter:description" content="这个问题其实不是什么大问题。6.0似乎用的人不多了没怎么在意。空的时候搜索了一下 stackoverflow 果然有人遇到相同问题。">
 
-<link rel="canonical" href="https://gowa.club/Android/FloatingActionButton在安卓6.0上崩溃的问题.html">
+<link rel="canonical" href="https://gowa.club/Android/FloatingActionButton%E5%9C%A8%E5%AE%89%E5%8D%936.0%E4%B8%8A%E5%B4%A9%E6%BA%83%E7%9A%84%E9%97%AE%E9%A2%98.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/FloatingActionButton在安卓6.0上崩溃的问题.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/FloatingActionButton%E5%9C%A8%E5%AE%89%E5%8D%936.0%E4%B8%8A%E5%B4%A9%E6%BA%83%E7%9A%84%E9%97%AE%E9%A2%98.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/FloatingActionButton在安卓6.0上崩溃的问题.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/FloatingActionButton%E5%9C%A8%E5%AE%89%E5%8D%936.0%E4%B8%8A%E5%B4%A9%E6%BA%83%E7%9A%84%E9%97%AE%E9%A2%98.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/FloatingActionButton在安卓6.0上崩溃的问题.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,11 +287,14 @@
       
         <p>这个问题其实不是什么大问题。6.0似乎用的人不多了没怎么在意。空的时候搜索了一下 stackoverflow 果然有人遇到相同问题。</p>
 <a id="more"></a>
+
 <p>原问：<a href="https://stackoverflow.com/questions/49291349/floating-action-button-not-working-in-marshmallow-and-lollipop" target="_blank" rel="noopener">https://stackoverflow.com/questions/49291349/floating-action-button-not-working-in-marshmallow-and-lollipop</a></p>
 <p>我原来的 fab 代码如下：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">android.support.design.widget.FloatingActionButton</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:id</span>=<span class="string">"@+id/btn_push"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_alignParentBottom</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_alignParentEnd</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_alignParentRight</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_marginBottom</span>=<span class="string">"10dp"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_marginEnd</span>=<span class="string">"10dp"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_marginRight</span>=<span class="string">"10dp"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:clickable</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:focusable</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:visibility</span>=<span class="string">"gone"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:backgroundTint</span>=<span class="string">"@color/blue"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:src</span>=<span class="string">"@drawable/ic_done_white_36dp"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>改成：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">android.support.design.widget.FloatingActionButton</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:id</span>=<span class="string">"@+id/btn_push"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_alignParentBottom</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_alignParentEnd</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_alignParentRight</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_marginBottom</span>=<span class="string">"10dp"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_marginEnd</span>=<span class="string">"10dp"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_marginRight</span>=<span class="string">"10dp"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:clickable</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:focusable</span>=<span class="string">"true"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:visibility</span>=<span class="string">"gone"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">app:backgroundTint</span>=<span class="string">"@color/blue"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">app:src</span>=<span class="string">"@drawable/ic_done_white_36dp"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>原因：在低版本使用一个 vector drawables 的时候，需要用这个来指定。</p>
 <blockquote>
 <p>To use VectorDrawableCompat, you need to set android.defaultConfig.vectorDrawables.useSupportLibrary = true.  To use VectorDrawableCompat, you need to make two modifications to your project. First, set android.defaultConfig.vectorDrawables.useSupportLibrary = true in your build.gradle file, and second, use app:srcCompat instead of android:src to refer to vector drawables.</p>
@@ -314,7 +315,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Misc/关于职业与工作方向的思考.html" rel="next" title="关于职业与工作方向的思考">
+                <a href="/Misc/%E5%85%B3%E4%BA%8E%E8%81%8C%E4%B8%9A%E4%B8%8E%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%90%91%E7%9A%84%E6%80%9D%E8%80%83.html" rel="next" title="关于职业与工作方向的思考">
                   <i class="fa fa-chevron-left"></i> 关于职业与工作方向的思考
                 </a>
             </div>
@@ -322,7 +323,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/数据库/安装instantclient连接oracle数据库.html" rel="prev" title="安装instantclient连接oracle数据库">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%AE%89%E8%A3%85instantclient%E8%BF%9E%E6%8E%A5oracle%E6%95%B0%E6%8D%AE%E5%BA%93.html" rel="prev" title="安装instantclient连接oracle数据库">
                   安装instantclient连接oracle数据库 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -408,10 +409,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -440,10 +441,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -518,7 +519,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/FloatingActionButton在安卓6.0上崩溃的问题.html",
+            url: "https://gowa.club/Android/FloatingActionButton%E5%9C%A8%E5%AE%89%E5%8D%936.0%E4%B8%8A%E5%B4%A9%E6%BA%83%E7%9A%84%E9%97%AE%E9%A2%98.html",
             identifier: "Android/FloatingActionButton在安卓6.0上崩溃的问题.html",
             title: "FloatingActionButton在安卓6.0上崩溃的问题"
           }

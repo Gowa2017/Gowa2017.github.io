@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,18 +51,16 @@
 <meta name="keywords" content="JavaScript,Node.js">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nodes.js中的事件调度">
-<meta property="og:url" content="https://gowa.club/JavaScript/Nodes.js中的事件调度.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;JavaScript&#x2F;Nodes.js%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E8%B0%83%E5%BA%A6.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Node.js 正是因为其 Event Loop 事件调度器的设计让其拥有了进行非阻塞操作的能力————尽管 JavaScript 是单线程的———— 这通过在可能的时候，从内核处把任务卸载下来达到。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/node-event-loop.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;node-event-loop.png">
 <meta property="og:updated_time" content="2018-12-14T12:45:02.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Nodes.js中的事件调度">
-<meta name="twitter:description" content="Node.js 正是因为其 Event Loop 事件调度器的设计让其拥有了进行非阻塞操作的能力————尽管 JavaScript 是单线程的———— 这通过在可能的时候，从内核处把任务卸载下来达到。">
-<meta name="twitter:image" content="https://gowa.club/res/node-event-loop.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;node-event-loop.png">
 
-<link rel="canonical" href="https://gowa.club/JavaScript/Nodes.js中的事件调度.html">
+<link rel="canonical" href="https://gowa.club/JavaScript/Nodes.js%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E8%B0%83%E5%BA%A6.html">
 
 
 <script id="page-configurations">
@@ -227,12 +225,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Nodes.js中的事件调度.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Nodes.js%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E8%B0%83%E5%BA%A6.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -273,7 +271,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/JavaScript/Nodes.js中的事件调度.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/JavaScript/Nodes.js%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E8%B0%83%E5%BA%A6.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/Nodes.js中的事件调度.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -291,9 +289,10 @@
       
         <p>Node.js 正是因为其 Event Loop 事件调度器的设计让其拥有了进行非阻塞操作的能力————尽管 JavaScript 是单线程的———— 这通过在可能的时候，从内核处把任务卸载下来达到。</p>
 <a id="more"></a>
+
 <h1 id="事件调度解释"><a href="#事件调度解释" class="headerlink" title="事件调度解释"></a>事件调度解释</h1><p>当 Node.js 启动时，会初始化 Event Loop，处理输入的脚本文件。我们在脚本中我们可能会做 异步的 API 调用，定时器调度，或者调用 <code>process.nextTick()</code>，然后再开始处理 Event Loop。</p>
 <p>下面就是 Event Loop 的运行处理流程：</p>
-<p><img src="../res/node-event-loop.png" alt></p>
+<p><img src="../res/node-event-loop.png" alt=""></p>
 <p>在上面的图中，每个方框内的，Node.js 官方文档把它叫做 <em>Phase</em>，我把它叫做环节这样理解。</p>
 <p>每个<strong>环节</strong>都有一个 FIFO 的回调函数队列需要执行。通常，每个环节都有其特别的地方，所以当 Event Loop 每进入一个环节的时候，都会进行本环节特定的操作，然后执行环节内的回调队列，直到：队列清空或已达到最大可执行数量。当队列为空或者达到执行数量限制就会进入下一环节。</p>
 <p>因为任何一个操作都可能调度更多的操作，且在 POLL 环节处理的新事件是由内核排队的，poll事件可以在正在处理 poll 事件的时候 的时候就排队。由此，长时间运行的回调允许 Poll 环境运行的时间比 timer 环节更长。</p>
@@ -312,6 +311,7 @@
 </blockquote>
 <p>举例说明，我们希望调度一个 100ms 后的任务，然后我们的脚本却开始异步读一个文件，花了 95 ms。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">someAsyncOperation</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Assume this takes 95ms to complete</span></span><br><span class="line">  fs.readFile(<span class="string">'/path/to/file'</span>, callback);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> timeoutScheduled = <span class="built_in">Date</span>.now();</span><br><span class="line"></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> delay = <span class="built_in">Date</span>.now() - timeoutScheduled;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;delay&#125;</span>ms have passed since I was scheduled`</span>);</span><br><span class="line">&#125;, <span class="number">100</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// do someAsyncOperation which takes 95 ms to complete</span></span><br><span class="line">someAsyncOperation(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> startCallback = <span class="built_in">Date</span>.now();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// do something that will take 10ms...</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="built_in">Date</span>.now() - startCallback &lt; <span class="number">10</span>) &#123;</span><br><span class="line">    <span class="comment">// do nothing</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
 <p>当事件循环进入 poll 环节，其队列是空的 (fs.readFile并没有完成），所以会一直等待，直到某个定时器到期。然而，在等待了 95ms 后，fs.readFile 完成了，其回调函数被添加到了 poll 环节的回调队列内，这个回调函数会执行 10ms。当回调结束后，队列为空，因为定时器已经到期咯，所以会立马执行定事器的回调。在这个例子中，可以看到事实上定时器花了 105ms 才执行。</p>
 <h2 id="pending-callbacks"><a href="#pending-callbacks" class="headerlink" title="pending callbacks"></a>pending callbacks</h2><p>这个环节会执行某些操作系统的回调，比如说 tcp 的错误。当一个 tcp 套接字收到一个 ECONNREFUSED  错误的时候，某些 *nix 系统会报告这个错误。这些些回调就放在这个环节的队列中。</p>
 <h2 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h2><p>此环节有两个主要的功能：</p>
@@ -337,24 +337,32 @@
 <p>这两个函数的执行顺序会因为其被调用的上下文而不同。如果两者都是在 main 模块内调用，那么这个由进程的性能决定。</p>
 <p>例如，如果我们在一 I/O 循环外调度这两个函数，这两个函数执行的顺序是不定的，因为这由进程的性能决定。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// timeout_vs_immediate.js</span></span><br><span class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'timeout'</span>);</span><br><span class="line">&#125;, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">setImmediate(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'immediate'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ node timeout_vs_immediate.js</span><br><span class="line">timeout</span><br><span class="line">immediate</span><br><span class="line"></span><br><span class="line">$ node timeout_vs_immediate.js</span><br><span class="line">immediate</span><br><span class="line">timeout</span><br></pre></td></tr></table></figure>
+
 <p>然而，如果我们在一个 I/O 周期内调度这两个函数，那么 setImmediate() 总是会先执行：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// timeout_vs_immediate.js</span></span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"></span><br><span class="line">fs.readFile(__filename, () =&gt; &#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'timeout'</span>);</span><br><span class="line">  &#125;, <span class="number">0</span>);</span><br><span class="line">  setImmediate(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'immediate'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ node timeout_vs_immediate.js</span><br><span class="line">immediate</span><br><span class="line">timeout</span><br><span class="line"></span><br><span class="line">$ node timeout_vs_immediate.js</span><br><span class="line">immediate</span><br><span class="line">timeout</span><br></pre></td></tr></table></figure>
+
 <p>使用 setImmediate() 的优势是：如果是在 I/O 周期内，那么它永远会比 setTimeOut() 调度的回调先执行。</p>
 <h1 id="process-nextTick"><a href="#process-nextTick" class="headerlink" title="process.nextTick()"></a>process.nextTick()</h1><p>在前面的图表中我们并没有出现 process.netTick()，即使其是异步API的一部分。这是因为，技术上来说，<code>process.nextTick()</code> 并不是事件循环的一部分。相反，当前操作完成后，<em>nextTickQueue</em> 将会被处理，而不管当前处于事件循环的哪个环节。</p>
 <p>回去看我们的图表，每当我们在任何一个环节调用 <code>process.nextTick()</code> 的时候，所有传递给 <code>process.nextTick()</code> 的回调都会在事件循环继续前优先解决。 这可能会产生一些比较坏的情况，因为我们可以通过递归调用 <code>process.nextTick()</code> 来饿死我们的 I/O ，这样事件循环永远到不了 poll 环节。</p>
 <h2 id="为什么会允许这样？"><a href="#为什么会允许这样？" class="headerlink" title="为什么会允许这样？"></a>为什么会允许这样？</h2><p>这就是设计上的统一了：一个API即使不需要是异步的也要设计成异步。例如：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">apiCall</span>(<span class="params">arg, callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> arg !== <span class="string">'string'</span>)</span><br><span class="line">    <span class="keyword">return</span> process.nextTick(callback,</span><br><span class="line">                            <span class="keyword">new</span> <span class="built_in">TypeError</span>(<span class="string">'argument should be string'</span>));</span><br><span class="line">                            &#125;</span><br></pre></td></tr></table></figure>
+
 <p>上面的代码做一个参数检查，如果不对，把错误传递给回调。最近更新的API允许将参数传递给process.nextTick（），允许它将回调后传递的任何参数作为参数传播到回调，因此您不必嵌套函数。</p>
 <p>我们做的事情是：将一个错误返回给用户，但这只是在我们允许后面的代码被执行的情况下。通过使用 <code>process.nextTick()</code>，我们保证 <code>apiCall</code> 总是在后续的用户代码后，事件循环继续前执行。为了达到这个目的，JS 的回调栈允许回绕，且立刻执行提供的回调函数，此回调允许用户递归调用 <code>process.nextTick()</code> 而不会达到一个 <em>RangeError: Maximum call stack size exceeded from v8</em> 的错误。</p>
 <p>这个设计可能会有一些潜在的问题出现。例如：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> bar;</span><br><span class="line"></span><br><span class="line"><span class="comment">// this has an asynchronous signature, but calls callback synchronously</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">someAsyncApiCall</span>(<span class="params">callback</span>) </span>&#123; callback(); &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// the callback is called before `someAsyncApiCall` completes.</span></span><br><span class="line">someAsyncApiCall(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// since someAsyncApiCall has completed, bar hasn't been assigned any value</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'bar'</span>, bar); <span class="comment">// undefined</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">bar = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
 <p>用户定义 <code>someAsyncApiCall()</code> 有一个异步签名，但实际上却是同步的。当其被调用时，回调函数会立刻执行。在回调中，其试图访问 bar 变量，但此时其作用域内并没有这个，因为还没有运行到后面的代码。</p>
 <p>现在我们把这个回调放在 <code>process.nextTick()</code>内，那么脚本现在有了执行到最后的能力。但其也有不允许事件循环继续的能力。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> bar;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">someAsyncApiCall</span>(<span class="params">callback</span>) </span>&#123;</span><br><span class="line">  process.nextTick(callback);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">someAsyncApiCall(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'bar'</span>, bar); <span class="comment">// 1</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">bar = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
 <p>这是现实世界的一个例子：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> server = net.createServer(<span class="function"><span class="params">()</span> =&gt;</span> &#123;&#125;).listen(<span class="number">8080</span>);</span><br><span class="line"></span><br><span class="line">server.on(<span class="string">'listening'</span>, () =&gt; &#123;&#125;);</span><br></pre></td></tr></table></figure>
+
 <h1 id="process-nextTick-vs-setImmediate"><a href="#process-nextTick-vs-setImmediate" class="headerlink" title="process.nextTick() vs setImmediate()"></a>process.nextTick() vs setImmediate()</h1><p>我们现在有了两个相似的调用，但他们的名字有点迷惑：</p>
 <ul>
 <li>process.nextTick() 会在当前环节立刻执行</li>
@@ -370,6 +378,7 @@
 <li>在回调栈解绑后，事件循环继续前有必要允许一个回调执行的时候。</li>
 </ol>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> server = net.createServer();</span><br><span class="line">server.on(<span class="string">'connection'</span>, (conn) =&gt; &#123; &#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>);</span><br><span class="line">server.on(<span class="string">'listening'</span>, () =&gt; &#123; &#125;);</span><br></pre></td></tr></table></figure>
+
 <p><code>listen()</code> 在事件循环的开始执行，但是 listening 的回调被放在了 setImmediate()。如果不传递一个域名，那么绑定到端口会立刻执行。对于事件循环来说，其必须马上到达 poll 环节，因为有可能在 listenting 事件前已经有连接进来了。</p>
 
     </div>
@@ -388,7 +397,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/JavaScript/Promise的使用及API.html" rel="next" title="Promise的使用及API">
+                <a href="/JavaScript/Promise%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8F%8AAPI.html" rel="next" title="Promise的使用及API">
                   <i class="fa fa-chevron-left"></i> Promise的使用及API
                 </a>
             </div>
@@ -396,7 +405,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/JavaScript/JavaScript的原型.html" rel="prev" title="JavaScript的原型继承与原型链">
+                <a href="/JavaScript/JavaScript%E7%9A%84%E5%8E%9F%E5%9E%8B.html" rel="prev" title="JavaScript的原型继承与原型链">
                   JavaScript的原型继承与原型链 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -483,10 +492,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -515,10 +524,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -593,7 +602,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/JavaScript/Nodes.js中的事件调度.html",
+            url: "https://gowa.club/JavaScript/Nodes.js%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E8%B0%83%E5%BA%A6.html",
             identifier: "JavaScript/Nodes.js中的事件调度.html",
             title: "Nodes.js中的事件调度"
           }

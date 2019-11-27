@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Windows,Asm,逆向">
 <meta property="og:type" content="article">
 <meta property="og:title" content="X86汇编操作数寻址">
-<meta property="og:url" content="https://gowa.club/Asm/X86汇编操作数寻址.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Asm&#x2F;X86%E6%B1%87%E7%BC%96%E6%93%8D%E4%BD%9C%E6%95%B0%E5%AF%BB%E5%9D%80.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="还是在大学的时候学汇编原理和接口技术的时候看过这些东西，不甚明了，现在就来重新看一下。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-09-18T12:28:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="X86汇编操作数寻址">
-<meta name="twitter:description" content="还是在大学的时候学汇编原理和接口技术的时候看过这些东西，不甚明了，现在就来重新看一下。">
 
-<link rel="canonical" href="https://gowa.club/Asm/X86汇编操作数寻址.html">
+<link rel="canonical" href="https://gowa.club/Asm/X86%E6%B1%87%E7%BC%96%E6%93%8D%E4%BD%9C%E6%95%B0%E5%AF%BB%E5%9D%80.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Asm/X86汇编操作数寻址.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Asm/X86%E6%B1%87%E7%BC%96%E6%93%8D%E4%BD%9C%E6%95%B0%E5%AF%BB%E5%9D%80.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -277,7 +275,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Asm/X86汇编操作数寻址.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Asm/X86%E6%B1%87%E7%BC%96%E6%93%8D%E4%BD%9C%E6%95%B0%E5%AF%BB%E5%9D%80.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Asm/X86汇编操作数寻址.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -295,6 +293,9 @@
       
         <p>还是在大学的时候学汇编原理和接口技术的时候看过这些东西，不甚明了，现在就来重新看一下。</p>
 <a id="more"></a>
+
+
+
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>粗略的来看，CPU 是一个计算单元，但其要计算的指令是从存储器，RAM来的。然后一般来说，一个程序在运行的时候，会将硬盘中的代码以一定的形式解析后加载到 RAM 中，事实上，CPU 的工作做成，就是从 RAM 拿数据，拿指令，然后执行的过程。</p>
 <p>所谓的寻址，就是如何定位位于 RAM 中的内存单元的问题了。</p>
 <h1 id="寄存器"><a href="#寄存器" class="headerlink" title="寄存器"></a>寄存器</h1><p>X86 当前已经定义了很多的寄存器了。大体来说分为四类：</p>
@@ -306,16 +307,30 @@
 </ul>
 <h2 id="通用寄存器"><a href="#通用寄存器" class="headerlink" title="通用寄存器"></a>通用寄存器</h2><p>这个是用得最多的寄存器了，但是他们还可以分开来，当做 8/16 位的寄存器来使用：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">32 bits : EAX EBX ECX EDX</span><br><span class="line">16 bits : AX BX CX DX</span><br><span class="line"> 8 bits : AH AL BH BL CH CL DH DL</span><br></pre></td></tr></table></figure>
+
 <p>在这里 H，L 指的是寄存器的高字节和低字节：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">EAX,AX,AH,AL : 加法寄存器（累加器） </span><br><span class="line">               用于 I/O 端口访问，算数运算，中断调用等等。</span><br><span class="line"></span><br><span class="line">EBX,BX,BH,BL : 基址寄存器。用来作为一个指向内存位置的指针。（在分段模式下，其指向的是 DS 寄存器内的）。</span><br><span class="line">               还可用来获取一些中断的返回值。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ECX,CX,CH,CL : 计数寄存器。</span><br><span class="line">               用以循环计数或者是位移。</span><br><span class="line">               获取一些中断的返回值。</span><br><span class="line"></span><br><span class="line">EDX,DX,DH,DL : 数据寄存器</span><br><span class="line">               I/O端口访问，算数运算，一些中断调用</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="段寄存器"><a href="#段寄存器" class="headerlink" title="段寄存器"></a>段寄存器</h2><p>段寄存器保存的是在分段模式下各数据段，代码段的地址。他们是16位的值。，他们只能被通用寄存器设置值，或特殊的指令设置值。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CS         : 持有程序的代码段。</span><br><span class="line">             改变它，可能会导致程序挂起。</span><br><span class="line"></span><br><span class="line">DS         : 程序的数据段。</span><br><span class="line">             改变它可能会导致获取不正确的数据。</span><br><span class="line"></span><br><span class="line">ES,FS,GS   : 扩展寄存器，用来针对远距离指针寻址。</span><br><span class="line"></span><br><span class="line">SS         : 程序使用的堆栈段寄存器。有些时候和 DS 一样。</span><br><span class="line">             改变它的址会有不可预知的结果，其与很多数据相关。</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="索引和指针寄存器"><a href="#索引和指针寄存器" class="headerlink" title="索引和指针寄存器"></a>索引和指针寄存器</h2><p>索引和指针寄存器指定地址的偏移部分。用途很广，但是每个寄存器都有一个特殊的功能。有的时候用来和一个段寄存器配合，以指定一个很远的地址。 “E” 开头的寄存器只能在保护模式下使用。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ES:EDI EDI DI : 目的索引寄存器。</span><br><span class="line">                用来做字符，内存数组的复制或者设置及配合 ES 进行远距离寻址。</span><br><span class="line"></span><br><span class="line">DS:ESI EDI SI : 源索引寄存器。</span><br><span class="line">                用来做字符，内存数组的复制或者设置</span><br><span class="line"></span><br><span class="line">SS:EBP EBP BP : 堆栈基址寄存器。</span><br><span class="line">                持有堆栈的基地址。</span><br><span class="line">                </span><br><span class="line">SS:ESP ESP SP : 堆栈寄存器。</span><br><span class="line">                持有堆栈顶地址。</span><br><span class="line"></span><br><span class="line">CS:EIP EIP IP : 指令寄存器。只读。</span><br><span class="line">                下一条指令的偏移。</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="标志寄存器"><a href="#标志寄存器" class="headerlink" title="标志寄存器"></a>标志寄存器</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Bit   Label    Desciption</span><br><span class="line">---------------------------</span><br><span class="line">0      CF      Carry flag</span><br><span class="line">2      PF      Parity flag</span><br><span class="line">4      AF      Auxiliary carry flag</span><br><span class="line">6      ZF      Zero flag</span><br><span class="line">7      SF      Sign flag</span><br><span class="line">8      TF      Trap flag</span><br><span class="line">9      IF      Interrupt enable flag</span><br><span class="line">10     DF      Direction flag</span><br><span class="line">11     OF      Overflow flag</span><br><span class="line">12-13  IOPL    I/O Priviledge level</span><br><span class="line">14     NT      Nested task flag</span><br><span class="line">16     RF      Resume flag</span><br><span class="line">17     VM      Virtual 8086 mode flag</span><br><span class="line">18     AC      Alignment check flag (486+)</span><br><span class="line">19     VIF     Virutal interrupt flag</span><br><span class="line">20     VIP     Virtual interrupt pending flag</span><br><span class="line">21     ID      ID flag</span><br></pre></td></tr></table></figure>
+
+
+
 <h1 id="寻址"><a href="#寻址" class="headerlink" title="寻址"></a>寻址</h1><h2 id="间接内存寻址"><a href="#间接内存寻址" class="headerlink" title="间接内存寻址"></a>间接内存寻址</h2><p>间接寻址，指定了给定地址的内容。</p>
 <p>比如，下面这个指令就是将 <strong>DS:BX</strong> 地址处，WORD 长单元内的内容给 <strong>AX</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov     ax, WORD PTR [bx]</span><br></pre></td></tr></table></figure>
+
 <p>其中：</p>
 <ul>
 <li>WORD 指定数据的大小</li>
@@ -323,12 +338,17 @@
 </ul>
 <p>我们可以指定多个寄存器：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov ax, [ax+si]</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="地址偏移"><a href="#地址偏移" class="headerlink" title="地址偏移"></a>地址偏移</h2><p>地址偏移是将一个常量加到有效地址上。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">table   WORD    100 DUP (0)</span><br><span class="line">        .</span><br><span class="line">        .</span><br><span class="line">        .</span><br><span class="line">        mov     ax, table[ esi ]</span><br></pre></td></tr></table></figure>
+
 <p>在上面的例子中，表达式  <strong>table[esi]</strong>  表示 table 进行了偏移，table 在这里是提供了一个数组的地址。</p>
 <p><strong>ESI</strong>  是数组中一个元素的索引，一般是运行时在循环中进行计算出来。</p>
 <h2 id="多重地址偏移"><a href="#多重地址偏移" class="headerlink" title="多重地址偏移"></a>多重地址偏移</h2><p>每个偏移量都可以顺是一个地址或者数字的常量。汇编器会将所有的偏移量加起来。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">table   WORD    100 DUP (0)</span><br><span class="line">        .</span><br><span class="line">        .</span><br><span class="line">        .</span><br><span class="line">        mov     ax, table[bx][di]+6</span><br></pre></td></tr></table></figure>
+
 <p><strong>table</strong> 和 <strong>6</strong> 都是偏移量</p>
 <h2 id="操作数大小"><a href="#操作数大小" class="headerlink" title="操作数大小"></a>操作数大小</h2><p>必须对间接寻址指定地址大小。</p>
 <ol>
@@ -338,12 +358,16 @@
 </ol>
 <p>假设 table 的大小是  <strong>WORD</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">table   WORD    100 DUP (0)</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">mov     table[bx], 0      ; 2 bytes - from size of table</span><br><span class="line">mov     BYTE PTR table, 0 ; 1 byte  - specified by BYTE</span><br><span class="line">mov     ax, [bx]          ; 2 bytes - implied by AX</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="间接语法选项"><a href="#间接语法选项" class="headerlink" title="间接语法选项"></a>间接语法选项</h2><p>间接寻址有多种方式，</p>
 <ul>
 <li>但是所有的寄存器都必须在 <strong>[]</strong> 中，。</li>
 <li>可以在 <strong>[]</strong>  多个寄存器用 <strong>+</strong> 连接，或者 <strong>[]</strong> 每个寄存器再连接</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov     ax, table[bx][di]</span><br><span class="line">mov     ax, table[di][bx]</span><br><span class="line">mov     ax, table[bx+di]</span><br><span class="line">mov     ax, [table+bx+di]</span><br><span class="line">mov     ax, [bx][di]+table</span><br></pre></td></tr></table></figure>
+
 <p>上面几种方式其实都是一个效果，拿到 table 中 索引是 <strong>BX+DI</strong> 的元素到 <strong>AX</strong>。</p>
 <h2 id="倍乘因子"><a href="#倍乘因子" class="headerlink" title="倍乘因子"></a>倍乘因子</h2><p>主要是用来索引数组。例如</p>
 <ul>
@@ -354,6 +378,9 @@
 </ul>
 <p>性能上不会有损失。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov     eax, darray[edx*4]     ; Load double of double array</span><br><span class="line">mov     eax, [esi*8][edi]      ; Load double of quad array</span><br><span class="line">mov     ax, wtbl[ecx+2][edx*2] ; Load word of word array</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="内存段与基础寄存器"><a href="#内存段与基础寄存器" class="headerlink" title="内存段与基础寄存器"></a>内存段与基础寄存器</h2><p>在间接寻址中，<strong>基本寄存器</strong> 表示在哪个段内计算内存地址。所以我们需要知道哪个在间接寻址的时候是以哪个为寄存器为寄存进行寻址的。</p>
 <ul>
 <li>如果基础寄存器是，EBP， ESP ，那么针对 SS 段进行寻址。然而，如果 EBP 有倍乘因子，那么就是在 DS 内寻址。</li>
@@ -366,16 +393,32 @@
 <li>如果没有倍乘因子，第一个就是基址寄存器。</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov   eax, [edx][ebp*4] ; EDX base (not scaled - seg DS)</span><br><span class="line">mov   eax, [edx*1][ebp] ; EBP base (not scaled - seg SS)</span><br><span class="line">mov   eax, [edx][ebp]   ; EDX base (first - seg DS)</span><br><span class="line">mov   eax, [ebp][edx]   ; EBP base (first - seg SS)</span><br><span class="line">mov   eax, [ebp]        ; EBP base (only - seg SS)</span><br><span class="line">mov   eax, [ebp*2]      ; EBP*2 index (seg DS)</span><br></pre></td></tr></table></figure>
+
+
+
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><h2 id="立即模式"><a href="#立即模式" class="headerlink" title="立即模式"></a><strong>立即模式</strong></h2><p>不访问内存，操作数就是指令的一部分。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov ax, 567</span><br><span class="line">mov ah, 09h</span><br><span class="line">mov dx, offset Prompt</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="寄存器寻址"><a href="#寄存器寻址" class="headerlink" title="寄存器寻址"></a>寄存器寻址</h2><p>不会访问内存，操作数在寄存器内</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">add ax, bx</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="间接模式"><a href="#间接模式" class="headerlink" title="间接模式"></a>间接模式</h2><p>内存只访问一次，指令的操作数字段包含了操作的地址。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">value dword 0</span><br><span class="line">		..</span><br><span class="line">		add ax, value ; 声明符号</span><br><span class="line">		add eax, [value]; 同上</span><br></pre></td></tr></table></figure>
+
+
+
 <p>汇编代码</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tbl DW 20 DUP(0)</span><br><span class="line">	..</span><br><span class="line">	mov [tbl], 56</span><br></pre></td></tr></table></figure>
+
+
+
 <p>和 C 代码</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">tbl[<span class="number">0</span>] = <span class="number">50</span></span><br></pre></td></tr></table></figure>
+
 <p>一样。</p>
 <h2 id="寄存器间接寻址（间接寻址模式）"><a href="#寄存器间接寻址（间接寻址模式）" class="headerlink" title="寄存器间接寻址（间接寻址模式）"></a>寄存器间接寻址（间接寻址模式）</h2><p>常用来在程序循环中寻址数组数据。</p>
 <ul>
@@ -384,11 +427,15 @@
 <li>对于 16 位的寻址，偏移量可以在 <strong>BX,SI,DI</strong> 中。</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov bx, offset Table  ; Load address</span><br><span class="line">add ax, [bx]          ; Register indirect addressing</span><br></pre></td></tr></table></figure>
+
+
+
 <ul>
 <li><strong>[BX]</strong> 表示 BX 内是一个地址偏移量。表现得像一个指针。</li>
 </ul>
 <p>寄存器间接模式可以用来实现数组。比如我们要累加一个 word 数组：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">       mov cx, size          ; set up size of Table</span><br><span class="line">       mov bx, offset Table  ; BX &lt;- address of Table</span><br><span class="line">       xor ax, ax            ; zero out Sum</span><br><span class="line">Loop1:</span><br><span class="line">       add ax, [bx]</span><br><span class="line">       inc bx      ; each word is 2 bytes long, so</span><br><span class="line">       inc bx      ; need to increment BX twice!</span><br><span class="line">       loop Loop1</span><br></pre></td></tr></table></figure>
+
 <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>是一个常量基址+寄存器。</p>
 <ul>
 <li>固定地址（基址）+ 可变的寄存器偏移（操作数字段含有一个常量基址）</li>
@@ -396,8 +443,10 @@
 <li>这也被叫做数组类型寻址，或者也叫做 偏移寻址。</li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov eax, [ ebx + 5 ]</span><br><span class="line">mov eax, [ ebx + esi + 5 ]</span><br></pre></td></tr></table></figure>
+
 <p>在 <strong>[]</strong> 内结合使用寄存器是有限制的：<strong>[]</strong> 不能同时出现 DI,SI，不能同时出现 EBX, EBP。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">add ax, Table[ bx ]</span><br><span class="line">add ax, [ Table + bx ]</span><br><span class="line">add ax, Table + [ bx ]</span><br><span class="line">add ax, [ bx ] + Table</span><br></pre></td></tr></table></figure>
+
 <p>这几种方式是相同的。</p>
 <h2 id="索引倍乘"><a href="#索引倍乘" class="headerlink" title="索引倍乘"></a>索引倍乘</h2><p>基数+寄存器偏移*倍乘因子</p>
 <h2 id="栈寻址"><a href="#栈寻址" class="headerlink" title="栈寻址"></a>栈寻址</h2><p>PUSH,POP。 ESP 会自动的增加或者减少。</p>
@@ -405,10 +454,17 @@
 <p>直接跳转到一个地址。</p>
 <h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><p>我们用一个 c 代码来看一下。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a+b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">return</span> add(a,b);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>编译成汇编代码：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">c++  -S -mllvm --x86-asm-syntax=intel t.cpp</span><br></pre></td></tr></table></figure>
+
+
+
 <p>打开  t.s</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">	.section	__TEXT,__text,regular,pure_instructions</span><br><span class="line">	.build_version macos, 10, 14	sdk_version 10, 14</span><br><span class="line">	.intel_syntax noprefix</span><br><span class="line">	.globl	__Z3addii               ## -- Begin function _Z3addii</span><br><span class="line">	.p2align	4, 0x90</span><br><span class="line">__Z3addii:                              ## @_Z3addii add 函数</span><br><span class="line">	.cfi_startproc</span><br><span class="line">## %bb.0:</span><br><span class="line">	push	rbp	;基址寄存器入栈</span><br><span class="line">	.cfi_def_cfa_offset 16</span><br><span class="line">	.cfi_offset rbp, -16</span><br><span class="line">	mov	rbp, rsp ; 基址寄存器指向栈顶</span><br><span class="line">	.cfi_def_cfa_register rbp</span><br><span class="line">	mov	dword ptr [rbp - 4], edi; 参数 a 的值复制到新的栈帧内存</span><br><span class="line">	mov	dword ptr [rbp - 8], esi; 参数 b 的值复制到新的栈帧内存</span><br><span class="line">	mov	esi, dword ptr [rbp - 4];  将栈帧内 a 的值给到 esi</span><br><span class="line">	add	esi, dword ptr [rbp - 8];  加上参数 b 的值</span><br><span class="line">	mov	eax, esi; 将结果给  eax</span><br><span class="line">	pop	rbp; 恢复</span><br><span class="line">	ret</span><br><span class="line">	.cfi_endproc</span><br><span class="line">                                        ## -- End function</span><br><span class="line">	.globl	_main                   ## -- Begin function main</span><br><span class="line">	.p2align	4, 0x90</span><br><span class="line">_main:                                  ## @main 程序启动入口</span><br><span class="line">	.cfi_startproc</span><br><span class="line">## %bb.0:</span><br><span class="line">	push	rbp	;基址寄存器入栈</span><br><span class="line">	.cfi_def_cfa_offset 16</span><br><span class="line">	.cfi_offset rbp, -16</span><br><span class="line">	mov	rbp, rsp; 基址寄存器指向栈顶</span><br><span class="line">	.cfi_def_cfa_register rbp</span><br><span class="line">	sub	rsp, 16	; 堆栈寄存器下移 16 字节。</span><br><span class="line">	mov	dword ptr [rbp - 4], 0 ; 栈顶位置第一个4字节设置为0 </span><br><span class="line">	mov	dword ptr [rbp - 8], 2 ; 栈顶位置第二个4字节设置为2 int a = 2;</span><br><span class="line">	mov	dword ptr [rbp - 12], 3; 栈顶位置第三个4字节设置为3 int b = 3;</span><br><span class="line">	mov	edi, dword ptr [rbp - 8]; 参数 a 传入 DI</span><br><span class="line">	mov	esi, dword ptr [rbp - 12]; 参数 b 传入 SI</span><br><span class="line">	call	__Z3addii ; 调用  add 函数。</span><br><span class="line">	add	rsp, 16 ; 栈指到栈顶</span><br><span class="line">	pop	rbp ; BP 值向原来的值。</span><br><span class="line">	ret</span><br><span class="line">	.cfi_endproc</span><br><span class="line">                                        ## -- End function</span><br><span class="line"></span><br><span class="line">.subsections_via_symbols</span><br></pre></td></tr></table></figure>
+
+
+
 <p>通过上面例子就能看到，事实上调用函数的时候传的参数，过程是这样的：</p>
 <ol>
 <li>将参数值复制到寄存器。</li>
@@ -428,14 +484,14 @@
           <div class="post-tags">
               <a href="/tags/Windows/" rel="tag"># Windows</a>
               <a href="/tags/Asm/" rel="tag"># Asm</a>
-              <a href="/tags/逆向/" rel="tag"># 逆向</a>
+              <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"># 逆向</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Windows/使用远程线程进行DLL的注入.html" rel="next" title="使用远程线程进行DLL的注入">
+                <a href="/Windows/%E4%BD%BF%E7%94%A8%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E8%BF%9B%E8%A1%8CDLL%E7%9A%84%E6%B3%A8%E5%85%A5.html" rel="next" title="使用远程线程进行DLL的注入">
                   <i class="fa fa-chevron-left"></i> 使用远程线程进行DLL的注入
                 </a>
             </div>
@@ -443,7 +499,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/RxJava/RxJava之retryWhen操作符.html" rel="prev" title="RxJava之retryWhen操作符">
+                <a href="/RxJava/RxJava%E4%B9%8BretryWhen%E6%93%8D%E4%BD%9C%E7%AC%A6.html" rel="prev" title="RxJava之retryWhen操作符">
                   RxJava之retryWhen操作符 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -530,10 +586,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -562,10 +618,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -640,7 +696,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Asm/X86汇编操作数寻址.html",
+            url: "https://gowa.club/Asm/X86%E6%B1%87%E7%BC%96%E6%93%8D%E4%BD%9C%E6%95%B0%E5%AF%BB%E5%9D%80.html",
             identifier: "Asm/X86汇编操作数寻址.html",
             title: "X86汇编操作数寻址"
           }

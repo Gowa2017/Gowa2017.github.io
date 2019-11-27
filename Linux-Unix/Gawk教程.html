@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Linux,AWK">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gawk教程">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/Gawk教程.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;Gawk%E6%95%99%E7%A8%8B.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="awk与sed，两大神器，处理字符文本效率爆棚。一直有用，但是没有完整的记录，临时百度感觉不好，做一个完整系统的阅读，并进行info手册的翻译，方便时时回顾。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.267Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Gawk教程">
-<meta name="twitter:description" content="awk与sed，两大神器，处理字符文本效率爆棚。一直有用，但是没有完整的记录，临时百度感觉不好，做一个完整系统的阅读，并进行info手册的翻译，方便时时回顾。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/Gawk教程.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/Gawk%E6%95%99%E7%A8%8B.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Gawk教程.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Gawk%E6%95%99%E7%A8%8B.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -278,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/Gawk教程.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/Gawk%E6%95%99%E7%A8%8B.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/Gawk教程.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,24 +292,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>awk与sed，两大神器，处理字符文本效率爆棚。一直有用，但是没有完整的记录，临时百度感觉不好，做一个完整系统的阅读，并进行info手册的翻译，方便时时回顾。<br><a id="more"></a></p>
+        <p>awk与sed，两大神器，处理字符文本效率爆棚。一直有用，但是没有完整的记录，临时百度感觉不好，做一个完整系统的阅读，并进行info手册的翻译，方便时时回顾。</p>
+<a id="more"></a>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>awk在很多系统上都有不同的实现，Gawk是awk在GNU/Linux的实现，其基本命令格式为：</p>
-<pre><code>  gawk [ POSIX or GNU style options ] -f program-file [ -- ] file ...
-  gawk [ POSIX or GNU style options ] [ -- ] program-text file ...
-</code></pre><p> 更加直观一些的格式是:</p>
-<pre><code> awk [ -F fs ] [ -v var=value ] [ &#39;prog&#39; | -f progfile] [ file ... ]
-</code></pre><p> 或者更简单一般的形式  </p>
-<pre><code> awk [ -F fs ] &#39;pattern { action }&#39;
-</code></pre><h1 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h1><p> awk以行为单为进行处理输入，然后用分隔符<strong>FS(field separator)</strong>把每行分隔成不同的<strong>域(field)</strong>。默认情况下使用空白符作为分隔符，但我们可以指定为任何我们想用的分隔符。<br> <code>$0</code>代表了整个行，<code>$1, $2 ...</code>代表了被分隔开的每个域。<br>接下来就会根据匹配 <strong>pattern</strong>的进行 <strong>action</strong> 动作。</p>
-<pre><code> awk -F: &#39;{print $0,$1,$2,$3}
-</code></pre><p> 上面这个例子没有 <strong>pattern</strong> 代表着无条件执行 <strong>action</strong> 的意思。<br> 然后观察一下输入是什么情况。  </p>
+<pre><code>gawk [ POSIX or GNU style options ] -f program-file [ -- ] file ...
+gawk [ POSIX or GNU style options ] [ -- ] program-text file ...</code></pre><p> 更加直观一些的格式是:</p>
+<pre><code>awk [ -F fs ] [ -v var=value ] [ &apos;prog&apos; | -f progfile] [ file ... ]</code></pre><p> 或者更简单一般的形式  </p>
+<pre><code>awk [ -F fs ] &apos;pattern { action }&apos;</code></pre><h1 id="工作原理"><a href="#工作原理" class="headerlink" title="工作原理"></a>工作原理</h1><p> awk以行为单为进行处理输入，然后用分隔符<strong>FS(field separator)</strong>把每行分隔成不同的<strong>域(field)</strong>。默认情况下使用空白符作为分隔符，但我们可以指定为任何我们想用的分隔符。<br> <code>$0</code>代表了整个行，<code>$1, $2 ...</code>代表了被分隔开的每个域。<br>接下来就会根据匹配 <strong>pattern</strong>的进行 <strong>action</strong> 动作。</p>
+<pre><code>awk -F: &apos;{print $0,$1,$2,$3}</code></pre><p> 上面这个例子没有 <strong>pattern</strong> 代表着无条件执行 <strong>action</strong> 的意思。<br> 然后观察一下输入是什么情况。  </p>
 <h1 id="命令行选项"><a href="#命令行选项" class="headerlink" title="命令行选项"></a>命令行选项</h1><ul>
-<li>-F fs | —field-separator fs 指定域分隔符  </li>
-<li>-f source-file | —file source-file 指定程序文件  </li>
-<li>-v var=value | —assign var=value 在执行程序前设置变量。多个变量用<code>awk -v foo=1 -v bar=2</code>来指定  </li>
+<li>-F fs | –field-separator fs 指定域分隔符  </li>
+<li>-f source-file | –file source-file 指定程序文件  </li>
+<li>-v var=value | –assign var=value 在执行程序前设置变量。多个变量用<code>awk -v foo=1 -v bar=2</code>来指定  </li>
 <li>-b | character-as-bytes 将所有输入输出都认为是单字节的。</li>
-<li>-d | —dump-variables[=file]  打印变量。不指定<em>file</em>的话，就会放在文件 <em>awkvars</em> 内。</li>
-<li>-D[file] | —debug[=file] </li>
+<li>-d | –dump-variables[=file]  打印变量。不指定<em>file_的话，就会放在文件 _awkvars</em> 内。</li>
+<li>-D[file] | –debug[=file] </li>
 </ul>
 <h1 id="内建命令"><a href="#内建命令" class="headerlink" title="内建命令"></a>内建命令</h1>
     </div>
@@ -330,7 +325,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/数据库/mysql-dump-命令进行逻辑备份.html" rel="next" title="mysql-dump 命令进行逻辑备份">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql-dump-%E5%91%BD%E4%BB%A4%E8%BF%9B%E8%A1%8C%E9%80%BB%E8%BE%91%E5%A4%87%E4%BB%BD.html" rel="next" title="mysql-dump 命令进行逻辑备份">
                   <i class="fa fa-chevron-left"></i> mysql-dump 命令进行逻辑备份
                 </a>
             </div>
@@ -338,7 +333,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/TCP-IP/OSPF协议及其配置实现.html" rel="prev" title="OSPF协议及其配置实现">
+                <a href="/TCP-IP/OSPF%E5%8D%8F%E8%AE%AE%E5%8F%8A%E5%85%B6%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0.html" rel="prev" title="OSPF协议及其配置实现">
                   OSPF协议及其配置实现 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -425,10 +420,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -457,10 +452,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -535,7 +530,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/Gawk教程.html",
+            url: "https://gowa.club/Linux-Unix/Gawk%E6%95%99%E7%A8%8B.html",
             identifier: "Linux-Unix/Gawk教程.html",
             title: "Gawk教程"
           }

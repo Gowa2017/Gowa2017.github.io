@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Java,Android,Docx">
 <meta property="og:type" content="article">
 <meta property="og:title" content="openoffice-XML-生成word中的图片">
-<meta property="og:url" content="https://gowa.club/Java/openoffice-XML-生成word中的图片.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;openoffice-XML-%E7%94%9F%E6%88%90word%E4%B8%AD%E7%9A%84%E5%9B%BE%E7%89%87.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="事情的需求是这样的，用poi来生成文书的，需要在里面插入图片，正常的情况下是没有问题的，但是对于一个是横向的图片（宽&amp;gt;高）的，要 在A4纸上打印出来就非常的丑陋了，要实现将图片进行旋转，并且居中，缩放的操作这个可难到我了。使用的是poi来进行生成，然后用Openoffice来转换为pdf，很明显openOffice对某些支持不不是很好。但依然 还是要了解一下图片，在Word内是怎么样表示的。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-07-22T12:49:43.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="openoffice-XML-生成word中的图片">
-<meta name="twitter:description" content="事情的需求是这样的，用poi来生成文书的，需要在里面插入图片，正常的情况下是没有问题的，但是对于一个是横向的图片（宽&amp;gt;高）的，要 在A4纸上打印出来就非常的丑陋了，要实现将图片进行旋转，并且居中，缩放的操作这个可难到我了。使用的是poi来进行生成，然后用Openoffice来转换为pdf，很明显openOffice对某些支持不不是很好。但依然 还是要了解一下图片，在Word内是怎么样表示的。">
 
-<link rel="canonical" href="https://gowa.club/Java/openoffice-XML-生成word中的图片.html">
+<link rel="canonical" href="https://gowa.club/Java/openoffice-XML-%E7%94%9F%E6%88%90word%E4%B8%AD%E7%9A%84%E5%9B%BE%E7%89%87.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/openoffice-XML-生成word中的图片.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/openoffice-XML-%E7%94%9F%E6%88%90word%E4%B8%AD%E7%9A%84%E5%9B%BE%E7%89%87.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/openoffice-XML-生成word中的图片.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/openoffice-XML-%E7%94%9F%E6%88%90word%E4%B8%AD%E7%9A%84%E5%9B%BE%E7%89%87.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/openoffice-XML-生成word中的图片.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -299,6 +297,7 @@
 <p>WordprocessingML Drawing 命令空间实现了这些能力，包含了所有用来锚定和显示 DrawingML 对象的信息。</p>
 <h1 id="anchor"><a href="#anchor" class="headerlink" title="anchor"></a>anchor</h1><p>下面的例子显示了一个居中显示的图片的xml代码：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">w:r</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">w:drawing</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:anchor</span> <span class="attr">relativeHeight</span>=<span class="string">"10"</span> <span class="attr">allowOverlap</span>=<span class="string">"true"</span>&gt;</span> <span class="tag">&lt;<span class="name">wp:positionH</span> <span class="attr">relativeFrom</span>=<span class="string">"margin"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:align</span>&gt;</span>center<span class="tag">&lt;/<span class="name">wp:align</span>&gt;</span> <span class="tag">&lt;/<span class="name">wp:positionH</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:positionV</span> <span class="attr">relativeFrom</span>=<span class="string">"margin"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:align</span>&gt;</span>center<span class="tag">&lt;/<span class="name">wp:align</span>&gt;</span> <span class="tag">&lt;/<span class="name">wp:positionV</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:extent</span> <span class="attr">cx</span>=<span class="string">"2441542"</span> <span class="attr">cy</span>=<span class="string">"1828800"</span>/&gt;</span> <span class="tag">&lt;<span class="name">wp:wrapSquare</span> <span class="attr">wrapText</span>=<span class="string">"bothSides"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:graphic</span>&gt;</span></span><br><span class="line">          ...</span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:graphic</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">wp:anchor</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">w:drawing</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">w:r</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p><code>anchor</code> 元素，说明，这个对象不会放在文本行内，而<code>anchor</code>的子元素则说明，这个对象居会垂直居中和水平居中，且文本可以以方形环绕它。</p>
 <p><code>anchor</code> 包含了下面这些子元素</p>
 <h2 id="positionH-Horizontal-Positioning"><a href="#positionH-Horizontal-Positioning" class="headerlink" title="positionH (Horizontal Positioning)"></a>positionH (Horizontal Positioning)</h2><p>指定浮动绘制对象在文档中的水平位置。位置有两部分来指定</p>
@@ -310,6 +309,7 @@
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">complexType</span> <span class="attr">name</span>=<span class="string">"CT_PosH"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">sequence</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">choice</span> <span class="attr">minOccurs</span>=<span class="string">"1"</span> <span class="attr">maxOccurs</span>=<span class="string">"1"</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">element</span> <span class="attr">name</span>=<span class="string">"align"</span> <span class="attr">type</span>=<span class="string">"ST_AlignH"</span> <span class="attr">minOccurs</span>=<span class="string">"1"</span> <span class="attr">maxOccurs</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">element</span> <span class="attr">name</span>=<span class="string">"posOffset"</span> <span class="attr">type</span>=<span class="string">"ST_PositionOffset"</span> <span class="attr">minOccurs</span>=<span class="string">"1"</span> <span class="attr">maxOccurs</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">choice</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">sequence</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"relativeFrom"</span> <span class="attr">type</span>=<span class="string">"ST_RelFromH"</span> <span class="attr">use</span>=<span class="string">"required"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">complexType</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>下面的代码指定了一个位于页面中的元素：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">wp:anchor</span> <span class="attr">...</span> &gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:positionH</span> <span class="attr">relativeFrom</span>=<span class="string">"margin"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:align</span>&gt;</span>center<span class="tag">&lt;/<span class="name">wp:align</span>&gt;</span> <span class="tag">&lt;/<span class="name">wp:positionH</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:positionV</span> <span class="attr">relativeFrom</span>=<span class="string">"margin"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:align</span>&gt;</span>center<span class="tag">&lt;/<span class="name">wp:align</span>&gt;</span> <span class="tag">&lt;/<span class="name">wp:positionV</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">wp:anchor</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><h4 id="relativeFrom-Horizontal-Position-Relative-Base"><a href="#relativeFrom-Horizontal-Position-Relative-Base" class="headerlink" title="relativeFrom(Horizontal Position Relative Base)"></a>relativeFrom(Horizontal Position Relative Base)</h4><p>这个指定基准位置，可能的值由 <code>ST_RelFromH</code>简单类型定义。</p>
 <h4 id="ST-RelFromH-Horizontal-Relative-Positioning"><a href="#ST-RelFromH-Horizontal-Relative-Positioning" class="headerlink" title="ST_RelFromH (Horizontal Relative Positioning)"></a>ST_RelFromH (Horizontal Relative Positioning)</h4><ol>
 <li>character (Character) </li>
@@ -323,9 +323,12 @@
 </ol>
 <p>xml定义如下:</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">simpleType</span> <span class="attr">name</span>=<span class="string">"ST_RelFromH"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">restriction</span> <span class="attr">base</span>=<span class="string">"xsd:token"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"margin"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"page"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"column"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"character"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"leftMargin"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"rightMargin"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"insideMargin"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"outsideMargin"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">restriction</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">simpleType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+
 <h3 id="子元素"><a href="#子元素" class="headerlink" title="子元素"></a>子元素</h3><h4 id="align-Relative-Horizontal-Alignment"><a href="#align-Relative-Horizontal-Alignment" class="headerlink" title="align (Relative Horizontal Alignment)"></a>align (Relative Horizontal Alignment)</h4><p>指定水平对齐。</p>
 <p>下面这个例子，表明这个对象会对齐在页面的左，上。</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">wp:anchor</span> <span class="attr">...</span> &gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:positionH</span> <span class="attr">relativeFrom</span>=<span class="string">"page"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">wp:align</span>&gt;</span>left<span class="tag">&lt;/<span class="name">wp:align</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">wp:positionH</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line">  <span class="tag">&lt;/<span class="name">wp:anchor</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>可用值：</p>
 <ul>
 <li>left    Left Alignment</li>
@@ -336,6 +339,7 @@
 </ul>
 <h4 id="posOffset-Absolute-Position-Offset"><a href="#posOffset-Absolute-Position-Offset" class="headerlink" title="posOffset (Absolute Position Offset)"></a>posOffset (Absolute Position Offset)</h4><h2 id="positionV-Vertical-Positioning"><a href="#positionV-Vertical-Positioning" class="headerlink" title="positionV (Vertical Positioning)"></a>positionV (Vertical Positioning)</h2><p>和 positionH 一样要指定计算基准位置，偏移参数。</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">complexType</span> <span class="attr">name</span>=<span class="string">"CT_PosV"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">sequence</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">choice</span> <span class="attr">minOccurs</span>=<span class="string">"1"</span> <span class="attr">maxOccurs</span>=<span class="string">"1"</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">element</span> <span class="attr">name</span>=<span class="string">"align"</span> <span class="attr">type</span>=<span class="string">"ST_AlignV"</span> <span class="attr">minOccurs</span>=<span class="string">"1"</span> <span class="attr">maxOccurs</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">element</span> <span class="attr">name</span>=<span class="string">"posOffset"</span> <span class="attr">type</span>=<span class="string">"ST_PositionOffset"</span> <span class="attr">minOccurs</span>=<span class="string">"1"</span> <span class="attr">maxOccurs</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">choice</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">sequence</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"relativeFrom"</span> <span class="attr">type</span>=<span class="string">"ST_RelFromV"</span> <span class="attr">use</span>=<span class="string">"required"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">complexType</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <h3 id="ST-RelFromH"><a href="#ST-RelFromH" class="headerlink" title="ST_RelFromH"></a>ST_RelFromH</h3><ul>
 <li>margin    Page Margin</li>
 <li>page    Page Edge</li>
@@ -371,7 +375,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/android使用poi生成文书出错解决.html" rel="next" title="android使用poi生成文书出错解决">
+                <a href="/Java/android%E4%BD%BF%E7%94%A8poi%E7%94%9F%E6%88%90%E6%96%87%E4%B9%A6%E5%87%BA%E9%94%99%E8%A7%A3%E5%86%B3.html" rel="next" title="android使用poi生成文书出错解决">
                   <i class="fa fa-chevron-left"></i> android使用poi生成文书出错解决
                 </a>
             </div>
@@ -379,7 +383,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/利用poi对docx文档进行加密.html" rel="prev" title="利用poi对docx文档进行加密">
+                <a href="/Java/%E5%88%A9%E7%94%A8poi%E5%AF%B9docx%E6%96%87%E6%A1%A3%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86.html" rel="prev" title="利用poi对docx文档进行加密">
                   利用poi对docx文档进行加密 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -466,10 +470,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -498,10 +502,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -576,7 +580,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/openoffice-XML-生成word中的图片.html",
+            url: "https://gowa.club/Java/openoffice-XML-%E7%94%9F%E6%88%90word%E4%B8%AD%E7%9A%84%E5%9B%BE%E7%89%87.html",
             identifier: "Java/openoffice-XML-生成word中的图片.html",
             title: "openoffice-XML-生成word中的图片"
           }

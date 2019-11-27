@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Oracle,数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Oracle常用sql">
-<meta property="og:url" content="https://gowa.club/数据库/Oracle常用sql.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;Oracle%E5%B8%B8%E7%94%A8sql.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="主要是工作记录需要应用到的时候进行了一下记录，包括会话、session、锁等的查询。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.270Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Oracle常用sql">
-<meta name="twitter:description" content="主要是工作记录需要应用到的时候进行了一下记录，包括会话、session、锁等的查询。">
 
-<link rel="canonical" href="https://gowa.club/数据库/Oracle常用sql.html">
+<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E5%B8%B8%E7%94%A8sql.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/Oracle常用sql.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E5%B8%B8%E7%94%A8sql.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -263,7 +261,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -278,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/数据库/Oracle常用sql.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E5%B8%B8%E7%94%A8sql.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/Oracle常用sql.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,15 +292,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>主要是工作记录需要应用到的时候进行了一下记录，包括会话、session、锁等的查询。<br><a id="more"></a></p>
+        <p>主要是工作记录需要应用到的时候进行了一下记录，包括会话、session、锁等的查询。</p>
+<a id="more"></a>
 <h1 id="查询应用、连接数"><a href="#查询应用、连接数" class="headerlink" title="查询应用、连接数"></a>查询应用、连接数</h1><pre><code>SELECT  B.PROGRAM , COUNT(1) 
 FROM V$PROCESS A, V$SESSION B 
 WHERE A.ADDR = B.PADDR 
 AND  B.USERNAME IS NOT NULL
-GROUP BY B.PROGRAM;
-</code></pre><h1 id="历史最大会话数："><a href="#历史最大会话数：" class="headerlink" title="历史最大会话数："></a>历史最大会话数：</h1><pre><code>SELECT SESSIONS_MAX,SESSIONS_WARNING,SESSIONS_CURRENT,SESSIONS_HIGHWATER FROM v$license;
-</code></pre><h1 id="查看session参数"><a href="#查看session参数" class="headerlink" title="查看session参数"></a>查看session参数</h1><pre><code>SELECT NAME, TYPE, VALUE FROM V$PARAMETER WHERE NAME LIKE &#39;session%&#39;;
-</code></pre><h1 id="查询被锁的表并释放session"><a href="#查询被锁的表并释放session" class="headerlink" title="查询被锁的表并释放session"></a>查询被锁的表并释放session</h1><pre><code>SELECT A.OWNER
+GROUP BY B.PROGRAM;</code></pre><h1 id="历史最大会话数："><a href="#历史最大会话数：" class="headerlink" title="历史最大会话数："></a>历史最大会话数：</h1><pre><code>SELECT SESSIONS_MAX,SESSIONS_WARNING,SESSIONS_CURRENT,SESSIONS_HIGHWATER FROM v$license;</code></pre><h1 id="查看session参数"><a href="#查看session参数" class="headerlink" title="查看session参数"></a>查看session参数</h1><pre><code>SELECT NAME, TYPE, VALUE FROM V$PARAMETER WHERE NAME LIKE &apos;session%&apos;;</code></pre><h1 id="查询被锁的表并释放session"><a href="#查询被锁的表并释放session" class="headerlink" title="查询被锁的表并释放session"></a>查询被锁的表并释放session</h1><pre><code>SELECT A.OWNER
   ,A.OBJECT_NAME
   ,B.XIDUSN
   ,B.XIDSLOT
@@ -319,8 +315,7 @@ GROUP BY B.PROGRAM;
   ,C.SERIAL#
   ,C.PROGRAM
 FROM ALL_OBJECTS A,V$LOCKED_OBJECT B,SYS.GV_$SESSION C
-WHERE  A.OBJECT_ID = B.OBJECT_ID  AND B.PROCESS = C.PROCESS  ORDER BY 1,2;
-</code></pre><h1 id="查看系统IO较大的session"><a href="#查看系统IO较大的session" class="headerlink" title="查看系统IO较大的session"></a>查看系统IO较大的session</h1><pre><code>SELECT se.sid
+WHERE  A.OBJECT_ID = B.OBJECT_ID  AND B.PROCESS = C.PROCESS  ORDER BY 1,2;</code></pre><h1 id="查看系统IO较大的session"><a href="#查看系统IO较大的session" class="headerlink" title="查看系统IO较大的session"></a>查看系统IO较大的session</h1><pre><code>SELECT se.sid
       ,se.serial#
       ,pr.spid
       ,se.username
@@ -336,9 +331,8 @@ WHERE  A.OBJECT_ID = B.OBJECT_ID  AND B.PROCESS = C.PROCESS  ORDER BY 1,2;
 FROM v$session se,v$session_wait st,v$sess_io si,v$process pr
 WHERE st.sid=se.sid  AND st.sid=si.sid 
   AND se.paddr=pr.ADDR AND se.sid&gt;6
-  AND st.wait_time=0 AND st.event NOT LIKE &#39;%SQL%&#39; 
-  ORDER BY physical_reads DESC;
-</code></pre><h1 id="查询消耗cpu较多的session"><a href="#查询消耗cpu较多的session" class="headerlink" title="查询消耗cpu较多的session"></a>查询消耗cpu较多的session</h1><pre><code>select a.sid
+  AND st.wait_time=0 AND st.event NOT LIKE &apos;%SQL%&apos; 
+  ORDER BY physical_reads DESC;</code></pre><h1 id="查询消耗cpu较多的session"><a href="#查询消耗cpu较多的session" class="headerlink" title="查询消耗cpu较多的session"></a>查询消耗cpu较多的session</h1><pre><code>select a.sid
       ,spid
       ,status
       ,substr(a.program,1,40) prog
@@ -347,8 +341,7 @@ WHERE st.sid=se.sid  AND st.sid=si.sid
       ,value/60/100 value
 from v$session a,v$process b,v$sesstat c
 where c.statistic#=12 and c.sid=a.sid and a.paddr=b.addr
-   order by value desc
-</code></pre>
+   order by value desc</code></pre>
     </div>
 
     
@@ -358,14 +351,14 @@ where c.statistic#=12 and c.sid=a.sid and a.paddr=b.addr
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Oracle/" rel="tag"># Oracle</a>
-              <a href="/tags/数据库/" rel="tag"># 数据库</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/Linux利用Cron定时任务编写脚本的注意.html" rel="next" title="Linux利用Cron定时任务编写脚本的注意">
+                <a href="/Linux-Unix/Linux%E5%88%A9%E7%94%A8Cron%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%BC%96%E5%86%99%E8%84%9A%E6%9C%AC%E7%9A%84%E6%B3%A8%E6%84%8F.html" rel="next" title="Linux利用Cron定时任务编写脚本的注意">
                   <i class="fa fa-chevron-left"></i> Linux利用Cron定时任务编写脚本的注意
                 </a>
             </div>
@@ -373,7 +366,7 @@ where c.statistic#=12 and c.sid=a.sid and a.paddr=b.addr
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/数据库/Oracle数据库的当前Redo-Log.html" rel="prev" title="Oracle数据库的当前Redo Log">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%BD%93%E5%89%8DRedo-Log.html" rel="prev" title="Oracle数据库的当前Redo Log">
                   Oracle数据库的当前Redo Log <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -460,10 +453,10 @@ where c.statistic#=12 and c.sid=a.sid and a.paddr=b.addr
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -492,10 +485,10 @@ where c.statistic#=12 and c.sid=a.sid and a.paddr=b.addr
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -570,7 +563,7 @@ where c.statistic#=12 and c.sid=a.sid and a.paddr=b.addr
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/数据库/Oracle常用sql.html",
+            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E5%B8%B8%E7%94%A8sql.html",
             identifier: "数据库/Oracle常用sql.html",
             title: "Oracle常用sql"
           }

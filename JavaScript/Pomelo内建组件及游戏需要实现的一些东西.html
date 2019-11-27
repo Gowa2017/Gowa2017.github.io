@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="JavaScript,Pomelo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Pomelo内建组件及游戏需要实现的一些东西">
-<meta property="og:url" content="https://gowa.club/JavaScript/Pomelo内建组件及游戏需要实现的一些东西.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;JavaScript&#x2F;Pomelo%E5%86%85%E5%BB%BA%E7%BB%84%E4%BB%B6%E5%8F%8A%E6%B8%B8%E6%88%8F%E9%9C%80%E8%A6%81%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="先从用户接入游戏说起。 游戏运行connector负责 管理客户端的连接 ，创建端口监听，绑定事件响应。依赖 session, server, pushSchedule, connection 组件。  当有客户连接，请求 session 组件，获取当前连接的 session；若当前连接不存在 session，那么 session 组件会建立新的 session，并维护连接。  然后 connec">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-12-29T08:56:19.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Pomelo内建组件及游戏需要实现的一些东西">
-<meta name="twitter:description" content="先从用户接入游戏说起。 游戏运行connector负责 管理客户端的连接 ，创建端口监听，绑定事件响应。依赖 session, server, pushSchedule, connection 组件。  当有客户连接，请求 session 组件，获取当前连接的 session；若当前连接不存在 session，那么 session 组件会建立新的 session，并维护连接。  然后 connec">
 
-<link rel="canonical" href="https://gowa.club/JavaScript/Pomelo内建组件及游戏需要实现的一些东西.html">
+<link rel="canonical" href="https://gowa.club/JavaScript/Pomelo%E5%86%85%E5%BB%BA%E7%BB%84%E4%BB%B6%E5%8F%8A%E6%B8%B8%E6%88%8F%E9%9C%80%E8%A6%81%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Pomelo内建组件及游戏需要实现的一些东西.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Pomelo%E5%86%85%E5%BB%BA%E7%BB%84%E4%BB%B6%E5%8F%8A%E6%B8%B8%E6%88%8F%E9%9C%80%E8%A6%81%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/JavaScript/Pomelo内建组件及游戏需要实现的一些东西.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/JavaScript/Pomelo%E5%86%85%E5%BB%BA%E7%BB%84%E4%BB%B6%E5%8F%8A%E6%B8%B8%E6%88%8F%E9%9C%80%E8%A6%81%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/Pomelo内建组件及游戏需要实现的一些东西.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -309,12 +307,14 @@
 </ul>
 <p>通过类似代码配置：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">app.set(<span class="string">'connectorConfig'</span>, opts);</span><br></pre></td></tr></table></figure>
+
 <h2 id="session"><a href="#session" class="headerlink" title="session"></a>session</h2><p> <strong>session</strong> 组件跟 <strong>connector</strong> 相关，也是仅仅被前端服务器加载，为 <em>sessionService</em> 提供一个组件包装, 加载 <strong>session</strong> 组件后，会在app的上下文中增加 <em>sessionService</em> ，可以通过<code>app.get(&#39;sessionService&#39;)</code>获取。</p>
 <p>主要用来<strong>维护客户端的连接信息</strong>，以及生成 <em>session</em> 并维护 <em>session</em> 。</p>
 <p>一个连接与一个 <em>session</em> 对应，同时 <strong>session</strong> 组件还维护具体登录用户与 <em>session</em> 的绑定信息。一个用户可以有多个客户端登录，对应于多个 <em>session</em> 。当需要给客户端推送消息或者给客户端返回响应的话，必须通过 <strong>session</strong> 组件拿到具体的客户端连接来进行。</p>
 <h3 id="支持的配置-1"><a href="#支持的配置-1" class="headerlink" title="支持的配置"></a>支持的配置</h3><p><strong>singleSession</strong>： 如果这个配置项配置为true的话，那么将将不允许一个用户同时绑定到多个session，在绑定用户一次后，后面的绑定将会失败。</p>
 <p>配置 <strong>session</strong> 组件，通过调用如下方式进行:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">app.set(<span class="string">'sessionConfig'</span>, opts);</span><br></pre></td></tr></table></figure>
+
 <h2 id="connection"><a href="#connection" class="headerlink" title="connection"></a>connection</h2><p><strong>connection</strong> 组件是一个功能相对简单的组件，也是仅仅被前端服务器加载,为 <em>connectionService</em> 提供一个组件包装,他主要进行连接信息的统计, <strong>connector</strong> 组件接收到客户端连接请求以及有客户端离线时，以及用户登录下线等等情况，都会向其汇报。</p>
 <p><strong>connection</strong> 组件无配置项。</p>
 <h2 id="server"><a href="#server" class="headerlink" title="server"></a>server</h2><p><strong>server</strong> 组件也是一个功能比较复杂的组件，它被除 master 外的服务器加载。<strong>server</strong> 组件会加载并维护自身的 Filter 信息和 Handler 信息。<strong>server</strong> 组件会从 <strong>connector</strong> 组件的回调里获得到相应的客户端请求或者通知，然后会使用自己的 before filters 对其消息进行过滤，再次调用自己的相应 Handler进行请求的逻辑处理，然后将响应通过回调的方式发给 <strong>connector</strong> 处理。最后调用after filters 进行一些清理处理。</p>
@@ -331,8 +331,10 @@
 <h3 id="配置项"><a href="#配置项" class="headerlink" title="配置项"></a>配置项</h3><p><strong>scheduler</strong>： <strong>scheduler</strong> 组件的具体调度策略配置，默认的是直接将响应发给客户端，同时pomelo还提供了有缓冲并且定时刷新的调度策略。用户也可以自定义自己的调度策略。</p>
 <p>配置pushScheduler组件，通过调用如下:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">app.set(<span class="string">'pushSchedulerConfig'</span>, opts);</span><br></pre></td></tr></table></figure>
+
 <p>如果要启用使用缓冲的scheduler的话，可以在app.js中增加:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">app.set(<span class="string">'pushSchedulerConfig'</span>, &#123;<span class="attr">scheduler</span>: pomelo.pushSchedulers.buffer, <span class="attr">flushInterval</span>: <span class="number">20</span>&#125;);</span><br></pre></td></tr></table></figure>
+
 <p>flushInterval是刷新周期，默认为20毫秒。</p>
 <h2 id="channel"><a href="#channel" class="headerlink" title="channel"></a>channel</h2><p><strong>channel</strong> 组件维护 <em>channel</em> 信息，可以被除了master之外的服务器加载。</p>
 <p>channel组件可以看作是channelService的组件包装,加载该组件后，会在app上下文中加入channelService，可以通过app.get(‘channelService’)获取。</p>
@@ -342,6 +344,7 @@
 <p><code>broadcastFilter(session, msg, filterParam)</code></p>
 <p>其中filterParam参数由在channelService的broadcast调用时传入，如下:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">channelService.broadcast(type, route, &#123;<span class="attr">filterParam</span>: param&#125;, cb);</span><br></pre></td></tr></table></figure>
+
 <p>可以通过如下方式对Channel组件进行配置：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">app.set(<span class="string">'channelConfig'</span>, opts)</span><br></pre></td></tr></table></figure>
 <h2 id="proxy"><a href="#proxy" class="headerlink" title="proxy"></a>proxy</h2><p><strong>proxy</strong> 组件是一个重量级的组件，它被除 <strong>master</strong> 外的所有服务器加载。</p>
@@ -355,8 +358,10 @@
 </ul>
 <p>另外，可以开启rpc的调用日志，通过如下的调用:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">app.enable(<span class="string">'rpcDebugLog'</span>);</span><br></pre></td></tr></table></figure>
+
 <p>配置proxy使用：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">app.set(<span class="string">'proxyConfig'</span>, opts);</span><br></pre></td></tr></table></figure>
+
 <h2 id="remote"><a href="#remote" class="headerlink" title="remote"></a>remote</h2><p><strong>remote</strong> 组件是与 <strong>proxy</strong> 组件对等的组件，它用来提供rpc调用服务。<strong>rpc</strong> 组件完成对当前服务器的 <strong>remote</strong> 的加载，并开启监听端口，等待rpc客户端的连接及相应的rpc调用。当接收到具体的调用请求时，会根据调用请求中描述的调用请求信息，调用相应的 remote 中的相应方法。然后再将具体的处理结果返回给rpc客户端。rpc服务端还支持对调用请求的filter，也就是说跟server组件处理客户端请求一样，rpc服务端处理具体请求时也会使用filter-remote链进行处理。</p>
 <p>remote组件配置项:</p>
 <ul>
@@ -365,10 +370,12 @@
 <li><strong>acceptorFactory</strong>, rpc底层实现需要的,可以认为跟proxy配置中的mailBoxFactory是对等的，我们将在rpc原理里面详述。<br>跟proxy组件一样，用户可以开启rpcDebugLog来得到所有的rpc调用过程的日志。 配置remote组件使用：</li>
 </ul>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">app.set(<span class="string">'remoteConfig'</span>, opts);</span><br></pre></td></tr></table></figure>
+
 <h2 id="dictionary"><a href="#dictionary" class="headerlink" title="dictionary"></a>dictionary</h2><p>dictionary组件是一个可选组件，不会被默认加载，只有当 <strong>connector</strong>组件的配置中开启了 <strong>useDict</strong> 的时候，此组件才会被加载。此组件会遍历所有 handler 的 route 字符串，还会从config/dictionary.json 中读取客户端的route字符串，然后对这些字符串进行编码，给予每一个路由赋予一个唯一的小整数，实现route信息压缩，当客户端与前端服务器通信时需要路由信息时，将不会再使用很长的那个字符串，而仅仅使用一个小整数。</p>
 <p>dictionary的配置项:</p>
 <p><strong>dict</strong>, 客户端路由字符串文件的位置，默认使用的是config/dictionary.json 配置dictionary组件使用:</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">app.set(<span class="string">'dictionaryConfig'</span>, opts);</span><br></pre></td></tr></table></figure>
+
 <h2 id="protobuf"><a href="#protobuf" class="headerlink" title="protobuf"></a>protobuf</h2><p>protobuf组件也是一个可选组件，不会被默认加载，只有当connector组件的配置中开启了useProtobuf的时候，此组件才会被加载。此组件会加载对应的proto文件，并完成消息的基于protobuf的编解码。默认的proto文件的配置信息在config/serverProtos.json和config/clientProtos.json中。具体会在详细介绍pomelo-protobuf中详细介绍。</p>
 <p>protobuf组件无配置项。</p>
 <h2 id="backendSession"><a href="#backendSession" class="headerlink" title="backendSession"></a>backendSession</h2><p>BackendSession组件可以看作是BackendSessionService的组件包装，加载该组件后，会在app的上下文中加入backendSessionService，可以通过<code>app.get(&#39;backendSessionService&#39;)</code>调用获取。可以被除了master之外的服务器加载。它主要为后端服务器提供BackendSession信息，并通过远程过程调用完成一些比如对原始session绑定uid等操作。</p>
@@ -397,7 +404,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/数据库/偶尔遇到MySQL几个BUG似的地方.html" rel="next" title="偶尔遇到MySQL几个BUG似的地方">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%81%B6%E5%B0%94%E9%81%87%E5%88%B0MySQL%E5%87%A0%E4%B8%AABUG%E4%BC%BC%E7%9A%84%E5%9C%B0%E6%96%B9.html" rel="next" title="偶尔遇到MySQL几个BUG似的地方">
                   <i class="fa fa-chevron-left"></i> 偶尔遇到MySQL几个BUG似的地方
                 </a>
             </div>
@@ -405,7 +412,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/JavaScript/Pomelo中登录流程.html" rel="prev" title="Pomelo中登录流程">
+                <a href="/JavaScript/Pomelo%E4%B8%AD%E7%99%BB%E5%BD%95%E6%B5%81%E7%A8%8B.html" rel="prev" title="Pomelo中登录流程">
                   Pomelo中登录流程 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -492,10 +499,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -524,10 +531,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -602,7 +609,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/JavaScript/Pomelo内建组件及游戏需要实现的一些东西.html",
+            url: "https://gowa.club/JavaScript/Pomelo%E5%86%85%E5%BB%BA%E7%BB%84%E4%BB%B6%E5%8F%8A%E6%B8%B8%E6%88%8F%E9%9C%80%E8%A6%81%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF.html",
             identifier: "JavaScript/Pomelo内建组件及游戏需要实现的一些东西.html",
             title: "Pomelo内建组件及游戏需要实现的一些东西"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Windows,MFC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MFC窗口相关方法">
-<meta property="og:url" content="https://gowa.club/Windows/MFC窗口相关方法.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Windows&#x2F;MFC%E7%AA%97%E5%8F%A3%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="在MFC手动建立进程 我们已经知道了如何手动建立一个进程。但我们在建立这个进程后，我们还有很多事情需要做，比如控制这个进程的主窗口啊，移动啊等等，那么我们就需要获得这个进程的窗口信息。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-06-27T17:06:16.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MFC窗口相关方法">
-<meta name="twitter:description" content="在MFC手动建立进程 我们已经知道了如何手动建立一个进程。但我们在建立这个进程后，我们还有很多事情需要做，比如控制这个进程的主窗口啊，移动啊等等，那么我们就需要获得这个进程的窗口信息。">
 
-<link rel="canonical" href="https://gowa.club/Windows/MFC窗口相关方法.html">
+<link rel="canonical" href="https://gowa.club/Windows/MFC%E7%AA%97%E5%8F%A3%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/MFC窗口相关方法.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/MFC%E7%AA%97%E5%8F%A3%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Windows/MFC窗口相关方法.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Windows/MFC%E7%AA%97%E5%8F%A3%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Windows/MFC窗口相关方法.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,20 +285,25 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在<a href="/Windows/MFC手动建立进程.html" title="MFC手动建立进程">MFC手动建立进程</a> 我们已经知道了如何手动建立一个进程。但我们在建立这个进程后，我们还有很多事情需要做，比如控制这个进程的主窗口啊，移动啊等等，那么我们就需要获得这个进程的窗口信息。</p>
+        <p>在<a href="/Windows/MFC%E6%89%8B%E5%8A%A8%E5%BB%BA%E7%AB%8B%E8%BF%9B%E7%A8%8B.html" title="MFC手动建立进程">MFC手动建立进程</a> 我们已经知道了如何手动建立一个进程。但我们在建立这个进程后，我们还有很多事情需要做，比如控制这个进程的主窗口啊，移动啊等等，那么我们就需要获得这个进程的窗口信息。</p>
 <a id="more"></a>
+
 <h1 id="EnumWindows"><a href="#EnumWindows" class="headerlink" title="EnumWindows"></a>EnumWindows</h1><p>通过按序传递一个 Handle 到一个我们自定义的回调函数来 枚举所有在屏幕上的顶级的窗口（主窗口）。此方法会在所有的窗口都已经枚举完或我们定义的方法返回  FALSE 时结束。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">EnumWindows</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  WNDENUMPROC lpEnumFunc,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPARAM      lParam</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>这个方法比在一个循环中调用  <code>GetWindow()</code> 更安全，因为 <code>GetWindow()</code> 方法可能会进入无限循环或者引用一个已经销毁了的窗口。</p>
 <p>执行成功返回 非0 值，失败返回 0 值，这时候可以调用 <code>GetLastError()</code>  来获取错误信息。</p>
 <p>如果 lpEnumFunc 返回一个 0值，那么这个函数也会返回 0值。我们就需要在我们的回调函数中返回一个有意义的错误值了。</p>
 <h2 id="EnumWindowsProc"><a href="#EnumWindowsProc" class="headerlink" title="EnumWindowsProc"></a>EnumWindowsProc</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL CALLBACK <span class="title">EnumWindowsProc</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  _In_ HWND   hwnd,</span></span></span><br><span class="line"><span class="function"><span class="params">  _In_ LPARAM lParam</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>此方法接受一个顶层窗口的 Handle，我们在这里面实现我们自己的逻辑</p>
 <h1 id="EnumThreadWindows"><a href="#EnumThreadWindows" class="headerlink" title="EnumThreadWindows"></a>EnumThreadWindows</h1><p>枚举一个线程的非子窗口，通过将此线程拥有的窗口的 Handle 传递给我们自定义的函数来进行实现。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">EnumThreadWindows</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  DWORD       dwThreadId,</span></span></span><br><span class="line"><span class="function"><span class="params">  WNDENUMPROC lpfn,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPARAM      lParam</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>这个效率应该更高呢。</p>
 <h1 id="FindWindow"><a href="#FindWindow" class="headerlink" title="FindWindow"></a>FindWindow</h1><p>通过窗口名（标题栏名称）或者类名来查找窗口。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">HWND <span class="title">FindWindow</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCSTR lpClassName,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCSTR lpWindowName</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <h1 id="EnumChildWindows"><a href="#EnumChildWindows" class="headerlink" title="EnumChildWindows"></a>EnumChildWindows</h1><p>枚举某一窗口下的所有子窗口</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">EnumChildWindows</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  HWND        hWndParent,</span></span></span><br><span class="line"><span class="function"><span class="params">  WNDENUMPROC lpEnumFunc,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPARAM      lParam</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
 
@@ -320,7 +323,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/macOS/用brew安装老版本的应用.html" rel="next" title="用brew安装老版本的应用">
+                <a href="/macOS/%E7%94%A8brew%E5%AE%89%E8%A3%85%E8%80%81%E7%89%88%E6%9C%AC%E7%9A%84%E5%BA%94%E7%94%A8.html" rel="next" title="用brew安装老版本的应用">
                   <i class="fa fa-chevron-left"></i> 用brew安装老版本的应用
                 </a>
             </div>
@@ -328,7 +331,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Windows/MFC中的字符宏与CString.html" rel="prev" title="MFC中的字符宏与CString">
+                <a href="/Windows/MFC%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E5%AE%8F%E4%B8%8ECString.html" rel="prev" title="MFC中的字符宏与CString">
                   MFC中的字符宏与CString <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -415,10 +418,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -447,10 +450,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -525,7 +528,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Windows/MFC窗口相关方法.html",
+            url: "https://gowa.club/Windows/MFC%E7%AA%97%E5%8F%A3%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95.html",
             identifier: "Windows/MFC窗口相关方法.html",
             title: "MFC窗口相关方法"
           }

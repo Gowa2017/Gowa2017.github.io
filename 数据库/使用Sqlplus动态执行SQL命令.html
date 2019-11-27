@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Oracle,Sqlplus">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Sqlplus动态执行SQL命令">
-<meta property="og:url" content="https://gowa.club/数据库/使用Sqlplus动态执行SQL命令.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;%E4%BD%BF%E7%94%A8Sqlplus%E5%8A%A8%E6%80%81%E6%89%A7%E8%A1%8CSQL%E5%91%BD%E4%BB%A4.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="之前都是要执行的命令写在 SQL 文件中，然后用 @filename 的形式来进行调用。但是这样的话，里面很多需要进行变更的参数就无法做到动态替换，总不可能为每个命令都写一个文件撒，所以就研究了一下 SqlPlus 更多的用法">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-10-21T03:00:04.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Sqlplus动态执行SQL命令">
-<meta name="twitter:description" content="之前都是要执行的命令写在 SQL 文件中，然后用 @filename 的形式来进行调用。但是这样的话，里面很多需要进行变更的参数就无法做到动态替换，总不可能为每个命令都写一个文件撒，所以就研究了一下 SqlPlus 更多的用法">
 
-<link rel="canonical" href="https://gowa.club/数据库/使用Sqlplus动态执行SQL命令.html">
+<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8Sqlplus%E5%8A%A8%E6%80%81%E6%89%A7%E8%A1%8CSQL%E5%91%BD%E4%BB%A4.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/使用Sqlplus动态执行SQL命令.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8Sqlplus%E5%8A%A8%E6%80%81%E6%89%A7%E8%A1%8CSQL%E5%91%BD%E4%BB%A4.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -256,7 +254,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/数据库/使用Sqlplus动态执行SQL命令.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8Sqlplus%E5%8A%A8%E6%80%81%E6%89%A7%E8%A1%8CSQL%E5%91%BD%E4%BB%A4.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/使用Sqlplus动态执行SQL命令.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,12 +287,13 @@
       
         <p>之前都是要执行的命令写在 SQL 文件中，然后用 @filename 的形式来进行调用。但是这样的话，里面很多需要进行变更的参数就无法做到动态替换，总不可能为每个命令都写一个文件撒，所以就研究了一下 SqlPlus 更多的用法</p>
 <a id="more"></a>
+
 <h1 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sqlplus [ [&lt;option&gt;] [&#123;logon | /nolog&#125;] [&lt;start&gt;] ]</span><br></pre></td></tr></table></figure>
+
 <p>分三个部分：</p>
 <ul>
 <li>options 指定各种选项 我们主要使用  <strong>-S</strong> 来实现静默执行。</li>
-<li>logon 指定登录的方式。`{<username>[/&lt;password&gt;][@<connect_identifier>] | / }<pre><code>    [AS {SYSDBA | SYSOPER | SYSASM | SYSBACKUP | SYSDG | SYSKM | SYSRAC}] [EDITION=value]` 我们采用账号密码的形式登录，然后也不作为管理员登录那么就简单的这样用就行了:`sqlplus myusername/mypassword@//IP:port/INSTANCE`
-</code></pre></connect_identifier></username></li>
+<li>logon 指定登录的方式。`{<username>[/<password>][@<connect_identifier>] | / }<pre><code>[AS {SYSDBA | SYSOPER | SYSASM | SYSBACKUP | SYSDG | SYSKM | SYSRAC}] [EDITION=value]` 我们采用账号密码的形式登录，然后也不作为管理员登录那么就简单的这样用就行了:`sqlplus myusername/mypassword@//IP:port/INSTANCE`</code></pre></li>
 <li>start <code>@&lt;URL&gt;|&lt;filename&gt;[.&lt;ext&gt;] [&lt;parameter&gt; ...]</code> 指定从一个网页服务器 URL 或者本地文件系统，配合对应的 parameter 变量来进行执行。</li>
 </ul>
 <blockquote>
@@ -303,6 +302,7 @@
 <h1 id="SQL-文件中变量的指定"><a href="#SQL-文件中变量的指定" class="headerlink" title="SQL 文件中变量的指定"></a>SQL 文件中变量的指定</h1><p>我们在 SQL 文件中可以用 <code>&amp;1 &amp;2</code> 的形式来指定变量，对应我们传递过去的参数。</p>
 <p>如 文件中 <strong>test.sql</strong> 中我们写入：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> &amp;<span class="number">1</span> <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure>
+
 <p>我们也命令执行的时候：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlplus -S username/password//ip:1521/port @test "520102"</span><br><span class="line"></span><br><span class="line">old   1: <span class="keyword">select</span> &amp;<span class="number">1</span> <span class="keyword">from</span> dual</span><br><span class="line"><span class="keyword">new</span>   <span class="number">1</span>: <span class="keyword">select</span> <span class="number">520102</span> <span class="keyword">from</span> dual</span><br><span class="line"></span><br><span class="line">    <span class="number">520102</span></span><br><span class="line"><span class="comment">----------</span></span><br><span class="line">    <span class="number">520102</span></span><br></pre></td></tr></table></figure>
 <p>输入就已经被替换了。我们来看更复杂一点的我们用来导出主体的例子：</p>
@@ -310,9 +310,11 @@
 <p>依然如先前那样执行，就OK了。</p>
 <p>但是发现一个问题，输出文件中会包含：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">old  79:     AND ( a.oplocdistrict = &amp;1</span><br><span class="line">new  79:     AND ( a.oplocdistrict = 520102</span><br></pre></td></tr></table></figure>
+
 <p>变量替换也给输出了，这个需要解决。</p>
 <p>在<a href="https://stackoverflow.com/questions/5340716/suppress-output-of-variables-substitution-in-sqlplus" target="_blank" rel="noopener">StackOverFlow 上找到了答案</a>  </p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="keyword">VERIFY</span> <span class="keyword">OFF</span></span><br></pre></td></tr></table></figure>
+
 <p>就OK </p>
 <h1 id="login-sql"><a href="#login-sql" class="headerlink" title="login.sql"></a>login.sql</h1><p>我们可以把我们公用的配置全部都放在这个文件内，然后放到当前执行的目录。但是从 12.2 and in 11.2.0.4 db version after a 2017 PSU patch,  这种方式已经不能正确的工作了。最后是在 <a href="http://dbaparadise.com/2017/08/how-to-make-login-sql-work-again-in-12-2-and-11-2-0-4/" target="_blank" rel="noopener">这里找到了解决方法</a></p>
 <blockquote>
@@ -320,6 +322,7 @@
 </blockquote>
 <p>只会查找设置的环境变量中的文件了不会查找当前路径下的文件了。</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">set</span> colsep ,</span><br><span class="line"><span class="keyword">set</span> <span class="keyword">heading</span> <span class="keyword">on</span></span><br><span class="line"><span class="keyword">set</span> headsep <span class="keyword">on</span></span><br><span class="line"><span class="keyword">set</span> linesize <span class="number">5000</span></span><br><span class="line"><span class="keyword">set</span> pagesize <span class="number">0</span></span><br><span class="line"><span class="keyword">set</span> trimspool <span class="keyword">on</span></span><br><span class="line"><span class="keyword">set</span> feedback <span class="keyword">off</span></span><br><span class="line"><span class="keyword">set</span> <span class="keyword">verify</span> <span class="keyword">off</span></span><br><span class="line"><span class="keyword">set</span> echo <span class="keyword">off</span></span><br><span class="line"><span class="keyword">set</span> term <span class="keyword">off</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">session</span> <span class="keyword">set</span> nls_date_format=<span class="string">'yyyy-mm-dd hh24:mi:ss'</span>;</span><br></pre></td></tr></table></figure>
+
 <p>我们需要设置好 ORACLE_PATH 变量的路径，并将其 export ，否则的话，我们在 Shell 脚本内设置，但其子进程是不会继承 这个环境变量的。</p>
 
     </div>
@@ -338,7 +341,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Asm/关于汇编中的PTR操作符.html" rel="next" title="关于汇编中的PTR操作符">
+                <a href="/Asm/%E5%85%B3%E4%BA%8E%E6%B1%87%E7%BC%96%E4%B8%AD%E7%9A%84PTR%E6%93%8D%E4%BD%9C%E7%AC%A6.html" rel="next" title="关于汇编中的PTR操作符">
                   <i class="fa fa-chevron-left"></i> 关于汇编中的PTR操作符
                 </a>
             </div>
@@ -346,7 +349,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Windows/Windows反虚拟机技术.html" rel="prev" title="Windows反虚拟机技术">
+                <a href="/Windows/Windows%E5%8F%8D%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8A%80%E6%9C%AF.html" rel="prev" title="Windows反虚拟机技术">
                   Windows反虚拟机技术 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -433,10 +436,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -465,10 +468,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -543,7 +546,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/数据库/使用Sqlplus动态执行SQL命令.html",
+            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8Sqlplus%E5%8A%A8%E6%80%81%E6%89%A7%E8%A1%8CSQL%E5%91%BD%E4%BB%A4.html",
             identifier: "数据库/使用Sqlplus动态执行SQL命令.html",
             title: "使用Sqlplus动态执行SQL命令"
           }

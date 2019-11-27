@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,21 +51,19 @@
 <meta name="keywords" content="TensorFlow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TensorFlow中的LSTM了解">
-<meta property="og:url" content="https://gowa.club/Python/TensorFlow中的LSTM了解.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Python&#x2F;TensorFlow%E4%B8%AD%E7%9A%84LSTM%E4%BA%86%E8%A7%A3.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="LSTM（长短期记忆）是最常用的 RNN （递归神经网络了）。经常用于序列数据。关于它的详细介绍可以看这个 权威博客。本文章原文位于：这里">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/Unrolled_RNN.png">
-<meta property="og:image" content="https://gowa.club/res/num_units.png">
-<meta property="og:image" content="https://gowa.club/res/lstm_unit.png">
-<meta property="og:image" content="https://gowa.club/res/inputs.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;Unrolled_RNN.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;num_units.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;lstm_unit.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;inputs.png">
 <meta property="og:updated_time" content="2018-11-26T15:59:20.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TensorFlow中的LSTM了解">
-<meta name="twitter:description" content="LSTM（长短期记忆）是最常用的 RNN （递归神经网络了）。经常用于序列数据。关于它的详细介绍可以看这个 权威博客。本文章原文位于：这里">
-<meta name="twitter:image" content="https://gowa.club/res/Unrolled_RNN.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;Unrolled_RNN.png">
 
-<link rel="canonical" href="https://gowa.club/Python/TensorFlow中的LSTM了解.html">
+<link rel="canonical" href="https://gowa.club/Python/TensorFlow%E4%B8%AD%E7%9A%84LSTM%E4%BA%86%E8%A7%A3.html">
 
 
 <script id="page-configurations">
@@ -230,12 +228,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow中的LSTM了解.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow%E4%B8%AD%E7%9A%84LSTM%E4%BA%86%E8%A7%A3.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -276,7 +274,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Python/TensorFlow中的LSTM了解.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Python/TensorFlow%E4%B8%AD%E7%9A%84LSTM%E4%BA%86%E8%A7%A3.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/TensorFlow中的LSTM了解.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,8 +292,10 @@
       
         <p>LSTM（长短期记忆）是最常用的 RNN （递归神经网络了）。经常用于序列数据。关于它的详细介绍可以看这个 <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="noopener">权威博客</a>。本文章原文位于：<a href="https://jasdeep06.github.io/posts/Understanding-LSTM-in-Tensorflow-MNIST/" target="_blank" rel="noopener">这里</a></p>
 <a id="more"></a>
+
 <h1 id="MNIST-数据集"><a href="#MNIST-数据集" class="headerlink" title="MNIST 数据集"></a>MNIST 数据集</h1><p>MNIST 是一个手写数字识别的数据集。可以用代码来下载使用：</p>
-<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">"/tmp/data/"</span>, one_hot=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">"/tmp/data/"</span>, one_hot=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
 <p>数据分割为三个部分：</p>
 <ol>
 <li><em>mnist.train</em>  55000 个图片数据</li>
@@ -303,17 +303,17 @@
 <li><em>mnist.validation</em>  5000 个有效的图片数据。</li>
 </ol>
 <h2 id="数据形状"><a href="#数据形状" class="headerlink" title="数据形状"></a>数据形状</h2><p>让我们讨论关于MNIST数据集的训练数据的形状。所有三个部分数据的形状是相同的。</p>
-<p>训练数据，55000 张图片，每张图片 28 X 28 pixels。这 784 个像素点放在一个维度是 784 的向量中。所以呢，训练数据的形状就是 <em>(55000,784)</em>，可通过 <em>mnist.train.images</em> 进行引用。</p>
+<p>训练数据，55000 张图片，每张图片 28 X 28 pixels。这 784 个像素点放在一个维度是 784 的向量中。所以呢，训练数据的形状就是 <em>(55000,784)*，可通过 *mnist.train.images</em> 进行引用。</p>
 <p> 55000 个训练图片中，每个都有一个对应的标签，表示了图片所数的类（是哪个数字）。这里有 10 个（ 0,1,2….）。类标签以一种热编码形式表示。</p>
 <p> 标签在 numpy 数组中的形式为 <em>(55000,10)</em>，通过 <em>mnist.train.lables</em>。</p>
 <h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>写代码前先画出一个概要，这有助于我们的代码更直观。</p>
 <h2 id="vanilla-RNN"><a href="#vanilla-RNN" class="headerlink" title="vanilla RNN"></a>vanilla RNN</h2><p>把一个 RNN 进行展开的话，就是如下这样：</p>
-<p><img src="../res/Unrolled_RNN.png" alt></p>
+<p><img src="../res/Unrolled_RNN.png" alt=""></p>
 <p>在这里：</p>
 <ol>
-<li><script type="math/tex">X_t</script> 引用在 t 时刻的输入。</li>
-<li><script type="math/tex">S_t</script> 引用在 t 时刻的隐藏状态。可以把它想象成我们网络的 <strong>记忆</strong>。</li>
-<li><script type="math/tex">O_t</script> 引用 t 时刻的输出。</li>
+<li>$$X_t$$ 引用在 t 时刻的输入。</li>
+<li>$$S_t$$ 引用在 t 时刻的隐藏状态。可以把它想象成我们网络的 <strong>记忆</strong>。</li>
+<li>$$O_t$$ 引用 t 时刻的输出。</li>
 <li><em>U, V, W</em> 表示在所有的时刻中共享的参数。使用同样参数的意义在于，我们的模型在每个时刻做的任务是一样的，只是输入不同。</li>
 </ol>
 <p>通过把 RNN 展开，我们达到了一个目的：在任何时刻，我们都会考虑前一时刻的输入，所以可以想象它是一个 <strong>前馈网络</strong>（由时刻之间的联系表示）</p>
@@ -324,35 +324,44 @@
 </ol>
 <h2 id="TensorFlow-中的-LSTM-神经元"><a href="#TensorFlow-中的-LSTM-神经元" class="headerlink" title="TensorFlow 中的 LSTM 神经元"></a>TensorFlow 中的 LSTM 神经元</h2><p>我们可以很简单的在 TensorFlow 中声明一个 LSTM 神经元：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">tf.contrib.rnn.BasicLSTMCell(num_units)</span><br></pre></td></tr></table></figure>
+
 <p><em>num_units</em> 代表了 LSTM 神经元中的单元数。<br><em>num_units</em> 可以类比于前馈神经网络的隐藏层。在一个前馈神经网络中隐藏层的节点数<strong>等于</strong>这个网络中每个时刻 LSTM 神经元内 LSTM 中的单元数。下面的图片可能会减少我们的疑惑。</p>
-<p><img src="../res/num_units.png" alt></p>
+<p><img src="../res/num_units.png" alt=""></p>
 <p>num_units 的任何一个 LSTM 单元可以被看作是一个标准的 LSTM 单元：</p>
-<p><img src="../res/lstm_unit.png" alt></p>
+<p><img src="../res/lstm_unit.png" alt=""></p>
 <h2 id="格式化输入"><a href="#格式化输入" class="headerlink" title="格式化输入"></a>格式化输入</h2><p>TensorFlow 中最简单的 RNN 就是 <em>static_rnn</em> 了。</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">tf.static_rnn(cell,inputs)</span><br></pre></td></tr></table></figure>
+
 <p>其拥有很多参数，但现在我们只关注这两个。</p>
 <p><em>inputs</em> 参数接受一个<strong>张量列表</strong>，形状为 <em>(batch_size, input_size)</em> 。列表的长度，就是这个网络展开的时刻数。就是说，在我们的网络中，一个输入就对应了一个时刻。</p>
 <p>就我们的 MNIST 图片数据而言，我们的图片大小是 28 X 28。可以把图片看成是 28 行，每行有 28 pixels。我们会把我们的网络展开成 28 个时刻，这样，每个时刻我们就可以输入一行数据了（28 pixels, input_size，输入张量的维度），一个图片就会走完 28 个时刻。 如果我们提供了 <em>batch_size</em> 个图片数据，每个时刻都会提供 <em>batch_size</em> 条数据。下面的图片看得更清楚：</p>
-<p><img src="../res/inputs.png" alt></p>
+<p><img src="../res/inputs.png" alt=""></p>
 <p><em>static_rnn</em> 的输入是一个张量列表，形状 <em>(batch_size, num_units)</em>。列表的长度，就是网络展开的长度。在此实现中，我们将仅关注最终时间步的输出，因为当将图像的所有行提供给RNN时将生成预测结果，也就是最后一个时刻。</p>
 <p>现在我们已经完成了所有繁重的工作，我们已经准备好编写代码。一旦上述概念清楚，编码部分就非常直接了。</p>
 <h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>开始，让我们导入必要的依赖项，数据集并声明一些常量。我们将使用batch_size = 128 和 num_units = 128。</p>
-<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.contrib <span class="keyword">import</span> rnn</span><br><span class="line"></span><br><span class="line"><span class="comment">#import mnist dataset</span></span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line">mnist=input_data.read_data_sets(<span class="string">"/tmp/data/"</span>,one_hot=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#define constants</span></span><br><span class="line"><span class="comment">#unrolled through 28 time steps</span></span><br><span class="line">time_steps=<span class="number">28</span></span><br><span class="line"><span class="comment">#hidden LSTM units</span></span><br><span class="line">num_units=<span class="number">128</span></span><br><span class="line"><span class="comment">#rows of 28 pixels</span></span><br><span class="line">n_input=<span class="number">28</span></span><br><span class="line"><span class="comment">#learning rate for adam</span></span><br><span class="line">learning_rate=<span class="number">0.001</span></span><br><span class="line"><span class="comment">#mnist is meant to be classified in 10 classes(0-9).</span></span><br><span class="line">n_classes=<span class="number">10</span></span><br><span class="line"><span class="comment">#size of batch</span></span><br><span class="line">batch_size=<span class="number">128</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.contrib <span class="keyword">import</span> rnn</span><br><span class="line"></span><br><span class="line"><span class="comment">#import mnist dataset</span></span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line">mnist=input_data.read_data_sets(<span class="string">"/tmp/data/"</span>,one_hot=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#define constants</span></span><br><span class="line"><span class="comment">#unrolled through 28 time steps</span></span><br><span class="line">time_steps=<span class="number">28</span></span><br><span class="line"><span class="comment">#hidden LSTM units</span></span><br><span class="line">num_units=<span class="number">128</span></span><br><span class="line"><span class="comment">#rows of 28 pixels</span></span><br><span class="line">n_input=<span class="number">28</span></span><br><span class="line"><span class="comment">#learning rate for adam</span></span><br><span class="line">learning_rate=<span class="number">0.001</span></span><br><span class="line"><span class="comment">#mnist is meant to be classified in 10 classes(0-9).</span></span><br><span class="line">n_classes=<span class="number">10</span></span><br><span class="line"><span class="comment">#size of batch</span></span><br><span class="line">batch_size=<span class="number">128</span></span><br></pre></td></tr></table></figure>
+
 <p>现在让我们声明占位符和权重以及偏差变量，这些变量将用于将shape [batch_size，num_units]的输出转换为[batch_size，n_classes]，以便可以预测正确的类。</p>
-<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment">#weights and biases of appropriate shape to accomplish above task</span></span><br><span class="line">out_weights=tf.Variable(tf.random_normal([num_units,n_classes]))</span><br><span class="line">out_bias=tf.Variable(tf.random_normal([n_classes]))</span><br><span class="line"></span><br><span class="line"><span class="comment">#defining placeholders</span></span><br><span class="line"><span class="comment">#input image placeholder</span></span><br><span class="line"><span class="comment"># [None, time_steps, n_input] 代表了 批量数，网络展开时刻数，每个时刻输入数据的大小</span></span><br><span class="line">x=tf.placeholder(<span class="string">"float"</span>,[<span class="keyword">None</span>,time_steps,n_input])</span><br><span class="line"><span class="comment">#input label placeholder</span></span><br><span class="line">y=tf.placeholder(<span class="string">"float"</span>,[<span class="keyword">None</span>,n_classes])</span><br></pre></td></tr></table></figure>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment">#weights and biases of appropriate shape to accomplish above task</span></span><br><span class="line">out_weights=tf.Variable(tf.random_normal([num_units,n_classes]))</span><br><span class="line">out_bias=tf.Variable(tf.random_normal([n_classes]))</span><br><span class="line"></span><br><span class="line"><span class="comment">#defining placeholders</span></span><br><span class="line"><span class="comment">#input image placeholder</span></span><br><span class="line"><span class="comment"># [None, time_steps, n_input] 代表了 批量数，网络展开时刻数，每个时刻输入数据的大小</span></span><br><span class="line">x=tf.placeholder(<span class="string">"float"</span>,[<span class="literal">None</span>,time_steps,n_input])</span><br><span class="line"><span class="comment">#input label placeholder</span></span><br><span class="line">y=tf.placeholder(<span class="string">"float"</span>,[<span class="literal">None</span>,n_classes])</span><br></pre></td></tr></table></figure>
+
 <p>现在我们正在接收 shape [batch_size，time_steps，n_input] 的输入，我们需要将其转换为长度为 time_steps 的shape [batch_size，n_inputs]的张量列表，以便可以将其输入static_rnn。</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment">#processing the input tensor from [batch_size,n_steps,n_input] to "time_steps" number of [batch_size,n_input] tensors</span></span><br><span class="line"><span class="comment"># 将 [batch_size,n_steps,n_input] 沿 time_steps 展开后，结果就是 [batch_size,n_input] 列表，大小是 time_steps。列表中每个元素都会被每个时刻当做输入。</span></span><br><span class="line">input=tf.unstack(x ,time_steps,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
 <p>现在我们已经准备好定义我们的网络。我们将使用一层BasicLSTMCell并使用我们的static_rnn网络。</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment">#defining the network</span></span><br><span class="line">lstm_layer=rnn.BasicLSTMCell(num_units,forget_bias=<span class="number">1</span>)</span><br><span class="line">outputs,_=rnn.static_rnn(lstm_layer,input,dtype=<span class="string">"float32"</span>)</span><br></pre></td></tr></table></figure>
 <p>由于我们只考虑上一次时间步的输入，我们将从中生成我们的预测:</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment">#converting last output of dimension [batch_size,num_units] to [batch_size,n_classes] by out_weight multiplication</span></span><br><span class="line">prediction=tf.matmul(outputs[<span class="number">-1</span>],out_weights)+out_bias</span><br></pre></td></tr></table></figure>
+
 <p>定义损失，优化器和准确性。</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment">#loss_function</span></span><br><span class="line">loss=tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=prediction,labels=y))</span><br><span class="line"><span class="comment">#optimization</span></span><br><span class="line">opt=tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss)</span><br><span class="line"></span><br><span class="line"><span class="comment">#model evaluation</span></span><br><span class="line">correct_prediction=tf.equal(tf.argmax(prediction,<span class="number">1</span>),tf.argmax(y,<span class="number">1</span>))</span><br><span class="line">accuracy=tf.reduce_mean(tf.cast(correct_prediction,tf.float32))</span><br></pre></td></tr></table></figure>
+
 <p>现在我们已经定义了图表，我们可以运行它。</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment">#initialize variables</span></span><br><span class="line">init=tf.global_variables_initializer()</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(init)</span><br><span class="line">    iter=<span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> iter&lt;<span class="number">800</span>:</span><br><span class="line">        batch_x,batch_y=mnist.train.next_batch(batch_size=batch_size)</span><br><span class="line"></span><br><span class="line">        batch_x=batch_x.reshape((batch_size,time_steps,n_input))</span><br><span class="line"></span><br><span class="line">        sess.run(opt, feed_dict=&#123;x: batch_x, y: batch_y&#125;)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> iter %<span class="number">10</span>==<span class="number">0</span>:</span><br><span class="line">            acc=sess.run(accuracy,feed_dict=&#123;x:batch_x,y:batch_y&#125;)</span><br><span class="line">            los=sess.run(loss,feed_dict=&#123;x:batch_x,y:batch_y&#125;)</span><br><span class="line">            print(<span class="string">"For iter "</span>,iter)</span><br><span class="line">            print(<span class="string">"Accuracy "</span>,acc)</span><br><span class="line">            print(<span class="string">"Loss "</span>,los)</span><br><span class="line">            print(<span class="string">"__________________"</span>)</span><br><span class="line"></span><br><span class="line">        iter=iter+<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
 <p>这里需要注意的一件重要事情是，我们的图像基本上被展平为一个维度784的矢量。函数next_batch（batch_size）必然返回这些784维向量的batch_size批量。因此，它们被重新整形为[batch_size，time_steps，n_input]，以便我们的占位符可以接受它们。</p>
 <p>我们还可以计算出我们模型的测试精度 - </p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment">#calculating test accuracy</span></span><br><span class="line">test_data = mnist.test.images[:<span class="number">128</span>].reshape((<span class="number">-1</span>, time_steps, n_input))</span><br><span class="line">test_label = mnist.test.labels[:<span class="number">128</span>]</span><br><span class="line">print(<span class="string">"Testing Accuracy:"</span>, sess.run(accuracy, feed_dict=&#123;x: test_data, y: test_label&#125;))</span><br></pre></td></tr></table></figure>
+
 <p>在运行时，模型运行的测试精度为99.21％。</p>
 
     </div>
@@ -370,7 +379,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/Dagger与安卓.html" rel="next" title="Dagger与安卓">
+                <a href="/Java/Dagger%E4%B8%8E%E5%AE%89%E5%8D%93.html" rel="next" title="Dagger与安卓">
                   <i class="fa fa-chevron-left"></i> Dagger与安卓
                 </a>
             </div>
@@ -378,7 +387,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/Poi中添加Anchor图片到Docx文档.html" rel="prev" title="Poi中添加Anchor图片到Docx文档">
+                <a href="/Java/Poi%E4%B8%AD%E6%B7%BB%E5%8A%A0Anchor%E5%9B%BE%E7%89%87%E5%88%B0Docx%E6%96%87%E6%A1%A3.html" rel="prev" title="Poi中添加Anchor图片到Docx文档">
                   Poi中添加Anchor图片到Docx文档 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -465,10 +474,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -497,10 +506,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -623,7 +632,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Python/TensorFlow中的LSTM了解.html",
+            url: "https://gowa.club/Python/TensorFlow%E4%B8%AD%E7%9A%84LSTM%E4%BA%86%E8%A7%A3.html",
             identifier: "Python/TensorFlow中的LSTM了解.html",
             title: "TensorFlow中的LSTM了解"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Java,Android,RxJava">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于RxJava操作符flatMap与concatMap的探究">
-<meta property="og:url" content="https://gowa.club/RxJava/关于RxJava操作符flatMap与concatMap的探究.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;RxJava&#x2F;%E5%85%B3%E4%BA%8ERxJava%E6%93%8D%E4%BD%9C%E7%AC%A6flatMap%E4%B8%8EconcatMap%E7%9A%84%E6%8E%A2%E7%A9%B6.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="迷惑的地方在于当 flatMap 和 concatMap 在运作的时候，在配合线程切换的话，其细节到底是怎么样的呢？">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-08-01T15:53:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于RxJava操作符flatMap与concatMap的探究">
-<meta name="twitter:description" content="迷惑的地方在于当 flatMap 和 concatMap 在运作的时候，在配合线程切换的话，其细节到底是怎么样的呢？">
 
-<link rel="canonical" href="https://gowa.club/RxJava/关于RxJava操作符flatMap与concatMap的探究.html">
+<link rel="canonical" href="https://gowa.club/RxJava/%E5%85%B3%E4%BA%8ERxJava%E6%93%8D%E4%BD%9C%E7%AC%A6flatMap%E4%B8%8EconcatMap%E7%9A%84%E6%8E%A2%E7%A9%B6.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/RxJava/关于RxJava操作符flatMap与concatMap的探究.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/RxJava/%E5%85%B3%E4%BA%8ERxJava%E6%93%8D%E4%BD%9C%E7%AC%A6flatMap%E4%B8%8EconcatMap%E7%9A%84%E6%8E%A2%E7%A9%B6.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/RxJava/关于RxJava操作符flatMap与concatMap的探究.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/RxJava/%E5%85%B3%E4%BA%8ERxJava%E6%93%8D%E4%BD%9C%E7%AC%A6flatMap%E4%B8%8EconcatMap%E7%9A%84%E6%8E%A2%E7%A9%B6.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="RxJava/关于RxJava操作符flatMap与concatMap的探究.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,11 +285,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>迷惑的地方在于当 flatMap 和 concatMap 在运作的时候，在配合线程切换的话，其细节到底是怎么样的呢？<br><a id="more"></a></p>
+        <p>迷惑的地方在于当 flatMap 和 concatMap 在运作的时候，在配合线程切换的话，其细节到底是怎么样的呢？</p>
+<a id="more"></a>
+
 <h1 id="FlatMap"><a href="#FlatMap" class="headerlink" title="FlatMap"></a>FlatMap</h1><p>根据 Reactivex.io 网站上的定义：</p>
 <blockquote>
 <p>The FlatMap operator transforms an Observable by applying a function that you specify to each item emitted by the source Observable, where that function returns an Observable that itself emits items. FlatMap then merges the emissions of these resulting Observables, emitting these merged results as its own sequence.</p>
+</blockquote>
+<blockquote>
 <p>This method is useful, for example, when you have an Observable that emits a series of items that themselves have Observable members or are in other ways transformable into Observables, so that you can create a new Observable that emits the complete collection of items emitted by the sub-Observables of these items.</p>
+</blockquote>
+<blockquote>
 <p><strong>Note</strong> that FlatMap merges the emissions of these Observables, so that they may interleave.</p>
 </blockquote>
 <p>这些说的是：</p>
@@ -300,7 +304,7 @@
 <li>然后 FlatMap 将所有变换后的 Observable 发射的元素进行 merge(合并)，最终，得到一个发射所有这些合并后元素的 Observable。</li>
 <li>merge(合并)后的元素，其顺序是不一定的。</li>
 </ol>
-<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p>首先，我们知道，<a href="/RxJava/关于RxJava操作符链式调用的理解.html" title="RxJava 的运作其实分成三个阶段">RxJava 的运作其实分成三个阶段</a>：</p>
+<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p>首先，我们知道，<a href="/RxJava/%E5%85%B3%E4%BA%8ERxJava%E6%93%8D%E4%BD%9C%E7%AC%A6%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8%E7%9A%84%E7%90%86%E8%A7%A3.html" title="RxJava 的运作其实分成三个阶段">RxJava 的运作其实分成三个阶段</a>：</p>
 <ul>
 <li>装配（Assembly Time）</li>
 <li>订阅（Subscription Time）</li>
@@ -310,23 +314,29 @@
 <h3 id="Assembly"><a href="#Assembly" class="headerlink" title="Assembly"></a>Assembly</h3><p><code>Observable.just(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;)</code> 会返回一个 ObservableFromArray，在此我称其为 <em>source</em>。</p>
 <p>当我们调用 <code>source.flatMap()</code>的时候，其实是在装配阶段，这个时候，其结果，会返回一个 ObservableFlatMap，为了称呼，我们称之为 <em>flatObservable</em>，此 ObservableFlatMap 的上流（upstream） 就是 <em>source</em>：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">RxJavaPlugins.onAssembly(<span class="keyword">new</span> ObservableFlatMap&lt;T, R&gt;(<span class="keyword">this</span>, mapper, delayErrors, maxConcurrency, bufferSize));</span><br></pre></td></tr></table></figure>
+
 <p>好了，这个时候， <em>source</em> 与 <em>flatObservable</em> 之间的联系，也就是 <em>flatObservable</em> 持有 <em>source</em> 而已。</p>
 <h3 id="Runtime"><a href="#Runtime" class="headerlink" title="Runtime"></a>Runtime</h3><p>当我们对 <em>flatObservable</em> 进行订阅的时候，实际上，我们是对其指定了一个 Observer。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// ObservableFlatMap</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subscribeActual</span><span class="params">(Observer&lt;? <span class="keyword">super</span> U&gt; t)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ObservableScalarXMap.tryScalarXMapSubscribe(source, t, mapper)) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    source.subscribe(<span class="keyword">new</span> MergeObserver&lt;T, U&gt;(t, mapper, delayErrors, maxConcurrency, bufferSize));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>是不是很惊喜，<em>flatObservable</em> 利用一个 <em>MergeObserver</em> 又订阅了 <em>source</em>。</p>
 <p>我们来看看， 我们的 <em>source</em> ObservableFromArray 这个时候干了什么：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//ObservableFromArray</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">subscribeActual</span><span class="params">(Observer&lt;? <span class="keyword">super</span> T&gt; observer)</span> </span>&#123;</span><br><span class="line">        FromArrayDisposable&lt;T&gt; d = <span class="keyword">new</span> FromArrayDisposable&lt;T&gt;(observer, array);</span><br><span class="line"></span><br><span class="line">        observer.onSubscribe(d);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (d.fusionMode) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        d.run();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">FromArrayDisposable(Observer&lt;? <span class="keyword">super</span> T&gt; actual, T[] array) &#123;</span><br><span class="line">    <span class="keyword">this</span>.downstream = actual;</span><br><span class="line">    <span class="keyword">this</span>.array = array;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    T[] a = array;</span><br><span class="line">    <span class="keyword">int</span> n = a.length;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n &amp;&amp; !isDisposed(); i++) &#123;</span><br><span class="line">        T value = a[i];</span><br><span class="line">        <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">            downstream.onError(<span class="keyword">new</span> NullPointerException(<span class="string">"The "</span> + i + <span class="string">"th element is null"</span>));</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        downstream.onNext(value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!isDisposed()) &#123;</span><br><span class="line">        downstream.onComplete();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>很简单，ObservableFromArray 建立了一个 FromArrayDisposable，其利用了 for 循环，给 downstream 传递数据（这里是 MergeObserver ）传递数据。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//MergeObserver</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(T t)</span> </span>&#123;</span><br><span class="line">            <span class="comment">// safeguard against misbehaving sources</span></span><br><span class="line">            <span class="keyword">if</span> (done) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            ObservableSource&lt;? extends U&gt; p;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                p = ObjectHelper.requireNonNull(mapper.apply(t), <span class="string">"The mapper returned a null ObservableSource"</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">                Exceptions.throwIfFatal(e);</span><br><span class="line">                upstream.dispose();</span><br><span class="line">                onError(e);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (maxConcurrency != Integer.MAX_VALUE) &#123;</span><br><span class="line">                <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (wip == maxConcurrency) &#123;</span><br><span class="line">                        sources.offer(p);</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    wip++;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            subscribeInner(p);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
 <p>MergeObserver 首先调用我们提供的 mapper 函数来获得一个 Observable。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// MergeObserver</span></span><br><span class="line">        <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">subscribeInner</span><span class="params">(ObservableSource&lt;? extends U&gt; p)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">                <span class="keyword">if</span> (p <span class="keyword">instanceof</span> Callable) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (tryEmitScalar(((Callable&lt;? extends U&gt;)p)) &amp;&amp; maxConcurrency != Integer.MAX_VALUE) &#123;</span><br><span class="line">                        <span class="keyword">boolean</span> empty = <span class="keyword">false</span>;</span><br><span class="line">                        <span class="keyword">synchronized</span> (<span class="keyword">this</span>) &#123;</span><br><span class="line">                            p = sources.poll();</span><br><span class="line">                            <span class="keyword">if</span> (p == <span class="keyword">null</span>) &#123;</span><br><span class="line">                                wip--;</span><br><span class="line">                                empty = <span class="keyword">true</span>;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">if</span> (empty) &#123;</span><br><span class="line">                            drain();</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    InnerObserver&lt;T, U&gt; inner = <span class="keyword">new</span> InnerObserver&lt;T, U&gt;(<span class="keyword">this</span>, uniqueId++);</span><br><span class="line">                    <span class="keyword">if</span> (addInner(inner)) &#123;</span><br><span class="line">                        p.subscribe(inner);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
 <p>接着，用一个 InnerObserver 来订阅了我们 mapper 返回的 Observable。这里，如果是 Callable 来的 Observer ,就直接发射数据了。InnerObserver 有一个 parent 参数，这里是 MergeObserver。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//InnerObserver</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSubscribe</span><span class="params">(Disposable d)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (DisposableHelper.setOnce(<span class="keyword">this</span>, d)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (d <span class="keyword">instanceof</span> QueueDisposable) &#123;</span><br><span class="line">                    <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">                    QueueDisposable&lt;U&gt; qd = (QueueDisposable&lt;U&gt;) d;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">int</span> m = qd.requestFusion(QueueDisposable.ANY | QueueDisposable.BOUNDARY);</span><br><span class="line">                    <span class="keyword">if</span> (m == QueueDisposable.SYNC) &#123;</span><br><span class="line">                        fusionMode = m;</span><br><span class="line">                        queue = qd;</span><br><span class="line">                        done = <span class="keyword">true</span>;</span><br><span class="line">                        parent.drain();</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (m == QueueDisposable.ASYNC) &#123;</span><br><span class="line">                        fusionMode = m;</span><br><span class="line">                        queue = qd;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(U t)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (fusionMode == QueueDisposable.NONE) &#123;</span><br><span class="line">                parent.tryEmit(t, <span class="keyword">this</span>);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                parent.drain();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
 <p>当我们 mapper 向 InnerObserver 发射数据的时候，其直接将数据发射给了 MergeObserver。</p>
 <p>这里说明一下，如果 InnerObserver 订阅的是一个 QueueDisposable 的话，那么其就会协商一下，发送模式，如果是同步发射，就会要求 MergeObserver 将所有 mapper 返回的 Observable 数据全部发射到 最下游再继续。</p>
 <p>当我们的 mapper 返回的 Observable 发射模式是 QueueDisposable.NONE 时，MergeObserver 采用的是 tryEmit 的形式来发射数据：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">tryEmit</span><span class="params">(U value, InnerObserver&lt;T, U&gt; inner)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (get() == <span class="number">0</span> &amp;&amp; compareAndSet(<span class="number">0</span>, <span class="number">1</span>)) &#123;</span><br><span class="line">        downstream.onNext(value);</span><br><span class="line">        <span class="keyword">if</span> (decrementAndGet() == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        SimpleQueue&lt;U&gt; q = inner.queue;</span><br><span class="line">        <span class="keyword">if</span> (q == <span class="keyword">null</span>) &#123;</span><br><span class="line">            q = <span class="keyword">new</span> SpscLinkedArrayQueue&lt;U&gt;(bufferSize);</span><br><span class="line">            inner.queue = q;</span><br><span class="line">        &#125;</span><br><span class="line">        q.offer(value);</span><br><span class="line">        <span class="keyword">if</span> (getAndIncrement() != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    drainLoop();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>如果数据无法立即发射，那么就把他放在队列中，在 for 循环内进行遍历发射。</p>
 <p>看起来好像不会出乱序的情况？例子中的执行确实也没有出现乱序这是为什么？ 这是因为我们是在同一个线程内进行操作的，同时我们的数据也比较特殊。</p>
 <p>可以从这里来看，对于每一个 mapper 返回的 Observable，我们都用 InnerObserver 来进行了订阅，但是其何时发射数据，这个是不一定的。所以说，在 InnerObserver 的 onNext 方法中，随后调用 MergeObserver.tryEmit(value, inner) 的方法时，会有需要发射的值，放到 inner 的队列中，然后再进行发射。</p>
@@ -365,7 +375,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/RxJava/使用Retrofit-Rxjava来上传下载文件.html" rel="next" title="使用Retrofit-Rxjava来上传下载文件">
+                <a href="/RxJava/%E4%BD%BF%E7%94%A8Retrofit-Rxjava%E6%9D%A5%E4%B8%8A%E4%BC%A0%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6.html" rel="next" title="使用Retrofit-Rxjava来上传下载文件">
                   <i class="fa fa-chevron-left"></i> 使用Retrofit-Rxjava来上传下载文件
                 </a>
             </div>
@@ -373,7 +383,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/在Linux为开启SFTP.html" rel="prev" title="在Linux为开启SFTP">
+                <a href="/Linux-Unix/%E5%9C%A8Linux%E4%B8%BA%E5%BC%80%E5%90%AFSFTP.html" rel="prev" title="在Linux为开启SFTP">
                   在Linux为开启SFTP <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -460,10 +470,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -492,10 +502,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -570,7 +580,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/RxJava/关于RxJava操作符flatMap与concatMap的探究.html",
+            url: "https://gowa.club/RxJava/%E5%85%B3%E4%BA%8ERxJava%E6%93%8D%E4%BD%9C%E7%AC%A6flatMap%E4%B8%8EconcatMap%E7%9A%84%E6%8E%A2%E7%A9%B6.html",
             identifier: "RxJava/关于RxJava操作符flatMap与concatMap的探究.html",
             title: "关于RxJava操作符flatMap与concatMap的探究"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python中的正则表达式">
-<meta property="og:url" content="https://gowa.club/Python/python中的正则表达式.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Python&#x2F;python%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="需要对经营地址匹配对应的社区，无奈看了别人的代码不是很清楚，只能就组看一下官方文档了。原文地址 关于正则表达式的基础就不赘述了，自己去看吧。只看一下在 Python 内的使用。正则表达式HowTo">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-10-15T16:39:35.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python中的正则表达式">
-<meta name="twitter:description" content="需要对经营地址匹配对应的社区，无奈看了别人的代码不是很清楚，只能就组看一下官方文档了。原文地址 关于正则表达式的基础就不赘述了，自己去看吧。只看一下在 Python 内的使用。正则表达式HowTo">
 
-<link rel="canonical" href="https://gowa.club/Python/python中的正则表达式.html">
+<link rel="canonical" href="https://gowa.club/Python/python%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/python中的正则表达式.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/python%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Python/python中的正则表达式.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Python/python%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/python中的正则表达式.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,11 +287,13 @@
       
         <p>需要对经营地址匹配对应的社区，无奈看了别人的代码不是很清楚，只能就组看一下官方文档了。<a href="https://docs.python.org/3/library/re.html" target="_blank" rel="noopener">原文地址</a> 关于正则表达式的基础就不赘述了，自己去看吧。只看一下在 Python 内的使用。<a href="https://docs.python.org/3/howto/regex.html#regex-howto" target="_blank" rel="noopener">正则表达式HowTo</a></p>
 <a id="more"></a>
+
 <p>正则表达式的实现，是在 <em>re</em> 模块内实现的。</p>
-<h1 id="的作用"><a href="#的作用" class="headerlink" title="| 的作用"></a>| 的作用</h1><p><code>|</code> 的作用是把任意的两个正则表达式 <em>A</em> <em>B</em> 给组合起来形成一个可匹配 <em>A</em> 或者 <em>B</em> 的新表达式 <em>A|B</em>。 <code>|</code> 可以组合任意数量的正则表达式。也可以在分组内进行使用。当扫描目标字符串的时候， <code>|</code> 分隔开的表达式会从左至右进行匹配。当有一个模式完全匹配，则会接受这个分支。也就是说，一旦 <em>A</em> 匹配上了，那么就不会再继续进行匹配 <em>B</em> 了，即使会产生一个更长的匹配。也就是说 <code>|</code> 是不贪婪的。匹配一个字面意义的 <code>|</code>，可以使用 <code>\|</code>，或者放在 <code>[|]</code> 内。</p>
+<h1 id="的作用"><a href="#的作用" class="headerlink" title="| 的作用"></a>| 的作用</h1><p><code>|</code> 的作用是把任意的两个正则表达式 <em>A</em> <em>B</em> 给组合起来形成一个可匹配 <em>A</em> 或者 <em>B</em> 的新表达式 <em>A|B*。 <code>|</code> 可以组合任意数量的正则表达式。也可以在分组内进行使用。当扫描目标字符串的时候， <code>|</code> 分隔开的表达式会从左至右进行匹配。当有一个模式完全匹配，则会接受这个分支。也就是说，一旦 *A</em> 匹配上了，那么就不会再继续进行匹配 <em>B</em> 了，即使会产生一个更长的匹配。也就是说 <code>|</code> 是不贪婪的。匹配一个字面意义的 <code>|</code>，可以使用 <code>\|</code>，或者放在 <code>[|]</code> 内。</p>
 <h1 id="模块内容"><a href="#模块内容" class="headerlink" title="模块内容"></a>模块内容</h1><h2 id="re-compile-pattern-flags-0"><a href="#re-compile-pattern-flags-0" class="headerlink" title="re.compile(pattern, flags=0)"></a>re.compile(pattern, flags=0)</h2><p>把一个正则表达式编译到一个 <strong>正则表达式对象</strong> ，此对象可以使用其<code>mathch(), search()</code>等方法来进行匹配。</p>
 <p>表达式的行为可以通过 <em>flags</em> 来进行改变。可以是下面的值，通过 <code>|</code> 进行组合。</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">prog = re.compile(pattern)</span><br><span class="line">result = prog.match(string)</span><br></pre></td></tr></table></figure>
+
 <p>与</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">result = re.match(pattern, string)</span><br></pre></td></tr></table></figure>
 <p>是相等的。不过把表达式编译成正则表达式对象后重复使用会更加有效率。</p>
@@ -306,7 +306,7 @@
 <li><strong>re.S/re.DOTALL</strong></li>
 <li><strong>re.X/re.VERBOSE</strong></li>
 </ul>
-<h2 id="re-search-pattern-string-flags-0"><a href="#re-search-pattern-string-flags-0" class="headerlink" title="re.search(pattern, string, flags=0)"></a>re.search(pattern, string, flags=0)</h2><p>扫描 <em>string</em>，查找第一个匹配 <em>pattern</em> 的位置，返回一个对象的 <strong>匹配对象</strong> 。如果查找不到匹配的位置，返回 <em>None</em> 。</p>
+<h2 id="re-search-pattern-string-flags-0"><a href="#re-search-pattern-string-flags-0" class="headerlink" title="re.search(pattern, string, flags=0)"></a>re.search(pattern, string, flags=0)</h2><p>扫描 <em>string*，查找第一个匹配 *pattern</em> 的位置，返回一个对象的 <strong>匹配对象</strong> 。如果查找不到匹配的位置，返回 <em>None</em> 。</p>
 <h2 id="re-match-pattern-string-flags-0"><a href="#re-match-pattern-string-flags-0" class="headerlink" title="re.match(pattern, string, flags=0)"></a>re.match(pattern, string, flags=0)</h2><p>如果 <em>string</em> 开头的 0 或 多个字符匹配了模式 <em>pattern</em> ，返回一个对应的匹配对象。如果不匹配的话，就返回 <em>None</em> 。</p>
 <blockquote>
 <p>即使是在  MULTILINE  模式下，这也只会匹配字符串的开始，而不是在每行的开始进行匹配。</p>
@@ -330,7 +330,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Python/pandas.DataFrame的使用.html" rel="next" title="pandas.DataFrame的使用">
+                <a href="/Python/pandas.DataFrame%E7%9A%84%E4%BD%BF%E7%94%A8.html" rel="next" title="pandas.DataFrame的使用">
                   <i class="fa fa-chevron-left"></i> pandas.DataFrame的使用
                 </a>
             </div>
@@ -338,7 +338,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/CentOS7中的KVM共享网络设置.html" rel="prev" title="CentOS7中的KVM共享网络设置">
+                <a href="/Linux-Unix/CentOS7%E4%B8%AD%E7%9A%84KVM%E5%85%B1%E4%BA%AB%E7%BD%91%E7%BB%9C%E8%AE%BE%E7%BD%AE.html" rel="prev" title="CentOS7中的KVM共享网络设置">
                   CentOS7中的KVM共享网络设置 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -425,10 +425,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -457,10 +457,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -535,7 +535,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Python/python中的正则表达式.html",
+            url: "https://gowa.club/Python/python%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F.html",
             identifier: "Python/python中的正则表达式.html",
             title: "python中的正则表达式"
           }

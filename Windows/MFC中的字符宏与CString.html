@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Windows,MFC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MFC中的字符宏与CString">
-<meta property="og:url" content="https://gowa.club/Windows/MFC中的字符宏与CString.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Windows&#x2F;MFC%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E5%AE%8F%E4%B8%8ECString.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="MFC 的宏太多了，让人目不暇接，回想　Linux 下的多简单呢，各种各样的接口和调用都都非常少，哪里像 MFC  这么恶心。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-06-29T15:26:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MFC中的字符宏与CString">
-<meta name="twitter:description" content="MFC 的宏太多了，让人目不暇接，回想　Linux 下的多简单呢，各种各样的接口和调用都都非常少，哪里像 MFC  这么恶心。">
 
-<link rel="canonical" href="https://gowa.club/Windows/MFC中的字符宏与CString.html">
+<link rel="canonical" href="https://gowa.club/Windows/MFC%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E5%AE%8F%E4%B8%8ECString.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/MFC中的字符宏与CString.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/MFC%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E5%AE%8F%E4%B8%8ECString.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Windows/MFC中的字符宏与CString.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Windows/MFC%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E5%AE%8F%E4%B8%8ECString.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Windows/MFC中的字符宏与CString.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,6 +287,7 @@
       
         <p> MFC 的宏太多了，让人目不暇接，回想　Linux 下的多简单呢，各种各样的接口和调用都都非常少，哪里像 MFC  这么恶心。</p>
  <a id="more"></a>
+
 <h1 id="字符集-CharacterSet-与编码-Encoding"><a href="#字符集-CharacterSet-与编码-Encoding" class="headerlink" title="字符集(CharacterSet)与编码(Encoding)"></a>字符集(CharacterSet)与编码(Encoding)</h1><p>我们先要区分开这两个概念才能理解后面文中说的那么多符号到底是什么东西。</p>
 <ul>
 <li>字符集。符号的集合。对于字符集的每个符号，用一个代码来表示，就叫编码。</li>
@@ -310,8 +309,10 @@
 <h2 id="L"><a href="#L" class="headerlink" title="L"></a>L</h2><p>这个很简单，这个一般用来放在字符前面，告诉编译器，这是一个 Unicode 字符。这也是 C/C++ 定义的。</p>
 <h2 id="T-TEXT"><a href="#T-TEXT" class="headerlink" title="_T _TEXT"></a>_T _TEXT</h2><p>其定义为：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _T(x)       __T(x)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _TEXT(x)       __T(x)</span></span><br></pre></td></tr></table></figure>
+
 <p>而根据我们程序使用字符集的不同，__T 有两种定义形式：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __T(x)      L ## x <span class="comment">// Unicode</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __T(x)      x <span class="comment">//ANSI</span></span></span><br></pre></td></tr></table></figure>
+
 <p>所以说，_T 会根据我们程序的字符集类型来自动匹配字符的编码。</p>
 <h2 id="TEXT"><a href="#TEXT" class="headerlink" title="TEXT"></a>TEXT</h2><p><code>_TEXT</code> 定义在 winnt.h 中，其作用与 <code>_T</code> 一致。</p>
 <h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>我们在用到字符的时候，必须告诉编译器，我们的字符是什么类型的，以此才能决定如何存储在文件中去。</p>
@@ -323,25 +324,36 @@
 <li>CString 根据编译时指定的字符类型决定其应该是什么类型。Unicode 和单字节多字节都支持。</li>
 </ul>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> ATL::CStringT&lt; <span class="keyword">wchar_t</span>, StrTraitMFC_DLL&lt; <span class="keyword">wchar_t</span> &gt; &gt; CStringW;</span><br><span class="line"><span class="keyword">typedef</span> ATL::CStringT&lt; <span class="keyword">char</span>, StrTraitMFC_DLL&lt; <span class="keyword">char</span> &gt; &gt; CStringA;</span><br><span class="line"><span class="keyword">typedef</span> ATL::CStringT&lt; TCHAR, StrTraitMFC_DLL&lt; TCHAR &gt; &gt; CString;</span><br></pre></td></tr></table></figure>
+
 <p>你可能会问 TCHAR 又是什么，其实也是一个宏，其在两个地方进行了定义:</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// winnt.h, </span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">char</span> TCHAR, *PTCHAR;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">wchar_t</span> WCHAR;    <span class="comment">// wc,   16-bit UNICODE character</span></span><br><span class="line"><span class="keyword">typedef</span> WCHAR TCHAR, *PTCHAR;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ucrt/tchar.h </span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">char</span>            TCHAR;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">wchar_t</span>     TCHAR;</span><br></pre></td></tr></table></figure>
+
 <p>事实上，其就是 char 或者 wchar_t，不过是会在编译时我们需要支持的字符集来选择具体实现成哪个类型。</p>
 <p>CString 对象支持将字符存在在一个 CStringData 对象内，其接受 C 风格的 NULL 结尾的字符串。CString 可以更高性能的跟踪字符串的长度，但它也支持从存储的字符数据内获取 NULL 字符来支持转换到 LPCWSTR 类型。</p>
 <p>有几种类型不需要链接到 MFC 库就能使用：CAtlString[AW]。</p>
 <h2 id="CString-实现"><a href="#CString-实现" class="headerlink" title="CString 实现"></a>CString 实现</h2><p>CString 是 CStringT 针对一个特定的泛型参数而来，其就是 <code>CStringT&lt;TCHAR&gt;</code>。</p>
-<p>我们可以看到 CStringT<tchar> 继承自 CSimpleStringT<tchar>。</tchar></tchar></p>
+<p>我们可以看到 CStringT<TCHAR> 继承自 CSimpleStringT<TCHAR>。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">typename</span> BaseType, <span class="class"><span class="keyword">class</span> <span class="title">StringTraits</span> &gt;</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">CStringT</span> :</span></span><br><span class="line">	<span class="keyword">public</span> CSimpleStringT&lt; BaseType, _CSTRING_IMPL_::_MFCDLLTraitsCheck&lt;BaseType, StringTraits&gt;::c_bIsMFCDLLTraits &gt;</span><br><span class="line">&#123;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
 <p>其中，泛型参数 <strong>StringTraits</strong> （字符串特性）用来决定字符串类是否需要 CRT 支持及在何处定位字符串资源，其可以为下列值：</p>
 <ul>
 <li><p><strong>StrTraitATL&lt; wchar_t</strong> | <strong>char</strong> | <strong>TCHAR, ChTraitsCRT&lt; wchar_t</strong> | <strong>char</strong> | <strong>TCHAR &gt; &gt;</strong>：类需要 CRT 支持，并且从 <strong>m_hInstResource</strong> 指定的模块来获取字符串资源。</p>
 </li>
 <li><p><strong>StrTraitATL&lt; wchar_t</strong> | <strong>char</strong> | <strong>TCHAR, ChTraitsOS&lt; wchar_t</strong> | <strong>char</strong> | <strong>TCHAR &gt; &gt;</strong>：类不需要 CRT 支持，并且从 <strong>m_hInstResource</strong> 指定的模块来获取字符串资源。</p>
 </li>
-<li><strong>StrTraitMFC&lt; wchar_t</strong> | <strong>char</strong> | <strong>TCHAR, ChTraitsCRT&lt; wchar_t</strong> | <strong>char</strong> | <strong>TCHAR &gt; &gt;</strong>：类需要 CRT 支持，字符串资源使用标准的MFC搜索算法。</li>
-<li><strong>StrTraitMFC&lt; wchar_t</strong> | <strong>char</strong> | <strong>TCHAR, ChTraitsOS&lt; wchar_t</strong> | <strong>char</strong> | <strong>TCHAR &gt; &gt;</strong>：类不需要 CRT 支持，字符串资源使用标准的MFC搜索算法。</li>
+<li><p><strong>StrTraitMFC&lt; wchar_t</strong> | <strong>char</strong> | <strong>TCHAR, ChTraitsCRT&lt; wchar_t</strong> | <strong>char</strong> | <strong>TCHAR &gt; &gt;</strong>：类需要 CRT 支持，字符串资源使用标准的MFC搜索算法。</p>
+</li>
+<li><p><strong>StrTraitMFC&lt; wchar_t</strong> | <strong>char</strong> | <strong>TCHAR, ChTraitsOS&lt; wchar_t</strong> | <strong>char</strong> | <strong>TCHAR &gt; &gt;</strong>：类不需要 CRT 支持，字符串资源使用标准的MFC搜索算法。</p>
+</li>
 </ul>
 <h2 id="CStringT-内建了一些数据类型："><a href="#CStringT-内建了一些数据类型：" class="headerlink" title="CStringT 内建了一些数据类型："></a>CStringT 内建了一些数据类型：</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// CStringT</span></span><br><span class="line"><span class="keyword">typedef</span> CSimpleStringT&lt; BaseType, _CSTRING_IMPL_::_MFCDLLTraitsCheck&lt;BaseType, StringTraits&gt;::c_bIsMFCDLLTraits &gt; CThisSimpleString;</span><br><span class="line"><span class="keyword">typedef</span> StringTraits StrTraits;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> CThisSimpleString::XCHAR XCHAR;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> CThisSimpleString::PXSTR PXSTR;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> CThisSimpleString::PCXSTR PCXSTR;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> CThisSimpleString::YCHAR YCHAR;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> CThisSimpleString::PYSTR PYSTR;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">typename</span> CThisSimpleString::PCYSTR PCYSTR;</span><br></pre></td></tr></table></figure>
+
+
+
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">typename</span> BaseType = <span class="keyword">char</span> &gt;</span><br><span class="line">class ChTraitsBase</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">char</span> XCHAR;</span><br><span class="line">	<span class="keyword">typedef</span> LPSTR PXSTR;</span><br><span class="line">	<span class="keyword">typedef</span> LPCSTR PCXSTR;</span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">wchar_t</span> YCHAR;</span><br><span class="line">	<span class="keyword">typedef</span> LPWSTR PYSTR;</span><br><span class="line">	<span class="keyword">typedef</span> LPCWSTR PCYSTR;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;&gt;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ChTraitsBase</span>&lt; wchar_t &gt;</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">wchar_t</span> XCHAR;</span><br><span class="line">	<span class="keyword">typedef</span> LPWSTR PXSTR;</span><br><span class="line">	<span class="keyword">typedef</span> LPCWSTR PCXSTR;</span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">char</span> YCHAR;</span><br><span class="line">	<span class="keyword">typedef</span> LPSTR PYSTR;</span><br><span class="line">	<span class="keyword">typedef</span> LPCSTR PCYSTR;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// CSimpleStringT</span></span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> ChTraitsBase&lt; BaseType &gt;::XCHAR XCHAR;</span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> ChTraitsBase&lt; BaseType &gt;::PXSTR PXSTR;</span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> ChTraitsBase&lt; BaseType &gt;::PCXSTR PCXSTR;</span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> ChTraitsBase&lt; BaseType &gt;::YCHAR YCHAR;</span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> ChTraitsBase&lt; BaseType &gt;::PYSTR PYSTR;</span><br><span class="line">	<span class="keyword">typedef</span> <span class="keyword">typename</span> ChTraitsBase&lt; BaseType &gt;::PCYSTR PCYSTR;</span><br></pre></td></tr></table></figure>
+
+
+
 <ul>
 <li>XCHAR 与 CStringT 对象泛型参数类型一致的单个字符（char, wchar_t）</li>
 <li>YCHAR 与 CStringT 对象泛型参数类型相对的单个字符（char, wchar_t）。如果 XCHAR 是 char，那么 YCHAR 就是 wchar_t。</li>
@@ -352,10 +364,15 @@
 </ul>
 <h2 id="CStringData"><a href="#CStringData" class="headerlink" title="CStringData"></a>CStringData</h2><p> CStringT 没有数据成员，我们所需要的字符是存在 CSimpleStringT 的 m_pszData 内。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	PXSTR m_pszData;</span><br></pre></td></tr></table></figure>
+
+
+
 <p>当我们构造 CStringT 的时候，实际上也会构造 CSimpleStringT：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">explicit</span> <span class="title">CSimpleStringT</span><span class="params">(_Inout_ IAtlStringMgr* pStringMgr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	ATLENSURE( pStringMgr != <span class="literal">NULL</span> );</span><br><span class="line">	CStringData* pData = pStringMgr-&gt;GetNilString();</span><br><span class="line">	Attach( pData );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Attach</span><span class="params">(_Inout_ CStringData* pData)</span> <span class="title">throw</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	m_pszData = <span class="keyword">static_cast</span>&lt; PXSTR &gt;( pData-&gt;data() );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>所以说呢是，强制将 IAtlStringMgr 分配的内存转换为一个 PXSTR 指针的。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">CStringData</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	IAtlStringMgr* pStringMgr;  <span class="comment">// String manager for this CStringData</span></span><br><span class="line">	<span class="keyword">int</span> nDataLength;  <span class="comment">// Length of currently used data in XCHARs (not including terminating null)</span></span><br><span class="line">	<span class="keyword">int</span> nAllocLength;  <span class="comment">// Length of allocated data in XCHARs (not including terminating null)</span></span><br><span class="line">	<span class="keyword">long</span> nRefs;     <span class="comment">// Reference count: negative == locked</span></span><br><span class="line">	<span class="comment">// XCHAR data[nAllocLength+1]  // A CStringData is always followed in memory by the actual array of character data</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span>* <span class="title">data</span><span class="params">()</span> <span class="title">throw</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> (<span class="keyword">this</span>+<span class="number">1</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">AddRef</span><span class="params">()</span> <span class="title">throw</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		ATLASSERT(nRefs &gt; <span class="number">0</span>);</span><br><span class="line">		_InterlockedIncrement(&amp;nRefs);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">IsLocked</span><span class="params">()</span> <span class="keyword">const</span> <span class="title">throw</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span> nRefs &lt; <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">bool</span> <span class="title">IsShared</span><span class="params">()</span> <span class="keyword">const</span> <span class="title">throw</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		<span class="keyword">return</span>( nRefs &gt; <span class="number">1</span> );</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Lock</span><span class="params">()</span> <span class="title">throw</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		ATLASSERT( nRefs &lt;= <span class="number">1</span> );</span><br><span class="line">		nRefs--;  <span class="comment">// Locked buffers can't be shared, so no interlocked operation necessary</span></span><br><span class="line">		<span class="keyword">if</span>( nRefs == <span class="number">0</span> )</span><br><span class="line">		&#123;</span><br><span class="line">			nRefs = <span class="number">-1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Release</span><span class="params">()</span> <span class="title">throw</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		ATLASSERT( nRefs != <span class="number">0</span> );</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>( _InterlockedDecrement( &amp;nRefs ) &lt;= <span class="number">0</span> )</span><br><span class="line">		&#123;</span><br><span class="line">			pStringMgr-&gt;Free( <span class="keyword">this</span> );</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Unlock</span><span class="params">()</span> <span class="title">throw</span><span class="params">()</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		ATLASSERT( IsLocked() );</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span>(IsLocked())</span><br><span class="line">		&#123;</span><br><span class="line">			nRefs++;  <span class="comment">// Locked buffers can't be shared, so no interlocked operation necessary</span></span><br><span class="line">			<span class="keyword">if</span>( nRefs == <span class="number">0</span> )</span><br><span class="line">			&#123;</span><br><span class="line">				nRefs = <span class="number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
 <p>在这里，我们来回顾一下这过程:</p>
 <ol>
 <li>CStringT 继承自 CSimpleStringT。</li>
@@ -364,11 +381,16 @@
 </ol>
 <p>构造一个 CString：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;atlstr.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    CString aCString = CString(_T(<span class="string">"A string"</span>));</span><br><span class="line">    _tprintf(_T(<span class="string">"%s"</span>), (LPCTSTR) aCString);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>但是我们肯定会遇到，在程序中并不是很多地方都会用 CString ，而有的地方可能是需要用 char * 这样的，比如说一些标准库的函数。</p>
 <h3 id="data"><a href="#data" class="headerlink" title="data()"></a>data()</h3><p>这个方法定义得有点让我感觉奇怪，</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">data</span><span class="params">()</span> <span class="title">throw</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (<span class="keyword">this</span>+<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="CString-类型间转换"><a href="#CString-类型间转换" class="headerlink" title="CString 类型间转换"></a>CString 类型间转换</h2><p>前文我们知道，是不是上 CStringT 内部的数据是有类型的，如果我们想要将 CStringA 转换到 char， CStringW 转换到 wchar_t，这是没有什么难度的。</p>
 <h2 id="GetBuffer-与-GetString"><a href="#GetBuffer-与-GetString" class="headerlink" title="GetBuffer() 与 GetString()"></a>GetBuffer() 与 GetString()</h2><h3 id="GetBuffer"><a href="#GetBuffer" class="headerlink" title="GetBuffer()"></a>GetBuffer()</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">PXSTR <span class="title">GetBuffer</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	CStringData* pData = GetData();</span><br><span class="line">	<span class="keyword">if</span>( pData-&gt;IsShared() )</span><br><span class="line">	&#123;</span><br><span class="line">		Fork( pData-&gt;nDataLength );</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span>( m_pszData );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">CStringData* <span class="title">GetData</span><span class="params">()</span> <span class="keyword">const</span> <span class="title">throw</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span>( <span class="keyword">reinterpret_cast</span>&lt; CStringData* &gt;( m_pszData )<span class="number">-1</span> );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">ATL_NOINLINE <span class="keyword">void</span> <span class="title">Fork</span><span class="params">(_In_ <span class="keyword">int</span> nLength)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	CStringData* pOldData = GetData();</span><br><span class="line">	<span class="keyword">int</span> nOldLength = pOldData-&gt;nDataLength;</span><br><span class="line">	CStringData* pNewData = pOldData-&gt;pStringMgr-&gt;Clone()-&gt;Allocate( nLength, <span class="keyword">sizeof</span>( XCHAR ) );</span><br><span class="line">	<span class="keyword">if</span>( pNewData == <span class="literal">NULL</span> )</span><br><span class="line">	&#123;</span><br><span class="line">		ThrowMemoryException();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> nCharsToCopy = ((nOldLength &lt; nLength) ? nOldLength : nLength)+<span class="number">1</span>;  <span class="comment">// Copy '\0'</span></span><br><span class="line">	CopyChars( PXSTR( pNewData-&gt;data() ), nCharsToCopy,</span><br><span class="line">		PCXSTR( pOldData-&gt;data() ), nCharsToCopy );</span><br><span class="line">	pNewData-&gt;nDataLength = nOldLength;</span><br><span class="line">	pOldData-&gt;Release();</span><br><span class="line">	Attach( pNewData );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>可以看到，这个有几步操作：</p>
 <ol>
 <li>获取到CStringData 对象的指针。</li>
@@ -377,14 +399,18 @@
 </ol>
 <p>我们来讨论非共享形式下的的返回，我们知道， m_pszData 实际上是指向 CStringData 的 data 成员：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span>:</span><br><span class="line">	PXSTR m_pszData;</span><br><span class="line">m_pszData = <span class="keyword">static_cast</span>&lt; PXSTR &gt;( pData-&gt;data() );</span><br></pre></td></tr></table></figure>
+
 <p>也就是直接返回了一个 <code>char *</code> 或者 <code>wchar_t</code> 的缓冲区，由于其类型是 PXSTR，所以我们是可以对这个缓冲区进行读写的。共享状态下则不然，你的修改不会修改到被共享的那个缓冲区。</p>
 <h3 id="GetString"><a href="#GetString" class="headerlink" title="GetString()"></a>GetString()</h3><p>这个定义就非常简单了：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">PCXSTR <span class="title">GetString</span><span class="params">()</span> <span class="keyword">const</span> <span class="title">throw</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">return</span>( m_pszData );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p> 就是直接返回了缓冲区，不过返回的是 PCXSTR，不可以进行写入了。</p>
 <h1 id="CString-与-STL-string"><a href="#CString-与-STL-string" class="headerlink" title="CString 与 STL string"></a>CString 与 STL string</h1><p>很多人建议如果想要用 string 的话，就定义一个新的类型来适配：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="built_in">std</span>::basic_string&lt;TCHAR&gt; tstring;</span><br></pre></td></tr></table></figure>
+
 <p>或者</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> UNICODE</span></span><br><span class="line">	<span class="keyword">typedef</span> <span class="built_in">std</span>::basic_string&lt;<span class="keyword">char</span>&gt; String;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">	<span class="keyword">typedef</span> <span class="built_in">std</span>::basic_string&lt;<span class="keyword">wchar_t</span>&gt; String;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -402,7 +428,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Windows/MFC窗口相关方法.html" rel="next" title="MFC窗口相关方法">
+                <a href="/Windows/MFC%E7%AA%97%E5%8F%A3%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95.html" rel="next" title="MFC窗口相关方法">
                   <i class="fa fa-chevron-left"></i> MFC窗口相关方法
                 </a>
             </div>
@@ -410,7 +436,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Windows/MFC中的多线程.html" rel="prev" title="MFC中的多线程">
+                <a href="/Windows/MFC%E4%B8%AD%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B.html" rel="prev" title="MFC中的多线程">
                   MFC中的多线程 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -497,10 +523,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -529,10 +555,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -607,7 +633,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Windows/MFC中的字符宏与CString.html",
+            url: "https://gowa.club/Windows/MFC%E4%B8%AD%E7%9A%84%E5%AD%97%E7%AC%A6%E5%AE%8F%E4%B8%8ECString.html",
             identifier: "Windows/MFC中的字符宏与CString.html",
             title: "MFC中的字符宏与CString"
           }

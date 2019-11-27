@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,19 +51,17 @@
 <meta name="keywords" content="Windows">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Windows中的线程">
-<meta property="og:url" content="https://gowa.club/Windows/Windows中的线程.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Windows&#x2F;Windows%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="在 Windows 中，进程是被动式的，其没有什么需要内核调度到 CPU 进行执行。 内核调度的实际上是线程，当然，每次建立一个新进程的时候，会为进程建立内核对象，分配地址空间，同时还会建立一个主线程，这样内核就会调度主线程的代码了。一般来说，我们进程的主线程入口是 main,wMain,winMain,wWinMain，这些函数其实其实也和我们手动建立的线程的入口线程有相似的地方。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/windows-thread-internals.jpg">
-<meta property="og:image" content="https://gowa.club/res/2011060900165228-20190829000118711.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;windows-thread-internals.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;2011060900165228-20190829000118711.png">
 <meta property="og:updated_time" content="2019-08-25T04:41:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Windows中的线程">
-<meta name="twitter:description" content="在 Windows 中，进程是被动式的，其没有什么需要内核调度到 CPU 进行执行。 内核调度的实际上是线程，当然，每次建立一个新进程的时候，会为进程建立内核对象，分配地址空间，同时还会建立一个主线程，这样内核就会调度主线程的代码了。一般来说，我们进程的主线程入口是 main,wMain,winMain,wWinMain，这些函数其实其实也和我们手动建立的线程的入口线程有相似的地方。">
-<meta name="twitter:image" content="https://gowa.club/res/windows-thread-internals.jpg">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;windows-thread-internals.jpg">
 
-<link rel="canonical" href="https://gowa.club/Windows/Windows中的线程.html">
+<link rel="canonical" href="https://gowa.club/Windows/Windows%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html">
 
 
 <script id="page-configurations">
@@ -228,12 +226,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/Windows中的线程.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/Windows%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -274,7 +272,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Windows/Windows中的线程.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Windows/Windows%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Windows/Windows中的线程.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,8 +290,10 @@
       
         <p>在 Windows 中，进程是被动式的，其没有什么需要内核调度到 CPU 进行执行。 内核调度的实际上是线程，当然，每次建立一个新进程的时候，会为进程建立内核对象，分配地址空间，同时还会建立一个主线程，这样内核就会调度主线程的代码了。一般来说，我们进程的主线程入口是 main,wMain,winMain,wWinMain，这些函数其实其实也和我们手动建立的线程的入口线程有相似的地方。</p>
 <a id="more"></a>
+
 <h1 id="CreateThread"><a href="#CreateThread" class="headerlink" title="CreateThread"></a>CreateThread</h1><p>我们可以用 CreateThread 来建立一个线程。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">HANDLE <span class="title">CreateThread</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   PSECURITY_ATTRIBUTES psa,</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD cbStack,</span></span></span><br><span class="line"><span class="function"><span class="params">   PTHREAD_START_ROUTINE pfnStartAddr,</span></span></span><br><span class="line"><span class="function"><span class="params">   PVOID pvParam,</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD fdwCreate,</span></span></span><br><span class="line"><span class="function"><span class="params">   PDWORD pdwThreadID)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>几个参数看起来并没有什么特意的地方，我们之前好像说过，对于每个建立内核对象的函数来，其肯定都会有一个  PSECURITY_ATTRIBUTES 参数，用来指定此内核对象的安全属性，是否可以继承等。</p>
 <ul>
 <li>cbStack 用来指定用从进程的地址空间内分配多大的空间给此线程使用。每个线程都会有自己的对栈用来存储线程内的本地变量。</li>
@@ -324,13 +324,14 @@
 <li><p>系统将递减线程内核对象的使用计数。</p>
 </li>
 </ul>
-<h1 id="内核线程对象内部细节"><a href="#内核线程对象内部细节" class="headerlink" title="内核线程对象内部细节"></a>内核线程对象内部细节</h1><p><img src="../res/windows-thread-internals.jpg" alt></p>
+<h1 id="内核线程对象内部细节"><a href="#内核线程对象内部细节" class="headerlink" title="内核线程对象内部细节"></a>内核线程对象内部细节</h1><p><img src="../res/windows-thread-internals.jpg" alt=""></p>
 <p>我们建立后的线程内核对象大体上来说是上图那样的。<code>CreateThread</code> 函数会让系统建立一个线程内核对象。此内核对象的初始引用计数是2，挂起计数为1，退回代码设置为 <strong>STILL_ACTIVE(0x103)</strong>，同时对象的状态设置为未收到信号状态。</p>
 <p>需要明确的是，<strong>每个线程都有一个线程栈，我们所谓的函数执行时候的栈帧，就是在线程栈上生成的。</strong></p>
 <p>内核对象建立后，系统从进程的地址空间为此线程的栈分配内存，接着就会在栈顶写入两个值。1）pvParam，2）pfnStartAddr。</p>
 <p>每个线程都有其自己的 CPU 寄存器集合，我们把这些寄存器的集合叫做 <strong>上下文</strong>。上下文记录了此线程上一次执行时候的CPU寄存器，其保存在一个 <code>CONTEXT</code> 结构中（定义在 WinNT.h 头文件中）。此结构包含在 线程内核对象中。</p>
 <p>在线程的上下文中，IP（指令指针寄存器），SP（堆栈指针寄存器） 是最重要的两个寄存器。当线线程内核对象初始化的时候，<strong>CONTEXT</strong> 结构中的 SP设置为 pfnStartAddr 的在线程栈上的地址；IP 设置为一个没有文档说明的函数 <code>RtlUserThreadStart</code> 函数，这是由 <code>NTDLL.dll</code> 导出的。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">VOID <span class="title">RtlUserThreadStart</span><span class="params">(PTHREAD_START_ROUTINE pfnStartAddr, PVOID pvParam)</span> </span>&#123;</span><br><span class="line">   __try &#123;</span><br><span class="line">      ExitThread((pfnStartAddr)(pvParam));</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   __except(UnhandledExceptionFilter(GetExceptionInformation())) &#123;</span><br><span class="line">      ExitProcess(GetExceptionCode());</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// <span class="doctag">NOTE:</span> We never get here.</span></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>这个时候线程已经完成了初始化，系统会检查一下 <code>CreateThread</code> 的 标志位参数是否设置了 <strong>CREATE_SUSPEND</strong>。如果没有设置的话，那么此线程已经能被调度，系统会将 <strong>CONTEXT</strong> 中的值加载进 CPU 的寄存器中。</p>
 <p>因为新线程的 IP 是指向 <code>RtlUserThreadStart</code> 的，所以这里才是新线程开始执行的地方。<code>RtlUserThreadStart</code> 的原型看起来，会让我们以为这个函数接受两个参数，但这隐含的表明这个函数是由其他函数进行调用的，事实上，并不是这样的。</p>
 <p>新线程简单的从这个时候开始存在和执行。<code>RtlUserThreadStart</code> 之所以能够访问两个参数是因为系统显式的将这两个值写到了线程的栈上（线程的开始）。当有的CPU架构使用 CPU 寄存器来传递参数而不是栈时，系统会初始化对应的寄存器，然后再执行 <code>RtlUserThreadStart</code>。</p>
@@ -340,9 +341,8 @@
 <h1 id="C-C-运行时库"><a href="#C-C-运行时库" class="headerlink" title="C/C++ 运行时库"></a>C/C++ 运行时库</h1><p>C/C++ 运行库是什么东西？这是 C/C++ 标准所定义的一些库函数。早期的时候，存在一个支持单线程应用的库，而其他库支持多线程。为什么会存在这种情况呢？这是因为标准 C 运行使馆库是在 1970 年发明的，这比线程早出现了很多年。当时的发明者并没有考虑 C 运行库在多线程应用下运行的问题。</p>
 <p>当前微软考虑到了这个问题，将 C/C++ 运行库都实现为线程安全的，但这需要我们在多线程的时候注意一些操作。比如 CreateThread 与 _beginthreadex 的差异。</p>
 <p>同时我们还需要明白一点，C/C++ 运行库，是基于 Windows 的提供的 API 来实现的。可以看看这些层级关系：</p>
-<p><img src="../res/2011060900165228-20190829000118711.png" alt></p>
+<p><img src="../res/2011060900165228-20190829000118711.png" alt=""></p>
 <p>有四个原生开发的 C/C++ 运行时库，有两个用于 .NET。这几个库都支持多线程，当前已经不存在单独支持单线程的 C/C++ 库了。</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -350,8 +350,7 @@
 <th>描述</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>LibCMt.lib</td>
 <td>发布版静态链接库</td>
 </tr>
@@ -375,21 +374,25 @@
 <td>MSVCURt.lib</td>
 <td>被编译成 100% MSIL 代码的导入库</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>C 运行时有一个全局变量 <strong>errno</strong>。有些函数会在调用失败的时候设置这个变量的值。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">BOOL fFailure = (system(<span class="string">"NOTEPAD.EXE README.TXT"</span>) == <span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (fFailure) &#123;</span><br><span class="line">   <span class="keyword">switch</span> (errno) &#123;</span><br><span class="line">   <span class="keyword">case</span> E2BIG: <span class="comment">// Argument list or environment too big</span></span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">   <span class="keyword">case</span> ENOENT: <span class="comment">// Command interpreter cannot be found</span></span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">   <span class="keyword">case</span> ENOEXEC: <span class="comment">// Command interpreter has bad format</span></span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">   <span class="keyword">case</span> ENOMEM: <span class="comment">// Insufficient memory to run command</span></span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>这在多线程的情况下会出现很大的问题。</p>
 <p>对于多线程的 C C++程序来说，想要正确的工作，那些使用了 C/C++ 运行时库函数的线程必须有一个自己的数据结构；那么当我们在线程中调用 C/C++ 运行时库函数的时候，这些函数必须知道怎么样找到调用线程关联的数据结构而不影响其他线程。也就是说，设置自己的线程内的全局变量，获取也只获取自己线程内的全局变量等。</p>
 <p>所以，怎么样让操作系统知道需要在新线程建立的时候分配这些数据结构？事实上操作系统才不管这个事情，因为其并不知道你的应用是用 C/C++ 写的，也不知道你调用的函数不是线程安全的，我们必须自己保证正确性。因此，在建立线程的时候，不要调用 Windows 操作系统的 <code>CreateThread</code> 函数，而是调用  C/C++ 运行时库函数 <code>_beginthreadex</code>。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> _beginthreadex(</span><br><span class="line"><span class="keyword">void</span> *security,</span><br><span class="line"><span class="keyword">unsigned</span> stack_size,</span><br><span class="line"><span class="keyword">unsigned</span> (*start_addr)(<span class="keyword">void</span> *),</span><br><span class="line"><span class="keyword">void</span> *arglist,</span><br><span class="line"><span class="keyword">unsigned</span> initflag,</span><br><span class="line"><span class="keyword">unsigned</span> *thrdaddr));</span><br></pre></td></tr></table></figure>
+
 <p>这看起来和 <code>CreateThread</code> 很像，但是函数参数的类型并不相同。这是因为 微软 C/C++ 运行时库小组认为<strong>C/C++ 运行时库函数不应该依赖于 Windows 的数据类型</strong>。可以用一个宏来简化我们的操作：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">unsigned</span> <span class="params">(__stdcall *PTHREAD_START)</span> <span class="params">(<span class="keyword">void</span> *)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> chBEGINTHREADEX(psa, cbStack, pfnStartAddr, \</span></span><br><span class="line">   pvParam, fdwCreate, pdwThreadID)                 \</span><br><span class="line">      ((HANDLE) _beginthreadex(                     \</span><br><span class="line">         (<span class="keyword">void</span> *) (psa),                            \</span><br><span class="line">         (<span class="keyword">unsigned</span>) (cbStackSize),                  \</span><br><span class="line">         (PTHREAD_START) (pfnStartAddr),            \</span><br><span class="line">         (<span class="keyword">void</span> *) (pvParam),                        \</span><br><span class="line">         (<span class="keyword">unsigned</span>) (dwCreateFlags),                \</span><br><span class="line">         (<span class="keyword">unsigned</span> *) (pdwThreadID)))</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="beginthreadex"><a href="#beginthreadex" class="headerlink" title="_beginthreadex"></a>_beginthreadex</h2><p><strong>为什么要调用这个函数，而不是要调用 CreateThread 函数呢？</strong></p>
 <p>答案是，为了线程安全。MSVCRT.dll 中的函数大多实现为线程安全的，当我们用 CreateThread 建立了一个线程，而我们又在线程中<strong>调用了 C 运行库函数</strong>时，如果这些函数需要一个线程相关的数据结构，会自动建立，但退回的时候却不会自动释放，所以在进程的运行期间可能会出现内存的泄漏问题。</p>
 <p>而 _beginthreadex 分配的线程相关的数据结构，会在线程结束时自动释放。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">uintptr_t</span> __cdecl _beginthreadex (</span><br><span class="line">   <span class="keyword">void</span> *psa,</span><br><span class="line">   <span class="keyword">unsigned</span> cbStackSize,</span><br><span class="line">   <span class="keyword">unsigned</span> (__stdcall * pfnStartAddr) (<span class="keyword">void</span> *),</span><br><span class="line">   <span class="keyword">void</span> * pvParam,</span><br><span class="line">   <span class="keyword">unsigned</span> dwCreateFlags,</span><br><span class="line">   <span class="keyword">unsigned</span> *pdwThreadID) &#123;</span><br><span class="line"></span><br><span class="line">   _ptiddata ptd;         <span class="comment">// 指向线程需要的关联数据</span></span><br><span class="line">   <span class="keyword">uintptr_t</span> thdl;        <span class="comment">// 线程的 handle</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// 为新线程关联数据分配内存</span></span><br><span class="line">   <span class="keyword">if</span> ((ptd = (_ptiddata)_calloc_crt(<span class="number">1</span>, <span class="keyword">sizeof</span>(struct _tiddata))) == <span class="literal">NULL</span>)</span><br><span class="line">      <span class="keyword">goto</span> error_return;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 初始化分配的内存</span></span><br><span class="line">   initptd(ptd);</span><br><span class="line">   <span class="comment">// 将线程函数和参数放进分配的结构中。</span></span><br><span class="line">   ptd-&gt;_initaddr = (<span class="keyword">void</span> *) pfnStartAddr;</span><br><span class="line">   ptd-&gt;_initarg = pvParam;</span><br><span class="line">   ptd-&gt;_thandle = (<span class="keyword">uintptr_t</span>)(<span class="number">-1</span>);</span><br><span class="line"></span><br><span class="line">   <span class="comment">// 建立新线程</span></span><br><span class="line">   thdl = (<span class="keyword">uintptr_t</span>) CreateThread((LPSECURITY_ATTRIBUTES)psa, cbStackSize,</span><br><span class="line">      _threadstartex, (PVOID) ptd, dwCreateFlags, pdwThreadID);</span><br><span class="line">   <span class="keyword">if</span> (thdl == <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="comment">// Thread couldn't be created, cleanup and return failure.</span></span><br><span class="line">      <span class="keyword">goto</span> error_return;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Thread created OK, return the handle as unsigned long.</span></span><br><span class="line">   <span class="keyword">return</span>(thdl);</span><br><span class="line">error_return:</span><br><span class="line">   <span class="comment">// Error: data block or thread couldn't be created.</span></span><br><span class="line">   <span class="comment">// GetLastError() is mapped into errno corresponding values</span></span><br><span class="line">   <span class="comment">// if something wrong happened in CreateThread.</span></span><br><span class="line"></span><br><span class="line">   _free_crt(ptd);</span><br><span class="line">   <span class="keyword">return</span>((<span class="keyword">uintptr_t</span>)<span class="number">0L</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>我们需要注意几点：</p>
 <ul>
 <li>每个线程会获取其自己的 <strong>_tiddata</strong> 数据库，这是从 C/C++ 运行使时库的堆上分配的。</li>
@@ -399,6 +402,7 @@
 </ul>
 <p>我们的 <strong>_tiddata</strong> 结构已经初始化来，那么其是怎么样与新线程关联起来的呢？我们来看看 <code>_threadstartex</code> 函数（这也是一个 C/C++　运行时库函数，Threadex.c 文件中）。</p>
 <h2 id="threadstartex"><a href="#threadstartex" class="headerlink" title="_threadstartex"></a>_threadstartex</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">unsigned</span> <span class="keyword">long</span> WINAPI _threadstartex (<span class="keyword">void</span>* ptd) &#123;</span><br><span class="line">   <span class="comment">// Note: ptd is the address of this thread's tiddata block.</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// Associate the tiddata block with this thread so</span></span><br><span class="line">   <span class="comment">// _getptd() will be able to find it in _callthreadstartex.</span></span><br><span class="line">   TlsSetValue(__tlsindex, ptd);</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Save this thread ID in the _tiddata block.</span></span><br><span class="line">   ((_ptiddata) ptd)-&gt;_tid = GetCurrentThreadId();</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Initialize floating-point support (code not shown).</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// call helper function.</span></span><br><span class="line">   _callthreadstartex();</span><br><span class="line"></span><br><span class="line">   <span class="comment">// We never get here; the thread dies in _callthreadstartex.</span></span><br><span class="line">   <span class="keyword">return</span>(<span class="number">0L</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span> _callthreadstartex(<span class="keyword">void</span>) &#123;</span><br><span class="line">   _ptiddata ptd; <span class="comment">/* pointer to thread's _tiddata struct */</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// get the pointer to thread data from TLS</span></span><br><span class="line">   ptd = _getptd();</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Wrap desired thread function in SEH frame to</span></span><br><span class="line">   <span class="comment">// handle run-time errors and signal support.</span></span><br><span class="line">   __try &#123;</span><br><span class="line">      <span class="comment">// Call desired thread function, passing it the desired parameter.</span></span><br><span class="line">      <span class="comment">// Pass thread's exit code value to _endthreadex.</span></span><br><span class="line">      _endthreadex(</span><br><span class="line">          ((<span class="keyword">unsigned</span> (WINAPI *)(<span class="keyword">void</span> *))(((_ptiddata)ptd)-&gt;_initaddr))</span><br><span class="line">             (((_ptiddata)ptd)-&gt;_initarg)) ;</span><br><span class="line">   &#125;</span><br><span class="line">   __except(_XcptFilter(GetExceptionCode(), GetExceptionInformation()))&#123;</span><br><span class="line">      <span class="comment">// The C run-time's exception handler deals with run-time errors</span></span><br><span class="line">      <span class="comment">// and signal support; we should never get it here.</span></span><br><span class="line">      _exit(GetExceptionCode());</span><br><span class="line"></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>需要注意几点：</p>
 <ul>
 <li>新线程是从 <code>**RtlUserThreadStart**</code> 开始执行，然后跳到 <code>_threadstartex</code> 这个前面说过。</li>
@@ -408,10 +412,12 @@
 <li>在<code>_callthreadstartex</code> 中调用 <code>_endthreadex</code> 而你是执行完毕直接返回的原因是：我们需要释放我们之前分配的 <strong>_tiddata</strong> 结构。</li>
 </ul>
 <h2 id="endthreadex"><a href="#endthreadex" class="headerlink" title="_endthreadex"></a>_endthreadex</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> __cdecl _endthreadex (<span class="keyword">unsigned</span> retcode) &#123;</span><br><span class="line">   _ptiddata ptd;         <span class="comment">// Pointer to thread's data block</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// Clean up floating-point support (code not shown).</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// Get the address of this thread's tiddata block.</span></span><br><span class="line">   ptd = _getptd_noexit ();</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Free the tiddata block.</span></span><br><span class="line">   <span class="keyword">if</span> (ptd != <span class="literal">NULL</span>)</span><br><span class="line">      _freeptd(ptd);</span><br><span class="line"></span><br><span class="line">   <span class="comment">// Terminate the thread.</span></span><br><span class="line">   ExitThread(retcode);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>前面强调过尽量不要使用 <code>ExitThread</code>，因为其会干掉当前线程，而不会从执行中的函数返回，那么我们在函数中构建的任何 C++ 对象都不会被销毁。还有一个原因就是：<code>ExitThread</code> 会阻止 <strong>_tiddata</strong> 结构的释放。</p>
 <p>所以如果要调用  <code>ExitThread</code> 的时候，用<code>_endthreadex</code> 代替吧，当然其实这也是非常不鼓励的。</p>
 <p>当 <strong>_tiddata</strong> 结构初始化并与线程关联后，任何 C/C++ 运行时库函数被调用时可以很容易的通过 TlsGetValue 来获取这个结构，操作里面的数据，得到线程独立的数据实例。对于函数来说这很不错，但是如果对于全局变量呢？比如 <strong>errno</strong>，这是一个标准的 C 头文件中的全局变量：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">_CRTIMP <span class="keyword">extern</span> <span class="keyword">int</span> * __cdecl _errno(<span class="keyword">void</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> errno   (*_errno())</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span>* __cdecl _errno(<span class="keyword">void</span>) &#123;</span><br><span class="line">   _ptiddata ptd = _getptd_noexit();</span><br><span class="line">   <span class="keyword">if</span> (!ptd) &#123;</span><br><span class="line">      <span class="keyword">return</span> &amp;ErrnoNoMem;</span><br><span class="line">   &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">return</span> (&amp;ptd-&gt;_terrno);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>我们将其定义为一个宏去，这样的话就可以在 <code>_errno</code> 中拿到线程独立的数据了。</p>
 
     </div>
@@ -429,7 +435,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/在Linux为开启SFTP.html" rel="next" title="在Linux为开启SFTP">
+                <a href="/Linux-Unix/%E5%9C%A8Linux%E4%B8%BA%E5%BC%80%E5%90%AFSFTP.html" rel="next" title="在Linux为开启SFTP">
                   <i class="fa fa-chevron-left"></i> 在Linux为开启SFTP
                 </a>
             </div>
@@ -437,7 +443,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Git/Git服务器存储裸库及多个工作区.html" rel="prev" title="Git服务器存储裸库及多个工作区">
+                <a href="/Git/Git%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AD%98%E5%82%A8%E8%A3%B8%E5%BA%93%E5%8F%8A%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E5%8C%BA.html" rel="prev" title="Git服务器存储裸库及多个工作区">
                   Git服务器存储裸库及多个工作区 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -524,10 +530,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -556,10 +562,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -634,7 +640,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Windows/Windows中的线程.html",
+            url: "https://gowa.club/Windows/Windows%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html",
             identifier: "Windows/Windows中的线程.html",
             title: "Windows中的线程"
           }

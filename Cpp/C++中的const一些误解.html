@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Cpp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++中的const一些误解">
-<meta property="og:url" content="https://gowa.club/Cpp/C++中的const一些误解.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Cpp&#x2F;C++%E4%B8%AD%E7%9A%84const%E4%B8%80%E4%BA%9B%E8%AF%AF%E8%A7%A3.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="哈哈，对于 const 实在是有太多的说的了。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-09-27T04:38:25.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="C++中的const一些误解">
-<meta name="twitter:description" content="哈哈，对于 const 实在是有太多的说的了。">
 
-<link rel="canonical" href="https://gowa.club/Cpp/C++中的const一些误解.html">
+<link rel="canonical" href="https://gowa.club/Cpp/C++%E4%B8%AD%E7%9A%84const%E4%B8%80%E4%BA%9B%E8%AF%AF%E8%A7%A3.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cpp/C++中的const一些误解.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cpp/C++%E4%B8%AD%E7%9A%84const%E4%B8%80%E4%BA%9B%E8%AF%AF%E8%A7%A3.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Cpp/C++中的const一些误解.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Cpp/C++%E4%B8%AD%E7%9A%84const%E4%B8%80%E4%BA%9B%E8%AF%AF%E8%A7%A3.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cpp/C++中的const一些误解.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,27 +287,38 @@
       
         <p>哈哈，对于 const 实在是有太多的说的了。</p>
 <a id="more"></a>
+
 <h1 id="const-类型"><a href="#const-类型" class="headerlink" title="const 类型"></a>const 类型</h1><p>常规来说，当我们对一个变量指定 const 的时候，表示这个变量是不能被改变的。事实上我认为内建类型，与引用类型还是有所不同的。</p>
 <p>比如：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> i = <span class="number">100</span>;</span><br></pre></td></tr></table></figure>
+
 <p>我们无法改变 i 的值。在这个时候，说的应该是，对于 i 这个符号哦代表的那块内存，是无法修改的。</p>
 <p>我们生命一个指针：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> *p = &amp;i;</span><br></pre></td></tr></table></figure>
+
 <p>你会发现，这个语句是不合法的，编译器的提示是：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cannot initialize a variable of type &apos;int *&apos; with an rvalue of type &apos;const int *&apos;</span><br></pre></td></tr></table></figure>
+
 <p> 就是说，类型不一致。</p>
 <p>所以从这里看出，我们的 const 与一个类型放在一起的时候，形成了一个新的类型。</p>
 <h1 id="const-指针"><a href="#const-指针" class="headerlink" title="const 指针"></a>const 指针</h1><p>当我们如下定义一个指针的时候：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * p;</span><br></pre></td></tr></table></figure>
+
 <p>表示的是， p 这个符号，指向的是一个 const 内存区域，同时此内存区域的值类型是 int。我们是无法修改其值的，但这个时候，我们却是可以改变 p 的值的。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> i = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> *p = &amp;i;</span><br><span class="line">*p = <span class="number">200</span>; <span class="comment">// read-only variable is not assignable</span></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> j = <span class="number">200</span>;</span><br><span class="line">p = &amp;j</span><br></pre></td></tr></table></figure>
+
 <p>如果我们真的相要指定一个不会改变的指针（事实上，对于引用类型  &amp; 就是这样做的），那么需要用 <code>int * const p</code> 这样的形式：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span>  i = <span class="number">100</span>;</span><br><span class="line"><span class="keyword">int</span> * <span class="keyword">const</span> p = &amp;i;</span><br><span class="line"><span class="keyword">int</span> j = <span class="number">20</span>;</span><br><span class="line">*p = j;</span><br><span class="line">p = &amp;j; <span class="comment">//cannot assign to variable 'p' with const-qualified type 'int *const'</span></span><br></pre></td></tr></table></figure>
+
+
+
 <p>事实上：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> * <span class="keyword">const</span> p ;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * p ;</span><br></pre></td></tr></table></figure>
+
 <p>这两种的效果是一致的。</p>
 <p>我们想要指定一个果然是无法改变的变量应该是这样：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> * <span class="keyword">const</span> p;</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -326,7 +335,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Windows/Windows读写配置文件.html" rel="next" title="Windows读写配置文件">
+                <a href="/Windows/Windows%E8%AF%BB%E5%86%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html" rel="next" title="Windows读写配置文件">
                   <i class="fa fa-chevron-left"></i> Windows读写配置文件
                 </a>
             </div>
@@ -334,7 +343,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Windows/MFC-CMap类的使用的怪异.html" rel="prev" title="MFC-CMap类的使用的怪异">
+                <a href="/Windows/MFC-CMap%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8%E7%9A%84%E6%80%AA%E5%BC%82.html" rel="prev" title="MFC-CMap类的使用的怪异">
                   MFC-CMap类的使用的怪异 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -421,10 +430,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -453,10 +462,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -531,7 +540,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Cpp/C++中的const一些误解.html",
+            url: "https://gowa.club/Cpp/C++%E4%B8%AD%E7%9A%84const%E4%B8%80%E4%BA%9B%E8%AF%AF%E8%A7%A3.html",
             identifier: "Cpp/C++中的const一些误解.html",
             title: "C++中的const一些误解"
           }

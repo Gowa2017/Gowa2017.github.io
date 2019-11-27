@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Linux,运维,TCP&#x2F;IP,Tcpdump">
 <meta property="og:type" content="article">
 <meta property="og:title" content="tcpdump的使用-过滤表达式">
-<meta property="og:url" content="https://gowa.club/TCP-IP/tcpdump的使用-过滤表达式.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;TCP-IP&#x2F;tcpdump%E7%9A%84%E4%BD%BF%E7%94%A8-%E8%BF%87%E6%BB%A4%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="一直都有在用，但是远没有体会到强大，直到某一天，实在需要排除网络故障问题的时候，让我们一起来学习吧。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.271Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tcpdump的使用-过滤表达式">
-<meta name="twitter:description" content="一直都有在用，但是远没有体会到强大，直到某一天，实在需要排除网络故障问题的时候，让我们一起来学习吧。">
 
-<link rel="canonical" href="https://gowa.club/TCP-IP/tcpdump的使用-过滤表达式.html">
+<link rel="canonical" href="https://gowa.club/TCP-IP/tcpdump%E7%9A%84%E4%BD%BF%E7%94%A8-%E8%BF%87%E6%BB%A4%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/TCP-IP/tcpdump的使用-过滤表达式.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/TCP-IP/tcpdump%E7%9A%84%E4%BD%BF%E7%94%A8-%E8%BF%87%E6%BB%A4%E8%A1%A8%E8%BE%BE%E5%BC%8F.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -278,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/TCP-IP/tcpdump的使用-过滤表达式.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/TCP-IP/tcpdump%E7%9A%84%E4%BD%BF%E7%94%A8-%E8%BF%87%E6%BB%A4%E8%A1%A8%E8%BE%BE%E5%BC%8F.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="TCP-IP/tcpdump的使用-过滤表达式.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,19 +292,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>一直都有在用，但是远没有体会到强大，直到某一天，实在需要排除网络故障问题的时候，让我们一起来学习吧。<br><a id="more"></a></p>
+        <p>一直都有在用，但是远没有体会到强大，直到某一天，实在需要排除网络故障问题的时候，让我们一起来学习吧。</p>
+<a id="more"></a>
 <h1 id="基本命令格式"><a href="#基本命令格式" class="headerlink" title="基本命令格式"></a>基本命令格式</h1><p>OS： CentOS 5.10 X86_64</p>
 <ul>
 <li>tcpdump version 3.9.4</li>
 <li>libpcap version 0.9.4<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tcpdump [ -AdDeflLnNOpqRStuUvxX ] [ -c count ]</span><br><span class="line">        [ -C file_size ] [ -F file ]</span><br><span class="line">        [ -i interface ] [ -m module ] [ -M secret ]</span><br><span class="line">        [ -r file ] [ -s snaplen ] [ -T type ] [ -w file ]</span><br><span class="line">        [ -W filecount ]</span><br><span class="line">        [ -E spi@ipaddr algo:secret,...  ]</span><br><span class="line">        [ -y datalinktype ] [ -Z user ]</span><br><span class="line">        [ expression ]</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="选项说明"><a href="#选项说明" class="headerlink" title="选项说明"></a>选项说明</h2><ul>
+<h2 id="选项说明"><a href="#选项说明" class="headerlink" title="选项说明"></a>选项说明</h2></li>
 <li><strong>-A</strong> 以ASCII打印每个报文。放用来抓网页。</li>
 <li><strong>-c</strong> <em>count</em> 收到 count 个包后退出</li>
 <li><strong>-C</strong> <em>file_size</em> 在将包数据写入文件的时候，检查文件是否大于设置的file_size。如果大了就重新开一个文件。文件名用<strong>-w filename</strong>指定，并加上一个从1开始的数字。file_size的单位是（1,000,000  bytes,  not 1,048,576 bytes）</li>
 <li><strong>-d</strong> -dd -ddd 将捕捉条件以人易读的方式/C片段方式/10进制方式。一般不用</li>
-<li><strong>-D —list-interface</strong> 以 1.eth0 这样的方式打印网卡，供 -i 调用。可能在老版本的 libpcap 上（缺少pcap_findalldevs()函数）无法支持。</li>
+<li><strong>-D –list-interface</strong> 以 1.eth0 这样的方式打印网卡，供 -i 调用。可能在老版本的 libpcap 上（缺少pcap_findalldevs()函数）无法支持。</li>
 <li><strong>-e</strong> 打印出链路层的头部信息如mac地址。</li>
 <li><strong>-E</strong> 针对 Ipsec ESP包。</li>
 <li><strong>-f</strong> 用数字形式显示 ‘外部的’ 互联网地址, 而不是字符形式。</li>
@@ -334,14 +331,14 @@
 <li><strong>-u</strong> 打印未解密的NFS<strong>handles</strong></li>
 <li><strong>-U</strong> <strong>packet-bufferd</strong>，每个包收到就存到<strong>-w filename</strong>指定的文件，而不是等输出缓冲区满。老版本libpcap缺少(pcap_dump_flush())函数的不支持。</li>
 <li><strong>-v -vv -vvv</strong> 打印的信息一个比一个多，详细。</li>
-<li><strong>-w</strong> <em>filenmae<strong> 将报文存到 filename，可通过</strong>-r<strong>读入，标准输出是</strong>-*</em>。</li>
+<li><strong>-w</strong> <em>filenmae*</em> 将报文存到 filename，可通过<strong>-r</strong>读入，标准输出是<strong>-</strong>。</li>
 <li><strong>-W</strong> 与<strong>-C</strong>一起用，限制文件生成数量，文件号最大会从。会在序号前补0,以便更好的排序。如果数字序号已到最大，就从最开始的文件开始写入。</li>
 <li><strong>-x</strong> 16进制形式打印每个包内容（不包括链路层头部）。这是一个链路层的包，所以被填充的部分也会被打印（上层网络的数据包小于数据帧最小长度）。</li>
 <li><strong>-xx</strong> 包括链路层头部</li>
 <li><strong>-X</strong> 以16进制和ASCII格式打印包内容（不包括链路层头部）。</li>
 <li><strong>-XX</strong> 以16进制和ASCII格式打印包内容（包括链路层头部）。</li>
 <li><strong>-y</strong> 指定链路层类型</li>
-<li><strong>—version</strong><h2 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h2>用来过滤哪些报文需要被捕获，没有表达式则所有报文都会被捕获。<br>表达式一般包括一个或多个条件，每个条件经常是一个<strong>限制符（qualifiers）</strong>和一个<strong>ID（NAME或NUMBER）</strong>构成。<br>有三种限制符：</li>
+<li><strong>–version</strong><h2 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h2>用来过滤哪些报文需要被捕获，没有表达式则所有报文都会被捕获。<br>表达式一般包括一个或多个条件，每个条件经常是一个<strong>限制符（qualifiers）</strong>和一个<strong>ID（NAME或NUMBER）</strong>构成。<br>有三种限制符：</li>
 <li><strong>type</strong> {host | net | port | portrange}，如果不指定，默认是<code>host</code>。例如：<code>host foo</code>、<code>net 128.3</code>、<code>port 80</code>、<code>portrange 6000-6008</code>。</li>
 <li><strong>dir</strong> { src | dest | src or dst | src and dst} 指定报文方向，如果不指定，默认是<code>src or dst</code>。例如：<code>src foo</code>、<code>dst net 128.3</code>、<code>src or dst port ftp-data</code>。</li>
 <li><strong>proto</strong> {ether | fddi | tr | wlan | ip | ip6 | arp | rarp | decnet | tcp | udp}，如果不指定，所有和<strong>type</strong>符合的协议会被捕获。例如<code>ether src foo</code>、<code>arp net 128.3</code>、<code>tcp port 21</code>、<code>udp portrange 7000-7005</code>。<blockquote>
@@ -353,9 +350,9 @@
 <ul>
 <li><strong>dst host</strong> <em>host</em> 如果IPv4/v6报文的目标是<em>host</em>则为真。<em>host</em>可以是IP或者主机名</li>
 <li><strong>src host</strong> <em>host</em> 如果IPv4/v6报文的源地址是<em>host</em>则为真。<em>host</em>可以是IP或者主机名</li>
-<li><strong>host</strong> <em>host</em> 如果目标地址或源地址是<em>host</em>则为真。</li>
+<li><strong>host</strong> <em>host</em> 如果目标地址或源地址是_host_则为真。</li>
 <li><strong>ether [ src | dst | host}</strong> <em>ehost</em> 以太网帧[源地址 | 目的地址 | 目的地址或源地址]是 <em>ehost</em></li>
-<li><strong>gateway</strong> <em>host</em> 如果报文的gateway是<em>host</em>。也就是说：ether帧的源地址或目的地址是<em>host</em>，但是IP报文的目的地址和源地址都不是<em>host</em>。</li>
+<li><strong>gateway</strong> <em>host</em> 如果报文的gateway是_host_。也就是说：ether帧的源地址或目的地址是_host_，但是IP报文的目的地址和源地址都不是_host_。</li>
 <li><strong>[ src | dst ] net</strong> <em>{net mask netmask | net/len}</em> 指定[源网络号 | 目的网络号 | 目的或源网络号]是 <em>net</em></li>
 </ul>
 
@@ -368,7 +365,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/运维/" rel="tag"># 运维</a>
+              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
               <a href="/tags/TCP-IP/" rel="tag"># TCP/IP</a>
               <a href="/tags/Tcpdump/" rel="tag"># Tcpdump</a>
           </div>
@@ -377,7 +374,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/Bash编程参考-参数与扩展.html" rel="next" title="Bash编程参考-参数与扩展">
+                <a href="/Linux-Unix/Bash%E7%BC%96%E7%A8%8B%E5%8F%82%E8%80%83-%E5%8F%82%E6%95%B0%E4%B8%8E%E6%89%A9%E5%B1%95.html" rel="next" title="Bash编程参考-参数与扩展">
                   <i class="fa fa-chevron-left"></i> Bash编程参考-参数与扩展
                 </a>
             </div>
@@ -385,7 +382,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/TCP-IP/DHCP-Client的模拟客户端申请IP.html" rel="prev" title="DHCP Client的模拟客户端申请IP">
+                <a href="/TCP-IP/DHCP-Client%E7%9A%84%E6%A8%A1%E6%8B%9F%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%94%B3%E8%AF%B7IP.html" rel="prev" title="DHCP Client的模拟客户端申请IP">
                   DHCP Client的模拟客户端申请IP <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -472,10 +469,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -504,10 +501,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -582,7 +579,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/TCP-IP/tcpdump的使用-过滤表达式.html",
+            url: "https://gowa.club/TCP-IP/tcpdump%E7%9A%84%E4%BD%BF%E7%94%A8-%E8%BF%87%E6%BB%A4%E8%A1%A8%E8%BE%BE%E5%BC%8F.html",
             identifier: "TCP-IP/tcpdump的使用-过滤表达式.html",
             title: "tcpdump的使用-过滤表达式"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Java,Android,Thread">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用ThreadPool进行线程管理">
-<meta property="og:url" content="https://gowa.club/Java/使用ThreadPool进行线程管理.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;%E4%BD%BF%E7%94%A8ThreadPool%E8%BF%9B%E8%A1%8C%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="从以前 Posix C 上的经验来说，线程是一个永远不会停止的话题啊。但是，线程的新建，销毁，初始化其实开销都是相对有点大的。同时，如果无限制的进行线程的抢占和使用，在资源受限（移动设备）时，就会影响性能了。所以才有了利用线程池来管理线程的这么一个做法。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-03-09T07:03:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用ThreadPool进行线程管理">
-<meta name="twitter:description" content="从以前 Posix C 上的经验来说，线程是一个永远不会停止的话题啊。但是，线程的新建，销毁，初始化其实开销都是相对有点大的。同时，如果无限制的进行线程的抢占和使用，在资源受限（移动设备）时，就会影响性能了。所以才有了利用线程池来管理线程的这么一个做法。">
 
-<link rel="canonical" href="https://gowa.club/Java/使用ThreadPool进行线程管理.html">
+<link rel="canonical" href="https://gowa.club/Java/%E4%BD%BF%E7%94%A8ThreadPool%E8%BF%9B%E8%A1%8C%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/使用ThreadPool进行线程管理.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/%E4%BD%BF%E7%94%A8ThreadPool%E8%BF%9B%E8%A1%8C%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/使用ThreadPool进行线程管理.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/%E4%BD%BF%E7%94%A8ThreadPool%E8%BF%9B%E8%A1%8C%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/使用ThreadPool进行线程管理.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,7 +285,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>从以前 Posix C 上的经验来说，线程是一个永远不会停止的话题啊。但是，线程的新建，销毁，初始化其实开销都是相对有点大的。同时，如果无限制的进行线程的抢占和使用，在资源受限（移动设备）时，就会影响性能了。所以才有了利用线程池来管理线程的这么一个做法。<br><a id="more"></a></p>
+        <p>从以前 Posix C 上的经验来说，线程是一个永远不会停止的话题啊。但是，线程的新建，销毁，初始化其实开销都是相对有点大的。同时，如果无限制的进行线程的抢占和使用，在资源受限（移动设备）时，就会影响性能了。所以才有了利用线程池来管理线程的这么一个做法。</p>
+<a id="more"></a>
+
 <h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>对于线程池来说，我们设计我们想要执行的任务，但是具体怎么执行，什么时候执行，我们交给了线程池。这样就跟我们的任务的设计和执行相分离。</p>
 <p>也即是说，我们把想要执行的 Runnable 丢给线程池就可以了。</p>
 <h1 id="相关的对象"><a href="#相关的对象" class="headerlink" title="相关的对象"></a>相关的对象</h1><ul>
@@ -301,6 +301,7 @@
 </ul>
 <h1 id="Executors"><a href="#Executors" class="headerlink" title="Executors"></a>Executors</h1><p>此类可以直接利用其工厂方法，获取一些 ExecutorService 对象。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_THREAD_POOL_SIZE = <span class="number">4</span>;</span><br><span class="line"></span><br><span class="line">ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE);</span><br><span class="line"></span><br><span class="line">ExecutorService executorService = Executors.newCachedThreadPool();</span><br><span class="line"></span><br><span class="line">ExecutorService executorService = Executors.newSingleThreadExecutor();</span><br></pre></td></tr></table></figure>
+
 <ul>
 <li>newFixedThreadPool 固定线程数量的线程池</li>
 <li>newCachedThreadPool 队列中有任务的时候，就会创建线程；队列空了大于60秒，就会被空闲线程回收。</li>
@@ -308,10 +309,12 @@
 </ul>
 <p>简单的向线程池添加任务：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">executorService.execute(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">    callBlockingFunction();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">Future future = executorService.submit(<span class="keyword">new</span> Callable()&#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Object <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    callBlockingFunction();</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
 <p> 在第二个方法中，Future 可以用来获取返回结果 <code>Future.get()</code>，还可以取消一个任务 <code>Future.cancel()</code>。</p>
-<h1 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h1><p>我们可能并不满足于上面那些简单的使用，所以有了ThreadPoolExecutor。</p>
+<p>#ThreadPoolExecutor<br>我们可能并不满足于上面那些简单的使用，所以有了ThreadPoolExecutor。</p>
 <p>我们在建立 ThreadPoolExecutor 的实例的时候，可以给予很多参数来控制我们所需要的线程数量，驻留时间等等。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors();</span><br><span class="line"><span class="keyword">int</span> KEEP_ALIVE_TIME = <span class="number">1</span>;</span><br><span class="line">TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;</span><br><span class="line"></span><br><span class="line">BlockingQueue&lt;Runnable&gt; taskQueue = <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;();</span><br><span class="line"></span><br><span class="line">ExecutorService executorService = <span class="keyword">new</span> ThreadPoolExecutor(NUMBER_OF_CORES, </span><br><span class="line">                                                          NUMBER_OF_CORES*<span class="number">2</span>, </span><br><span class="line">                                                          KEEP_ALIVE_TIME, </span><br><span class="line">                                                          KEEP_ALIVE_TIME_UNIT, </span><br><span class="line">                                                          taskQueue, </span><br><span class="line">                                                          <span class="keyword">new</span> BackgroundThreadFactory());</span><br><span class="line">                                                          </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">BackgroundThreadFactory</span> <span class="keyword">implements</span> <span class="title">ThreadFactory</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> sTag = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Thread <span class="title">newThread</span><span class="params">(Runnable runnable)</span> </span>&#123;</span><br><span class="line">      Thread thread = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line">      thread.setName(<span class="string">"CustomThread"</span> + sTag);</span><br><span class="line">      thread.setPriority(Process.THREAD_PRIORITY_BACKGROUND);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// A exception handler is created to log the exception from threads</span></span><br><span class="line">      thread.setUncaughtExceptionHandler(<span class="keyword">new</span> Thread.UncaughtExceptionHandler() &#123;</span><br><span class="line">          <span class="meta">@Override</span></span><br><span class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">uncaughtException</span><span class="params">(Thread thread, Throwable ex)</span> </span>&#123;</span><br><span class="line">              Log.e(Util.LOG_TAG, thread.getName() + <span class="string">" encountered an error: "</span> + ex.getMessage());</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;);</span><br><span class="line">      <span class="keyword">return</span> thread;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>我们来看一下 Google 官方架构栏图中 todo-mvp 中对 Executor 的使用。</p>
 <p>在类 <code>app/src/main/java/com/example/android/architecture/blueprints/todoapp/util/AppExecutors.java</code> 中，定义了三种类型的 Executor。</p>
 <ul>
@@ -320,9 +323,12 @@
 <li>mainThread</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppExecutors</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> THREAD_COUNT = <span class="number">3</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Executor diskIO;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Executor networkIO;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Executor mainThread;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@VisibleForTesting</span></span><br><span class="line">    AppExecutors(Executor diskIO, Executor networkIO, Executor mainThread) &#123;</span><br><span class="line">        <span class="keyword">this</span>.diskIO = diskIO;</span><br><span class="line">        <span class="keyword">this</span>.networkIO = networkIO;</span><br><span class="line">        <span class="keyword">this</span>.mainThread = mainThread;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AppExecutors</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(<span class="keyword">new</span> DiskIOThreadExecutor(), Executors.newFixedThreadPool(THREAD_COUNT),</span><br><span class="line">                <span class="keyword">new</span> MainThreadExecutor());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Executor <span class="title">diskIO</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> diskIO;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Executor <span class="title">networkIO</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> networkIO;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Executor <span class="title">mainThread</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mainThread;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MainThreadExecutor</span> <span class="keyword">implements</span> <span class="title">Executor</span> </span>&#123;</span><br><span class="line">        <span class="keyword">private</span> Handler mainThreadHandler = <span class="keyword">new</span> Handler(Looper.getMainLooper());</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(@NonNull Runnable command)</span> </span>&#123;</span><br><span class="line">            mainThreadHandler.post(command);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DiskIOThreadExecutor</span> <span class="keyword">implements</span> <span class="title">Executor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Executor mDiskIO;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DiskIOThreadExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        mDiskIO = Executors.newSingleThreadExecutor();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(@NonNull Runnable command)</span> </span>&#123;</span><br><span class="line">        mDiskIO.execute(command);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>可以看到，diskIO 只启用了一个线程的线程池，而 networkIO，启了三个线程，主线程的是直接将要执行的代码 Post 过去。</p>
 <h2 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> List&lt;Task&gt; tasks = mTasksDao.getTasks();</span><br><span class="line">        mAppExecutors.mainThread().execute(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (tasks.isEmpty()) &#123;</span><br><span class="line">                    <span class="comment">// This will be called if the table is new or just empty.</span></span><br><span class="line">                    callback.onDataNotAvailable();</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    callback.onTasksLoaded(tasks);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">mAppExecutors.diskIO().execute(runnable);</span><br></pre></td></tr></table></figure>
+
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Runnable runnable = <span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> Task task = mTasksDao.getTaskById(taskId);</span><br><span class="line"></span><br><span class="line">        mAppExecutors.mainThread().execute(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (task != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    callback.onTaskLoaded(task);</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    callback.onDataNotAvailable();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">mAppExecutors.diskIO().execute(runnable);</span><br></pre></td></tr></table></figure>
 
     </div>
@@ -342,7 +348,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/数据库/MySQL存储过程中的游标.html" rel="next" title="MySQL存储过程中的游标">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%B8%B8%E6%A0%87.html" rel="next" title="MySQL存储过程中的游标">
                   <i class="fa fa-chevron-left"></i> MySQL存储过程中的游标
                 </a>
             </div>
@@ -350,7 +356,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/Java内部类与嵌套类.html" rel="prev" title="Java内部类与嵌套类">
+                <a href="/Java/Java%E5%86%85%E9%83%A8%E7%B1%BB%E4%B8%8E%E5%B5%8C%E5%A5%97%E7%B1%BB.html" rel="prev" title="Java内部类与嵌套类">
                   Java内部类与嵌套类 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -398,7 +404,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本原理"><span class="nav-number">1.</span> <span class="nav-text">基本原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关的对象"><span class="nav-number">2.</span> <span class="nav-text">相关的对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Executors"><span class="nav-number">3.</span> <span class="nav-text">Executors</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ThreadPoolExecutor"><span class="nav-number">4.</span> <span class="nav-text">ThreadPoolExecutor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">5.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-1"><span class="nav-number">5.1.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本原理"><span class="nav-number">1.</span> <span class="nav-text">基本原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关的对象"><span class="nav-number">2.</span> <span class="nav-text">相关的对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Executors"><span class="nav-number">3.</span> <span class="nav-text">Executors</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">4.</span> <span class="nav-text">使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-1"><span class="nav-number">4.1.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -437,10 +443,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -469,10 +475,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -547,7 +553,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/使用ThreadPool进行线程管理.html",
+            url: "https://gowa.club/Java/%E4%BD%BF%E7%94%A8ThreadPool%E8%BF%9B%E8%A1%8C%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86.html",
             identifier: "Java/使用ThreadPool进行线程管理.html",
             title: "使用ThreadPool进行线程管理"
           }

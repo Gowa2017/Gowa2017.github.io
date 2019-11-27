@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,18 +51,16 @@
 <meta name="keywords" content="Cocos Creator">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Cocos Creator热更新例子的研究">
-<meta property="og:url" content="https://gowa.club/Cocos-Creator/Cocos Creator热更新例子的研究.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Cocos-Creator&#x2F;Cocos%20Creator%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BE%8B%E5%AD%90%E7%9A%84%E7%A0%94%E7%A9%B6.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="来源于官方的例子，主要是看一下是怎么实现的。官方文档有一定的描述，但很科幻，也没有集成在插件内。官方的文档描述地址：热更新范例教程">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/cocos-creator-hot-update.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;cocos-creator-hot-update.png">
 <meta property="og:updated_time" content="2019-01-05T14:18:43.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cocos Creator热更新例子的研究">
-<meta name="twitter:description" content="来源于官方的例子，主要是看一下是怎么实现的。官方文档有一定的描述，但很科幻，也没有集成在插件内。官方的文档描述地址：热更新范例教程">
-<meta name="twitter:image" content="https://gowa.club/res/cocos-creator-hot-update.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;cocos-creator-hot-update.png">
 
-<link rel="canonical" href="https://gowa.club/Cocos-Creator/Cocos Creator热更新例子的研究.html">
+<link rel="canonical" href="https://gowa.club/Cocos-Creator/Cocos%20Creator%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BE%8B%E5%AD%90%E7%9A%84%E7%A0%94%E7%A9%B6.html">
 
 
 <script id="page-configurations">
@@ -227,12 +225,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos-Creator/Cocos Creator热更新例子的研究.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos-Creator/Cocos%20Creator%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BE%8B%E5%AD%90%E7%9A%84%E7%A0%94%E7%A9%B6.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -273,7 +271,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Cocos-Creator/Cocos Creator热更新例子的研究.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Cocos-Creator/Cocos%20Creator%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BE%8B%E5%AD%90%E7%9A%84%E7%A0%94%E7%A9%B6.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cocos-Creator/Cocos Creator热更新例子的研究.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -291,6 +289,7 @@
       
         <p>来源于官方的例子，主要是看一下是怎么实现的。官方文档有一定的描述，但很科幻，也没有集成在插件内。官方的文档描述地址：<a href="https://docs.cocos.com/creator/manual/zh/advanced-topics/hot-update.html" target="_blank" rel="noopener">热更新范例教程</a></p>
 <a id="more"></a>
+
 <h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><p>对于不同版本的文件级差异，AssetsManager 中使用 Manifest 文件来进行版本比对。本地和远端的 Manifest 文件分别标示了本地和远端的当前版本包含的文件列表和文件版本，这样就可以通过比对每个文件的版本来确定需要更新的文件列表。</p>
 <p>Manifest 文件中包含以下几个重要信息：</p>
 <ol>
@@ -304,16 +303,20 @@
 <p>其中 Version 文件内容是 Manifest 文件内容的一部分，不包含文件列表。由于 Manifest 文件可能比较大，每次检查更新的时候都完整下载的话可能影响体验，所以开发者可以额外提供一个非常小的 Version 文件。AssetsManager 会首先检查 Version 文件提供的主版本号来判断是否需要继续下载 Manifest 文件并更新。</p>
 <h1 id="例子实现"><a href="#例子实现" class="headerlink" title="例子实现"></a>例子实现</h1><p><code>scripts/module/HotUpdate.js</code> 是实现逻辑的组件，其挂在了 Canvas 上。组件拥有的属性如下：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">properties: &#123;</span><br><span class="line">    panel: UpdatePanel, <span class="comment">// 进度条</span></span><br><span class="line">    manifestUrl: &#123;      <span class="comment">// 版本库文件</span></span><br><span class="line">        type: cc.Asset,</span><br><span class="line">        <span class="keyword">default</span>: <span class="literal">null</span></span><br><span class="line">    &#125;,</span><br><span class="line">    updateUI: cc.Node, <span class="comment">//更新窗口</span></span><br><span class="line">    _updating: <span class="literal">false</span>,</span><br><span class="line">    _canRetry: <span class="literal">false</span>,</span><br><span class="line">    _storagePath: <span class="string">''</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>界面基本如下：<br><img src="../res/cocos-creator-hot-update.png" alt></p>
+
+<p>界面基本如下：<br><img src="../res/cocos-creator-hot-update.png" alt=""></p>
 <h1 id="AssetsManager"><a href="#AssetsManager" class="headerlink" title="AssetsManager"></a>AssetsManager</h1><p>事实上热更新就是因为 AssetsManager 支持而实现的了。关于这个资源管理器的接口，是绑定到 jsb 的，文档上我没看到，但是官方有提示源代码有能看到：<a href="https://github.com/cocos-creator/cocos2d-x-lite/blob/develop/extensions/assets-manager/AssetsManagerEx.h" target="_blank" rel="noopener">AssetsManagerEx.h</a></p>
 <h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><p>在 onLoad 函数里面完成：</p>
 <p>在这个初始化中，先得出一个存储路径 <em>this_storagePath</em>，一个版本比较函数 <em>this_versionCompareHandle</em>，然后就初始化了 AssetsManager，初始化的时候，将 manifest 路径设置为空。 接着，为 AssetsManager 设置了一个回调 <code>setVerifyCallback</code>。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">onLoad: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// Hot update is only available in Native build</span></span><br><span class="line">    <span class="keyword">if</span> (!cc.sys.isNative) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>._storagePath = ((jsb.fileUtils ? jsb.fileUtils.getWritablePath() : <span class="string">'/'</span>) + <span class="string">'blackjack-remote-asset'</span>);</span><br><span class="line">    cc.log(<span class="string">'Storage path for remote asset : '</span> + <span class="keyword">this</span>._storagePath);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Setup your own version compare handler, versionA and B is versions in string</span></span><br><span class="line">    <span class="comment">// if the return value greater than 0, versionA is greater than B,</span></span><br><span class="line">    <span class="comment">// if the return value equals 0, versionA equals to B,</span></span><br><span class="line">    <span class="comment">// if the return value smaller than 0, versionA is smaller than B.</span></span><br><span class="line">    <span class="keyword">this</span>.versionCompareHandle = <span class="function"><span class="keyword">function</span> (<span class="params">versionA, versionB</span>) </span>&#123;</span><br><span class="line">        cc.log(<span class="string">"JS Custom Version Compare: version A is "</span> + versionA + <span class="string">', version B is '</span> + versionB);</span><br><span class="line">        <span class="keyword">var</span> vA = versionA.split(<span class="string">'.'</span>);</span><br><span class="line">        <span class="keyword">var</span> vB = versionB.split(<span class="string">'.'</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; vA.length; ++i) &#123;</span><br><span class="line">            <span class="keyword">var</span> a = <span class="built_in">parseInt</span>(vA[i]);</span><br><span class="line">            <span class="keyword">var</span> b = <span class="built_in">parseInt</span>(vB[i] || <span class="number">0</span>);</span><br><span class="line">            <span class="keyword">if</span> (a === b) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">return</span> a - b;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (vB.length &gt; vA.length) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Init with empty manifest url for testing custom manifest</span></span><br><span class="line">    <span class="keyword">this</span>._am = <span class="keyword">new</span> jsb.AssetsManager(<span class="string">''</span>, <span class="keyword">this</span>._storagePath, <span class="keyword">this</span>.versionCompareHandle);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> panel = <span class="keyword">this</span>.panel;</span><br><span class="line">    <span class="comment">// Setup the verification callback, but we don't have md5 check function yet, so only print some message</span></span><br><span class="line">    <span class="comment">// Return true if the verification passed, otherwise return false</span></span><br><span class="line">    <span class="keyword">this</span>._am.setVerifyCallback(<span class="function"><span class="keyword">function</span> (<span class="params">path, asset</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// When asset is compressed, we don't need to check its md5, because zip file have been deleted.</span></span><br><span class="line">        <span class="keyword">var</span> compressed = asset.compressed;</span><br><span class="line">        <span class="comment">// Retrieve the correct md5 value.</span></span><br><span class="line">        <span class="keyword">var</span> expectedMD5 = asset.md5;</span><br><span class="line">        <span class="comment">// asset.path is relative path and path is absolute.</span></span><br><span class="line">        <span class="keyword">var</span> relativePath = asset.path;</span><br><span class="line">        <span class="comment">// The size of asset file, but this value could be absent.</span></span><br><span class="line">        <span class="keyword">var</span> size = asset.size;</span><br><span class="line">        <span class="keyword">if</span> (compressed) &#123;</span><br><span class="line">            panel.info.string = <span class="string">"Verification passed : "</span> + relativePath;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            panel.info.string = <span class="string">"Verification passed : "</span> + relativePath + <span class="string">' ('</span> + expectedMD5 + <span class="string">')'</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.panel.info.string = <span class="string">'Hot update is ready, please check or directly update.'</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (cc.sys.os === cc.sys.OS_ANDROID) &#123;</span><br><span class="line">        <span class="comment">// Some Android device may slow down the download process when concurrent tasks is too much.</span></span><br><span class="line">        <span class="comment">// The value may not be accurate, please do more test and find what's most suitable for your game.</span></span><br><span class="line">        <span class="keyword">this</span>._am.setMaxConcurrentTask(<span class="number">2</span>);</span><br><span class="line">        <span class="keyword">this</span>.panel.info.string = <span class="string">"Max concurrent tasks count have been limited to 2"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">this</span>.panel.fileProgress.progress = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">this</span>.panel.byteProgress.progress = <span class="number">0</span>;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
 <p>当我们点击检查更新的时候，就会调用对应的事件响应函数：</p>
 <p>函数中，先是载入了本地 manifest 文件，接着，就开始检查更新，更新完毕，会回调 我们的 <code>checkCb()</code> 回调。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">checkUpdate: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._updating) &#123;</span><br><span class="line">        <span class="keyword">this</span>.panel.info.string = <span class="string">'Checking or updating ...'</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._am.getState() === jsb.AssetsManager.State.UNINITED) &#123;</span><br><span class="line">        <span class="comment">// Resolve md5 url</span></span><br><span class="line">        <span class="keyword">var</span> url = <span class="keyword">this</span>.manifestUrl.nativeUrl;</span><br><span class="line">        <span class="keyword">if</span> (cc.loader.md5Pipe) &#123;</span><br><span class="line">            url = cc.loader.md5Pipe.transformURL(url);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>._am.loadLocalManifest(url);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>._am.getLocalManifest() || !<span class="keyword">this</span>._am.getLocalManifest().isLoaded()) &#123;</span><br><span class="line">        <span class="keyword">this</span>.panel.info.string = <span class="string">'Failed to load local manifest ...'</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>._am.setEventCallback(<span class="keyword">this</span>.checkCb.bind(<span class="keyword">this</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>._am.checkUpdate();</span><br><span class="line">    <span class="keyword">this</span>._updating = <span class="literal">true</span>;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
 <p>OK，在回调中就可以根据检测的结果，来确定是否需要进行更新了：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">checkCb: <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</span><br><span class="line">    cc.log(<span class="string">'Code: '</span> + event.getEventCode());</span><br><span class="line">    <span class="keyword">switch</span> (event.getEventCode())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> jsb.EventAssetsManager.ERROR_NO_LOCAL_MANIFEST:</span><br><span class="line">            <span class="keyword">this</span>.panel.info.string = <span class="string">"No local manifest file found, hot update skipped."</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> jsb.EventAssetsManager.ERROR_DOWNLOAD_MANIFEST:</span><br><span class="line">        <span class="keyword">case</span> jsb.EventAssetsManager.ERROR_PARSE_MANIFEST:</span><br><span class="line">            <span class="keyword">this</span>.panel.info.string = <span class="string">"Fail to download manifest file, hot update skipped."</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> jsb.EventAssetsManager.ALREADY_UP_TO_DATE:</span><br><span class="line">            <span class="keyword">this</span>.panel.info.string = <span class="string">"Already up to date with the latest remote version."</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> jsb.EventAssetsManager.NEW_VERSION_FOUND:</span><br><span class="line">            <span class="keyword">this</span>.panel.info.string = <span class="string">'New version found, please try to update.'</span>;</span><br><span class="line">            <span class="keyword">this</span>.panel.checkBtn.active = <span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">this</span>.panel.fileProgress.progress = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">this</span>.panel.byteProgress.progress = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">this</span>._am.setEventCallback(<span class="literal">null</span>);</span><br><span class="line">    <span class="keyword">this</span>._checkListener = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">this</span>._updating = <span class="literal">false</span>;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
 <p>接着我们就可以点击更新按钮进行更新了，具体的代码，其实都在里面了。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">hotUpdate: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>._am &amp;&amp; !<span class="keyword">this</span>._updating) &#123;</span><br><span class="line">        <span class="keyword">this</span>._am.setEventCallback(<span class="keyword">this</span>.updateCb.bind(<span class="keyword">this</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span>._am.getState() === jsb.AssetsManager.State.UNINITED) &#123;</span><br><span class="line">            <span class="comment">// Resolve md5 url</span></span><br><span class="line">            <span class="keyword">var</span> url = <span class="keyword">this</span>.manifestUrl.nativeUrl;</span><br><span class="line">            <span class="keyword">if</span> (cc.loader.md5Pipe) &#123;</span><br><span class="line">                url = cc.loader.md5Pipe.transformURL(url);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">this</span>._am.loadLocalManifest(url);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">this</span>._failCount = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">this</span>._am.update();</span><br><span class="line">        <span class="keyword">this</span>.panel.updateBtn.active = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">this</span>._updating = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
 
@@ -332,7 +335,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Vim/Vim常用插件清单.html" rel="next" title="Vim常用插件清单">
+                <a href="/Vim/Vim%E5%B8%B8%E7%94%A8%E6%8F%92%E4%BB%B6%E6%B8%85%E5%8D%95.html" rel="next" title="Vim常用插件清单">
                   <i class="fa fa-chevron-left"></i> Vim常用插件清单
                 </a>
             </div>
@@ -340,7 +343,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/Dagger例子的使用解析.html" rel="prev" title="Dagger例子的使用解析">
+                <a href="/Java/Dagger%E4%BE%8B%E5%AD%90%E7%9A%84%E4%BD%BF%E7%94%A8%E8%A7%A3%E6%9E%90.html" rel="prev" title="Dagger例子的使用解析">
                   Dagger例子的使用解析 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -427,10 +430,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -459,10 +462,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -537,7 +540,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Cocos-Creator/Cocos Creator热更新例子的研究.html",
+            url: "https://gowa.club/Cocos-Creator/Cocos%20Creator%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BE%8B%E5%AD%90%E7%9A%84%E7%A0%94%E7%A9%B6.html",
             identifier: "Cocos-Creator/Cocos Creator热更新例子的研究.html",
             title: "Cocos Creator热更新例子的研究"
           }

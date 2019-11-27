@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -47,25 +47,23 @@
   };
 </script>
 
-  <meta name="description" content="Java Native Interface (JNI) 是一个外部函数编程接口框架，其可以让在 Java VM 内运行的代码可以调用原生的用其他语言写成的（C/C++，汇编等）可执行程序或者库，也允许外部的应用或者库调用 Java VM 内的 Java 代码。其是一个框架，而不是一个实现。">
+  <meta name="description" content="Java Native Interface (JNI) 是一个外部函数编程接口框架，其可以让在 Java VM 内运行的代码可以调用原生的用其他语言写成的（C&#x2F;C++，汇编等）可执行程序或者库，也允许外部的应用或者库调用 Java VM 内的 Java 代码。其是一个框架，而不是一个实现。">
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JNI技术与Native代码交互">
-<meta property="og:url" content="https://gowa.club/Java/JNI技术与Native代码交互.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;JNI%E6%8A%80%E6%9C%AF%E4%B8%8ENative%E4%BB%A3%E7%A0%81%E4%BA%A4%E4%BA%92.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="Java Native Interface (JNI) 是一个外部函数编程接口框架，其可以让在 Java VM 内运行的代码可以调用原生的用其他语言写成的（C/C++，汇编等）可执行程序或者库，也允许外部的应用或者库调用 Java VM 内的 Java 代码。其是一个框架，而不是一个实现。">
+<meta property="og:description" content="Java Native Interface (JNI) 是一个外部函数编程接口框架，其可以让在 Java VM 内运行的代码可以调用原生的用其他语言写成的（C&#x2F;C++，汇编等）可执行程序或者库，也允许外部的应用或者库调用 Java VM 内的 Java 代码。其是一个框架，而不是一个实现。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/JNI-Java-Native-Interface.jpg">
-<meta property="og:image" content="https://gowa.club/res/Roll_of_JNI.png">
-<meta property="og:image" content="https://gowa.club/res/JNI-Helloword-demo.png">
-<meta property="og:image" content="https://gowa.club/res/types4.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;JNI-Java-Native-Interface.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;Roll_of_JNI.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;JNI-Helloword-demo.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;types4.gif">
 <meta property="og:updated_time" content="2019-11-01T13:26:57.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JNI技术与Native代码交互">
-<meta name="twitter:description" content="Java Native Interface (JNI) 是一个外部函数编程接口框架，其可以让在 Java VM 内运行的代码可以调用原生的用其他语言写成的（C/C++，汇编等）可执行程序或者库，也允许外部的应用或者库调用 Java VM 内的 Java 代码。其是一个框架，而不是一个实现。">
-<meta name="twitter:image" content="https://gowa.club/res/JNI-Java-Native-Interface.jpg">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;JNI-Java-Native-Interface.jpg">
 
-<link rel="canonical" href="https://gowa.club/Java/JNI技术与Native代码交互.html">
+<link rel="canonical" href="https://gowa.club/Java/JNI%E6%8A%80%E6%9C%AF%E4%B8%8ENative%E4%BB%A3%E7%A0%81%E4%BA%A4%E4%BA%92.html">
 
 
 <script id="page-configurations">
@@ -230,12 +228,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/JNI技术与Native代码交互.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/JNI%E6%8A%80%E6%9C%AF%E4%B8%8ENative%E4%BB%A3%E7%A0%81%E4%BA%A4%E4%BA%92.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -276,7 +274,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/JNI技术与Native代码交互.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/JNI%E6%8A%80%E6%9C%AF%E4%B8%8ENative%E4%BB%A3%E7%A0%81%E4%BA%A4%E4%BA%92.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/JNI技术与Native代码交互.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,6 +292,7 @@
       
         <p> <strong>Java Native Interface</strong> (<strong>JNI</strong>) 是一个外部函数编程接口框架，其可以让在 Java VM 内运行的代码可以调用原生的用其他语言写成的（C/C++，汇编等）可执行程序或者库，也允许外部的应用或者库调用 Java VM 内的 Java 代码。其是一个框架，而不是一个实现。</p>
 <a id="more"></a>
+
 <p><img src="../res/JNI-Java-Native-Interface.jpg" alt="JNI - Java Native Interface"></p>
 <p>JNI 指定了一个 Java 代码与外部原生代码间进行通信交互的一个协议。一个 <strong>Java native method</strong> 是一个在 Java 代码内声明，但是却在外部的其他语言内实现的方法。</p>
 <h1 id="JNI的角色"><a href="#JNI的角色" class="headerlink" title="JNI的角色"></a>JNI的角色</h1><p>其是 <strong>Java VM</strong> 实现的一部分，是一个 <strong>双向</strong> 的接口，允许 Java 代码与外部代码间相互调用。</p>
@@ -309,15 +308,21 @@
 </ol>
 <p><img src="../res/JNI-Helloword-demo.png" alt="img"></p>
 <h2 id="HelloWorld-java"><a href="#HelloWorld-java" class="headerlink" title="HelloWorld.java"></a>HelloWorld.java</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;  <span class="comment">//native method</span></span><br><span class="line">	<span class="keyword">static</span>   <span class="comment">//static initializer code</span></span><br><span class="line">	&#123;</span><br><span class="line">		System.load(<span class="string">"CLibHelloWorld.so"</span>);</span><br><span class="line">	&#125; </span><br><span class="line"> </span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		HelloWorld hw = <span class="keyword">new</span> HelloWorld();</span><br><span class="line">        hw.print();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>这里面有两个地方需要关注一下。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>使用了 <strong>native</strong> 关键字来声明 <code>print()</code> 方法是一个 native 方法。这告诉了 Java 的编译器，这个方法不要从 Java 的源代码中查找，而是从外部的库中获得，因此呢，在Java 代码中也没有这个方法的实现。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(“CLibHelloWorld<span class="string">"); //**** Loads CLibHelloWorld.so</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
 <p>在 print 方法被调用前，首先共享库文件必须进行加载。 Java VM 会首先运行静态初始化器。</p>
 <h2 id="HelloWorld-h"><a href="#HelloWorld-h" class="headerlink" title="HelloWorld.h"></a>HelloWorld.h</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">javah –jni HelloWorld</span><br></pre></td></tr></table></figure>
+
 <p>使用这个命令将会生成 C 头文件 javah –jni HelloWorld.h</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* DO NOT EDIT THIS FILE - it is machine generated */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="comment">/* Header for class HelloWorld */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> _Included_HelloWorld</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _Included_HelloWorld</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Class:     HelloWorld</span></span><br><span class="line"><span class="comment"> * Method:    print</span></span><br><span class="line"><span class="comment"> * Signature: ()V</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL Java_HelloWorld_print</span><br><span class="line">  (JNIEnv *, jobject);</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">JNIEXPORT <span class="keyword">void</span> JNICALL <span class="title">Java_HelloWorld_print</span>  <span class="params">(JNIEnv *, jobject)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>这行代码中说明了这么几个事实：</p>
 <ol>
 <li>函数的命名格式为 <code>JAVA_类名_方法名</code>，这可以用来区别多个类中的同名方法。</li>
@@ -326,12 +331,15 @@
 </ol>
 <h2 id="CLibHelloWorld-c"><a href="#CLibHelloWorld-c" class="headerlink" title="CLibHelloWorld.c"></a>CLibHelloWorld.c</h2><p>我们来在 C 中实现这个方法。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"HelloWorld.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"jni.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span>  <span class="meta-string">"stdio.h"</span></span></span><br><span class="line"> </span><br><span class="line"><span class="function">JNIEXPORT <span class="keyword">void</span> JNICALL <span class="title">Java_HelloWorld_print</span><span class="params">(JNIEnv *env, jobject obj)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"Hello world\n"</span>);</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><p>然后我们来写个 makefile 来运行它：</p>
 <figure class="highlight makefile"><table><tr><td class="code"><pre><span class="line">CMD_JAVA_HOME=<span class="string">"/usr/libexec/java_home"</span></span><br><span class="line">JAVA_INCLUDE=`$&#123;CMD_JAVA_HOME&#125;`/<span class="keyword">include</span></span><br><span class="line">JAVA_INCLUDE_DARWIN=`$&#123;CMD_JAVA_HOME&#125;`/<span class="keyword">include</span>/darwin</span><br><span class="line"></span><br><span class="line"><span class="section">all: CLibHelloWorld.c HelloWorld.java</span></span><br><span class="line">	javac HelloWorld.java</span><br><span class="line">	cc -c -fPIC -I$&#123;JAVA_INCLUDE&#125; -I$&#123;JAVA_INCLUDE_DARWIN&#125; CLibHelloWorld.c -o CLibHelloWorld.o</span><br><span class="line">	cc -shared -fPIC  -o CLibHelloWorld.dylib CLibHelloWorld.o -lc</span><br><span class="line">	java HelloWorld</span><br></pre></td></tr></table></figure>
+
 <p>输出就很明显了。</p>
 <h1 id="Native方法参数"><a href="#Native方法参数" class="headerlink" title="Native方法参数"></a>Native方法参数</h1><p>现在，我们想要为我们的 print 方法加上几个参数，我们需要怎么做呢。想要了解这点，我们就要先明白， 在 C 中的数据类型，与 JNI 中数据类型的对应关系，否则，我们无法做到接口的统一。</p>
 <h2 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h2><p>从 <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/types.html" target="_blank" rel="noopener">这个地址</a> 可以看到比较完整的列表。</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -340,8 +348,7 @@
 <th>Description</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>boolean</td>
 <td>jboolean</td>
 <td>unsigned 8 bits</td>
@@ -386,15 +393,14 @@
 <td>void</td>
 <td>N/A</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>通常，会有如下两个定义，只是为了方便而已。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> JNI_FALSE  0 </span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> JNI_TRUE   1</span></span><br></pre></td></tr></table></figure>
+
 <p>jsize 整型用来描述一个索引和大小。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> jint jsize;</span><br></pre></td></tr></table></figure>
+
 <h2 id="引用类型"><a href="#引用类型" class="headerlink" title="引用类型"></a>引用类型</h2><p><img src="../res/types4.gif" alt="The top of the heirarchy is jobject. Subclasses of jobject are jclass, jstring, jarray and jthrowable. Subclasses of jarray are jobjectArray, jbooleanArray, jbyteArray, jcharArray, jshortArray, jintArray, jlongArray, jfloatArray, jdoubleArray."></p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -403,8 +409,7 @@
 <th><strong>Description</strong></th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>java.lang.object</td>
 <td>jobject</td>
 <td>Any Java object</td>
@@ -424,15 +429,14 @@
 <td>jthrowable</td>
 <td>Java throwable object</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>在 C 中，所有的 JNI 引用类型都被定义为 jobject。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> jobject jclass;</span><br></pre></td></tr></table></figure>
+
 <p>在 C++ 中， JNI 就引入了许多相关的类：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> _<span class="title">jobject</span> &#123;</span>&#125;; </span><br><span class="line"><span class="class"><span class="keyword">class</span> _<span class="title">jclass</span> :</span> <span class="keyword">public</span> _jobject &#123;&#125;; </span><br><span class="line">... </span><br><span class="line"><span class="keyword">typedef</span> _jobject *jobject; </span><br><span class="line"><span class="keyword">typedef</span> _jclass *jclass;</span><br></pre></td></tr></table></figure>
+
 <h2 id="类型签名"><a href="#类型签名" class="headerlink" title="类型签名"></a>类型签名</h2><p>JNI 使用了 Java VM 对类型签名的表示。</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -440,8 +444,7 @@
 <th>Java Type</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>Z</td>
 <td>boolean</td>
 </tr>
@@ -485,27 +488,37 @@
 <td>( arg-types ) ret-type</td>
 <td>method type</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>因此，Java 方法：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">f</span> <span class="params">(<span class="keyword">int</span> n, String s, <span class="keyword">int</span>[] arr)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>的类型签名是：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">(ILjava/lang/String;[I)J</span><br></pre></td></tr></table></figure>
+
 <h2 id="print-String"><a href="#print-String" class="headerlink" title="print(String);"></a>print(String);</h2><p>现在为我们的 <code>print()</code> 方法加上参数。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">print</span><span class="params">(String arg)</span></span>;  <span class="comment">//native method</span></span><br></pre></td></tr></table></figure>
+
 <p>重新生成头文件：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">javah -jni HelloWorld</span><br></pre></td></tr></table></figure>
+
 <p>Native 方法的签名就变了：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">JNIEXPORT <span class="keyword">void</span> JNICALL Java_HelloWorld_print</span><br><span class="line">  (JNIEnv *, jobject, jstring);</span><br></pre></td></tr></table></figure>
+
 <p>现在我们来实现它。这个时候，我们会有一个难题，那就是说 jstring 实际上是一个 JNI 的类型，我们是无法直接使用的，我们必须通过 JNI 提供的方法来，将其转换我们需要的格式。所以，函数的实现最终如下：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function">JNIEXPORT <span class="keyword">void</span> JNICALL <span class="title">Java_HelloWorld_print</span><span class="params">(JNIEnv *env, jobject obj, jstring arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"%s"</span>,(*env)-&gt;GetStringUTFChars(env,arg,<span class="literal">NULL</span>));</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这种形式看起来其实好丑陋，这是因为在 C 和 CPP 中，两者的定义不同，在 C 中，JNIEnv 是 一个指向 JNINativeInterface<em> 的指针，所以说我们得到一个 JNIEnv 指针后，必须解引用后才能拿到真正的 JNIEnv 对象；而在 C++ 中，虽然 结构 JNIEnv</em> 看起来没有什么差别，但是其是以类的形式来编写各种方法，意思就是所有方法都有一个 <strong>this</strong>  参数，所以调用方法的时候就不需要传递 JNIEnv 本身了。</p>
+
+<p>这种形式看起来其实好丑陋，这是因为在 C 和 CPP 中，两者的定义不同，在 C 中，JNIEnv 是 一个指向 JNINativeInterface_ 的指针，所以说我们得到一个 JNIEnv 指针后，必须解引用后才能拿到真正的 JNIEnv 对象；而在 C++ 中，虽然 结构 JNIEnv_ 看起来没有什么差别，但是其是以类的形式来编写各种方法，意思就是所有方法都有一个 <strong>this</strong>  参数，所以调用方法的时候就不需要传递 JNIEnv 本身了。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">JNINativeInterface_</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">JNIEnv_</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">typedef</span> JNIEnv_ JNIEnv;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">JNINativeInterface_</span> *<span class="title">JNIEnv</span>;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">JNINativeInterface_</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* (JNICALL *GetStringUTFChars)</span><br><span class="line">      (JNIEnv *env, jstring str, jboolean *isCopy);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">JNIEnv_</span> &#123;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">JNINativeInterface_</span> *<span class="title">functions</span>;</span>  </span><br><span class="line">    <span class="function"><span class="keyword">const</span> <span class="keyword">char</span>* <span class="title">GetStringUTFChars</span><span class="params">(jstring str, jboolean *isCopy)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> functions-&gt;GetStringUTFChars(<span class="keyword">this</span>,str,isCopy);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>实际上最终调用的都是 C 编写的函数了。在 C++ 中我们的方法实现就会更简单干净一些：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">JNIEXPORT <span class="keyword">void</span> JNICALL <span class="title">Java_HelloWorld_print</span><span class="params">(JNIEnv *env, jobject obj, jstring arg)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">     </span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"%s"</span>,env-&gt;GetStringUTFChars(arg,<span class="literal">NULL</span>));</span><br><span class="line">  <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -522,7 +535,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Lua/PIL.15.数据文件与序列化.html" rel="next" title="PIL.15.数据文件与序列化">
+                <a href="/Lua/PIL.15.%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E4%B8%8E%E5%BA%8F%E5%88%97%E5%8C%96.html" rel="next" title="PIL.15.数据文件与序列化">
                   <i class="fa fa-chevron-left"></i> PIL.15.数据文件与序列化
                 </a>
             </div>
@@ -530,7 +543,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Lua/JNI使用-LuaJava实现.html" rel="prev" title="JNI使用-LuaJava实现">
+                <a href="/Lua/JNI%E4%BD%BF%E7%94%A8-LuaJava%E5%AE%9E%E7%8E%B0.html" rel="prev" title="JNI使用-LuaJava实现">
                   JNI使用-LuaJava实现 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -617,10 +630,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -649,10 +662,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -727,7 +740,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/JNI技术与Native代码交互.html",
+            url: "https://gowa.club/Java/JNI%E6%8A%80%E6%9C%AF%E4%B8%8ENative%E4%BB%A3%E7%A0%81%E4%BA%A4%E4%BA%92.html",
             identifier: "Java/JNI技术与Native代码交互.html",
             title: "JNI技术与Native代码交互"
           }

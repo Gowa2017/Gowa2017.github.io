@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Linux,Shell">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shell编程与C的一些不同">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/Shell编程与C的一些不同.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;Shell%E7%BC%96%E7%A8%8B%E4%B8%8EC%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%90%8C.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="事情是这样的，前几天整理一下业务脚本的时候，发现有几处写的地方让我莫名其妙，后面经过仔细的了解才明白，确实有点反常。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.270Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Shell编程与C的一些不同">
-<meta name="twitter:description" content="事情是这样的，前几天整理一下业务脚本的时候，发现有几处写的地方让我莫名其妙，后面经过仔细的了解才明白，确实有点反常。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/Shell编程与C的一些不同.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/Shell%E7%BC%96%E7%A8%8B%E4%B8%8EC%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%90%8C.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Shell编程与C的一些不同.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Shell%E7%BC%96%E7%A8%8B%E4%B8%8EC%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%90%8C.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -278,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/Shell编程与C的一些不同.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/Shell%E7%BC%96%E7%A8%8B%E4%B8%8EC%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%90%8C.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/Shell编程与C的一些不同.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,13 +292,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>事情是这样的，前几天整理一下业务脚本的时候，发现有几处写的地方让我莫名其妙，后面经过仔细的了解才明白，确实有点反常。<br><a id="more"></a></p>
-<h1 id="开始不明白的例子"><a href="#开始不明白的例子" class="headerlink" title="开始不明白的例子"></a>开始不明白的例子</h1><p>观察以下代码，按照逻辑，<code>if condition; then ...</code> 才会执行，同学们来看看这会出现什么。<br><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">CheckDb()</span><br><span class="line">&#123;</span><br><span class="line">ret=`sqlplus -s absadmin/imsadmin32@LCIMS80 &lt;&lt; !</span><br><span class="line"><span class="built_in">set</span> pagesize 0</span><br><span class="line"><span class="built_in">set</span> feedback off</span><br><span class="line">select <span class="string">'ok'</span> from dual;</span><br><span class="line">!`</span><br><span class="line">	ret=`<span class="built_in">echo</span> <span class="variable">$ret</span>`</span><br><span class="line">        <span class="keyword">if</span> [ <span class="string">"<span class="variable">$&#123;ret&#125;</span>"</span> != <span class="string">"ok"</span> ]</span><br><span class="line">        <span class="keyword">then</span></span><br><span class="line">                <span class="built_in">echo</span> <span class="string">"`date +'[%Y-%m-%d %H:%M:%S]'` <span class="variable">$&#123;ret&#125;</span>"</span></span><br><span class="line">		<span class="built_in">echo</span> 1</span><br><span class="line">                <span class="built_in">return</span> 1</span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">	<span class="built_in">echo</span> 0</span><br><span class="line">        <span class="built_in">return</span> 0</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">times</span> <span class="keyword">in</span> 1 2 3</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="keyword">if</span> CheckDb</span><br><span class="line">        <span class="keyword">then</span></span><br><span class="line">                auth0=`ps -ef | grep <span class="string">'AB_AUTH 0'</span> | grep -v monitor | grep -v grep | wc -l`</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> [ <span class="variable">$&#123;auth0&#125;</span> -gt 0 ]</span><br><span class="line">                <span class="keyword">then</span></span><br><span class="line">                        <span class="built_in">echo</span> <span class="string">"`date +'[%Y-%m-%d %H:%M:%S]'`  resume from no DB !"</span></span><br><span class="line">                        SendMsg <span class="string">"resume+from+no+DB"</span></span><br><span class="line">                        sh <span class="variable">$&#123;AAA_HOME&#125;</span>/bin/restartall</span><br><span class="line">                <span class="keyword">fi</span></span><br><span class="line">                <span class="built_in">break</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> [ <span class="variable">$times</span> -eq 3 ]</span><br><span class="line">        <span class="keyword">then</span></span><br><span class="line">                AuthNoDB</span><br><span class="line">                <span class="built_in">break</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">        SendMsg <span class="string">"login+DATABASE+fail+<span class="variable">$times</span>+times"</span></span><br><span class="line">        sleep 3</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line">i</span><br></pre></td></tr></table></figure></p>
+        <p>事情是这样的，前几天整理一下业务脚本的时候，发现有几处写的地方让我莫名其妙，后面经过仔细的了解才明白，确实有点反常。</p>
+<a id="more"></a>
+<h1 id="开始不明白的例子"><a href="#开始不明白的例子" class="headerlink" title="开始不明白的例子"></a>开始不明白的例子</h1><p>观察以下代码，按照逻辑，<code>if condition; then ...</code> 才会执行，同学们来看看这会出现什么。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">CheckDb()</span><br><span class="line">&#123;</span><br><span class="line">ret=`sqlplus -s absadmin/imsadmin32@LCIMS80 &lt;&lt; !</span><br><span class="line"><span class="built_in">set</span> pagesize 0</span><br><span class="line"><span class="built_in">set</span> feedback off</span><br><span class="line">select <span class="string">'ok'</span> from dual;</span><br><span class="line">!`</span><br><span class="line">	ret=`<span class="built_in">echo</span> <span class="variable">$ret</span>`</span><br><span class="line">        <span class="keyword">if</span> [ <span class="string">"<span class="variable">$&#123;ret&#125;</span>"</span> != <span class="string">"ok"</span> ]</span><br><span class="line">        <span class="keyword">then</span></span><br><span class="line">                <span class="built_in">echo</span> <span class="string">"`date +'[%Y-%m-%d %H:%M:%S]'` <span class="variable">$&#123;ret&#125;</span>"</span></span><br><span class="line">		<span class="built_in">echo</span> 1</span><br><span class="line">                <span class="built_in">return</span> 1</span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">	<span class="built_in">echo</span> 0</span><br><span class="line">        <span class="built_in">return</span> 0</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">times</span> <span class="keyword">in</span> 1 2 3</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="keyword">if</span> CheckDb</span><br><span class="line">        <span class="keyword">then</span></span><br><span class="line">                auth0=`ps -ef | grep <span class="string">'AB_AUTH 0'</span> | grep -v monitor | grep -v grep | wc -l`</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> [ <span class="variable">$&#123;auth0&#125;</span> -gt 0 ]</span><br><span class="line">                <span class="keyword">then</span></span><br><span class="line">                        <span class="built_in">echo</span> <span class="string">"`date +'[%Y-%m-%d %H:%M:%S]'`  resume from no DB !"</span></span><br><span class="line">                        SendMsg <span class="string">"resume+from+no+DB"</span></span><br><span class="line">                        sh <span class="variable">$&#123;AAA_HOME&#125;</span>/bin/restartall</span><br><span class="line">                <span class="keyword">fi</span></span><br><span class="line">                <span class="built_in">break</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> [ <span class="variable">$times</span> -eq 3 ]</span><br><span class="line">        <span class="keyword">then</span></span><br><span class="line">                AuthNoDB</span><br><span class="line">                <span class="built_in">break</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">        SendMsg <span class="string">"login+DATABASE+fail+<span class="variable">$times</span>+times"</span></span><br><span class="line">        sleep 3</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line">i</span><br></pre></td></tr></table></figure>
+
 <p>事实上，shell的if中的condition有三种模式。<br><code>if command; then ...; fi</code> 这种情况下<code>command(可以是函数)</code>执行成功，返回0,那么执行then后面的语句，而不是进行T|F判断;<br><code>if [ condition ]; then ...; fi</code> 这种情况下<code>condition</code>为真才会执行then。</p>
-<pre><code>if [ 1 -gt 2 ]; then echo true; else echo false; fi
-</code></pre><p><code>if test condition; then ...; fi</code> 这种情况下<code>condition</code>为真才会执行then。   </p>
-<pre><code>if test 1 -gt 2 ; then echo true; else echo false; fi
-</code></pre><p>因为在shell中 <code>test 与 []</code> 是完全一样的。</p>
+<pre><code>if [ 1 -gt 2 ]; then echo true; else echo false; fi</code></pre><p><code>if test condition; then ...; fi</code> 这种情况下<code>condition</code>为真才会执行then。   </p>
+<pre><code>if test 1 -gt 2 ; then echo true; else echo false; fi</code></pre><p>因为在shell中 <code>test 与 []</code> 是完全一样的。</p>
 
     </div>
 
@@ -318,7 +317,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Kindle/Kindle越狱操作.html" rel="next" title="Kindle越狱操作">
+                <a href="/Kindle/Kindle%E8%B6%8A%E7%8B%B1%E6%93%8D%E4%BD%9C.html" rel="next" title="Kindle越狱操作">
                   <i class="fa fa-chevron-left"></i> Kindle越狱操作
                 </a>
             </div>
@@ -326,7 +325,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/Iptables在大流量的情况下启动导致服务拒绝.html" rel="prev" title="Iptables在大流量的情况下启动导致服务拒绝">
+                <a href="/Linux-Unix/Iptables%E5%9C%A8%E5%A4%A7%E6%B5%81%E9%87%8F%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%90%AF%E5%8A%A8%E5%AF%BC%E8%87%B4%E6%9C%8D%E5%8A%A1%E6%8B%92%E7%BB%9D.html" rel="prev" title="Iptables在大流量的情况下启动导致服务拒绝">
                   Iptables在大流量的情况下启动导致服务拒绝 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -413,10 +412,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -445,10 +444,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -523,7 +522,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/Shell编程与C的一些不同.html",
+            url: "https://gowa.club/Linux-Unix/Shell%E7%BC%96%E7%A8%8B%E4%B8%8EC%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%90%8C.html",
             identifier: "Linux-Unix/Shell编程与C的一些不同.html",
             title: "Shell编程与C的一些不同"
           }

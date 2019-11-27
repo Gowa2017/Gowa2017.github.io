@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="将当前的git版本库内容提交到svn">
-<meta property="og:url" content="https://gowa.club/Git/将当前的git版本库内容提交到svn.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Git&#x2F;%E5%B0%86%E5%BD%93%E5%89%8D%E7%9A%84git%E7%89%88%E6%9C%AC%E5%BA%93%E5%86%85%E5%AE%B9%E6%8F%90%E4%BA%A4%E5%88%B0svn.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="由于自己本地一直都使用的是 git ，很多凌乱的脚本准备归一下类，方便维护。所以就建立了一个 svn 版本库来存储。但我不想简单的只是把内容提交上去，还要保留我本地的 git 历史记录，所以要进行手动处理一下。参考地址">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-12-11T06:35:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="将当前的git版本库内容提交到svn">
-<meta name="twitter:description" content="由于自己本地一直都使用的是 git ，很多凌乱的脚本准备归一下类，方便维护。所以就建立了一个 svn 版本库来存储。但我不想简单的只是把内容提交上去，还要保留我本地的 git 历史记录，所以要进行手动处理一下。参考地址">
 
-<link rel="canonical" href="https://gowa.club/Git/将当前的git版本库内容提交到svn.html">
+<link rel="canonical" href="https://gowa.club/Git/%E5%B0%86%E5%BD%93%E5%89%8D%E7%9A%84git%E7%89%88%E6%9C%AC%E5%BA%93%E5%86%85%E5%AE%B9%E6%8F%90%E4%BA%A4%E5%88%B0svn.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/将当前的git版本库内容提交到svn.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/%E5%B0%86%E5%BD%93%E5%89%8D%E7%9A%84git%E7%89%88%E6%9C%AC%E5%BA%93%E5%86%85%E5%AE%B9%E6%8F%90%E4%BA%A4%E5%88%B0svn.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Git/将当前的git版本库内容提交到svn.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Git/%E5%B0%86%E5%BD%93%E5%89%8D%E7%9A%84git%E7%89%88%E6%9C%AC%E5%BA%93%E5%86%85%E5%AE%B9%E6%8F%90%E4%BA%A4%E5%88%B0svn.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Git/将当前的git版本库内容提交到svn.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,21 +285,30 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>由于自己本地一直都使用的是 git ，很多凌乱的脚本准备归一下类，方便维护。所以就建立了一个 svn 版本库来存储。但我不想简单的只是把内容提交上去，还要保留我本地的 git 历史记录，所以要进行手动处理一下。<br><a href="https://my.oschina.net/CasparLi/blog/717759" target="_blank" rel="noopener">参考地址</a><br><a id="more"></a></p>
+        <p>由于自己本地一直都使用的是 git ，很多凌乱的脚本准备归一下类，方便维护。所以就建立了一个 svn 版本库来存储。但我不想简单的只是把内容提交上去，还要保留我本地的 git 历史记录，所以要进行手动处理一下。<br><a href="https://my.oschina.net/CasparLi/blog/717759" target="_blank" rel="noopener">参考地址</a></p>
+<a id="more"></a>
+
 <h1 id="手动指定-svn-库地址"><a href="#手动指定-svn-库地址" class="headerlink" title="手动指定 svn 库地址"></a>手动指定 svn 库地址</h1><p>在配置文件内添加：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">vim .git/config</span><br><span class="line"></span><br><span class="line">[svn-remote <span class="string">"svn"</span>]</span><br><span class="line">        url = http://svn.example.com/foo/trunk  </span><br><span class="line">        fetch = :refs/remotes/git-svn</span><br></pre></td></tr></table></figure>
+
 <p>我们可以用 <code>git config --local -l</code> 来验证一下我们的配置：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git config --<span class="built_in">local</span> -l`</span><br><span class="line">svn-remote.svn.url=svn://guan.isum.cn/smart/shells</span><br><span class="line">svn-remote.svn.fetch=:refs/remotes/git-svn</span><br></pre></td></tr></table></figure>
-<p>这里，请不要被 <em>“svn”</em> 这个所误导，只是我们指定的一个远程版本仓库的名称而已，你可以叫任何其他的名字。</p>
+
+<p>这里，请不要被 *”svn”* 这个所误导，只是我们指定的一个远程版本仓库的名称而已，你可以叫任何其他的名字。</p>
 <p>这个配置也就是指定了一个远程 svn 版本库的意思。</p>
 <h1 id="拉取远程分支"><a href="#拉取远程分支" class="headerlink" title="拉取远程分支"></a>拉取远程分支</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git svn fetch svn</span><br></pre></td></tr></table></figure>
+
 <p>将 svn 版本库获取之后，我们可以将内容检出到本地来。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git co -b svn git-svn</span><br></pre></td></tr></table></figure>
+
 <p>将原程分支  git-svn 给检出到本地了。</p>
 <h1 id="分支合并"><a href="#分支合并" class="headerlink" title="分支合并"></a>分支合并</h1><p>这个时候，我们就可以用 merge 命令将我们本地 git 分支上的内容合并过来了。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git merge master --allow-unrelated-histories</span><br></pre></td></tr></table></figure>
+
 <p>推送到 svn 远程库：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git svn dcommit</span><br></pre></td></tr></table></figure>
+
+
 <h1 id="回到主分支"><a href="#回到主分支" class="headerlink" title="回到主分支"></a>回到主分支</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git co master</span><br><span class="line">git rebase svn</span><br><span class="line">git branch -d svn</span><br></pre></td></tr></table></figure>
     </div>
 
@@ -318,7 +325,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/利用NFS及LVM进行存储动态扩容.html" rel="next" title="利用NFS及LVM进行存储动态扩容">
+                <a href="/Linux-Unix/%E5%88%A9%E7%94%A8NFS%E5%8F%8ALVM%E8%BF%9B%E8%A1%8C%E5%AD%98%E5%82%A8%E5%8A%A8%E6%80%81%E6%89%A9%E5%AE%B9.html" rel="next" title="利用NFS及LVM进行存储动态扩容">
                   <i class="fa fa-chevron-left"></i> 利用NFS及LVM进行存储动态扩容
                 </a>
             </div>
@@ -326,7 +333,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/JavaScript/Promise的使用及API.html" rel="prev" title="Promise的使用及API">
+                <a href="/JavaScript/Promise%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8F%8AAPI.html" rel="prev" title="Promise的使用及API">
                   Promise的使用及API <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -413,10 +420,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -445,10 +452,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -523,7 +530,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Git/将当前的git版本库内容提交到svn.html",
+            url: "https://gowa.club/Git/%E5%B0%86%E5%BD%93%E5%89%8D%E7%9A%84git%E7%89%88%E6%9C%AC%E5%BA%93%E5%86%85%E5%AE%B9%E6%8F%90%E4%BA%A4%E5%88%B0svn.html",
             identifier: "Git/将当前的git版本库内容提交到svn.html",
             title: "将当前的git版本库内容提交到svn"
           }

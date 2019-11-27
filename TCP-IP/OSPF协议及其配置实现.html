@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,19 +51,17 @@
 <meta name="keywords" content="TCP&#x2F;IP,OSPF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OSPF协议及其配置实现">
-<meta property="og:url" content="https://gowa.club/TCP-IP/OSPF协议及其配置实现.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;TCP-IP&#x2F;OSPF%E5%8D%8F%E8%AE%AE%E5%8F%8A%E5%85%B6%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="简介OSPF(Open Shortest Path First)是开放最短路径有限协议，V2针对IPV4网络，V3针对IPV6网络。是IETF组织开发的一个基于链路状态的内部网关协议。每台OSPF路由器根据自己周围的网络拓扑结构生成链路状态通告LSA(Link Stat Advertisement)，并通过更新报文将LSA发送到网络中的其他OSPF路由器。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/20161123-ospf-zone.png">
-<meta property="og:image" content="https://gowa.club/res/20161123-ospf-router-type.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;20161123-ospf-zone.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;20161123-ospf-router-type.png">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.269Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OSPF协议及其配置实现">
-<meta name="twitter:description" content="简介OSPF(Open Shortest Path First)是开放最短路径有限协议，V2针对IPV4网络，V3针对IPV6网络。是IETF组织开发的一个基于链路状态的内部网关协议。每台OSPF路由器根据自己周围的网络拓扑结构生成链路状态通告LSA(Link Stat Advertisement)，并通过更新报文将LSA发送到网络中的其他OSPF路由器。">
-<meta name="twitter:image" content="https://gowa.club/res/20161123-ospf-zone.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;20161123-ospf-zone.png">
 
-<link rel="canonical" href="https://gowa.club/TCP-IP/OSPF协议及其配置实现.html">
+<link rel="canonical" href="https://gowa.club/TCP-IP/OSPF%E5%8D%8F%E8%AE%AE%E5%8F%8A%E5%85%B6%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0.html">
 
 
 <script id="page-configurations">
@@ -228,12 +226,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/TCP-IP/OSPF协议及其配置实现.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/TCP-IP/OSPF%E5%8D%8F%E8%AE%AE%E5%8F%8A%E5%85%B6%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -281,7 +279,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/TCP-IP/OSPF协议及其配置实现.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/TCP-IP/OSPF%E5%8D%8F%E8%AE%AE%E5%8F%8A%E5%85%B6%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="TCP-IP/OSPF协议及其配置实现.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -297,26 +295,26 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>OSPF(Open Shortest Path First)是开放最短路径有限协议，V2针对IPV4网络，V3针对IPV6网络。是IETF组织开发的一个基于链路状态的内部网关协议。<br>每台OSPF路由器根据自己周围的网络拓扑结构生成链路状态通告LSA(Link Stat Advertisement)，并通过更新报文将LSA发送到网络中的其他OSPF路由器。<br><a id="more"></a></p>
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>OSPF(Open Shortest Path First)是开放最短路径有限协议，V2针对IPV4网络，V3针对IPV6网络。是IETF组织开发的一个基于链路状态的内部网关协议。<br>每台OSPF路由器根据自己周围的网络拓扑结构生成链路状态通告LSA(Link Stat Advertisement)，并通过更新报文将LSA发送到网络中的其他OSPF路由器。  </p>
+<a id="more"></a>
 <h1 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h1><p>每台OSPF路由器都会手机其他路由器发来的LSA，所有的LSA放在一起便组成了链路状态数据库LSDB(Link State Database)。LSA是对路由器周围网络拓扑结构的描述，LSDB则是对整个自治系统的网络拓扑结构描述。<br>OPSF路由器将LSDB转换成一张带权的有向图，这张图便是对整个网络拓扑结构的真实反映。各个路由器得到的有向图是完全相同的。<br>每台路由器根据有向图，使用SPF算法算出一棵以自己为根的最短路径树，这棵树给出了到自治系统中各节点的路由。<br><strong>随着网络扩大，LSDB也会越来越大，所以通过划分区域来解决LSDB过大的问题</strong></p>
 <h1 id="区域"><a href="#区域" class="headerlink" title="区域"></a>区域</h1><p><img src="/res/20161123-ospf-zone.png" alt="OSPF区域"><br><strong>根据区域特性不同，大体可分为以下几种区域:</strong><br>Backbone 区域——Backbone 区域，也被称为区域 0，其任务是汇总每个区域的网络拓扑到其他所有的区域。所有区域间通信必须通过骨干区域，非骨干区域之间不能直接交换数据包。因此，在规划 OSPF 网络时必须注意使所有非骨干区域与骨干区域物理或逻辑相 连。在实际应用中无法满足物理相连的条件时，可以通过配置虚连接实现逻辑相连。<br>Stub 区域——Stub 区域也被称为末梢区域，是不允许 AS 外部 LSA 在其内部泛洪 的区域，只可以携带区域内部路由和区域间路由。<br>Totally Stub 区域——Totally Stub 区域也被称为完全末梢区域，在 Stub 区域基础上 进一步减少了区域内 LSA 数量，不仅不允许携带 AS 外部路由，也不允许携带区域 间路由。<br>NSSA 区域——NSSA(Not-So-Stubby-Area)区域也被称为非完全末梢区域，除通 过 ASBR 引入自治系统外部路由外，保留了其余 Stub 区域的特征。  </p>
 <h1 id="路由器类型"><a href="#路由器类型" class="headerlink" title="路由器类型"></a>路由器类型</h1><p><img src="/res/20161123-ospf-router-type.png" alt="OSPF-路由器类型"><br><strong>根据在AS中的不同位置，可分为以下几类</strong>:<br>区域内路由器(Internal Routers) 该类路由器的所有接口都属于同一个 OSPF区域。<br>区域边界路由器 ABR(Area Border Routers)该类路由器可以同时属于两个以上的区域，但其中一个必须是骨干区域。ABR 用 来连接骨干区域和非骨干区域，它与骨干区域之间既可以是物理连接，也可以是逻 辑上的连接。<br>骨干路由器(Backbone Routers) 该类路由器至少有一个接口属于骨干区域。因此，所有的 ABR 和位于 Area0 的内部路由器都是骨干路由器。<br>自治系统边界路由器 ASBR(AS Boundary Routers)与其他 AS 交换路由信息的路由器称为 ASBR。ASBR 并不一定位于 AS 的边界， 它可能是区域内路由器，也可能是 ABR。只要一台 OSPF 路由器引入了外部路由的 信息，它就成为 ASBR。</p>
-<h1 id="OSPF报文头部"><a href="#OSPF报文头部" class="headerlink" title="OSPF报文头部"></a>OSPF报文头部</h1><pre><code>    0                   1                   2                   3
-    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |   Version #   |     Type      |         Packet length         |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                          Router ID                            |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                           Area ID                             |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |           Checksum            |             AuType            |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                       Authentication                          |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                       Authentication                          |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-</code></pre><p><strong>通过Type字段来定义五种报文:</strong>  </p>
+<h1 id="OSPF报文头部"><a href="#OSPF报文头部" class="headerlink" title="OSPF报文头部"></a>OSPF报文头部</h1><pre><code> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|   Version #   |     Type      |         Packet length         |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                          Router ID                            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                           Area ID                             |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|           Checksum            |             AuType            |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                       Authentication                          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                       Authentication                          |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</code></pre><p><strong>通过Type字段来定义五种报文:</strong>  </p>
 <ul>
 <li>Hello 报文——Hello 报文用于发现和维护邻居和邻接关系，在广播型网络和 NBMA 网络也用来选举 DR 和 BDR。  </li>
 <li>DD 报文——DD(Database Description)报文通过携带 LSA 头部信息发送链路状态 数据库摘要。  </li>
@@ -329,10 +327,9 @@
 <li>进入ospf视图  </li>
 <li>配置area  </li>
 <li>配置网络  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">router id 1.1.1.1  </span><br><span class="line">ospf</span><br><span class="line">area 0</span><br><span class="line">network 192.168.0.1 0.0.0.255 #反掩码</span><br><span class="line">quit</span><br></pre></td></tr></table></figure>
-</li>
+更多命令可以通过  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dis ospf ?</span><br></pre></td></tr></table></figure>
+进行查看</li>
 </ol>
-<p>更多命令可以通过<br> <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dis ospf ?</span><br></pre></td></tr></table></figure></p>
-<p>进行查看</p>
 
     </div>
 
@@ -350,7 +347,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/Gawk教程.html" rel="next" title="Gawk教程">
+                <a href="/Linux-Unix/Gawk%E6%95%99%E7%A8%8B.html" rel="next" title="Gawk教程">
                   <i class="fa fa-chevron-left"></i> Gawk教程
                 </a>
             </div>
@@ -358,7 +355,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/Basic-RegEx与Extend-RegEx.html" rel="prev" title="Basic RegEx与Extend RegEx">
+                <a href="/Linux-Unix/Basic-RegEx%E4%B8%8EExtend-RegEx.html" rel="prev" title="Basic RegEx与Extend RegEx">
                   Basic RegEx与Extend RegEx <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -445,10 +442,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -477,10 +474,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -555,7 +552,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/TCP-IP/OSPF协议及其配置实现.html",
+            url: "https://gowa.club/TCP-IP/OSPF%E5%8D%8F%E8%AE%AE%E5%8F%8A%E5%85%B6%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0.html",
             identifier: "TCP-IP/OSPF协议及其配置实现.html",
             title: "OSPF协议及其配置实现"
           }

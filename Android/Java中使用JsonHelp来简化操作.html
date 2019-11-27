@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Java,Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java中使用JsonHelp来简化操作">
-<meta property="og:url" content="https://gowa.club/Android/Java中使用JsonHelp来简化操作.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Java%E4%B8%AD%E4%BD%BF%E7%94%A8JsonHelp%E6%9D%A5%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Json为什么使用这个广我是不知道的，不过现在阶段公司在开发中大批量的都是使用Json来从服务端获取数据，也只有学习一下了。另外，值得一提的是以前，通过在Http地址中带上方法到接口去获取对应的信息，和在数据包内包含协议，究竟哪一个好，还真不知道">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-06T07:35:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java中使用JsonHelp来简化操作">
-<meta name="twitter:description" content="Json为什么使用这个广我是不知道的，不过现在阶段公司在开发中大批量的都是使用Json来从服务端获取数据，也只有学习一下了。另外，值得一提的是以前，通过在Http地址中带上方法到接口去获取对应的信息，和在数据包内包含协议，究竟哪一个好，还真不知道">
 
-<link rel="canonical" href="https://gowa.club/Android/Java中使用JsonHelp来简化操作.html">
+<link rel="canonical" href="https://gowa.club/Android/Java%E4%B8%AD%E4%BD%BF%E7%94%A8JsonHelp%E6%9D%A5%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Java中使用JsonHelp来简化操作.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Java%E4%B8%AD%E4%BD%BF%E7%94%A8JsonHelp%E6%9D%A5%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/Java中使用JsonHelp来简化操作.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/Java%E4%B8%AD%E4%BD%BF%E7%94%A8JsonHelp%E6%9D%A5%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Java中使用JsonHelp来简化操作.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,16 +285,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Json为什么使用这个广我是不知道的，不过现在阶段公司在开发中大批量的都是使用Json来从服务端获取数据，也只有学习一下了。另外，值得一提的是以前，通过在Http地址中带上方法到接口去获取对应的信息，和在数据包内包含协议，究竟哪一个好，还真不知道<br><a id="more"></a></p>
+        <p>Json为什么使用这个广我是不知道的，不过现在阶段公司在开发中大批量的都是使用Json来从服务端获取数据，也只有学习一下了。另外，值得一提的是以前，通过在Http地址中带上方法到接口去获取对应的信息，和在数据包内包含协议，究竟哪一个好，还真不知道</p>
+<a id="more"></a>
+
 <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>JsonHelp提供了很多方法来简化从Json对象到Java对象的转换，及其相逆的转换。我们来看一下。</p>
 <h1 id="JSONHelper"><a href="#JSONHelper" class="headerlink" title="JSONHelper"></a>JSONHelper</h1><h2 id="toJSONObject"><a href="#toJSONObject" class="headerlink" title="toJSONObject"></a>toJSONObject</h2><p>这个方法，会被Java 对象，转换为一个JSON对象。那JSON对象又是怎么样的？在安卓内部的JSONObject类中，我们可以看到，其实其只是一个Map。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> LinkedHashMap&lt;String, Object&gt; nameValuePairs;</span><br></pre></td></tr></table></figure>
+
 <p>有点类似反射，获取当前类中的所有字段，找到注解的字段，获取字段的值，然后放到 JSON对象的 LinkedHashmap 中。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JSONObject <span class="title">toJSONObject</span><span class="params">(@NonNull Object object)</span> </span>&#123;</span><br><span class="line">    JSONObject jsonObject = <span class="keyword">new</span> JSONObject();</span><br><span class="line">    Class&lt;?&gt; currentClass = object.getClass();</span><br><span class="line">    <span class="keyword">while</span> (currentClass != Object.class) &#123;</span><br><span class="line">        Field[] fields = currentClass.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span> (Field field : fields) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!field.isAccessible())</span><br><span class="line">                field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (field.isAnnotationPresent(JsonTransparent.class)) &#123;</span><br><span class="line">                <span class="comment">// 忽略掉JsonTransparent注解的部分</span></span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> modifiers = field.getModifiers();</span><br><span class="line">            <span class="keyword">if</span> (Modifier.isFinal(modifiers) || Modifier.isStatic(modifiers)) &#123;</span><br><span class="line">                <span class="comment">// 忽略掉static 和 final 修饰的变量</span></span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            String fieldName;</span><br><span class="line">            <span class="keyword">if</span> (field.isAnnotationPresent(JsonField.class)) &#123;</span><br><span class="line">                fieldName = field.getAnnotation(JsonField.class).value();</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                fieldName = field.getName();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Object value = getJsonObject(field.get(object));</span><br><span class="line">                <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    jsonObject.put(fieldName, value);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        currentClass = currentClass.getSuperclass();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> jsonObject;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JSONObject <span class="title">toJSONObject</span><span class="params">(@NonNull Object object)</span> </span>&#123;</span><br><span class="line">    JSONObject jsonObject = <span class="keyword">new</span> JSONObject();</span><br><span class="line">    Class&lt;?&gt; currentClass = object.getClass();</span><br><span class="line">    <span class="keyword">while</span> (currentClass != Object<span class="class">.<span class="keyword">class</span>) </span>&#123;</span><br><span class="line">        Field[] fields = currentClass.getDeclaredFields();</span><br><span class="line">        <span class="keyword">for</span> (Field field : fields) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!field.isAccessible())</span><br><span class="line">                field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (field.isAnnotationPresent(JsonTransparent<span class="class">.<span class="keyword">class</span>)) </span>&#123;</span><br><span class="line">                <span class="comment">// 忽略掉JsonTransparent注解的部分</span></span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> modifiers = field.getModifiers();</span><br><span class="line">            <span class="keyword">if</span> (Modifier.isFinal(modifiers) || Modifier.isStatic(modifiers)) &#123;</span><br><span class="line">                <span class="comment">// 忽略掉static 和 final 修饰的变量</span></span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            String fieldName;</span><br><span class="line">            <span class="keyword">if</span> (field.isAnnotationPresent(JsonField<span class="class">.<span class="keyword">class</span>)) </span>&#123;</span><br><span class="line">                fieldName = field.getAnnotation(JsonField<span class="class">.<span class="keyword">class</span>).<span class="title">value</span>()</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                fieldName = field.getName();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Object value = getJsonObject(field.get(object));</span><br><span class="line">                <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    jsonObject.put(fieldName, value);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        currentClass = currentClass.getSuperclass();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> jsonObject;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="toJSONArray"><a href="#toJSONArray" class="headerlink" title="toJSONArray"></a>toJSONArray</h2><p>JSONArray是一个 List：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> List&lt;Object&gt; values;</span><br></pre></td></tr></table></figure>
+
 <p><code>toJSONArray</code>就是把一个对象列表逐个的放进去。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JSONArray <span class="title">toJSONArray</span><span class="params">(@NonNull List&lt;?&gt; datas)</span> </span>&#123;</span><br><span class="line">    JSONArray jsonArray = <span class="keyword">new</span> JSONArray();</span><br><span class="line">    <span class="keyword">for</span> (Object object : datas) &#123;</span><br><span class="line">        jsonArray.put(getJsonObject(object));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> jsonArray;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <h2 id="getJsonObject"><a href="#getJsonObject" class="headerlink" title="getJsonObject"></a>getJsonObject</h2><p>这个方法将Java对象转换为JSON支持的类型。</p>
 <h2 id="toList"><a href="#toList" class="headerlink" title="toList"></a>toList</h2><p>将JSONArray转换为一个List。对于JSONArray中的每个元素，获取其值，转换为Java对象后放到列表内。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;V&gt; <span class="function">List&lt;V&gt; <span class="title">toList</span><span class="params">(@NonNull JSONArray jsonArray, @NonNull Class&lt;V&gt; entityType)</span> </span>&#123;</span><br><span class="line">       List&lt;V&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">       <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; jsonArray.length(); i++) &#123;</span><br><span class="line">           <span class="keyword">try</span> &#123;</span><br><span class="line">               V v;</span><br><span class="line"></span><br><span class="line">               String json = jsonArray.getString(i);</span><br><span class="line">               <span class="keyword">if</span> (json.startsWith(<span class="string">"&#123;"</span>)) &#123;</span><br><span class="line">                   JSONObject jsonObject = <span class="keyword">new</span> JSONObject(json);</span><br><span class="line">                   v = toObject(jsonObject, entityType);</span><br><span class="line">               &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                   v = (V) getJavaObject(json, entityType, <span class="keyword">null</span>);</span><br><span class="line">               &#125;</span><br><span class="line"></span><br><span class="line">               <span class="keyword">if</span> (v != <span class="keyword">null</span>) &#123;</span><br><span class="line">                   list.add(v);</span><br><span class="line">               &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                   Log.d(<span class="string">"json"</span>, <span class="string">"json序列化失败："</span> + json);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">               e.printStackTrace();</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> list;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
@@ -304,10 +307,12 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;V&gt; <span class="function">V <span class="title">toObject</span><span class="params">(@NonNull JSONObject jsonObject, @NonNull Class&lt;V&gt; entityType)</span> </span>&#123;</span><br><span class="line">    V v;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        v = entityType.newInstance();</span><br><span class="line">        initObject(jsonObject, v);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e1) &#123;</span><br><span class="line">        e1.printStackTrace();</span><br><span class="line">        v = <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> v;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="getJavaObject"><a href="#getJavaObject" class="headerlink" title="getJavaObject"></a>getJavaObject</h2><h2 id="getCollectionClass"><a href="#getCollectionClass" class="headerlink" title="getCollectionClass"></a>getCollectionClass</h2><h1 id="JSONObject"><a href="#JSONObject" class="headerlink" title="JSONObject"></a>JSONObject</h1><p>当我们获取数据，比如从网络获取的时候，其实获得的是JSON的字符串。查看了一下HttpRequester中的代码，在<code>OnSuccess</code>方法中，会把反馈回来的字符串建立一个JSON对象。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccess</span><span class="params">(<span class="keyword">int</span> statusCode, Header[] headers, String responseString)</span> </span>&#123;</span><br><span class="line">    Logger.log(Logger.HTTP, TAG + <span class="string">"-&gt;onSuccess()-&gt;code = "</span> + statusCode + <span class="string">", content = "</span> + responseString);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        JSONObject jsonObject = <span class="keyword">new</span> JSONObject(responseString);</span><br><span class="line">        <span class="keyword">int</span> state = jsonObject.optInt(<span class="string">"state"</span>, <span class="number">0</span>);</span><br><span class="line">        String msg = CodeConfig.getCodeTip(state);</span><br><span class="line">        HttpRequester.<span class="keyword">this</span>.onFinish(state, msg, jsonObject);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (JSONException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">        HttpRequester.<span class="keyword">this</span>.onFinish(CodeConfig.CODE_FAIL, e.getMessage(), <span class="keyword">null</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>当建立成JSON对象后，我们就可以做我们想做的操作了。对象本身就提供了很多方法来操作数据。</p>
 <p>我们知道，JSON对象其实放数据的就是一个<code>LinkedHashMap</code>。我们所做的事情，其实都是对这个Map进行获取而且了。</p>
 <p>我们最常用的，其实就是获取字符串我们来看一下<code>optString</code>这个方法。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">optString</span><span class="params">(String name, String fallback)</span> </span>&#123;</span><br><span class="line">    Object object = opt(name);</span><br><span class="line">    String result = JSON.toString(object);</span><br><span class="line">    <span class="keyword">return</span> result != <span class="keyword">null</span> ? result : fallback;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">opt</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> nameValuePairs.get(name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>好简单不是，其实就是从Map内获取出获取键的值，然后把这个值转换成字符串返回。</p>
 <p>但是我们从服务器返回的数据，有可能是一个列表，一个对象，或者一个复杂的对象结构。这个时候，就不能简单的从对象内获取字符串了。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>总结以上流程，我们简单来归纳一下。当我们调用HttpRequester的时候，其返回的数据会被封装成JSONObject对象返回给调用进程。</p>
@@ -329,7 +334,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/开源项目分类汇总，更全更新可见.html" rel="next" title="开源项目分类汇总，更全更新可见">
+                <a href="/Android/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%88%86%E7%B1%BB%E6%B1%87%E6%80%BB%EF%BC%8C%E6%9B%B4%E5%85%A8%E6%9B%B4%E6%96%B0%E5%8F%AF%E8%A7%81.html" rel="next" title="开源项目分类汇总，更全更新可见">
                   <i class="fa fa-chevron-left"></i> 开源项目分类汇总，更全更新可见
                 </a>
             </div>
@@ -337,7 +342,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/java中的数据结构.html" rel="prev" title="java中的数据结构">
+                <a href="/Java/java%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.html" rel="prev" title="java中的数据结构">
                   java中的数据结构 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -424,10 +429,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -456,10 +461,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -534,7 +539,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/Java中使用JsonHelp来简化操作.html",
+            url: "https://gowa.club/Android/Java%E4%B8%AD%E4%BD%BF%E7%94%A8JsonHelp%E6%9D%A5%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C.html",
             identifier: "Android/Java中使用JsonHelp来简化操作.html",
             title: "Java中使用JsonHelp来简化操作"
           }

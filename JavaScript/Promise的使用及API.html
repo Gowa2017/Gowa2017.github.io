@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,18 +51,16 @@
 <meta name="keywords" content="JavaScript,Promise">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Promise的使用及API">
-<meta property="og:url" content="https://gowa.club/JavaScript/Promise的使用及API.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;JavaScript&#x2F;Promise%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8F%8AAPI.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="完全是闲的，工作暂时用不到，但是看书偶尔看到了，不了解一下心里就根猫抓的一样。 Promise 对象，代表的是一个异步操作的最终完成（或失败）及其返回值。原文地址">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/promises.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;promises.png">
 <meta property="og:updated_time" content="2018-12-11T16:52:05.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Promise的使用及API">
-<meta name="twitter:description" content="完全是闲的，工作暂时用不到，但是看书偶尔看到了，不了解一下心里就根猫抓的一样。 Promise 对象，代表的是一个异步操作的最终完成（或失败）及其返回值。原文地址">
-<meta name="twitter:image" content="https://gowa.club/res/promises.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;promises.png">
 
-<link rel="canonical" href="https://gowa.club/JavaScript/Promise的使用及API.html">
+<link rel="canonical" href="https://gowa.club/JavaScript/Promise%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8F%8AAPI.html">
 
 
 <script id="page-configurations">
@@ -227,12 +225,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Promise的使用及API.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Promise%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8F%8AAPI.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -273,7 +271,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/JavaScript/Promise的使用及API.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/JavaScript/Promise%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8F%8AAPI.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/Promise的使用及API.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -291,11 +289,15 @@
       
         <p>完全是闲的，工作暂时用不到，但是看书偶尔看到了，不了解一下心里就根猫抓的一样。 <em>Promise</em> 对象，代表的是一个<strong>异步</strong>操作的最终完成（或失败）及其返回值。<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank" rel="noopener">原文地址</a></p>
 <a id="more"></a>
+
 <h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><p>开篇就是一个例子：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> promise1 = <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123;</span><br><span class="line">  setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    resolve(<span class="string">'foo'</span>);</span><br><span class="line">  &#125;, <span class="number">300</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">promise1.then(<span class="function"><span class="keyword">function</span>(<span class="params">value</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(value);</span><br><span class="line">  <span class="comment">// expected output: "foo"</span></span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(promise1);</span><br><span class="line"><span class="comment">// expected output: [object Promise]</span></span><br></pre></td></tr></table></figure>
+
 <p>执行脚本的输出是：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&gt; [object <span class="built_in">Promise</span>]</span><br><span class="line">&gt; <span class="string">"foo"</span></span><br></pre></td></tr></table></figure>
+
 <h1 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h1><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> <span class="built_in">Promise</span>( <span class="comment">/* executor */</span> <span class="function"><span class="keyword">function</span>(<span class="params">resolve, reject</span>) </span>&#123; ... &#125; );</span><br></pre></td></tr></table></figure>
+
 <p>参数：executor。 一个以 <em>resolve, reject</em> 为参数的函数，我们就叫它 executor 函数吧。executor 函数会被 Promise 的实现立即执行（这个函数会在 Promise 构造器返回创建好的对象前执行），参数 <em>resolve, reject</em> 都是函数哦。调用 <em>resolve, reject</em> 分别表示 解决或拒绝了此次 Promise。executor 函数通常会执行一些异步操作，一旦完成成，就会调用  <em>resolve</em> 来解决或在有错误时调用<em>reject</em> 来拒绝。如果 executor 抛出一个错误，那么本次 Promise 被拒绝，返回值被忽略。</p>
 <h1 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h1><p>Promise 是一个值的代理，但在这个 promise 创建的时候并不需要知道。这允许我们把异步操作的最终完成或失败与事件处理器相关联。这让异步方法像同步方法一样返回值：asynchronous 方法能立即返回一个将来可能用到的 <em>promise</em>，而不是立即返回最终值。</p>
 <p>一个 <em>Promise</em> 有几种状态：</p>
@@ -304,9 +306,9 @@
 <li><strong>fulfilled</strong> 操作已成功</li>
 <li><strong>rejected</strong> 操作失败</li>
 </ul>
-<p>pending 状态的 Promise 可以用一个值来 <em>fulfilled</em> ，或用一个原因（错误）来 <em>rejected</em>。当前面两个操作中的任意一个发生时，通过 promise 的 <code>then()</code> 函数排队的相关事件处理器就会被调用。（如果在事件处理器排队的时候 Promise 已经 <em>fulfieed</em> 或 <em>rejected</em>，此处理器会被立即调用。所以在异步操作完成与设置处理器间没有竞争条件）</p>
+<p>pending 状态的 Promise 可以用一个值来 <em>fulfilled</em> ，或用一个原因（错误）来 <em>rejected*。当前面两个操作中的任意一个发生时，通过 promise 的 <code>then()</code> 函数排队的相关事件处理器就会被调用。（如果在事件处理器排队的时候 Promise 已经 *fulfieed</em> 或 <em>rejected</em>，此处理器会被立即调用。所以在异步操作完成与设置处理器间没有竞争条件）</p>
 <p><code>Promise.prototype.then()，Promise.prototype.catch()</code> 都返回的是 promise，所以可以链式调用。</p>
-<p><img src="../res/promises.png" alt></p>
+<p><img src="../res/promises.png" alt=""></p>
 <blockquote>
 <p><em>fulfilled, rejected</em> 状态的 Promise 都可以被叫做 <em>settled</em>。</p>
 </blockquote>
@@ -343,7 +345,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Git/将当前的git版本库内容提交到svn.html" rel="next" title="将当前的git版本库内容提交到svn">
+                <a href="/Git/%E5%B0%86%E5%BD%93%E5%89%8D%E7%9A%84git%E7%89%88%E6%9C%AC%E5%BA%93%E5%86%85%E5%AE%B9%E6%8F%90%E4%BA%A4%E5%88%B0svn.html" rel="next" title="将当前的git版本库内容提交到svn">
                   <i class="fa fa-chevron-left"></i> 将当前的git版本库内容提交到svn
                 </a>
             </div>
@@ -351,7 +353,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/JavaScript/Nodes.js中的事件调度.html" rel="prev" title="Nodes.js中的事件调度">
+                <a href="/JavaScript/Nodes.js%E4%B8%AD%E7%9A%84%E4%BA%8B%E4%BB%B6%E8%B0%83%E5%BA%A6.html" rel="prev" title="Nodes.js中的事件调度">
                   Nodes.js中的事件调度 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -438,10 +440,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -470,10 +472,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -548,7 +550,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/JavaScript/Promise的使用及API.html",
+            url: "https://gowa.club/JavaScript/Promise%E7%9A%84%E4%BD%BF%E7%94%A8%E5%8F%8AAPI.html",
             identifier: "JavaScript/Promise的使用及API.html",
             title: "Promise的使用及API"
           }

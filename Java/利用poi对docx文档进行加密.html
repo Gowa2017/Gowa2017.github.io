@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Java,Android,Docx,Poi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用poi对docx文档进行加密">
-<meta property="og:url" content="https://gowa.club/Java/利用poi对docx文档进行加密.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;%E5%88%A9%E7%94%A8poi%E5%AF%B9docx%E6%96%87%E6%A1%A3%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="事情的起因是，公司业务上对于某一类型的文书是在客户端生成，然后上传到服务器，openoffice转换成pdf文书，然后展示给用户。以避免用户对文书进行的修改。而，docx模板替换后生成的文书，转换成pdf后会丢失格式。最为明显的是，对于图片进行旋转后，docx显示正常，而openoffice无效果的问题。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-07-29T04:30:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="利用poi对docx文档进行加密">
-<meta name="twitter:description" content="事情的起因是，公司业务上对于某一类型的文书是在客户端生成，然后上传到服务器，openoffice转换成pdf文书，然后展示给用户。以避免用户对文书进行的修改。而，docx模板替换后生成的文书，转换成pdf后会丢失格式。最为明显的是，对于图片进行旋转后，docx显示正常，而openoffice无效果的问题。">
 
-<link rel="canonical" href="https://gowa.club/Java/利用poi对docx文档进行加密.html">
+<link rel="canonical" href="https://gowa.club/Java/%E5%88%A9%E7%94%A8poi%E5%AF%B9docx%E6%96%87%E6%A1%A3%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/利用poi对docx文档进行加密.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/%E5%88%A9%E7%94%A8poi%E5%AF%B9docx%E6%96%87%E6%A1%A3%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/利用poi对docx文档进行加密.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/%E5%88%A9%E7%94%A8poi%E5%AF%B9docx%E6%96%87%E6%A1%A3%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/利用poi对docx文档进行加密.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,7 +285,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>事情的起因是，公司业务上对于某一类型的文书是在客户端生成，然后上传到服务器，openoffice转换成pdf文书，然后展示给用户。以避免用户对文书进行的修改。而，docx模板替换后生成的文书，转换成pdf后会丢失格式。最为明显的是，对于图片进行旋转后，docx显示正常，而openoffice无效果的问题。<br><a id="more"></a></p>
+        <p>事情的起因是，公司业务上对于某一类型的文书是在客户端生成，然后上传到服务器，openoffice转换成pdf文书，然后展示给用户。以避免用户对文书进行的修改。而，docx模板替换后生成的文书，转换成pdf后会丢失格式。最为明显的是，对于图片进行旋转后，docx显示正常，而openoffice无效果的问题。</p>
+<a id="more"></a>
 <h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><p>最终，协商出一个折衷的方法，就是对docx文档进行加密，这样展示的话就没有什么问题了。虽然这并不能避免进行复制后到其他地方进行操作，但也是最快捷的解决办法了。</p>
 <h1 id="加密级别"><a href="#加密级别" class="headerlink" title="加密级别"></a>加密级别</h1><p>对文档的加密有好几个级别，</p>
 <ul>
@@ -297,13 +296,16 @@
 </ul>
 <h1 id="POI的实现"><a href="#POI的实现" class="headerlink" title="POI的实现"></a>POI的实现</h1><h2 id="文档的修改限制"><a href="#文档的修改限制" class="headerlink" title="文档的修改限制"></a>文档的修改限制</h2><p>这个级别的加密，用户想要修改必须输入正确的密码才能继续修改，而且POI实现起来也比较简单：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    XWPFDocument document = <span class="keyword">new</span> XWPFDocument();</span><br><span class="line">    document.createParagraph().createRun().setText(<span class="string">"此文档禁止修改"</span>);</span><br><span class="line">    OutputStream os = <span class="keyword">new</span> FileOutputStream(<span class="string">"test.docx"</span>);</span><br><span class="line">    document.enforceReadonlyProtection(<span class="string">"foobar"</span>, HashAlgorithm.md5);</span><br><span class="line">    document.write(os);</span><br><span class="line"></span><br><span class="line">    os.close();</span><br><span class="line">&#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">    System.out.println(e.getMessage());</span><br><span class="line">    e.printStackTrace();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>这样加密了以后，文档打开阅览没有问题，但是一旦需要修改就要求输入密码了。</p>
 <h2 id="文档访问加密"><a href="#文档访问加密" class="headerlink" title="文档访问加密"></a>文档访问加密</h2><p>这个级别的加密，打开文件都需要输入密码。密码错误则无法打开。<br>我们用上面的文档来进行加密。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">        POIFSFileSystem fs = <span class="keyword">new</span> POIFSFileSystem();</span><br><span class="line">        EncryptionInfo info = <span class="keyword">new</span> EncryptionInfo(EncryptionMode.agile);</span><br><span class="line"><span class="comment">// EncryptionInfo info = new EncryptionInfo(EncryptionMode.agile, CipherAlgorithm.aes192, HashAlgorithm.sha384, -1, -1, null);</span></span><br><span class="line"></span><br><span class="line">        Encryptor enc = info.getEncryptor();</span><br><span class="line">        enc.confirmPassword(<span class="string">"foobaa"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Read in an existing OOXML file</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            OPCPackage opc = OPCPackage.open(<span class="keyword">new</span> File(<span class="string">"test.docx"</span>), PackageAccess.READ_WRITE);</span><br><span class="line">            OutputStream os = enc.getDataStream(fs);</span><br><span class="line">            opc.save(os);</span><br><span class="line">            opc.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">// Write out the encrypted version</span></span><br><span class="line">            FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(<span class="string">"docx_e.docx"</span>);</span><br><span class="line">            fs.writeFilesystem(fos);</span><br><span class="line">            fos.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            System.out.println(e.getMessage());</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+
 <p>这样操作过后，打开文档就需要输入密码，否则打开失败。</p>
 <p>同时，我们可以看到，我们可以使用不同的密码来进行不同级别的加密限制。</p>
 <h2 id="部分内容的修改限制"><a href="#部分内容的修改限制" class="headerlink" title="部分内容的修改限制"></a>部分内容的修改限制</h2><p>这个级别的加密，可以使有的部分可以修改，有的内容禁止修改。我们使用对文件整体修改的例子上，对部分内容不加限制的代码如下：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">            XWPFDocument document = <span class="keyword">new</span> XWPFDocument();</span><br><span class="line">            document.createParagraph().createRun().setText(<span class="string">"此文档禁止修改"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意这里</span></span><br><span class="line">            CTPermStart ctPermStart = document.getDocument().getBody().addNewPermStart();</span><br><span class="line">            ctPermStart.setEdGrp(STEdGrp.EVERYONE);</span><br><span class="line">            ctPermStart.setId(<span class="string">"123456"</span>); <span class="comment">//note the Id</span></span><br><span class="line">            document.createParagraph().createRun().setText(<span class="string">"此处可以修改"</span>);</span><br><span class="line">            document.getDocument().getBody().addNewPermEnd().setId(<span class="string">"123456"</span>); <span class="comment">//note the same Id</span></span><br><span class="line"><span class="comment">// 注意 setId。</span></span><br><span class="line">            OutputStream os = <span class="keyword">new</span> FileOutputStream(<span class="string">"test.docx"</span>);</span><br><span class="line">            document.enforceReadonlyProtection(<span class="string">"foobar"</span>, HashAlgorithm.md5);</span><br><span class="line">            document.write(os);</span><br><span class="line"></span><br><span class="line">            os.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            System.out.println(e.getMessage());</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
 <p>如此之后，我们可以发现，后面的这句文字可以修改，而其他的都不能修改。</p>
 
     </div>
@@ -324,7 +326,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/openoffice-XML-生成word中的图片.html" rel="next" title="openoffice-XML-生成word中的图片">
+                <a href="/Java/openoffice-XML-%E7%94%9F%E6%88%90word%E4%B8%AD%E7%9A%84%E5%9B%BE%E7%89%87.html" rel="next" title="openoffice-XML-生成word中的图片">
                   <i class="fa fa-chevron-left"></i> openoffice-XML-生成word中的图片
                 </a>
             </div>
@@ -332,7 +334,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/ssh代理隧道.html" rel="prev" title="ssh代理隧道">
+                <a href="/Linux-Unix/ssh%E4%BB%A3%E7%90%86%E9%9A%A7%E9%81%93.html" rel="prev" title="ssh代理隧道">
                   ssh代理隧道 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -419,10 +421,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -451,10 +453,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -529,7 +531,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/利用poi对docx文档进行加密.html",
+            url: "https://gowa.club/Java/%E5%88%A9%E7%94%A8poi%E5%AF%B9docx%E6%96%87%E6%A1%A3%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86.html",
             identifier: "Java/利用poi对docx文档进行加密.html",
             title: "利用poi对docx文档进行加密"
           }

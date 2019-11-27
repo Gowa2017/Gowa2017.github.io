@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java中final语义">
-<meta property="og:url" content="https://gowa.club/Java/Java中final语义.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;Java%E4%B8%ADfinal%E8%AF%AD%E4%B9%89.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="使用场景是我在安卓组件的点击事件回调中不准备修改 Activity 中的一个 Map 的内容，但是开始的时候，提示我在内部类中访问外部变量必须声明为 final。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-01-09T06:07:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Java中final语义">
-<meta name="twitter:description" content="使用场景是我在安卓组件的点击事件回调中不准备修改 Activity 中的一个 Map 的内容，但是开始的时候，提示我在内部类中访问外部变量必须声明为 final。">
 
-<link rel="canonical" href="https://gowa.club/Java/Java中final语义.html">
+<link rel="canonical" href="https://gowa.club/Java/Java%E4%B8%ADfinal%E8%AF%AD%E4%B9%89.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Java中final语义.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Java%E4%B8%ADfinal%E8%AF%AD%E4%B9%89.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/Java中final语义.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/Java%E4%B8%ADfinal%E8%AF%AD%E4%B9%89.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Java中final语义.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,8 +285,11 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>使用场景是我在安卓组件的点击事件回调中不准备修改 Activity 中的一个 Map 的内容，但是开始的时候，提示我在内部类中访问外部变量必须声明为 final。<br><a id="more"></a></p>
+        <p>使用场景是我在安卓组件的点击事件回调中不准备修改 Activity 中的一个 Map 的内容，但是开始的时候，提示我在内部类中访问外部变量必须声明为 final。</p>
+<a id="more"></a>
+
 <h1 id="重现问题"><a href="#重现问题" class="headerlink" title="重现问题"></a>重现问题</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    setContentView(R.layout.activity_com_register_multi_cert_global_freight_srv);</span><br><span class="line">    ButterKnife.bind(<span class="keyword">this</span>);</span><br><span class="line">    addCheckBoxToGl(cargoClassArr, cargoClassMap, glCargoClass);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">addCheckBoxToGl</span><span class="params">(String[] data, <span class="keyword">final</span> Map&lt;String, String&gt; dataMap, GridLayout gl)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; data.length; i++) &#123;</span><br><span class="line">        String s = data[i];</span><br><span class="line">        AppCompatCheckBox cb = <span class="keyword">new</span> AppCompatCheckBox(<span class="keyword">this</span>);</span><br><span class="line">        cb.setText(s);</span><br><span class="line">        cb.setOnCheckedChangeListener(<span class="keyword">new</span> CompoundButton.OnCheckedChangeListener() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCheckedChanged</span><span class="params">(CompoundButton buttonView, <span class="keyword">boolean</span> isChecked)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">if</span> (isChecked) &#123;</span><br><span class="line">                    dataMap.put(buttonView.getText().toString(), buttonView.getText().toString());</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    dataMap.remove(buttonView.getText().toString());</span><br><span class="line">                &#125;</span><br><span class="line">                Log.d(TAG, <span class="string">"onViewClicked: "</span> + <span class="keyword">new</span> Gson().toJson(cargoClassMap));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        gl.addView(cb);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>错误提示：<strong>变量 dataMap 从内部类中进行访问，需要声明为 final</strong></p>
 <p>我当时以为，final 是不可改变的意思。但事实证明这是错误的。在进行 final 声明后，依然改变了 dataMap 的值。</p>
 <p>最后查阅官方文档才发现：<a href="https://docs.oracle.com/javase/tutorial/java/javaOO/classvars.html" target="_blank" rel="noopener">https://docs.oracle.com/javase/tutorial/java/javaOO/classvars.html</a></p>
@@ -312,7 +313,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/Dagger注解说明.html" rel="next" title="Dagger注解说明">
+                <a href="/Java/Dagger%E6%B3%A8%E8%A7%A3%E8%AF%B4%E6%98%8E.html" rel="next" title="Dagger注解说明">
                   <i class="fa fa-chevron-left"></i> Dagger注解说明
                 </a>
             </div>
@@ -320,7 +321,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Vim/Vim的自动命令-au与augroup.html" rel="prev" title="Vim的自动命令-au与augroup">
+                <a href="/Vim/Vim%E7%9A%84%E8%87%AA%E5%8A%A8%E5%91%BD%E4%BB%A4-au%E4%B8%8Eaugroup.html" rel="prev" title="Vim的自动命令-au与augroup">
                   Vim的自动命令-au与augroup <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -407,10 +408,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -439,10 +440,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -517,7 +518,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/Java中final语义.html",
+            url: "https://gowa.club/Java/Java%E4%B8%ADfinal%E8%AF%AD%E4%B9%89.html",
             identifier: "Java/Java中final语义.html",
             title: "Java中final语义"
           }

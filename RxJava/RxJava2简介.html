@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -47,20 +47,18 @@
   };
 </script>
 
-  <meta name="description" content="RxJava是 响应式扩展 的Java VM实现：采用观察者序列来组成异步和事件驱动的程序的一个库。 其扩展了 观察者模式 来支持 数据/事件的序列，并增加了操作符，这允许我们通过生命来组成序列，而不用担心底层的如 线程，同步，线程安全和并发数据结构等。 开始在 AS 中 加上 compile &quot;io.reactivex.rxjava2:rxjava:2.x.y&quot;  把 x, y  换成最新的版本">
+  <meta name="description" content="RxJava是 响应式扩展 的Java VM实现：采用观察者序列来组成异步和事件驱动的程序的一个库。 其扩展了 观察者模式 来支持 数据&#x2F;事件的序列，并增加了操作符，这允许我们通过生命来组成序列，而不用担心底层的如 线程，同步，线程安全和并发数据结构等。 开始在 AS 中 加上 compile &quot;io.reactivex.rxjava2:rxjava:2.x.y&quot;  把 x, y  换成最新的版本">
 <meta name="keywords" content="Java,Android,RxJava">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RxJava2简介">
-<meta property="og:url" content="https://gowa.club/RxJava/RxJava2简介.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;RxJava&#x2F;RxJava2%E7%AE%80%E4%BB%8B.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="RxJava是 响应式扩展 的Java VM实现：采用观察者序列来组成异步和事件驱动的程序的一个库。 其扩展了 观察者模式 来支持 数据/事件的序列，并增加了操作符，这允许我们通过生命来组成序列，而不用担心底层的如 线程，同步，线程安全和并发数据结构等。 开始在 AS 中 加上 compile &quot;io.reactivex.rxjava2:rxjava:2.x.y&quot;  把 x, y  换成最新的版本">
+<meta property="og:description" content="RxJava是 响应式扩展 的Java VM实现：采用观察者序列来组成异步和事件驱动的程序的一个库。 其扩展了 观察者模式 来支持 数据&#x2F;事件的序列，并增加了操作符，这允许我们通过生命来组成序列，而不用担心底层的如 线程，同步，线程安全和并发数据结构等。 开始在 AS 中 加上 compile &quot;io.reactivex.rxjava2:rxjava:2.x.y&quot;  把 x, y  换成最新的版本">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-07T18:14:29.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RxJava2简介">
-<meta name="twitter:description" content="RxJava是 响应式扩展 的Java VM实现：采用观察者序列来组成异步和事件驱动的程序的一个库。 其扩展了 观察者模式 来支持 数据/事件的序列，并增加了操作符，这允许我们通过生命来组成序列，而不用担心底层的如 线程，同步，线程安全和并发数据结构等。 开始在 AS 中 加上 compile &quot;io.reactivex.rxjava2:rxjava:2.x.y&quot;  把 x, y  换成最新的版本">
 
-<link rel="canonical" href="https://gowa.club/RxJava/RxJava2简介.html">
+<link rel="canonical" href="https://gowa.club/RxJava/RxJava2%E7%AE%80%E4%BB%8B.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/RxJava/RxJava2简介.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/RxJava/RxJava2%E7%AE%80%E4%BB%8B.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/RxJava/RxJava2简介.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/RxJava/RxJava2%E7%AE%80%E4%BB%8B.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="RxJava/RxJava2简介.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -296,8 +294,10 @@
 </blockquote>
 <h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><p>例子程序：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> rxjava.examples;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io.reactivex.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Flowable.just(<span class="string">"Hello world"</span>).subscribe(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>如果我们使用的开发环境不支持  Java 8 的 lambdas，必须自己创建一个内部的 Consumer。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> io.reactivex.functions.Consumer;</span><br><span class="line"></span><br><span class="line">Flowable.just(<span class="string">"Hello world"</span>)</span><br><span class="line">  .subscribe(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line">      <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">          System.out.println(s);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+
 <h1 id="基本类"><a href="#基本类" class="headerlink" title="基本类"></a>基本类</h1><ul>
 <li><strong>io.reactivex.Flowable</strong>: 0..N flows, supporting Reactive-Streams and backpressure</li>
 <li><strong>io.reactivex.Observable</strong>: 0..N flows, no backpressure,</li>
@@ -307,8 +307,10 @@
 </ul>
 <h1 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h1><h2 id="Upstream-downstream"><a href="#Upstream-downstream" class="headerlink" title="Upstream, downstream"></a>Upstream, downstream</h2><p>RxJava中的数据流由 <code>一个源，0个或多个中间步骤，随后是一个数据消费者或者结合步骤（这些步骤会通过某些方式来消费数据流）</code></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">source.operator1().operator2().operator3().subscribe(consumer);</span><br><span class="line"></span><br><span class="line">source.flatMap(value -&gt; source.operator1().operator2().operator3());</span><br></pre></td></tr></table></figure>
+
 <p>在这，如果我们把自己想象成 <code>operator2</code>，往左边看，直到source，这部分叫做 <strong>upstream</strong>。右边到 subscriber/consumer 之间的叫做 <strong>downstream</strong>。当每个元素写在单独一行的时候会更直观：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">source</span><br><span class="line">  .operator1()</span><br><span class="line">  .operator2()</span><br><span class="line">  .operator3()</span><br><span class="line">  .subscribe(consumer)</span><br></pre></td></tr></table></figure>
+
 <h2 id="动作中的对象"><a href="#动作中的对象" class="headerlink" title="动作中的对象"></a>动作中的对象</h2><p>在RxJAVA文档中，<strong>emission, emits, item, event, signal, data</strong></p>
 
     </div>
@@ -328,7 +330,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/关于安卓权限的适配.html" rel="next" title="关于安卓权限的适配">
+                <a href="/Android/%E5%85%B3%E4%BA%8E%E5%AE%89%E5%8D%93%E6%9D%83%E9%99%90%E7%9A%84%E9%80%82%E9%85%8D.html" rel="next" title="关于安卓权限的适配">
                   <i class="fa fa-chevron-left"></i> 关于安卓权限的适配
                 </a>
             </div>
@@ -336,7 +338,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/android中的线程.html" rel="prev" title="Android中的线程">
+                <a href="/Android/android%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html" rel="prev" title="Android中的线程">
                   Android中的线程 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -423,10 +425,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -455,10 +457,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -533,7 +535,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/RxJava/RxJava2简介.html",
+            url: "https://gowa.club/RxJava/RxJava2%E7%AE%80%E4%BB%8B.html",
             identifier: "RxJava/RxJava2简介.html",
             title: "RxJava2简介"
           }

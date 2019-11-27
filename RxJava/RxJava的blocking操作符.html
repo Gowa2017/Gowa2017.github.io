@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Java,Android,RxJava">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RxJava的blocking操作符">
-<meta property="og:url" content="https://gowa.club/RxJava/RxJava的blocking操作符.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;RxJava&#x2F;RxJava%E7%9A%84blocking%E6%93%8D%E4%BD%9C%E7%AC%A6.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="之所以有这样的场景，是因为当我想像 Stream API 那样使用 Observable 的时候出现了问题。所以就来了解一下 blocking 操作符到底是怎么样工作的。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-05-31T13:20:30.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RxJava的blocking操作符">
-<meta name="twitter:description" content="之所以有这样的场景，是因为当我想像 Stream API 那样使用 Observable 的时候出现了问题。所以就来了解一下 blocking 操作符到底是怎么样工作的。">
 
-<link rel="canonical" href="https://gowa.club/RxJava/RxJava的blocking操作符.html">
+<link rel="canonical" href="https://gowa.club/RxJava/RxJava%E7%9A%84blocking%E6%93%8D%E4%BD%9C%E7%AC%A6.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/RxJava/RxJava的blocking操作符.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/RxJava/RxJava%E7%9A%84blocking%E6%93%8D%E4%BD%9C%E7%AC%A6.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/RxJava/RxJava的blocking操作符.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/RxJava/RxJava%E7%9A%84blocking%E6%93%8D%E4%BD%9C%E7%AC%A6.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="RxJava/RxJava的blocking操作符.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,13 +287,16 @@
       
         <p>之所以有这样的场景，是因为当我想像 Stream API 那样使用 Observable 的时候出现了问题。所以就来了解一下 blocking 操作符到底是怎么样工作的。</p>
 <a id="more"></a>
+
 <p>首先，我们知道对于 Observer 与 Observable 的关系是：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Observable.subscribe(Observer)</span><br></pre></td></tr></table></figure>
+
 <p>之后， Observable 就会调用  Observer 的方法 <code>onNext(), onError(), onComplete()</code> 方法来发送数据和通知。</p>
 <p>同时呢，对于在 Observable 上应用的每个操作符，都会返回一个新的 Observable。新成的 Observable 会将之前的 Observable 当作 Upstream。（在代码中可以看到是表示为 <em>source, upstream</em> 等）</p>
 <p>同时，新返回的 Observable 会用一个内部的 Observer 来和 upstream 进行连接。</p>
 <h1 id="blockingFirst"><a href="#blockingFirst" class="headerlink" title="blockingFirst()"></a>blockingFirst()</h1><p>对于在 Observable 上应用这个操作符：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> T <span class="title">blockingFirst</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    BlockingFirstObserver&lt;T&gt; observer = <span class="keyword">new</span> BlockingFirstObserver&lt;T&gt;();</span><br><span class="line">    subscribe(observer);</span><br><span class="line">    T v = observer.blockingGet();</span><br><span class="line">    <span class="keyword">if</span> (v != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> v;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>就是用一个 BlockingFirstObserver 来订阅 Observable ，接着就执行了 blockingGet() 方法。</p>
 <p>BlockingFirstObserver 继承自 BlockingBaseObserver（继承自 CountDownLatch）。</p>
 <p>在 BlockingBaseObserver 中默认以参数 1 初始化了 CountDownLatch。</p>
@@ -306,12 +307,20 @@
 </blockquote>
 <h2 id="Sync-与状态"><a href="#Sync-与状态" class="headerlink" title="Sync 与状态"></a>Sync 与状态</h2><p>CountDownLatch 持有一个其内部的类 Sync 的实例，Sync 继承自 AbstractQueuedSynchronizer。其是一个有状态的类，用来作为很多同步操作的基础。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Sync</span> <span class="keyword">extends</span> <span class="title">AbstractQueuedSynchronizer</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">4982264981922014374L</span>;</span><br><span class="line"></span><br><span class="line">    Sync(<span class="keyword">int</span> count) &#123;</span><br><span class="line">        setState(count);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> getState();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">int</span> <span class="title">tryAcquireShared</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (getState() == <span class="number">0</span>) ? <span class="number">1</span> : -<span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryReleaseShared</span><span class="params">(<span class="keyword">int</span> releases)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// Decrement count; signal when transition to zero</span></span><br><span class="line">        <span class="keyword">for</span> (;;) &#123;</span><br><span class="line">            <span class="keyword">int</span> c = getState();</span><br><span class="line">            <span class="keyword">if</span> (c == <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">int</span> nextc = c-<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (compareAndSetState(c, nextc))</span><br><span class="line">                <span class="keyword">return</span> nextc == <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Sync sync;</span><br></pre></td></tr></table></figure>
+
+
+
+
 <h2 id="await"><a href="#await" class="headerlink" title="await()"></a>await()</h2><p>BlockingFirstObserver 会调用 blockingGet 方法：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> T <span class="title">blockingGet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (getCount() != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            BlockingHelper.verifyNonBlocking();</span><br><span class="line">            await();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException ex) &#123;</span><br><span class="line">            dispose();</span><br><span class="line">            <span class="keyword">throw</span> ExceptionHelper.wrapOrThrow(ex);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Throwable e = error;</span><br><span class="line">    <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> ExceptionHelper.wrapOrThrow(e);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>如前文所述，如果当前的 <em>count</em> 值（状态） 不为0，那么就会调用其父类 CountDownLatch 的 <code>await()</code> 方法，进入等待：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    sync.acquireSharedInterruptibly(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
 <p>不过根据我观察代码发现一个问题，事实上虽然说的是 blocking 的形式去获取数据。在我们不使用 subscribeOn 操作符的情况下，事实上代码：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> T <span class="title">blockingFirst</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    BlockingFirstObserver&lt;T&gt; observer = <span class="keyword">new</span> BlockingFirstObserver&lt;T&gt;();</span><br><span class="line">    subscribe(observer);</span><br><span class="line">    T v = observer.blockingGet();</span><br><span class="line">    <span class="keyword">if</span> (v != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> v;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> NoSuchElementException();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>在 subscribe 的时候， Observable 就开始发射数据，等到调用  <code>blockingGet()</code> 方法的时候，数据都已经发射过来了，看起来是不会进入阻塞状态的呢。</p>
 <h2 id="countDown"><a href="#countDown" class="headerlink" title="countDown()"></a>countDown()</h2><p>在源 Observable 发射数据的时候，其实就已经改变了锁的状态(count 值)了，所以呢，不会阻塞了。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">BlockingFirstObserver</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">BlockingBaseObserver</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(T t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">            value = t;</span><br><span class="line">            upstream.dispose();</span><br><span class="line">            countDown();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable t)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (value == <span class="keyword">null</span>) &#123;</span><br><span class="line">            error = t;</span><br><span class="line">        &#125;</span><br><span class="line">        countDown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -333,7 +342,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/RxJava/RxJava使用Schedulers时进行的线程切换.html" rel="next" title="RxJava使用Schedulers时进行的线程切换">
+                <a href="/RxJava/RxJava%E4%BD%BF%E7%94%A8Schedulers%E6%97%B6%E8%BF%9B%E8%A1%8C%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%88%87%E6%8D%A2.html" rel="next" title="RxJava使用Schedulers时进行的线程切换">
                   <i class="fa fa-chevron-left"></i> RxJava使用Schedulers时进行的线程切换
                 </a>
             </div>
@@ -341,7 +350,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/RealVNC的VNC-Viewer连接到VM虚拟机出错的问题.html" rel="prev" title="RealVNC的VNC-Viewer连接到VM虚拟机出错的问题">
+                <a href="/Linux-Unix/RealVNC%E7%9A%84VNC-Viewer%E8%BF%9E%E6%8E%A5%E5%88%B0VM%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%87%BA%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98.html" rel="prev" title="RealVNC的VNC-Viewer连接到VM虚拟机出错的问题">
                   RealVNC的VNC-Viewer连接到VM虚拟机出错的问题 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -428,10 +437,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -460,10 +469,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -538,7 +547,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/RxJava/RxJava的blocking操作符.html",
+            url: "https://gowa.club/RxJava/RxJava%E7%9A%84blocking%E6%93%8D%E4%BD%9C%E7%AC%A6.html",
             identifier: "RxJava/RxJava的blocking操作符.html",
             title: "RxJava的blocking操作符"
           }

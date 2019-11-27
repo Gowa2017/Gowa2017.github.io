@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -47,20 +47,18 @@
   };
 </script>
 
-  <meta name="description" content="偶尔看到一篇对 SpringMVC 讲得很好的文章。原文地址在 https://stackify.com/spring-mvc/">
+  <meta name="description" content="偶尔看到一篇对 SpringMVC 讲得很好的文章。原文地址在 https:&#x2F;&#x2F;stackify.com&#x2F;spring-mvc&#x2F;">
 <meta name="keywords" content="Java,SpringMVC,Spring">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringMVC是怎么样工作的">
-<meta property="og:url" content="https://gowa.club/Java/SpringMVC是怎么样工作的.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;SpringMVC%E6%98%AF%E6%80%8E%E4%B9%88%E6%A0%B7%E5%B7%A5%E4%BD%9C%E7%9A%84.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="偶尔看到一篇对 SpringMVC 讲得很好的文章。原文地址在 https://stackify.com/spring-mvc/">
+<meta property="og:description" content="偶尔看到一篇对 SpringMVC 讲得很好的文章。原文地址在 https:&#x2F;&#x2F;stackify.com&#x2F;spring-mvc&#x2F;">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-03-31T02:10:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="SpringMVC是怎么样工作的">
-<meta name="twitter:description" content="偶尔看到一篇对 SpringMVC 讲得很好的文章。原文地址在 https://stackify.com/spring-mvc/">
 
-<link rel="canonical" href="https://gowa.club/Java/SpringMVC是怎么样工作的.html">
+<link rel="canonical" href="https://gowa.club/Java/SpringMVC%E6%98%AF%E6%80%8E%E4%B9%88%E6%A0%B7%E5%B7%A5%E4%BD%9C%E7%9A%84.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/SpringMVC是怎么样工作的.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/SpringMVC%E6%98%AF%E6%80%8E%E4%B9%88%E6%A0%B7%E5%B7%A5%E4%BD%9C%E7%9A%84.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/SpringMVC是怎么样工作的.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/SpringMVC%E6%98%AF%E6%80%8E%E4%B9%88%E6%A0%B7%E5%B7%A5%E4%BD%9C%E7%9A%84.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/SpringMVC是怎么样工作的.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,6 +287,7 @@
       
         <p>偶尔看到一篇对 SpringMVC 讲得很好的文章。原文地址在 <a href="https://stackify.com/spring-mvc/" target="_blank" rel="noopener">https://stackify.com/spring-mvc/</a></p>
 <a id="more"></a>
+
 <h1 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h1><p>Tomcat 是一个 Servlet 容器，很自然地，每个发送到 Tomcat 网页服务器的请求都会一个 Java Servlet 处理。所以呢 Spring 网页应用的入口就是 Servlet。</p>
 <p>简单来说，一个 Servlet 就是 一个 Java 网页应用中的一个核心组件；其是一个底层概念，不会在特定的编程模式上涉及太多。</p>
 <p>一个 HTTP Servlet 只能接收一个 HTTP 请求，处理，然后发回一个响应。</p>
@@ -312,8 +311,11 @@
 <h1 id="HTTP-请求处理过程"><a href="#HTTP-请求处理过程" class="headerlink" title="HTTP 请求处理过程"></a>HTTP 请求处理过程</h1><p>首先，让我们来追踪一下到我们的控制层中的并返回到浏览器（前端）的简单 HTTP 请求，</p>
 <p>DispatcherServlet 的继承层级很深，但很值得深入探究一下。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GenericServlet </span><br><span class="line">    &lt;- HttpServlet </span><br><span class="line">        &lt;- HttpServletBean </span><br><span class="line">            &lt;- FrameworkServlet </span><br><span class="line">                &lt;-DispatcherServlet</span><br></pre></td></tr></table></figure>
+
+
 <h2 id="GenericServlet"><a href="#GenericServlet" class="headerlink" title="GenericServlet"></a>GenericServlet</h2><p>GenericServlet 是 Servlet 规范的一部分，并不直接关注 HTTP。你定义了一个接收所有的请求并产生响应的 <code>service()</code> 方法。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(ServletRequest req, ServletResponse res)</span> </span></span><br><span class="line"><span class="function">  <span class="keyword">throws</span> ServletException, IOException</span>;</span><br></pre></td></tr></table></figure>
+
 <p><em>ServletRequest，ServletResponse</em> 方法参数与 HTTP 协议没有什么关系。</p>
 <p>每个请求到达服务器的时候都会调用这个方法。</p>
 <h2 id="HttpServlet"><a href="#HttpServlet" class="headerlink" title="HttpServlet"></a>HttpServlet</h2><p>HttpServlet 关注 HTTP 的实现，也是规范的一部分。</p>
@@ -327,16 +329,20 @@
 <h2 id="DispatcherServlet-统一请求处理"><a href="#DispatcherServlet-统一请求处理" class="headerlink" title="DispatcherServlet 统一请求处理"></a>DispatcherServlet 统一请求处理</h2><p><code>HttpServlet.service()</code>方法通过 HTTP 的动词类型（get,post）来路由请求，在底层 servlet 上环境中工作得很好。然而，在 Spring MVC 这个级别的抽象，方法类型只是可以用来进行映射请求到处理器的一个参数。</p>
 <p>因此，FrameworkServlet 类的另外一个主要功能是将处理逻辑放到单一的 <code>processRequest()</code> 方法中，其会按序调用 <code>doService()</code>方法。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@Override</span><br><span class="line">protected final void doGet(HttpServletRequest request, </span><br><span class="line">  HttpServletResponse response) throws ServletException, IOException &#123;</span><br><span class="line">    processRequest(request, response);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@Override</span><br><span class="line">protected final void doPost(HttpServletRequest request, </span><br><span class="line">  HttpServletResponse response) throws ServletException, IOException &#123;</span><br><span class="line">    processRequest(request, response);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// …</span><br></pre></td></tr></table></figure>
+
 <h2 id="DispatcherServlet-丰富请求"><a href="#DispatcherServlet-丰富请求" class="headerlink" title="DispatcherServlet: 丰富请求"></a>DispatcherServlet: 丰富请求</h2><p>最后，<code>DispatcherServlet()</code> 实现了 <code>doService()</code> 方法。在这里，其会给请求添加上一些有用的对象，在接下来的处理过程中有利于我们的处理过程：应用上下文，区域解析器，主题解析器，主题源等等。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">request.setAttribute(WEB_APPLICATION_CONTEXT_ATTRIBUTE, </span><br><span class="line">  getWebApplicationContext());</span><br><span class="line">request.setAttribute(LOCALE_RESOLVER_ATTRIBUTE, <span class="keyword">this</span>.localeResolver);</span><br><span class="line">request.setAttribute(THEME_RESOLVER_ATTRIBUTE, <span class="keyword">this</span>.themeResolver);</span><br><span class="line">request.setAttribute(THEME_SOURCE_ATTRIBUTE, getThemeSource());</span><br></pre></td></tr></table></figure>
+
 <p>同样，<code>doService()</code>方法会这样好输入和输出快速映射(Flash Map)。 Flash Map 基本上是一个用来在请求间立刻传递参数的模式。这在有的时候会只有用，比如重定向。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">FlashMap inputFlashMap = <span class="keyword">this</span>.flashMapManager</span><br><span class="line">  .retrieveAndUpdate(request, response);</span><br><span class="line"><span class="keyword">if</span> (inputFlashMap != <span class="keyword">null</span>) &#123;</span><br><span class="line">    request.setAttribute(INPUT_FLASH_MAP_ATTRIBUTE, </span><br><span class="line">      Collections.unmodifiableMap(inputFlashMap));</span><br><span class="line">&#125;</span><br><span class="line">request.setAttribute(OUTPUT_FLASH_MAP_ATTRIBUTE, <span class="keyword">new</span> FlashMap());</span><br></pre></td></tr></table></figure>
+
 <p>接着 <code>doService()</code> 会调用 <code>doDispatch()</code> 方法进行请求分发。</p>
 <h2 id="DispatcherServlet：请求分发"><a href="#DispatcherServlet：请求分发" class="headerlink" title="DispatcherServlet：请求分发"></a>DispatcherServlet：请求分发</h2><p><code>dispatch()</code> 的主要目的是：找出请求的处理器，将请求/响应参数传递过去。 handler 可以是任意类型的对象，而不局限于一个特定的接口。这就意味着，Spring 需要找到一个知道如何与 handler 对话的 adapter。</p>
 <p>为了找到与请求匹配的 handler， Spring 会遍历所有已注册的  <em>HandlerMapping</em> 接口的实现。实现的类型有很多种。</p>
-<p>SimpleUrlHandlerMapping 允许将一个请求的URL 映射到一个特定的处理 bean。例如，可以通过将一个 <em>java.util.Properties</em>实例注入到 <em>mappings</em> 属性中：</p>
+<p>SimpleUrlHandlerMapping 允许将一个请求的URL 映射到一个特定的处理 bean。例如，可以通过将一个 <em>java.util.Properties*实例注入到 *mappings</em> 属性中：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">/welcome.html=ticketController</span><br><span class="line">/show.html=ticketController</span><br></pre></td></tr></table></figure>
-<p>可能使用最广泛的 handler 映射是 <em>RequestMappingHandlerMapping</em>了，其将一个请求映射到一个<em>@Controller</em> 注解的类中，一个 <em>@RequestMapping</em> 注解的方法上。</p>
+
+<p>可能使用最广泛的 handler 映射是 <em>RequestMappingHandlerMapping*了，其将一个请求映射到一个</em>@Controller* 注解的类中，一个 <em>@RequestMapping</em> 注解的方法上。</p>
 <p>注意，Spring 关注的方法是用 <em>@GetMapping, @PostMapping</em> 对应注解的。这些注解，通过 <em>@RequestMapping</em> 元注解来标记。</p>
 <p><code>doDispatch()</code> 方法也会关心一些其他 HTTP　相关的任务。</p>
 <h2 id="请求处理"><a href="#请求处理" class="headerlink" title="请求处理"></a>请求处理</h2><p>现在，Spring 决定了请求的handler，业绩 handler 的 adapter，是时候最终处理这个请求了。下面是 <code>HandlerAdapter.handle()</code> 方法的签名。注意到 handler 可以选择怎么处理请求很重要：</p>
@@ -345,19 +351,24 @@
 <li>返回一个 ModleAndView 对象，由 DispatcherServlet 渲染</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Nullable</span></span><br><span class="line"><span class="function">ModelAndView <span class="title">handle</span><span class="params">(HttpServletRequest request, </span></span></span><br><span class="line"><span class="function"><span class="params">                    HttpServletResponse response, </span></span></span><br><span class="line"><span class="function"><span class="params">                    Object handler)</span> <span class="keyword">throws</span> Exception</span>;</span><br></pre></td></tr></table></figure>
+
 <p>这里有几种类型的 handler。</p>
 <p>下面演示的是 SimpleControllerHandlerAdapter 如何处理一个 Spring MVC 中控制器实例的（不要与 @Controller 注解的 POJO 混淆）。</p>
 <p>控制器中的处理器返回的 <em>ModelAndView</em> 对象不会被自身渲染，而是由 DispatchServlet 渲染：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ModelAndView <span class="title">handle</span><span class="params">(HttpServletRequest request, </span></span></span><br><span class="line"><span class="function"><span class="params">  HttpServletResponse response, Object handler)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> ((Controller) handler).handleRequest(request, response);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
 <p>第二个是 SimpleServletHandlerAdapter，它会将一个常规的 Servlets 改为一个请求 handler。</p>
 <p>一个 <em>Servlet</em> 对于 ModelAndView 是一点也不清楚的，其只是简单的处理一下请求，将结果渲染到响应对象中。所以，这个 adapter 返回 null 而不是 ModelAndView。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ModelAndView <span class="title">handle</span><span class="params">(HttpServletRequest request, </span></span></span><br><span class="line"><span class="function"><span class="params">  HttpServletResponse response, Object handler)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    ((Servlet) handler).service(request, response);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>在我们的情况中，控制器是一个 POJO，然后方法上使用了 <em>@RequestMapping</em> 注解，所以每个 handler 都是控制器类的一个方法。对于这样的 handler 类型， Spring 使用 <em>RequestMappingHandlerAdapter</em> 类。</p>
 <h2 id="处理参数及Handler方法的返回值"><a href="#处理参数及Handler方法的返回值" class="headerlink" title="处理参数及Handler方法的返回值"></a>处理参数及Handler方法的返回值</h2><p>通常，控制器中的 handler 方法，并不会使用  <em>HttpServletRequest, HttpServletResponse</em> 作为参数，而是会使用很多其他的类型，比如 domain 对象，路径参数等等。</p>
 <p>同时，在控制器方法中，我们并不一定需要返回一个 ModleAndView 实例。我们可能会返回一个 View 名称，一个 <em>ResponseEntity</em> 或者一个将会被转换为 JSON 响应的 POJO。</p>
 <p><em>RequestMappingHandlerAdapter</em> 保证 handler 方法的参数从 HttpServletRequest 内进行解析，同时，根据 handler 方法的返回值来创建 ModelAndView。</p>
 <p>下面这些位于 RequestMappingHandlerAdapter 中的代码保证了上述的实现：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ServletInvocableHandlerMethod invocableMethod </span><br><span class="line">  = createInvocableHandlerMethod(handlerMethod);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">this</span>.argumentResolvers != <span class="keyword">null</span>) &#123;</span><br><span class="line">    invocableMethod.setHandlerMethodArgumentResolvers(</span><br><span class="line">      <span class="keyword">this</span>.argumentResolvers);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">this</span>.returnValueHandlers != <span class="keyword">null</span>) &#123;</span><br><span class="line">    invocableMethod.setHandlerMethodReturnValueHandlers(</span><br><span class="line">      <span class="keyword">this</span>.returnValueHandlers);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p><em>argumentResolvers</em> 对象是一个不同 <em>HandlerMethodArgumentResolver</em> 实例的复合。</p>
 <p>这里有超过 30 种不同的参数解析器实现。他们允许从请求中解压出任何形式的信息，同时将其提供给 handler 方法。参数包括： URL 路径变量，请求体参数，请求头，cookies, session 等。</p>
 <p><em>returnValueHandlers</em> 对象是 <em>HandlerMethodReturnValueHandler</em> 对象的复合。同样也有很多种不同的 value handlers，他们能处理方法的返回值，然后创建 adapter 需要的 ModelAndView 对象。</p>
@@ -368,11 +379,13 @@
 <p>在渲染期间，<em>ModelAndView</em> 对象可能已经包含了一个对选定 View 的引用，或者只是一个 View 名称，也可能什么都没有（此时依赖于一个默认的 view）。</p>
 <p>因为 <code>hello(), login()</code> 方法都将期望的视图通过字符串名称来指定，必须通过这个名称来进行查找。所以，这就是 <em>ViewResolver</em> 列表开始表演的地方。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (ViewResolver viewResolver : <span class="keyword">this</span>.viewResolvers) &#123;</span><br><span class="line">    View view = viewResolver.resolveViewName(viewName, locale);</span><br><span class="line">    <span class="keyword">if</span> (view != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> view;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>这是一个 <em>ViewResolver</em> 实例的列表，包括了 <em>ThymeleafViewResoleve</em>（thymeleaf-spring5集成库提供）。这个 resolver 知道去哪里查找 View，然后返回对应的 View 实例。</p>
 <p>在调用了 View 的 <code>render()</code> 方法后，Spring 通过将 HTML 页面发送到用户的浏览器来完结请求。</p>
 <h2 id="REST-支持"><a href="#REST-支持" class="headerlink" title="REST 支持"></a>REST 支持</h2><p>在典型的 MVC 场景之外，我们一样可以用这个框架来建立 REST 网页服务。</p>
 <p>简单来说，你可以接受一个资源作为输入，指定一个 POJO 作为方法参数，用 <em>@RequestBody</em> 进行注解。也可以将此方法加上 <em>@ResponseBody</em> 注解来表示其结果必须直接通过转换为一个 HTTP 响应。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestBody;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.ResponseBody;</span><br><span class="line"></span><br><span class="line"><span class="meta">@ResponseBody</span></span><br><span class="line"><span class="meta">@PostMapping</span>(<span class="string">"/message"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> MyOutputResource <span class="title">sendMessage</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  @RequestBody MyInputResource inputResource)</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> MyOutputResource(<span class="string">"Received: "</span></span><br><span class="line">      + inputResource.getRequestMessage());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>为了将内部的 DTOs 转换为 REST 表示，框架使用了 <em>HttpMessageConverter</em> 架构。例如，实现中的一个例子是 <em>MappingJackson2HttpMessageConverter</em>，其能将 model 对象和 JSON 对象间通过 Jackson 库进行转换。</p>
 <p>为了简化 REST API 的创建，Spring 介绍了 <em>@RestController</em> 注解。 这对默认会使用 <em>@ResponseBody</em> 语义来说非常的方便，避免了在每个 REST 控制器上进行显式的设置。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RestfulWebServiceController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(<span class="string">"/message"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> MyOutputResource <span class="title">getMessage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MyOutputResource(<span class="string">"Hello!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -394,7 +407,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/对于TextView或者普通的View应用Selector.html" rel="next" title="对于TextView或者普通的View应用Selector">
+                <a href="/Android/%E5%AF%B9%E4%BA%8ETextView%E6%88%96%E8%80%85%E6%99%AE%E9%80%9A%E7%9A%84View%E5%BA%94%E7%94%A8Selector.html" rel="next" title="对于TextView或者普通的View应用Selector">
                   <i class="fa fa-chevron-left"></i> 对于TextView或者普通的View应用Selector
                 </a>
             </div>
@@ -402,7 +415,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/Tomcat服务器架构.html" rel="prev" title="Tomcat服务器架构">
+                <a href="/Java/Tomcat%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%9E%B6%E6%9E%84.html" rel="prev" title="Tomcat服务器架构">
                   Tomcat服务器架构 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -489,10 +502,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -521,10 +534,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -599,7 +612,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/SpringMVC是怎么样工作的.html",
+            url: "https://gowa.club/Java/SpringMVC%E6%98%AF%E6%80%8E%E4%B9%88%E6%A0%B7%E5%B7%A5%E4%BD%9C%E7%9A%84.html",
             identifier: "Java/SpringMVC是怎么样工作的.html",
             title: "SpringMVC是怎么样工作的"
           }

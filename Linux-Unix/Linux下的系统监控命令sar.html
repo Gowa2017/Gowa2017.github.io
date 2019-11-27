@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Linux,运维">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux下的系统监控命令sar">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/Linux下的系统监控命令sar.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;Linux%E4%B8%8B%E7%9A%84%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E5%91%BD%E4%BB%A4sar.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="运维人员常用的命令如sar, vmstat, iostat等，各有千秋与侧中，不过sar是比较全的查看系统性能的命令了。对于CPU、磁盘、内存、IO的性能都能进行比较完整的监控并生成报表。对于自动化运维监控具有统一化的作用。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.269Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux下的系统监控命令sar">
-<meta name="twitter:description" content="运维人员常用的命令如sar, vmstat, iostat等，各有千秋与侧中，不过sar是比较全的查看系统性能的命令了。对于CPU、磁盘、内存、IO的性能都能进行比较完整的监控并生成报表。对于自动化运维监控具有统一化的作用。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/Linux下的系统监控命令sar.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/Linux%E4%B8%8B%E7%9A%84%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E5%91%BD%E4%BB%A4sar.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Linux下的系统监控命令sar.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Linux%E4%B8%8B%E7%9A%84%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E5%91%BD%E4%BB%A4sar.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -278,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/Linux下的系统监控命令sar.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/Linux%E4%B8%8B%E7%9A%84%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E5%91%BD%E4%BB%A4sar.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/Linux下的系统监控命令sar.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,39 +292,67 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>运维人员常用的命令如<strong>sar, vmstat, iostat</strong>等，各有千秋与侧中，不过<strong>sar</strong>是比较全的查看系统性能的命令了。对于CPU、磁盘、内存、IO的性能都能进行比较完整的监控并生成报表。对于自动化运维监控具有统一化的作用。<br><a id="more"></a></p>
-<h1 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h1><p>作者将代码开源在 <a href="http://sebastien.godard.pagesperso-orange.fr/" target="_blank" rel="noopener">sar官方地址</a>。其实是一个系统状态工具集的集合。<br><strong>sar:</strong> 收集、报告或者保存系统活动信息。其基本命令形式如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sar [options] [-A] [-o filename] [interval[count]]</span><br></pre></td></tr></table></figure></p>
+        <p>运维人员常用的命令如<strong>sar, vmstat, iostat</strong>等，各有千秋与侧中，不过<strong>sar</strong>是比较全的查看系统性能的命令了。对于CPU、磁盘、内存、IO的性能都能进行比较完整的监控并生成报表。对于自动化运维监控具有统一化的作用。</p>
+<a id="more"></a>
+<h1 id="简单介绍"><a href="#简单介绍" class="headerlink" title="简单介绍"></a>简单介绍</h1><p>作者将代码开源在 <a href="http://sebastien.godard.pagesperso-orange.fr/" target="_blank" rel="noopener">sar官方地址</a>。其实是一个系统状态工具集的集合。<br><strong>sar:</strong> 收集、报告或者保存系统活动信息。其基本命令形式如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sar [options] [-A] [-o filename] [interval[count]]</span><br></pre></td></tr></table></figure>
 <p><strong>sar</strong>命令将操作系统中选定的累计活动计数器的内容写到标准输出。基于 <em>count</em> 和 <em>interval</em> 参数的值，记帐系统按指定次数(count)，以指定的时间间隔（interval，以秒为单位）写入信息。<br>收集的数据也可以保存在由<strong>-o filename</strong> 标志指定的文件中。如果<strong>filename</strong>省略，那么就输出到每日的记录文件<strong>/var/log/sa/sadd</strong>。<strong>dd（01到31)</strong>代表某月的某一天。默认情况下数据是按天记录在里面的。<br>可能你这个时候就会问了，那么，我平时都没有执行这个命令的时候，它的记录是怎么产生的呢，这就对了。<br>其实<strong>sar</strong>不止它一个程序呢，还包括下面这些程序：</p>
 <ul>
-<li><strong>sar</strong> 收集、报告或存储信息（CPU、内存、磁盘、中断、网卡、TTY、内核表等等）</li>
-<li><strong>sadc</strong> 系统数据收集器，给<strong>sar</strong>做后台服务。</li>
-<li><strong>sa1</strong> 收记并存储二进制数据到每天的文件。这是设计来给<strong>cron</strong>执行一个<strong>sadc</strong>的前台程序。</li>
-<li><strong>sa2</strong> 生成总结报表。</li>
-<li><strong>sadf</strong> 以多种格式显示数据（CSV, XML, JSON, etc.），还可以用来生成SVG（Scalable Vector Graphics）图表，<h1 id="先理解一些概念"><a href="#先理解一些概念" class="headerlink" title="先理解一些概念"></a>先理解一些概念</h1><h2 id="虚拟内存-Virtual-Memory"><a href="#虚拟内存-Virtual-Memory" class="headerlink" title="虚拟内存(Virtual Memory)"></a>虚拟内存(Virtual Memory)</h2><h1 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h1>多的不说了，更多的介绍可以在你的系统上执行<code>info sar</code>命令查看。</li>
-<li><strong>-A</strong>    这选项等于 <em>—bBdFHqrRSvwWy -I SUM -I XALL -m ALL -n ALL -r ALL -u ALL -P ALL</em></li>
-<li><strong>-b</strong>    报告<strong>I/O</strong>和传输状态。<br>  tps    每秒传输到物理设备的。一次传输就是一个I/O请求。多次逻辑的请求可以合并成一个<strong>物理I/O</strong>请求，每次传输的大小是不定的。<br>  rtps    每秒向物理设备的读请求数。<br>  wtps    每秒向物理设备的写请求数。<br>  bread/s    每秒从设备读的<strong>block</strong>数。<br>  bwrtn/s    每秒从设备写的<strong>block</strong>数。</li>
-<li><strong>-B</strong>    报告页状态，下面是会显示的值。<br>  pgpgin/s    每秒从磁盘调入的内存页(KB)。<br>  pgpgout/s    每秒从调出到磁盘的内存页(KB)。<br>  fault/s    系统每秒产生的缺页(major+minor)。因为某些缺页不会产生<strong>I/O</strong>，所以这并不是一个对产生IO缺页的统计。<br>  majflt/s    主要页错误。</li>
-<li><strong>-c</strong>    报告进程建立活动。<br>  proc/s    每秒建立的进程数</li>
-<li><strong>-d</strong>    报告每个块设备的活动。在某些版本的内核下<em>avgqu-sz, await, svctm, %util</em>可能不可用，显示为<em>0.00</em>。<br>  tps    每秒到设备的传输数。多个逻辑请求可以合并为一个<strong>物理I/O</strong>请求，每次请求的大小是不定的。<br>  rd_sec/s    每秒读取的扇区（每扇区512b）数。<br>  wr_sec/s    每秒写入的扇区数。<br>  avgrq-sz    平均的请求扇区数。<br>  avgqu-sz    平均的请求队列数。<br>  await    I/O请求的平均等待数(ms)。包括队列时间跟处理时间。<br>  svctm    对I/O请求的平均处理时间。<br>  %util    处理某个I/O请求花的CPU时间。这个值接进<strong>100%</strong>说明这设备已经饱和了。</li>
-<li><strong>-f filename</strong>    从<strong>-o filename</strong>创建的文件内获得记录。</li>
-<li><strong>-I {irq | ALL | SUM | XALL}</strong>    报告某一中断状态。<strong>irq</strong>是中断号。使用多个<strong>-I</strong>选项可以指定多个监控。<strong>SUM</strong>统计每秒中断数。<strong>ALL</strong>报告前16个中断。<strong>XALL</strong>报告所有中断。</li>
-<li><strong>-n { DEV | EDEV | NFS | NFSD | SOCK | ALL}</strong> 报告网络状态。<br>指定<strong>DEV</strong>选项，以下值：<br>IFACE    报告的网卡接口名。<br>rxpck/s    每秒接收的报文数。<br>txpck/s    每秒发送的报文数。<br>rxbyt/s    每秒接收的比特数。<br>txbyt/s    每秒发送的比特数。<br>rxcmp/s    每秒接收的压缩比特数。（cslip等等）<br>txcmp/s    每秒发送的压缩比特数。<br>rxmcst/s    每秒接收的广播包数。<br>指定<strong>EDEV</strong>选项，报告错误状态。<br>IFACE 网卡名称。<br>rxerr/s    每秒接收报文数。<br>txerr/s    每秒发送报文数。<br>coll/s    每秒传输过程中发生的碰撞数。<br>rxdrop/s    因linux缓存空间不足，每秒丢弃的接收报文数。<br>txdrop/s    因linux缓存空间不足，每秒丢弃的发送报文数。<br>txcarr/s    每秒的传输错误数。（翻译不准确）<br>rxfram/s    每秒接收报文帧错误数。<br>rxfifo/s    接收报文每秒的FIFO溢出数。<br>txfifo/s    发送报文每秒的FIFO溢出数。<br>指定<strong>SOCK</strong>选项，报告<strong>sockets</strong>状态。<br>totosck    使用的sockets总数<br>tcpsck    tcp使用的sockets数。<br>udpsck    udp使用的sockets数。<br>rawsck    raw使用的sockets数。<br>ip-frag    当前IP分片数</li>
-<li><strong>-P { cpu | ALL }</strong>    报告CPU状态。<strong>ALL</strong>报告所有CPU状态。</li>
-<li><strong>-P</strong>    更友好的打印输出。与<strong>-d</strong>一起使用的时候，显示设备全明而不是类似 <strong>dev m-n</strong>这样，参看<em>/etc/sysconfig/sysstat.ioconf</em>文件。</li>
-<li><strong>-q</strong>    报告队列长度和负载。<br>  run-qz    运行对列（等待允许的进程数）。<br>  plist-sz    进程表中的进程和线程数。<br>  ldavg-1    系统一分钟内负载。<br>  ldavg-5    过去5分钟内负载。<br>  ldavg-15    过去15分钟内负载。</li>
-<li><strong>-r</strong>    查看内存和交换分区使用情况<br>  kbmemfree    空闲内存<br>  kbmemused    已使用内存<br>  %memused     已使用百分比<br>  kbbuffers    内核用做缓冲区的大小。<br>  kbcached     内核用来缓存数据的大小。<br>  kbswpfree     空闲交换分区<br>  kbswpused    交换分区使用<br>  %swpused    交换分区使用率<br>  kbswpcad    交换分区已缓存数据。</li>
-<li><strong>-R</strong>    报告内存状态。<br>  frmpg/s    内核每秒释放的内核页数。一个<strong>负值</strong>说明内核正在占用内存。个页是4KB还是8KB取决于机器架构。<br>  bufpg/s    内核每秒用来做缓冲的页数。<br>  campg/s    内核每秒用来做缓存的页数。</li>
-<li><strong>-u</strong>    CPU利用率。<br>  %user    在用户级别（应用）执行使用的CPU。<br>  %nice    在用户级别（应用）伴随<strong>nice优先级</strong>执行使用的CPU。<br>  %system    在系统级别（内核）执行使用的CPU。<br>  %iowait    在等待一个未完成I/O请求的CPU。<br>  %steal    调度管理程序服务某一虚拟处理器的时候，其他处理器的等待时间<br>  %idle    系统没有I/O请求的CPU百分比。</li>
-<li><strong>-v</strong>    报告<strong>i-node、文件、其他内核表</strong>情况。<br>  dentunusd    目录缓存中没有使用的缓存项。<br>  file-sz    未使用的文件<code>handles</code><br>  inode-sz    未使用的i节点<code>handles</code><br>  super-sz    内核分配的超级块<code>handles</code><br>  %super-sz    已分配的超级块<code>handles</code>占linux最多能分配的百分比<br>  dquot-sz    已分配的磁盘配额<br>  rtsig-sz<br>  %rtsig-sz</li>
-<li><strong>-w</strong>    报告系统切换活动。<br>  cswch/s    每秒上下文切换总数</li>
-<li><strong>-W</strong>    交换分区情况。<br>  pswpin/s    每秒进入swap的页<br>  pswpout/s    每秒出去swap的页</li>
+<li><p><strong>sar</strong> 收集、报告或存储信息（CPU、内存、磁盘、中断、网卡、TTY、内核表等等）</p>
+</li>
+<li><p><strong>sadc</strong> 系统数据收集器，给<strong>sar</strong>做后台服务。</p>
+</li>
+<li><p><strong>sa1</strong> 收记并存储二进制数据到每天的文件。这是设计来给<strong>cron</strong>执行一个<strong>sadc</strong>的前台程序。</p>
+</li>
+<li><p><strong>sa2</strong> 生成总结报表。</p>
+</li>
+<li><p><strong>sadf</strong> 以多种格式显示数据（CSV, XML, JSON, etc.），还可以用来生成SVG（Scalable Vector Graphics）图表，</p>
+<h1 id="先理解一些概念"><a href="#先理解一些概念" class="headerlink" title="先理解一些概念"></a>先理解一些概念</h1><h2 id="虚拟内存-Virtual-Memory"><a href="#虚拟内存-Virtual-Memory" class="headerlink" title="虚拟内存(Virtual Memory)"></a>虚拟内存(Virtual Memory)</h2><h1 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h1><p>多的不说了，更多的介绍可以在你的系统上执行<code>info sar</code>命令查看。</p>
+</li>
+<li><p><strong>-A</strong>    这选项等于 <em>–bBdFHqrRSvwWy -I SUM -I XALL -m ALL -n ALL -r ALL -u ALL -P ALL</em></p>
+</li>
+<li><p><strong>-b</strong>    报告<strong>I/O</strong>和传输状态。<br>  tps    每秒传输到物理设备的。一次传输就是一个I/O请求。多次逻辑的请求可以合并成一个<strong>物理I/O</strong>请求，每次传输的大小是不定的。<br>  rtps    每秒向物理设备的读请求数。<br>  wtps    每秒向物理设备的写请求数。<br>  bread/s    每秒从设备读的<strong>block</strong>数。<br>  bwrtn/s    每秒从设备写的<strong>block</strong>数。</p>
+</li>
+<li><p><strong>-B</strong>    报告页状态，下面是会显示的值。<br>  pgpgin/s    每秒从磁盘调入的内存页(KB)。<br>  pgpgout/s    每秒从调出到磁盘的内存页(KB)。<br>  fault/s    系统每秒产生的缺页(major+minor)。因为某些缺页不会产生<strong>I/O</strong>，所以这并不是一个对产生IO缺页的统计。<br>  majflt/s    主要页错误。</p>
+</li>
+<li><p><strong>-c</strong>    报告进程建立活动。<br>  proc/s    每秒建立的进程数</p>
+</li>
+<li><p><strong>-d</strong>    报告每个块设备的活动。在某些版本的内核下<em>avgqu-sz, await, svctm, %util</em>可能不可用，显示为<em>0.00</em>。<br>  tps    每秒到设备的传输数。多个逻辑请求可以合并为一个<strong>物理I/O</strong>请求，每次请求的大小是不定的。<br>  rd_sec/s    每秒读取的扇区（每扇区512b）数。<br>  wr_sec/s    每秒写入的扇区数。<br>  avgrq-sz    平均的请求扇区数。<br>  avgqu-sz    平均的请求队列数。<br>  await    I/O请求的平均等待数(ms)。包括队列时间跟处理时间。<br>  svctm    对I/O请求的平均处理时间。<br>  %util    处理某个I/O请求花的CPU时间。这个值接进<strong>100%</strong>说明这设备已经饱和了。</p>
+</li>
+<li><p><strong>-f filename</strong>    从<strong>-o filename</strong>创建的文件内获得记录。</p>
+</li>
+<li><p><strong>-I {irq | ALL | SUM | XALL}</strong>    报告某一中断状态。<strong>irq</strong>是中断号。使用多个<strong>-I</strong>选项可以指定多个监控。<strong>SUM</strong>统计每秒中断数。<strong>ALL</strong>报告前16个中断。<strong>XALL</strong>报告所有中断。</p>
+</li>
+<li><p><strong>-n { DEV | EDEV | NFS | NFSD | SOCK | ALL}</strong> 报告网络状态。<br>指定<strong>DEV</strong>选项，以下值：<br>IFACE    报告的网卡接口名。<br>rxpck/s    每秒接收的报文数。<br>txpck/s    每秒发送的报文数。<br>rxbyt/s    每秒接收的比特数。<br>txbyt/s    每秒发送的比特数。<br>rxcmp/s    每秒接收的压缩比特数。（cslip等等）<br>txcmp/s    每秒发送的压缩比特数。<br>rxmcst/s    每秒接收的广播包数。<br>指定<strong>EDEV</strong>选项，报告错误状态。<br>IFACE 网卡名称。<br>rxerr/s    每秒接收报文数。<br>txerr/s    每秒发送报文数。<br>coll/s    每秒传输过程中发生的碰撞数。<br>rxdrop/s    因linux缓存空间不足，每秒丢弃的接收报文数。<br>txdrop/s    因linux缓存空间不足，每秒丢弃的发送报文数。<br>txcarr/s    每秒的传输错误数。（翻译不准确）<br>rxfram/s    每秒接收报文帧错误数。<br>rxfifo/s    接收报文每秒的FIFO溢出数。<br>txfifo/s    发送报文每秒的FIFO溢出数。<br>指定<strong>SOCK</strong>选项，报告<strong>sockets</strong>状态。<br>totosck    使用的sockets总数<br>tcpsck    tcp使用的sockets数。<br>udpsck    udp使用的sockets数。<br>rawsck    raw使用的sockets数。<br>ip-frag    当前IP分片数</p>
+</li>
+<li><p><strong>-P { cpu | ALL }</strong>    报告CPU状态。<strong>ALL</strong>报告所有CPU状态。</p>
+</li>
+<li><p><strong>-P</strong>    更友好的打印输出。与<strong>-d</strong>一起使用的时候，显示设备全明而不是类似 <strong>dev m-n</strong>这样，参看<em>/etc/sysconfig/sysstat.ioconf</em>文件。</p>
+</li>
+<li><p><strong>-q</strong>    报告队列长度和负载。<br>  run-qz    运行对列（等待允许的进程数）。<br>  plist-sz    进程表中的进程和线程数。<br>  ldavg-1    系统一分钟内负载。<br>  ldavg-5    过去5分钟内负载。<br>  ldavg-15    过去15分钟内负载。</p>
+</li>
+<li><p><strong>-r</strong>    查看内存和交换分区使用情况<br>  kbmemfree    空闲内存<br>  kbmemused    已使用内存<br>  %memused     已使用百分比<br>  kbbuffers    内核用做缓冲区的大小。<br>  kbcached     内核用来缓存数据的大小。<br>  kbswpfree     空闲交换分区<br>  kbswpused    交换分区使用<br>  %swpused    交换分区使用率<br>  kbswpcad    交换分区已缓存数据。</p>
+</li>
+<li><p><strong>-R</strong>    报告内存状态。<br>  frmpg/s    内核每秒释放的内核页数。一个<strong>负值</strong>说明内核正在占用内存。个页是4KB还是8KB取决于机器架构。<br>  bufpg/s    内核每秒用来做缓冲的页数。<br>  campg/s    内核每秒用来做缓存的页数。</p>
+</li>
+<li><p><strong>-u</strong>    CPU利用率。<br>  %user    在用户级别（应用）执行使用的CPU。<br>  %nice    在用户级别（应用）伴随<strong>nice优先级</strong>执行使用的CPU。<br>  %system    在系统级别（内核）执行使用的CPU。<br>  %iowait    在等待一个未完成I/O请求的CPU。<br>  %steal    调度管理程序服务某一虚拟处理器的时候，其他处理器的等待时间<br>  %idle    系统没有I/O请求的CPU百分比。</p>
+</li>
+<li><p><strong>-v</strong>    报告<strong>i-node、文件、其他内核表</strong>情况。<br>  dentunusd    目录缓存中没有使用的缓存项。<br>  file-sz    未使用的文件<code>handles</code><br>  inode-sz    未使用的i节点<code>handles</code><br>  super-sz    内核分配的超级块<code>handles</code><br>  %super-sz    已分配的超级块<code>handles</code>占linux最多能分配的百分比<br>  dquot-sz    已分配的磁盘配额<br>  rtsig-sz<br>  %rtsig-sz</p>
+</li>
+<li><p><strong>-w</strong>    报告系统切换活动。<br>  cswch/s    每秒上下文切换总数</p>
+</li>
+<li><p><strong>-W</strong>    交换分区情况。<br>  pswpin/s    每秒进入swap的页<br>  pswpout/s    每秒出去swap的页</p>
+</li>
 <li><p><strong>-x { pid | SELF | ALL }</strong> 报告进程状态。此时<strong>-o、-f无限</strong>，最多报告256个。<br>  minflt/s    此进程每秒产生的<strong>minor faults</strong>，这不需要从磁盘载入页到内存<br>  majflt/s    <strong>major faults</strong>，需要从磁盘载入页到内存。<br>  %user    此程序在用户级别执行使用的CPU，不管有没有<strong>nice priorty</strong><br>  %system    系统级别（内核）执行使用的CPU<br>  nswap/s    内核每秒交换出去的页数。<br>  CPU    此进程在哪个CPU执行</p>
 </li>
 <li><p><strong>-X { pid | SELF | ALL }</strong> 报告进程的子进程状态。此时<strong>-o、-f无限</strong>，最多报告256个。<br>  cminflt/s    此进程子进程每秒产生的<strong>minor faults</strong>，这不需要从磁盘载入页到内存<br>  cmajflt/s    <strong>major faults</strong>，需要从磁盘载入页到内存。<br>  %cuser    此程序在用户级别执行使用的CPU，不管有没有<strong>nice priorty</strong><br>  %csystem    系统级别（内核）执行使用的CPU<br>  cnswap/s    内核每秒交换出去的页数。</p>
 </li>
-<li><strong>-y</strong>    报告tty设备活动<br>  rcvin/s    当前串行线每秒获得的中断数，串行线号由<strong>TTY列</strong>给出。<br>  xmtin/s    当前串行线每秒非出的中断数，串行线号由<strong>TTY列</strong>给出。<br>  framerr/s    当前串行线每秒发生的帧错误。<br>  prtyerr/s    当前串行线每秒发生的奇偶(parity)错误。<br>  brk/s    当前串行线每秒发生的<strong>break</strong><br>  ovrun/s    每秒溢出</li>
-<li><strong>-e [hh:mm:ss]</strong>    报告的截止时间（24小时制），只配合<strong>-f</strong>、<strong>-o</strong>选项使用。</li>
-<li><strong>-s [hh:mm:ss]</strong>    报告的开始时间（24小时制），只配合<strong>-f</strong>、<strong>-o</strong>选项使用。</li>
+<li><p><strong>-y</strong>    报告tty设备活动<br>  rcvin/s    当前串行线每秒获得的中断数，串行线号由<strong>TTY列</strong>给出。<br>  xmtin/s    当前串行线每秒非出的中断数，串行线号由<strong>TTY列</strong>给出。<br>  framerr/s    当前串行线每秒发生的帧错误。<br>  prtyerr/s    当前串行线每秒发生的奇偶(parity)错误。<br>  brk/s    当前串行线每秒发生的<strong>break</strong><br>  ovrun/s    每秒溢出</p>
+</li>
+<li><p><strong>-e [hh:mm:ss]</strong>    报告的截止时间（24小时制），只配合<strong>-f</strong>、<strong>-o</strong>选项使用。</p>
+</li>
+<li><p><strong>-s [hh:mm:ss]</strong>    报告的开始时间（24小时制），只配合<strong>-f</strong>、<strong>-o</strong>选项使用。</p>
+</li>
 </ul>
 
     </div>
@@ -338,14 +364,14 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/运维/" rel="tag"># 运维</a>
+              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/数据库/Oracle的-exp-imp.html" rel="next" title="Oracle的 exp/imp">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E7%9A%84-exp-imp.html" rel="next" title="Oracle的 exp/imp">
                   <i class="fa fa-chevron-left"></i> Oracle的 exp/imp
                 </a>
             </div>
@@ -353,7 +379,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Asm/8086系CPU的内存寻址.html" rel="prev" title="8086系CPU的内存寻址">
+                <a href="/Asm/8086%E7%B3%BBCPU%E7%9A%84%E5%86%85%E5%AD%98%E5%AF%BB%E5%9D%80.html" rel="prev" title="8086系CPU的内存寻址">
                   8086系CPU的内存寻址 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -440,10 +466,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -472,10 +498,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -550,7 +576,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/Linux下的系统监控命令sar.html",
+            url: "https://gowa.club/Linux-Unix/Linux%E4%B8%8B%E7%9A%84%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E5%91%BD%E4%BB%A4sar.html",
             identifier: "Linux-Unix/Linux下的系统监控命令sar.html",
             title: "Linux下的系统监控命令sar"
           }

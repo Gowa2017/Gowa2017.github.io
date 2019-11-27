@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL将单列拆分为多个行">
-<meta property="og:url" content="https://gowa.club/数据库/MySQL将单列拆分为多个行.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;MySQL%E5%B0%86%E5%8D%95%E5%88%97%E6%8B%86%E5%88%86%E4%B8%BA%E5%A4%9A%E4%B8%AA%E8%A1%8C.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="事情的起因是业务表内存储的各检查项目的ID，是用 、 分隔存储在了一个字段，而现在需要获得每个字段的具体内容。所以想要把字段分开来，join 查询另外的内容表。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-12-04T04:05:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL将单列拆分为多个行">
-<meta name="twitter:description" content="事情的起因是业务表内存储的各检查项目的ID，是用 、 分隔存储在了一个字段，而现在需要获得每个字段的具体内容。所以想要把字段分开来，join 查询另外的内容表。">
 
-<link rel="canonical" href="https://gowa.club/数据库/MySQL将单列拆分为多个行.html">
+<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E5%B0%86%E5%8D%95%E5%88%97%E6%8B%86%E5%88%86%E4%B8%BA%E5%A4%9A%E4%B8%AA%E8%A1%8C.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/MySQL将单列拆分为多个行.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E5%B0%86%E5%8D%95%E5%88%97%E6%8B%86%E5%88%86%E4%B8%BA%E5%A4%9A%E4%B8%AA%E8%A1%8C.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -256,7 +254,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/数据库/MySQL将单列拆分为多个行.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E5%B0%86%E5%8D%95%E5%88%97%E6%8B%86%E5%88%86%E4%B8%BA%E5%A4%9A%E4%B8%AA%E8%A1%8C.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/MySQL将单列拆分为多个行.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,27 +287,37 @@
       
         <p>事情的起因是业务表内存储的各检查项目的ID，是用 <code>、</code> 分隔存储在了一个字段，而现在需要获得每个字段的具体内容。所以想要把字段分开来，join 查询另外的内容表。</p>
 <a id="more"></a>
+
 <h1 id="拆分"><a href="#拆分" class="headerlink" title="拆分"></a>拆分</h1><p>MySQL 有一个 replace 函数可以替换字符串内容。思路是将一列拆分为多个值，然后插入到中间表。</p>
 <h1 id="原来数据"><a href="#原来数据" class="headerlink" title="原来数据"></a>原来数据</h1><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t1(</span><br><span class="line"><span class="keyword">uuid</span> <span class="built_in">varchar</span>(<span class="number">64</span>),</span><br><span class="line">itemlist <span class="built_in">varchar</span>(<span class="number">200</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> t1 (<span class="string">`uuid`</span>, <span class="string">`itemlist`</span>) <span class="keyword">values</span>(<span class="keyword">replace</span>(<span class="keyword">uuid</span>(),<span class="string">'-'</span>,<span class="string">''</span>),<span class="string">'*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4,*3.5'</span>);</span><br></pre></td></tr></table></figure>
 <p>想要得到的表结构是：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> t2(</span><br><span class="line"><span class="keyword">uuid</span> <span class="built_in">varchar</span>(<span class="number">64</span>),</span><br><span class="line">item <span class="built_in">varchar</span>(<span class="number">64</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+
 <h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p>我们的数据字段 itemlist 是以 <code>,</code> 来进行分隔的，有几个逗号，我们就要拆分成逗号数量 + 1个字段。我们可以将数据重复那么多次，然后把其中的内容给替换掉就行了。</p>
 <p>对于要拆成的字段数的计算方法，我们可以这样操作：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">length(itemlist) - length(<span class="keyword">replace</span>(itemlist, <span class="string">','</span>, <span class="string">''</span>)) + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
 <p>基本原理就是把逗号替换为空后的字符会比原来的字符少掉逗号个字符，再加上最开始的一个。</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">length</span>(itemlist) - <span class="keyword">length</span>(<span class="keyword">replace</span>(itemlist, <span class="string">','</span>, <span class="string">''</span>)) + <span class="number">1</span> <span class="keyword">from</span> t1;</span><br><span class="line"></span><br><span class="line">结果是 8</span><br></pre></td></tr></table></figure>
+
 <p>然后我们可以用一个只有数字的表来进行 join 只显示 8 行。</p>
 <p>光是生成一个序列表其实有点麻烦。mysql。我们用视图的形式先生成一个 16 个数字的 view：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">VIEW</span> generator_16</span><br><span class="line"><span class="keyword">AS</span> <span class="keyword">SELECT</span> <span class="number">0</span> n <span class="keyword">UNION</span> ALL <span class="keyword">SELECT</span> <span class="number">1</span>  <span class="keyword">UNION</span> ALL <span class="keyword">SELECT</span> <span class="number">2</span>  <span class="keyword">UNION</span> ALL</span><br><span class="line">   <span class="keyword">SELECT</span> <span class="number">3</span>   <span class="keyword">UNION</span> ALL <span class="keyword">SELECT</span> <span class="number">4</span>  <span class="keyword">UNION</span> ALL <span class="keyword">SELECT</span> <span class="number">5</span>  <span class="keyword">UNION</span> ALL</span><br><span class="line">   <span class="keyword">SELECT</span> <span class="number">6</span>   <span class="keyword">UNION</span> ALL <span class="keyword">SELECT</span> <span class="number">7</span>  <span class="keyword">UNION</span> ALL <span class="keyword">SELECT</span> <span class="number">8</span>  <span class="keyword">UNION</span> ALL</span><br><span class="line">   <span class="keyword">SELECT</span> <span class="number">9</span>   <span class="keyword">UNION</span> ALL <span class="keyword">SELECT</span> <span class="number">10</span> <span class="keyword">UNION</span> ALL <span class="keyword">SELECT</span> <span class="number">11</span> <span class="keyword">UNION</span> ALL</span><br><span class="line">   <span class="keyword">SELECT</span> <span class="number">12</span>  <span class="keyword">UNION</span> ALL <span class="keyword">SELECT</span> <span class="number">13</span> <span class="keyword">UNION</span> ALL <span class="keyword">SELECT</span> <span class="number">14</span> <span class="keyword">UNION</span> ALL</span><br><span class="line">   <span class="keyword">SELECT</span> <span class="number">15</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">VIEW</span> generator_16</span><br><span class="line"><span class="keyword">AS</span> <span class="keyword">SELECT</span> <span class="number">0</span> n <span class="keyword">UNION</span> <span class="keyword">ALL</span> <span class="keyword">SELECT</span> <span class="number">1</span>  <span class="keyword">UNION</span> <span class="keyword">ALL</span> <span class="keyword">SELECT</span> <span class="number">2</span>  <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">   <span class="keyword">SELECT</span> <span class="number">3</span>   <span class="keyword">UNION</span> <span class="keyword">ALL</span> <span class="keyword">SELECT</span> <span class="number">4</span>  <span class="keyword">UNION</span> <span class="keyword">ALL</span> <span class="keyword">SELECT</span> <span class="number">5</span>  <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">   <span class="keyword">SELECT</span> <span class="number">6</span>   <span class="keyword">UNION</span> <span class="keyword">ALL</span> <span class="keyword">SELECT</span> <span class="number">7</span>  <span class="keyword">UNION</span> <span class="keyword">ALL</span> <span class="keyword">SELECT</span> <span class="number">8</span>  <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">   <span class="keyword">SELECT</span> <span class="number">9</span>   <span class="keyword">UNION</span> <span class="keyword">ALL</span> <span class="keyword">SELECT</span> <span class="number">10</span> <span class="keyword">UNION</span> <span class="keyword">ALL</span> <span class="keyword">SELECT</span> <span class="number">11</span> <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">   <span class="keyword">SELECT</span> <span class="number">12</span>  <span class="keyword">UNION</span> <span class="keyword">ALL</span> <span class="keyword">SELECT</span> <span class="number">13</span> <span class="keyword">UNION</span> <span class="keyword">ALL</span> <span class="keyword">SELECT</span> <span class="number">14</span> <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">   <span class="keyword">SELECT</span> <span class="number">15</span>;</span><br></pre></td></tr></table></figure>
+
 <p>接着我们就可以利用  join 会增加您行数的这么一个事实来显示更多的记录：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">OR</span> <span class="keyword">REPLACE</span> <span class="keyword">VIEW</span> generator_256</span><br><span class="line"><span class="keyword">AS</span> <span class="keyword">SELECT</span> ( ( hi.n &lt;&lt; <span class="number">4</span> ) | lo.n ) <span class="keyword">AS</span> n</span><br><span class="line">     <span class="keyword">FROM</span> generator_16 lo, generator_16 hi;</span><br></pre></td></tr></table></figure>
+
 <p>下面我们就可以干活了：</p>
 <h2 id="join-序列表"><a href="#join-序列表" class="headerlink" title="join 序列表"></a>join 序列表</h2><figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> t1 a <span class="keyword">join</span> generator_256  b <span class="keyword">ON</span> b.n &lt; (<span class="keyword">length</span>(a.itemlist) - <span class="keyword">length</span>(<span class="keyword">replace</span>(a.itemlist, <span class="string">','</span>, <span class="string">''</span>))+<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4,*3.5	0</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4,*3.5	1</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4,*3.5	2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4,*3.5	3</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4,*3.5	4</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4,*3.5	5</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4,*3.5	6</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4,*3.5	7</span><br></pre></td></tr></table></figure>
+
 <p>然后我们把其中的 itemlist 进行替换。</p>
 <p><code>substring_index(str, char, n)</code> 函数会找到我们指定的字符出现的地方就停止。 <em>n</em> 表示第几次出现的位置。如果 <em>n</em> 是负值，表明从右向左去找。</p>
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.uuid,</span><br><span class="line">       substring_index(a.itemlist, <span class="string">','</span>, b.n+<span class="number">1</span>)</span><br><span class="line"><span class="keyword">FROM</span> t1 a</span><br><span class="line"><span class="keyword">JOIN</span> generator_256 b <span class="keyword">ON</span> b.n &lt; (<span class="keyword">length</span>(a.itemlist) - <span class="keyword">length</span>(<span class="keyword">replace</span>(a.itemlist, <span class="string">','</span>, <span class="string">''</span>))+<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4,*3.5</span><br></pre></td></tr></table></figure>
+
 <p>这不是我们想要的，我们还需要把顺序在后面的记录中的值给挑选出来。是不是就是从右往左的第一个。</p>
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> a.uuid,</span><br><span class="line">       substring_index(substring_index(a.itemlist, <span class="string">','</span>, b.n+<span class="number">1</span>), <span class="string">','</span>, <span class="number">-1</span>)</span><br><span class="line"><span class="keyword">FROM</span> t1 a</span><br><span class="line"><span class="keyword">JOIN</span> generator_256 b <span class="keyword">ON</span> b.n &lt; (<span class="keyword">length</span>(a.itemlist) - <span class="keyword">length</span>(<span class="keyword">replace</span>(a.itemlist, <span class="string">','</span>, <span class="string">''</span>))+<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.3</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*2.1</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*2.2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*3.2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*3.3</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*3.4</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*3.5</span><br></pre></td></tr></table></figure>
+
 <p>OK，大功告成。</p>
 
     </div>
@@ -327,7 +335,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Misc/adblockplus的匹配规则-PAC用到.html" rel="next" title="adblockplus的匹配规则-PAC用到">
+                <a href="/Misc/adblockplus%E7%9A%84%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99-PAC%E7%94%A8%E5%88%B0.html" rel="next" title="adblockplus的匹配规则-PAC用到">
                   <i class="fa fa-chevron-left"></i> adblockplus的匹配规则-PAC用到
                 </a>
             </div>
@@ -335,7 +343,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Python/pandas类似于SQL一样的使用操作.html" rel="prev" title="pandas类似于SQL一样的使用操作">
+                <a href="/Python/pandas%E7%B1%BB%E4%BC%BC%E4%BA%8ESQL%E4%B8%80%E6%A0%B7%E7%9A%84%E4%BD%BF%E7%94%A8%E6%93%8D%E4%BD%9C.html" rel="prev" title="pandas类似于SQL一样的使用操作">
                   pandas类似于SQL一样的使用操作 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -422,10 +430,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -454,10 +462,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -532,7 +540,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/数据库/MySQL将单列拆分为多个行.html",
+            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E5%B0%86%E5%8D%95%E5%88%97%E6%8B%86%E5%88%86%E4%B8%BA%E5%A4%9A%E4%B8%AA%E8%A1%8C.html",
             identifier: "数据库/MySQL将单列拆分为多个行.html",
             title: "MySQL将单列拆分为多个行"
           }

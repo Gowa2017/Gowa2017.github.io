@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,31 +51,29 @@
 <meta name="keywords" content="TensorFlow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TensorFlow中的反向传播">
-<meta property="og:url" content="https://gowa.club/Python/TensorFlow中的反向传播.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Python&#x2F;TensorFlow%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="反向传播算法对于快速训练大型神经网络来说至关重要。本文将介绍该算法的工作原理。来源于谷歌对神经网络的一个简单展示。原文地址：反向传播算法">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/backprop_01.png">
-<meta property="og:image" content="https://gowa.club/res/backprop_02.png">
-<meta property="og:image" content="https://gowa.club/res/backprop_03.png">
-<meta property="og:image" content="https://gowa.club/res/backprop_04.png">
-<meta property="og:image" content="https://gowa.club/res/backprop_05.png">
-<meta property="og:image" content="https://gowa.club/res/backprop_06.png">
-<meta property="og:image" content="https://gowa.club/res/backprop_07.png">
-<meta property="og:image" content="https://gowa.club/res/backprop_08.png">
-<meta property="og:image" content="https://gowa.club/res/backprop_09.png">
-<meta property="og:image" content="https://gowa.club/res/backprop_10.png">
-<meta property="og:image" content="https://gowa.club/res/backprop_11.png">
-<meta property="og:image" content="https://gowa.club/res/backprop_12.png">
-<meta property="og:image" content="https://gowa.club/res/backprop_13.png">
-<meta property="og:image" content="https://gowa.club/res/RNN-unrolled.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_01.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_02.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_03.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_04.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_05.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_06.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_07.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_08.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_09.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_10.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_11.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_12.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_13.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;RNN-unrolled.png">
 <meta property="og:updated_time" content="2018-11-14T16:59:24.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TensorFlow中的反向传播">
-<meta name="twitter:description" content="反向传播算法对于快速训练大型神经网络来说至关重要。本文将介绍该算法的工作原理。来源于谷歌对神经网络的一个简单展示。原文地址：反向传播算法">
-<meta name="twitter:image" content="https://gowa.club/res/backprop_01.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;backprop_01.png">
 
-<link rel="canonical" href="https://gowa.club/Python/TensorFlow中的反向传播.html">
+<link rel="canonical" href="https://gowa.club/Python/TensorFlow%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD.html">
 
 
 <script id="page-configurations">
@@ -240,12 +238,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow中的反向传播.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -286,7 +284,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Python/TensorFlow中的反向传播.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Python/TensorFlow%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/TensorFlow中的反向传播.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -304,52 +302,59 @@
       
         <p>反向传播算法对于快速训练大型神经网络来说至关重要。本文将介绍该算法的工作原理。来源于谷歌对神经网络的一个简单展示。原文地址：<a href="https://google-developers.appspot.com/machine-learning/crash-course/backprop-scroll/" target="_blank" rel="noopener">反向传播算法</a></p>
 <a id="more"></a>
-<h1 id="简单的神经网络"><a href="#简单的神经网络" class="headerlink" title="简单的神经网络"></a>简单的神经网络</h1><p><img src="../res/backprop_01.png" alt><br>在上边，您会看到一个神经网络，其中包含一个输入节点、一个输出节点，以及两个隐藏层（分别有两个节点）。 </p>
-<p>相邻的层中的节点通过权重 <script type="math/tex">𝑤_{𝑖𝑗}</script> 相关联，这些权重是网络参数。</p>
-<h1 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h1><p><img src="../res/backprop_02.png" alt><br>每个节点都有一个总输入 𝑥、一个激活函数 𝑓(𝑥) 以及一个输出 𝑦=𝑓(𝑥)。 𝑓(𝑥) 必须是非线性函数，否则神经网络就只能学习线性模型。 </p>
-<p>常用的激活函数是 S 型函数：<script type="math/tex">f(\color{input}x\color{black}) = \frac{1}{1+e^{-\color{input}x}}</script></p>
-<h1 id="误差函数"><a href="#误差函数" class="headerlink" title="误差函数"></a>误差函数</h1><p><img src="../res/backprop_03.png" alt> </p>
-<p>目标是根据数据自动学习网络的权重，以便让所有输入 <script type="math/tex">x_{input}</script> 的预测输出 <script type="math/tex">y_{output}</script> 接近目标 <script type="math/tex">y_{target}</script>。</p>
-<p>为了衡量与该目标的差距，我们使用了一个误差函数 𝐸。 常用的误差函数是 <script type="math/tex">E(\color{output}y_{output}\color{black},\color{output}y_{target}\color{black}) = \frac{1}{2}(\color{output}y_{output}\color{black} - \color{output}y_{target}\color{black})^2</script></p>
-<h1 id="正向传播"><a href="#正向传播" class="headerlink" title="正向传播"></a>正向传播</h1><p><img src="../res/backprop_04.png" alt><br>首先，我们取一个输入样本 <script type="math/tex">(\color{input}x_{input}\color{black},\color{output}y_{target}\color{black})</script>，并更新网络的输入层。<br><br><br>        为了保持一致性，我们将输入视为与其他任何节点相同，但不具有激活函数，以便让其输出与输入相等，即<script type="math/tex">\color{output}y_1 \color{black} = \color{input} x_{input}</script>。</p>
-<h2 id="更新隐藏层"><a href="#更新隐藏层" class="headerlink" title="更新隐藏层"></a>更新隐藏层</h2><p><img src="../res/backprop_05.png" alt></p>
-<p>现在，我们更新第一个隐藏层。我们取上一层节点的输出 <script type="math/tex">\color{output}y</script>，并使用权重来计算下一层节点的输入 <script type="math/tex">\color{input}x</script>。</p>
-<script type="math/tex; mode=display">\color{input} x_j \color{black} = \sum_{i\in in(j)} w_{ij}\color{output} y_i\color{black} +b_j</script><p><img src="../res/backprop_06.png" alt></p>
-<p>然后，我们更新第一个隐藏层中节点的输出。<br>为此，我们使用激活函数 <script type="math/tex">f(x)</script>。</p>
-<script type="math/tex; mode=display">\color{output} y \color{black} = f(\color{input} x \color{black})</script><p><img src="../res/backprop_07.png" alt></p>
+
+<h1 id="简单的神经网络"><a href="#简单的神经网络" class="headerlink" title="简单的神经网络"></a>简单的神经网络</h1><p><img src="../res/backprop_01.png" alt=""><br>在上边，您会看到一个神经网络，其中包含一个输入节点、一个输出节点，以及两个隐藏层（分别有两个节点）。 </p>
+<p>相邻的层中的节点通过权重 $$𝑤_{𝑖𝑗}$$ 相关联，这些权重是网络参数。</p>
+<h1 id="激活函数"><a href="#激活函数" class="headerlink" title="激活函数"></a>激活函数</h1><p><img src="../res/backprop_02.png" alt=""><br>每个节点都有一个总输入 𝑥、一个激活函数 𝑓(𝑥) 以及一个输出 𝑦=𝑓(𝑥)。 𝑓(𝑥) 必须是非线性函数，否则神经网络就只能学习线性模型。 </p>
+<p>常用的激活函数是 S 型函数：$$f(\color{input}x\color{black}) = \frac{1}{1+e^{-\color{input}x}}$$</p>
+<h1 id="误差函数"><a href="#误差函数" class="headerlink" title="误差函数"></a>误差函数</h1><p><img src="../res/backprop_03.png" alt=""> </p>
+<p>目标是根据数据自动学习网络的权重，以便让所有输入 $$x_{input}$$ 的预测输出 $$y_{output}$$ 接近目标 $$y_{target}$$。</p>
+<p>为了衡量与该目标的差距，我们使用了一个误差函数 𝐸。 常用的误差函数是 $$E(\color{output}y_{output}\color{black},\color{output}y_{target}\color{black}) = \frac{1}{2}(\color{output}y_{output}\color{black} - \color{output}y_{target}\color{black})^2 $$</p>
+<h1 id="正向传播"><a href="#正向传播" class="headerlink" title="正向传播"></a>正向传播</h1><p><img src="../res/backprop_04.png" alt=""><br>首先，我们取一个输入样本 $$(\color{input}x_{input}\color{black},\color{output}y_{target}\color{black})$$，并更新网络的输入层。<br><br><br>        为了保持一致性，我们将输入视为与其他任何节点相同，但不具有激活函数，以便让其输出与输入相等，即$$ \color{output}y_1 \color{black} = \color{input} x_{input} $$。</p>
+<h2 id="更新隐藏层"><a href="#更新隐藏层" class="headerlink" title="更新隐藏层"></a>更新隐藏层</h2><p><img src="../res/backprop_05.png" alt=""></p>
+<p>现在，我们更新第一个隐藏层。我们取上一层节点的输出 $$\color{output}y$$，并使用权重来计算下一层节点的输入 $$\color{input}x$$。<br>$$ \color{input} x_j \color{black} = \sum_{i\in in(j)} w_{ij}\color{output} y_i\color{black} +b_j$$</p>
+<p><img src="../res/backprop_06.png" alt=""></p>
+<p>然后，我们更新第一个隐藏层中节点的输出。<br>为此，我们使用激活函数 $$f(x)$$。<br>$$ \color{output} y \color{black} = f(\color{input} x \color{black})$$</p>
+<p><img src="../res/backprop_07.png" alt=""></p>
 <p>使用这两个公式，我们可以传播到网络的其余内容，并获得网络的最终输出。</p>
-<script type="math/tex; mode=display">\color{output} y \color{black} = f(\color{input} x \color{black})</script><script type="math/tex; mode=display">\color{input} x_j \color{black} =  \sum_{i\in in(j)} w_{ij}\color{output} y_i \color{black} + b_j</script><h1 id="误差导数"><a href="#误差导数" class="headerlink" title="误差导数"></a>误差导数</h1><p><img src="../res/backprop_08.png" alt></p>
+<p>$$ \color{output} y \color{black} = f(\color{input} x \color{black})$$</p>
+<p>$$ \color{input} x_j \color{black} =  \sum_{i\in in(j)} w_{ij}\color{output} y_i \color{black} + b_j$$</p>
+<h1 id="误差导数"><a href="#误差导数" class="headerlink" title="误差导数"></a>误差导数</h1><p><img src="../res/backprop_08.png" alt=""></p>
 <p>反向传播算法会对特定样本的预测输出和理想输出进行比较，然后确定网络的每个权重的更新幅度。</p>
-<p>为此，我们需要计算误差相对于每个权重<script type="math/tex">\frac{dE}{dw_{ij}}</script> 的变化情况。</p>
+<p>为此，我们需要计算误差相对于每个权重$$\frac{dE}{dw_{ij}}$$ 的变化情况。</p>
 <p>获得误差导数后，我们可以使用一种简单的更新法则来更新权重：</p>
-<script type="math/tex; mode=display">w_{ij} = w_{ij} - \alpha \frac{dE}{dw_{ij}}</script><p>其中，𝛼 是一个正常量，称为“学习速率”，我们需要根据经验对该常量进行微调。</p>
-<p>[注意] 该更新法则非常简单：如果在权重提高后误差降低了<script type="math/tex">(\frac{dE}{dw_{ij}} < 0)</script>，则提高权重；否则，如果在权重提高后误差也提高了 <script type="math/tex">(\frac{dE}{dw_{ij}} > 0)</script>，则降低权重。</p>
-<h2 id="其他导数"><a href="#其他导数" class="headerlink" title="其他导数"></a>其他导数</h2><p><img src="../res/backprop_09.png" alt></p>
-<p>为了帮助计算 <script type="math/tex">\frac{dE}{dw_{ij}}</script>，我们还为每个节点分别存储了另外两个导数，即误差随以下两项的变化情况：</p>
-<p>节点 <script type="math/tex">\frac{dE}{dx}</script> 的总输入，以及 <script type="math/tex">\frac{dE}{dy}</script> 的输出</p>
-<h1 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h1><p><img src="../res/backprop_10.png" alt></p>
+<p>$$w_{ij} = w_{ij} - \alpha \frac{dE}{dw_{ij}}$$</p>
+<p>其中，𝛼 是一个正常量，称为“学习速率”，我们需要根据经验对该常量进行微调。</p>
+<p>[注意] 该更新法则非常简单：如果在权重提高后误差降低了$$(\frac{dE}{dw_{ij}} &lt; 0)$$，则提高权重；否则，如果在权重提高后误差也提高了 $$(\frac{dE}{dw_{ij}} &gt; 0)$$，则降低权重。</p>
+<h2 id="其他导数"><a href="#其他导数" class="headerlink" title="其他导数"></a>其他导数</h2><p><img src="../res/backprop_09.png" alt=""></p>
+<p>为了帮助计算 $$\frac{dE}{dw_{ij}}$$，我们还为每个节点分别存储了另外两个导数，即误差随以下两项的变化情况：</p>
+<p>节点 $$\frac{dE}{dx}$$ 的总输入，以及 $$\frac{dE}{dy}$$ 的输出</p>
+<h1 id="反向传播"><a href="#反向传播" class="headerlink" title="反向传播"></a>反向传播</h1><p><img src="../res/backprop_10.png" alt=""></p>
 <p>我们开始反向传播误差导数。</p>
 <p>由于我们拥有此特定输入样本的预测输出，因此我们可以计算误差随该输出的变化情况。</p>
-<script type="math/tex; mode=display">
-E = \frac{1}{2}(\color{output}y_{output}\color{black} - \color{output}y_{target}\color{black})^2</script><p>我们可以得出：</p>
-<script type="math/tex; mode=display">
-\frac{\partial E}{\partial y_{output}}  = y_{output} - y_{target}</script><p><img src="../res/backprop_11.png" alt></p>
-<p>现在我们获得了<script type="math/tex">\frac{dE}{dy}</script>，接下来便可以根据链式法则得出 <script type="math/tex">\frac{dE}{dx}</script>。</p>
-<script type="math/tex; mode=display">\frac{\partial E}{\partial x}  = \frac{dy}{dx}\frac{\partial E}{\partial y}  = \frac{d}{dx}f(x)\frac{\partial E}{\partial y}</script><p>其中，当 <script type="math/tex">f(\color{input}x\color{black})</script>是 S 型激活函数时，<script type="math/tex">\frac{d}{dx}f(\color{input}x\color{black}) = f(\color{input}x\color{black})(1 - f(\color{input}x\color{black}))</script></p>
-<p><img src="../res/backprop_12.png" alt></p>
+<p>$$<br>E = \frac{1}{2}(\color{output}y_{output}\color{black} - \color{output}y_{target}\color{black})^2<br>$$</p>
+<p>我们可以得出：</p>
+<p>$$<br>\frac{\partial E}{\partial y_{output}}  = y_{output} - y_{target}<br>$$</p>
+<p><img src="../res/backprop_11.png" alt=""></p>
+<p>现在我们获得了$$\frac{dE}{dy}$$，接下来便可以根据链式法则得出 $$\frac{dE}{dx}$$。</p>
+<p>$$ \frac{\partial E}{\partial x}  = \frac{dy}{dx}\frac{\partial E}{\partial y}  = \frac{d}{dx}f(x)\frac{\partial E}{\partial y}$$</p>
+<p>其中，当 $$f(\color{input}x\color{black})$$是 S 型激活函数时，$$\frac{d}{dx}f(\color{input}x\color{black}) = f(\color{input}x\color{black})(1 - f(\color{input}x\color{black}))$$</p>
+<p><img src="../res/backprop_12.png" alt=""></p>
 <p>一旦得出相对于某节点的总输入的误差导数，我们便可以得出相对于进入该节点的权重的误差导数。</p>
-<script type="math/tex; mode=display">
-\frac{\partial E}{\partial w_{ij}}  = \frac{\partial x_j}{\partial w_{ij}} \frac{\partial E}{\partial x_j}  = y_i \frac{\partial E}{\partial x_j}</script><p><img src="../res/backprop_13.png" alt></p>
-<p>根据链式法则，我们还可以根据上一层得出 <script type="math/tex">\frac{dE}{dy}</script>。此时，我们形成了一个完整的循环。</p>
-<script type="math/tex; mode=display">\frac{\partial E}{\partial y_i}  = \sum_{j\in out(i)} \frac{\partial x_j}{\partial y_i} \frac{\partial E}{\partial x_j} = \sum_{j\in out(i)} w_{ij}  \frac{\partial E}{\partial x_j}</script><p>接下来，只需重复前面的 3 个公式，直到计算出所有误差导数即可。</p>
+<p>$$<br>\frac{\partial E}{\partial w_{ij}}  = \frac{\partial x_j}{\partial w_{ij}} \frac{\partial E}{\partial x_j}  = y_i \frac{\partial E}{\partial x_j}<br>$$</p>
+<p><img src="../res/backprop_13.png" alt=""></p>
+<p>根据链式法则，我们还可以根据上一层得出 $$\frac{dE}{dy}$$。此时，我们形成了一个完整的循环。</p>
+<p>$$ \frac{\partial E}{\partial y_i}  = \sum_{j\in out(i)} \frac{\partial x_j}{\partial y_i} \frac{\partial E}{\partial x_j} = \sum_{j\in out(i)} w_{ij}  \frac{\partial E}{\partial x_j}$$</p>
+<p>接下来，只需重复前面的 3 个公式，直到计算出所有误差导数即可。</p>
 <h1 id="BPTT"><a href="#BPTT" class="headerlink" title="BPTT"></a>BPTT</h1><p>BPTT 是 Backpropagation through time 的缩写。在 RNN 中这是对传统 反向传播BP的一个扩展。 因为在 RNN 中，我们无法直接应用 反向传播算法，因为在计算图中 RNN 网络是循环的。所以我们就会将 RNN 进行展开。</p>
-<p><img src="../res/RNN-unrolled.png" alt></p>
+<p><img src="../res/RNN-unrolled.png" alt=""></p>
 <p>这样，RNN 就可以看作是一个前馈网络，我们就可以使用 BP 了。</p>
 <p>但是，因为有 梯度消失/梯度爆炸的情况，想要将梯度传播到多个层后非常的困难。此外，展开RNN并为一个非常长的序列传播梯度的计算要求非常大。</p>
 <p>所以才出现了 BPTT，他背后的基本思想是：每次处理一个时间步长的序列，每处理 K1 步长，然后运行 BTPP K2 个步长。</p>
 <h1 id="反向传播的截短"><a href="#反向传播的截短" class="headerlink" title="反向传播的截短"></a>反向传播的截短</h1><p>通过设计，递归神经网络（RNN）的输出取决于任意远距离的输入。不幸的是，这使得反向传播计算变得困难。为了使学习过程易于处理，通常的做法是创建网络的“展开”版本，其中包含固定数量（num_steps）的LSTM输入和输出。然后在RNN的这种有限近似上训练该模型。这可以通过一次馈送长度输入num_steps并在每个这样的输入块之后执行反向传递来实现。</p>
 <p>这是一个简化的代码块，用于创建执行截断反向传播的图形：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Placeholder for the inputs in a given iteration.</span></span><br><span class="line">words = tf.placeholder(tf.int32, [batch_size, num_steps])</span><br><span class="line"></span><br><span class="line">lstm = tf.contrib.rnn.BasicLSTMCell(lstm_size)</span><br><span class="line"><span class="comment"># Initial state of the LSTM memory.</span></span><br><span class="line">initial_state = state = lstm.zero_state(batch_size, dtype=tf.float32)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(num_steps):</span><br><span class="line">    <span class="comment"># The value of state is updated after processing each batch of words.</span></span><br><span class="line">    output, state = lstm(words[:, i], state)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># The rest of the code.</span></span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line">final_state = state</span><br></pre></td></tr></table></figure>
+
 <p>在所有数据集上实现迭代：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># A numpy array holding the state of LSTM after each batch of words.</span></span><br><span class="line">numpy_state = initial_state.eval()</span><br><span class="line">total_loss = <span class="number">0.0</span></span><br><span class="line"><span class="keyword">for</span> current_batch_of_words <span class="keyword">in</span> words_in_dataset:</span><br><span class="line">    numpy_state, current_loss = session.run([final_state, loss],</span><br><span class="line">        <span class="comment"># Initialize the LSTM state from the previous iteration.</span></span><br><span class="line">        feed_dict=&#123;initial_state: numpy_state, words: current_batch_of_words&#125;)</span><br><span class="line">    total_loss += current_loss</span><br></pre></td></tr></table></figure>
     </div>
@@ -367,7 +372,7 @@ E = \frac{1}{2}(\color{output}y_{output}\color{black} - \color{output}y_{target}
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Python/TensorFlow模型建立过程.html" rel="next" title="TensorFlow模型建立过程">
+                <a href="/Python/TensorFlow%E6%A8%A1%E5%9E%8B%E5%BB%BA%E7%AB%8B%E8%BF%87%E7%A8%8B.html" rel="next" title="TensorFlow模型建立过程">
                   <i class="fa fa-chevron-left"></i> TensorFlow模型建立过程
                 </a>
             </div>
@@ -375,7 +380,7 @@ E = \frac{1}{2}(\color{output}y_{output}\color{black} - \color{output}y_{target}
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/Android-Studio将一个项目以Module形式的引入及遇到的坑.html" rel="prev" title="Android-Studio将一个项目以Module形式的引入及遇到的坑">
+                <a href="/Android/Android-Studio%E5%B0%86%E4%B8%80%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%BB%A5Module%E5%BD%A2%E5%BC%8F%E7%9A%84%E5%BC%95%E5%85%A5%E5%8F%8A%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html" rel="prev" title="Android-Studio将一个项目以Module形式的引入及遇到的坑">
                   Android-Studio将一个项目以Module形式的引入及遇到的坑 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -462,10 +467,10 @@ E = \frac{1}{2}(\color{output}y_{output}\color{black} - \color{output}y_{target}
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -494,10 +499,10 @@ E = \frac{1}{2}(\color{output}y_{output}\color{black} - \color{output}y_{target}
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -572,7 +577,7 @@ E = \frac{1}{2}(\color{output}y_{output}\color{black} - \color{output}y_{target}
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Python/TensorFlow中的反向传播.html",
+            url: "https://gowa.club/Python/TensorFlow%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD.html",
             identifier: "Python/TensorFlow中的反向传播.html",
             title: "TensorFlow中的反向传播"
           }

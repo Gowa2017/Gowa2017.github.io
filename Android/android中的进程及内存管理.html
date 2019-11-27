@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,21 +51,19 @@
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="android中的进程及内存管理">
-<meta property="og:url" content="https://gowa.club/Android/android中的进程及内存管理.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;android%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%8F%8A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="其实以为，安卓只需要在界面上进行了解就行了，其实不然。大多数时候，我们都是在JAVA进行业务逻辑的处理和数据的处理，与显示层其实没有什么太大的关系。更容易让我们忽略的是，如果对于内存管理，生命周期没有一定了解的话，总是会出现很多莫名其妙的问题。比如，基于网络获取的数据给存储到了 View或者 Activity内，那么，在安卓把它进行回收了的时候，就总是会出现 NPE 错误了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/diagram_backstack.png">
-<meta property="og:image" content="https://gowa.club/res/diagram_multitasking.png">
-<meta property="og:image" content="https://gowa.club/res/diagram_multiple_instances.png">
-<meta property="og:image" content="https://gowa.club/res/diagram_backstack_singletask_multiactivity">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;diagram_backstack.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;diagram_multitasking.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;diagram_multiple_instances.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;diagram_backstack_singletask_multiactivity">
 <meta property="og:updated_time" content="2018-06-12T04:46:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="android中的进程及内存管理">
-<meta name="twitter:description" content="其实以为，安卓只需要在界面上进行了解就行了，其实不然。大多数时候，我们都是在JAVA进行业务逻辑的处理和数据的处理，与显示层其实没有什么太大的关系。更容易让我们忽略的是，如果对于内存管理，生命周期没有一定了解的话，总是会出现很多莫名其妙的问题。比如，基于网络获取的数据给存储到了 View或者 Activity内，那么，在安卓把它进行回收了的时候，就总是会出现 NPE 错误了。">
-<meta name="twitter:image" content="https://gowa.club/res/diagram_backstack.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;diagram_backstack.png">
 
-<link rel="canonical" href="https://gowa.club/Android/android中的进程及内存管理.html">
+<link rel="canonical" href="https://gowa.club/Android/android%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%8F%8A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86.html">
 
 
 <script id="page-configurations">
@@ -230,12 +228,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android中的进程及内存管理.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%8F%8A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -276,7 +274,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/android中的进程及内存管理.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/android%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%8F%8A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/android中的进程及内存管理.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,7 +290,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>其实以为，安卓只需要在界面上进行了解就行了，其实不然。大多数时候，我们都是在JAVA进行业务逻辑的处理和数据的处理，与显示层其实没有什么太大的关系。更容易让我们忽略的是，如果对于内存管理，生命周期没有一定了解的话，总是会出现很多莫名其妙的问题。比如，基于网络获取的数据给存储到了 View或者 Activity内，那么，在安卓把它进行回收了的时候，就总是会出现 NPE 错误了。<br><a id="more"></a><br>所以有必要对此进行一个了解及记录。</p>
+        <p>其实以为，安卓只需要在界面上进行了解就行了，其实不然。大多数时候，我们都是在JAVA进行业务逻辑的处理和数据的处理，与显示层其实没有什么太大的关系。更容易让我们忽略的是，如果对于内存管理，生命周期没有一定了解的话，总是会出现很多莫名其妙的问题。比如，基于网络获取的数据给存储到了 View或者 Activity内，那么，在安卓把它进行回收了的时候，就总是会出现 NPE 错误了。</p>
+<a id="more"></a>
+<p>所以有必要对此进行一个了解及记录。</p>
 <h1 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h1><p>来自安卓官方的文档，开宗明义的就描述了，安卓是一个什么样的系统。<a href="https://developer.android.google.cn/guide/components/fundamentals" target="_blank" rel="noopener">应用基础</a> 一文中的描述如下：</p>
 <ul>
 <li>Android 操作系统是一种多用户 Linux 系统，其中的每个应用都是一个不同的用户；    </li>
@@ -305,17 +305,17 @@
 <h1 id="进程-1"><a href="#进程-1" class="headerlink" title="进程"></a>进程</h1><p>多数情况下，每个应用在其自己的Linux进程内运行。这个进程在应用的某些代码需要运行的时候建立，只有其应用不需要，或者系统需要释放内存来供其他应用使用的时候会结束。</p>
 <p>一个不太寻常和安卓的基础特征是，应用进程的生命周期不是直接由其自己控制的。系统通过一系列的因素来决定其生命周期，如系统已知此应用的运行部分，对用户的重要程度，及系统有多少内存可用。</p>
 <p>开发者需要明白各个组件（Activity，Service，BroadcastReceiver）是怎么样影响应用的生命周期的。<strong>不正确的使用这些组件可能会导致应用在执行重要活动的时候被系统给KIll</strong></p>
-<p>一个常见的进程生命周期Bug是 <em>BroadcastReceiver</em> 在其 <em>BroadcastReceiver.onReceive()</em> 方法中收到一个 <em>intent</em> 时启动了一个新的线程，然后就从方法中返回了。其返回后，系统就会认为，<em>BroadcastReceiver </em>不再活跃，其就会将此进程标记为不再需要的（除非有其他应用组件还是活跃的）。所以，系统可能会在将来的某个时候就释放内存，同时，也会结束派生出来的线程。典型的解决办法是从<em>BroadcaseReceiver</em>内调度一个<em>JobService</em>，这样系统就会知道依然有活跃的任务存在。</p>
+<p>一个常见的进程生命周期Bug是 <em>BroadcastReceiver</em> 在其 <em>BroadcastReceiver.onReceive()</em> 方法中收到一个 <em>intent</em> 时启动了一个新的线程，然后就从方法中返回了。其返回后，系统就会认为，<em>BroadcastReceiver *不再活跃，其就会将此进程标记为不再需要的（除非有其他应用组件还是活跃的）。所以，系统可能会在将来的某个时候就释放内存，同时，也会结束派生出来的线程。典型的解决办法是从</em>BroadcaseReceiver<em>内调度一个</em>JobService*，这样系统就会知道依然有活跃的任务存在。</p>
 <p>为了确定哪个进程在内存低的时候被Kill，安卓会把每个进程放到一个 <em>重要性等级中</em>，其参考依据是应用进程中运行的组件及组件状态。下面是重要级别列表（从高至低）：</p>
 <ul>
 <li><strong>前台进程</strong>：当前用户正在交互的进程。很多组件会导致进程被认为是前台的。下面的任一条件满足，应用进程就会被认为是前台的：   </li>
 </ul>
-<p>运行一个屏幕最顶部与用户正在交互的 <em>Activity</em>（<em>onResume()</em>被调用）。<br><em>BroadcastReceiver</em> 正在运行（执行 <em>BroadcastReceiver.onReceive()</em>中）<br>有一个<em>Sevice</em>并且在执行其中一个回调函数的代码。（<code>Service.onCreate(), Service.onStart(), or Service.onDestroy()</code>）     </p>
+<p>运行一个屏幕最顶部与用户正在交互的 <em>Activity<em>（</em>onResume()*被调用）。<br>*BroadcastReceiver</em> 正在运行（执行 <em>BroadcastReceiver.onReceive()</em>中）<br>有一个<em>Sevice</em>并且在执行其中一个回调函数的代码。（<code>Service.onCreate(), Service.onStart(), or Service.onDestroy()</code>）     </p>
 <p>系统中这样的进程应该只有少数几个，只有在内存到达连这些进程都不能继续运行的时候才会杀掉这种进程。通常，在这个时候，系统已经到了一个 内存换页状态，所以需要这个杀掉进程的动作来保证用户交互的响应性。</p>
 <ul>
 <li><strong>可见进程</strong>：在做一些用户可以感受到的事情的进程，杀掉这样的进程对用户来说体验不好。满足下面条件的进程被认为是可见的：</li>
 </ul>
-<p>运行一个用户可见，但不在前台的 <em>Activity</em>，（如调用了 <code>onPause()</code>方法）。这是有可能发生的，比如前台进程是一个对话框，而其允许先前的Activity在其后面。<br>有一个 <em>Service</em> 以前台服务运行，通过 <code>Service.startForeground()</code>执行（这个方法会请求系统向对待用户敏感事件一样对待，或者向对用户可见一样）。<br>其内用一个系统使用的，对用户来说能感受到的服务，比如 Live wallpaper，输入法服务等。  </p>
+<p>运行一个用户可见，但不在前台的 <em>Activity*，（如调用了 <code>onPause()</code>方法）。这是有可能发生的，比如前台进程是一个对话框，而其允许先前的Activity在其后面。<br>有一个 *Service</em> 以前台服务运行，通过 <code>Service.startForeground()</code>执行（这个方法会请求系统向对待用户敏感事件一样对待，或者向对用户可见一样）。<br>其内用一个系统使用的，对用户来说能感受到的服务，比如 Live wallpaper，输入法服务等。  </p>
 <ul>
 <li><p><strong>服务进程</strong>： 此进程内包含一个已经调用了<code>startService()</code> 的 <code>Service</code>。虽然这些过程对用户来说不是直接可见的，但他们通常在做用户关心的事情（如后台网络数据上传或下载），所以系统会保持这样的进程运行，除非位于其上的两个类型进程没有足够的内存了。<br>长时间运行（例如30分钟或更长时间）的服务可能把重要性降级，以允许它们的进程下降到下面描述的缓存的LRU列表。 这有助于避免由于内存泄漏或其他问题而长时间运行的服务消耗大量内存，导致系统无法有效使用缓存进程。</p>
 </li>
@@ -345,8 +345,8 @@
 <p>系统停止您的一个 Activity 时（例如，新 Activity 启动或任务转到前台），如果系统需要回收系统内存资源，则可能会完全销毁该 Activity。 发生这种情况时，有关该 Activity 状态的信息将会丢失。如果发生这种情况，系统仍会知道该 Activity 存在于返回栈中，但是当该 Activity 被置于堆栈顶部时，系统一定会重建 Activity（而不是恢复 Activity）。 为了避免用户的工作丢失，您应主动通过在 Activity 中实现 onSaveInstanceState() 回调方法来保留工作。</p>
 <p>如需了解有关如何保存 Activity 状态的详细信息，请参阅 Activity 文档。</p>
 <h1 id="管理任务"><a href="#管理任务" class="headerlink" title="管理任务"></a>管理任务</h1><p>Android 管理任务和返回栈的方式（如上所述，即：将所有连续启动的 Activity 放入同一任务和“后进先出”堆栈中）非常适用于大多数应用，而您不必担心 Activity 如何与任务关联或者如何存在于返回栈中。 但是，您可能会决定要中断正常行为。 也许您希望应用中的 Activity 在启动时开始新任务（而不是放置在当前任务中）；或者，当启动 Activity 时，您希望将其现有实例上移一层（而不是在返回栈的顶部创建新实例）；或者，您希望在用户离开任务时，清除返回栈中除根 Activity 以外的所有其他 Activity。</p>
-<p>通过使用 <activity> 清单文件元素中的属性和传递给 <code>startActivity()</code> 的 Intent 中的标志，您可以执行所有这些操作以及其他操作。</activity></p>
-<p>在这一方面，您可以使用的主要 <activity> 属性包括：</activity></p>
+<p>通过使用 <activity> 清单文件元素中的属性和传递给 <code>startActivity()</code> 的 Intent 中的标志，您可以执行所有这些操作以及其他操作。</p>
+<p>在这一方面，您可以使用的主要 <activity> 属性包括：</p>
 <ul>
 <li>taskAffinity</li>
 <li>launchMode</li>
@@ -370,16 +370,16 @@
 <blockquote>
 <p>注：某些适用于清单文件的启动模式不可用作 Intent 标志，同样，某些可用作 Intent 标志的启动模式无法在清单文件中定义。</p>
 </blockquote>
-<h2 id="使用清单文件"><a href="#使用清单文件" class="headerlink" title="使用清单文件"></a>使用清单文件</h2><p>在清单文件中声明 Activity 时，您可以使用 <activity> 元素的 launchMode 属性指定 Activity 应该如何与任务关联。</activity></p>
+<h2 id="使用清单文件"><a href="#使用清单文件" class="headerlink" title="使用清单文件"></a>使用清单文件</h2><p>在清单文件中声明 Activity 时，您可以使用 <activity> 元素的 launchMode 属性指定 Activity 应该如何与任务关联。</p>
 <p>launchMode 属性指定有关应如何将 Activity 启动到任务中的指令。您可以分配给 launchMode 属性的启动模式共有四种：</p>
 <h3 id="“standard”（默认模式）"><a href="#“standard”（默认模式）" class="headerlink" title="“standard”（默认模式）"></a>“standard”（默认模式）</h3><p>默认。系统在启动 Activity 的任务中创建 Activity 的新实例并向其传送 Intent。Activity 可以多次实例化，而每个实例均可属于不同的任务，并且一个任务可以拥有多个实例。</p>
 <h3 id="“singleTop”"><a href="#“singleTop”" class="headerlink" title="“singleTop”"></a>“singleTop”</h3><p>如果当前任务的顶部已存在 Activity 的一个实例，则系统会通过调用该实例的 onNewIntent() 方法向其传送 Intent，而不是创建 Activity 的新实例。Activity 可以多次实例化，而每个实例均可属于不同的任务，并且一个任务可以拥有多个实例（但前提是位于返回栈顶部的 Activity 并不是 Activity 的现有实例）。<br>例如，假设任务的返回栈包含根 Activity A 以及 Activity B、C 和位于顶部的 D（堆栈是 A-B-C-D；D 位于顶部）。收到针对 D 类 Activity 的 Intent。如果 D 具有默认的 “standard” 启动模式，则会启动该类的新实例，且堆栈会变成 A-B-C-D-D。但是，如果 D 的启动模式是 “singleTop”，则 D 的现有实例会通过 onNewIntent() 接收 Intent，因为它位于堆栈的顶部；而堆栈仍为 A-B-C-D。但是，如果收到针对 B 类 Activity 的 Intent，则会向堆栈添加 B 的新实例，即便其启动模式为 “singleTop” 也是如此。</p>
 <p>注：为某个 Activity 创建新实例时，用户可以按“返回”按钮返回到前一个 Activity。 但是，当 Activity 的现有实例处理新 Intent 时，则在新 Intent 到达 onNewIntent() 之前，用户无法按“返回”按钮返回到 Activity 的状态。</p>
 <h3 id="“singleTask”"><a href="#“singleTask”" class="headerlink" title="“singleTask”"></a>“singleTask”</h3><p>系统创建新任务并实例化位于新任务底部的 Activity。但是，如果该 Activity 的一个实例已存在于一个单独的任务中，则系统会通过调用现有实例的 onNewIntent() 方法向其传送 Intent，而不是创建新实例。一次只能存在 Activity 的一个实例。<br>注：尽管 Activity 在新任务中启动，但是用户按“返回”按钮仍会返回到前一个 Activity。</p>
-<h3 id="“singleInstance”"><a href="#“singleInstance”" class="headerlink" title="“singleInstance”."></a>“singleInstance”.</h3><p>与 “singleTask” 相同，只是系统不会将任何其他 Activity 启动到包含实例的任务中。该 Activity 始终是其任务唯一仅有的成员；由此 Activity 启动的任何 Activity 均在单独的任务中打开。<br>我们再来看另一示例，Android 浏览器应用声明网络浏览器 Activity 应始终在其自己的任务中打开（通过在 <activity> 元素中指定 singleTask 启动模式）。这意味着，如果您的应用发出打开 Android 浏览器的 Intent，则其 Activity 与您的应用位于不同的任务中。相反，系统会为浏览器启动新任务，或者如果浏览器已有任务正在后台运行，则会将该任务上移一层以处理新 Intent。</activity></p>
+<h3 id="“singleInstance”"><a href="#“singleInstance”" class="headerlink" title="“singleInstance”."></a>“singleInstance”.</h3><p>与 “singleTask” 相同，只是系统不会将任何其他 Activity 启动到包含实例的任务中。该 Activity 始终是其任务唯一仅有的成员；由此 Activity 启动的任何 Activity 均在单独的任务中打开。<br>我们再来看另一示例，Android 浏览器应用声明网络浏览器 Activity 应始终在其自己的任务中打开（通过在 <activity> 元素中指定 singleTask 启动模式）。这意味着，如果您的应用发出打开 Android 浏览器的 Intent，则其 Activity 与您的应用位于不同的任务中。相反，系统会为浏览器启动新任务，或者如果浏览器已有任务正在后台运行，则会将该任务上移一层以处理新 Intent。</p>
 <p>无论 Activity 是在新任务中启动，还是在与启动 Activity 相同的任务中启动，用户按“返回”按钮始终会转到前一个 Activity。 但是，如果启动指定 singleTask 启动模式的 Activity，则当某后台任务中存在该 Activity 的实例时，整个任务都会转移到前台。此时，返回栈包括上移到堆栈顶部的任务中的所有 Activity。 图 4 显示了这种情况。</p>
 <p><img src="../res/diagram_backstack_singletask_multiactivity" alt="图 4. 显示如何将启动模式为“singleTask”的 Activity 添加到返回栈。 如果 Activity 已经是某个拥有自己的返回栈的后台任务的一部分，则整个返回栈也会上移到当前任务的顶部。"></p>
-<p>如需了解有关在清单文件中使用启动模式的详细信息，请参阅 <activity> 元素文档，其中更详细地讨论了 launchMode 属性和可接受的值。</activity></p>
+<p>如需了解有关在清单文件中使用启动模式的详细信息，请参阅 <activity> 元素文档，其中更详细地讨论了 launchMode 属性和可接受的值。</p>
 <blockquote>
 <p>注：使用 launchMode 属性为 Activity 指定的行为可由 Intent 附带的 Activity 启动标志替代，下文将对此进行讨论。</p>
 </blockquote>
@@ -410,8 +410,8 @@
 <p>系统停止您的一个 Activity 时（例如，新 Activity 启动或任务转到前台），如果系统需要回收系统内存资源，则可能会完全销毁该 Activity。 发生这种情况时，有关该 Activity 状态的信息将会丢失。如果发生这种情况，系统仍会知道该 Activity 存在于返回栈中，但是当该 Activity 被置于堆栈顶部时，系统一定会重建 Activity（而不是恢复 Activity）。 为了避免用户的工作丢失，您应主动通过在 Activity 中实现 onSaveInstanceState() 回调方法来保留工作。</p>
 <p>如需了解有关如何保存 Activity 状态的详细信息，请参阅 Activity 文档。</p>
 <p>管理任务<br>Android 管理任务和返回栈的方式（如上所述，即：将所有连续启动的 Activity 放入同一任务和“后进先出”堆栈中）非常适用于大多数应用，而您不必担心 Activity 如何与任务关联或者如何存在于返回栈中。 但是，您可能会决定要中断正常行为。 也许您希望应用中的 Activity 在启动时开始新任务（而不是放置在当前任务中）；或者，当启动 Activity 时，您希望将其现有实例上移一层（而不是在返回栈的顶部创建新实例）；或者，您希望在用户离开任务时，清除返回栈中除根 Activity 以外的所有其他 Activity。</p>
-<p>通过使用 <activity> 清单文件元素中的属性和传递给 startActivity() 的 Intent 中的标志，您可以执行所有这些操作以及其他操作。</activity></p>
-<p>在这一方面，您可以使用的主要 <activity> 属性包括：</activity></p>
+<p>通过使用 <activity> 清单文件元素中的属性和传递给 startActivity() 的 Intent 中的标志，您可以执行所有这些操作以及其他操作。</p>
+<p>在这一方面，您可以使用的主要 <activity> 属性包括：</p>
 <p>taskAffinity<br>launchMode<br>allowTaskReparenting<br>clearTaskOnLaunch<br>alwaysRetainTaskState<br>finishOnTaskLaunch<br>您可以使用的主要 Intent 标志包括：</p>
 <p>FLAG_ACTIVITY_NEW_TASK<br>FLAG_ACTIVITY_CLEAR_TOP<br>FLAG_ACTIVITY_SINGLE_TOP<br>在下文中，您将了解如何使用这些清单文件属性和 Intent 标志定义 Activity 与任务的关联方式，以及 Activity 在返回栈中的行为方式。</p>
 <p>此外，我们还单独介绍了有关如何在概览屏幕中显示和管理任务与 Activity 的注意事项。 如需了解详细信息，请参阅概览屏幕。 通常，您应该允许系统定义任务和 Activity 在概览屏幕中的显示方法，并且无需修改此行为。</p>
@@ -421,15 +421,15 @@
 <p>使用 Intent 标志<br>调用 startActivity() 时，可以在 Intent 中加入一个标志，用于声明新 Activity 如何（或是否）与当前任务关联。</p>
 <p>因此，如果 Activity A 启动 Activity B，则 Activity B 可以在其清单文件中定义它应该如何与当前任务关联（如果可能），并且 Activity A 还可以请求 Activity B 应该如何与当前任务关联。如果这两个 Activity 均定义 Activity B 应该如何与任务关联，则 Activity A 的请求（如 Intent 中所定义）优先级要高于 Activity B 的请求（如其清单文件中所定义）。</p>
 <p>注：某些适用于清单文件的启动模式不可用作 Intent 标志，同样，某些可用作 Intent 标志的启动模式无法在清单文件中定义。</p>
-<p>使用清单文件<br>在清单文件中声明 Activity 时，您可以使用 <activity> 元素的 launchMode 属性指定 Activity 应该如何与任务关联。</activity></p>
+<p>使用清单文件<br>在清单文件中声明 Activity 时，您可以使用 <activity> 元素的 launchMode 属性指定 Activity 应该如何与任务关联。</p>
 <p>launchMode 属性指定有关应如何将 Activity 启动到任务中的指令。您可以分配给 launchMode 属性的启动模式共有四种：</p>
 <p>“standard”（默认模式）<br>默认。系统在启动 Activity 的任务中创建 Activity 的新实例并向其传送 Intent。Activity 可以多次实例化，而每个实例均可属于不同的任务，并且一个任务可以拥有多个实例。<br>“singleTop”<br>如果当前任务的顶部已存在 Activity 的一个实例，则系统会通过调用该实例的 onNewIntent() 方法向其传送 Intent，而不是创建 Activity 的新实例。Activity 可以多次实例化，而每个实例均可属于不同的任务，并且一个任务可以拥有多个实例（但前提是位于返回栈顶部的 Activity 并不是 Activity 的现有实例）。<br>例如，假设任务的返回栈包含根 Activity A 以及 Activity B、C 和位于顶部的 D（堆栈是 A-B-C-D；D 位于顶部）。收到针对 D 类 Activity 的 Intent。如果 D 具有默认的 “standard” 启动模式，则会启动该类的新实例，且堆栈会变成 A-B-C-D-D。但是，如果 D 的启动模式是 “singleTop”，则 D 的现有实例会通过 onNewIntent() 接收 Intent，因为它位于堆栈的顶部；而堆栈仍为 A-B-C-D。但是，如果收到针对 B 类 Activity 的 Intent，则会向堆栈添加 B 的新实例，即便其启动模式为 “singleTop” 也是如此。</p>
 <p>注：为某个 Activity 创建新实例时，用户可以按“返回”按钮返回到前一个 Activity。 但是，当 Activity 的现有实例处理新 Intent 时，则在新 Intent 到达 onNewIntent() 之前，用户无法按“返回”按钮返回到 Activity 的状态。</p>
 <p>“singleTask”<br>系统创建新任务并实例化位于新任务底部的 Activity。但是，如果该 Activity 的一个实例已存在于一个单独的任务中，则系统会通过调用现有实例的 onNewIntent() 方法向其传送 Intent，而不是创建新实例。一次只能存在 Activity 的一个实例。<br>注：尽管 Activity 在新任务中启动，但是用户按“返回”按钮仍会返回到前一个 Activity。</p>
-<p>“singleInstance”.<br>与 “singleTask” 相同，只是系统不会将任何其他 Activity 启动到包含实例的任务中。该 Activity 始终是其任务唯一仅有的成员；由此 Activity 启动的任何 Activity 均在单独的任务中打开。<br>我们再来看另一示例，Android 浏览器应用声明网络浏览器 Activity 应始终在其自己的任务中打开（通过在 <activity> 元素中指定 singleTask 启动模式）。这意味着，如果您的应用发出打开 Android 浏览器的 Intent，则其 Activity 与您的应用位于不同的任务中。相反，系统会为浏览器启动新任务，或者如果浏览器已有任务正在后台运行，则会将该任务上移一层以处理新 Intent。</activity></p>
+<p>“singleInstance”.<br>与 “singleTask” 相同，只是系统不会将任何其他 Activity 启动到包含实例的任务中。该 Activity 始终是其任务唯一仅有的成员；由此 Activity 启动的任何 Activity 均在单独的任务中打开。<br>我们再来看另一示例，Android 浏览器应用声明网络浏览器 Activity 应始终在其自己的任务中打开（通过在 <activity> 元素中指定 singleTask 启动模式）。这意味着，如果您的应用发出打开 Android 浏览器的 Intent，则其 Activity 与您的应用位于不同的任务中。相反，系统会为浏览器启动新任务，或者如果浏览器已有任务正在后台运行，则会将该任务上移一层以处理新 Intent。</p>
 <p>无论 Activity 是在新任务中启动，还是在与启动 Activity 相同的任务中启动，用户按“返回”按钮始终会转到前一个 Activity。 但是，如果启动指定 singleTask 启动模式的 Activity，则当某后台任务中存在该 Activity 的实例时，整个任务都会转移到前台。此时，返回栈包括上移到堆栈顶部的任务中的所有 Activity。 图 4 显示了这种情况。</p>
 <p>图 4. 显示如何将启动模式为“singleTask”的 Activity 添加到返回栈。 如果 Activity 已经是某个拥有自己的返回栈的后台任务的一部分，则整个返回栈也会上移到当前任务的顶部。</p>
-<p>如需了解有关在清单文件中使用启动模式的详细信息，请参阅 <activity> 元素文档，其中更详细地讨论了 launchMode 属性和可接受的值。</activity></p>
+<p>如需了解有关在清单文件中使用启动模式的详细信息，请参阅 <activity> 元素文档，其中更详细地讨论了 launchMode 属性和可接受的值。</p>
 <p>注：使用 launchMode 属性为 Activity 指定的行为可由 Intent 附带的 Activity 启动标志替代，下文将对此进行讨论。</p>
 <p>使用 Intent 标志<br>启动 Activity 时，您可以通过在传递给 startActivity() 的 Intent 中加入相应的标志，修改 Activity 与其任务的默认关联方式。可用于修改默认行为的标志包括：</p>
 <p>FLAG_ACTIVITY_NEW_TASK<br>在新任务中启动 Activity。如果已为正在启动的 Activity 运行任务，则该任务会转到前台并恢复其最后状态，同时 Activity 会在 onNewIntent() 中收到新 Intent。<br>正如前文所述，这会产生与 “singleTask”launchMode 值相同的行为。</p>
@@ -438,8 +438,8 @@
 <p>FLAG_ACTIVITY_CLEAR_TOP 通常与 FLAG_ACTIVITY_NEW_TASK 结合使用。一起使用时，通过这些标志，可以找到其他任务中的现有 Activity，并将其放入可从中响应 Intent 的位置。</p>
 <p>注：如果指定 Activity 的启动模式为 “standard”，则该 Activity 也会从堆栈中移除，并在其位置启动一个新实例，以便处理传入的 Intent。 这是因为当启动模式为 “standard” 时，将始终为新 Intent 创建新实例。</p>
 <h1 id="处理关联-1"><a href="#处理关联-1" class="headerlink" title="处理关联"></a>处理关联</h1><p>“关联”指示 Activity 优先属于哪个任务。默认情况下，同一应用中的所有 Activity 彼此关联。 因此，默认情况下，同一应用中的所有 Activity 优先位于相同任务中。 不过，您可以修改 Activity 的默认关联。 在不同应用中定义的 Activity 可以共享关联，或者可为在同一应用中定义的 Activity 分配不同的任务关联。</p>
-<p>可以使用 <activity> 元素的 taskAffinity 属性修改任何给定 Activity 的关联。</activity></p>
-<p>taskAffinity 属性取字符串值，该值必须不同于在 <manifest> 元素中声明的默认软件包名称，因为系统使用该名称标识应用的默认任务关联。</manifest></p>
+<p>可以使用 <activity> 元素的 taskAffinity 属性修改任何给定 Activity 的关联。</p>
+<p>taskAffinity 属性取字符串值，该值必须不同于在 <manifest> 元素中声明的默认软件包名称，因为系统使用该名称标识应用的默认任务关联。</p>
 <p>在两种情况下，关联会起作用：</p>
 <p>启动 Activity 的 Intent 包含 FLAG_ACTIVITY_NEW_TASK 标志。<br>默认情况下，新 Activity 会启动到调用 startActivity() 的 Activity 任务中。它将推入与调用方相同的返回栈。 但是，如果传递给 startActivity() 的 Intent 包含 FLAG_ACTIVITY_NEW_TASK 标志，则系统会寻找其他任务来储存新 Activity。这通常是新任务，但未做强制要求。 如果现有任务与新 Activity 具有相同关联，则会将 Activity 启动到该任务中。 否则，将开始新任务。</p>
 <p>如果此标志导致 Activity 开始新任务，且用户按“主页”按钮离开，则必须为用户提供导航回任务的方式。 有些实体（如通知管理器）始终在外部任务中启动 Activity，而从不作为其自身的一部分启动 Activity，因此它们始终将 FLAG_ACTIVITY_NEW_TASK 放入传递给 startActivity() 的 Intent 中。请注意，如果 Activity 能够由可以使用此标志的外部实体调用，则用户可以通过独立方式返回到启动的任务，例如，使用启动器图标（任务的根 Activity 具有 CATEGORY_LAUNCHER Intent 过滤器；请参阅下面的启动任务部分）。</p>
@@ -452,9 +452,10 @@
 <p><strong>clearTaskOnLaunch</strong><br>如果在任务的根 Activity 中将此属性设置为 “true”，则每当用户离开任务然后返回时，系统都会将堆栈清除到只剩下根 Activity。 换而言之，它与 alwaysRetainTaskState 正好相反。 即使只离开任务片刻时间，用户也始终会返回到任务的初始状态。</p>
 <p><strong>finishOnTaskLaunch</strong><br>此属性类似于 clearTaskOnLaunch，但它对单个 Activity 起作用，而非整个任务。 此外，它还有可能会导致任何 Activity 停止，包括根 Activity。 设置为 “true” 时，Activity 仍是任务的一部分，但是仅限于当前会话。如果用户离开然后返回任务，则任务将不复存在。<br>启动任务<br>通过为 Activity 提供一个以 “android.intent.action.MAIN” 为指定操作、以 “android.intent.category.LAUNCHER” 为指定类别的 Intent 过滤器，您可以将 Activity 设置为任务的入口点。 例如：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activity</span> <span class="attr">...</span> &gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">intent-filter</span> <span class="attr">...</span> &gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">action</span> <span class="attr">android:name</span>=<span class="string">"android.intent.action.MAIN"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">category</span> <span class="attr">android:name</span>=<span class="string">"android.intent.category.LAUNCHER"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">intent-filter</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">activity</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <p>此类 Intent 过滤器会使 Activity 的图标和标签显示在应用启动器中，让用户能够启动 Activity 并在启动之后随时返回到创建的任务中。</p>
 <p>第二个功能非常重要：用户必须能够在离开任务后，再使用此 Activity 启动器返回该任务。 因此，只有在 Activity 具有 ACTION_MAIN 和 CATEGORY_LAUNCHER 过滤器时，才应该使用将 Activity 标记为“始终启动任务”的两种启动模式，即 “singleTask” 和 “singleInstance”。例如，我们可以想像一下如果缺少过滤器会发生什么情况： Intent 启动一个 “singleTask” Activity，从而启动一个新任务，并且用户花了些时间处理该任务。然后，用户按“主页”按钮。 任务现已发送到后台，而且不可见。现在，用户无法返回到任务，因为该任务未显示在应用启动器中。</p>
-<p>如果您并不想用户能够返回到 Activity，对于这些情况，请将 <activity> 元素的 finishOnTaskLaunch 设置为 “true”（请参阅清理堆栈）。</activity></p>
+<p>如果您并不想用户能够返回到 Activity，对于这些情况，请将 <activity> 元素的 finishOnTaskLaunch 设置为 “true”（请参阅清理堆栈）。</p>
 <p>有关如何在概览屏幕中显示和管理任务与 Activity 的更多信息，请参阅概览屏幕。</p>
 
     </div>
@@ -472,7 +473,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/Word-OOXML中的尺寸单位.html" rel="next" title="Word-OOXML中的尺寸单位">
+                <a href="/Java/Word-OOXML%E4%B8%AD%E7%9A%84%E5%B0%BA%E5%AF%B8%E5%8D%95%E4%BD%8D.html" rel="next" title="Word-OOXML中的尺寸单位">
                   <i class="fa fa-chevron-left"></i> Word-OOXML中的尺寸单位
                 </a>
             </div>
@@ -480,7 +481,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/安卓被强杀后台恢复时候崩溃的解决办法.html" rel="prev" title="安卓被强杀后台恢复时候崩溃的解决办法">
+                <a href="/Android/%E5%AE%89%E5%8D%93%E8%A2%AB%E5%BC%BA%E6%9D%80%E5%90%8E%E5%8F%B0%E6%81%A2%E5%A4%8D%E6%97%B6%E5%80%99%E5%B4%A9%E6%BA%83%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95.html" rel="prev" title="安卓被强杀后台恢复时候崩溃的解决办法">
                   安卓被强杀后台恢复时候崩溃的解决办法 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -567,10 +568,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -599,10 +600,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -677,7 +678,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/android中的进程及内存管理.html",
+            url: "https://gowa.club/Android/android%E4%B8%AD%E7%9A%84%E8%BF%9B%E7%A8%8B%E5%8F%8A%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86.html",
             identifier: "Android/android中的进程及内存管理.html",
             title: "android中的进程及内存管理"
           }

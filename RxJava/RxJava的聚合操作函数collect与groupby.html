@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Java,Android,RxJava">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RxJava的聚合操作函数collect与groupby">
-<meta property="og:url" content="https://gowa.club/RxJava/RxJava的聚合操作函数collect与groupby.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;RxJava&#x2F;RxJava%E7%9A%84%E8%81%9A%E5%90%88%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0collect%E4%B8%8Egroupby.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="RxJava 提供了一些类似与 stream 的方法，恰好我们在 API26 以下的安卓是无法使用 stream API的，所以尝试用这种方式来使用，但是会有坑的。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-05-27T15:03:55.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RxJava的聚合操作函数collect与groupby">
-<meta name="twitter:description" content="RxJava 提供了一些类似与 stream 的方法，恰好我们在 API26 以下的安卓是无法使用 stream API的，所以尝试用这种方式来使用，但是会有坑的。">
 
-<link rel="canonical" href="https://gowa.club/RxJava/RxJava的聚合操作函数collect与groupby.html">
+<link rel="canonical" href="https://gowa.club/RxJava/RxJava%E7%9A%84%E8%81%9A%E5%90%88%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0collect%E4%B8%8Egroupby.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/RxJava/RxJava的聚合操作函数collect与groupby.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/RxJava/RxJava%E7%9A%84%E8%81%9A%E5%90%88%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0collect%E4%B8%8Egroupby.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/RxJava/RxJava的聚合操作函数collect与groupby.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/RxJava/RxJava%E7%9A%84%E8%81%9A%E5%90%88%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0collect%E4%B8%8Egroupby.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="RxJava/RxJava的聚合操作函数collect与groupby.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,15 +287,19 @@
       
         <p>RxJava 提供了一些类似与 stream 的方法，恰好我们在 API26 以下的安卓是无法使用 stream API的，所以尝试用这种方式来使用，但是会有坑的。</p>
 <a id="more"></a>
+
 <h1 id="groupBy"><a href="#groupBy" class="headerlink" title="groupBy"></a>groupBy</h1><p>对一个 Observable 使用  groupBy 后，会返回 ObservableGroupBy。一般情况下，我们只指定 keySelector 就行了，其他的使用默认值，当然，有的时候我们还会指定 valueSelector。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> &lt;K, V&gt; Observable&lt;GroupedObservable&lt;K, V&gt;&gt; groupBy(Function&lt;? <span class="keyword">super</span> T, ? extends K&gt; keySelector,</span><br><span class="line">        Function&lt;? <span class="keyword">super</span> T, ? extends V&gt; valueSelector,</span><br><span class="line">        <span class="keyword">boolean</span> delayError, <span class="keyword">int</span> bufferSize) &#123;</span><br><span class="line">    ObjectHelper.requireNonNull(keySelector, <span class="string">"keySelector is null"</span>);</span><br><span class="line">    ObjectHelper.requireNonNull(valueSelector, <span class="string">"valueSelector is null"</span>);</span><br><span class="line">    ObjectHelper.verifyPositive(bufferSize, <span class="string">"bufferSize"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> RxJavaPlugins.onAssembly(<span class="keyword">new</span> ObservableGroupBy&lt;T, K, V&gt;(<span class="keyword">this</span>, keySelector, valueSelector, bufferSize, delayError));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p><em>keySelector</em> 用来选择组的键，我们也可以把他当做组的ID。可以理解为：<strong>对于发射的每个值，通过　keySelector 来赋予一个组的ID</strong>。之后我们就可以根据组 ID 来干很多事情了。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Dict&gt; lst = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">lst.add(<span class="keyword">new</span> Dict(<span class="string">"1"</span>, <span class="string">"A"</span>));</span><br><span class="line">lst.add(<span class="keyword">new</span> Dict(<span class="string">"2"</span>, <span class="string">"B"</span>));</span><br><span class="line">lst.add(<span class="keyword">new</span> Dict(<span class="string">"1"</span>, <span class="string">"B"</span>));</span><br><span class="line">lst.add(<span class="keyword">new</span> Dict(<span class="string">"2"</span>, <span class="string">"A"</span>));</span><br><span class="line">lst.add(<span class="keyword">new</span> Dict(<span class="string">"3"</span>, <span class="string">"B"</span>));</span><br><span class="line">lst.add(<span class="keyword">new</span> Dict(<span class="string">"3"</span>, <span class="string">"A"</span>));</span><br><span class="line">Observable.fromIterable(lst)</span><br><span class="line">        .groupBy(<span class="keyword">new</span> Function&lt;Dict, String&gt;() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> String <span class="title">apply</span><span class="params">(Dict dict)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> dict.getValue()+<span class="string">"group"</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">        .subscribe(grp -&gt; grp.subscribe( d -&gt; System.out.println(d)));</span><br></pre></td></tr></table></figure>
+
 <p><strong>简单而言，groupBy 会将每个元素都赋予一个组ID，然后将组ID相同元素放在一个 Observable 内发射出来。</strong></p>
 <h1 id="collect"><a href="#collect" class="headerlink" title="collect"></a>collect</h1><p>这个操作符就比较猥琐了。<br>根据定义：collect 将会有限个元素的源发射的数据装到一个可变的数据结构内，然后返回一个会发射这个数据结构的 <em>Single</em>。</p>
 <p>collect 是 reduce 的简化操作，不需像 reduce 那些需要在处理每个元素的时候都返回状态。</p>
 <p>要求 upstream 必须要发射 <code>onComplete</code> 通知。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> &lt;U&gt; <span class="function">Single&lt;U&gt; <span class="title">collect</span><span class="params">(Callable&lt;? extends U&gt; initialValueSupplier, BiConsumer&lt;? <span class="keyword">super</span> U, ? <span class="keyword">super</span> T&gt; collector)</span> </span>&#123;</span><br><span class="line">    ObjectHelper.requireNonNull(initialValueSupplier, <span class="string">"initialValueSupplier is null"</span>);</span><br><span class="line">    ObjectHelper.requireNonNull(collector, <span class="string">"collector is null"</span>);</span><br><span class="line">    <span class="keyword">return</span> RxJavaPlugins.onAssembly(<span class="keyword">new</span> ObservableCollectSingle&lt;T, U&gt;(<span class="keyword">this</span>, initialValueSupplier, collector));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>其需要的两个参数：</p>
 <ul>
 <li>initialValueSupplier 数据结构构造方法</li>
@@ -309,6 +311,7 @@
 <li>T upstream 发射元素的类型</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;Dict&gt; lst = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">lst.add(<span class="keyword">new</span> Dict(<span class="string">"1"</span>, <span class="string">"A"</span>));</span><br><span class="line">lst.add(<span class="keyword">new</span> Dict(<span class="string">"2"</span>, <span class="string">"B"</span>));</span><br><span class="line">lst.add(<span class="keyword">new</span> Dict(<span class="string">"1"</span>, <span class="string">"B"</span>));</span><br><span class="line">lst.add(<span class="keyword">new</span> Dict(<span class="string">"2"</span>, <span class="string">"A"</span>));</span><br><span class="line">lst.add(<span class="keyword">new</span> Dict(<span class="string">"3"</span>, <span class="string">"B"</span>));</span><br><span class="line">lst.add(<span class="keyword">new</span> Dict(<span class="string">"3"</span>, <span class="string">"A"</span>));</span><br><span class="line">HashMap&lt;String,Integer&gt; res =</span><br><span class="line">Observable.fromIterable(lst)</span><br><span class="line">        .groupBy(dict -&gt; dict.getValue() + <span class="string">"group"</span>)</span><br><span class="line">        .collect(HashMap&lt;String, Single&lt;Long&gt;&gt;::<span class="keyword">new</span>, (m, e) -&gt; m.put(e.getKey(), e.count()))</span><br><span class="line">        .flatMap((Function&lt;HashMap&lt;String, Single&lt;Long&gt;&gt;, SingleSource&lt;HashMap&lt;String, Integer&gt;&gt;&gt;) stringSingleHashMap -&gt; &#123;</span><br><span class="line">            HashMap&lt;String,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">            stringSingleHashMap.forEach((k,v)-&gt;map.put(k,v.blockingGet().intValue()));</span><br><span class="line">            <span class="keyword">return</span> Single.just(map);</span><br><span class="line">        &#125;)</span><br><span class="line">        .blockingGet();</span><br><span class="line">System.out.println(res);</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -327,7 +330,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/RxJava/RxJava使用blockingGet造成麻烦问题.html" rel="next" title="RxJava使用blockingGet造成麻烦问题">
+                <a href="/RxJava/RxJava%E4%BD%BF%E7%94%A8blockingGet%E9%80%A0%E6%88%90%E9%BA%BB%E7%83%A6%E9%97%AE%E9%A2%98.html" rel="next" title="RxJava使用blockingGet造成麻烦问题">
                   <i class="fa fa-chevron-left"></i> RxJava使用blockingGet造成麻烦问题
                 </a>
             </div>
@@ -335,7 +338,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/RxJava/RxJava使用Schedulers时进行的线程切换.html" rel="prev" title="RxJava使用Schedulers时进行的线程切换">
+                <a href="/RxJava/RxJava%E4%BD%BF%E7%94%A8Schedulers%E6%97%B6%E8%BF%9B%E8%A1%8C%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%88%87%E6%8D%A2.html" rel="prev" title="RxJava使用Schedulers时进行的线程切换">
                   RxJava使用Schedulers时进行的线程切换 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -422,10 +425,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -454,10 +457,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -532,7 +535,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/RxJava/RxJava的聚合操作函数collect与groupby.html",
+            url: "https://gowa.club/RxJava/RxJava%E7%9A%84%E8%81%9A%E5%90%88%E6%93%8D%E4%BD%9C%E5%87%BD%E6%95%B0collect%E4%B8%8Egroupby.html",
             identifier: "RxJava/RxJava的聚合操作函数collect与groupby.html",
             title: "RxJava的聚合操作函数collect与groupby"
           }

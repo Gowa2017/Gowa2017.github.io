@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Java,Android,Retrofit">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Retrofit统一进行错误处理的实现">
-<meta property="og:url" content="https://gowa.club/Android/Retrofit统一进行错误处理的实现.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Retrofit%E7%BB%9F%E4%B8%80%E8%BF%9B%E8%A1%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E7%9A%84%E5%AE%9E%E7%8E%B0.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="在前的一篇文章中 建立一个可持续发展的安卓Client 。介绍了使用 Retrofit 来建立 Client 的一个方式。但后面在使用中遇到，如果每次调用接口请求都要处理 Response 的话，很多代码是重复的，而且不方便进行维护。所以有了这个文章。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-01-15T13:03:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Retrofit统一进行错误处理的实现">
-<meta name="twitter:description" content="在前的一篇文章中 建立一个可持续发展的安卓Client 。介绍了使用 Retrofit 来建立 Client 的一个方式。但后面在使用中遇到，如果每次调用接口请求都要处理 Response 的话，很多代码是重复的，而且不方便进行维护。所以有了这个文章。">
 
-<link rel="canonical" href="https://gowa.club/Android/Retrofit统一进行错误处理的实现.html">
+<link rel="canonical" href="https://gowa.club/Android/Retrofit%E7%BB%9F%E4%B8%80%E8%BF%9B%E8%A1%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E7%9A%84%E5%AE%9E%E7%8E%B0.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Retrofit统一进行错误处理的实现.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Retrofit%E7%BB%9F%E4%B8%80%E8%BF%9B%E8%A1%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E7%9A%84%E5%AE%9E%E7%8E%B0.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/Retrofit统一进行错误处理的实现.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/Retrofit%E7%BB%9F%E4%B8%80%E8%BF%9B%E8%A1%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E7%9A%84%E5%AE%9E%E7%8E%B0.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Retrofit统一进行错误处理的实现.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,8 +288,10 @@
         <p>在前的一篇文章中 <a href="https://gowa.club/Android/建立一个可持续发展的安卓Client.html">建立一个可持续发展的安卓Client
 </a>。介绍了使用 Retrofit 来建立 Client 的一个方式。但后面在使用中遇到，如果每次调用接口请求都要处理 Response 的话，很多代码是重复的，而且不方便进行维护。所以有了这个文章。</p>
 <a id="more"></a>
+
 <h1 id="Retrofit-基本使用。"><a href="#Retrofit-基本使用。" class="headerlink" title="Retrofit 基本使用。"></a>Retrofit 基本使用。</h1><p>Retrofit 的基本使用就是用一个接口来定义我们网络请求的行为，Retrofit 会根据这个定义行为的接口来构造对应的 Client， Client 拥有了我们接口定义的各种方法。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">IApis net = ServiceGenerator.createServices(IApis.class);</span><br><span class="line">Call&lt;SrvResult&gt; cb = net.getQqPhone(<span class="string">"hahaha"</span>);</span><br><span class="line">cb.enqueue(<span class="keyword">new</span> NetCallback() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccessful</span><span class="params">(SrvResult response)</span> </span>&#123;</span><br><span class="line">        System.out.println(response.getData());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">IApis net = ServiceGenerator.createServices(IApis<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">Call&lt;SrvResult&gt; cb = net.getQqPhone(<span class="string">"hahaha"</span>);</span><br><span class="line">cb.enqueue(<span class="keyword">new</span> NetCallback() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccessful</span><span class="params">(SrvResult response)</span> </span>&#123;</span><br><span class="line">        System.out.println(response.getData());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
 <ol>
 <li>我们调用  <code>ServiceGenarator.createServices(IApis.class)</code> 来建立一个 Client。</li>
 <li>调用 Client 的方法，得到一个 Call。</li>
@@ -300,11 +300,13 @@
 </ol>
 <p>在异步调用的时候(cb.enqueue()) 的时候，我们的回调实现了 Call 接口。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Callback</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call&lt;T&gt; var1, Response&lt;T&gt; var2)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Call&lt;T&gt; var1, Throwable var2)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>当请求成功，或失败的时候就会回调对应的方法。</p>
 <p>在此，我想到的是使用一个实现了 Callback 接口的的类，在其中进行统一的处理。但是，有可能我们针对不同的返回结果，又需要进行不同的数据操作的时候，这又不足。</p>
 <p>所以准备用抽象类来完成这个活。</p>
 <h1 id="NetCallback"><a href="#NetCallback" class="headerlink" title="NetCallback"></a>NetCallback</h1><p>由于我们的服务端返回的数据格式都是一致的：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SrvResult</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> state;</span><br><span class="line">    <span class="keyword">private</span> Object data;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getState</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setState</span><span class="params">(<span class="keyword">int</span> state)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.state = state;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setData</span><span class="params">(Object data)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>所以我们可以统一解析为一致的格式。</p>
 <p>对于出现失败的情况有两种：</p>
 <ul>
@@ -312,20 +314,19 @@
 <li>应用返回表示此次请求数据逻辑不合法等等的失败 </li>
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">NetCallback</span> <span class="keyword">implements</span> <span class="title">Callback</span>&lt;<span class="title">SrvResult</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"NetCallback"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">onSuccessfull</span><span class="params">(SrvResult data)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call&lt;SrvResult&gt; call, Response&lt;SrvResult&gt; response)</span> </span>&#123;</span><br><span class="line">        Response&lt;SrvResult&gt; res = response;</span><br><span class="line">        SrvResult data = response.body();</span><br><span class="line">        <span class="comment">// 请求成功，http 协议返回代码 200-300</span></span><br><span class="line">        <span class="keyword">if</span> (res.isSuccessful()) &#123;</span><br><span class="line">            <span class="keyword">if</span> (data.getState() != <span class="number">200</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (data.getData() == <span class="keyword">null</span> || TextUtils.isEmpty(data.getData().toString())) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (!TextUtils.isEmpty(CodeConfig.getCodeTip(data.getState()))) &#123;</span><br><span class="line">                        onFail(CodeConfig.getCodeTip(data.getState()));</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        onFail(<span class="string">"请求失败，请重试"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    onFail(data.getData().toString());</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            onSuccessfull(data);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            onFail(res.message());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onFailure</span><span class="params">(Call&lt;SrvResult&gt; call, Throwable t)</span> </span>&#123;</span><br><span class="line">        Toast.makeText(SSVApplication.getInstance(), t.getMessage(), Toast.LENGTH_SHORT).show();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 错误提示</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onFail</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        Toast.makeText(SSVApplication.getInstance(), s, Toast.LENGTH_SHORT).show();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>Retrofit 默认会成功时调用  onResponse 失败调用 onFailure。</p>
 <p>所以我们只需要定义一个我们需要在数据响应成功时的方法就OK了。</p>
-<p><strong>注意：isSuccessful 返回的状态码是 200 -300 </strong></p>
+<p>*<em>注意：isSuccessful 返回的状态码是 200 -300 *</em></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSuccessful</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.code &gt;= <span class="number">200</span> &amp;&amp; <span class="keyword">this</span>.code &lt; <span class="number">300</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="HTTP-状态码"><a href="#HTTP-状态码" class="headerlink" title="HTTP 状态码"></a>HTTP 状态码</h1><div class="table-container">
-<table>
+<h1 id="HTTP-状态码"><a href="#HTTP-状态码" class="headerlink" title="HTTP 状态码"></a>HTTP 状态码</h1><table>
 <thead>
 <tr>
 <th>STATUE</th>
 <th>说明</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>1xx</td>
 <td>代表请求已被接受，需要继续处理 (临时响应)</td>
 </tr>
@@ -345,9 +346,7 @@
 <td>5xx</td>
 <td>表示服务器无法完成明显有效的请求</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 
     </div>
 
@@ -366,7 +365,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/关于接口与对象的一些思考.html" rel="next" title="关于接口与对象的一些思考">
+                <a href="/Java/%E5%85%B3%E4%BA%8E%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83.html" rel="next" title="关于接口与对象的一些思考">
                   <i class="fa fa-chevron-left"></i> 关于接口与对象的一些思考
                 </a>
             </div>
@@ -374,7 +373,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/安卓9.0应用内升级失败的一种情况解决.html" rel="prev" title="安卓9.0应用内升级失败的一种情况解决">
+                <a href="/Android/%E5%AE%89%E5%8D%939.0%E5%BA%94%E7%94%A8%E5%86%85%E5%8D%87%E7%BA%A7%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%B8%80%E7%A7%8D%E6%83%85%E5%86%B5%E8%A7%A3%E5%86%B3.html" rel="prev" title="安卓9.0应用内升级失败的一种情况解决">
                   安卓9.0应用内升级失败的一种情况解决 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -461,10 +460,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -493,10 +492,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -571,7 +570,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/Retrofit统一进行错误处理的实现.html",
+            url: "https://gowa.club/Android/Retrofit%E7%BB%9F%E4%B8%80%E8%BF%9B%E8%A1%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E7%9A%84%E5%AE%9E%E7%8E%B0.html",
             identifier: "Android/Retrofit统一进行错误处理的实现.html",
             title: "Retrofit统一进行错误处理的实现"
           }

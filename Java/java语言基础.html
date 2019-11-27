@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,18 +51,16 @@
 <meta name="keywords" content="Java,The Java Tutorial">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java语言基础">
-<meta property="og:url" content="https://gowa.club/Java/java语言基础.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;java%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="介绍了一些语言的基础，如变量，操作符，表达式，语句，块，流程控制等基本的语言元素。有点基础的可能看起来比较简单。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://gowa.club/res/objects-tenElementArray.gif">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;objects-tenElementArray.gif">
 <meta property="og:updated_time" content="2018-01-10T15:19:21.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java语言基础">
-<meta name="twitter:description" content="介绍了一些语言的基础，如变量，操作符，表达式，语句，块，流程控制等基本的语言元素。有点基础的可能看起来比较简单。">
-<meta name="twitter:image" content="https://gowa.club/res/objects-tenElementArray.gif">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;objects-tenElementArray.gif">
 
-<link rel="canonical" href="https://gowa.club/Java/java语言基础.html">
+<link rel="canonical" href="https://gowa.club/Java/java%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80.html">
 
 
 <script id="page-configurations">
@@ -227,12 +225,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/java语言基础.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/java%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -273,7 +271,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/java语言基础.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/java%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/java语言基础.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,7 +287,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>介绍了一些语言的基础，如变量，操作符，表达式，语句，块，流程控制等基本的语言元素。有点基础的可能看起来比较简单。<br><a id="more"></a></p>
+        <p>介绍了一些语言的基础，如变量，操作符，表达式，语句，块，流程控制等基本的语言元素。有点基础的可能看起来比较简单。</p>
+<a id="more"></a>
 <h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><p>在前面的例子中我们学到，一个对象在<em>fields</em>内存储状态。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int cadence = 0;</span><br><span class="line">int speed = 0;</span><br><span class="line">int gear = 1;</span><br></pre></td></tr></table></figure>
 <p>可能依然有几个迷惑的问题：命令一个字段的规则和约定是什么？除了<code>int</code>，还有什么数据类型？定义<em>fields</em>的时候是不是一定要进行初始化？如果没有显式初始化的话是不是会获得一个默认值？我们将在这一节来回答这些问题，在这之前，有几个技术上的区别要首先注意到。在Java中，<em>field</em>和<em>变量(variable)</em>都会用到；这是新开发者长会混淆的地方，因为它们经常看起来指的是同一样东西。</p>
@@ -302,13 +301,12 @@
 </ul>
 <p>这个文章接下来在讨论域和变量的时候会使用以下一般性的说明。如果我们在谈论<strong>一般域</strong>（不包括本地变量和参数）的时候，我们简单的称呼为<strong>域</strong>。如果讨论包括了以上所有的情况，我们简单的称做<strong>变量</strong>。如果上下文需要进行区别的话，我们会用限定术语（static field, local variables, 等等）。某些时候可能会偶尔遇到使用<strong>成员(member)</strong>的地方。一个类型的 域，方法，嵌套类型都统一叫做<strong>成员</strong>。</p>
 <h2 id="命名-Naming）"><a href="#命名-Naming）" class="headerlink" title="命名(Naming）"></a>命名(Naming）</h2><ul>
-<li>变量名大小写敏感。变量名可以是任意数量的合法字符————不限制长度的Unicode字母和数字序列，以一个字母开始，<script type="math/tex">`，`_`。约定是总是以字母开头，而不要使用`</script>和<code>_</code>。<code>$</code>永远不要使用它。某些时候你会看到自动生成的名字会包含美元符号，但是自己的变量避免使用它。下划线也不要用来开头，虽然是合法的，但不鼓励。空白字符是不允许使用的。  </li>
+<li>变量名大小写敏感。变量名可以是任意数量的合法字符————不限制长度的Unicode字母和数字序列，以一个字母开始，<code>$</code>，<code>_</code>。约定是总是以字母开头，而不要使用<code>$</code>和<code>_</code>。<code>$</code>永远不要使用它。某些时候你会看到自动生成的名字会包含美元符号，但是自己的变量避免使用它。下划线也不要用来开头，虽然是合法的，但不鼓励。空白字符是不允许使用的。  </li>
 <li>后续的字符可能是字母，数字，美元符号，下划线。命名变量的时候，使用单词全写而不是简写。这样会让代码更加容易阅读和理解。很多情况下也会让你的代码是自文档的；域名字<em>cadence, speed, gear</em>总比简写的<em>s, c, g</em>合适。同时不要使用<em>关键词或保留字</em>。  </li>
 <li>如果选择的名字只有一个单词，全部都使用小写字母。如果是有多个单词组成，后续单词的第一个字母大写，其他小写。如<code>gearRatio</code>和<code>currentGear</code>就是例子。如果变量是存储一个常量，<code>static final int NUM_GEARS = 6;</code>，那么就把所有字母大写，单词间用下划线分隔开。除了这里，不用在其他情况下使用下划线。 </li>
 </ul>
 <h1 id="基本数据类型"><a href="#基本数据类型" class="headerlink" title="基本数据类型"></a>基本数据类型</h1><p>Java是静态类型的，这意味着所有变量都必须先声明然后再使用。首先要声明变量的类型和名字：</p>
-<pre><code>int gear = 1;
-</code></pre><p>一个变量的类型决定了其包含的值，和其能进行的操作。除了<code>int</code>，Java支持7种其他类型的基本数据类型。一个基本类型是被语言预定义的，并且以一个保留关键字进行命名。基本值和其他的基本值不共享状态。下面是8种基本的数据类型：  </p>
+<pre><code>int gear = 1;</code></pre><p>一个变量的类型决定了其包含的值，和其能进行的操作。除了<code>int</code>，Java支持7种其他类型的基本数据类型。一个基本类型是被语言预定义的，并且以一个保留关键字进行命名。基本值和其他的基本值不共享状态。下面是8种基本的数据类型：  </p>
 <ul>
 <li><strong>byte</strong></li>
 <li><strong>short</strong></li>
@@ -322,7 +320,6 @@
 <p>除了上面这8种类型，Java通过<code>java.lang.String</code>包来支持字符串。用双引号<code>&quot;</code>包含字符串会自动建立一个<code>String</code>对象；比如，<code>String s = &quot;this is a string&quot;;</code>，<code>String</code>对象是不变的，一旦创建的话值就不会变化。<code>String</code>类并不是一个基本数据类型，但是由于语言给予它的特殊支持，可以这样认为。将会在<strong>Simple Data Objects</strong>一章学到更多关于<code>String</code>类的内容。</p>
 <h2 id="默认值"><a href="#默认值" class="headerlink" title="默认值"></a>默认值</h2><p>在声明一个域的时候并非一定要赋一个初值。编译器会对没有赋初值的域进行初始化为相关默认值。一般来讲，这默认值将会是 0 或者<code>null</code>，根据数据类型而定。然而，依赖这些默认的值被认为是一种不好的编程风格。</p>
 <p>下面这个表格显示了各类型的默认值：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -330,8 +327,7 @@
 <th>默认值(for fields)</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>byte</td>
 <td>0</td>
 </tr>
@@ -367,12 +363,11 @@
 <td>boolean</td>
 <td>false</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>本地变量有所不同，编译器不会对未初始化的本地变量给予默认值。所以，如果必须要在你使用本地变量前给予它一个值。访问一个未初始化的自动变量会得到一个 编译时 错误。</p>
 <h2 id="字面值"><a href="#字面值" class="headerlink" title="字面值"></a>字面值</h2><p>你可能会注意到在初始化基本类型的变量时没有使用<code>new</code>关键词。基本类型是语言内建的数据类型；他们不是从类创建的对象。一个<strong><code>literal(字面值)</code></strong>代表了一个固定值的源代码；字面值在代码内不需要进行计算。如下所示，可以对基本类型给予一个字面值：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">boolean result = true;</span><br><span class="line">char capitalC = &apos;C&apos;;</span><br><span class="line">byte b = 100;</span><br><span class="line">short s = 10000;</span><br><span class="line">int i = 100000;</span><br></pre></td></tr></table></figure>
+
 <h2 id="整数字面值"><a href="#整数字面值" class="headerlink" title="整数字面值"></a>整数字面值</h2><p>以<code>l,L</code>结尾的是<code>long</code>类型的整数字面值，不然的话就是<code>int</code>整型字面值。建议使用<code>L</code>，因为<code>l</code>看起来和数字<code>1</code>很相似。</p>
 <p><code>byte, short, int, long</code>的值都可以通过<code>int</code>的字面值创建。<code>long</code>的值超过了<code>int</code>的范围，可以用<code>long</code>字面值创建。整数字面值可以用以下的数字系统表示：</p>
 <ul>
@@ -382,15 +377,18 @@
 </ul>
 <p>一般来说都是用的十进制。可以用前缀<code>0x</code>,<code>0b</code>分别来表示16进制和二进制。  </p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// The number 26, in decimal</span><br><span class="line">int decVal = 26;</span><br><span class="line">//  The number 26, in hexadecimal</span><br><span class="line">int hexVal = 0x1a;</span><br><span class="line">// The number 26, in binary</span><br><span class="line">int binVal = 0b11010;</span><br></pre></td></tr></table></figure>
+
 <h2 id="浮点值"><a href="#浮点值" class="headerlink" title="浮点值"></a>浮点值</h2><p>以<code>F, f</code>结尾的浮点值是<code>fload</code>类型；否则其类型是<code>double</code>，无论是否有<code>D, d</code>后缀。</p>
 <p>浮点类型（<code>fload</code>, <code>double</code>）可以用<code>e, E</code>（科学计数法）表示，<code>F, f</code>（32-bit浮点值）, <code>D, d</code>（64-bit浮点值，默认值，经常是省略的）。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">double d1 = 123.4;</span><br><span class="line">// same value as d1, but in scientific notation</span><br><span class="line">double d2 = 1.234e2;</span><br><span class="line">float f1  = 123.4f;</span><br></pre></td></tr></table></figure>
+
 <h2 id="字符和字符串值"><a href="#字符和字符串值" class="headerlink" title="字符和字符串值"></a>字符和字符串值</h2><p><code>char, String</code>的值可能包含任何Unicode(UTF-16)中的任意字符。如果编辑器或系统允许，可以直接在代码类使用这些字符。不然的话，就只能用<code>\u0108</code>（有音调符号的大写字母C），<code>S\u00ED Se\u00F1</code> (Sí Señor in Spanish)这种形式来表示。对<code>char</code>使用<code>&#39;</code>，对<code>String</code>使用<code>&quot;</code>。Unicode 反引序列可以在任何地方使用。  </p>
 <p>Java也支持一些特殊的反引序列。<code>\b(backspace), \t(tab), \n(line feed), \f(form feed), \r(carriage return), \&quot;(double quote), \&#39;(single quote),and \\(backslash)</code>。</p>
 <p>一个特殊的值<code>null</code>可以用来做任何类型的值。<code>null</code>可以赋给任何变量，除了基本类型的变量。<code>null</code>经常被用来在程序中编辑某些对象不可用。 </p>
 <p>最后，有一个特殊类型的值叫做<code>class literal</code>，通过在一个类型名字后面加上一个<code>.class</code>后缀，如<code>String.class</code>。这指代类型本身。</p>
 <h2 id="在数字值内使用下划线字符"><a href="#在数字值内使用下划线字符" class="headerlink" title="在数字值内使用下划线字符"></a>在数字值内使用下划线字符</h2><p>在Java SE 7以上，可以在数字中出现下划线。这可以让你分隔数字来提高阅读性。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">long creditCardNumber = 1234_5678_9012_3456L;</span><br><span class="line">long socialSecurityNumber = 999_99_9999L;</span><br><span class="line">float pi =  3.14_15F;</span><br><span class="line">long hexBytes = 0xFF_EC_DE_5E;</span><br><span class="line">long hexWords = 0xCAFE_BABE;</span><br><span class="line">long maxLong = 0x7fff_ffff_ffff_ffffL;</span><br><span class="line">byte nybbles = 0b0010_0101;</span><br><span class="line">long bytes = 0b11010010_01101001_10010100_10010010;</span><br></pre></td></tr></table></figure>
+
 <p>只能在数字中间放下划线，不能在这些地方放下划线：   </p>
 <ul>
 <li>数字的开始或结束</li>
@@ -400,41 +398,50 @@
 </ul>
 <p>下面的例子演示了有效和无效的下划线放置：  </p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/ Invalid: cannot put underscores</span><br><span class="line">// adjacent to a decimal point</span><br><span class="line">float pi1 = 3_.1415F;</span><br><span class="line">// Invalid: cannot put underscores </span><br><span class="line">// adjacent to a decimal point</span><br><span class="line">float pi2 = 3._1415F;</span><br><span class="line">// Invalid: cannot put underscores </span><br><span class="line">// prior to an L suffix</span><br><span class="line">long socialSecurityNumber1 = 999_99_9999_L;</span><br><span class="line"></span><br><span class="line">// OK (decimal literal)</span><br><span class="line">int x1 = 5_2;</span><br><span class="line">// Invalid: cannot put underscores</span><br><span class="line">// At the end of a literal</span><br><span class="line">int x2 = 52_;</span><br><span class="line">// OK (decimal literal)</span><br><span class="line">int x3 = 5_______2;</span><br><span class="line"></span><br><span class="line">// Invalid: cannot put underscores</span><br><span class="line">// in the 0x radix prefix</span><br><span class="line">int x4 = 0_x52;</span><br><span class="line">// Invalid: cannot put underscores</span><br><span class="line">// at the beginning of a number</span><br><span class="line">int x5 = 0x_52;</span><br><span class="line">// OK (hexadecimal literal)</span><br><span class="line">int x6 = 0x5_2; </span><br><span class="line">// Invalid: cannot put underscores</span><br><span class="line">// at the end of a number</span><br><span class="line">int x7 = 0x52_;</span><br></pre></td></tr></table></figure>
+
 <h1 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h1><p>数字是一个容器对象，存储了单一类型固定数量的值。数组的长度在建立时就已确定。创建后，长度就不会变化。<br><img src="/res/objects-tenElementArray.gif" alt="An araay of 10 elements"></p>
 <p>数字的每个项目被称做<em>元素</em>，每个元素通过<em>索引</em>访问。如上所示，索引从0开始。在这个例子中，第9个元素可以通过 索引8 进行访问。</p>
 <p>接下来程序，<code>ArrayDemo</code>，创建一个整数数组，放了一些值在里面，然后打印出这些值来：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArrayDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// declares an array of integers</span></span><br><span class="line">        <span class="keyword">int</span>[] anArray;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// allocates memory for 10 integers</span></span><br><span class="line">        anArray = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">           </span><br><span class="line">        <span class="comment">// initialize first element</span></span><br><span class="line">        anArray[<span class="number">0</span>] = <span class="number">100</span>;</span><br><span class="line">        <span class="comment">// initialize second element</span></span><br><span class="line">        anArray[<span class="number">1</span>] = <span class="number">200</span>;</span><br><span class="line">        <span class="comment">// and so forth</span></span><br><span class="line">        anArray[<span class="number">2</span>] = <span class="number">300</span>;</span><br><span class="line">        anArray[<span class="number">3</span>] = <span class="number">400</span>;</span><br><span class="line">        anArray[<span class="number">4</span>] = <span class="number">500</span>;</span><br><span class="line">        anArray[<span class="number">5</span>] = <span class="number">600</span>;</span><br><span class="line">        anArray[<span class="number">6</span>] = <span class="number">700</span>;</span><br><span class="line">        anArray[<span class="number">7</span>] = <span class="number">800</span>;</span><br><span class="line">        anArray[<span class="number">8</span>] = <span class="number">900</span>;</span><br><span class="line">        anArray[<span class="number">9</span>] = <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"Element at index 0: "</span></span><br><span class="line">                           + anArray[<span class="number">0</span>]);</span><br><span class="line">        System.out.println(<span class="string">"Element at index 1: "</span></span><br><span class="line">                           + anArray[<span class="number">1</span>]);</span><br><span class="line">        System.out.println(<span class="string">"Element at index 2: "</span></span><br><span class="line">                           + anArray[<span class="number">2</span>]);</span><br><span class="line">        System.out.println(<span class="string">"Element at index 3: "</span></span><br><span class="line">                           + anArray[<span class="number">3</span>]);</span><br><span class="line">        System.out.println(<span class="string">"Element at index 4: "</span></span><br><span class="line">                           + anArray[<span class="number">4</span>]);</span><br><span class="line">        System.out.println(<span class="string">"Element at index 5: "</span></span><br><span class="line">                           + anArray[<span class="number">5</span>]);</span><br><span class="line">        System.out.println(<span class="string">"Element at index 6: "</span></span><br><span class="line">                           + anArray[<span class="number">6</span>]);</span><br><span class="line">        System.out.println(<span class="string">"Element at index 7: "</span></span><br><span class="line">                           + anArray[<span class="number">7</span>]);</span><br><span class="line">        System.out.println(<span class="string">"Element at index 8: "</span></span><br><span class="line">                           + anArray[<span class="number">8</span>]);</span><br><span class="line">        System.out.println(<span class="string">"Element at index 9: "</span></span><br><span class="line">                           + anArray[<span class="number">9</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这个程序的输出是：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Element at index 0: 100</span><br><span class="line">Element at index 1: 200</span><br><span class="line">Element at index 2: 300</span><br><span class="line">Element at index 3: 400</span><br><span class="line">Element at index 4: 500</span><br><span class="line">Element at index 5: 600</span><br><span class="line">Element at index 6: 700</span><br><span class="line">Element at index 7: 800</span><br><span class="line">Element at index 8: 900</span><br><span class="line">Element at index 9: 1000</span><br></pre></td></tr></table></figure></p>
+<p>这个程序的输出是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Element at index 0: 100</span><br><span class="line">Element at index 1: 200</span><br><span class="line">Element at index 2: 300</span><br><span class="line">Element at index 3: 400</span><br><span class="line">Element at index 4: 500</span><br><span class="line">Element at index 5: 600</span><br><span class="line">Element at index 6: 700</span><br><span class="line">Element at index 7: 800</span><br><span class="line">Element at index 8: 900</span><br><span class="line">Element at index 9: 1000</span><br></pre></td></tr></table></figure>
+
 <p>在真实的编程情况下，我们应该使用一种 循环语句来遍历数组中的每个元素，而不像例子里这样一个元素使用一个语句。你将会在<strong>Control Flow</strong>一章学到循环控制。</p>
 <h2 id="声明引用数组的变量"><a href="#声明引用数组的变量" class="headerlink" title="声明引用数组的变量"></a>声明引用数组的变量</h2><p>上面的例子声明了一个数组（名字是 <em>anArray</em>）：</p>
 <pre><code>// declares an array of integers
-int[] anArray;
-</code></pre><p>和声明其他类型变量一样，数组的声明有两个组件：类型和名字。数组类型写做 <code>type[]</code>，<code>type</code>是数组里面包含的数据类型；<code>[]</code>是一个特殊的符号来表示这是一个数组。数组的大小不是类型的一部分（这就是为什么[]是空的原因）。这并不会真正创建一个数组，这只是告诉编译器这个变量将会指向一个特定类型的数组。</p>
-<p>类似的，可以声明其他类型的数组：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">byte[] anArrayOfBytes;</span><br><span class="line">short[] anArrayOfShorts;</span><br><span class="line">long[] anArrayOfLongs;</span><br><span class="line">float[] anArrayOfFloats;</span><br><span class="line">double[] anArrayOfDoubles;</span><br><span class="line">boolean[] anArrayOfBooleans;</span><br><span class="line">char[] anArrayOfChars;</span><br><span class="line">String[] anArrayOfStrings;</span><br></pre></td></tr></table></figure></p>
+int[] anArray;</code></pre><p>和声明其他类型变量一样，数组的声明有两个组件：类型和名字。数组类型写做 <code>type[]</code>，<code>type</code>是数组里面包含的数据类型；<code>[]</code>是一个特殊的符号来表示这是一个数组。数组的大小不是类型的一部分（这就是为什么[]是空的原因）。这并不会真正创建一个数组，这只是告诉编译器这个变量将会指向一个特定类型的数组。</p>
+<p>类似的，可以声明其他类型的数组：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">byte[] anArrayOfBytes;</span><br><span class="line">short[] anArrayOfShorts;</span><br><span class="line">long[] anArrayOfLongs;</span><br><span class="line">float[] anArrayOfFloats;</span><br><span class="line">double[] anArrayOfDoubles;</span><br><span class="line">boolean[] anArrayOfBooleans;</span><br><span class="line">char[] anArrayOfChars;</span><br><span class="line">String[] anArrayOfStrings;</span><br></pre></td></tr></table></figure>
+
 <p>还可以把方括号放在数组名后面：</p>
 <pre><code>// this form is discouraged
-float anArrayOfFloats[];
-</code></pre><h2 id="创建，初始化和访问一个数组"><a href="#创建，初始化和访问一个数组" class="headerlink" title="创建，初始化和访问一个数组"></a>创建，初始化和访问一个数组</h2><p>用<code>new</code>操作符可以创建一个数组。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// create an array of integers</span><br><span class="line">anArray = new int[10];</span><br></pre></td></tr></table></figure></p>
+float anArrayOfFloats[];</code></pre><h2 id="创建，初始化和访问一个数组"><a href="#创建，初始化和访问一个数组" class="headerlink" title="创建，初始化和访问一个数组"></a>创建，初始化和访问一个数组</h2><p>用<code>new</code>操作符可以创建一个数组。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// create an array of integers</span><br><span class="line">anArray = new int[10];</span><br></pre></td></tr></table></figure>
+
 <p>如果没有这条语句的话，编译器会打印一条错误：</p>
-<pre><code>ArrayDemo.java:4: Variable anArray may not have been initialized.
-</code></pre><p>接下来的几行为数组内的元素赋值：</p>
+<pre><code>ArrayDemo.java:4: Variable anArray may not have been initialized.</code></pre><p>接下来的几行为数组内的元素赋值：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">anArray[0] = 100; // initialize first element</span><br><span class="line">anArray[1] = 200; // initialize second element</span><br><span class="line">anArray[2] = 300; // and so forth</span><br></pre></td></tr></table></figure>
+
 <p>还可以用更简短的方式来创建和初始化一个数组：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">int[] anArray = &#123; </span><br><span class="line">    100, 200, 300,</span><br><span class="line">    400, 500, 600, </span><br><span class="line">    700, 800, 900, 1000</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
 <p>这里，数组的长度由括号的值数量确定。</p>
 <p>也可以声明数组的数组，比如<code>String[][]</code>。每个元素，必须通过一个合适的数字索引进行访问。</p>
 <p>在Java中，多维数组的所有组件都是数组。这和C或Fortan不同。多维数组中的行长度是可变的，就跟如下程序所示一样：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">class MultiDimArrayDemo &#123;</span><br><span class="line">	public static void main(String[] args) &#123;</span><br><span class="line">		String[][] names = &#123;</span><br><span class="line">			&#123;&quot;Mr. &quot;, &quot;Mrs. &quot;, &quot;Ms. &quot;&#125;,</span><br><span class="line">			&#123;&quot;Smith&quot;, &quot;Jones&quot;&#125;</span><br><span class="line">			&#125;;</span><br><span class="line">			// Mr. Smith</span><br><span class="line">			System.out.println(names[0][0] + names[1][0]);</span><br><span class="line">			// Ms. Jones</span><br><span class="line">			System.out.println(names[0][2] + names[1][1]);</span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>最后，可以用内建的<code>length</code>属性来得到数组的长度。</p>
-<pre><code>System.out.println(anArray.length);
-</code></pre><h2 id="复制数组"><a href="#复制数组" class="headerlink" title="复制数组"></a>复制数组</h2><p><code>System</code>类有一个<code>arraycopy</code>方法用来高效的在数组间进行复制：</p>
-<pre><code>public static void arraycopy(Object src, int srcPos, Object dest, int destPos, int length)
-</code></pre><p>下面的程序，<code>ArrayCopyDemo</code>，声明了一个<code>char</code>数组，包含单词<em>decaffeinated</em>。使用<code>System.arraycopy</code>方法来从这个数组中复制数据到其他数组：</p>
+<pre><code>System.out.println(anArray.length);</code></pre><h2 id="复制数组"><a href="#复制数组" class="headerlink" title="复制数组"></a>复制数组</h2><p><code>System</code>类有一个<code>arraycopy</code>方法用来高效的在数组间进行复制：</p>
+<pre><code>public static void arraycopy(Object src, int srcPos, Object dest, int destPos, int length)</code></pre><p>下面的程序，<code>ArrayCopyDemo</code>，声明了一个<code>char</code>数组，包含单词<em>decaffeinated</em>。使用<code>System.arraycopy</code>方法来从这个数组中复制数据到其他数组：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArrayCopyDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">char</span>[] copyFrom = &#123; <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'c'</span>, <span class="string">'a'</span>, <span class="string">'f'</span>, <span class="string">'f'</span>, <span class="string">'e'</span>,</span><br><span class="line">			    <span class="string">'i'</span>, <span class="string">'n'</span>, <span class="string">'a'</span>, <span class="string">'t'</span>, <span class="string">'e'</span>, <span class="string">'d'</span> &#125;;</span><br><span class="line">        <span class="keyword">char</span>[] copyTo = <span class="keyword">new</span> <span class="keyword">char</span>[<span class="number">7</span>];</span><br><span class="line"></span><br><span class="line">        System.arraycopy(copyFrom, <span class="number">2</span>, copyTo, <span class="number">0</span>, <span class="number">7</span>);</span><br><span class="line">        System.out.println(<span class="keyword">new</span> String(copyTo));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出是：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">caffein</span><br></pre></td></tr></table></figure></p>
+
+<p>输出是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">caffein</span><br></pre></td></tr></table></figure>
+
 <h2 id="数组操作"><a href="#数组操作" class="headerlink" title="数组操作"></a>数组操作</h2><p>数组是一个非常有用和实用的概念。Java SE提供某些非常常用的操作数组的方法。这样用一行代码就可以进行某些常用的操作，而不用手工进行逐个的复制。</p>
 <p>为了方便，Java SE在 <code>java.util.Arrays</code>提供了一些方法来进行数组操作。上面一个例子可以修改来使用<code>copyOfRange</code>方法来达成同样的目的。区别就是使用<code>copyOfRange</code>方法不需要在复制之前创建目标数组，这个数组由方法进行返回：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArrayCopyOfDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">char</span>[] copyFrom = &#123;<span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'c'</span>, <span class="string">'a'</span>, <span class="string">'f'</span>, <span class="string">'f'</span>, <span class="string">'e'</span>,</span><br><span class="line">            <span class="string">'i'</span>, <span class="string">'n'</span>, <span class="string">'a'</span>, <span class="string">'t'</span>, <span class="string">'e'</span>, <span class="string">'d'</span>&#125;;</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">char</span>[] copyTo = java.util.Arrays.copyOfRange(copyFrom, <span class="number">2</span>, <span class="number">9</span>);</span><br><span class="line">        </span><br><span class="line">        System.out.println(<span class="keyword">new</span> String(copyTo));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>可以看到，输出的结果是一致的（caffein），但使用了更少的代码。要注意的是，<code>copyOfRange</code>的第2，3个参数分别指定了复制开始和结束的位置，左开右闭。在这里，索引9代表的元素<code>a</code>并没有被复制。</p>
 <p>一些<code>java.util.Arrays</code>提供的方法有下面：</p>
 <ul>
@@ -445,7 +452,6 @@ float anArrayOfFloats[];
 </ul>
 <h1 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h1><p>现在我们已经知道怎么样去声明和初始化一个变量，但是我们可以对它做更多的事情。研究一下Java的操作符是一个非常不错的开始。操作符是对一个，两个，或者三个操作属进行特定操作的符号，并且会返回值。</p>
 <p>高优先级的操作符会优先进行计算，如果同样的操作符在一起出现的话，必须指明哪一个先进行计算。二元操作符（排除<code>=</code>）从左至右进行结合，赋值（=）从右至左结合。<br>下面是Java的操作符有限级由高到低的表格：</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -453,14 +459,13 @@ float anArrayOfFloats[];
 <th>优先级</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>后缀</td>
-<td><em>expr++ expr—</em></td>
+<td><em>expr++ expr–</em></td>
 </tr>
 <tr>
 <td>一元操作符</td>
-<td><em>++expr —expr +expr -expr ~ !</em></td>
+<td><em>++expr –expr +expr -expr ~ !</em></td>
 </tr>
 <tr>
 <td>乘/除/模</td>
@@ -492,8 +497,7 @@ float anArrayOfFloats[];
 </tr>
 <tr>
 <td>或</td>
-<td>\</td>
-<td></td>
+<td>|</td>
 </tr>
 <tr>
 <td>逻辑与</td>
@@ -511,9 +515,7 @@ float anArrayOfFloats[];
 <td>赋值</td>
 <td>= += -= *= /= %= ^= &#124;= &lt;&lt;= &gt;&gt;= &gt;&gt;=</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 
     </div>
 
@@ -531,7 +533,7 @@ float anArrayOfFloats[];
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/关于面向对象（OOP）编程的一些概念.html" rel="next" title="关于面向对象（OOP）编程的一些概念">
+                <a href="/Java/%E5%85%B3%E4%BA%8E%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%EF%BC%88OOP%EF%BC%89%E7%BC%96%E7%A8%8B%E7%9A%84%E4%B8%80%E4%BA%9B%E6%A6%82%E5%BF%B5.html" rel="next" title="关于面向对象（OOP）编程的一些概念">
                   <i class="fa fa-chevron-left"></i> 关于面向对象（OOP）编程的一些概念
                 </a>
             </div>
@@ -539,7 +541,7 @@ float anArrayOfFloats[];
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Misc/Word2007利用模板和快速样式进行格式化文档.html" rel="prev" title="Word2007利用模板和快速样式进行格式化文档">
+                <a href="/Misc/Word2007%E5%88%A9%E7%94%A8%E6%A8%A1%E6%9D%BF%E5%92%8C%E5%BF%AB%E9%80%9F%E6%A0%B7%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%96%87%E6%A1%A3.html" rel="prev" title="Word2007利用模板和快速样式进行格式化文档">
                   Word2007利用模板和快速样式进行格式化文档 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -626,10 +628,10 @@ float anArrayOfFloats[];
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -658,10 +660,10 @@ float anArrayOfFloats[];
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -736,7 +738,7 @@ float anArrayOfFloats[];
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/java语言基础.html",
+            url: "https://gowa.club/Java/java%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80.html",
             identifier: "Java/java语言基础.html",
             title: "java语言基础"
           }

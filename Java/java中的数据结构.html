@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Java,The Java Tutorial">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java中的数据结构">
-<meta property="og:url" content="https://gowa.club/Java/java中的数据结构.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;java%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="java中实在是有太多的数据结构，谁叫它世界上最庞大复杂的语言呢，但其提供的东西，确实用起来很方便。比如List，Map，Set等等，但是很多时候对其内部并不是很了解，使用起来也不是很灵活。最简单的，我还不知道 Array 和ArrayList的区别。所以现在就来探究一下。 前言其实我对POSIX比较熟悉，ANSI C也比较了解，其中其实是没有什么数据结构的，基本类型，加上数组，结构体，联合等等，">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-07T00:08:58.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java中的数据结构">
-<meta name="twitter:description" content="java中实在是有太多的数据结构，谁叫它世界上最庞大复杂的语言呢，但其提供的东西，确实用起来很方便。比如List，Map，Set等等，但是很多时候对其内部并不是很了解，使用起来也不是很灵活。最简单的，我还不知道 Array 和ArrayList的区别。所以现在就来探究一下。 前言其实我对POSIX比较熟悉，ANSI C也比较了解，其中其实是没有什么数据结构的，基本类型，加上数组，结构体，联合等等，">
 
-<link rel="canonical" href="https://gowa.club/Java/java中的数据结构.html">
+<link rel="canonical" href="https://gowa.club/Java/java%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/java中的数据结构.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/java%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/java中的数据结构.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/java%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/java中的数据结构.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -298,49 +296,78 @@
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></span><br><span class="line"><span class="class">        </span></span><br><span class="line">            transient Object[] elementData; // non-private to simplify nested class access</span><br></pre></td></tr></table></figure>
 <p>在我们动态添加元素，而数组空间不够的时候，一样需要重新分配内存并进行复制。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">grow</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// overflow-conscious code</span></span><br><span class="line">    <span class="keyword">int</span> oldCapacity = elementData.length;</span><br><span class="line">    <span class="keyword">int</span> newCapacity = oldCapacity + (oldCapacity &gt;&gt; <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> (newCapacity - minCapacity &lt; <span class="number">0</span>)</span><br><span class="line">        newCapacity = minCapacity;</span><br><span class="line">    <span class="keyword">if</span> (newCapacity - MAX_ARRAY_SIZE &gt; <span class="number">0</span>)</span><br><span class="line">        newCapacity = hugeCapacity(minCapacity);</span><br><span class="line">    <span class="comment">// minCapacity is usually close to size, so this is a win:</span></span><br><span class="line">    elementData = Arrays.copyOf(elementData, newCapacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>当我们访问这个对象元素的时候，其实也是也数组的形式访问内部的那个数据数组<code>elementData</code>。</p>
 <h1 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h1><p>上面的ArrayList 是使用 数组来保存内部数据，而LinkedList内部是使用双向链表来保存数据。只有这个区别而已。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">    E item;</span><br><span class="line">    Node&lt;E&gt; next;</span><br><span class="line">    Node&lt;E&gt; prev;</span><br><span class="line"></span><br><span class="line">    Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</span><br><span class="line">        <span class="keyword">this</span>.item = element;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">        <span class="keyword">this</span>.prev = prev;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><p>Map是一个接口，其提供了对键值这样类型数组的存储与访问，以及其他一些附加的操作。平时我不是很在意这个东西，但是在很多时候用起来才知道方便。</p>
 <p>方法列表：</p>
 <ul>
-<li><code>boolean isEmpty();</code> 如果map内并无 键-值 对，返回 true。</li>
-<li><code>int size();</code>  返回容量</li>
-<li><code>boolean containsKey(Object);</code> 返回map是否含有 <em>Object</em> 这个键。</li>
-<li><code>boolean containsValue(Object);</code> 返回map是否含有 <em>Object</em> 这个值。</li>
-<li><code>V get(Object);</code> 返回  <em>Object</em> 键对应的值。</li>
-<li><code>V put(K, V);</code> 把一个键值对 <code>K, V</code> 放进map。</li>
-<li><code>V remove(Object);</code> 从 map 内移除 <em>Object</em> 指定的键所引用的键值对。</li>
-<li><code>void putAll(Map&lt;? extends K, ? extends V&gt; m);</code> 把 <em>m</em> 内的所有键值对复制过来。</li>
-<li><code>void clear();</code> 清空</li>
-<li><code>Set&lt;K&gt; keySet();</code> 返回map 包含的所有  键 的Set。</li>
-<li><code>Collection&lt;V&gt; values();</code> 返回 map 包含所有值的 Collection。</li>
-<li><code>Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet();</code>  返回所有的键值对。</li>
-<li><code>boolean equals(Object o);</code> 与此map想比较是否相等。</li>
-<li><code>int hashCode();</code> map的 hask值。</li>
-<li><code>default V getOrDefault(Object key, V defaultValue);</code> 返回键对应的值，如果map没有这个键，返回默认值。接口已实现的方法。</li>
-<li><code>default void forEach(BiConsumer&lt;? super K, ? super V&gt; action);</code> 对map中的每项进行对应的动作，直到遍历完map，或抛出了一个违例。接口实现的方法。</li>
-<li><code>default void replaceAll(BiFunction&lt;? super K, ? super V, ? extends V&gt; function);</code> 将map内所有项的值都替换为 该项，执行为指定的函数后的结果。接口实现的方法</li>
-<li><code>default V putIfAbsent(K key, V value);</code> 如果  键 <em>key</em> 还未与一个 值相关联（或与null 关联），把我们给定的 <em>value</em> 与 其相关联。返回此键值对项中的值。接口实现的方法</li>
-<li><code>default boolean remove(Object key, Object value);</code> 移除 已关联的 <em>key, value</em> 键值对。 接口实现的方法。</li>
-<li><code>default boolean replace(K key, V oldValue, V newValue);</code> 当 已存在 <em>key, oldValue</em> 关联的时候，把 <em>oldValue</em> 替换为 <em>newValue</em>。接口实现的方法。</li>
-<li><code>default V replace(K key, V value);</code> 当 <em>key</em> 与某些值关联时，将其值替换为 <em>value</em> 。</li>
-<li><code>default V computeIfAbsent(K key,Function&lt;? super K, ? extends V&gt; mappingFunction)</code> 如果  <em>key</em> 没有与任何值关联（或与null关联），使用  <em>mappingFunction</em> 计算出其值，然后放到 map内。</li>
-<li><code>default V computeIfPresent(K key,BiFunction&lt;? super K, ? super V, ? extends V&gt; remappingFunction)</code> 如果 <em>key</em> 当前的值不是 <em>null</em>，把 <em>key</em> 与 <em>BiFunction</em> 计算的值重新关联。</li>
-<li><code>default V compute(K key,BiFunction&lt;? super K, ? super V, ? extends V&gt; remappingFunction)</code> 为 <em>key</em> 与其当前关联的值 (或 null）重新计算一个 键值对。</li>
+<li><p><code>boolean isEmpty();</code> 如果map内并无 键-值 对，返回 true。</p>
+</li>
+<li><p><code>int size();</code>  返回容量</p>
+</li>
+<li><p><code>boolean containsKey(Object);</code> 返回map是否含有 <em>Object</em> 这个键。</p>
+</li>
+<li><p><code>boolean containsValue(Object);</code> 返回map是否含有 <em>Object</em> 这个值。</p>
+</li>
+<li><p><code>V get(Object);</code> 返回  <em>Object</em> 键对应的值。</p>
+</li>
+<li><p><code>V put(K, V);</code> 把一个键值对 <code>K, V</code> 放进map。</p>
+</li>
+<li><p><code>V remove(Object);</code> 从 map 内移除 <em>Object</em> 指定的键所引用的键值对。</p>
+</li>
+<li><p><code>void putAll(Map&lt;? extends K, ? extends V&gt; m);</code> 把 <em>m</em> 内的所有键值对复制过来。</p>
+</li>
+<li><p><code>void clear();</code> 清空</p>
+</li>
+<li><p><code>Set&lt;K&gt; keySet();</code> 返回map 包含的所有  键 的Set。</p>
+</li>
+<li><p><code>Collection&lt;V&gt; values();</code> 返回 map 包含所有值的 Collection。</p>
+</li>
+<li><p><code>Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet();</code>  返回所有的键值对。</p>
+</li>
+<li><p><code>boolean equals(Object o);</code> 与此map想比较是否相等。</p>
+</li>
+<li><p><code>int hashCode();</code> map的 hask值。</p>
+</li>
+<li><p><code>default V getOrDefault(Object key, V defaultValue);</code> 返回键对应的值，如果map没有这个键，返回默认值。接口已实现的方法。</p>
+</li>
+<li><p><code>default void forEach(BiConsumer&lt;? super K, ? super V&gt; action);</code> 对map中的每项进行对应的动作，直到遍历完map，或抛出了一个违例。接口实现的方法。</p>
+</li>
+<li><p><code>default void replaceAll(BiFunction&lt;? super K, ? super V, ? extends V&gt; function);</code> 将map内所有项的值都替换为 该项，执行为指定的函数后的结果。接口实现的方法</p>
+</li>
+<li><p><code>default V putIfAbsent(K key, V value);</code> 如果  键 <em>key</em> 还未与一个 值相关联（或与null 关联），把我们给定的 <em>value</em> 与 其相关联。返回此键值对项中的值。接口实现的方法</p>
+</li>
+<li><p><code>default boolean remove(Object key, Object value);</code> 移除 已关联的 <em>key, value</em> 键值对。 接口实现的方法。</p>
+</li>
+<li><p><code>default boolean replace(K key, V oldValue, V newValue);</code> 当 已存在 <em>key, oldValue</em> 关联的时候，把 <em>oldValue</em> 替换为 <em>newValue</em>。接口实现的方法。</p>
+</li>
+<li><p><code>default V replace(K key, V value);</code> 当 <em>key</em> 与某些值关联时，将其值替换为 <em>value</em> 。</p>
+</li>
+<li><p><code>default V computeIfAbsent(K key,Function&lt;? super K, ? extends V&gt; mappingFunction)</code> 如果  <em>key</em> 没有与任何值关联（或与null关联），使用  <em>mappingFunction</em> 计算出其值，然后放到 map内。</p>
+</li>
+<li><p><code>default V computeIfPresent(K key,BiFunction&lt;? super K, ? super V, ? extends V&gt; remappingFunction)</code> 如果 <em>key</em> 当前的值不是 <em>null*，把 *key</em> 与 <em>BiFunction</em> 计算的值重新关联。</p>
+</li>
+<li><p><code>default V compute(K key,BiFunction&lt;? super K, ? super V, ? extends V&gt; remappingFunction)</code> 为 <em>key</em> 与其当前关联的值 (或 null）重新计算一个 键值对。</p>
+</li>
 <li><p><code>default V merge(K key, V value,BiFunction&lt;? super V, ? super V, ? extends V&gt; remappingFunction)</code> 如果  <em>key</em> 没有与任何值关联（或null），把它与 <em>value</em> 相关联。否则，把它与 <em>BiFunction</em> 的结果相关联；如果 <em>BiFunction</em>的结果为null，移除这个键。</p>
 <p>​          </p>
 </li>
 </ul>
 <h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><p>HaspMap实现了Map接口：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Map</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;, <span class="title">Cloneable</span>, <span class="title">Serializable</span> </span>&#123;</span><br></pre></td></tr></table></figure>
+
 <p>其真正保存数据的，也是一个 名为 table  的 Node 数组：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;</span><br></pre></td></tr></table></figure>
-<p>只不过，其数组中的元素是一个Node<k, v>，（单向）Hash链。</k,></p>
+
+<p>只不过，其数组中的元素是一个Node&lt;K, V&gt;，（单向）Hash链。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> hash;</span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    V value;</span><br><span class="line">    Node&lt;K,V&gt; next;</span><br></pre></td></tr></table></figure>
+
 <p>每个Node内，保存了键，值及下一个Node，加上自身的hash值。</p>
 <p>当我们访问HashMap中元素的时候：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt; e;</span><br><span class="line">    <span class="keyword">return</span> (e = getNode(hash(key), key)) == <span class="keyword">null</span> ? <span class="keyword">null</span> : e.value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">final</span> Node&lt;K,V&gt; <span class="title">getNode</span><span class="params">(<span class="keyword">int</span> hash, Object key)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; <span class="keyword">int</span> n; K k;</span><br><span class="line">    <span class="keyword">if</span> ((tab = table) != <span class="keyword">null</span> &amp;&amp; (n = tab.length) &gt; <span class="number">0</span> &amp;&amp;</span><br><span class="line">        (first = tab[(n - <span class="number">1</span>) &amp; hash]) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (first.hash == hash &amp;&amp; <span class="comment">// always check first node</span></span><br><span class="line">            ((k = first.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">            <span class="keyword">return</span> first;</span><br><span class="line">        <span class="keyword">if</span> ((e = first.next) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (first <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">                <span class="keyword">return</span> ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);</span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                    ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                    <span class="keyword">return</span> e;</span><br><span class="line">            &#125; <span class="keyword">while</span> ((e = e.next) != <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>其实先根据键 得出hash值，再得到hash链位置，然后通过遍历hash链来查找是否存在对应的键。</p>
 
     </div>
@@ -359,7 +386,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/Java中使用JsonHelp来简化操作.html" rel="next" title="Java中使用JsonHelp来简化操作">
+                <a href="/Android/Java%E4%B8%AD%E4%BD%BF%E7%94%A8JsonHelp%E6%9D%A5%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C.html" rel="next" title="Java中使用JsonHelp来简化操作">
                   <i class="fa fa-chevron-left"></i> Java中使用JsonHelp来简化操作
                 </a>
             </div>
@@ -367,7 +394,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/关于安卓权限的适配.html" rel="prev" title="关于安卓权限的适配">
+                <a href="/Android/%E5%85%B3%E4%BA%8E%E5%AE%89%E5%8D%93%E6%9D%83%E9%99%90%E7%9A%84%E9%80%82%E9%85%8D.html" rel="prev" title="关于安卓权限的适配">
                   关于安卓权限的适配 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -454,10 +481,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -486,10 +513,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -564,7 +591,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/java中的数据结构.html",
+            url: "https://gowa.club/Java/java%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.html",
             identifier: "Java/java中的数据结构.html",
             title: "java中的数据结构"
           }

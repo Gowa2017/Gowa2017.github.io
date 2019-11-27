@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Lua">
 <meta property="og:type" content="article">
 <meta property="og:title" content="luasocket中的http实现">
-<meta property="og:url" content="https://gowa.club/Lua/luasocket中的http实现.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Lua&#x2F;luasocket%E4%B8%AD%E7%9A%84http%E5%AE%9E%E7%8E%B0.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="看他的实现很有意思，又有同学遇到了在下载大文件的时候， OOM 的错误，所以就看一下是如何解决这个问题。事实上其是依赖于 ltn12，Lua Technicl Notes 12 ，实现了数据的分段处理，有点类似响应式编程和观察者模式。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-11T04:17:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="luasocket中的http实现">
-<meta name="twitter:description" content="看他的实现很有意思，又有同学遇到了在下载大文件的时候， OOM 的错误，所以就看一下是如何解决这个问题。事实上其是依赖于 ltn12，Lua Technicl Notes 12 ，实现了数据的分段处理，有点类似响应式编程和观察者模式。">
 
-<link rel="canonical" href="https://gowa.club/Lua/luasocket中的http实现.html">
+<link rel="canonical" href="https://gowa.club/Lua/luasocket%E4%B8%AD%E7%9A%84http%E5%AE%9E%E7%8E%B0.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/luasocket中的http实现.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/luasocket%E4%B8%AD%E7%9A%84http%E5%AE%9E%E7%8E%B0.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/luasocket中的http实现.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/luasocket%E4%B8%AD%E7%9A%84http%E5%AE%9E%E7%8E%B0.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/luasocket中的http实现.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,6 +287,7 @@
       
         <p>看他的实现很有意思，又有同学遇到了在下载大文件的时候， OOM 的错误，所以就看一下是如何解决这个问题。事实上其是依赖于 ltn12，Lua Technicl Notes 12 ，实现了数据的分段处理，有点类似响应式编程和观察者模式。</p>
 <a id="more"></a>
+
 <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>LuaSocket 的官方地址这 <a href="http://w3.impa.br/~diego/software/luasocket/" target="_blank" rel="noopener">http://w3.impa.br/~diego/software/luasocket/</a>。</p>
 <p>http 模块，位于 <code>socket.http</code> 中，其是基于 socket 之上的一个 http 实现。有两种形式，其只导出了三个函数：</p>
 <ul>
@@ -299,13 +298,18 @@
 <p>我们来看一下具体的实现。</p>
 <h1 id="http-open"><a href="#http-open" class="headerlink" title="http.open()"></a>http.open()</h1><p>这个函数返回一个表 {}，这个表代表了连接本身，我们可以将其看成是一个 <em>handle</em>。表中元素 <strong>c</strong> 代表了套接字，这个表没有任何其他元素，除了套接字。对于这个 handle 上的所有操作都封装在了其元表中。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">_M.open</span><span class="params">(host, port, create)</span></span></span><br><span class="line">    <span class="comment">-- create socket with user connect function, or with default</span></span><br><span class="line">    <span class="keyword">local</span> c = socket.try((<span class="built_in">create</span> <span class="keyword">or</span> socket.tcp)())</span><br><span class="line">    <span class="keyword">local</span> h = base.<span class="built_in">setmetatable</span>(&#123; c = c &#125;, metat)</span><br><span class="line">    <span class="comment">-- create finalized try</span></span><br><span class="line">    h.try = socket.newtry(<span class="function"><span class="keyword">function</span><span class="params">()</span></span> h:<span class="built_in">close</span>() <span class="keyword">end</span>)</span><br><span class="line">    <span class="comment">-- set timeout before connecting</span></span><br><span class="line">    h.try(c:settimeout(_M.TIMEOUT))</span><br><span class="line">    h.try(c:connect(host, port <span class="keyword">or</span> _M.PORT))</span><br><span class="line">    <span class="comment">-- here everything worked</span></span><br><span class="line">    <span class="keyword">return</span> h</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> metat = &#123; <span class="built_in">__index</span> = &#123;&#125; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 发送请求</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">metat.__index:sendrequestline</span><span class="params">(method, uri)</span></span></span><br><span class="line">    <span class="keyword">local</span> reqline = <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"%s %s HTTP/1.1\r\n"</span>, method <span class="keyword">or</span> <span class="string">"GET"</span>, uri)</span><br><span class="line">    <span class="keyword">return</span> self.try(self.c:send(reqline))</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 发送 http 头</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">metat.__index:sendheaders</span><span class="params">(tosend)</span></span></span><br><span class="line">    <span class="keyword">local</span> canonic = headers.canonic</span><br><span class="line">    <span class="keyword">local</span> h = <span class="string">"\r\n"</span></span><br><span class="line">    <span class="keyword">for</span> f, v <span class="keyword">in</span> base.<span class="built_in">pairs</span>(tosend) <span class="keyword">do</span></span><br><span class="line">        h = (canonic[f] <span class="keyword">or</span> f) .. <span class="string">": "</span> .. v .. <span class="string">"\r\n"</span> .. h</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    self.try(self.c:send(h))</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 发送 body</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">metat.__index:sendbody</span><span class="params">(headers, source, step)</span></span></span><br><span class="line">    source = source <span class="keyword">or</span> ltn12.source.empty()</span><br><span class="line">    step = step <span class="keyword">or</span> ltn12.pump.step</span><br><span class="line">    <span class="comment">-- if we don't know the size in advance, send chunked and hope for the best</span></span><br><span class="line">    <span class="keyword">local</span> mode = <span class="string">"http-chunked"</span></span><br><span class="line">    <span class="keyword">if</span> headers[<span class="string">"content-length"</span>] <span class="keyword">then</span> mode = <span class="string">"keep-open"</span> <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span> self.try(ltn12.pump.all(source, socket.sink(mode, self.c), step))</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 读取返回的状态行</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">metat.__index:receivestatusline</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">local</span> <span class="built_in">status</span> = self.try(self.c:receive(<span class="number">5</span>))</span><br><span class="line">    <span class="comment">-- identify HTTP/0.9 responses, which do not contain a status line</span></span><br><span class="line">    <span class="comment">-- this is just a heuristic, but is what the RFC recommends</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">status</span> ~= <span class="string">"HTTP/"</span> <span class="keyword">then</span> <span class="keyword">return</span> <span class="literal">nil</span>, <span class="built_in">status</span> <span class="keyword">end</span></span><br><span class="line">    <span class="comment">-- otherwise proceed reading a status line</span></span><br><span class="line">    <span class="built_in">status</span> = self.try(self.c:receive(<span class="string">"*l"</span>, <span class="built_in">status</span>))</span><br><span class="line">    <span class="keyword">local</span> code = socket.skip(<span class="number">2</span>, <span class="built_in">string</span>.<span class="built_in">find</span>(<span class="built_in">status</span>, <span class="string">"HTTP/%d*%.%d* (%d%d%d)"</span>))</span><br><span class="line">    <span class="keyword">return</span> self.try(base.<span class="built_in">tonumber</span>(code), <span class="built_in">status</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 读取返回的头</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">metat.__index:receiveheaders</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">return</span> self.try(receiveheaders(self.c))</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 读取返回的body</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">metat.__index:receivebody</span><span class="params">(headers, sink, step)</span></span></span><br><span class="line">    sink = sink <span class="keyword">or</span> ltn12.sink.null()</span><br><span class="line">    step = step <span class="keyword">or</span> ltn12.pump.step</span><br><span class="line">    <span class="keyword">local</span> length = base.<span class="built_in">tonumber</span>(headers[<span class="string">"content-length"</span>])</span><br><span class="line">    <span class="keyword">local</span> t = headers[<span class="string">"transfer-encoding"</span>] <span class="comment">-- shortcut</span></span><br><span class="line">    <span class="keyword">local</span> mode = <span class="string">"default"</span> <span class="comment">-- connection close</span></span><br><span class="line">    <span class="keyword">if</span> t <span class="keyword">and</span> t ~= <span class="string">"identity"</span> <span class="keyword">then</span> mode = <span class="string">"http-chunked"</span></span><br><span class="line">    <span class="keyword">elseif</span> base.<span class="built_in">tonumber</span>(headers[<span class="string">"content-length"</span>]) <span class="keyword">then</span> mode = <span class="string">"by-length"</span> <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span> self.try(ltn12.pump.all(socket.source(mode, self.c, length),</span><br><span class="line">            sink, step))</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- ? 这个09 代表了什么鬼？</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">metat.__index:receive09body</span><span class="params">(status, sink, step)</span></span></span><br><span class="line">    <span class="keyword">local</span> source = ltn12.source.rewind(socket.source(<span class="string">"until-closed"</span>, self.c))</span><br><span class="line">    source(<span class="built_in">status</span>)</span><br><span class="line">    <span class="keyword">return</span> self.try(ltn12.pump.all(source, sink, step))</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--  关闭连接</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">metat.__index:close</span><span class="params">()</span></span></span><br><span class="line">    <span class="keyword">return</span> self.c:<span class="built_in">close</span>()</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <p>OK，我们已经知道了是如何封装一个 http client，我们来看一下具体访问的时候呢。</p>
-<h1 id="http-request"><a href="#http-request" class="headerlink" title="http.request()"></a>http.request()</h1><p>这个函数，会在 socket.protect 的包装下，根据请求类型（是一个字符串，还是表）来决定访问的的形式。<br><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">_M.request = socket.protect(<span class="function"><span class="keyword">function</span><span class="params">(reqt, body)</span></span></span><br><span class="line">    <span class="keyword">if</span> base.<span class="built_in">type</span>(reqt) == <span class="string">"string"</span> <span class="keyword">then</span> <span class="keyword">return</span> srequest(reqt, body)</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> trequest(reqt) <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></table></figure></p>
+<h1 id="http-request"><a href="#http-request" class="headerlink" title="http.request()"></a>http.request()</h1><p>这个函数，会在 socket.protect 的包装下，根据请求类型（是一个字符串，还是表）来决定访问的的形式。</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">_M.request = socket.protect(<span class="function"><span class="keyword">function</span><span class="params">(reqt, body)</span></span></span><br><span class="line">    <span class="keyword">if</span> base.<span class="built_in">type</span>(reqt) == <span class="string">"string"</span> <span class="keyword">then</span> <span class="keyword">return</span> srequest(reqt, body)</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> trequest(reqt) <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></table></figure>
+
 <h2 id="srequest-u-b"><a href="#srequest-u-b" class="headerlink" title="srequest(u, b)"></a>srequest(u, b)</h2><p>当我们传递给 request 的参数是一个 http URL 地址，加上一个可选的 body 参数的时候，会采用这种形式。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> <span class="function"><span class="keyword">function</span> <span class="title">srequest</span><span class="params">(u, b)</span></span></span><br><span class="line">    <span class="keyword">local</span> t = &#123;&#125;</span><br><span class="line">    <span class="keyword">local</span> reqt = &#123;</span><br><span class="line">        url = u,</span><br><span class="line">        sink = ltn12.sink.<span class="built_in">table</span>(t)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> b <span class="keyword">then</span></span><br><span class="line">        reqt.source = ltn12.source.<span class="built_in">string</span>(b)</span><br><span class="line">        reqt.headers = &#123;</span><br><span class="line">            [<span class="string">"content-length"</span>] = <span class="built_in">string</span>.<span class="built_in">len</span>(b),</span><br><span class="line">            [<span class="string">"content-type"</span>] = <span class="string">"application/x-www-form-urlencoded"</span></span><br><span class="line">        &#125;</span><br><span class="line">        reqt.method = <span class="string">"POST"</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">local</span> code, headers, <span class="built_in">status</span> = socket.skip(<span class="number">1</span>, trequest(reqt))</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">table</span>.<span class="built_in">concat</span>(t), code, headers, <span class="built_in">status</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <p>看实现，我们能理解出，实际上，其也是用 url 来构造了一个 表，表中指定了我们采用表形式需要的信息。</p>
 <p>可以看到，构造的表中有如下 信息：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  url = <span class="built_in">string</span>,</span><br><span class="line">  [sink = LTN12 sink,]</span><br><span class="line">  [method = <span class="built_in">string</span>,]</span><br><span class="line">  [headers = header-<span class="built_in">table</span>,]</span><br><span class="line">  [source = LTN12 source],</span><br><span class="line">  [step = LTN12 pump step,]</span><br><span class="line">  [proxy = <span class="built_in">string</span>,]</span><br><span class="line">  [redirect = boolean,]</span><br><span class="line">  [<span class="built_in">create</span> = <span class="function"><span class="keyword">function</span>]</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+
 <p>其中  url , sink 是不然会有的。</p>
 <h2 id="trequest"><a href="#trequest" class="headerlink" title="trequest()"></a>trequest()</h2><p>请求最终都会走到这个函数：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">--[[local]]</span> <span class="function"><span class="keyword">function</span> <span class="title">trequest</span><span class="params">(reqt)</span></span></span><br><span class="line">    <span class="comment">-- we loop until we get what we want, or</span></span><br><span class="line">    <span class="comment">-- until we are sure there is no way to get it</span></span><br><span class="line">    <span class="keyword">local</span> nreqt = adjustrequest(reqt)</span><br><span class="line">    <span class="keyword">local</span> h = _M.<span class="built_in">open</span>(nreqt.host, nreqt.port, nreqt.<span class="built_in">create</span>)</span><br><span class="line">    <span class="comment">-- send request line and headers</span></span><br><span class="line">    h:sendrequestline(nreqt.method, nreqt.uri)</span><br><span class="line">    h:sendheaders(nreqt.headers)</span><br><span class="line">    <span class="comment">-- if there is a body, send it</span></span><br><span class="line">    <span class="keyword">if</span> nreqt.source <span class="keyword">then</span></span><br><span class="line">        h:sendbody(nreqt.headers, nreqt.source, nreqt.step)</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">local</span> code, <span class="built_in">status</span> = h:receivestatusline()</span><br><span class="line">    <span class="comment">-- if it is an HTTP/0.9 server, simply get the body and we are done</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> code <span class="keyword">then</span></span><br><span class="line">        h:receive09body(<span class="built_in">status</span>, nreqt.sink, nreqt.step)</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>, <span class="number">200</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">local</span> headers</span><br><span class="line">    <span class="comment">-- ignore any 100-continue messages</span></span><br><span class="line">    <span class="keyword">while</span> code == <span class="number">100</span> <span class="keyword">do</span></span><br><span class="line">        headers = h:receiveheaders()</span><br><span class="line">        code, <span class="built_in">status</span> = h:receivestatusline()</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    headers = h:receiveheaders()</span><br><span class="line">    <span class="comment">-- at this point we should have a honest reply from the server</span></span><br><span class="line">    <span class="comment">-- we can't redirect if we already used the source, so we report the error</span></span><br><span class="line">    <span class="keyword">if</span> shouldredirect(nreqt, code, headers) <span class="keyword">and</span> <span class="keyword">not</span> nreqt.source <span class="keyword">then</span></span><br><span class="line">        h:<span class="built_in">close</span>()</span><br><span class="line">        <span class="keyword">return</span> tredirect(reqt, headers.location)</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">-- here we are finally done</span></span><br><span class="line">    <span class="keyword">if</span> shouldreceivebody(nreqt, code) <span class="keyword">then</span></span><br><span class="line">        h:receivebody(headers, nreqt.sink, nreqt.step)</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    h:<span class="built_in">close</span>()</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>, code, headers, <span class="built_in">status</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
@@ -335,7 +339,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/InputService-安卓的输入系统.html" rel="next" title="InputService-安卓的输入系统">
+                <a href="/Android/InputService-%E5%AE%89%E5%8D%93%E7%9A%84%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F.html" rel="next" title="InputService-安卓的输入系统">
                   <i class="fa fa-chevron-left"></i> InputService-安卓的输入系统
                 </a>
             </div>
@@ -343,7 +347,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/Auto.js截图后在相册无法立即显示.html" rel="prev" title="Auto.js截图后在相册无法立即显示">
+                <a href="/Android/Auto.js%E6%88%AA%E5%9B%BE%E5%90%8E%E5%9C%A8%E7%9B%B8%E5%86%8C%E6%97%A0%E6%B3%95%E7%AB%8B%E5%8D%B3%E6%98%BE%E7%A4%BA.html" rel="prev" title="Auto.js截图后在相册无法立即显示">
                   Auto.js截图后在相册无法立即显示 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -430,10 +434,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -462,10 +466,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -540,7 +544,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Lua/luasocket中的http实现.html",
+            url: "https://gowa.club/Lua/luasocket%E4%B8%AD%E7%9A%84http%E5%AE%9E%E7%8E%B0.html",
             identifier: "Lua/luasocket中的http实现.html",
             title: "luasocket中的http实现"
           }

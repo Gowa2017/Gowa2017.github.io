@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Windows">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于Windows的内核对象">
-<meta property="og:url" content="https://gowa.club/Windows/关于Windows的内核对象.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Windows&#x2F;%E5%85%B3%E4%BA%8EWindows%E7%9A%84%E5%86%85%E6%A0%B8%E5%AF%B9%E8%B1%A1.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="当系统提供给我们很多 API 调用的时候，事实上我们是请求系统为我们做很多事情，比如很多由系统进行维护的数据结构，我们是无法进行操纵的，必须通过系统提供的API进行操纵，这也就是所谓内核对象的由来。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-07-22T01:03:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于Windows的内核对象">
-<meta name="twitter:description" content="当系统提供给我们很多 API 调用的时候，事实上我们是请求系统为我们做很多事情，比如很多由系统进行维护的数据结构，我们是无法进行操纵的，必须通过系统提供的API进行操纵，这也就是所谓内核对象的由来。">
 
-<link rel="canonical" href="https://gowa.club/Windows/关于Windows的内核对象.html">
+<link rel="canonical" href="https://gowa.club/Windows/%E5%85%B3%E4%BA%8EWindows%E7%9A%84%E5%86%85%E6%A0%B8%E5%AF%B9%E8%B1%A1.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/关于Windows的内核对象.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/%E5%85%B3%E4%BA%8EWindows%E7%9A%84%E5%86%85%E6%A0%B8%E5%AF%B9%E8%B1%A1.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Windows/关于Windows的内核对象.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Windows/%E5%85%B3%E4%BA%8EWindows%E7%9A%84%E5%86%85%E6%A0%B8%E5%AF%B9%E8%B1%A1.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Windows/关于Windows的内核对象.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -293,12 +291,12 @@
 <p>内核对象通过引用计数来表示其是否还有用，如果某个内核对象的引用计数为0，那么内核就会销毁这个对象。当一个内核对象刚刚创建的时候，其引用计数为 1，其他的进程引用此对象的时候，他的引用计数就会加 1。</p>
 <h2 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h2><p>有一个数据结构叫做 <em>SECURITY_ATTRIBUTES</em>，我们在创建内核对象的 API 的时候经常会用到，我们会在这个数据结构中指明我们要创建的内核对象安全性设置。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">SECURITY_ATTRIBUTES</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">   DWORD nLength,</span><br><span class="line">   LPVOID lpSecurityDescriptor;</span><br><span class="line">   BOOL bInherttHandle;</span><br><span class="line">&#125; SECURITY_ATTRIBUTES;</span><br></pre></td></tr></table></figure>
+
 <p>多数情况下，我们会将需要这个参数的地方设置为 NULL，应用默认的设置。</p>
 <h2 id="Handle"><a href="#Handle" class="headerlink" title="Handle"></a>Handle</h2><p>每个进程都一个 Handle 表，这个表用来干什么呢。用来存储对于进程内核对象的引用，其结构是 <em>索引，指针</em> 形式的一个数组。</p>
 <p>因此，Handle 是进程相关的。其只是一个进程对象表中的索引而已。</p>
 <h2 id="内核对象的继承"><a href="#内核对象的继承" class="headerlink" title="内核对象的继承"></a>内核对象的继承</h2><p>只有在进程间有父子关系的时候，内核对象才能被继承。事实上，这里继承的意思是指：对于父子进程对同一个 Handle 其指向的内核对象是一致的。具体的实现是：父进程在创建子进程的时候，会根据父进程中的 Handle 表复制一份到子进程去，当然，只有那些我们创建的时候指定了 bInherttHandle 为 TRUE 的内核对象才会被复制过去；同时，这个操作还会增加内核对象的引用计数。</p>
 <h1 id="进程的内核对象句柄表"><a href="#进程的内核对象句柄表" class="headerlink" title="进程的内核对象句柄表"></a>进程的内核对象句柄表</h1><p>当一个进程初始化的时候，系统会为其分配一个 Handle 表。这个 表 只为内核对象而使用，不是为了 用户对象或者 GDI 对象而存在的。这个表很简单</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -308,8 +306,7 @@
 <th>标志</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>1</td>
 <td>0x????????</td>
 <td>0x????????</td>
@@ -321,16 +318,14 @@
 <td>0x????????</td>
 <td>0x????????</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h2 id="内核对象建立"><a href="#内核对象建立" class="headerlink" title="内核对象建立"></a>内核对象建立</h2><p>当进程初始化的时候，其句柄表是空的。当进程中的某个线程调用了建立内核对象的函数是，内核会为此对象分配内存，然后初始化此对象。接着，内核会扫描进程的句柄表，找到一个空的项，比如找到了索引为 1 的位置，然后就进行填充这一项。    </p>
 <p>因此，句柄其实是线程相对的，只去当前进程中的所有线程间可用。句柄的值一般来说应该会被 4 整除。</p>
 <h1 id="在进程间共享内核对象"><a href="#在进程间共享内核对象" class="headerlink" title="在进程间共享内核对象"></a>在进程间共享内核对象</h1><p>内核对象句柄是进程相关的，因此想要共享内核对象比较困难。有三种方式可以进行句柄的共享。</p>
 <h2 id="使用对象句柄继承"><a href="#使用对象句柄继承" class="headerlink" title="使用对象句柄继承"></a>使用对象句柄继承</h2><p>对象句柄的继承只在进程间有父子关系的时候适用。在这种场景下，父进程的句柄表内有多个记录，接着父进程准备 spawn 一个子进程，给予子进程访问这些内核对象的权限。父进程需要进行几步工作。</p>
 <p><strong>父进程在建立内核对象的时候，其必须为其建立的内核对象指定可继承属性。</strong></p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">SECURITY_ATTRIBUTES sa;</span><br><span class="line">sa.nLength = <span class="keyword">sizeof</span>(sa);</span><br><span class="line">sa.lpSecurityDescriptor = <span class="literal">NULL</span>;</span><br><span class="line">sa.bInheritHandle = TRUE;   <span class="comment">// Make the returned handle inheritable.</span></span><br><span class="line"></span><br><span class="line">HANDLE hMutex = CreateMutex(&amp;sa, FALSE, <span class="literal">NULL</span>);</span><br></pre></td></tr></table></figure>
-<div class="table-container">
+
 <table>
 <thead>
 <tr>
@@ -340,8 +335,7 @@
 <th><strong>Flags</strong></th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>1</td>
 <td>0xF0000000</td>
 <td>0x????????</td>
@@ -359,38 +353,54 @@
 <td>0x????????</td>
 <td>0x00000001</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>看起来父进程的句柄表是这个样子，句柄3是可以继承的。</p>
 <p><strong>建立进程的时候进行句柄的继承指定。</strong></p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">CreateProcess</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszApplicationName,</span></span></span><br><span class="line"><span class="function"><span class="params">   PTSTR pszCommandLine,</span></span></span><br><span class="line"><span class="function"><span class="params">   PSECURITY_ATTRIBUTES psaProcess,</span></span></span><br><span class="line"><span class="function"><span class="params">   PSECURITY_ATTRIBUTES psaThread,</span></span></span><br><span class="line"><span class="function"><span class="params">   BOOL bInheritHandles,</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwCreationFlags,</span></span></span><br><span class="line"><span class="function"><span class="params">   PVOID pvEnvironment,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszCurrentDirectory,</span></span></span><br><span class="line"><span class="function"><span class="params">   LPSTARTUPINFO pStartupInfo,</span></span></span><br><span class="line"><span class="function"><span class="params">   PPROCESS_INFORMATION pProcessInformation)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
 <p>也就是将 <strong>bInheritHandles</strong> 指定为 TRUE。</p>
 <p>在建立子进程的时候，子进程不会马上执行。首先，系统会子进程建立一个空的句柄表；接着，系统会遍历父进程的句柄表，将可继承的句柄复制到子进程的句柄表内。注意会将可继承的句柄复制到子进程的句柄表内的相同位置；然后，会增加句柄引用的内核对象的引用计数加1。</p>
 <p>但是，对象句柄的继承有一个非常奇怪的特性：子进程并不知道其已经继承了一些句柄。对象句柄的继承只在子进程期望其从父进程获取一个内核对象的访问权限时有用。因此呢，我们需要一种方法来告知子进程其已经继承了句柄。</p>
 <p>最常用的方式就是在子进程的命令行参数中进行传递句柄值；还有一种方式就是父进程将句柄放在一个环境变量内，同时环境变量的名字应该是子进程已知的。</p>
 <h3 id="改变句柄的标志"><a href="#改变句柄的标志" class="headerlink" title="改变句柄的标志"></a>改变句柄的标志</h3><p>有的时候父进程建立了一个可进程的内核对象的，但是其只想要其某些子进程进行继承，为了改变一个句柄的继承标志，我们需要使用 <code>SetHandleInformation</code> 函数：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">SetHandleInformation</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   HANDLE hObject,</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwMask,</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwFlags)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p> <strong>dwMask</strong> 用来告诉函数需要改变句柄的哪个标志：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> HANDLE_FLAG_INHERIT            0x00000001</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> HANDLE_FLAG_PROTECT_FROM_CLOSE 0x00000002</span></span><br></pre></td></tr></table></figure>
+
 <p><strong>dwFlags</strong> 用来表示改变成什么值。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SetHandleInformation(hObj, HANDLE_FLAG_INHERIT, HANDLE_FLAG_INHERIT);</span><br><span class="line">SetHandleInformation(hObj, HANDLE_FLAG_INHERIT, 0);</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="命名对象"><a href="#命名对象" class="headerlink" title="命名对象"></a>命名对象</h2><p>第二种方法是为内核对象进行命名。很多——不是全部——内核对象可以被命名。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">HANDLE <span class="title">CreateMutex</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   PSECURITY_ATTRIBUTES psa,</span></span></span><br><span class="line"><span class="function"><span class="params">   BOOL bInitialOwner,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszName)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">HANDLE <span class="title">CreateEvent</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   PSECURITY_ATTRIBUTES psa,</span></span></span><br><span class="line"><span class="function"><span class="params">   BOOL bManualReset,</span></span></span><br><span class="line"><span class="function"><span class="params">   BOOL bInitialState,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszName)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">HANDLE <span class="title">CreateSemaphore</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   PSECURITY_ATTRIBUTES psa,</span></span></span><br><span class="line"><span class="function"><span class="params">   LONG lInitialCount,</span></span></span><br><span class="line"><span class="function"><span class="params">   LONG lMaximumCount,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszName)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">HANDLE <span class="title">CreateWaitableTimer</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   PSECURITY_ATTRIBUTES psa,</span></span></span><br><span class="line"><span class="function"><span class="params">   BOOL bManualReset,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszName)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">HANDLE <span class="title">CreateFileMapping</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   HANDLE hFile,</span></span></span><br><span class="line"><span class="function"><span class="params">   PSECURITY_ATTRIBUTES psa,</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD flProtect,</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwMaximumSizeHigh,</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwMaximumSizeLow,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszName)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">HANDLE <span class="title">CreateJobObject</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   PSECURITY_ATTRIBUTES psa,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszName)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>当最后一个参数 pszName 不是 NULL 的时候，我们只能通过句柄继承或者 <code>DuplicateHandle</code> 来进行共享。</p>
 <p>但是需要注意， pszName 传递的名称如果在内核内已经存在了，就会出错。</p>
 <p>我们来看看如何进行共享，首先我们在进程 A 中建立一个内核对象：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">HANDLE hMutexProcessA = CreateMutex(<span class="literal">NULL</span>, FALSE, TEXT(<span class="string">"JeffMutex"</span>));</span><br></pre></td></tr></table></figure>
+
 <p>然后我们的进程 B 也建立一个命名对象：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">HANDLE hMutexProcessB = CreateMutex(<span class="literal">NULL</span>, FALSE, TEXT(<span class="string">"JeffMutex"</span>));</span><br></pre></td></tr></table></figure>
+
 <p>这时候，系统会首先找一下是不是有一个叫 “JeffMutex” 的内核对象，然后再检查内核对象的类型，接着再检查进程 B 是不是拥有内核的访问权限。如果检查都通过，系统会在进程B 的句柄表内新增一个项，然后用找到的数据进行填充。这样，进程B 也就用有了对内核对象的引用了。</p>
-<p>还有一个可选的途径是调用  Open<em> 函数，而不是调用  Create</em> 函数：</p>
+<p>还有一个可选的途径是调用  Open* 函数，而不是调用  Create* 函数：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">HANDLE <span class="title">OpenMutex</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwDesiredAccess,</span></span></span><br><span class="line"><span class="function"><span class="params">   BOOL bInheritHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszName)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">HANDLE <span class="title">OpenEvent</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwDesiredAccess,</span></span></span><br><span class="line"><span class="function"><span class="params">   BOOL bInheritHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszName)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">HANDLE <span class="title">OpenSemaphore</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwDesiredAccess,</span></span></span><br><span class="line"><span class="function"><span class="params">   BOOL bInheritHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszName)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">HANDLE <span class="title">OpenWaitableTimer</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwDesiredAccess,</span></span></span><br><span class="line"><span class="function"><span class="params">   BOOL bInheritHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszName)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">HANDLE <span class="title">OpenFileMapping</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwDesiredAccess,</span></span></span><br><span class="line"><span class="function"><span class="params">   BOOL bInheritHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszName)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">HANDLE <span class="title">OpenJobObject</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwDesiredAccess,</span></span></span><br><span class="line"><span class="function"><span class="params">   BOOL bInheritHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">   PCTSTR pszName)</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
 <p>因为微软并没有提供如何建立一个唯一的对象名称，所以呢，如果我们试图建立相同的名称的内核对象就会出错。推荐使用 GUID 来进行表示。</p>
 <p>经常，命名对象用来禁志一个应用的多个实例存在。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> WINAPI _tWinMain(HINSTANCE hInstExe, HINSTANCE, PTSTR pszCmdLine,</span><br><span class="line">   <span class="keyword">int</span> nCmdShow) &#123;</span><br><span class="line">   HANDLE h = CreateMutex(<span class="literal">NULL</span>, FALSE,</span><br><span class="line">      TEXT(<span class="string">"&#123;FA531CC1-0497-11d3-A180-00105A276C3E&#125;"</span>));</span><br><span class="line">   <span class="keyword">if</span> (GetLastError() == ERROR_ALREADY_EXISTS) &#123;</span><br><span class="line">      <span class="comment">// There is already an instance of this application running.</span></span><br><span class="line">      <span class="comment">// Close the object and immediately return.</span></span><br><span class="line">      CloseHandle(h);</span><br><span class="line">      <span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// This is the first instance of this application running.</span></span><br><span class="line">   ...</span><br><span class="line">   <span class="comment">// Before exiting, close the object.</span></span><br><span class="line">   CloseHandle(h);</span><br><span class="line">   <span class="keyword">return</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 <h2 id="句柄复制"><a href="#句柄复制" class="headerlink" title="句柄复制"></a>句柄复制</h2><p>最后一种方式就是使用 <code>DuplicateHande</code>函数：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">DuplicateHandle</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">   HANDLE hSourceProcessHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">   HANDLE hSourceHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">   HANDLE hTargetProcessHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">   PHANDLE phTargetHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwDesiredAccess,</span></span></span><br><span class="line"><span class="function"><span class="params">   BOOL bInheritHandle,</span></span></span><br><span class="line"><span class="function"><span class="params">   DWORD dwOptions)</span></span>;</span><br></pre></td></tr></table></figure>
+
 <p>这个函数将一个进程句柄表内的项目，复制到另外一个进程的句柄表。最常见的情况是，<code>DuplicateHandel</code> 会涉及到三个运行中的进程。</p>
 <ul>
 <li><strong>hSourceProcessHandle</strong> 源进程内核对象句柄</li>
@@ -414,7 +424,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/macOS/macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP.html" rel="next" title="macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP">
+                <a href="/macOS/macOS%E4%B8%8A%E7%94%A8brew%E5%AE%89%E8%A3%85nginx%E5%8F%8Affmpeg%E5%AE%9E%E7%8E%B0RTSP%E8%BD%ACRTMP.html" rel="next" title="macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP">
                   <i class="fa fa-chevron-left"></i> macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP
                 </a>
             </div>
@@ -422,7 +432,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/RxJava/使用Retrofit-Rxjava来上传下载文件.html" rel="prev" title="使用Retrofit-Rxjava来上传下载文件">
+                <a href="/RxJava/%E4%BD%BF%E7%94%A8Retrofit-Rxjava%E6%9D%A5%E4%B8%8A%E4%BC%A0%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6.html" rel="prev" title="使用Retrofit-Rxjava来上传下载文件">
                   使用Retrofit-Rxjava来上传下载文件 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -509,10 +519,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -541,10 +551,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -619,7 +629,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Windows/关于Windows的内核对象.html",
+            url: "https://gowa.club/Windows/%E5%85%B3%E4%BA%8EWindows%E7%9A%84%E5%86%85%E6%A0%B8%E5%AF%B9%E8%B1%A1.html",
             identifier: "Windows/关于Windows的内核对象.html",
             title: "关于Windows的内核对象"
           }

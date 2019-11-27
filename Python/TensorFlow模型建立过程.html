@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="TensorFlow">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TensorFlow模型建立过程">
-<meta property="og:url" content="https://gowa.club/Python/TensorFlow模型建立过程.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Python&#x2F;TensorFlow%E6%A8%A1%E5%9E%8B%E5%BB%BA%E7%AB%8B%E8%BF%87%E7%A8%8B.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="简单的总结一下 TensorFlow 建立模型进行使用的过程。嗯，到现在为止，一直想要研究一下怎么样整一个神经网络来预测二进制的序列，一直感觉看得如天书一般 ，不知道是如何进行的，所以还是从头开始来。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-11-14T13:50:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="TensorFlow模型建立过程">
-<meta name="twitter:description" content="简单的总结一下 TensorFlow 建立模型进行使用的过程。嗯，到现在为止，一直想要研究一下怎么样整一个神经网络来预测二进制的序列，一直感觉看得如天书一般 ，不知道是如何进行的，所以还是从头开始来。">
 
-<link rel="canonical" href="https://gowa.club/Python/TensorFlow模型建立过程.html">
+<link rel="canonical" href="https://gowa.club/Python/TensorFlow%E6%A8%A1%E5%9E%8B%E5%BB%BA%E7%AB%8B%E8%BF%87%E7%A8%8B.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow模型建立过程.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow%E6%A8%A1%E5%9E%8B%E5%BB%BA%E7%AB%8B%E8%BF%87%E7%A8%8B.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Python/TensorFlow模型建立过程.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Python/TensorFlow%E6%A8%A1%E5%9E%8B%E5%BB%BA%E7%AB%8B%E8%BF%87%E7%A8%8B.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/TensorFlow模型建立过程.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,6 +287,7 @@
       
         <p>简单的总结一下 TensorFlow 建立模型进行使用的过程。嗯，到现在为止，一直想要研究一下怎么样整一个神经网络来预测二进制的序列，一直感觉看得如天书一般 ，不知道是如何进行的，所以还是从头开始来。</p>
 <a id="more"></a>
+
 <h1 id="概括"><a href="#概括" class="headerlink" title="概括"></a>概括</h1><p>简单来说，我们建立一个模型。然后给出一定的带标签的样本数据，传递给模型。模型在训练过程中会计算出每次训练的损失，然后逐渐的改变我们模型中的权重参数，最终达到让我们的损失到达一个期望值。就可以说模型收敛了。</p>
 <h1 id="神经网络中的几个概念"><a href="#神经网络中的几个概念" class="headerlink" title="神经网络中的几个概念"></a>神经网络中的几个概念</h1><ul>
 <li><strong>epoch</strong> 对所有训练数据的<strong>一次</strong> 前向传递 和 反向传递。</li>
@@ -298,6 +297,7 @@
 <p>比如： 如果有 1000 个样本， batch size 是500， 那么就会需要 2 次遍历来完成 1 次 epoch。</p>
 <h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><p>以一个线性回归的例子来进行解析说明。</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">A linear regression learning algorithm example using TensorFlow library.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Author: Aymeric Damien</span></span><br><span class="line"><span class="string">Project: https://github.com/aymericdamien/TensorFlow-Examples/</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">rng = numpy.random</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练参数</span></span><br><span class="line">learning_rate = <span class="number">0.01</span> <span class="comment"># 学习速率，梯度下降是用来选择下一个点</span></span><br><span class="line">training_epochs = <span class="number">1000</span> <span class="comment"># 训练次数</span></span><br><span class="line">display_step = <span class="number">50</span>  <span class="comment"># 训练中显示的步长</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Training Data</span></span><br><span class="line">train_X = numpy.asarray([<span class="number">3.3</span>,<span class="number">4.4</span>,<span class="number">5.5</span>,<span class="number">6.71</span>,<span class="number">6.93</span>,<span class="number">4.168</span>,<span class="number">9.779</span>,<span class="number">6.182</span>,<span class="number">7.59</span>,<span class="number">2.167</span>,</span><br><span class="line">                         <span class="number">7.042</span>,<span class="number">10.791</span>,<span class="number">5.313</span>,<span class="number">7.997</span>,<span class="number">5.654</span>,<span class="number">9.27</span>,<span class="number">3.1</span>]) <span class="comment"># 样本</span></span><br><span class="line">train_Y = numpy.asarray([<span class="number">1.7</span>,<span class="number">2.76</span>,<span class="number">2.09</span>,<span class="number">3.19</span>,<span class="number">1.694</span>,<span class="number">1.573</span>,<span class="number">3.366</span>,<span class="number">2.596</span>,<span class="number">2.53</span>,<span class="number">1.221</span>,</span><br><span class="line">                         <span class="number">2.827</span>,<span class="number">3.465</span>,<span class="number">1.65</span>,<span class="number">2.904</span>,<span class="number">2.42</span>,<span class="number">2.94</span>,<span class="number">1.3</span>]) <span class="comment"># 标签</span></span><br><span class="line">n_samples = train_X.shape[<span class="number">0</span>] <span class="comment"># 样本数量</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># tf Graph Input</span></span><br><span class="line">X = tf.placeholder(<span class="string">"float"</span>)</span><br><span class="line">Y = tf.placeholder(<span class="string">"float"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Set model weights</span></span><br><span class="line">W = tf.Variable(rng.randn(), name=<span class="string">"weight"</span>)</span><br><span class="line">b = tf.Variable(rng.randn(), name=<span class="string">"bias"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Construct a linear model</span></span><br><span class="line"><span class="comment"># 类似于输出为 y = wx + b</span></span><br><span class="line">pred = tf.add(tf.multiply(X, W), b)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Mean squared error 均方差</span></span><br><span class="line">cost = tf.reduce_sum(tf.pow(pred-Y, <span class="number">2</span>))/(<span class="number">2</span>*n_samples)</span><br><span class="line"><span class="comment"># Gradient descent 梯度下降</span></span><br><span class="line"><span class="comment"># 这里 minimize() 知道需要修改 W and b ，因为默认情况下变量是可训练的。</span></span><br><span class="line">optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Initialize the variables (i.e. assign their default value)</span></span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Start training</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Run the initializer</span></span><br><span class="line">    sess.run(init)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Fit all training data</span></span><br><span class="line">    <span class="keyword">for</span> epoch <span class="keyword">in</span> range(training_epochs):</span><br><span class="line">        <span class="keyword">for</span> (x, y) <span class="keyword">in</span> zip(train_X, train_Y):</span><br><span class="line">            sess.run(optimizer, feed_dict=&#123;X: x, Y: y&#125;)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Display logs per epoch step</span></span><br><span class="line">        <span class="keyword">if</span> (epoch+<span class="number">1</span>) % display_step == <span class="number">0</span>:</span><br><span class="line">            c = sess.run(cost, feed_dict=&#123;X: train_X, Y:train_Y&#125;)</span><br><span class="line">            print(<span class="string">"Epoch:"</span>, <span class="string">'%04d'</span> % (epoch+<span class="number">1</span>), <span class="string">"cost="</span>, <span class="string">"&#123;:.9f&#125;"</span>.format(c), \</span><br><span class="line">                <span class="string">"W="</span>, sess.run(W), <span class="string">"b="</span>, sess.run(b))</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"Optimization Finished!"</span>)</span><br><span class="line">    training_cost = sess.run(cost, feed_dict=&#123;X: train_X, Y: train_Y&#125;)</span><br><span class="line">    print(<span class="string">"Training cost="</span>, training_cost, <span class="string">"W="</span>, sess.run(W), <span class="string">"b="</span>, sess.run(b), <span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Graphic display</span></span><br><span class="line">    plt.plot(train_X, train_Y, <span class="string">'ro'</span>, label=<span class="string">'Original data'</span>)</span><br><span class="line">    plt.plot(train_X, sess.run(W) * train_X + sess.run(b), label=<span class="string">'Fitted line'</span>)</span><br><span class="line">    plt.legend()</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Testing example, as requested (Issue #2)</span></span><br><span class="line">    test_X = numpy.asarray([<span class="number">6.83</span>, <span class="number">4.668</span>, <span class="number">8.9</span>, <span class="number">7.91</span>, <span class="number">5.7</span>, <span class="number">8.7</span>, <span class="number">3.1</span>, <span class="number">2.1</span>])</span><br><span class="line">    test_Y = numpy.asarray([<span class="number">1.84</span>, <span class="number">2.273</span>, <span class="number">3.2</span>, <span class="number">2.831</span>, <span class="number">2.92</span>, <span class="number">3.24</span>, <span class="number">1.35</span>, <span class="number">1.03</span>])</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"Testing... (Mean square loss Comparison)"</span>)</span><br><span class="line">    testing_cost = sess.run(</span><br><span class="line">        tf.reduce_sum(tf.pow(pred - Y, <span class="number">2</span>)) / (<span class="number">2</span> * test_X.shape[<span class="number">0</span>]),</span><br><span class="line">        feed_dict=&#123;X: test_X, Y: test_Y&#125;)  <span class="comment"># same function as cost above</span></span><br><span class="line">    print(<span class="string">"Testing cost="</span>, testing_cost)</span><br><span class="line">    print(<span class="string">"Absolute mean square loss difference:"</span>, abs(</span><br><span class="line">        training_cost - testing_cost))</span><br><span class="line"></span><br><span class="line">    plt.plot(test_X, test_Y, <span class="string">'bo'</span>, label=<span class="string">'Testing data'</span>)</span><br><span class="line">    plt.plot(train_X, sess.run(W) * train_X + sess.run(b), label=<span class="string">'Fitted line'</span>)</span><br><span class="line">    plt.legend()</span><br><span class="line">    plt.show()</span><br></pre></td></tr></table></figure>
+
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>基本过程如下：</p>
 <ol>
 <li>准备我们的样本数据（带标签的）</li>
@@ -321,7 +321,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/Android-Application启动流程分析.html" rel="next" title="Android-Application启动流程分析">
+                <a href="/Android/Android-Application%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90.html" rel="next" title="Android-Application启动流程分析">
                   <i class="fa fa-chevron-left"></i> Android-Application启动流程分析
                 </a>
             </div>
@@ -329,7 +329,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Python/TensorFlow中的反向传播.html" rel="prev" title="TensorFlow中的反向传播">
+                <a href="/Python/TensorFlow%E4%B8%AD%E7%9A%84%E5%8F%8D%E5%90%91%E4%BC%A0%E6%92%AD.html" rel="prev" title="TensorFlow中的反向传播">
                   TensorFlow中的反向传播 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -416,10 +416,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -448,10 +448,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -526,7 +526,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Python/TensorFlow模型建立过程.html",
+            url: "https://gowa.club/Python/TensorFlow%E6%A8%A1%E5%9E%8B%E5%BB%BA%E7%AB%8B%E8%BF%87%E7%A8%8B.html",
             identifier: "Python/TensorFlow模型建立过程.html",
             title: "TensorFlow模型建立过程"
           }

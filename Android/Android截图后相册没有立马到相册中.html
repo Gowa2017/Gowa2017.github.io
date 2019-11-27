@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android截图后相册没有立马到相册中">
-<meta property="og:url" content="https://gowa.club/Android/Android截图后相册没有立马到相册中.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Android%E6%88%AA%E5%9B%BE%E5%90%8E%E7%9B%B8%E5%86%8C%E6%B2%A1%E6%9C%89%E7%AB%8B%E9%A9%AC%E5%88%B0%E7%9B%B8%E5%86%8C%E4%B8%AD.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="问题是这样的，我们使用的第三方的视频SDK，截图后却不能马上在相册中显示，而有的时候又显示出来了。查看了一下截图的路径，确实是截图下来了的。问题就是没有放到相册进去的问题。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-11T14:47:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android截图后相册没有立马到相册中">
-<meta name="twitter:description" content="问题是这样的，我们使用的第三方的视频SDK，截图后却不能马上在相册中显示，而有的时候又显示出来了。查看了一下截图的路径，确实是截图下来了的。问题就是没有放到相册进去的问题。">
 
-<link rel="canonical" href="https://gowa.club/Android/Android截图后相册没有立马到相册中.html">
+<link rel="canonical" href="https://gowa.club/Android/Android%E6%88%AA%E5%9B%BE%E5%90%8E%E7%9B%B8%E5%86%8C%E6%B2%A1%E6%9C%89%E7%AB%8B%E9%A9%AC%E5%88%B0%E7%9B%B8%E5%86%8C%E4%B8%AD.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android截图后相册没有立马到相册中.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android%E6%88%AA%E5%9B%BE%E5%90%8E%E7%9B%B8%E5%86%8C%E6%B2%A1%E6%9C%89%E7%AB%8B%E9%A9%AC%E5%88%B0%E7%9B%B8%E5%86%8C%E4%B8%AD.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -278,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/Android截图后相册没有立马到相册中.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/Android%E6%88%AA%E5%9B%BE%E5%90%8E%E7%9B%B8%E5%86%8C%E6%B2%A1%E6%9C%89%E7%AB%8B%E9%A9%AC%E5%88%B0%E7%9B%B8%E5%86%8C%E4%B8%AD.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Android截图后相册没有立马到相册中.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,14 +292,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>问题是这样的，我们使用的第三方的视频SDK，截图后却不能马上在相册中显示，而有的时候又显示出来了。查看了一下截图的路径，确实是截图下来了的。问题就是没有放到相册进去的问题。<br><a id="more"></a></p>
+        <p>问题是这样的，我们使用的第三方的视频SDK，截图后却不能马上在相册中显示，而有的时候又显示出来了。查看了一下截图的路径，确实是截图下来了的。问题就是没有放到相册进去的问题。</p>
+<a id="more"></a>
+
 <p>查看了一下 SDK 内截图的代码：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"> <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String IMAGE_PATH = Environment.getExternalStorageDirectory().getPath() + <span class="string">"/snapshot/"</span>;</span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> String IMGSTR = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMMddHHmmss"</span>).format(<span class="keyword">new</span> Date()) + <span class="string">".jpg"</span>;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">captureBitmap</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    String path = IMAGE_PATH + IMGSTR;</span><br><span class="line">    <span class="comment">//先创建一个文件夹</span></span><br><span class="line">    File dir = <span class="keyword">new</span> File(IMAGE_PATH);</span><br><span class="line">    File file = <span class="keyword">new</span> File(IMAGE_PATH, IMGSTR);</span><br><span class="line">    <span class="keyword">if</span>(!dir.exists()) &#123;</span><br><span class="line">        dir.mkdir();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span>(file.exists()) &#123;</span><br><span class="line">            file.delete();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> result = IPlaySDK.PLAYCatchPicEx(m_nPort, path, PicFormat_JPEG);</span><br><span class="line">    Log.i(<span class="string">"PLAYCatchPicEx"</span>, String.valueOf(result));</span><br><span class="line">    <span class="keyword">if</span> (result &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        showToast(R.string.capture_success);</span><br><span class="line">        saveIntoMediaCore();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        showToast(R.string.capture_fail);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"> <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">saveIntoMediaCore</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);</span><br><span class="line">     Uri uri = Uri.parse(IMAGE_PATH + IMGSTR);</span><br><span class="line">     intent.setData(uri);</span><br><span class="line">     RealPlayActivity.<span class="keyword">this</span>.setIntent(intent);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
 <p>似乎截图之后，并没有把截图通知到系统，扫描对应的图片。而是调用了 <code>setIntent(intent)</code> 这个方法。</p>
-<p>查看了官方关于 <a href="https://developer.android.com/reference/android/app/Activity.html#setIntent(android.content.Intent" target="_blank" rel="noopener"><code>setIntent()</code> 的定义后</a>)，方才了解到，这个方法，只会设置 Activity 调用 <code>getIntent()</code> 所获取的 Intent。</p>
+<p>查看了官方关于 <a href="https://developer.android.com/reference/android/app/Activity.html#setIntent(android.content.Intent)" target="_blank" rel="noopener"><code>setIntent()</code> 的定义后</a>，方才了解到，这个方法，只会设置 Activity 调用 <code>getIntent()</code> 所获取的 Intent。</p>
 <p>窃以为其应该是在截图了之后，能够立马在当前查看而设置的这个。但其实这没有什么意义啊，截图了之后知道了路径本来就可以立马在当前的 Activity 打开的。</p>
 <h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><p>我来加上一个广播意图的操作看看。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">saveIntoMediaCore</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);</span><br><span class="line">    Uri uri = Uri.parse(IMAGE_PATH + IMGSTR);</span><br><span class="line">    intent.setData(uri);</span><br><span class="line">    sendBroadcast(intent);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>结果：在我的 MIUI 10 开发版中正常。但是在 华为系统，和小米的老版本系统上却无法进入相册，文件是已保存的。</p>
 <p>如果这样还不能解决的话，提供了一个更详细的解决办法：<a href="https://www.grokkingandroid.com/adding-files-to-androids-media-library-using-the-mediascanner/" target="_blank" rel="noopener">https://www.grokkingandroid.com/adding-files-to-androids-media-library-using-the-mediascanner/</a></p>
 <h1 id="问题出现的原因"><a href="#问题出现的原因" class="headerlink" title="问题出现的原因"></a>问题出现的原因</h1><p>通常情况下我们在向文件系统添加文件的时候，安卓的 MedaScanner 会自动的把文件给扫描出来。但不是一直都会进行这个扫描。</p>
@@ -310,10 +312,12 @@
 <p>想要让文件添加到媒体库，可以使用  <strong>MediaStore 内容提供者</strong> 或者  <strong>MediaScanner</strong>。 那篇文章只解释了 <strong>MediaScanner</strong>，在他的另外一篇文章就介绍了 <strong>MediaStore</strong>。</p>
 <h2 id="使用-broadcast"><a href="#使用-broadcast" class="headerlink" title="使用 broadcast"></a>使用 broadcast</h2><p>这是最简单的方式：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Intent intent = </span><br><span class="line">      <span class="keyword">new</span> Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);</span><br><span class="line">intent.setData(Uri.fromFile(file));</span><br><span class="line">sendBroadcast(intent);</span><br></pre></td></tr></table></figure>
+
 <p>大多数时候，这个会工作得很好。不过如果想更好的控制的话，采用下面两种方式。</p>
-<h2 id="MediaScannerConnection-scanFile"><a href="#MediaScannerConnection-scanFile" class="headerlink" title="MediaScannerConnection.scanFile()"></a>MediaScannerConnection.scanFile()</h2><p><a href="https://developer.android.com/reference/android/media/MediaScannerConnection.html#scanFile(android.content.Context,%20java.lang.String%5B%5D,%20java.lang.String%5B%5D,%20android.media.MediaScannerConnection.OnScanCompletedListener" target="_blank" rel="noopener">这个静态方法</a>)会构造一个 <strong>MediaScannerConnection</strong>，在连接建立后，调用其 <code>connect()</code> 方法，接着再调用 <code>scanFile(Context, String[], String[],MediaScannerConnection.OnScanCompletedListener)</code>。</p>
+<h2 id="MediaScannerConnection-scanFile"><a href="#MediaScannerConnection-scanFile" class="headerlink" title="MediaScannerConnection.scanFile()"></a>MediaScannerConnection.scanFile()</h2><p><a href="https://developer.android.com/reference/android/media/MediaScannerConnection.html#scanFile(android.content.Context,%20java.lang.String%5B%5D,%20java.lang.String%5B%5D,%20android.media.MediaScannerConnection.OnScanCompletedListener)" target="_blank" rel="noopener">这个静态方法</a>会构造一个 <strong>MediaScannerConnection</strong>，在连接建立后，调用其 <code>connect()</code> 方法，接着再调用 <code>scanFile(Context, String[], String[],MediaScannerConnection.OnScanCompletedListener)</code>。</p>
 <p>如果只是想简单的知道文件是什么时候被添加的，使用 <strong>MediaScannerConnection</strong> 的静态方法  <code>scanFile()</code> ，给他弄上一个监听回调函数 <code>MediaScannerConnection.OnScanCompletedListener</code>。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">MediaScannerConnection.scanFile(</span><br><span class="line">      getApplicationContext(), </span><br><span class="line">      <span class="keyword">new</span> String[]&#123;file.getAbsolutePath()&#125;, </span><br><span class="line">      <span class="keyword">null</span>, </span><br><span class="line">      <span class="keyword">new</span> OnScanCompletedListener() &#123;</span><br><span class="line">         <span class="meta">@Override</span></span><br><span class="line">         <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScanCompleted</span><span class="params">(String path, Uri uri)</span> </span>&#123;</span><br><span class="line">            Log.v(<span class="string">"grokkingandroid"</span>, </span><br><span class="line">                  <span class="string">"file "</span> + path + <span class="string">" was scanned seccessfully: "</span> + uri);</span><br><span class="line">         &#125;</span><br><span class="line">      &#125;);</span><br></pre></td></tr></table></figure>
+
 <p><strong>参数解释</strong>：</p>
 <ul>
 <li>context 应用程序上下文</li>
@@ -326,14 +330,18 @@
 <p><strong>MediaScannerConnectionClient</strong>的实现不仅会在一次扫描完成后调用，而且会在连接开始通信时调用。因为这可能会花一点时间，下一节我们会描述，你可能会对这个回调感兴趣。构建API的方式实际上需要使用此回调方法来启动扫描。</p>
 <p>下面是一个 <strong>MediaScannerConnectionClient</strong> 的实现例子：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">MyMediaScannerConnectionClient</span> </span></span><br><span class="line"><span class="class">      <span class="keyword">implements</span> <span class="title">MediaScannerConnectionClient</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="keyword">private</span> String mFilename;</span><br><span class="line">   <span class="keyword">private</span> String mMimetype;</span><br><span class="line">   <span class="keyword">private</span> MediaScannerConnection mConn;</span><br><span class="line">   </span><br><span class="line">   <span class="keyword">public</span> MyMediaScannerConnectionClient</span><br><span class="line">         (Context ctx, File file, String mimetype) &#123;</span><br><span class="line">      <span class="keyword">this</span>.mFilename = file.getAbsolutePath();</span><br><span class="line">      mConn = <span class="keyword">new</span> MediaScannerConnection(ctx, <span class="keyword">this</span>);</span><br><span class="line">      mConn.connect();</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onMediaScannerConnected</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      mConn.scanFile(mFilename, mMimetype);</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="meta">@Override</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onScanCompleted</span><span class="params">(String path, Uri uri)</span> </span>&#123;</span><br><span class="line">      mConn.disconnect();</span><br><span class="line">   &#125;    	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>在这个实现中，在构造器里面建立了 <em>MediaScannerConnection</em>，也调用了 <code>connect()</code> 方法。</p>
 <p>然后在 <code>onMediaScannerConnected()</code> 方法中启动了扫描。</p>
 <p>最简单的使用方法：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">MediaScannerConnectionClient client = </span><br><span class="line">      <span class="keyword">new</span> MyMediaScannerConnectionClient(</span><br><span class="line">            getApplicationContext(), file, <span class="keyword">null</span>);</span><br></pre></td></tr></table></figure>
+
 <h2 id="连接的建立是异步的"><a href="#连接的建立是异步的" class="headerlink" title="连接的建立是异步的"></a>连接的建立是异步的</h2><p>请注意，连接不会立即建立。这就是为什么下面的片段会引起麻烦（这是我第一次注意到<a href="http://commonsware.com/Android/" target="_blank" rel="noopener">Mark Murphy特别推荐的书籍</a>中有问题的代码）</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/////// Do not do this ! ///////</span></span><br><span class="line">MediaScannerConnection c = </span><br><span class="line">      <span class="keyword">new</span> MediaScannerConnection(</span><br><span class="line">            getApplicationContext(), <span class="keyword">null</span>);</span><br><span class="line">c.connect();</span><br><span class="line">c.scanFile(file.getAbsolutePath(), <span class="keyword">null</span>);</span><br><span class="line">c.disconnect();</span><br><span class="line"><span class="comment">/////// Do not do this ! ///////</span></span><br></pre></td></tr></table></figure>
+
 <p>这会抛出一个违例：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> IllegalStateException:</span><br><span class="line"></span><br><span class="line">java.lang.IllegalStateException: not connected to MediaScannerService</span><br></pre></td></tr></table></figure>
+
 <p>有的设备上花 20-40 ms 就建立起来了，但是有的设备可能会花上 100ms ，设置 1s。</p>
 <h1 id="不仅仅是媒体文件"><a href="#不仅仅是媒体文件" class="headerlink" title="不仅仅是媒体文件"></a>不仅仅是媒体文件</h1><p>现在的设备使用了 MTP 而不仅仅是传统的 USB 存储协议， MediaScanner还用于通过MTP访问任意文件。因此，如果您将设备插入计算机，那么您未添加到MediaScanner的任何文件和文件夹在完全扫描之前是不可见的！</p>
 <p>随着Honeycomb的推出，谷歌开始推动MTP。即使不是所有的手机制造商都遵循谷歌的决定，有些人可能 - 而谷歌自己的Nexus系列肯定会这样做。</p>
@@ -354,7 +362,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/数据库/MySQL自己的定时任务使用.html" rel="next" title="MySQL自己的定时任务使用">
+                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E8%87%AA%E5%B7%B1%E7%9A%84%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E4%BD%BF%E7%94%A8.html" rel="next" title="MySQL自己的定时任务使用">
                   <i class="fa fa-chevron-left"></i> MySQL自己的定时任务使用
                 </a>
             </div>
@@ -362,7 +370,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Python/TensorFlow中张量的stack与unstack.html" rel="prev" title="TensorFlow中的张量的stack与unstack">
+                <a href="/Python/TensorFlow%E4%B8%AD%E5%BC%A0%E9%87%8F%E7%9A%84stack%E4%B8%8Eunstack.html" rel="prev" title="TensorFlow中的张量的stack与unstack">
                   TensorFlow中的张量的stack与unstack <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -449,10 +457,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -481,10 +489,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -559,7 +567,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/Android截图后相册没有立马到相册中.html",
+            url: "https://gowa.club/Android/Android%E6%88%AA%E5%9B%BE%E5%90%8E%E7%9B%B8%E5%86%8C%E6%B2%A1%E6%9C%89%E7%AB%8B%E9%A9%AC%E5%88%B0%E7%9B%B8%E5%86%8C%E4%B8%AD.html",
             identifier: "Android/Android截图后相册没有立马到相册中.html",
             title: "Android截图后相册没有立马到相册中"
           }

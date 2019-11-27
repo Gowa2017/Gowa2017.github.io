@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="PIL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PIL.29Lua中调用C函数">
-<meta property="og:url" content="https://gowa.club/Lua/PIL.29Lua中调用C函数.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Lua&#x2F;PIL.29Lua%E4%B8%AD%E8%B0%83%E7%94%A8C%E5%87%BD%E6%95%B0.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="我们在说Lua调用C函数的时候，不是说Lua可以调用所有的C函数，我们必须在传递参数和获得结果之间遵从一些协议。同时，必须要注册C函数，也就是说，要以合适的方式给Lua这个函数的地址。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-02-04T08:53:03.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="PIL.29Lua中调用C函数">
-<meta name="twitter:description" content="我们在说Lua调用C函数的时候，不是说Lua可以调用所有的C函数，我们必须在传递参数和获得结果之间遵从一些协议。同时，必须要注册C函数，也就是说，要以合适的方式给Lua这个函数的地址。">
 
-<link rel="canonical" href="https://gowa.club/Lua/PIL.29Lua中调用C函数.html">
+<link rel="canonical" href="https://gowa.club/Lua/PIL.29Lua%E4%B8%AD%E8%B0%83%E7%94%A8C%E5%87%BD%E6%95%B0.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.29Lua中调用C函数.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.29Lua%E4%B8%AD%E8%B0%83%E7%94%A8C%E5%87%BD%E6%95%B0.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/PIL.29Lua中调用C函数.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/PIL.29Lua%E4%B8%AD%E8%B0%83%E7%94%A8C%E5%87%BD%E6%95%B0.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/PIL.29Lua中调用C函数.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -287,9 +285,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>我们在说Lua调用C函数的时候，不是说Lua可以调用所有的C函数，我们必须在传递参数和获得结果之间遵从一些协议。同时，必须要注册C函数，也就是说，要以合适的方式给Lua这个函数的地址。<br><a id="more"></a></p>
+        <p>我们在说Lua调用C函数的时候，不是说Lua可以调用所有的C函数，我们必须在传递参数和获得结果之间遵从一些协议。同时，必须要注册C函数，也就是说，要以合适的方式给Lua这个函数的地址。</p>
+<a id="more"></a>
+
 <h1 id="C-函数"><a href="#C-函数" class="headerlink" title="C 函数"></a>C 函数</h1><p>我们先来看一个简单的函数：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">l_sin</span><span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">double</span> d = lua_tonumber(L, <span class="number">1</span>);</span><br><span class="line">	lua_pushnumber(L, <span class="built_in">sin</span>(d));</span><br><span class="line">	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>从C的位置来看，这个函数从Lua state获取一个参数，然后把结果压入Lua state。因此，函数在压入结果前不需要清理栈。在函数返回后，Lua会自动的保存结果然后清理C函数的栈。</p>
 <p>在我们可以在Lua中用这个函数前，我们必须先注册。我们使用<code>lua_pushcfunction</code>来实现：获取这个C函数的地址，在Lua中建立一个<code>function</code>的值来保存这个地址。一旦注册后，C函数就跟其他Lua内的函数一样了。</p>
 <p>一个快速但是很不简洁的方法是在官方的lua解释器代码<code>lua.c</code>中放入 <code>l_sin</code>的代码，然后在调用了<code>luaL_openlibs</code>函数后加入下面的两行：</p>
@@ -298,8 +299,7 @@
 <p>对一个更专业sin函数，必须检查参数的类型，lua辅助库可以帮我们完全这个工作。<code>luaL_checknumber</code>检查是不是给了一个数值参数：一旦出错，就会给出一个错误提示信息；不然就返回这个数值。修改后代码应该如下：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">l_sin</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> d = luaL_checknumber(L, <span class="number">1</span>);</span><br><span class="line">        lua_pushnumber(L, <span class="built_in">sin</span>(d));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">/* number of results */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在上面的定义后，我们如果调用<code>mysin(&#39;a&#39;)</code>，就会得到如下的错误：</p>
-<pre><code>bad argument #1 to &#39;mysin&#39; (number expected, got string)
-</code></pre><p>作为一个更复杂的例子，我们来写一个返回指定目录内容的函数。Lua内在标准库内没有提供这个函数，ISO C不提供这样的操作。我们假设我们的系统兼容 POSIX。我们的函数————我们会在Lua把它叫做<em>dir</em>，在C中叫<code>l_dir</code>————获取一个字符串的路径参数，然后返回所有的目录项。具体来说，<code>dir(&quot;/home/lua&quot;)</code>会返回一个表<code>{&quot;.&quot;, &quot;..&quot;, &quot;src&quot;, &quot;bin&quot;, &quot;lib&quot;}</code>。代码如下：</p>
+<pre><code>bad argument #1 to &apos;mysin&apos; (number expected, got string)</code></pre><p>作为一个更复杂的例子，我们来写一个返回指定目录内容的函数。Lua内在标准库内没有提供这个函数，ISO C不提供这样的操作。我们假设我们的系统兼容 POSIX。我们的函数————我们会在Lua把它叫做<em>dir</em>，在C中叫<code>l_dir</code>————获取一个字符串的路径参数，然后返回所有的目录项。具体来说，<code>dir(&quot;/home/lua&quot;)</code>会返回一个表<code>{&quot;.&quot;, &quot;..&quot;, &quot;src&quot;, &quot;bin&quot;, &quot;lib&quot;}</code>。代码如下：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">              <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line">              <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line">              <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line">              <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"lua.h"</span></span></span><br><span class="line">              <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"lauxlib.h"</span></span></span><br><span class="line">              <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">l_dir</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">                DIR *dir;</span><br><span class="line">                <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">entry</span>;</span></span><br><span class="line">                <span class="keyword">int</span> i;</span><br><span class="line">                <span class="keyword">const</span> <span class="keyword">char</span> *path = luaL_checkstring(L, <span class="number">1</span>);</span><br><span class="line">                <span class="comment">/* open directory */</span></span><br><span class="line">                dir = opendir(path);</span><br><span class="line">                <span class="keyword">if</span> (dir == <span class="literal">NULL</span>) &#123;  <span class="comment">/* error opening the directory? */</span></span><br><span class="line">                  lua_pushnil(L);  <span class="comment">/* return nil... */</span></span><br><span class="line">                  lua_pushstring(L, strerror(errno));  <span class="comment">/* and error message */</span></span><br><span class="line">                  <span class="keyword">return</span> <span class="number">2</span>;  <span class="comment">/* number of results */</span></span><br><span class="line">&#125;</span><br><span class="line">                <span class="comment">/* create result table */</span></span><br><span class="line">                lua_newtable(L);</span><br><span class="line">                i = <span class="number">1</span>;</span><br><span class="line">                <span class="keyword">while</span> ((entry = readdir(dir)) != <span class="literal">NULL</span>) &#123;  <span class="comment">/* for each entry */</span></span><br><span class="line">                  lua_pushinteger(L, i++);  <span class="comment">/* push key */</span></span><br><span class="line">                  lua_pushstring(L, entry-&gt;d_name);  <span class="comment">/* push value */</span></span><br><span class="line">                  lua_settable(L, <span class="number">-3</span>);    <span class="comment">/* table[i] = entry name */</span></span><br><span class="line">&#125;</span><br><span class="line">                closedir(dir);</span><br><span class="line">                <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">/* table is already on top */</span></span><br><span class="line">              &#125;</span><br></pre></td></tr></table></figure>
 <p>此函数通过 <code>luaL_checkstring</code>来检查参数是否为一个字符串。然后通过系统调用<code>opendir</code>来打开目录。如果无法打开目录，就会返回一个<code>nil</code>与错误信息。在打开目录后，会创建一个表，然后把目录项都放在里面。最后，关闭目录，返回值1，这在Lua中表示到达了栈的顶部。（<code>lua_settable</code>会从栈中弹出 键和值。因此，在循环后，在栈顶的元素就是返回的表）</p>
 <h1 id="接续函数"><a href="#接续函数" class="headerlink" title="接续函数"></a>接续函数</h1><p>通过<code>lua_pcall, lua_call</code>，一个在Lua调用的C函数，依然可以调用Lua。某些标准库函数就会这样做：<code>table.sort</code>可以调用一个排序函数；<code>string.gsub</code>可以调用一个替换函数；<code>pcall, xpcall</code>可以在保护模式下调用函数。如果我们记住，Lua的 main函数代码也是从C（宿主程序）调用的，我们的调用流程就跟这样的：C（宿主）调用Lua（脚本），Lua（脚本）调用C（库函数），Lua库函数调用Lua（回调）。</p>
@@ -307,12 +307,15 @@
 <p>Lua中的每个协程都有自己的栈，其中保留了这个协程所有挂起的调用信息。特别地，栈内保存了返回地址，参数，以及每个调用的本地变量。对于调用Lua函数，解释器只需要这个栈，我们叫做<code>soft stack</code>。然而，对于调用C函数，解释器必须使用C栈。毕竟，C函数中的返回地址和本地变量是存在与C栈中的。</p>
 <p>让解释器拥有多个<code>soft stack</code>是非常容易的，但是ISO C运行时只有一个内部的栈。因此，Lua协程不能挂起一个C函数的执行：如果一个C函数想要在协程内恢复到其让出时间片的地方，Lua不能C函数的状态来让其恢复。试着看一下下面的代码：Lua 5.1</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">co = coroutine.<span class="built_in">wrap</span>(<span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">		<span class="built_in">print</span>(<span class="built_in">pcall</span>(coroutine.<span class="built_in">yield</span>))</span><br><span class="line">		<span class="keyword">end</span>)</span><br><span class="line">co</span><br><span class="line">	<span class="comment">--&gt; false atttemp to yield across metamethod/C-call boundary</span></span><br></pre></td></tr></table></figure>
+
 <p><code>pcall</code>是一个C函数；所以Lua 5.1不能挂起它，因为ISO C没有一个可以挂起C函数然后恢复运行的方式。</p>
 <p>Lua 5.2和后续的版本通过<em>continuations</em>来减轻这样的困难。Lua通过 long jumps 来实现 yields（让出时间片），这和实现错误是一样的。一个 long jump只是简单的丢C栈中的C函数信息，所以这是不可能恢复运行这个函数的。然而，一个C函数<code>foo</code>可以指定一个连续函数<code>foo_k</code>，这个函数用来在恢复<code>foo</code>的时候进行执行。这就是说，如果解释器检查到要恢复执行<code>foo</code>，但是一个long jump已经丢弃了其在栈中的信息，它就会去调用<code>foo_k</code>。</p>
 <p>为了让事情变得更具体一点，我们看一下<code>pcall</code>的实现例子。在Lua 5.1中，其代码如下：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">luaB_pcall</span> <span class="params">(luaState *L)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> status;</span><br><span class="line">	luaL_checkany(L, <span class="number">1</span>); <span class="comment">/* at least one parameter */</span></span><br><span class="line">	status = lua_pcall(L, lua_gettop(L) - <span class="number">1</span>, LUA_MULTRET, <span class="number">0</span>);</span><br><span class="line">	lua_pushboolean(L, (status == LUA_OK)); <span class="comment">/* status */</span></span><br><span class="line">	lua_insert(L, <span class="number">1</span>); <span class="comment">/* status is first result */</span></span><br><span class="line">	<span class="keyword">return</span> lua_gettop(L); <span class="comment">/* return status + all results */</span></span><br></pre></td></tr></table></figure>
+
 <p>如果通过<code>lua_pcall</code>调用的函数让出时间片，想要恢复<code>luaB_pcall</code>是不可能的。因此，无论合适，只要在一个受保护的调用中让出时间片，解释器会抛出一个错误。Lua 5.3实现<code>pcall</code>框架上和下面相似：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">              <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">finishpcall</span> <span class="params">(lua_State *L, <span class="keyword">int</span> status, <span class="keyword">intptr_t</span> ctx)</span> </span>&#123;</span><br><span class="line">                (<span class="keyword">void</span>)ctx;   <span class="comment">/* unused parameter */</span></span><br><span class="line">                status = (status != LUA_OK &amp;&amp; status != LUA_YIELD);</span><br><span class="line">                lua_pushboolean(L, (status == <span class="number">0</span>));  <span class="comment">/* status */</span></span><br><span class="line">                lua_insert(L, <span class="number">1</span>);  <span class="comment">/* status is first result */</span></span><br><span class="line">                <span class="keyword">return</span> lua_gettop(L);  <span class="comment">/* return status + all results */</span></span><br><span class="line">              &#125;</span><br><span class="line">              <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">luaB_pcall</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">                <span class="keyword">int</span> status;</span><br><span class="line">                luaL_checkany(L, <span class="number">1</span>);</span><br><span class="line">                status = lua_pcallk(L, lua_gettop(L) - <span class="number">1</span>, LUA_MULTRET, <span class="number">0</span>,</span><br><span class="line">                                    <span class="number">0</span>, finishpcall);</span><br><span class="line">                <span class="keyword">return</span> finishpcall(L, status, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>这和Lua 5.1有三个重要的不同：</p>
 <ol>
 <li>用<code>lua_pcallk</code>替换了<code>lua_pcall</code>。  </li>
@@ -328,23 +331,31 @@
 <p>当我们用C函数扩展LUa时，像C模块一样设计我们的代码是非常棒的，即使我们只想注册一个C函数。通常，辅助库提供了一个帮助函数来完成这个任务。宏<code>luaL_newlib</code>把C函数和他们期待的名字放在数组内，然后注册到一个新表中。举个例子，我们想建个库，函数就是我们先前定义的<code>l_dir</code>。</p>
 <p>首先，我们必须定义库函数：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"> <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">l_dir</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">as before</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>然后，我们定义一个数组：数组包含模块内的所有函数和他们期待的名字。数组类型<code>luaL_Reg</code>，包含两个字段的结构：函数名（字符串），函数指针。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">luaL_Reg</span> <span class="title">mylib</span> [] = &#123;</span></span><br><span class="line">	&#123;<span class="string">"dir"</span>, l_dir&#125;,</span><br><span class="line">	&#123;<span class="literal">NULL</span>, <span class="literal">NULL</span>&#125; <span class="comment">/* sentinel */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
 <p>在我们的函数中，只有一个函数<code>l_dir</code>需要声明。数组的最后一对始终是<code>{NULL, NULL}</code>，用来表示结束。</p>
 <p>最后，我们定义一个主函数，使用<code>luaL_newlib</code>：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">luaopen_mylib</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">        luaL_newlib(L, mylib);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>调用<code>luaL_newlib</code>创建一个新表，然后用<em>mylib</em>内的键值对进行填充。当其返回时，<code>luaL_newlib</code>将保存库的表留在栈上。<code>luaopen_mylib</code>返回1来向Lua返回这个表。</p>
 <p>在完成这个库后，我们必须把它和解释器链接。最方便的就是用动态链接特性，但这要Lua解释器的支持。 这种情况下，必须先把代码建立成一个动态库（<code>mylib.so</code>，Linux-like系统），然后把它放在C路径中。在这些步骤后，可以通过<code>require</code>来加载代码：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> mylib = <span class="built_in">require</span> <span class="string">"mylib"</span></span><br></pre></td></tr></table></figure>
+
 <p>这个调用让<code>mylib</code>动态库与Lua相链接，先找到<code>luaopen_mylib</code>函数，以一个C函数注册，然后调用它打开模块。（这个行为就解释了为什么<code>luaopen_mylib</code>必须和其他C函数一样有类似的原型）</p>
 <p>为了找到<code>luaopen_mylib</code>，动态链接器必须知道其名字。总是会使用<code>luaopen_</code>加上模块名来进行查找。因此，如果我们的库是<code>mylib</code>，被调用的函数就会是<code>luaopen_mylib</code>。</p>
 <p>如果解释器不支持动态链接，必须使用新库来重新编译Lua。</p>
 <h1 id="实际操作"><a href="#实际操作" class="headerlink" title="实际操作"></a>实际操作</h1><p>把上面的总结一下，得出我们的代码：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// mylib.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"lua.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"lauxlib.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">l_dir</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  DIR *dir;</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">entry</span>;</span></span><br><span class="line">  <span class="keyword">int</span> i;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span> *path = luaL_checkstring(L, <span class="number">1</span>);</span><br><span class="line">  <span class="comment">/* open directory */</span></span><br><span class="line">  dir = opendir(path);</span><br><span class="line">  <span class="keyword">if</span> (dir == <span class="literal">NULL</span>) &#123;  <span class="comment">/* error opening the directory? */</span></span><br><span class="line">    lua_pushnil(L);  <span class="comment">/* return nil... */</span></span><br><span class="line">    lua_pushstring(L, strerror(errno));  <span class="comment">/* and error message */</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">2</span>;  <span class="comment">/* number of results */</span></span><br><span class="line">&#125;</span><br><span class="line">  <span class="comment">/* create result table */</span></span><br><span class="line">  lua_newtable(L);</span><br><span class="line">  i = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">while</span> ((entry = readdir(dir)) != <span class="literal">NULL</span>) &#123;  <span class="comment">/* for each entry */</span></span><br><span class="line">    lua_pushinteger(L, i++);  <span class="comment">/* push key */</span></span><br><span class="line">    lua_pushstring(L, entry-&gt;d_name);  <span class="comment">/* push value */</span></span><br><span class="line">        lua_settable(L, <span class="number">-3</span>);    <span class="comment">/* table[i] = entry name */</span></span><br><span class="line">&#125;</span><br><span class="line">  closedir(dir);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">/* table is already on top */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">luaL_Reg</span> <span class="title">mylib</span> [] = &#123;</span></span><br><span class="line">        &#123;<span class="string">"dir"</span>, l_dir&#125;,</span><br><span class="line">        &#123;<span class="literal">NULL</span>, <span class="literal">NULL</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">luaopen_mylib</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">        luaL_newlib(L, mylib);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 <p>把上面代码保存到一个<code>mylib.c</code>文件内。<br>然后我们的运行环境是macOS，和Linux编译代码有所不同：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gcc -fPIC -o mylib.o -c mylib.c</span><br><span class="line">gcc -O2 -bundle -undefined dynamic_lookup -o mylib.so mylib.o</span><br></pre></td></tr></table></figure>
+
 <p>我们可以写一个lua脚本<code>t.lua</code>：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> mylib = <span class="built_in">require</span> <span class="string">"mylib"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> t = mylib.dir(<span class="string">"."</span>)</span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> <span class="built_in">pairs</span>(t) <span class="keyword">do</span></span><br><span class="line">         <span class="built_in">print</span>(k, v)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
 <p>然后，用<code>lua t.lua</code>，看一下输出：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1	.</span><br><span class="line">2	..</span><br><span class="line">3	mylib.c</span><br><span class="line">4	mylib.o</span><br><span class="line">5	mylib.so</span><br><span class="line">6	t.lua</span><br></pre></td></tr></table></figure>
 
@@ -363,7 +374,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Lua/skynet-任务调度及消息处理.html" rel="next" title="skynet-任务调度及消息处理">
+                <a href="/Lua/skynet-%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E5%8F%8A%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86.html" rel="next" title="skynet-任务调度及消息处理">
                   <i class="fa fa-chevron-left"></i> skynet-任务调度及消息处理
                 </a>
             </div>
@@ -458,10 +469,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -490,10 +501,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -568,7 +579,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Lua/PIL.29Lua中调用C函数.html",
+            url: "https://gowa.club/Lua/PIL.29Lua%E4%B8%AD%E8%B0%83%E7%94%A8C%E5%87%BD%E6%95%B0.html",
             identifier: "Lua/PIL.29Lua中调用C函数.html",
             title: "PIL.29Lua中调用C函数"
           }

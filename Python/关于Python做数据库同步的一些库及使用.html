@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,16 +51,14 @@
 <meta name="keywords" content="Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于Python做数据库同步的一些库及使用">
-<meta property="og:url" content="https://gowa.club/Python/关于Python做数据库同步的一些库及使用.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Python&#x2F;%E5%85%B3%E4%BA%8EPython%E5%81%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%90%8C%E6%AD%A5%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BA%93%E5%8F%8A%E4%BD%BF%E7%94%A8.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="之前有用过 Python 来做 Oracle 与 MySQL， MySQL 与 MySQL 之间的同步。但是一直没有仔细探究这几个库的用法。现在就好好来看看。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-28T13:23:29.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于Python做数据库同步的一些库及使用">
-<meta name="twitter:description" content="之前有用过 Python 来做 Oracle 与 MySQL， MySQL 与 MySQL 之间的同步。但是一直没有仔细探究这几个库的用法。现在就好好来看看。">
 
-<link rel="canonical" href="https://gowa.club/Python/关于Python做数据库同步的一些库及使用.html">
+<link rel="canonical" href="https://gowa.club/Python/%E5%85%B3%E4%BA%8EPython%E5%81%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%90%8C%E6%AD%A5%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BA%93%E5%8F%8A%E4%BD%BF%E7%94%A8.html">
 
 
 <script id="page-configurations">
@@ -225,12 +223,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/关于Python做数据库同步的一些库及使用.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/%E5%85%B3%E4%BA%8EPython%E5%81%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%90%8C%E6%AD%A5%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BA%93%E5%8F%8A%E4%BD%BF%E7%94%A8.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -271,7 +269,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Python/关于Python做数据库同步的一些库及使用.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Python/%E5%85%B3%E4%BA%8EPython%E5%81%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%90%8C%E6%AD%A5%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BA%93%E5%8F%8A%E4%BD%BF%E7%94%A8.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/关于Python做数据库同步的一些库及使用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -289,6 +287,9 @@
       
         <p>之前有用过 Python 来做 Oracle 与 MySQL， MySQL 与 MySQL 之间的同步。但是一直没有仔细探究这几个库的用法。现在就好好来看看。</p>
 <a id="more"></a>
+
+
+
 <h1 id="MySQLdb"><a href="#MySQLdb" class="headerlink" title="MySQLdb"></a>MySQLdb</h1><p>这玩意不 Python 3.0 并不支持。因为我需要用到 Python 3.0 所以就放弃他了吧。</p>
 <h1 id="Mysqlclient"><a href="#Mysqlclient" class="headerlink" title="Mysqlclient"></a>Mysqlclient</h1><p>完全兼容MySQLdb的衍生版；同时兼容Python3.x</p>
 <p>是Django ORM的依赖工具。</p>
@@ -299,6 +300,9 @@
 <p>但是貌似我用在 MySQL 5.1.73 上也没有问题？</p>
 <p>习惯了 MySQLdb 的可以这样来获取与其一样的使用方法：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pymysql.install_as_MySQLdb()</span><br></pre></td></tr></table></figure>
+
+
+
 <h1 id="SQLAlchemy"><a href="#SQLAlchemy" class="headerlink" title="SQLAlchemy"></a>SQLAlchemy</h1><p><a href="https://www.sqlalchemy.org" target="_blank" rel="noopener">SQLAlchemy</a> 是一个 ORM （对象关系映射），其提供了非常强大的性能及方便性。</p>
 <p>既支持原生 SQL，又支持 ORM 的工具；</p>
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>SQL 数据库在行为上与对象集合不同，其更关注数据的容量和性能：对象集合与行或列数据也不一样，其更关注抽象出来的东西。SQLAlchemy 是为了在这其中取得平衡。</p>
@@ -346,7 +350,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/IdeaVim的的一些使用.html" rel="next" title="IdeaVim的的一些使用">
+                <a href="/Java/IdeaVim%E7%9A%84%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BD%BF%E7%94%A8.html" rel="next" title="IdeaVim的的一些使用">
                   <i class="fa fa-chevron-left"></i> IdeaVim的的一些使用
                 </a>
             </div>
@@ -354,7 +358,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/Android中进行混淆的时候保留某些类的问题.html" rel="prev" title="Android中进行混淆的时候保留某些类的问题">
+                <a href="/Android/Android%E4%B8%AD%E8%BF%9B%E8%A1%8C%E6%B7%B7%E6%B7%86%E7%9A%84%E6%97%B6%E5%80%99%E4%BF%9D%E7%95%99%E6%9F%90%E4%BA%9B%E7%B1%BB%E7%9A%84%E9%97%AE%E9%A2%98.html" rel="prev" title="Android中进行混淆的时候保留某些类的问题">
                   Android中进行混淆的时候保留某些类的问题 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -441,10 +445,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -473,10 +477,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -551,7 +555,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Python/关于Python做数据库同步的一些库及使用.html",
+            url: "https://gowa.club/Python/%E5%85%B3%E4%BA%8EPython%E5%81%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%90%8C%E6%AD%A5%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BA%93%E5%8F%8A%E4%BD%BF%E7%94%A8.html",
             identifier: "Python/关于Python做数据库同步的一些库及使用.html",
             title: "关于Python做数据库同步的一些库及使用"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 3.8.0">
+<meta name="generator" content="Hexo 4.0.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -51,19 +51,17 @@
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Github上的MySQL高可用">
-<meta property="og:url" content="https://gowa.club/数据库/Github上的MySQL高可用.html">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;Github%E4%B8%8A%E7%9A%84MySQL%E9%AB%98%E5%8F%AF%E7%94%A8.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Github 使用 MySQL 作为主要的数据库，其可用性是非常的严格的。对于 Github 网站自身，其 API 入登录认证等都需要访问数据库。我们必须运行多个 MySQL 群集来服务不同的业务和任务。我们的群集使用传统的​主从​设置，在这种设置中，一个群集中的一个节点（Master）接受写操作。剩下的群集节点异步的从 Master 重放变更并提供读流量。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://github.blog/wp-content/uploads/2018/06/sample-3dc-topology.png">
-<meta property="og:image" content="https://github.blog/wp-content/uploads/2018/06/mysql-ha-solution-at-github.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;github.blog&#x2F;wp-content&#x2F;uploads&#x2F;2018&#x2F;06&#x2F;sample-3dc-topology.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;github.blog&#x2F;wp-content&#x2F;uploads&#x2F;2018&#x2F;06&#x2F;mysql-ha-solution-at-github.png">
 <meta property="og:updated_time" content="2019-06-08T13:42:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Github上的MySQL高可用">
-<meta name="twitter:description" content="Github 使用 MySQL 作为主要的数据库，其可用性是非常的严格的。对于 Github 网站自身，其 API 入登录认证等都需要访问数据库。我们必须运行多个 MySQL 群集来服务不同的业务和任务。我们的群集使用传统的​主从​设置，在这种设置中，一个群集中的一个节点（Master）接受写操作。剩下的群集节点异步的从 Master 重放变更并提供读流量。">
-<meta name="twitter:image" content="https://github.blog/wp-content/uploads/2018/06/sample-3dc-topology.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;github.blog&#x2F;wp-content&#x2F;uploads&#x2F;2018&#x2F;06&#x2F;sample-3dc-topology.png">
 
-<link rel="canonical" href="https://gowa.club/数据库/Github上的MySQL高可用.html">
+<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Github%E4%B8%8A%E7%9A%84MySQL%E9%AB%98%E5%8F%AF%E7%94%A8.html">
 
 
 <script id="page-configurations">
@@ -228,12 +226,12 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/Github上的MySQL高可用.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Github%E4%B8%8A%E7%9A%84MySQL%E9%AB%98%E5%8F%AF%E7%94%A8.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
       <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content>
+      <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -259,7 +257,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -274,7 +272,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/数据库/Github上的MySQL高可用.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Github%E4%B8%8A%E7%9A%84MySQL%E9%AB%98%E5%8F%AF%E7%94%A8.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/Github上的MySQL高可用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,7 +288,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Github 使用 MySQL 作为主要的数据库，其可用性是非常的严格的。对于 Github 网站自身，其 API 入登录认证等都需要访问数据库。我们必须运行多个 MySQL 群集来服务不同的业务和任务。我们的群集使用传统的​主从​设置，在这种设置中，一个群集中的一个节点（Master）接受写操作。剩下的群集节点异步的从 Master 重放变更并提供读流量。<br><a id="more"></a></p>
+        <p>Github 使用 MySQL 作为主要的数据库，其可用性是非常的严格的。对于 Github 网站自身，其 API 入登录认证等都需要访问数据库。我们必须运行多个 MySQL 群集来服务不同的业务和任务。我们的群集使用传统的​主从​设置，在这种设置中，一个群集中的一个节点（Master）接受写操作。剩下的群集节点异步的从 Master 重放变更并提供读流量。</p>
+<a id="more"></a>
+
 <p>Master 的可用性非常的严格。如果没有了 Master，一个群集就无法接受写操作：所有需要持久化的数据都无法持久化。所有涉及道数据变更的操作如：提交、问题、用户创建、审阅等都会失败。</p>
 <p>为了支持写操作我们很明显，需要一个可用的可写入节点。同样重要的是，我们需要能识别和发现那个节点。</p>
 <p>在失败的情况下，在 Master 崩溃的情况下，我们必须确保一个新的 Master 的存在，且其能快速的宣告自身。用来检测失败，故障转移，宣告新 Master 身份的时间就构成了所有的停服时间。</p>
@@ -313,7 +313,7 @@
 <p>client 使用一个域名，如 <em>mysql-writer-1.github.net</em> 来发现可写节点。这个域名会解析到一个 VIP（绑定在 Master 主机上）。</p>
 <p>这样，在正常情况下， clients 只需要解析域名，连接到解析后的IP就可以了。</p>
 <p>下面三复制的拓扑，分布在三个数据中心：</p>
-<p><img src="https://github.blog/wp-content/uploads/2018/06/sample-3dc-topology.png" alt></p>
+<p><img src="https://github.blog/wp-content/uploads/2018/06/sample-3dc-topology.png" alt=""></p>
 <p>如果 Master 宕机，在复制中我们必须将一个提升为 Master。</p>
 <p><em>orchestrator</em> 将会检查故障，提升一个新 Master，接着重新设置域名/VIP。所有的 Client 都不知道 Master已经变更：它们都只拥有一个标示 Master 的域名，这个域名现在解析到了一个新的 Master。然而，我们思考一下：</p>
 <p>VIP 是协作性的：其被所有的数据库服务器拥有和宣告。为了获取或者释放一个VIP，一个服务器必须发送一个 ARP 请求。拥有这个 VIP 的服务器必须在新的 Master 需要之前释放这个 VIP。这会有一些影响：</p>
@@ -352,9 +352,9 @@
 <li><a href="https://githubengineering.com/glb-director-open-source-load-balancer/" target="_blank" rel="noopener">GLB/HAProxy</a> 在 clients 和可写节点间作为一个代理层。 <a href="https://github.com/github/glb-director" target="_blank" rel="noopener">GLB 是开源的</a>。</li>
 <li><em>anycast</em> 进行网络路由</li>
 </ul>
-<p><img src="https://github.blog/wp-content/uploads/2018/06/mysql-ha-solution-at-github.png" alt></p>
+<p><img src="https://github.blog/wp-content/uploads/2018/06/mysql-ha-solution-at-github.png" alt=""></p>
 <h2 id="正常流程"><a href="#正常流程" class="headerlink" title="正常流程"></a>正常流程</h2><p>正常请下，通过 GLP/HAProxy 连接到可写节点。</p>
-<p>应用永远不会意识到 Master 的变化。和之前的方案一样，他们使用一个域名。例如，对于 <em>cluster1</em> 的 Master 可能是 <em>mysql-writer-1.github.net</em>。在我们当前的配置中，这个域名被解析到一个 <em>anycast</em> IP。</p>
+<p>应用永远不会意识到 Master 的变化。和之前的方案一样，他们使用一个域名。例如，对于 <em>cluster1</em> 的 Master 可能是 <em>mysql-writer-1.github.net*。在我们当前的配置中，这个域名被解析到一个 *anycast</em> IP。</p>
 <p>使用 <em>anycast</em> 技术后，域名会解析到一个IP地址，但是流量却是根据 client 的位置进行路由。实际上，在每个数据中心我们都有 GLB（高可用负载均衡器，部署在多个盒子上）。到 <em>mysql-writer-1.github.net</em> 的流量总是会路由到当地数据中心的 GLB 群集上。也就是说，所有 clients 都由 本地代理提供服务。</p>
 <p>我们在 <em>HAProxy</em> 之上运行 GLB。 HAProxy 有写入池：每个 Mysql Cluster 一个池，每个池只有一个后端服务器： cluster 的 Master 服务器。所有数据中心的 GLB/HAProxy 都有相同的写入池。因此，如果应用想要连接到 <em>mysql-writer-1.github.net</em> 的时候，其不用关心是连接到了哪个 GLB。其总是会被路由到 <em>cluster1</em> 的 Master 节点。</p>
 <p>对于应用而言，在 GLB 处就停止了服务发现，也不需要重新进行发现。把流量路由到正确的地方这是 GLB 的责任。</p>
@@ -413,7 +413,7 @@
 <p>我们在本地DC副本上启用半同步，并且在 Master 死亡的情况下，我们期望（尽管不严格执行）无损故障转移。完全DC故障的无损故障转移成本很高，我们不期望它。</p>
 <p>在尝试半同步超时时，我们还观察到了一种对我们有利的行为：在主服务器故障的情况下，我们能够影响理想候选人的身份。通过在指定服务器上启用半同步，并将其标记为候选服务器，我们可以通过影响故障结果来减少总停机时间。</p>
 <h2 id="心跳注入"><a href="#心跳注入" class="headerlink" title="心跳注入"></a>心跳注入</h2><p>我们选择一直运行 <em>pt-heartbeat</em> 服务，而不是只是 选举/踢出 Master 的时候进行 启动/停止。这个需要打个补丁来让 <em>pt-heartbeat</em> 服务适应服务器在 <em>read-only</em> 状态的变化或者完全的崩溃。</p>
-<p>当前 <em>pt-heartbeat</em> 服务运行在 Master 和 slave 上。在 Master 上，他们产生心跳事件。在 slave 上，他们确认当前的服务器是 <em>read-only</em>，和进行常规的状态检查。当一个服务器被选举为 Master 的时候， <em>pt-heartbeat</em> 会检查此服务器是否为可写，同时开始产生心跳事件。</p>
+<p>当前 <em>pt-heartbeat</em> 服务运行在 Master 和 slave 上。在 Master 上，他们产生心跳事件。在 slave 上，他们确认当前的服务器是 <em>read-only*，和进行常规的状态检查。当一个服务器被选举为 Master 的时候， *pt-heartbeat</em> 会检查此服务器是否为可写，同时开始产生心跳事件。</p>
 <h2 id="orchestrator-权限委托"><a href="#orchestrator-权限委托" class="headerlink" title="orchestrator 权限委托"></a>orchestrator 权限委托</h2><p>同时我们让 <em>orchestrator</em> 来做下面的事情：</p>
 <ul>
 <li>伪GTID注入</li>
@@ -451,7 +451,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/RealVNC的VNC-Viewer连接到VM虚拟机出错的问题.html" rel="next" title="RealVNC的VNC-Viewer连接到VM虚拟机出错的问题">
+                <a href="/Linux-Unix/RealVNC%E7%9A%84VNC-Viewer%E8%BF%9E%E6%8E%A5%E5%88%B0VM%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%87%BA%E9%94%99%E7%9A%84%E9%97%AE%E9%A2%98.html" rel="next" title="RealVNC的VNC-Viewer连接到VM虚拟机出错的问题">
                   <i class="fa fa-chevron-left"></i> RealVNC的VNC-Viewer连接到VM虚拟机出错的问题
                 </a>
             </div>
@@ -459,7 +459,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/Retrofit下载文件及ResponseBody解析.html" rel="prev" title="Retrofit下载文件及ResponseBody解析">
+                <a href="/Android/Retrofit%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6%E5%8F%8AResponseBody%E8%A7%A3%E6%9E%90.html" rel="prev" title="Retrofit下载文件及ResponseBody解析">
                   Retrofit下载文件及ResponseBody解析 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -546,10 +546,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -578,10 +578,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.8.0
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -656,7 +656,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/数据库/Github上的MySQL高可用.html",
+            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Github%E4%B8%8A%E7%9A%84MySQL%E9%AB%98%E5%8F%AF%E7%94%A8.html",
             identifier: "数据库/Github上的MySQL高可用.html",
             title: "Github上的MySQL高可用"
           }
