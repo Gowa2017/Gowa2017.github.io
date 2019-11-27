@@ -219,6 +219,153 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E8%8F%9C%E5%8D%95.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Android/Android%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E8%8F%9C%E5%8D%95.html" class="post-title-link" itemprop="url">Android中的一些菜单</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-05-06 21:32:26" itemprop="dateCreated datePublished" datetime="2019-05-06T21:32:26+08:00">2019-05-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Android/Android%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E8%8F%9C%E5%8D%95.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Android中的一些菜单.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>今天是遇到一个猥琐的需求，想要像现在的苹果一样，在 app 内截图，于是就用了一个 ImageView 来浮动，点击用 PopupWindow 来显示全部的内容。但是呢，还是不很清楚里面的原理，所以来回顾一下用过但没有深酒过的一些菜单用法。</p>
+<h1 id="Spinner"><a href="#Spinner" class="headerlink" title="Spinner"></a>Spinner</h1><p>Spinner 继承自 AdapterView。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Spinner</span><br><span class="line">    -&gt; AbsSpinner</span><br><span class="line">        -&gt; AdapterView</span><br><span class="line">            -&gt; ViewGroup</span><br></pre></td></tr></table></figure>
+
+<p>所以其使用是需要一个 Adapter 的，因为对于 AdapterView ，其子视图依赖于一个 Adapter，其从 Adapter 内已加载的项目来显示。</p>
+<h2 id="为-Spinner-填充数据"><a href="#为-Spinner-填充数据" class="headerlink" title="为 Spinner 填充数据"></a>为 Spinner 填充数据</h2><p>基本的步骤就是构造一个 adapter，这个 adapter 可以有多种。常见的有三种：</p>
+<ul>
+<li>@see android.widget.ArrayAdapter</li>
+<li>@see android.widget.CursorAdapter</li>
+<li>@see android.widget.SimpleCursorAdapter</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Get a Spinner and bind it to an ArrayAdapter that</span></span><br><span class="line"><span class="comment">// references a String array.</span></span><br><span class="line">Spinner s1 = (Spinner) findViewById(R.id.spinner1);</span><br><span class="line">ArrayAdapter adapter = ArrayAdapter.createFromResource(</span><br><span class="line">    <span class="keyword">this</span>, R.array.colors, android.R.layout.simple_spinner_item);</span><br><span class="line">adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);</span><br><span class="line">s1.setAdapter(adapter);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Load a Spinner and bind it to a data query.</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> String[] PROJECTION = <span class="keyword">new</span> String[] &#123;</span><br><span class="line">        People._ID, People.NAME</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">Spinner s2 = (Spinner) findViewById(R.id.spinner2);</span><br><span class="line">Cursor cur = managedQuery(People.CONTENT_URI, PROJECTION, <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line">SimpleCursorAdapter adapter2 = <span class="keyword">new</span> SimpleCursorAdapter(<span class="keyword">this</span>,</span><br><span class="line">    android.R.layout.simple_spinner_item, <span class="comment">// Use a template</span></span><br><span class="line">                                          <span class="comment">// that displays a</span></span><br><span class="line">                                          <span class="comment">// text view</span></span><br><span class="line">    cur, <span class="comment">// Give the cursor to the list adapter</span></span><br><span class="line">    <span class="keyword">new</span> String[] &#123;People.NAME&#125;, <span class="comment">// Map the NAME column in the</span></span><br><span class="line">                                         <span class="comment">// people database to...</span></span><br><span class="line">    <span class="keyword">new</span> <span class="keyword">int</span>[] &#123;android.R.id.text1&#125;); <span class="comment">// The "text1" view defined in</span></span><br><span class="line">                                     <span class="comment">// the XML template</span></span><br><span class="line"></span><br><span class="line">adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);</span><br><span class="line">s2.setAdapter(adapter2);</span><br></pre></td></tr></table></figure>
+
+<h2 id="响应用户的选择事件"><a href="#响应用户的选择事件" class="headerlink" title="响应用户的选择事件"></a>响应用户的选择事件</h2><p>可以通过 <code>AdapterView.onItemClickListener</code> 来捕捉用户的选择动作：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Create a message handling object as an anonymous class.</span></span><br><span class="line"><span class="keyword">private</span> OnItemClickListener messageClickedHandler = <span class="keyword">new</span> OnItemClickListener() &#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onItemClick</span><span class="params">(AdapterView parent, View v, <span class="keyword">int</span> position, <span class="keyword">long</span> id)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// Display a messagebox.</span></span><br><span class="line">        Toast.makeText(context,<span class="string">"You've got an event"</span>,Toast.LENGTH_SHORT).show();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Now hook into our object and set its onItemClickListener member</span></span><br><span class="line"><span class="comment">// to our class handler object.</span></span><br><span class="line">historyView = (ListView)findViewById(R.id.history);</span><br><span class="line">historyView.setOnItemClickListener(messageClickedHandler);</span><br></pre></td></tr></table></figure>
+
+<p>这是一个比较简单的做法，但是有的时候可能我们显示的数据都不是这么简单的，比如我需要对一些来源于网络的字典进行适配的话，我就必须要自己定义一个 Adapter 了。</p>
+<h2 id="自定义一个-Adapter"><a href="#自定义一个-Adapter" class="headerlink" title="自定义一个 Adapter"></a>自定义一个 Adapter</h2><p>对于 Spinner.setAdapter(SpinnerAdapter adapter) 来说，其需要一个 SpinnerAdapter 接口的实现作为参数。恰好，BaseAdapter 就实现了它。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">BaseAdapter</span> <span class="keyword">implements</span> <span class="title">ListAdapter</span>, <span class="title">SpinnerAdapter</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以我们来设计一个抽象的 Adapter，其接受一个类型参数指定了我们要适配的元素序列的类型：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">MyCommonSpinnerAdapter</span>&lt;<span class="title">T</span>&gt; <span class="keyword">extends</span> <span class="title">BaseAdapter</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"MyCommonSpinnerAdapter"</span>;</span><br><span class="line">    <span class="keyword">private</span> List&lt;T&gt; data;</span><br><span class="line">    <span class="keyword">private</span> Context mContext;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyCommonSpinnerAdapter</span><span class="params">(List&lt;T&gt; data, Context context)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">        mContext = context;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> data == <span class="keyword">null</span> ? <span class="number">0</span> : data.size();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">getItem</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> data == <span class="keyword">null</span> ? <span class="keyword">null</span> : data.get(position);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">getItemId</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> position;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> View <span class="title">getView</span><span class="params">(<span class="keyword">int</span> position, View convertView, ViewGroup parent)</span> </span>&#123;</span><br><span class="line">        Log.d(TAG, <span class="string">"getView: "</span>);</span><br><span class="line">        ViewHolder h = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (convertView == <span class="keyword">null</span>) &#123;</span><br><span class="line">            h = <span class="keyword">new</span> ViewHolder();</span><br><span class="line">            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_simple_spinner_list, <span class="keyword">null</span>);</span><br><span class="line">            h.mTextView = convertView.findViewById(R.id.item);</span><br><span class="line">            convertView.setTag(h);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            h = (ViewHolder) convertView.getTag();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        h.mTextView.setText(getText(data.get(position)));</span><br><span class="line">        <span class="keyword">return</span> convertView;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getText</span><span class="params">(T data)</span></span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ViewHolder</span> </span>&#123;</span><br><span class="line">        TextView mTextView;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一般来说，我们的重点都在 getView() 方法上。很多时候，可能都会有人问， convertView 是什么，从哪里来？</p>
+<p>事实上这个不看一下源代码果然是不会知道的。</p>
+<p>对于 Spinner 的父类 AbsSpinner 而言，其在构建的时候，就会初始化一个可回收的视图数组:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">final</span> RecycleBin mRecycler = <span class="keyword">new</span> RecycleBin();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RecycleBin</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> SparseArray&lt;View&gt; mScrapHeap = <span class="keyword">new</span> SparseArray&lt;View&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(<span class="keyword">int</span> position, View v)</span> </span>&#123;</span><br><span class="line">        mScrapHeap.put(position, v);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">View <span class="title">get</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// System.out.print("Looking for " + position);</span></span><br><span class="line">        View result = mScrapHeap.get(position);</span><br><span class="line">        <span class="keyword">if</span> (result != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="comment">// System.out.println(" HIT");</span></span><br><span class="line">            mScrapHeap.delete(position);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// System.out.println(" MISS");</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> SparseArray&lt;View&gt; scrapHeap = mScrapHeap;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> count = scrapHeap.size();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; count; i++) &#123;</span><br><span class="line">            <span class="keyword">final</span> View view = scrapHeap.valueAt(i);</span><br><span class="line">            <span class="keyword">if</span> (view != <span class="keyword">null</span>) &#123;</span><br><span class="line">                removeDetachedView(view, <span class="keyword">true</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        scrapHeap.clear();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>SparseArray 默认会是 10 个元素。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">SparseArray</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>(<span class="number">10</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>在 AbsSpinner 的 <code>onMeasure()</code> 方法中，会根据当前选择的位置来显示视图：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> selectedPosition = getSelectedItemPosition();</span><br><span class="line"><span class="keyword">if</span> (selectedPosition &gt;= <span class="number">0</span> &amp;&amp; mAdapter != <span class="keyword">null</span> &amp;&amp; selectedPosition &lt; mAdapter.getCount()) &#123;</span><br><span class="line">    <span class="comment">// Try looking in the recycler. (Maybe we were measured once already)</span></span><br><span class="line">    View view = mRecycler.get(selectedPosition);</span><br><span class="line">    <span class="keyword">if</span> (view == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// Make a new one</span></span><br><span class="line">        view = mAdapter.getView(selectedPosition, <span class="keyword">null</span>, <span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (view.getImportantForAccessibility() == IMPORTANT_FOR_ACCESSIBILITY_AUTO) &#123;</span><br><span class="line">            view.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (view != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="comment">// Put in recycler for re-measuring and/or layout</span></span><br><span class="line">        mRecycler.put(selectedPosition, view);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (view.getLayoutParams() == <span class="keyword">null</span>) &#123;</span><br><span class="line">            mBlockLayoutRequests = <span class="keyword">true</span>;</span><br><span class="line">            view.setLayoutParams(generateDefaultLayoutParams());</span><br><span class="line">            mBlockLayoutRequests = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        measureChild(view, widthMeasureSpec, heightMeasureSpec);</span><br><span class="line"></span><br><span class="line">        preferredHeight = getChildHeight(view) + mSpinnerPadding.top + mSpinnerPadding.bottom;</span><br><span class="line">        preferredWidth = getChildWidth(view) + mSpinnerPadding.left + mSpinnerPadding.right;</span><br><span class="line"></span><br><span class="line">        needsMeasuring = <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用  adapter 获取 View 后，会将返回的 childView 放在 Recycler 内。</p>
+<p>也就是说，当 adapter 通过 xml 文件扩张了一个视图后，会将视图的结构放在扩张后的 convertView 的 tag 内，这样下次进行使用的时候，将不需要再次进行 findViewById 等操作。可以直接通过 ViewHolder 来进行对应的 convertView 内部的操作。</p>
+<p>实现的模式有点像 RecyclerView 呢。</p>
+<h1 id="PopupMenu"><a href="#PopupMenu" class="headerlink" title="PopupMenu"></a>PopupMenu</h1><p>PopupMenu 会以一个给定 View 作为锚点，显示一个弹出菜单。</p>
+<p>除了每个 View 都会需要一个 Context 外， PopupMenu 需要知道其锚点 View，还有一个菜单，这样其就可以显示出来了。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">PopupMenu</span><span class="params">(Context context, View anchor, <span class="keyword">int</span> gravity, <span class="keyword">int</span> popupStyleAttr,</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">int</span> popupStyleRes)</span> </span>&#123;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>通过 PopupMenu 的成员可以看出其很简单：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> Context mContext;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> MenuBuilder mMenu;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> View mAnchor;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> MenuPopupHelper mPopup;</span><br></pre></td></tr></table></figure>
+
+<p>我们可以从其 show() 方法来看背后的过程：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    mPopup.show();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">show</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.tryShow()) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"MenuPopupHelper cannot be used without an anchor"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryShow</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.isShowing()) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="keyword">this</span>.mAnchorView == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.showPopup(<span class="number">0</span>, <span class="number">0</span>, <span class="keyword">false</span>, <span class="keyword">false</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">showPopup</span><span class="params">(<span class="keyword">int</span> xOffset, <span class="keyword">int</span> yOffset, <span class="keyword">boolean</span> useOffsets, <span class="keyword">boolean</span> showTitle)</span> </span>&#123;</span><br><span class="line">    MenuPopup popup = <span class="keyword">this</span>.getPopup();</span><br><span class="line">    popup.setShowTitle(showTitle);</span><br><span class="line">    <span class="keyword">if</span> (useOffsets) &#123;</span><br><span class="line">        <span class="keyword">int</span> hgrav = GravityCompat.getAbsoluteGravity(<span class="keyword">this</span>.mDropDownGravity, ViewCompat.getLayoutDirection(<span class="keyword">this</span>.mAnchorView)) &amp; <span class="number">7</span>;</span><br><span class="line">        <span class="keyword">if</span> (hgrav == <span class="number">5</span>) &#123;</span><br><span class="line">            xOffset += <span class="keyword">this</span>.mAnchorView.getWidth();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        popup.setHorizontalOffset(xOffset);</span><br><span class="line">        popup.setVerticalOffset(yOffset);</span><br><span class="line">        <span class="keyword">float</span> density = <span class="keyword">this</span>.mContext.getResources().getDisplayMetrics().density;</span><br><span class="line">        <span class="keyword">int</span> halfSize = (<span class="keyword">int</span>)(<span class="number">48.0F</span> * density / <span class="number">2.0F</span>);</span><br><span class="line">        Rect epicenter = <span class="keyword">new</span> Rect(xOffset - halfSize, yOffset - halfSize, xOffset + halfSize, yOffset + halfSize);</span><br><span class="line">        popup.setEpicenterBounds(epicenter);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    popup.show();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>事实上，其本质都是利用  ListPopupWindow，然后在其上显示内容的。</p>
+<h1 id="PopupWindow"><a href="#PopupWindow" class="headerlink" title="PopupWindow"></a>PopupWindow</h1><p>PopupWindow 可以用来显示任何 View。其是一个浮动的容器，位于当前 Activity 的最上方。其有两种方式来进行显示：</p>
+<ul>
+<li>View 的下拉</li>
+<li>固定位置显示</li>
+</ul>
+<p>我们也固定位置显示来看一下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showAtLocation</span><span class="params">(View parent, <span class="keyword">int</span> gravity, <span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">    mParentRootView = <span class="keyword">new</span> WeakReference&lt;&gt;(parent.getRootView());</span><br><span class="line">    showAtLocation(parent.getWindowToken(), gravity, x, y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">showAtLocation</span><span class="params">(IBinder token, <span class="keyword">int</span> gravity, <span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (isShowing() || mContentView == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    TransitionManager.endTransitions(mDecorView);</span><br><span class="line"></span><br><span class="line">    detachFromAnchor();</span><br><span class="line"></span><br><span class="line">    mIsShowing = <span class="keyword">true</span>;</span><br><span class="line">    mIsDropdown = <span class="keyword">false</span>;</span><br><span class="line">    mGravity = gravity;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> WindowManager.LayoutParams p = createPopupLayoutParams(token);</span><br><span class="line">    preparePopup(p);</span><br><span class="line"></span><br><span class="line">    p.x = x;</span><br><span class="line">    p.y = y;</span><br><span class="line"></span><br><span class="line">    invokePopup(p);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>想要 PopupWindow 正式显示，其必须要有一个 ContentView ，也就是需要一个内容视图。</p>
+<p>我们知道，所有的内容需要显示，都必须间接或者直接的继承自 View。所以说，我们光有这对象是无法在屏幕上显示的。在 <code>preparePopup()</code> 方法中，就做了建立 View 的事情：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">preparePopup</span><span class="params">(WindowManager.LayoutParams p)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (mContentView == <span class="keyword">null</span> || mContext == <span class="keyword">null</span> || mWindowManager == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"You must specify a valid content view by "</span></span><br><span class="line">                + <span class="string">"calling setContentView() before attempting to show the popup."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// The old decor view may be transitioning out. Make sure it finishes</span></span><br><span class="line">    <span class="comment">// and cleans up before we try to create another one.</span></span><br><span class="line">    <span class="keyword">if</span> (mDecorView != <span class="keyword">null</span>) &#123;</span><br><span class="line">        mDecorView.cancelTransitions();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// When a background is available, we embed the content view within</span></span><br><span class="line">    <span class="comment">// another view that owns the background drawable.</span></span><br><span class="line">    <span class="keyword">if</span> (mBackground != <span class="keyword">null</span>) &#123;</span><br><span class="line">        mBackgroundView = createBackgroundView(mContentView);</span><br><span class="line">        mBackgroundView.setBackground(mBackground);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        mBackgroundView = mContentView;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    mDecorView = createDecorView(mBackgroundView);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// The background owner should be elevated so that it casts a shadow.</span></span><br><span class="line">    mBackgroundView.setElevation(mElevation);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// We may wrap that in another view, so we'll need to manually specify</span></span><br><span class="line">    <span class="comment">// the surface insets.</span></span><br><span class="line">    p.setSurfaceInsets(mBackgroundView, <span class="keyword">true</span> <span class="comment">/*manual*/</span>, <span class="keyword">true</span> <span class="comment">/*preservePrevious*/</span>);</span><br><span class="line"></span><br><span class="line">    mPopupViewInitialLayoutDirectionInherited =</span><br><span class="line">            (mContentView.getRawLayoutDirection() == View.LAYOUT_DIRECTION_INHERIT);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果我们为 PopupWindow 指定了背景，那么会建立一个 View 来包含着 ContentView，然后这个新建立的 View 就将背景设置为我们指定；但如果我们没有指定背景的话，那就直接将 contentView 作为背景 View 了。</p>
+<p>接着，根据背景 View 来建立一个 decorView，实际上就是一个 FrameLayout。</p>
+<p>在 <code>invokePopup()</code> 方法中，会了解这个 FrameLayout，添加到 PhoneWindow ，我们 Activity 最底层的容器上。所以说，这个 FrameLayout 是与我们默认情况下的 Activity 的decorView 是平级的哦。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android%E4%B8%AD%E8%BF%9B%E8%A1%8C%E6%B7%B7%E6%B7%86%E7%9A%84%E6%97%B6%E5%80%99%E4%BF%9D%E7%95%99%E6%9F%90%E4%BA%9B%E7%B1%BB%E7%9A%84%E9%97%AE%E9%A2%98.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1041,96 +1188,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Retrofit%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%BB%BA%E7%AB%8B%E5%8F%8A%E4%B8%8ERxJava%E7%9A%84%E4%BD%BF%E7%94%A8.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Android/Retrofit%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%BB%BA%E7%AB%8B%E5%8F%8A%E4%B8%8ERxJava%E7%9A%84%E4%BD%BF%E7%94%A8.html" class="post-title-link" itemprop="url">Retrofit对象的建立及与RxJava的使用</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-04-07 23:36:17" itemprop="dateCreated datePublished" datetime="2019-04-07T23:36:17+08:00">2019-04-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Android/Retrofit%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%BB%BA%E7%AB%8B%E5%8F%8A%E4%B8%8ERxJava%E7%9A%84%E4%BD%BF%E7%94%A8.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Retrofit对象的建立及与RxJava的使用.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>对于 Retrofit 的使用，我们一般会利用 Retrofit.Builder 来填写参数后，建立一个 Retrofit 对象，接着就以此对象来根据我们编写的接口生成 所以的 Call，当配合 RxJava 使用的时候，我很好奇这其中的过程是怎么样的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Android/Retrofit%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%BB%BA%E7%AB%8B%E5%8F%8A%E4%B8%8ERxJava%E7%9A%84%E4%BD%BF%E7%94%A8.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1179,14 +1236,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">285</span>
+          <span class="site-state-item-count">286</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '8LQ0Z7JZKO',
+      apiKey: '5d3485c20d60066c59575f644f5b3da9',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="在文章 使用Retrofit-Rxjava来上传下载文件 大概对如何用 RxJava 配合下载文件做了一个介绍，但是最近想着，我们完全是可以将显示的进度，当作是事件发射出来的，但其中遇到了几个坑。">
+<meta name="keywords" content="Android,RxJava,Retrofit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="利用RxJava-Retrofit来下载文件遇到的坑">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Androi&#x2F;%E5%88%A9%E7%94%A8RxJava-Retrofit%E6%9D%A5%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="在文章 使用Retrofit-Rxjava来上传下载文件 大概对如何用 RxJava 配合下载文件做了一个介绍，但是最近想着，我们完全是可以将显示的进度，当作是事件发射出来的，但其中遇到了几个坑。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-27T06:03:06.000Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://gowa.club/Androi/%E5%88%A9%E7%94%A8RxJava-Retrofit%E6%9D%A5%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>利用RxJava-Retrofit来下载文件遇到的坑 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Androi/%E5%88%A9%E7%94%A8RxJava-Retrofit%E6%9D%A5%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          利用RxJava-Retrofit来下载文件遇到的坑
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-27 14:03:06" itemprop="dateCreated datePublished" datetime="2019-11-27T14:03:06+08:00">2019-11-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/RxJava/" itemprop="url" rel="index">
+                    <span itemprop="name">RxJava</span>
+                  </a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Androi/" itemprop="url" rel="index">
+                    <span itemprop="name">Androi</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Androi/%E5%88%A9%E7%94%A8RxJava-Retrofit%E6%9D%A5%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Androi/利用RxJava-Retrofit来下载文件遇到的坑.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在文章 <a href="/RxJava/%E4%BD%BF%E7%94%A8Retrofit-Rxjava%E6%9D%A5%E4%B8%8A%E4%BC%A0%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6.html" title="使用Retrofit-Rxjava来上传下载文件">使用Retrofit-Rxjava来上传下载文件</a> 大概对如何用 RxJava 配合下载文件做了一个介绍，但是最近想着，我们完全是可以将显示的进度，当作是事件发射出来的，但其中遇到了几个坑。</p>
+<a id="more"></a>
+
+<p>我们实现的原理是这么一个事实：<strong>对于OkHttpClient</strong> 返回的数据 ResponseBody 实际上并不是包含真正的数据，从一个比较高的角度来看，实际上我们可以把它看成是一个封装了 套接字 的对象，我们可以从 ResponseBody 封装的套接字上来读取数据，读取后就写入文件，显示进度。</p>
+<h1 id="RxServiceGenerator"><a href="#RxServiceGenerator" class="headerlink" title="RxServiceGenerator"></a>RxServiceGenerator</h1><p>首先我们建立一个 Service 的生产类，用它来根据接口，构造 ServiceMethod。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RxServiceGenerator</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Retrofit.Builder sBuilder = <span class="keyword">new</span> Retrofit.Builder()</span><br><span class="line">            .baseUrl(<span class="string">"https://storage.qoo-app.com/"</span>)</span><br><span class="line">            .addConverterFactory(GsonConverterFactory.create())</span><br><span class="line">            .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync());</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Retrofit mRetrofit = sBuilder.build();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> OkHttpClient.Builder httpClient = <span class="keyword">new</span> OkHttpClient.Builder()</span><br><span class="line">            .connectTimeout(<span class="number">30</span>, TimeUnit.SECONDS)</span><br><span class="line">            .readTimeout(<span class="number">30</span>, TimeUnit.SECONDS);</span><br><span class="line">    <span class="comment">//添加一个日志拦截器，这个是给客户端 OkHttpClient 添加的</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> HttpLoggingInterceptor logging = <span class="keyword">new</span> HttpLoggingInterceptor()</span><br><span class="line">            .setLevel(HttpLoggingInterceptor.Level.BODY);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> &lt;S&gt; <span class="function">S <span class="title">createService</span><span class="params">(Class&lt;S&gt; serviceClass)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!httpClient.interceptors().contains(logging))&#123;</span><br><span class="line">            httpClient.addInterceptor(logging);</span><br><span class="line">            sBuilder.client(httpClient.build());</span><br><span class="line">            mRetrofit = sBuilder.build();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> mRetrofit.create(serviceClass);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，我们在 OkHttpClient 上挂了一个 <a href="https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor" target="_blank" rel="noopener">Logging Interceptor</a> 这个是由 Squareup 官方出的一个拦截器，用来显示请求和响应的日志信息。</p>
+<h1 id="DownloadUtils"><a href="#DownloadUtils" class="headerlink" title="DownloadUtils"></a>DownloadUtils</h1><p>接下来构造我们的下载类。这里用到了  <a href="https://github.com/Blankj/AndroidUtilCode" target="_blank" rel="noopener">https://github.com/Blankj/AndroidUtilCode</a> 这个 Android 的 Utils 库。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DownloadUtils</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"DownloadUtils"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> DownInterface api = RxServiceGenerator.createService(DownInterface<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Observable&lt;String&gt; <span class="title">download</span><span class="params">(String url)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> api</span><br><span class="line">                .down(url)</span><br><span class="line">                .flatMap( r -&gt; writeToFile(r,url));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Observable&lt;String&gt; <span class="title">writeToFile</span><span class="params">(ResponseBody res, String url)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Observable.create(emitter -&gt; &#123;</span><br><span class="line">            Source source = res.source();</span><br><span class="line">            BufferedSink sink = Okio.buffer(Okio.sink(getFile(url)));</span><br><span class="line">            Buffer buffer = <span class="keyword">new</span> Buffer();</span><br><span class="line">            <span class="keyword">long</span> total = res.contentLength();</span><br><span class="line">            <span class="keyword">long</span> downloaded = <span class="number">0</span>, tosave = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">while</span> ((tosave = source.read(buffer, <span class="number">8192</span>)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                buffer.readAll(sink);</span><br><span class="line">                downloaded += tosave;</span><br><span class="line">                Long progress = downloaded * <span class="number">100</span> / total;</span><br><span class="line">                emitter.onNext(String.format(<span class="string">"%d"</span>, progress.intValue()));</span><br><span class="line">            &#125;</span><br><span class="line">            emitter.onComplete();</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> File <span class="title">getFile</span><span class="params">(@NonNull String url)</span> <span class="keyword">throws</span> IOException, SecurityException </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> getSaveFile(getToSavePath(getFileNameByUrl(url)));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getFileNameByUrl</span><span class="params">(@NonNull String url)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (TextUtils.isEmpty(url)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> pos = url.lastIndexOf(<span class="string">"/"</span>);</span><br><span class="line">        <span class="keyword">return</span> url.substring(pos);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getToSavePath</span><span class="params">(String fileName)</span> </span>&#123;</span><br><span class="line">         <span class="keyword">return</span> PathUtils.getExternalAppDownloadPath() + File.separator + fileName;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> File <span class="title">getSaveFile</span><span class="params">(String savePath)</span> <span class="keyword">throws</span> IOException, SecurityException </span>&#123;</span><br><span class="line">        File f = <span class="keyword">new</span> File(savePath);</span><br><span class="line">        <span class="keyword">if</span> (f.exists()) &#123;</span><br><span class="line">            f.delete();</span><br><span class="line">        &#125;</span><br><span class="line">        f.createNewFile();</span><br><span class="line">        <span class="keyword">return</span> f;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">interface</span> <span class="title">DownInterface</span> </span>&#123;</span><br><span class="line">        <span class="meta">@Streaming</span></span><br><span class="line">        <span class="meta">@GET</span></span><br><span class="line">        <span class="function">Observable&lt;ResponseBody&gt; <span class="title">down</span><span class="params">(@Url String url)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在这里我们在 writeToFile 过程中，会将进度信息当做事件发射出去，一旦完成，就发射一个 OnComplete 事件。</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>这样我们就在 Activity 里面进行使用了，我就随便以一个地址来进行测试：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String REQ_URL = <span class="string">"https://storage.qoo-app.com/apk/com.qooapp.qoohelper/com.qooapp.qoohelper-20191119170001.apk"</span>;</span><br><span class="line">DownloadUtils.download(REQ_URL)</span><br><span class="line">        .subscribeOn(Schedulers.io())</span><br><span class="line">        .observeOn(AndroidSchedulers.mainThread())</span><br><span class="line">        .subscribe(nt -&gt; &#123;</span><br><span class="line">                    mProgressBar.setProgress(Integer.parseInt(nt));</span><br><span class="line">                    mTvProgress.setText(String.format(<span class="string">"%s%%"</span>, nt));</span><br><span class="line">                &#125;,</span><br><span class="line">                e -&gt; ToastUtils.showShort(e.getMessage()),</span><br><span class="line">                () -&gt; mTvProgress.setText(<span class="string">"下载完成"</span>)</span><br><span class="line">        );</span><br></pre></td></tr></table></figure>
+
+<p>但是出乎意料，下载的时候不会显示进度，而会在最终将进度一并显示出来。查看日志发现了问题：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.264</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: &lt;-- <span class="number">200</span>  https:<span class="comment">//storage.qoo-app.com/apk/com.qooapp.qoohelper/com.qooapp.qoohelper-20191119170001.apk (760ms)</span></span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.265</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: content-type: application/vnd.android.<span class="keyword">package</span>-archive</span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.265</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: content-length: <span class="number">21136988</span></span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.265</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: last-modified: Tue, <span class="number">19</span> Nov <span class="number">2019</span> <span class="number">09</span>:<span class="number">00</span>:<span class="number">03</span> GMT</span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.265</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: accept-ranges: bytes</span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.266</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: server: AmazonS3</span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.266</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: date: Tue, <span class="number">26</span> Nov <span class="number">2019</span> <span class="number">09</span>:<span class="number">12</span>:<span class="number">27</span> GMT</span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.266</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: etag: <span class="string">"837724425faaa6c21e331e6b3d25e057"</span></span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.266</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: x-cache: Hit from cloudfront</span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.267</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: via: <span class="number">1.1</span> df5e8a506b27f692fa07efb955acfd9c.cloudfront.net (CloudFront)</span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.267</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: x-amz-cf-pop: HKG62-C1</span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.267</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: x-amz-cf-id: AZUqvSCTG2AJBPmuvaL3BDbQovNsxqwDOtKl3toZCu8Q4eif3EpW8Q==</span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">14.267</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: age: <span class="number">75647</span></span><br><span class="line"><span class="number">2019</span>-<span class="number">11</span>-<span class="number">27</span> <span class="number">14</span>:<span class="number">13</span>:<span class="number">17.838</span> <span class="number">8075</span>-<span class="number">26788</span>/com.example.mytext D/OkHttp: &lt;-- <span class="function">END <span class="title">HTTP</span> <span class="params">(binary <span class="number">21136988</span>-<span class="keyword">byte</span> body omitted</span></span></span><br></pre></td></tr></table></figure>
+
+<p>出现这种情况，我猜想是因为在某些地方，先将所有的 ResponseBody 内的数据读取完了，再给到了我们的 DownloadUtils 内。</p>
+<p>我对 getResponseWithInterceptorChain 方法中添加的拦截器都进行 Debug 都没有看到有读取 ResponseBody 的地方。百思不得其解。最终多次尝试，才在  HttpLoggingInterceptor 找到了问题所在。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">Response <span class="title">getResponseWithInterceptorChain</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">  <span class="comment">// Build a full stack of interceptors.</span></span><br><span class="line">  List&lt;Interceptor&gt; interceptors = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">  interceptors.addAll(client.interceptors());</span><br><span class="line">  interceptors.add(retryAndFollowUpInterceptor);</span><br><span class="line">  interceptors.add(<span class="keyword">new</span> BridgeInterceptor(client.cookieJar()));</span><br><span class="line">  interceptors.add(<span class="keyword">new</span> CacheInterceptor(client.internalCache()));</span><br><span class="line">  interceptors.add(<span class="keyword">new</span> ConnectInterceptor(client));</span><br><span class="line">  <span class="keyword">if</span> (!forWebSocket) &#123;</span><br><span class="line">    interceptors.addAll(client.networkInterceptors());</span><br><span class="line">  &#125;</span><br><span class="line">  interceptors.add(<span class="keyword">new</span> CallServerInterceptor(forWebSocket));</span><br><span class="line"></span><br><span class="line">  Interceptor.Chain chain = <span class="keyword">new</span> RealInterceptorChain(interceptors, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="keyword">null</span>, <span class="number">0</span>,</span><br><span class="line">      originalRequest, <span class="keyword">this</span>, eventListener, client.connectTimeoutMillis(),</span><br><span class="line">      client.readTimeoutMillis(), client.writeTimeoutMillis());</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> chain.proceed(originalRequest);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="HttpLoggingInterceptor"><a href="#HttpLoggingInterceptor" class="headerlink" title="HttpLoggingInterceptor"></a>HttpLoggingInterceptor</h1><p>原因在于 HttpLoggingInterceptor 会记录请求和响应的 Body ，所以，其会将 Body 读取出来，然后显示，最终往下，或者往上传递。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ResponseBody responseBody = response.body();</span><br><span class="line">long contentLength = responseBody.contentLength();</span><br><span class="line">String bodySize = contentLength != -1 ? contentLength + &quot;-byte&quot; : &quot;unknown-length&quot;;</span><br><span class="line">logger.log(&quot;&lt;-- &quot; + response.code() + &apos; &apos; + response.message() + &apos; &apos;</span><br><span class="line">    + response.request().url() + &quot; (&quot; + tookMs + &quot;ms&quot; + (!logHeaders ? &quot;, &quot;</span><br><span class="line">    + bodySize + &quot; body&quot; : &quot;&quot;) + &apos;)&apos;);</span><br><span class="line"></span><br><span class="line">if (logHeaders) &#123;</span><br><span class="line">  Headers headers = response.headers();</span><br><span class="line">  for (int i = 0, count = headers.size(); i &lt; count; i++) &#123;</span><br><span class="line">    logger.log(headers.name(i) + &quot;: &quot; + headers.value(i));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (!logBody || !HttpHeaders.hasBody(response)) &#123;</span><br><span class="line">    logger.log(&quot;&lt;-- END HTTP&quot;);</span><br><span class="line">  &#125; else if (bodyEncoded(response.headers())) &#123;</span><br><span class="line">    logger.log(&quot;&lt;-- END HTTP (encoded body omitted)&quot;);</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    BufferedSource source = responseBody.source();</span><br><span class="line">    source.request(Long.MAX_VALUE); // Buffer the entire body.</span><br><span class="line">    Buffer buffer = source.buffer();</span><br><span class="line"></span><br><span class="line">    Charset charset = UTF8;</span><br><span class="line">    MediaType contentType = responseBody.contentType();</span><br><span class="line">    if (contentType != null) &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">        charset = contentType.charset(UTF8);</span><br><span class="line">      &#125; catch (UnsupportedCharsetException e) &#123;</span><br><span class="line">        logger.log(&quot;&quot;);</span><br><span class="line">        logger.log(&quot;Couldn&apos;t decode the response body; charset is likely malformed.&quot;);</span><br><span class="line">        logger.log(&quot;&lt;-- END HTTP&quot;);</span><br><span class="line"></span><br><span class="line">        return response;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (!isPlaintext(buffer)) &#123;</span><br><span class="line">      logger.log(&quot;&quot;);</span><br><span class="line">      logger.log(&quot;&lt;-- END HTTP (binary &quot; + buffer.size() + &quot;-byte body omitted)&quot;);</span><br><span class="line">      return response;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (contentLength != 0) &#123;</span><br><span class="line">      logger.log(&quot;&quot;);</span><br><span class="line">      logger.log(buffer.clone().readString(charset));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    logger.log(&quot;&lt;-- END HTTP (&quot; + buffer.size() + &quot;-byte body)&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>关于在于 </p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">BufferedSource source = responseBody.source();</span><br><span class="line">source.request(Long.MAX_VALUE); <span class="comment">// Buffer the entire body.</span></span><br><span class="line">Buffer buffer = source.buffer();</span><br></pre></td></tr></table></figure>
+
+<p>这个地方将 Body 读取了，在这进行 IO 肯定是要花时间的，所以我们的下载才会先等待，然后突然进度条就满了。</p>
+<p>这就和我们设置的拦截器的级别有关了，我们想要查看 POST 和响应的数据，就必须设置为 Level.Body ，但我们下载的时候不能这么干，我们把级别改一下。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> HttpLoggingInterceptor logging = <span class="keyword">new</span> HttpLoggingInterceptor()</span><br><span class="line">        .setLevel(HttpLoggingInterceptor.Level.HEADERS);</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="InterruptedIOException"><a href="#InterruptedIOException" class="headerlink" title="InterruptedIOException"></a>InterruptedIOException</h1><p>在我们上面的代码中，如果在下载的过程中，在 writeToFile 方法中，安卓退出 Activity 退出了，或者是其他的原因导致了下游的生命周期到了，进行了 dispose() 操作，就会出现 InterruptedIOException。</p>
+<p>在 <a href="https://github.com/ReactiveX/RxJava/wiki/What' target="_blank" rel="noopener"s-different-in-2.0#error-handling">RxJava 的官方文档中说明</a></p>
+<blockquote>
+<p>One important design requirement for 2.x is that no <code>Throwable</code> errors should be swallowed. This means errors that can’t be emitted because the downstream’s lifecycle already reached its terminal state or the downstream cancelled a sequence which was about to emit an error.</p>
+<p>2.x 中一个非常重要的设计就是，任何 Throwable 都不应该被抛弃。这就意味着，如果下游的生命周期到了终止状态，或者下游取消了一个能发射错误的序列，那么，错误就不能被发射出去。</p>
+</blockquote>
+<blockquote>
+<p>Such errors are routed to the <code>RxJavaPlugins.onError</code> handler. This handler can be overridden with the method <code>RxJavaPlugins.setErrorHandler(Consumer&lt;Throwable&gt;)</code>. Without a specific handler, RxJava defaults to printing the <code>Throwable</code>‘s stacktrace to the console and calls the current thread’s uncaught exception handler.</p>
+<p>这些错误就会被路由到 RxJavaPlugins.onError 控制器。这个 Handler 可以被 <code>RxJavaPlugins.setErrorHandler(Consumer&lt;Throwable&gt;)</code> 方法重写。如果没有指定一个 Handler ，RxJava 默认会将 Throwable 的堆栈信息给打印到控制台，然后调用当前线程的 uncaught exception handler</p>
+</blockquote>
+<blockquote>
+<p>On desktop Java, this latter handler does nothing on an <code>ExecutorService</code> backed <code>Scheduler</code> and the application can keep running. However, Android is more strict and terminates the application in such uncaught exception cases.</p>
+<p>在桌面 Java 上，uncaught exception handler 不会做任何事情。然而，安卓上的限制比较严格，其会让应用中止。</p>
+</blockquote>
+<blockquote>
+<p>If this behavior is desirable can be debated, but in any case, if you want to avoid such calls to the uncaught exception handler, the <strong>final application</strong> that uses RxJava 2 (directly or transitively) should set a no-op handler:</p>
+<p>如果不想出现这种行为，那么最终使用 RxJava 的应用，生设置一个无操作的 Handler</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// If Java 8 lambdas are supported</span></span><br><span class="line">RxJavaPlugins.setErrorHandler(e -&gt; &#123; &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// If no Retrolambda or Jack </span></span><br><span class="line">RxJavaPlugins.setErrorHandler(Functions.&lt;Throwable&gt;emptyConsumer());</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>不建议在中间库内改变 error handler。</p>
+</blockquote>
+<blockquote>
+<p>不幸的是，RxJava 不能告知这种超出生命周期，不能发射的 exceptions 应不应该让我们的 APP 崩溃。排查这种原因很烦人，特别是很底层的 source 路由到 RxJavaPlugins.onError。</p>
+</blockquote>
+<p>其也给出了例子的解决方法：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">RxJavaPlugins.setErrorHandler(e -&gt; &#123;</span><br><span class="line">    <span class="keyword">if</span> (e <span class="keyword">instanceof</span> UndeliverableException) &#123;</span><br><span class="line">        e = e.getCause();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ((e <span class="keyword">instanceof</span> IOException) || (e <span class="keyword">instanceof</span> SocketException)) &#123;</span><br><span class="line">        <span class="comment">// fine, irrelevant network problem or API that throws on cancellation</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (e <span class="keyword">instanceof</span> InterruptedException) &#123;</span><br><span class="line">        <span class="comment">// fine, some blocking code was interrupted by a dispose call</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ((e <span class="keyword">instanceof</span> NullPointerException) || (e <span class="keyword">instanceof</span> IllegalArgumentException)) &#123;</span><br><span class="line">        <span class="comment">// that's likely a bug in the application</span></span><br><span class="line">        Thread.currentThread().getUncaughtExceptionHandler()</span><br><span class="line">            .handleException(Thread.currentThread(), e);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (e <span class="keyword">instanceof</span> IllegalStateException) &#123;</span><br><span class="line">        <span class="comment">// that's a bug in RxJava or in a custom operator</span></span><br><span class="line">        Thread.currentThread().getUncaughtExceptionHandler()</span><br><span class="line">            .handleException(Thread.currentThread(), e);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Log.warning(<span class="string">"Undeliverable exception received, not sure what to do"</span>, e);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android/" rel="tag"># Android</a>
+              <a href="/tags/RxJava/" rel="tag"># RxJava</a>
+              <a href="/tags/Retrofit/" rel="tag"># Retrofit</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Docker/Docker%E7%9A%84overlay2%E7%AE%80%E8%BF%B0.html" rel="next" title="Docker的overlay2简述">
+                  <i class="fa fa-chevron-left"></i> Docker的overlay2简述
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RxServiceGenerator"><span class="nav-number">1.</span> <span class="nav-text">RxServiceGenerator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DownloadUtils"><span class="nav-number">2.</span> <span class="nav-text">DownloadUtils</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">3.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HttpLoggingInterceptor"><span class="nav-number">4.</span> <span class="nav-text">HttpLoggingInterceptor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#InterruptedIOException"><span class="nav-number">5.</span> <span class="nav-text">InterruptedIOException</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">286</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">106</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Androi/%E5%88%A9%E7%94%A8RxJava-Retrofit%E6%9D%A5%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html",
+            identifier: "Androi/利用RxJava-Retrofit来下载文件遇到的坑.html",
+            title: "利用RxJava-Retrofit来下载文件遇到的坑"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
