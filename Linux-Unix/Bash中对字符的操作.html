@@ -55,7 +55,7 @@
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="问题的来源是在安卓开发的时候，美工更换了各种图标。需要进行替换。但是有一个蛋疼的问题就是，我们的 app 是分渠道的，有的资源是公用的，所以名称也是一致。我不能将图标进行替换，因为那样会影响其他渠道的图标显示。但是当我将图标放到渠道包的资源目录下的时候，因为出现了一个苦恼的问题。因为美工不专业，做的图标是 xhdpi的，那么如果是在 xxhdpi 或者是 xxhdpi 的分辨率下，读取的将不是我放">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-24T12:05:22.000Z">
+<meta property="og:updated_time" content="2019-11-29T03:28:22.000Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://gowa.club/Linux-Unix/Bash%E4%B8%AD%E5%AF%B9%E5%AD%97%E7%AC%A6%E7%9A%84%E6%93%8D%E4%BD%9C.html">
@@ -248,6 +248,13 @@
 
               <time title="Created: 2019-03-24 20:05:22" itemprop="dateCreated datePublished" datetime="2019-03-24T20:05:22+08:00">2019-03-24</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-11-29 11:28:22" itemprop="dateModified" datetime="2019-11-29T11:28:22+08:00">2019-11-29</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -303,11 +310,11 @@
 <li><code>:</code> 可以用在 <code>-=+</code> 前，表示将已声明但值为 null 也进行匹配。</li>
 </ul>
 <h1 id="长度-子字符"><a href="#长度-子字符" class="headerlink" title="长度/子字符"></a>长度/子字符</h1><ul>
-<li>${&#35;parameter} 得出字符长度。</li>
-<li><code>${var#Pattern}</code> 移除到 <em>Pattern</em> 的匹配在短的地方。<code>echo ${PWD#*/}</code></li>
-<li><code>${var##Pattern}</code> 移除到 <em>Pattern</em> 匹配最长的地方。<code>echo ${PWD##*/}</code></li>
-<li><code>${var%Pattern}</code> 最短匹配，从右至左 <code>echo ${PWD%/*}</code></li>
-<li><code>${var%%Pattern}</code> 最长匹配，从右至左。<code>echo ${PWD%%/*}</code></li>
+<li><code>${ #parameter}</code> 得出字符长度。</li>
+<li><code>${var#Pattern}</code> 移除 <em>Pattern(必须是从左开头开始匹配）</em> 最短匹配的内容。<code>echo ${PWD#/*/}</code></li>
+<li><code>${var##Pattern}</code>移除 <em>Pattern(必须是从左开头开始匹配）</em> 最长匹配的内容。<code>echo ${PWD##/*/}</code></li>
+<li><code>${var%Pattern}</code> 移除最短匹配，从右至左 <code>echo ${PWD%/*}</code></li>
+<li><code>${var%%Pattern}</code> 移除最长匹配，从右至左。<code>echo ${PWD%%/*}</code></li>
 </ul>
 <h1 id="变量扩展-替换"><a href="#变量扩展-替换" class="headerlink" title="变量扩展/替换"></a>变量扩展/替换</h1><ul>
 <li><code>${var:pos}</code> 截短 <em>pos</em> 前的内容 <code>${PWD:8}</code></li>
@@ -405,7 +412,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">288</span>
+          <span class="site-state-item-count">289</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

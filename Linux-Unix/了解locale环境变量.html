@@ -313,6 +313,17 @@
 <li>LC_MONETARY 代表 货币 格式.</li>
 <li>LC_NUMERIC 代表 数字 格式 (比如 小数点 和 千位分组符).</li>
 </ul>
+<h1 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h1><p>Linux 上有两个命令 <code>locale/localectl</code> 来进行设置 locale。</p>
+<ul>
+<li>locale 用来查看相关的 locale 信息，支持的语言，字符集</li>
+<li>localectl 就用来设置对应的 locale 了。</li>
+</ul>
+<p>我们可以利用设置 L_ALL 或者  LANG 变量了更改语言和字符集。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">localectl  <span class="built_in">set</span>-locale LANG=zh_CN.utf8</span><br></pre></td></tr></table></figure>
+
+<p>然后退出重新登录。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">locale</span><br><span class="line">LANG=zh_CN.utf8</span><br><span class="line">LC_CTYPE=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_NUMERIC=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_TIME=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_COLLATE=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_MONETARY=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_MESSAGES=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_PAPER=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_NAME=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_ADDRESS=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_TELEPHONE=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_MEASUREMENT=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_IDENTIFICATION=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_ALL=</span><br></pre></td></tr></table></figure>
+
 
     </div>
 
@@ -386,7 +397,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#原因"><span class="nav-number">1.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#格式"><span class="nav-number">2.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量解释"><span class="nav-number">3.</span> <span class="nav-text">变量解释</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LANG"><span class="nav-number">3.1.</span> <span class="nav-text">LANG</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#原因"><span class="nav-number">1.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#格式"><span class="nav-number">2.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量解释"><span class="nav-number">3.</span> <span class="nav-text">变量解释</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LANG"><span class="nav-number">3.1.</span> <span class="nav-text">LANG</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置"><span class="nav-number">4.</span> <span class="nav-text">设置</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -400,7 +411,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">288</span>
+          <span class="site-state-item-count">289</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
