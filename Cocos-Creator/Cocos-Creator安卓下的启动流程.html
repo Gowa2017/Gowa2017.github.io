@@ -55,7 +55,7 @@
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="事实上， cocos-2dx 和 cocos creator 启动过程大同小异，不过使用的绑定不一致罢了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-14T17:18:15.000Z">
+<meta property="og:updated_time" content="2019-11-29T01:35:15.000Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="https://gowa.club/Cocos-Creator/Cocos-Creator%E5%AE%89%E5%8D%93%E4%B8%8B%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B.html">
@@ -248,6 +248,13 @@
 
               <time title="Created: 2019-11-15 01:18:15" itemprop="dateCreated datePublished" datetime="2019-11-15T01:18:15+08:00">2019-11-15</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2019-11-29 09:35:15" itemprop="dateModified" datetime="2019-11-29T09:35:15+08:00">2019-11-29</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -323,6 +330,13 @@
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">    <span class="keyword">bool</span> ScriptEngine::start()</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!init())</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line"></span><br><span class="line">        se::AutoHandleScope hs;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// debugger</span></span><br><span class="line">        <span class="keyword">if</span> (isDebuggerEnabled())</span><br><span class="line">        &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> SE_ENABLE_INSPECTOR</span></span><br><span class="line">            <span class="comment">// V8 inspector stuff, most code are taken from NodeJS.</span></span><br><span class="line">            _isolateData = node::CreateIsolateData(_isolate, uv_default_loop());</span><br><span class="line">            _env = node::CreateEnvironment(_isolateData, _context.Get(_isolate), <span class="number">0</span>, <span class="literal">nullptr</span>, <span class="number">0</span>, <span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">            node::DebugOptions options;</span><br><span class="line">            options.set_wait_for_connect(_isWaitForConnect);<span class="comment">// the program will be hung up until debug attach if _isWaitForConnect = true</span></span><br><span class="line">            options.set_inspector_enabled(<span class="literal">true</span>);</span><br><span class="line">            options.set_port((<span class="keyword">int</span>)_debuggerServerPort);</span><br><span class="line">            options.set_host_name(_debuggerServerAddr.c_str());</span><br><span class="line">            <span class="keyword">bool</span> ok = _env-&gt;inspector_agent()-&gt;Start(_platform, <span class="string">""</span>, options);</span><br><span class="line">            assert(ok);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//</span></span><br><span class="line">        <span class="keyword">bool</span> ok = <span class="literal">false</span>;</span><br><span class="line">        _startTime = <span class="built_in">std</span>::chrono::steady_clock::now();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> cb : _registerCallbackArray)</span><br><span class="line">        &#123;</span><br><span class="line">            ok = cb(_globalObj);</span><br><span class="line">            assert(ok);</span><br><span class="line">            <span class="keyword">if</span> (!ok)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// After ScriptEngine is started, _registerCallbackArray isn't needed. Therefore, clear it here.</span></span><br><span class="line">        _registerCallbackArray.clear();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ok;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
 <p>这样，我们使用的 js 环境就能调用 所有 cocos 引擎里面的导出函数了。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>其总体的启动过程就如下了：</p>
+<ol>
+<li>Cocos2dxActivity.onCreate 会先加载 so 库，然后用代码的形式构造一个 RelativeLayout。</li>
+<li>构造 Cocos2dxGLSurfaceView，然后将其添加的 RelativeLayout。</li>
+<li>Cocos2dxGLSurfaceView 需要一个 Cocos2dxRenderer 之后都会由它往 Cocos2dxGLSurfaceView 上绘制内容。</li>
+<li>Cocos2dxGLSurfaceView 建立在屏幕上完成后就会调用 Cocos2dxRenderer 的 回调函数，进行 nativeInit 处理。在这个过程就会建立 AppDelegate，初始化引擎，然后执行脚本逻辑。</li>
+</ol>
 
     </div>
 
@@ -395,7 +409,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AppActivity"><span class="nav-number">1.</span> <span class="nav-text">AppActivity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AppActivity-onCreate"><span class="nav-number">1.1.</span> <span class="nav-text">AppActivity.onCreate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cocos2dxActivity-onCreate"><span class="nav-number">1.2.</span> <span class="nav-text">Cocos2dxActivity.onCreate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cocos2dxActivity-init"><span class="nav-number">1.3.</span> <span class="nav-text">Cocos2dxActivity.init()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cocos2dxRenderer"><span class="nav-number">1.4.</span> <span class="nav-text">Cocos2dxRenderer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#onSurfaceCreated"><span class="nav-number">1.4.1.</span> <span class="nav-text">onSurfaceCreated</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nativeInit"><span class="nav-number">1.4.2.</span> <span class="nav-text">nativeInit</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AppDelegate-applicationDidFinishLaunching"><span class="nav-number">2.</span> <span class="nav-text">AppDelegate.applicationDidFinishLaunching</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ScriptEngine-start"><span class="nav-number">3.</span> <span class="nav-text">ScriptEngine::start()</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#AppActivity"><span class="nav-number">1.</span> <span class="nav-text">AppActivity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AppActivity-onCreate"><span class="nav-number">1.1.</span> <span class="nav-text">AppActivity.onCreate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cocos2dxActivity-onCreate"><span class="nav-number">1.2.</span> <span class="nav-text">Cocos2dxActivity.onCreate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cocos2dxActivity-init"><span class="nav-number">1.3.</span> <span class="nav-text">Cocos2dxActivity.init()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cocos2dxRenderer"><span class="nav-number">1.4.</span> <span class="nav-text">Cocos2dxRenderer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#onSurfaceCreated"><span class="nav-number">1.4.1.</span> <span class="nav-text">onSurfaceCreated</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nativeInit"><span class="nav-number">1.4.2.</span> <span class="nav-text">nativeInit</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AppDelegate-applicationDidFinishLaunching"><span class="nav-number">2.</span> <span class="nav-text">AppDelegate.applicationDidFinishLaunching</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ScriptEngine-start"><span class="nav-number">3.</span> <span class="nav-text">ScriptEngine::start()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -409,7 +423,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">286</span>
+          <span class="site-state-item-count">288</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -422,7 +436,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">106</span>
+        <span class="site-state-item-count">107</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
