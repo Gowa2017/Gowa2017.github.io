@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '8LQ0Z7JZKO',
+      apiKey: '5d3485c20d60066c59575f644f5b3da9',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Python 使用 OpenCV 是非常简单的，但是 Lua 使用起来就没有这么容易了，概因为没有人来维护这个东西，没有现程可以用的模块。究其原理，也就是将 OpenCV 库进行一下 LuaBinding 然后就可以在 Lua 虚拟机中使用了，在 GitHub 上就看到了 https:&#x2F;&#x2F;github.com&#x2F;satoren&#x2F;luaOpenCV 这么一个库。">
+<meta name="keywords" content="Lua,OpenCV,LuaBinding,Kaguya">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lua使用luaOpenCV来使用OpenCV库">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Lua&#x2F;Lua%E4%BD%BF%E7%94%A8luaOpenCV%E6%9D%A5%E4%BD%BF%E7%94%A8OpenCV%E5%BA%93.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="Python 使用 OpenCV 是非常简单的，但是 Lua 使用起来就没有这么容易了，概因为没有人来维护这个东西，没有现程可以用的模块。究其原理，也就是将 OpenCV 库进行一下 LuaBinding 然后就可以在 Lua 虚拟机中使用了，在 GitHub 上就看到了 https:&#x2F;&#x2F;github.com&#x2F;satoren&#x2F;luaOpenCV 这么一个库。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-01T13:47:44.000Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://gowa.club/Lua/Lua%E4%BD%BF%E7%94%A8luaOpenCV%E6%9D%A5%E4%BD%BF%E7%94%A8OpenCV%E5%BA%93.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Lua使用luaOpenCV来使用OpenCV库 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/Lua%E4%BD%BF%E7%94%A8luaOpenCV%E6%9D%A5%E4%BD%BF%E7%94%A8OpenCV%E5%BA%93.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Lua使用luaOpenCV来使用OpenCV库
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-01 21:47:44" itemprop="dateCreated datePublished" datetime="2019-12-01T21:47:44+08:00">2019-12-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Lua/Lua%E4%BD%BF%E7%94%A8luaOpenCV%E6%9D%A5%E4%BD%BF%E7%94%A8OpenCV%E5%BA%93.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/Lua使用luaOpenCV来使用OpenCV库.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Python 使用 OpenCV 是非常简单的，但是 Lua 使用起来就没有这么容易了，概因为没有人来维护这个东西，没有现程可以用的模块。究其原理，也就是将 OpenCV 库进行一下 LuaBinding 然后就可以在 Lua 虚拟机中使用了，在 GitHub 上就看到了 <a href="https://github.com/satoren/luaOpenCV" target="_blank" rel="noopener">https://github.com/satoren/luaOpenCV</a> 这么一个库。</p>
+<a id="more"></a>
+<p>虽然说是可用的，但是其过程也是比较困难的，需要使用 Cmake 等编译工具链进行自行编译，这个环境都会出现不小的问题。</p>
+<h1 id="项目指引"><a href="#项目指引" class="headerlink" title="项目指引"></a>项目指引</h1><h2 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h2><ul>
+<li>Lua 5.1 to 5.3 (recommended: 5.3)</li>
+<li>C++11 compiler(gcc 4.8+,clang 3.4+,MSVC2015).</li>
+<li>CMake 2.8 or later</li>
+</ul>
+<h2 id="编译步骤-macOS"><a href="#编译步骤-macOS" class="headerlink" title="编译步骤(macOS)"></a>编译步骤(macOS)</h2><h3 id="初始化第三库依赖"><a href="#初始化第三库依赖" class="headerlink" title="初始化第三库依赖"></a>初始化第三库依赖</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">https://github.com/satoren/luaOpenCV.git</span><br><span class="line">git submodule update --init --recursive</span><br></pre></td></tr></table></figure>
+<p>这里说明一下，因为 luaOpenCV 需要将 OpenCV 库进行绑定，所以其首先肯定要将 OpenCV 源代码拷贝过来了。所以其第三方依赖中就有 OpenCV 项目。</p>
+<p>我们这样就会将所有的第三方 submodule 都给拉到本地来了。依赖有三个：</p>
+<ul>
+<li><a href="https://github.com/opencv/opencv" target="_blank" rel="noopener">OpenCV</a> 这个就不说了，这个依赖的是当时一个特定的版本分支</li>
+<li><a href="https://github.com/satoren/kaguya" target="_blank" rel="noopener">kaguya </a>一个 C++ 到 Lua 的绑定。</li>
+<li><a href="https://github.com/google/googletest" target="_blank" rel="noopener">Google Test</a> 谷歌的 C++ 测试框架。</li>
+</ul>
+<h3 id="编译-OpenCV-本地库"><a href="#编译-OpenCV-本地库" class="headerlink" title="编译 OpenCV 本地库"></a>编译 OpenCV 本地库</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> third_party/opencv</span><br><span class="line">mkdir build</span><br><span class="line"><span class="built_in">cd</span> build</span><br><span class="line">cmake ../ -DCMAKE_INSTALL_PREFIX=../../opencvlib -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=Off</span><br><span class="line">cmake --build . </span><br><span class="line">cmake --build . --target install</span><br></pre></td></tr></table></figure>
+
+<h3 id="编译-luaOpenCV-库"><a href="#编译-luaOpenCV-库" class="headerlink" title="编译 luaOpenCV 库"></a>编译 luaOpenCV 库</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ../../.. <span class="comment"># return to root of source tree</span></span><br><span class="line">mkdir build</span><br><span class="line"><span class="built_in">cd</span> build</span><br><span class="line">cmake ../ -DCMAKE_BUILD_TYPE=Release</span><br><span class="line">cmake --build .</span><br></pre></td></tr></table></figure>
+
+<h3 id="demo"><a href="#demo" class="headerlink" title="demo"></a>demo</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">lua samples/hello_opencv.lua</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="luaOpenCV-Cmakefile-文件解析"><a href="#luaOpenCV-Cmakefile-文件解析" class="headerlink" title="luaOpenCV Cmakefile 文件解析"></a>luaOpenCV Cmakefile 文件解析</h1><p>我们在编译 OpenCV 的时候指定了几个变量：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cmake ../ -DCMAKE_INSTALL_PREFIX=../../opencvlib -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=Off</span><br></pre></td></tr></table></figure>
+
+<p>其中：  </p>
+<ul>
+<li><code>CMAKE_INSTALL_PREFIX</code> 指定将我们的 OpenCV 静态库安装到  thirdl_party/opencvlib 目录下（包括头文件，静态库等）</li>
+<li><code>DBUILD_SHARED_LIBS</code> 指明，我们在编译 OpenCV 的时候，不要生成共享库，而是生成静态库，方便我们后面编译的时候进行链接。</li>
+</ul>
+<p>下面是 cmake 文件</p>
+<figure class="highlight mk"><table><tr><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 2.8)</span><br><span class="line">project(luaOpenCV)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">option(BUILD_TESTS <span class="string">"Builds the unit test"</span> TRUE)</span><br><span class="line"><span class="comment"># 指定 lua 源码目录</span></span><br><span class="line">option(LOCAL_LUA_DIRECTORY <span class="string">"local lua library directory"</span> <span class="string">"third_party/lua-5.3.3"</span>)</span><br><span class="line">set(LOCAL_LUA_DIRECTORY <span class="string">"third_party/lua-5.3.3"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查找 lua 库，如果找不到我们指定的路径这就起作用了</span></span><br><span class="line"><span class="keyword">include</span>(cmake/FindLua.cmake)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 前缀路径，会在 CMAKE_PREFIX_PATH 内查找 openCV </span></span><br><span class="line">set(CMAKE_PREFIX_PATH third_party/opencvlib)</span><br><span class="line">FIND_PACKAGE(OpenCV 3.1.0 REQUIRED)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 包含 lua 头文件及静态库文件</span></span><br><span class="line">include_directories(BEFORE $&#123;LUA_INCLUDE_DIRS&#125;)</span><br><span class="line">link_directories($&#123;LUA_LIBRARY_DIRS&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 包含 kaguya 头文件</span></span><br><span class="line">include_directories(third_party/kaguya/<span class="keyword">include</span>)</span><br><span class="line"><span class="comment"># 包含 OpenCV 头文件</span></span><br><span class="line">include_directories(BEFORE $&#123;OpenCV_INCLUDE_DIRS&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">if(MSVC)</span><br><span class="line"> set(CMAKE_CXX_FLAGS <span class="string">"$&#123;CMAKE_CXX_FLAGS&#125; /bigobj"</span>)</span><br><span class="line"><span class="keyword">else</span>(MSVC)</span><br><span class="line"> set(CMAKE_CXX_FLAGS <span class="string">"$&#123;CMAKE_CXX_FLAGS&#125; -std=c++11"</span>)</span><br><span class="line"><span class="keyword">endif</span>(MSVC)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># luaOpenCV 的源文件其实就两个</span></span><br><span class="line">set(LUA_OPENCV_SRCS src/raw_bind.cc src/manual_bind.cc)</span><br><span class="line">add_library(cv SHARED $&#123;LUA_OPENCV_SRCS&#125;)</span><br><span class="line"><span class="comment"># 将 opencv 静态库， lua 静态库链接到我们的代码内</span></span><br><span class="line">target_link_libraries(cv $&#123;OpenCV_LIBS&#125; $&#123;LUA_LIBRARIES&#125;)</span><br></pre></td></tr></table></figure>
+
+<p>我们重点来看看这 luaOpenCV 的两个代码文件，因为其是用 kaguya 来进行 C++ 绑定的，看明白了这个就很简单了。</p>
+<h1 id="Kaguya"><a href="#Kaguya" class="headerlink" title="Kaguya"></a>Kaguya</h1><p>要说到 Kaguya ，就要说到 LuaBinding，就不能不提 <a href="https://cloudwu.github.io/lua53doc/manual.html#lua_CFunction" target="_blank" rel="noopener">lua_CFunction</a>，所有想要给 Lua 进行调用的 函数（方法） 都必须是 lua_CFunction 格式，<strong>也就是说，接受一个 lua_State 作为参数，返回一个整型值（代表了返回值的个数）</strong>。</p>
+<p>那么，我们 Kaguya 就必须能将所有的 C++ 类的静态方法，类对象方法都转换成这种格式。</p>
+<p>它是怎么做的呢？</p>
+<p>在我们的 raw_bind.cc 和  manual_bind.cc 里面，其实都指向了一个地方，我们来看一个函数 putText</p>
+<h2 id="putText"><a href="#putText" class="headerlink" title="putText"></a>putText</h2><p>在 OpenCV 中 putText 的定义：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">putText</span><span class="params">( InputOutputArray _img, <span class="keyword">const</span> String&amp; text, Point org,</span></span></span><br><span class="line"><span class="function"><span class="params">              <span class="keyword">int</span> fontFace, <span class="keyword">double</span> fontScale, Scalar color,</span></span></span><br><span class="line"><span class="function"><span class="params">              <span class="keyword">int</span> thickness, <span class="keyword">int</span> line_type, <span class="keyword">bool</span> bottomLeftOrigin )</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="comment">// ... ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>而我们的绑定代码则是如下，指定了函数的绑定后的名称，函数的地址，最小参数数量，最大参数数量，函数签名。这个宏，会生成我们要绑定函数的包装函数。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">namespace</span> gen_wrap_cv &#123;</span><br><span class="line">KAGUYA_FUNCTION_OVERLOADS_WITH_SIGNATURE(putText_wrap_obj, cv::putText, <span class="number">6</span>, <span class="number">9</span>, <span class="keyword">void</span> (*)(InputOutputArray, <span class="keyword">const</span> cv::String &amp;, Point, <span class="keyword">int</span>, <span class="keyword">double</span>, Scalar, <span class="keyword">int</span>, <span class="keyword">int</span>, <span class="keyword">bool</span>));</span><br><span class="line"><span class="keyword">auto</span> putText = putText_wrap_obj();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>按着宏往下追，我们看到，这个时候，会以我们传递的函数签名我类型参数，调用 create<T>() 方法。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// kaguya/native_function.hpp </span></span><br><span class="line"></span><br><span class="line"><span class="comment">/// @brief Generate wrapper function object for count based overloads with nonvoid return function. Include default arguments parameter function</span></span><br><span class="line"><span class="comment">/// @param GENERATE_NAME generate function object name</span></span><br><span class="line"><span class="comment">/// @param FNAME target function name</span></span><br><span class="line"><span class="comment">/// @param MINARG minimum arguments count</span></span><br><span class="line"><span class="comment">/// @param MAXARG maximum arguments count</span></span><br><span class="line"><span class="comment">/// @param SIGNATURE function signature. e,g, int(int)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> KAGUYA_FUNCTION_OVERLOADS_WITH_SIGNATURE(GENERATE_NAME,FNAME, MINARG, MAXARG,SIGNATURE) KAGUYA_FUNCTION_OVERLOADS_INTERNAL(GENERATE_NAME,FNAME, MINARG, MAXARG,create<span class="meta-string">&lt;SIGNATURE&gt;())</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 这个针对的是成员函数的</span></span><br><span class="line"><span class="comment">/// @brief Generate wrapper function object for count based overloads with nonvoid return function. Include default arguments parameter function</span></span><br><span class="line"><span class="comment">/// @param GENERATE_NAME generate function object name</span></span><br><span class="line"><span class="comment">/// @param CLASS target class name</span></span><br><span class="line"><span class="comment">/// @param FNAME target function name</span></span><br><span class="line"><span class="comment">/// @param MINARG minimum arguments count</span></span><br><span class="line"><span class="comment">/// @param MAXARG maximum arguments count</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> KAGUYA_MEMBER_FUNCTION_OVERLOADS(GENERATE_NAME,CLASS,FNAME, MINARG, MAXARG) KAGUYA_MEMBER_FUNCTION_OVERLOADS_INTERNAL(GENERATE_NAME,CLASS,FNAME, MINARG, MAXARG,create(&amp;CLASS::FNAME))</span></span><br></pre></td></tr></table></figure>
+
+<p>最终是定义了一个结构体，就是我们绑定后的函数名：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> KAGUYA_FUNCTION_OVERLOADS_INTERNAL(GENERATE_NAME,FNAME, MINARG, MAXARG,CREATE_FN)\</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">GENERATE_NAME</span>\</span></span><br><span class="line"><span class="class">&#123;</span>\</span><br><span class="line">	<span class="keyword">template</span>&lt;<span class="keyword">typename</span> F&gt;\</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">Function</span> :</span> kaguya::OverloadFunctionImpl&lt;F&gt;\</span><br><span class="line">	&#123;\</span><br><span class="line">		<span class="keyword">typedef</span> <span class="keyword">typename</span> kaguya::OverloadFunctionImpl&lt;F&gt;::result_type result_type;\</span><br><span class="line">		virtual result_type invoke_type(lua_State *state)\</span><br><span class="line">		&#123;\</span><br><span class="line">			<span class="keyword">using</span> <span class="keyword">namespace</span> kaguya::nativefunction;\</span><br><span class="line">			<span class="keyword">int</span> argcount = lua_gettop(state);\</span><br><span class="line">			KAGUYA_PP_REPEAT_DEF_VA_ARG(KAGUYA_PP_INC(KAGUYA_PP_SUB(MAXARG, MINARG)), KAGUYA_INTERNAL_OVERLOAD_FUNCTION_INVOKE, FNAME, MINARG, MAXARG)\</span><br><span class="line">			<span class="keyword">throw</span> kaguya::LuaTypeMismatch(<span class="string">"argument count mismatch"</span>);\</span><br><span class="line">		&#125;\</span><br><span class="line">		<span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">minArgCount</span><span class="params">()</span><span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> MINARG;	&#125;\</span><br><span class="line">		<span class="function"><span class="keyword">virtual</span> <span class="keyword">int</span> <span class="title">maxArgCount</span><span class="params">()</span><span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> MAXARG; &#125;\</span><br><span class="line">	&#125;;\</span><br><span class="line">	template&lt;typename F&gt; kaguya::PolymorphicInvoker::holder_type create(F)\</span><br><span class="line">	&#123;\</span><br><span class="line">		kaguya::OverloadFunctionImpl&lt;F&gt;* ptr = <span class="keyword">new</span> Function&lt;F&gt;();\</span><br><span class="line">		<span class="keyword">return</span> kaguya::PolymorphicInvoker::holder_type(ptr);\</span><br><span class="line">	&#125;\</span><br><span class="line">	template&lt;typename F&gt; kaguya::PolymorphicInvoker::holder_type create()\</span><br><span class="line">	&#123;\</span><br><span class="line">		kaguya::OverloadFunctionImpl&lt;F&gt;* ptr = <span class="keyword">new</span> Function&lt;F&gt;();\</span><br><span class="line">		<span class="keyword">return</span> kaguya::PolymorphicInvoker::holder_type(ptr);\</span><br><span class="line">	&#125;\</span><br><span class="line">	kaguya::<span class="function">PolymorphicInvoker <span class="title">operator</span><span class="params">()</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> CREATE_FN; &#125;\</span><br><span class="line">&#125;GENERATE_NAME;</span><br></pre></td></tr></table></figure>
+
+<p>当我们调用这个宏定义好的结构：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> putText = putText_wrap_obj();</span><br></pre></td></tr></table></figure>
+
+<p>实际调用的是：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">template&lt;typename F&gt; kaguya::PolymorphicInvoker::holder_type create()\</span><br><span class="line">&#123;\</span><br><span class="line">	kaguya::OverloadFunctionImpl&lt;F&gt;* ptr = <span class="keyword">new</span> Function&lt;F&gt;();\</span><br><span class="line">	<span class="keyword">return</span> kaguya::PolymorphicInvoker::holder_type(ptr);\</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这会返回一个 Function 的实现，然后将其放到一个 PolymorphicInvoker 中进行返回。</p>
+<p>最终，我们会将这函数注册到 Lua 内去。</p>
+<h2 id="KAGUYA-BINDINGS"><a href="#KAGUYA-BINDINGS" class="headerlink" title="KAGUYA_BINDINGS"></a>KAGUYA_BINDINGS</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">KAGUYA_BINDINGS(cv) &#123;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> kaguya;</span><br><span class="line">  function(<span class="string">"addText"</span>, gen_wrap_cv::addText);</span><br><span class="line">  function(<span class="string">"putText"</span>, gen_wrap_cv::putText);</span><br></pre></td></tr></table></figure>
+
+<p>如果是类：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">class_&lt;cv::RotatedRect&gt;(<span class="string">"RotatedRect"</span>)</span><br><span class="line">  .constructors&lt;<span class="keyword">void</span> (),<span class="keyword">void</span> (<span class="keyword">const</span> Point2f &amp;, <span class="keyword">const</span> Size2f &amp;, <span class="keyword">float</span>),<span class="keyword">void</span> (<span class="keyword">const</span> Point2f &amp;, <span class="keyword">const</span> Point2f &amp;, <span class="keyword">const</span> Point2f &amp;)&gt;()</span><br><span class="line">  .function(<span class="string">"boundingRect"</span>, gen_wrap_cv::gen_wrap_RotatedRect::boundingRect)</span><br><span class="line">  .function(<span class="string">"points"</span>, gen_wrap_cv::gen_wrap_RotatedRect::points)</span><br><span class="line">  .property(<span class="string">"center"</span>, &amp;cv::RotatedRect::center)</span><br><span class="line">  .property(<span class="string">"size"</span>, &amp;cv::RotatedRect::size)</span><br><span class="line">  .property(<span class="string">"angle"</span>, &amp;cv::RotatedRect::angle)</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+
+<p>我们看一下我们这个绑定宏都干了什么：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> KAGUYA_BINDINGS(MODULE_NAME)\</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">KAGUYA_PP_CAT</span><span class="params">(kaguya_bind_internal_,MODULE_NAME)</span><span class="params">()</span></span>;\</span><br><span class="line"><span class="function">KAGUYA_EXPORT <span class="keyword">int</span> <span class="title">KAGUYA_PP_CAT</span><span class="params">(luaopen_, MODULE_NAME)</span><span class="params">(lua_State* L)</span> </span>&#123; <span class="keyword">return</span> kaguya::detail::bind_internal(L,&amp;KAGUYA_PP_CAT(kaguya_bind_internal_, MODULE_NAME)); &#125;\</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">KAGUYA_PP_CAT</span><span class="params">(kaguya_bind_internal_, MODULE_NAME)</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+
+<p>我们将他展开就是：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">kaguya_bind_internal_cv</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="string">"C"</span> __attribute__((visibility(<span class="string">"default"</span>))) <span class="function"><span class="keyword">int</span> <span class="title">luaopen_cv</span><span class="params">(lua_State* L)</span> </span>&#123;</span><br><span class="line"><span class="keyword">return</span> kaguya::detail::bind_internal(L,&amp;kaguya_bind_internal_cv); &#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">kaguya_bind_internal_cv</span><span class="params">()</span></span>&#123;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> kaguya;</span><br><span class="line">  function(<span class="string">"addText"</span>, gen_wrap_cv::addText);</span><br><span class="line">  function(<span class="string">"putText"</span>, gen_wrap_cv::putText);</span><br><span class="line">  class_&lt;cv::RotatedRect&gt;(<span class="string">"RotatedRect"</span>)</span><br><span class="line">    .constructors&lt;<span class="keyword">void</span> (),<span class="keyword">void</span> (<span class="keyword">const</span> Point2f &amp;, <span class="keyword">const</span> Size2f &amp;, <span class="keyword">float</span>),<span class="keyword">void</span> (<span class="keyword">const</span> Point2f &amp;, <span class="keyword">const</span> Point2f &amp;, <span class="keyword">const</span> Point2f &amp;)&gt;()</span><br><span class="line">    .function(<span class="string">"boundingRect"</span>, gen_wrap_cv::gen_wrap_RotatedRect::boundingRect)</span><br><span class="line">    .function(<span class="string">"points"</span>, gen_wrap_cv::gen_wrap_RotatedRect::points)</span><br><span class="line">    .property(<span class="string">"center"</span>, &amp;cv::RotatedRect::center)</span><br><span class="line">    .property(<span class="string">"size"</span>, &amp;cv::RotatedRect::size)</span><br><span class="line">    .property(<span class="string">"angle"</span>, &amp;cv::RotatedRect::angle)</span><br><span class="line">  ;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后就会调用我们的绑定函数了：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">bind_internal</span><span class="params">(lua_State* L, <span class="keyword">void</span>(*bindfn)())</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> count = lua_gettop(L);</span><br><span class="line">	kaguya::<span class="function">State <span class="title">state</span><span class="params">(L)</span></span>;</span><br><span class="line">	LuaTable l = state.newTable();</span><br><span class="line">	l.push();</span><br><span class="line">	<span class="function">scope <span class="title">scope</span><span class="params">(l)</span></span>;</span><br><span class="line">	bindfn();</span><br><span class="line">	<span class="keyword">return</span> lua_gettop(L) - count;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>背后就不细说了，反正就是在里面建个表，然后把在这个表上执行相关的绑定操作了。</p>
+<h1 id="类的实现"><a href="#类的实现" class="headerlink" title="类的实现"></a>类的实现</h1><p>类的实现要复杂得多，所以自己看代码并。但我猜测也不外乎将构造器导出，然后构造的时候就设置其元表这样了。不过，其方法都应该是被包装过的。</p>
+<h1 id="编译过程中出现的错误"><a href="#编译过程中出现的错误" class="headerlink" title="编译过程中出现的错误"></a>编译过程中出现的错误</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In file included from /Users/gowa/Repo/luaOpenCV/third_party/opencv/modules/videoio/src/cap_ffmpeg.cpp:47:</span><br><span class="line">cap_ffmpeg_impl.hpp:1581:21: error: use of</span><br><span class="line">      undeclared identifier &apos;CODEC_FLAG_GLOBAL_HEADER&apos;</span><br><span class="line">        c-&gt;flags |= CODEC_FLAG_GLOBAL_HEADER;</span><br><span class="line">                    ^</span><br><span class="line">/Users/gowa/Repo/luaOpenCV/third_party/opencv/modules/videoio/src/cap_ffmpeg_impl.hpp:1609:30: error: use of</span><br><span class="line">      undeclared identifier &apos;AVFMT_RAWPICTURE&apos;</span><br><span class="line">    if (oc-&gt;oformat-&gt;flags &amp; AVFMT_RAWPICTURE) &#123;</span><br><span class="line">                             ^</span><br><span class="line">/Users/gowa/Repo/luaOpenCV/third_party/opencv/modules/videoio/src/cap_ffmpeg_impl.hpp:1783:35: error: use of</span><br><span class="line">      undeclared identifier &apos;AVFMT_RAWPICTURE&apos;</span><br><span class="line">        if( (oc-&gt;oformat-&gt;flags &amp; AVFMT_RAWPICTURE) == 0 )</span><br><span class="line">                                  ^</span><br><span class="line">/Users/gowa/Repo/luaOpenCV/third_party/opencv/modules/videoio/src/cap_ffmpeg_impl.hpp:2079:32: error: use of</span><br><span class="line">      undeclared identifier &apos;AVFMT_RAWPICTURE&apos;</span><br><span class="line">    if (!(oc-&gt;oformat-&gt;flags &amp; AVFMT_RAWPICTURE)) &#123;</span><br><span class="line">                               ^</span><br><span class="line">/Users/gowa/Repo/luaOpenCV/third_party/opencv/modules/videoio/src/cap_ffmpeg_impl.hpp:2378:25: error: use of</span><br><span class="line">      undeclared identifier &apos;CODEC_FLAG_GLOBAL_HEADER&apos;</span><br><span class="line">            c-&gt;flags |= CODEC_FLAG_GLOBAL_HEADER;</span><br><span class="line">                        ^</span><br><span class="line">/Users/gowa/Repo/luaOpenCV/third_party/opencv/modules/videoio/src/cap_ffmpeg_impl.hpp:2461:9: warning: ignoring return</span><br><span class="line">      value of function declared with &apos;warn_unused_result&apos; attribute [-Wunused-result]</span><br><span class="line">        avformat_write_header(oc_, NULL);</span><br><span class="line">        ^~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~</span><br></pre></td></tr></table></figure>
+
+<p>手动在文件中加上：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> AV_CODEC_FLAG_GLOBAL_HEADER (1 &lt;&lt; 22)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CODEC_FLAG_GLOBAL_HEADER AV_CODEC_FLAG_GLOBAL_HEADER</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> AVFMT_RAWPICTURE 0x0020</span></span><br></pre></td></tr></table></figure>
+
+<p>还有个错误：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">error: cannot initialize a variable</span><br><span class="line">      of type 'char *' with an rvalue of type 'const char *'</span><br><span class="line">    <span class="keyword">char</span>* str = PyString_AsString(obj);</span><br><span class="line">          ^     ~~~~~~~~~~~~~~~~~~~~~~</span><br></pre></td></tr></table></figure>
+
+<p>改为 const 即可：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">char</span>* str = PyString_AsString(obj);</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Lua/" rel="tag"># Lua</a>
+              <a href="/tags/OpenCV/" rel="tag"># OpenCV</a>
+              <a href="/tags/LuaBinding/" rel="tag"># LuaBinding</a>
+              <a href="/tags/Kaguya/" rel="tag"># Kaguya</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Python/Python%E4%BD%BF%E7%94%A8OpenCV.html" rel="next" title="Python使用OpenCV">
+                  <i class="fa fa-chevron-left"></i> Python使用OpenCV
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#项目指引"><span class="nav-number">1.</span> <span class="nav-text">项目指引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前提条件"><span class="nav-number">1.1.</span> <span class="nav-text">前提条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译步骤-macOS"><span class="nav-number">1.2.</span> <span class="nav-text">编译步骤(macOS)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化第三库依赖"><span class="nav-number">1.2.1.</span> <span class="nav-text">初始化第三库依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译-OpenCV-本地库"><span class="nav-number">1.2.2.</span> <span class="nav-text">编译 OpenCV 本地库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译-luaOpenCV-库"><span class="nav-number">1.2.3.</span> <span class="nav-text">编译 luaOpenCV 库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#demo"><span class="nav-number">1.2.4.</span> <span class="nav-text">demo</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#luaOpenCV-Cmakefile-文件解析"><span class="nav-number">2.</span> <span class="nav-text">luaOpenCV Cmakefile 文件解析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kaguya"><span class="nav-number">3.</span> <span class="nav-text">Kaguya</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#putText"><span class="nav-number">3.1.</span> <span class="nav-text">putText</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KAGUYA-BINDINGS"><span class="nav-number">3.2.</span> <span class="nav-text">KAGUYA_BINDINGS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类的实现"><span class="nav-number">4.</span> <span class="nav-text">类的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编译过程中出现的错误"><span class="nav-number">5.</span> <span class="nav-text">编译过程中出现的错误</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">292</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">112</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Lua/Lua%E4%BD%BF%E7%94%A8luaOpenCV%E6%9D%A5%E4%BD%BF%E7%94%A8OpenCV%E5%BA%93.html",
+            identifier: "Lua/Lua使用luaOpenCV来使用OpenCV库.html",
+            title: "Lua使用luaOpenCV来使用OpenCV库"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
