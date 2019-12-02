@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '8LQ0Z7JZKO',
+      apiKey: '5d3485c20d60066c59575f644f5b3da9',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="在文章 Android中模拟输入的实现 我们查看了官方提供的 com.android.commands.input.INPUT 类来进行模拟输入的实现过程。但是有一个很猥琐的地方就是，这个 Input 类我们是无法访问的，其被定义为非 SDK 类，我们用反射的方法来获取这个类的实现的时候，会收到警告。">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android利用Input类实现模拟输入">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Android%E5%88%A9%E7%94%A8Input%E7%B1%BB%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="在文章 Android中模拟输入的实现 我们查看了官方提供的 com.android.commands.input.INPUT 类来进行模拟输入的实现过程。但是有一个很猥琐的地方就是，这个 Input 类我们是无法访问的，其被定义为非 SDK 类，我们用反射的方法来获取这个类的实现的时候，会收到警告。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-02T07:11:18.000Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://gowa.club/Android/Android%E5%88%A9%E7%94%A8Input%E7%B1%BB%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Android利用Input类实现模拟输入 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android%E5%88%A9%E7%94%A8Input%E7%B1%BB%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android利用Input类实现模拟输入
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-02 15:11:18" itemprop="dateCreated datePublished" datetime="2019-12-02T15:11:18+08:00">2019-12-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Android/Android%E5%88%A9%E7%94%A8Input%E7%B1%BB%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Android利用Input类实现模拟输入.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在文章 <a href="/Android/Android%E4%B8%AD%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html" title="Android中模拟输入的实现">Android中模拟输入的实现</a> 我们查看了官方提供的 <strong>com.android.commands.input.INPUT</strong> 类来进行模拟输入的实现过程。但是有一个很猥琐的地方就是，这个 Input 类我们是无法访问的，其被定义为非 SDK 类，我们用反射的方法来获取这个类的实现的时候，会收到警告。</p>
+<a id="more"></a>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class inputS = Class.forName(<span class="string">"com.android.commands.input.INPUT"</span>);</span><br></pre></td></tr></table></figure>
+<p>具体原因在这 <a href="https://developer.android.com/distribute/best-practices/develop/restrictions-non-sdk-interfaces" target="_blank" rel="noopener">这里</a></p>
+<p>因为这个类虽然存在于源代码内，但并未打包在 SDK 内，并不是打算提供开发者用的。</p>
+<blockquote>
+<p>Using Private APIs  Using reflection to access hidden/private Android APIs is not safe; it will often not work on devices from other vendors, and it may suddenly stop working (if the API is removed) or crash spectacularly (if the API behavior changes, since there are no guarantees for compatibility).  Issue id: PrivateApi</p>
+</blockquote>
+<p>所以我们尝试把其源代码搬到我们自己的项目中来吧。</p>
+<h1 id="InputManager-getInstance"><a href="#InputManager-getInstance" class="headerlink" title="InputManager.getInstance"></a>InputManager.getInstance</h1><p>我们的 Input 需要使用  InputManager 来进行模拟的输入，但是，我们却是无法获取其实例的，因为其 getInstance 方法，是 @hide 注解了的。所以我们现在却可以通过反射的时候来获取。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Input</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Class inputManager = Class.forName(<span class="string">"android.hardware.input.InputManager"</span>);</span><br><span class="line">        Method getInstance = inputManager.getDeclaredMethod(<span class="string">"getInstance"</span>);</span><br><span class="line">        mInputManager = (InputManager) getInstance.invoke(<span class="keyword">null</span>);</span><br><span class="line">        inject = inputManager.getDeclaredMethod(<span class="string">"injectInputEvent"</span>, InputEvent<span class="class">.<span class="keyword">class</span>, <span class="title">Integer</span>.<span class="title">TYPE</span>)</span>;</span><br><span class="line">        inject.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>设置 InputManager 里面的所有方法都是 @hide 的。关于如何使用了 Hide 的 API，<a href="https://juejin.im/post/5d4249fbf265da03d42f836b" target="_blank" rel="noopener">这里有一些方法</a>。</p>
+<p>其实我们这样做，还是出现了一些警告：</p>
+<blockquote>
+<p>43: Reflective access to getInstance, which is not part of the public SDK and therefore likely to change in future Android releases<br>45: Reflective access to injectInputEvent, which is not part of the public SDK and therefore likely to change in future Android releases</p>
+</blockquote>
+<p>意思就是通过反射调用非公开的 SDK 的内容，在将来的安卓版本中可能会变更，这个就暂时不用害怕了。</p>
+<p>这样我们就成功的拿到了 InputManager 了。</p>
+<h1 id="权限"><a href="#权限" class="headerlink" title="权限"></a>权限</h1><p>文本的输入不需要特权。而对于触摸的事件在 native 层会检测是否是本进程，或者是 root 权限，需要root 后才能进行。</p>
+<h1 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">final</span> Input input = <span class="keyword">new</span> Input();</span><br><span class="line">tv.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</span><br><span class="line">        input.sendText(InputDevice.SOURCE_KEYBOARD,<span class="string">"hello"</span>);</span><br><span class="line">        Executor executor = Executors.newSingleThreadExecutor();</span><br><span class="line">        executor.execute(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                input.sendTap(InputDevice.SOURCE_TOUCHSCREEN,<span class="number">2</span>,<span class="number">2</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>结果执行的时候，输入文字没有问题，对于触摸的时候，提示：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Caused by: java.lang.SecurityException: Injecting to another application requires INJECT_EVENTS permission</span><br></pre></td></tr></table></figure>
+
+<p>及时我申请了ROOT 也会这样，为什么呢？因为签名问题。</p>
+<p>我们在 <strong>AndroidManifest.xml</strong> 内加上权限需求：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">manifest</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:sharedUserId</span>=<span class="string">"android.uid.system"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">package</span>=<span class="string">"com.example.myapplication"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">uses-permission</span> <span class="attr">android:name</span>=<span class="string">"android.permission.INJECT_EVENTS"</span>/&gt;</span></span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<p>会提示我们：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Using system app permission  </span><br><span class="line">Permissions with the protection level signature, privileged or signatureOrSystem are only granted to system apps. If an app is a regular non-system app, it will never be able to use these permissions.  </span><br><span class="line">Issue id: ProtectedPermissions</span><br></pre></td></tr></table></figure>
+
+<p>只有系统 APP 才能拥有这些权限，意思只有系统 APP 才能获取这些敏感的权限。</p>
+<h1 id="系统签名文件"><a href="#系统签名文件" class="headerlink" title="系统签名文件"></a>系统签名文件</h1><p>我们需要拿系统的签名信息，来生成签名文件。具体来说就是：</p>
+<p>platform.x509.pem platform.pk8 来进行直接或者间接的签名。</p>
+<h2 id="1-直接签名"><a href="#1-直接签名" class="headerlink" title="1. 直接签名"></a>1. 直接签名</h2><p>这个需要用到 signapk.jar 这么一个 jar 包，这是官方源码内会提供的工具。在 <code>aosp/prebuilts/sdk/tools/lib</code> 内会有这个工具，不过这个工具的依赖于几个库。</p>
+<p>我们直接执行命令</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">java -jar ./signapk.jar platform.x509.pem platform.pk8 app-debug.apk app-debug-signed.apk</span><br></pre></td></tr></table></figure>
+
+<p>会提示我们找不到库：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">Caused by: java.lang.IllegalArgumentException: Failed to load any of the given libraries: [conscrypt_openjdk_jni-osx-x86_64, conscrypt_openjdk_jni]</span><br></pre></td></tr></table></figure>
+
+<p>这是因为我们没有相应的 conscrypt_openjdk_jni-osx-x86_64 动态库。我们可以从源码内复制过来：</p>
+<ul>
+<li>Linux  aosp/prebuilts/sdk/tools/linux/lib64/libconscrypt_openjdk_jni.so</li>
+<li>macOS  aosp/prebuilts/sdk/tools/darwin/lib64/libconscrypt_openjdk_jni.dylib</li>
+</ul>
+<p>复制到目录下执行先前的命令就OK了。</p>
+<p>专门写了个小脚本来干这个活：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">OUTDIR=`<span class="built_in">pwd</span>`</span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$#</span> -lt 1 ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"USAGE: sign apkfile"</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line">OUTAPK=<span class="variable">$&#123;1%%.apk&#125;</span>-signed.apk</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ ! -f <span class="variable">$1</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$1</span> 文件不存在"</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line">cp <span class="variable">$1</span> ~/bin/</span><br><span class="line"><span class="built_in">cd</span> ~/bin</span><br><span class="line">java -jar ./signapk.jar platform.x509.pem platform.pk8 <span class="variable">$1</span> <span class="variable">$OUTAPK</span></span><br><span class="line">cp <span class="variable">$OUTAPK</span> <span class="variable">$OUTDIR</span></span><br><span class="line">rm -f <span class="variable">$1</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-转换为-keystore-进行"><a href="#2-转换为-keystore-进行" class="headerlink" title="2. 转换为 keystore 进行"></a>2. 转换为 keystore 进行</h2><p>我们上面的例子中，platform.x509.pem 是公钥，而 platform.pk8 是私钥。我们可以通过将其导入到 keystore 来进行。</p>
+<p>其需要有几步来进行操作：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Convert PK8 to PEM KEY 将 PK8 私钥转换成 转成 pem 格式</span></span><br><span class="line">openssl pkcs8 -inform DER -nocrypt -<span class="keyword">in</span> platform.pk8 -out key</span><br><span class="line"><span class="comment"># Bundle CERT and KEY 导出为 pks12 </span></span><br><span class="line">openssl pkcs12 -<span class="built_in">export</span> -<span class="keyword">in</span> platform.x509.pem -inkey key -out p12 -password pass:android -name sys</span><br><span class="line"><span class="comment"># Import P12 in Keystore</span></span><br><span class="line">keytool -importkeystore -deststorepass android -destkeystore syskeystore -srckeystore p12 -srcstoretype PKCS12 -srcstorepass android </span><br><span class="line">rm -f key p12</span><br></pre></td></tr></table></figure>
+
+<p>这样在我们的 syskeystore 中就会有 sys 条目了，密码是 android。如果我们不指定 -destkeystore 那么会默认存在 <code>~/.keystore</code> 中。</p>
+<p>然后在我们的 Android 中使用这个 keysotre。</p>
+<figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">signingConfigs &#123;</span><br><span class="line">    release &#123;</span><br><span class="line">        storeFile file(System.getenv(<span class="string">"HOME"</span>) + File.separator + <span class="string">".keystore"</span>)</span><br><span class="line">        storePassword <span class="string">'android'</span></span><br><span class="line">        keyAlias <span class="string">'sys'</span></span><br><span class="line">        keyPassword <span class="string">'android'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>OK 没问题能使用了。</p>
+<h1 id="Input-源码"><a href="#Input-源码" class="headerlink" title="Input 源码"></a>Input 源码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Input</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String TAG = <span class="string">"Input"</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String INVALID_ARGUMENTS = <span class="string">"Error: Invalid arguments for command: "</span>;</span><br><span class="line">    <span class="keyword">private</span> InputManager mInputManager;</span><br><span class="line">    <span class="keyword">private</span> Method inject;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String, Integer&gt; SOURCES = <span class="keyword">new</span> HashMap&lt;String, Integer&gt;() &#123;&#123;</span><br><span class="line">        put(<span class="string">"keyboard"</span>, InputDevice.SOURCE_KEYBOARD);</span><br><span class="line">        put(<span class="string">"dpad"</span>, InputDevice.SOURCE_DPAD);</span><br><span class="line">        put(<span class="string">"gamepad"</span>, InputDevice.SOURCE_GAMEPAD);</span><br><span class="line">        put(<span class="string">"touchscreen"</span>, InputDevice.SOURCE_TOUCHSCREEN);</span><br><span class="line">        put(<span class="string">"mouse"</span>, InputDevice.SOURCE_MOUSE);</span><br><span class="line">        put(<span class="string">"stylus"</span>, InputDevice.SOURCE_STYLUS);</span><br><span class="line">        put(<span class="string">"trackball"</span>, InputDevice.SOURCE_TRACKBALL);</span><br><span class="line">        put(<span class="string">"touchpad"</span>, InputDevice.SOURCE_TOUCHPAD);</span><br><span class="line">        put(<span class="string">"touchnavigation"</span>, InputDevice.SOURCE_TOUCH_NAVIGATION);</span><br><span class="line">        put(<span class="string">"joystick"</span>, InputDevice.SOURCE_JOYSTICK);</span><br><span class="line">    &#125;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Input</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Class inputManager = Class.forName(<span class="string">"android.hardware.input.InputManager"</span>);</span><br><span class="line">            Method getInstance = inputManager.getDeclaredMethod(<span class="string">"getInstance"</span>);</span><br><span class="line">            mInputManager = (InputManager) getInstance.invoke(<span class="keyword">null</span>);</span><br><span class="line">            inject = inputManager.getDeclaredMethod(<span class="string">"injectInputEvent"</span>, InputEvent<span class="class">.<span class="keyword">class</span>, <span class="title">Integer</span>.<span class="title">TYPE</span>)</span>;</span><br><span class="line">            inject.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Command-line entry point.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> args The command-line arguments</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        (<span class="keyword">new</span> Input()).run(args);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (args.length &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            showUsage();</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">        String command = args[index];</span><br><span class="line">        <span class="keyword">int</span> inputSource = InputDevice.SOURCE_UNKNOWN;</span><br><span class="line">        <span class="keyword">if</span> (SOURCES.containsKey(command)) &#123;</span><br><span class="line">            inputSource = SOURCES.get(command);</span><br><span class="line">            index++;</span><br><span class="line">            command = args[index];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> length = args.length - index;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (command.equals(<span class="string">"text"</span>)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (length == <span class="number">2</span>) &#123;</span><br><span class="line">                    inputSource = getSource(inputSource, InputDevice.SOURCE_KEYBOARD);</span><br><span class="line">                    sendText(inputSource, args[index+<span class="number">1</span>]);</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (command.equals(<span class="string">"keyevent"</span>)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (length &gt;= <span class="number">2</span>) &#123;</span><br><span class="line">                    <span class="keyword">final</span> <span class="keyword">boolean</span> longpress = <span class="string">"--longpress"</span>.equals(args[index + <span class="number">1</span>]);</span><br><span class="line">                    <span class="keyword">final</span> <span class="keyword">int</span> start = longpress ? index + <span class="number">2</span> : index + <span class="number">1</span>;</span><br><span class="line">                    inputSource = getSource(inputSource, InputDevice.SOURCE_KEYBOARD);</span><br><span class="line">                    <span class="keyword">if</span> (args.length &gt; start) &#123;</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> i = start; i &lt; args.length; i++) &#123;</span><br><span class="line">                            <span class="keyword">int</span> keyCode = KeyEvent.keyCodeFromString(args[i]);</span><br><span class="line">                            <span class="keyword">if</span> (keyCode == KeyEvent.KEYCODE_UNKNOWN) &#123;</span><br><span class="line">                                keyCode = KeyEvent.keyCodeFromString(<span class="string">"KEYCODE_"</span> + args[i]);</span><br><span class="line">                            &#125;</span><br><span class="line">                            sendKeyEvent(inputSource, keyCode, longpress);</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (command.equals(<span class="string">"tap"</span>)) &#123;</span><br><span class="line">                <span class="keyword">if</span> (length == <span class="number">3</span>) &#123;</span><br><span class="line">                    inputSource = getSource(inputSource, InputDevice.SOURCE_TOUCHSCREEN);</span><br><span class="line">                    sendTap(inputSource, Float.parseFloat(args[index+<span class="number">1</span>]),</span><br><span class="line">                            Float.parseFloat(args[index+<span class="number">2</span>]));</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (command.equals(<span class="string">"swipe"</span>)) &#123;</span><br><span class="line">                <span class="keyword">int</span> duration = -<span class="number">1</span>;</span><br><span class="line">                inputSource = getSource(inputSource, InputDevice.SOURCE_TOUCHSCREEN);</span><br><span class="line">                <span class="keyword">switch</span> (length) &#123;</span><br><span class="line">                    <span class="keyword">case</span> <span class="number">6</span>:</span><br><span class="line">                        duration = Integer.parseInt(args[index+<span class="number">5</span>]);</span><br><span class="line">                    <span class="keyword">case</span> <span class="number">5</span>:</span><br><span class="line">                        sendSwipe(inputSource,</span><br><span class="line">                                Float.parseFloat(args[index+<span class="number">1</span>]), Float.parseFloat(args[index+<span class="number">2</span>]),</span><br><span class="line">                                Float.parseFloat(args[index+<span class="number">3</span>]), Float.parseFloat(args[index+<span class="number">4</span>]),</span><br><span class="line">                                duration);</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (command.equals(<span class="string">"draganddrop"</span>)) &#123;</span><br><span class="line">                <span class="keyword">int</span> duration = -<span class="number">1</span>;</span><br><span class="line">                inputSource = getSource(inputSource, InputDevice.SOURCE_TOUCHSCREEN);</span><br><span class="line">                <span class="keyword">switch</span> (length) &#123;</span><br><span class="line">                    <span class="keyword">case</span> <span class="number">6</span>:</span><br><span class="line">                        duration = Integer.parseInt(args[index+<span class="number">5</span>]);</span><br><span class="line">                    <span class="keyword">case</span> <span class="number">5</span>:</span><br><span class="line">                        sendDragAndDrop(inputSource,</span><br><span class="line">                                Float.parseFloat(args[index+<span class="number">1</span>]), Float.parseFloat(args[index+<span class="number">2</span>]),</span><br><span class="line">                                Float.parseFloat(args[index+<span class="number">3</span>]), Float.parseFloat(args[index+<span class="number">4</span>]),</span><br><span class="line">                                duration);</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (command.equals(<span class="string">"press"</span>)) &#123;</span><br><span class="line">                inputSource = getSource(inputSource, InputDevice.SOURCE_TRACKBALL);</span><br><span class="line">                <span class="keyword">if</span> (length == <span class="number">1</span>) &#123;</span><br><span class="line">                    sendTap(inputSource, <span class="number">0.0f</span>, <span class="number">0.0f</span>);</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (command.equals(<span class="string">"roll"</span>)) &#123;</span><br><span class="line">                inputSource = getSource(inputSource, InputDevice.SOURCE_TRACKBALL);</span><br><span class="line">                <span class="keyword">if</span> (length == <span class="number">3</span>) &#123;</span><br><span class="line">                    sendMove(inputSource, Float.parseFloat(args[index+<span class="number">1</span>]),</span><br><span class="line">                            Float.parseFloat(args[index+<span class="number">2</span>]));</span><br><span class="line">                    <span class="keyword">return</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                System.err.println(<span class="string">"Error: Unknown command: "</span> + command);</span><br><span class="line">                showUsage();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NumberFormatException ex) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">        System.err.println(INVALID_ARGUMENTS + command);</span><br><span class="line">        showUsage();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Convert the characters of string text into key event's and send to</span></span><br><span class="line"><span class="comment">     * device.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> text is a string of characters you want to input to the device.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendText</span><span class="params">(<span class="keyword">int</span> source, String text)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        StringBuffer buff = <span class="keyword">new</span> StringBuffer(text);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> escapeFlag = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;buff.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (escapeFlag) &#123;</span><br><span class="line">                escapeFlag = <span class="keyword">false</span>;</span><br><span class="line">                <span class="keyword">if</span> (buff.charAt(i) == <span class="string">'s'</span>) &#123;</span><br><span class="line">                    buff.setCharAt(i, <span class="string">' '</span>);</span><br><span class="line">                    buff.deleteCharAt(--i);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (buff.charAt(i) == <span class="string">'%'</span>) &#123;</span><br><span class="line">                escapeFlag = <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">char</span>[] chars = buff.toString().toCharArray();</span><br><span class="line"></span><br><span class="line">        KeyCharacterMap kcm = KeyCharacterMap.load(KeyCharacterMap.VIRTUAL_KEYBOARD);</span><br><span class="line">        KeyEvent[] events = kcm.getEvents(chars);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; events.length; i++) &#123;</span><br><span class="line">            KeyEvent e = events[i];</span><br><span class="line">            <span class="keyword">if</span> (source != e.getSource()) &#123;</span><br><span class="line">                e.setSource(source);</span><br><span class="line">            &#125;</span><br><span class="line">            injectKeyEvent(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sendKeyEvent</span><span class="params">(<span class="keyword">int</span> inputSource, <span class="keyword">int</span> keyCode, <span class="keyword">boolean</span> longpress)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> now = SystemClock.uptimeMillis();</span><br><span class="line">        injectKeyEvent(<span class="keyword">new</span> KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, <span class="number">0</span>, <span class="number">0</span>,</span><br><span class="line">                KeyCharacterMap.VIRTUAL_KEYBOARD, <span class="number">0</span>, <span class="number">0</span>, inputSource));</span><br><span class="line">        <span class="keyword">if</span> (longpress) &#123;</span><br><span class="line">            injectKeyEvent(<span class="keyword">new</span> KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, <span class="number">1</span>, <span class="number">0</span>,</span><br><span class="line">                    KeyCharacterMap.VIRTUAL_KEYBOARD, <span class="number">0</span>, KeyEvent.FLAG_LONG_PRESS,</span><br><span class="line">                    inputSource));</span><br><span class="line">        &#125;</span><br><span class="line">        injectKeyEvent(<span class="keyword">new</span> KeyEvent(now, now, KeyEvent.ACTION_UP, keyCode, <span class="number">0</span>, <span class="number">0</span>,</span><br><span class="line">                KeyCharacterMap.VIRTUAL_KEYBOARD, <span class="number">0</span>, <span class="number">0</span>, inputSource));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendTap</span><span class="params">(<span class="keyword">int</span> inputSource, <span class="keyword">float</span> x, <span class="keyword">float</span> y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> now = SystemClock.uptimeMillis();</span><br><span class="line">        injectMotionEvent(inputSource, MotionEvent.ACTION_DOWN, now, x, y, <span class="number">1.0f</span>);</span><br><span class="line">        injectMotionEvent(inputSource, MotionEvent.ACTION_UP, now, x, y, <span class="number">0.0f</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sendSwipe</span><span class="params">(<span class="keyword">int</span> inputSource, <span class="keyword">float</span> x1, <span class="keyword">float</span> y1, <span class="keyword">float</span> x2, <span class="keyword">float</span> y2, <span class="keyword">int</span> duration)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (duration &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            duration = <span class="number">300</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">long</span> now = SystemClock.uptimeMillis();</span><br><span class="line">        injectMotionEvent(inputSource, MotionEvent.ACTION_DOWN, now, x1, y1, <span class="number">1.0f</span>);</span><br><span class="line">        <span class="keyword">long</span> startTime = now;</span><br><span class="line">        <span class="keyword">long</span> endTime = startTime + duration;</span><br><span class="line">        <span class="keyword">while</span> (now &lt; endTime) &#123;</span><br><span class="line">            <span class="keyword">long</span> elapsedTime = now - startTime;</span><br><span class="line">            <span class="keyword">float</span> alpha = (<span class="keyword">float</span>) elapsedTime / duration;</span><br><span class="line">            injectMotionEvent(inputSource, MotionEvent.ACTION_MOVE, now, lerp(x1, x2, alpha),</span><br><span class="line">                    lerp(y1, y2, alpha), <span class="number">1.0f</span>);</span><br><span class="line">            now = SystemClock.uptimeMillis();</span><br><span class="line">        &#125;</span><br><span class="line">        injectMotionEvent(inputSource, MotionEvent.ACTION_UP, now, x2, y2, <span class="number">0.0f</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sendDragAndDrop</span><span class="params">(<span class="keyword">int</span> inputSource, <span class="keyword">float</span> x1, <span class="keyword">float</span> y1, <span class="keyword">float</span> x2, <span class="keyword">float</span> y2,</span></span></span><br><span class="line"><span class="function"><span class="params">                                 <span class="keyword">int</span> dragDuration)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (dragDuration &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            dragDuration = <span class="number">300</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">long</span> now = SystemClock.uptimeMillis();</span><br><span class="line">        injectMotionEvent(inputSource, MotionEvent.ACTION_DOWN, now, x1, y1, <span class="number">1.0f</span>);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(ViewConfiguration.getLongPressTimeout());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(e);</span><br><span class="line">        &#125;</span><br><span class="line">        now = SystemClock.uptimeMillis();</span><br><span class="line">        <span class="keyword">long</span> startTime = now;</span><br><span class="line">        <span class="keyword">long</span> endTime = startTime + dragDuration;</span><br><span class="line">        <span class="keyword">while</span> (now &lt; endTime) &#123;</span><br><span class="line">            <span class="keyword">long</span> elapsedTime = now - startTime;</span><br><span class="line">            <span class="keyword">float</span> alpha = (<span class="keyword">float</span>) elapsedTime / dragDuration;</span><br><span class="line">            injectMotionEvent(inputSource, MotionEvent.ACTION_MOVE, now, lerp(x1, x2, alpha),</span><br><span class="line">                    lerp(y1, y2, alpha), <span class="number">1.0f</span>);</span><br><span class="line">            now = SystemClock.uptimeMillis();</span><br><span class="line">        &#125;</span><br><span class="line">        injectMotionEvent(inputSource, MotionEvent.ACTION_UP, now, x2, y2, <span class="number">0.0f</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Sends a simple zero-pressure move event.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> inputSource the InputDevice.SOURCE_* sending the input event</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> dx change in x coordinate due to move</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> dy change in y coordinate due to move</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">sendMove</span><span class="params">(<span class="keyword">int</span> inputSource, <span class="keyword">float</span> dx, <span class="keyword">float</span> dy)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> now = SystemClock.uptimeMillis();</span><br><span class="line">        injectMotionEvent(inputSource, MotionEvent.ACTION_MOVE, now, dx, dy, <span class="number">0.0f</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">injectKeyEvent</span><span class="params">(KeyEvent event)</span> </span>&#123;</span><br><span class="line">        Log.i(TAG, <span class="string">"injectKeyEvent: "</span> + event);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            inject.invoke(mInputManager, event, <span class="number">0</span>);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">getInputDeviceId</span><span class="params">(<span class="keyword">int</span> inputSource)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_DEVICE_ID = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] devIds = InputDevice.getDeviceIds();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> devId : devIds) &#123;</span><br><span class="line">            InputDevice inputDev = InputDevice.getDevice(devId);</span><br><span class="line">            <span class="keyword">if</span> (inputDev.supportsSource(inputSource)) &#123;</span><br><span class="line">                <span class="keyword">return</span> devId;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> DEFAULT_DEVICE_ID;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Builds a MotionEvent and injects it into the event stream.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> inputSource the InputDevice.SOURCE_* sending the input event</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> action the MotionEvent.ACTION_* for the event</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> when the value of SystemClock.uptimeMillis() at which the event happened</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> x x coordinate of event</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> y y coordinate of event</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> pressure pressure of event</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">injectMotionEvent</span><span class="params">(<span class="keyword">int</span> inputSource, <span class="keyword">int</span> action, <span class="keyword">long</span> when, <span class="keyword">float</span> x, <span class="keyword">float</span> y, <span class="keyword">float</span> pressure)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_SIZE = <span class="number">1.0f</span>;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_META_STATE = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_PRECISION_X = <span class="number">1.0f</span>;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_PRECISION_Y = <span class="number">1.0f</span>;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_EDGE_FLAGS = <span class="number">0</span>;</span><br><span class="line">        MotionEvent event = MotionEvent.obtain(when, when, action, x, y, pressure, DEFAULT_SIZE,</span><br><span class="line">                DEFAULT_META_STATE, DEFAULT_PRECISION_X, DEFAULT_PRECISION_Y,</span><br><span class="line">                getInputDeviceId(inputSource), DEFAULT_EDGE_FLAGS);</span><br><span class="line">        event.setSource(inputSource);</span><br><span class="line">        Log.i(TAG, <span class="string">"injectMotionEvent: "</span> + event);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            inject.invoke(mInputManager, event, <span class="number">2</span>);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> <span class="title">lerp</span><span class="params">(<span class="keyword">float</span> a, <span class="keyword">float</span> b, <span class="keyword">float</span> alpha)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (b - a) * alpha + a;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getSource</span><span class="params">(<span class="keyword">int</span> inputSource, <span class="keyword">int</span> defaultSource)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> inputSource == InputDevice.SOURCE_UNKNOWN ? defaultSource : inputSource;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">showUsage</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.err.println(<span class="string">"Usage: input [&lt;source&gt;] &lt;command&gt; [&lt;arg&gt;...]"</span>);</span><br><span class="line">        System.err.println();</span><br><span class="line">        System.err.println(<span class="string">"The sources are: "</span>);</span><br><span class="line">        <span class="keyword">for</span> (String src : SOURCES.keySet()) &#123;</span><br><span class="line">            System.err.println(<span class="string">"      "</span> + src);</span><br><span class="line">        &#125;</span><br><span class="line">        System.err.println();</span><br><span class="line">        System.err.println(<span class="string">"The commands and default sources are:"</span>);</span><br><span class="line">        System.err.println(<span class="string">"      text &lt;string&gt; (Default: touchscreen)"</span>);</span><br><span class="line">        System.err.println(<span class="string">"      keyevent [--longpress] &lt;key code number or name&gt; ..."</span></span><br><span class="line">                + <span class="string">" (Default: keyboard)"</span>);</span><br><span class="line">        System.err.println(<span class="string">"      tap &lt;x&gt; &lt;y&gt; (Default: touchscreen)"</span>);</span><br><span class="line">        System.err.println(<span class="string">"      swipe &lt;x1&gt; &lt;y1&gt; &lt;x2&gt; &lt;y2&gt; [duration(ms)]"</span></span><br><span class="line">                + <span class="string">" (Default: touchscreen)"</span>);</span><br><span class="line">        System.err.println(<span class="string">"      draganddrop &lt;x1&gt; &lt;y1&gt; &lt;x2&gt; &lt;y2&gt; [duration(ms)]"</span></span><br><span class="line">                + <span class="string">" (Default: touchscreen)"</span>);</span><br><span class="line">        System.err.println(<span class="string">"      press (Default: trackball)"</span>);</span><br><span class="line">        System.err.println(<span class="string">"      roll &lt;dx&gt; &lt;dy&gt; (Default: trackball)"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android/" rel="tag"># Android</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Lua/Lua%E4%BD%BF%E7%94%A8luaOpenCV%E6%9D%A5%E4%BD%BF%E7%94%A8OpenCV%E5%BA%93.html" rel="next" title="Lua使用luaOpenCV来使用OpenCV库">
+                  <i class="fa fa-chevron-left"></i> Lua使用luaOpenCV来使用OpenCV库
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#InputManager-getInstance"><span class="nav-number">1.</span> <span class="nav-text">InputManager.getInstance</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#权限"><span class="nav-number">2.</span> <span class="nav-text">权限</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试代码"><span class="nav-number">3.</span> <span class="nav-text">测试代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">3.1.</span> <span class="nav-text">问题</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#系统签名文件"><span class="nav-number">4.</span> <span class="nav-text">系统签名文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-直接签名"><span class="nav-number">4.1.</span> <span class="nav-text">1. 直接签名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-转换为-keystore-进行"><span class="nav-number">4.2.</span> <span class="nav-text">2. 转换为 keystore 进行</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Input-源码"><span class="nav-number">5.</span> <span class="nav-text">Input 源码</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">293</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">113</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Android/Android%E5%88%A9%E7%94%A8Input%E7%B1%BB%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5.html",
+            identifier: "Android/Android利用Input类实现模拟输入.html",
+            title: "Android利用Input类实现模拟输入"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
