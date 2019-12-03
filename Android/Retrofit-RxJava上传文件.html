@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '8LQ0Z7JZKO',
+      apiKey: '5d3485c20d60066c59575f644f5b3da9',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="在 利用RxJava-Retrofit来下载文件遇到的坑 我们已经可以在下载文件，将整个流程弄成链式的了，但是在上传文件就不会这么容易，有不少地方需要注意。">
+<meta name="keywords" content="Android,RxJava,Retrofit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Retrofit-RxJava上传文件">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Retrofit-RxJava%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="在 利用RxJava-Retrofit来下载文件遇到的坑 我们已经可以在下载文件，将整个流程弄成链式的了，但是在上传文件就不会这么容易，有不少地方需要注意。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-29T08:53:03.000Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://gowa.club/Android/Retrofit-RxJava%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Retrofit-RxJava上传文件 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Retrofit-RxJava%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Retrofit-RxJava上传文件
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-29 16:53:03" itemprop="dateCreated datePublished" datetime="2019-11-29T16:53:03+08:00">2019-11-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Android/Retrofit-RxJava%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Retrofit-RxJava上传文件.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在 <a href="/RxJava/%E5%88%A9%E7%94%A8RxJava-Retrofit%E6%9D%A5%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html" title="利用RxJava-Retrofit来下载文件遇到的坑">利用RxJava-Retrofit来下载文件遇到的坑</a> 我们已经可以在下载文件，将整个流程弄成链式的了，但是在上传文件就不会这么容易，有不少地方需要注意。</p>
+<a id="more"></a>
+
+<p>这和我们的 Retrofit 与 OkHttp 的接驳有关。在 <a href="/RxJava/Retrofit-OkHttp%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BBmd.html" title="Retrofit-OkHttp请求过程-源码阅读md">Retrofit-OkHttp请求过程-源码阅读md</a> 中我们看到，Retrofit 会</p>
+<ol>
+<li>根据  API 接口生成一个代理实现，这个代理实现的所有接口中的方法都是 HttpServiceMethod（更确切一点，是HttpServiceMethod 的子类 CallAdapted 其持有一个建立的 CallAdapter ）。</li>
+<li>调用这个代理实现的方法，就会通过反射调用 HttpServiceMethod（CallAdapted），将一个 OkHttpCall 调用 callAdapter.adapt(call) 进行适配后返回。</li>
+</ol>
+<h1 id="RxJava2CallAdapter"><a href="#RxJava2CallAdapter" class="headerlink" title="RxJava2CallAdapter"></a>RxJava2CallAdapter</h1><p>而对于我们的 RxJava2CallAdapter，其 adapt 做的事情就是将我们的 Retrofit 的 OkHttpCall 适配成一个 Observable。最终返回的是一个 ResultObservable。<br>这个可以我们可以看一下这个调用链调：</p>
+<p>OkHttpCall -&gt; CallEnqueueObservable(CallExecuteObservable) -&gt; BodyObservable。</p>
+<p>我们的 subscribe 就是对 BodyObservable 进行订阅的。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Object <span class="title">adapt</span><span class="params">(Call&lt;R&gt; call)</span> </span>&#123;</span><br><span class="line">  Observable&lt;Response&lt;R&gt;&gt; responseObservable = isAsync</span><br><span class="line">      ? <span class="keyword">new</span> CallEnqueueObservable&lt;&gt;(call)</span><br><span class="line">      : <span class="keyword">new</span> CallExecuteObservable&lt;&gt;(call);</span><br><span class="line"></span><br><span class="line">  Observable&lt;?&gt; observable;</span><br><span class="line">  <span class="keyword">if</span> (isResult) &#123;</span><br><span class="line">    observable = <span class="keyword">new</span> ResultObservable&lt;&gt;(responseObservable);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isBody) &#123;</span><br><span class="line">    observable = <span class="keyword">new</span> BodyObservable&lt;&gt;(responseObservable);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    observable = responseObservable;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (scheduler != <span class="keyword">null</span>) &#123;</span><br><span class="line">    observable = observable.subscribeOn(scheduler);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isFlowable) &#123;</span><br><span class="line">    <span class="keyword">return</span> observable.toFlowable(BackpressureStrategy.LATEST);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (isSingle) &#123;</span><br><span class="line">    <span class="keyword">return</span> observable.singleOrError();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (isMaybe) &#123;</span><br><span class="line">    <span class="keyword">return</span> observable.singleElement();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (isCompletable) &#123;</span><br><span class="line">    <span class="keyword">return</span> observable.ignoreElements();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> RxJavaPlugins.onAssembly(observable);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="OkHttpCall"><a href="#OkHttpCall" class="headerlink" title="OkHttpCall"></a>OkHttpCall</h1><p>当我们对这个 call 调用 <code>execute(), enqueue()</code> 方法的时候，最终，它都会建立一个 OkHttp3 的 RealCall，然后开发发送请求。</p>
+<p>在 RealCall 中会添加多个拦截器，最先返回的那个是 CallServerInterceptor 在这里面，其会将请求的头，请求的 Body 写到套接字上面去（从 Java 这来看是写到 Http1CodeC 建立的 RequestBody 去）</p>
+<p>这个读取，是从我们最上层建立的 RequestBody 处进行读取，然后写入。网络上大多数的思路，都是通过将 RequestBody 的 writeTo 方法进行重写。</p>
+<h1 id="RequestBody"><a href="#RequestBody" class="headerlink" title="RequestBody"></a>RequestBody</h1><p>对于一个文件，其构建的 RequestBody 是这样的：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** Returns a new request body that transmits the content of &#123;<span class="doctag">@code</span> file&#125;. */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RequestBody <span class="title">create</span><span class="params">(<span class="keyword">final</span> @Nullable MediaType contentType, <span class="keyword">final</span> File file)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (file == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"file == null"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> RequestBody() &#123;</span><br><span class="line">    <span class="meta">@Override</span> <span class="keyword">public</span> <span class="meta">@Nullable</span> <span class="function">MediaType <span class="title">contentType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> contentType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">contentLength</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> file.length();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeTo</span><span class="params">(BufferedSink sink)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      Source source = <span class="keyword">null</span>;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        source = Okio.source(file);</span><br><span class="line">        sink.writeAll(source);</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        Util.closeQuietly(source);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果我们重写 WriteTo 方法，每次按一定的量进行读取，然后嘟嘟后就把消息给一个回调函数，这是可以的，但是有没有更好的办法呢？</p>
+<p>想了很久感觉是没有的，因为我们是无法侵入到 CallServerInterceptor 里面去进行操作的。</p>
+<p>对于订阅的 BodyObservable 来说，我们是想知道的这次调用网络接口是成功还是失败。而不是想知道其上传了多少，毕竟这不是单独为了我们的上传文件而设计的东西。</p>
+<p>简而言之，只有CallServerInterceptor 处理后返回到 OkHttpCall 的数据，BodyObservable 才能将其转换为事件往下发射。而我们需要的是在 CallServerInterceptor 处理的过程中就发射事件，而且不可以发射到 OkHttpCall 所以常规的思路肯定就是实现不了。</p>
+<p>而且对于 RequestBody 读肯定是在 IO 线程的，其也要涉及到线程的切换来通知进度。</p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>在国外网站上找到了一个比较链式一点的实现 <a href="https://medium.com/@PaulinaSadowska/display-progress-of-multipart-request-with-retrofit-and-rxjava-23a4a779e6ba" target="_blank" rel="noopener">https://medium.com/@PaulinaSadowska/display-progress-of-multipart-request-with-retrofit-and-rxjava-23a4a779e6ba</a></p>
+<p>其实现的原理也是在 RequestBody 中重写方法，不过是将事件封装到下一个 Flowable 中，不再使用异步调用发起请求，而是采用  blockingGet 拿到请求的返回结果，然后再抛回来。</p>
+<h1 id="HTTP-协议-multipart"><a href="#HTTP-协议-multipart" class="headerlink" title="HTTP 协议 multipart"></a>HTTP 协议 multipart</h1><p>我们可以 Post 多种类型的内容，这些内容会放在 Body 里面，但是这些内容是什么类型，则由 header 里面的 content-type 来进行指定。</p>
+<blockquote>
+<p>协议规定：如果发送者发送的消息里面有 body，其必须在 Header 中生成一个 Content-Type 字段，除非它不知道。如果 Content-Type 头字段没有设置，那么接收方就会将其当做是 application/octet-stream 来处理或通过测试来决定其类型。</p>
+</blockquote>
+<p>关于所有类型的完整定义在 <a href="https://tools.ietf.org/html/rfc2046" target="_blank" rel="noopener">rfc2046 </a>。</p>
+<p>对于 content-type  是 multipart 其会拥有多个子类型。<a href="https://tools.ietf.org/html/rfc2046#section-5.1" target="_blank" rel="noopener">rfc2046 5.1 节</a> 对其进行了描述。</p>
+<p>对于类型是 multipart 的，在 content-type 字段还需要设置一个参数 <strong>boundary</strong>，然后会定义一个定界分隔符：完全由两个 <code>-</code> 符号组成的线，加上 <strong>boundary</strong>。对于里面的每个part 我们都可以指定其类型，及相关参数如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST /foo HTTP/1.1</span><br><span class="line">Content-Length: 68137</span><br><span class="line">Content-Type: multipart/form-data; boundary=---------------------------974767299852498929531610575</span><br><span class="line"></span><br><span class="line">-----------------------------974767299852498929531610575</span><br><span class="line">Content-Disposition: form-data; name=&quot;description&quot; </span><br><span class="line"></span><br><span class="line">some text</span><br><span class="line">-----------------------------974767299852498929531610575</span><br><span class="line">Content-Disposition: form-data; name=&quot;myFile&quot;; filename=&quot;foo.txt&quot; </span><br><span class="line">Content-Type: text/plain </span><br><span class="line"></span><br><span class="line">(content of the uploaded file foo.txt)</span><br><span class="line">-----------------------------974767299852498929531610575--</span><br></pre></td></tr></table></figure>
+
+<p>实际上有两种类型的 multipart ， formdata 和 byterange 不过后一种我们用得少，所以先不管它。</p>
+<h1 id="MultipartBody"><a href="#MultipartBody" class="headerlink" title="MultipartBody"></a>MultipartBody</h1><p>MultipartBody 是 RequestBody 的子类，因为其有多个 Part 所以其还有一个内部类 Part，每个 Part 都是一个 RequestBody 加上此 Part 对应的信息如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Content-Disposition: form-data; name=&quot;myFile&quot;; filename=&quot;foo.txt&quot;  这是 PartHeader </span><br><span class="line">Content-Type: text/plain  </span><br><span class="line"></span><br><span class="line">(content of the uploaded file foo.txt)  Part 中的 RequestBody</span><br></pre></td></tr></table></figure>
+
+<p>我们现在要做的就是在一个 RequestBody 上封装一个 CountingRequestBody ，重写且在写出数据的方法，回调进行通知。事实本质上还是进行了回调。</p>
+<p>这样做，依然还有 个问题，就是当我们从文件内读取数据，然后写入到 套接字的时候，如果IO快的话，会很快就返回到100%，但这个时候，网络的传输并没有完成，就会出现进度100%，然后却等几秒才有反应的问题。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android/" rel="tag"># Android</a>
+              <a href="/tags/RxJava/" rel="tag"># RxJava</a>
+              <a href="/tags/Retrofit/" rel="tag"># Retrofit</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Python/Python%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5%E5%86%85%E5%AE%B9.html" rel="next" title="Python解析网页内容">
+                  <i class="fa fa-chevron-left"></i> Python解析网页内容
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/Android/%E5%AE%89%E8%A3%85Genymotion%E5%85%8D%E8%B4%B9%E7%89%88%E6%A8%A1%E6%8B%9F%E5%99%A8%E8%BF%9B%E8%A1%8C%E8%B0%83%E8%AF%95.html" rel="prev" title="安装Genymotion免费版模拟器进行调试">
+                  安装Genymotion免费版模拟器进行调试 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RxJava2CallAdapter"><span class="nav-number">1.</span> <span class="nav-text">RxJava2CallAdapter</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OkHttpCall"><span class="nav-number">2.</span> <span class="nav-text">OkHttpCall</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#RequestBody"><span class="nav-number">3.</span> <span class="nav-text">RequestBody</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实现"><span class="nav-number">4.</span> <span class="nav-text">实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-协议-multipart"><span class="nav-number">5.</span> <span class="nav-text">HTTP 协议 multipart</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MultipartBody"><span class="nav-number">6.</span> <span class="nav-text">MultipartBody</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">294</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">113</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Android/Retrofit-RxJava%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6.html",
+            identifier: "Android/Retrofit-RxJava上传文件.html",
+            title: "Retrofit-RxJava上传文件"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
