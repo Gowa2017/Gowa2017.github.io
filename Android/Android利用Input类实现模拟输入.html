@@ -47,13 +47,13 @@
   };
 </script>
 
-  <meta name="description" content="在文章 Android中模拟输入的实现 我们查看了官方提供的 com.android.commands.input.INPUT 类来进行模拟输入的实现过程。但是有一个很猥琐的地方就是，这个 Input 类我们是无法访问的，其被定义为非 SDK 类，我们用反射的方法来获取这个类的实现的时候，会收到警告。">
-<meta name="keywords" content="Android">
+  <meta name="description" content="在文章 Android中Input类模拟输入的实现 我们查看了官方提供的 com.android.commands.input.INPUT 类来进行模拟输入的实现过程。但是有一个很猥琐的地方就是，这个 Input 类我们是无法访问的，其被定义为非 SDK 类，我们用反射的方法来获取这个类的实现的时候，会收到警告。">
+<meta name="keywords" content="Android,Android Input">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android利用Input类实现模拟输入">
 <meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Android%E5%88%A9%E7%94%A8Input%E7%B1%BB%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="在文章 Android中模拟输入的实现 我们查看了官方提供的 com.android.commands.input.INPUT 类来进行模拟输入的实现过程。但是有一个很猥琐的地方就是，这个 Input 类我们是无法访问的，其被定义为非 SDK 类，我们用反射的方法来获取这个类的实现的时候，会收到警告。">
+<meta property="og:description" content="在文章 Android中Input类模拟输入的实现 我们查看了官方提供的 com.android.commands.input.INPUT 类来进行模拟输入的实现过程。但是有一个很猥琐的地方就是，这个 Input 类我们是无法访问的，其被定义为非 SDK 类，我们用反射的方法来获取这个类的实现的时候，会收到警告。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-12-02T07:11:18.000Z">
 <meta name="twitter:card" content="summary">
@@ -285,7 +285,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在文章 <a href="/Android/Android%E4%B8%AD%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html" title="Android中模拟输入的实现">Android中模拟输入的实现</a> 我们查看了官方提供的 <strong>com.android.commands.input.INPUT</strong> 类来进行模拟输入的实现过程。但是有一个很猥琐的地方就是，这个 Input 类我们是无法访问的，其被定义为非 SDK 类，我们用反射的方法来获取这个类的实现的时候，会收到警告。</p>
+        <p>在文章 <a href="/Android/Android%E4%B8%ADInput%E7%B1%BB%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html" title="Android中Input类模拟输入的实现">Android中Input类模拟输入的实现</a> 我们查看了官方提供的 <strong>com.android.commands.input.INPUT</strong> 类来进行模拟输入的实现过程。但是有一个很猥琐的地方就是，这个 Input 类我们是无法访问的，其被定义为非 SDK 类，我们用反射的方法来获取这个类的实现的时候，会收到警告。</p>
 <a id="more"></a>
 
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Class inputS = Class.forName(<span class="string">"com.android.commands.input.INPUT"</span>);</span><br></pre></td></tr></table></figure>
@@ -361,6 +361,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Android/" rel="tag"># Android</a>
+              <a href="/tags/Android-Input/" rel="tag"># Android Input</a>
           </div>
 
         
@@ -437,7 +438,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">295</span>
+          <span class="site-state-item-count">297</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -450,7 +451,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

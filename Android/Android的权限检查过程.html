@@ -47,13 +47,13 @@
   };
 </script>
 
-  <meta name="description" content="是从追踪 InputManagerServer 的注入输入事件开始的过程。">
-<meta name="keywords" content="Android">
+  <meta name="description" content="是从追踪 InputManagerServer 的注入输入事件开始的过程。我们在之前的  中看到，这个类并没有检查权限，但是为什么会提示权限不够违例呢。事实上就是其在 native 层进行检查">
+<meta name="keywords" content="Android,Android Input">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Android的权限检查过程">
 <meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Android%E7%9A%84%E6%9D%83%E9%99%90%E6%A3%80%E6%9F%A5%E8%BF%87%E7%A8%8B.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="是从追踪 InputManagerServer 的注入输入事件开始的过程。">
+<meta property="og:description" content="是从追踪 InputManagerServer 的注入输入事件开始的过程。我们在之前的  中看到，这个类并没有检查权限，但是为什么会提示权限不够违例呢。事实上就是其在 native 层进行检查">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-17T16:13:53.000Z">
 <meta name="twitter:card" content="summary">
@@ -285,7 +285,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>是从追踪 InputManagerServer 的注入输入事件开始的过程。</p>
+        <p>是从追踪 InputManagerServer 的注入输入事件开始的过程。我们在之前的  中看到，这个类并没有检查权限，但是为什么会提示权限不够违例呢。事实上就是其在 native 层进行检查</p>
 <a id="more"></a>
 
 <p>其基本过程是通过  InputManager 从 ServiceManager 处拿到 InputManagerService 的 Binder  ，然后 Binder 调用 InputManagerService 的 injectInputEvent 方法 进行注入。</p>
@@ -364,6 +364,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Android/" rel="tag"># Android</a>
+              <a href="/tags/Android-Input/" rel="tag"># Android Input</a>
           </div>
 
         
@@ -440,7 +441,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">295</span>
+          <span class="site-state-item-count">297</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -453,7 +454,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

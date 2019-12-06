@@ -47,18 +47,18 @@
   };
 </script>
 
-  <meta name="description" content="我们在用 adb 进行调试的时候，可以使用类似 adb shell input ... 的形式来进行模拟输入，输入的不止是文字，还可以是模拟按键等内容，我们来看一下其是如何实现的。">
-<meta name="keywords" content="Android,逆向">
+  <meta name="description" content="我们在用 adb 进行调试的时候，可以使用类似 adb shell input ... 的形式来进行模拟输入，输入的不止是文字，还可以是模拟按键等内容，我们来看一下其是如何实现的。我们已经看到了 InputService-安卓的输入系统 对 InputManagerService 是如何启动了。">
+<meta name="keywords" content="Android,逆向,Android Input">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android中模拟输入的实现">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Android%E4%B8%AD%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html">
+<meta property="og:title" content="Android中Input类模拟输入的实现">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Android%E4%B8%ADInput%E7%B1%BB%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="我们在用 adb 进行调试的时候，可以使用类似 adb shell input ... 的形式来进行模拟输入，输入的不止是文字，还可以是模拟按键等内容，我们来看一下其是如何实现的。">
+<meta property="og:description" content="我们在用 adb 进行调试的时候，可以使用类似 adb shell input ... 的形式来进行模拟输入，输入的不止是文字，还可以是模拟按键等内容，我们来看一下其是如何实现的。我们已经看到了 InputService-安卓的输入系统 对 InputManagerService 是如何启动了。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-13T14:29:54.000Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://gowa.club/Android/Android%E4%B8%AD%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html">
+<link rel="canonical" href="https://gowa.club/Android/Android%E4%B8%ADInput%E7%B1%BB%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html">
 
 
 <script id="page-configurations">
@@ -72,7 +72,7 @@
   };
 </script>
 
-  <title>Android中模拟输入的实现 | 退思园</title>
+  <title>Android中Input类模拟输入的实现 | 退思园</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
     <script>
@@ -223,7 +223,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android%E4%B8%AD%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android%E4%B8%ADInput%E7%B1%BB%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -236,7 +236,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Android中模拟输入的实现
+          Android中Input类模拟输入的实现
         </h1>
 
         <div class="post-meta">
@@ -269,8 +269,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/Android%E4%B8%AD%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Android中模拟输入的实现.html" itemprop="commentCount"></span>
+    <a title="disqus" href="/Android/Android%E4%B8%ADInput%E7%B1%BB%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Android中Input类模拟输入的实现.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -285,10 +285,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>我们在用 adb 进行调试的时候，可以使用类似 <code>adb shell input ...</code> 的形式来进行模拟输入，输入的不止是文字，还可以是模拟按键等内容，我们来看一下其是如何实现的。</p>
+        <p>我们在用 adb 进行调试的时候，可以使用类似 <code>adb shell input ...</code> 的形式来进行模拟输入，输入的不止是文字，还可以是模拟按键等内容，我们来看一下其是如何实现的。我们已经看到了 <a href="/Android/InputService-%E5%AE%89%E5%8D%93%E7%9A%84%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F.html" title="InputService-安卓的输入系统">InputService-安卓的输入系统</a> 对 InputManagerService 是如何启动了。</p>
 <a id="more"></a>
 
-<p>input 命令，本身是一个 shell 脚本，位于 /system/bin/input ，打开可以看到其内容非常的简单，通过 app_process 命令启动了一个类而已。</p>
+<p>input 命令，本身是一个 shell 脚本，位于 /system/bin/input ，打开可以看到其内容非常的简单，通过 app_process 命令启动了一个类而已。<strong>com.android.commands.input.Input</strong> 在 SDK 内有，但是并不是公开的类，所以需要自己想办法查看后使用。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">base=/system</span><br><span class="line"><span class="built_in">export</span> CLASSPATH=<span class="variable">$base</span>/framework/input.jar</span><br><span class="line"><span class="built_in">exec</span> app_process <span class="variable">$base</span>/bin com.android.commands.input.Input <span class="string">"<span class="variable">$@</span>"</span></span><br></pre></td></tr></table></figure>
 
 <p>那么，这个过程到底是怎么样的呢？我们在 <a href="/Android/InputService-%E5%AE%89%E5%8D%93%E7%9A%84%E8%BE%93%E5%85%A5%E7%B3%BB%E7%BB%9F.html" title="InputService-安卓的输入系统">InputService-安卓的输入系统</a> 一文中曾经介绍过系统的启动流程，我们的 Zygote 也是用这个命令来进行启动的。其启动的参数如下：</p>
@@ -400,6 +400,7 @@
           <div class="post-tags">
               <a href="/tags/Android/" rel="tag"># Android</a>
               <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"># 逆向</a>
+              <a href="/tags/Android-Input/" rel="tag"># Android Input</a>
           </div>
 
         
@@ -476,7 +477,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">295</span>
+          <span class="site-state-item-count">297</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -489,7 +490,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">114</span>
+        <span class="site-state-item-count">115</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -611,9 +612,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/Android%E4%B8%AD%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html",
-            identifier: "Android/Android中模拟输入的实现.html",
-            title: "Android中模拟输入的实现"
+            url: "https://gowa.club/Android/Android%E4%B8%ADInput%E7%B1%BB%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html",
+            identifier: "Android/Android中Input类模拟输入的实现.html",
+            title: "Android中Input类模拟输入的实现"
           }
         }
       });

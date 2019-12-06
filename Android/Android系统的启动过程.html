@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '8LQ0Z7JZKO',
+      apiKey: '5d3485c20d60066c59575f644f5b3da9',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="在文章    和 Android中APP的启动过程 我们大概看了一下一个 APP的启动过程。我们现在来从源码看系统的启动过程。">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android系统的启动过程">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Android%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="在文章    和 Android中APP的启动过程 我们大概看了一下一个 APP的启动过程。我们现在来从源码看系统的启动过程。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;1*oVJgKQJMm0p1-whfB6W4kg.png">
+<meta property="og:updated_time" content="2019-12-06T01:46:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;1*oVJgKQJMm0p1-whfB6W4kg.png">
+
+<link rel="canonical" href="https://gowa.club/Android/Android%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Android系统的启动过程 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Android系统的启动过程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-06 09:46:43" itemprop="dateCreated datePublished" datetime="2019-12-06T09:46:43+08:00">2019-12-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Android/Android%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Android系统的启动过程.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在文章    和 <a href="/Android/Android%E4%B8%ADAPP%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html" title="Android中APP的启动过程">Android中APP的启动过程</a> 我们大概看了一下一个 APP的启动过程。我们现在来从源码看系统的启动过程。</p>
+<a id="more"></a>
+
+<p>系统内核其他后，启动的第一个进程就是 init 进程，不过 Android 的启动进程已经是修改过的，和 Linux 不一样了。</p>
+<h1 id="init"><a href="#init" class="headerlink" title="init"></a>init</h1><p>我们来看一张图</p>
+<p><img src="../res/1*oVJgKQJMm0p1-whfB6W4kg.png" alt="img"></p>
+<p>大概可以看到系统的启动分为几个部分：</p>
+<ol>
+<li>启动内核。</li>
+<li>启动第一个进程 <strong>init</strong></li>
+<li><strong>init</strong>  启动 Zygote 进程，这个进程就会启动安卓框架相关的</li>
+<li>Zygote 启动 AppRuntime(AndroidRunTime)</li>
+<li>运行时，启动 Java 层的服务。</li>
+</ol>
+<p>init 启动的时候会解析 init.rc 文件，然后根据文件中的配置来启动系统服务。</p>
+<p>我们的 <strong>zygote</strong> 服务定义在 <code>/init.${ro.zygote}.rc</code> 中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">service zygote /system/bin/app_process -Xzygote /system/bin --zygote --start-system-server</span><br><span class="line">    class main</span><br><span class="line">    socket zygote stream 660 root system</span><br><span class="line">    onrestart write /sys/android_power/request_state wake</span><br><span class="line">    onrestart write /sys/power/state on</span><br><span class="line">    onrestart restart audioserver</span><br><span class="line">    onrestart restart cameraserver</span><br><span class="line">    onrestart restart media</span><br><span class="line">    onrestart restart netd</span><br><span class="line">    writepid /dev/cpuset/foreground/tasks</span><br></pre></td></tr></table></figure>
+
+<p>下面就开始看 zygote 服务的启动流程了</p>
+<h1 id="app-process-命令"><a href="#app-process-命令" class="headerlink" title="app_process 命令"></a>app_process 命令</h1><p>其源代码位于 <a href="http://androidxref.com/9.0.0_r3/xref/frameworks/base/cmds/app_process/app_main.cpp" target="_blank" rel="noopener">http://androidxref.com/9.0.0_r3/xref/frameworks/base/cmds/app_process/app_main.cpp</a></p>
+<p>其只是一个工具，用来启动 zygote（其实就是 app_process 本身） 这么个进程。在这里定义了几个关键的概念：</p>
+<ul>
+<li>AppRuntime 应用的运行时，表示每个应用都需要的运行环境</li>
+<li>AndroidRuntime 安卓运行时，安卓系统的运行环境。</li>
+</ul>
+<p>其实，我们最主要看两个地方，就知道是怎么样启动 zygote 了：</p>
+<p>app_process 的命令格式如下：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">app_process [java-options] cmd-dir start-class-name [options]</span><br></pre></td></tr></table></figure>
+
+<p>也就是说启动的时候需要指定命令目录，启动类名，已经可选的 Java 启动选项和参数选项。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">AppRuntime <span class="title">runtime</span><span class="params">(argv[<span class="number">0</span>], computeArgBlockSize(argc, argv))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (zygote) &#123;</span><br><span class="line">    runtime.start(<span class="string">"com.android.internal.os.ZygoteInit"</span>, args, zygote);</span><br><span class="line">.....</span><br></pre></td></tr></table></figure>
+
+<p>app_process 命令会构造一个 AppRuntime ，其父类是 AndroiRunTime，然后在此运行时内启动 <code>com.android.internal.os.ZygoteInit</code>。</p>
+<h2 id="AppRuntime"><a href="#AppRuntime" class="headerlink" title="AppRuntime"></a>AppRuntime</h2><p>这个类是 AndroidRuntime 的子类。其定义了一个 APP，或者说一个安卓系统上进程相关的内容。其成员和方法并不多，从他的定义上来理解这个运行时到底是做什么的：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"> [functions]</span><br><span class="line">+AppRuntime(<span class="keyword">char</span>* argBlockStart, <span class="keyword">const</span> <span class="keyword">size_t</span> argBlockLength)</span><br><span class="line">+onExit(<span class="keyword">int</span> code)</span><br><span class="line">+onStarted()</span><br><span class="line">+onVmCreated(JNIEnv* env)</span><br><span class="line">+onZygoteInit()</span><br><span class="line">+setClassNameAndArgs(<span class="keyword">const</span> String8&amp; className, <span class="keyword">int</span> argc, <span class="keyword">char</span> * <span class="keyword">const</span> *argv)</span><br><span class="line"> [members]</span><br><span class="line">+mArgs</span><br><span class="line">+mClass</span><br><span class="line">+mClassName</span><br></pre></td></tr></table></figure>
+
+<p>成员就三个：启动类名，启动 Java类在 Cpp 的表示，启动类的参数。</p>
+<p>onStarted 会在非 Zygote 启动时被 AndroidRunTime 回调，而 onZygoteInit 会在启动 Zygote 时回调。</p>
+<h2 id="AndroidRuntime"><a href="#AndroidRuntime" class="headerlink" title="AndroidRuntime"></a>AndroidRuntime</h2><p>AndroidRuntime 是 C++ 与 Java 进行沟通的桥梁，其源代码位于<a href="http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/jni/AndroidRuntime.cpp" target="_blank" rel="noopener">http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/jni/AndroidRuntime.cpp</a></p>
+<p>所有的安卓APP办成都需要这个运行时，包括 Zygote, SystemServer。</p>
+<p>其干的最主要的事情就是：</p>
+<ul>
+<li>开启 Java VM</li>
+<li>建立 Jni 环境</li>
+<li>将安卓框架 Native 层的内容注入到 JNI 去。</li>
+<li>Java VM 内初始化 ZygoteInit</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> AndroidRuntime::start(<span class="keyword">const</span> <span class="keyword">char</span>* className, <span class="keyword">const</span> Vector&lt;String8&gt;&amp; options, <span class="keyword">bool</span> zygote)</span><br><span class="line">&#123;</span><br><span class="line">    ALOGD(<span class="string">"&gt;&gt;&gt;&gt;&gt;&gt; START %s uid %d &lt;&lt;&lt;&lt;&lt;&lt;\n"</span>,</span><br><span class="line">            className != <span class="literal">NULL</span> ? className : <span class="string">"(unknown)"</span>, getuid());</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">const</span> String8 <span class="title">startSystemServer</span><span class="params">(<span class="string">"start-system-server"</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * 'startSystemServer == true' means runtime is obsolete and not run from</span></span><br><span class="line"><span class="comment">     * init.rc anymore, so we print out the boot start event here.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; options.size(); ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (options[i] == startSystemServer) &#123;</span><br><span class="line">           <span class="comment">/* track our progress through the boot sequence */</span></span><br><span class="line">           <span class="keyword">const</span> <span class="keyword">int</span> LOG_BOOT_PROGRESS_START = <span class="number">3000</span>;</span><br><span class="line">           LOG_EVENT_LONG(LOG_BOOT_PROGRESS_START,  ns2ms(systemTime(SYSTEM_TIME_MONOTONIC)));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span>* rootDir = getenv(<span class="string">"ANDROID_ROOT"</span>);</span><br><span class="line">    <span class="keyword">if</span> (rootDir == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        rootDir = <span class="string">"/system"</span>;</span><br><span class="line">        <span class="keyword">if</span> (!hasDir(<span class="string">"/system"</span>)) &#123;</span><br><span class="line">            LOG_FATAL(<span class="string">"No root directory specified, and /android does not exist."</span>);</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        setenv(<span class="string">"ANDROID_ROOT"</span>, rootDir, <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//const char* kernelHack = getenv("LD_ASSUME_KERNEL");</span></span><br><span class="line">    <span class="comment">//ALOGD("Found LD_ASSUME_KERNEL='%s'\n", kernelHack);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* start the virtual machine */</span></span><br><span class="line">    JniInvocation jni_invocation;</span><br><span class="line">    jni_invocation.Init(<span class="literal">NULL</span>);</span><br><span class="line">    JNIEnv* env;</span><br><span class="line">    <span class="keyword">if</span> (startVm(&amp;mJavaVM, &amp;env, zygote) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    onVmCreated(env);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Register android functions.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">if</span> (startReg(env) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        ALOGE(<span class="string">"Unable to register all android natives\n"</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * We want to call main() with a String array with arguments in it.</span></span><br><span class="line"><span class="comment">     * At present we have two arguments, the class name and an option string.</span></span><br><span class="line"><span class="comment">     * Create an array to hold them.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    jclass stringClass;</span><br><span class="line">    jobjectArray strArray;</span><br><span class="line">    jstring classNameStr;</span><br><span class="line"></span><br><span class="line">    stringClass = env-&gt;FindClass(<span class="string">"java/lang/String"</span>);</span><br><span class="line">    assert(stringClass != <span class="literal">NULL</span>);</span><br><span class="line">    strArray = env-&gt;NewObjectArray(options.size() + <span class="number">1</span>, stringClass, <span class="literal">NULL</span>);</span><br><span class="line">    assert(strArray != <span class="literal">NULL</span>);</span><br><span class="line">    classNameStr = env-&gt;NewStringUTF(className);</span><br><span class="line">    assert(classNameStr != <span class="literal">NULL</span>);</span><br><span class="line">    env-&gt;SetObjectArrayElement(strArray, <span class="number">0</span>, classNameStr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; options.size(); ++i) &#123;</span><br><span class="line">        jstring optionsStr = env-&gt;NewStringUTF(options.itemAt(i).<span class="built_in">string</span>());</span><br><span class="line">        assert(optionsStr != <span class="literal">NULL</span>);</span><br><span class="line">        env-&gt;SetObjectArrayElement(strArray, i + <span class="number">1</span>, optionsStr);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Start VM.  This thread becomes the main thread of the VM, and will</span></span><br><span class="line"><span class="comment">     * not return until the VM exits.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">char</span>* slashClassName = toSlashClassName(className != <span class="literal">NULL</span> ? className : <span class="string">""</span>);</span><br><span class="line">    jclass startClass = env-&gt;FindClass(slashClassName);</span><br><span class="line">    <span class="keyword">if</span> (startClass == <span class="literal">NULL</span>) &#123;</span><br><span class="line">        ALOGE(<span class="string">"JavaVM unable to locate class '%s'\n"</span>, slashClassName);</span><br><span class="line">        <span class="comment">/* keep going */</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        jmethodID startMeth = env-&gt;GetStaticMethodID(startClass, <span class="string">"main"</span>,</span><br><span class="line">            <span class="string">"([Ljava/lang/String;)V"</span>);</span><br><span class="line">        <span class="keyword">if</span> (startMeth == <span class="literal">NULL</span>) &#123;</span><br><span class="line">            ALOGE(<span class="string">"JavaVM unable to find main() in '%s'\n"</span>, className);</span><br><span class="line">            <span class="comment">/* keep going */</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            env-&gt;CallStaticVoidMethod(startClass, startMeth, strArray);</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></span><br><span class="line">            <span class="keyword">if</span> (env-&gt;ExceptionCheck())</span><br><span class="line">                threadExitUncaughtException(env);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">free</span>(slashClassName);</span><br><span class="line"></span><br><span class="line">    ALOGD(<span class="string">"Shutting down VM\n"</span>);</span><br><span class="line">    <span class="keyword">if</span> (mJavaVM-&gt;DetachCurrentThread() != JNI_OK)</span><br><span class="line">        ALOGW(<span class="string">"Warning: unable to detach main thread\n"</span>);</span><br><span class="line">    <span class="keyword">if</span> (mJavaVM-&gt;DestroyJavaVM() != <span class="number">0</span>)</span><br><span class="line">        ALOGW(<span class="string">"Warning: VM did not shut down cleanly\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，最终 AndroidRuntime 有一个对 Java VM 的引用。</p>
+<h2 id="ZygoteInit-main"><a href="#ZygoteInit-main" class="headerlink" title="ZygoteInit.main()"></a>ZygoteInit.main()</h2><p>我们在 Zygote 中，调用了 <code>runtime.start(&quot;com.android.internal.os.ZygoteInit&quot;, args, zygote);</code> 方法，这就在 Java VM 类，启动了初始化过程。这是第一个启动的 Java 类。</p>
+<p>Java VM 的初始化工作，代码位于</p>
+<p><a href="http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/ZygoteInit.java](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/ZygoteInit.java)" target="_blank" rel="noopener">http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/ZygoteInit.java](http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/ZygoteInit.java)</a></p>
+<p>从这个时候开始，代码的运行逻辑就交了 Java VM了。这会启动一个 ZygoteServer，然后开启一个套接字监听，</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String argv[])</span> </span>&#123;</span><br><span class="line">    ZygoteServer zygoteServer = <span class="keyword">new</span> ZygoteServer();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Mark zygote start. This ensures that thread creation will throw</span></span><br><span class="line">    <span class="comment">// an error.</span></span><br><span class="line">    ZygoteHooks.startZygoteNoThreadCreation();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Zygote goes into its own process group.</span></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Os.setpgid(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ErrnoException ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Failed to setpgid(0,0)"</span>, ex);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> Runnable caller;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// Report Zygote start time to tron unless it is a runtime restart</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="string">"1"</span>.equals(SystemProperties.get(<span class="string">"sys.boot_completed"</span>))) &#123;</span><br><span class="line">            MetricsLogger.histogram(<span class="keyword">null</span>, <span class="string">"boot_zygote_init"</span>,</span><br><span class="line">                    (<span class="keyword">int</span>) SystemClock.elapsedRealtime());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        String bootTimeTag = Process.is64Bit() ? <span class="string">"Zygote64Timing"</span> : <span class="string">"Zygote32Timing"</span>;</span><br><span class="line">        TimingsTraceLog bootTimingsTraceLog = <span class="keyword">new</span> TimingsTraceLog(bootTimeTag,</span><br><span class="line">                Trace.TRACE_TAG_DALVIK);</span><br><span class="line">        bootTimingsTraceLog.traceBegin(<span class="string">"ZygoteInit"</span>);</span><br><span class="line">        RuntimeInit.enableDdms();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> startSystemServer = <span class="keyword">false</span>;</span><br><span class="line">        String socketName = <span class="string">"zygote"</span>;</span><br><span class="line">        String abiList = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">boolean</span> enableLazyPreload = <span class="keyword">false</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; argv.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="string">"start-system-server"</span>.equals(argv[i])) &#123;</span><br><span class="line">                startSystemServer = <span class="keyword">true</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"--enable-lazy-preload"</span>.equals(argv[i])) &#123;</span><br><span class="line">                enableLazyPreload = <span class="keyword">true</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (argv[i].startsWith(ABI_LIST_ARG)) &#123;</span><br><span class="line">                abiList = argv[i].substring(ABI_LIST_ARG.length());</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (argv[i].startsWith(SOCKET_NAME_ARG)) &#123;</span><br><span class="line">                socketName = argv[i].substring(SOCKET_NAME_ARG.length());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Unknown command line argument: "</span> + argv[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (abiList == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"No ABI list supplied."</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        zygoteServer.registerServerSocketFromEnv(socketName);</span><br><span class="line">        <span class="comment">// In some configurations, we avoid preloading resources and classes eagerly.</span></span><br><span class="line">        <span class="comment">// In such cases, we will preload things prior to our first fork.</span></span><br><span class="line">        <span class="keyword">if</span> (!enableLazyPreload) &#123;</span><br><span class="line">            bootTimingsTraceLog.traceBegin(<span class="string">"ZygotePreload"</span>);</span><br><span class="line">            EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_START,</span><br><span class="line">                SystemClock.uptimeMillis());</span><br><span class="line">            preload(bootTimingsTraceLog);</span><br><span class="line">            EventLog.writeEvent(LOG_BOOT_PROGRESS_PRELOAD_END,</span><br><span class="line">                SystemClock.uptimeMillis());</span><br><span class="line">            bootTimingsTraceLog.traceEnd(); <span class="comment">// ZygotePreload</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            Zygote.resetNicePriority();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Do an initial gc to clean up after startup</span></span><br><span class="line">        bootTimingsTraceLog.traceBegin(<span class="string">"PostZygoteInitGC"</span>);</span><br><span class="line">        gcAndFinalize();</span><br><span class="line">        bootTimingsTraceLog.traceEnd(); <span class="comment">// PostZygoteInitGC</span></span><br><span class="line"></span><br><span class="line">        bootTimingsTraceLog.traceEnd(); <span class="comment">// ZygoteInit</span></span><br><span class="line">        <span class="comment">// Disable tracing so that forked processes do not inherit stale tracing tags from</span></span><br><span class="line">        <span class="comment">// Zygote.</span></span><br><span class="line">        Trace.setTracingEnabled(<span class="keyword">false</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">        Zygote.nativeSecurityInit();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Zygote process unmounts root storage spaces.</span></span><br><span class="line">        Zygote.nativeUnmountStorageOnInit();</span><br><span class="line"></span><br><span class="line">        ZygoteHooks.stopZygoteNoThreadCreation();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (startSystemServer) &#123;</span><br><span class="line">            Runnable r = forkSystemServer(abiList, socketName, zygoteServer);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// &#123;@code r == null&#125; in the parent (zygote) process, and &#123;@code r != null&#125; in the</span></span><br><span class="line">            <span class="comment">// child (system_server) process.</span></span><br><span class="line">            <span class="comment">// 如果 r != null 是在子进程进行返回，也就是 SystemServer 进行返回，那么就执行 SystemServer 的逻辑不继续往下执行。</span></span><br><span class="line">            <span class="keyword">if</span> (r != <span class="keyword">null</span>) &#123;</span><br><span class="line">                r.run();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Log.i(TAG, <span class="string">"Accepting command socket connections"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// The select loop returns early in the child process after a fork and</span></span><br><span class="line">        <span class="comment">// loops forever in the zygote.</span></span><br><span class="line">      	<span class="comment">// 父进程 Zygote 进入循环等待套接字事件</span></span><br><span class="line">        caller = zygoteServer.runSelectLoop(abiList);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">        Log.e(TAG, <span class="string">"System zygote died with exception"</span>, ex);</span><br><span class="line">        <span class="keyword">throw</span> ex;</span><br><span class="line">    &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        zygoteServer.closeServerSocket();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// We're in the child process and have exited the select loop. Proceed to execute the</span></span><br><span class="line">    <span class="comment">// command.</span></span><br><span class="line">    <span class="keyword">if</span> (caller != <span class="keyword">null</span>) &#123;</span><br><span class="line">        caller.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="ZygoteServer-runSelectLoop-进程-fork"><a href="#ZygoteServer-runSelectLoop-进程-fork" class="headerlink" title="ZygoteServer.runSelectLoop() - 进程 fork"></a>ZygoteServer.runSelectLoop() - 进程 fork</h2><p>这个服务主要是接受主要的套接字上的命令，然后进行处理，启动其他服务。这个服务相对简单一些，所以放在前面来看。在复制完 SystemServer 进程后，流程就会走到这里。</p>
+<p>对于 SystemServer 进程，则不会进入这个循环，因为其在 fork 后其任务就变更了。</p>
+<p>这个循环会从套接字内接收收到的请求，然后进行处理，需要注意的是：<code>ZygoteConnection. processOneCommand()</code> 会 <code>Zygote.forkAndSpecialize()</code> fork  一个新的进程来执行请求。新的进行会从此循环内返回，执行对应命令。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">Runnable <span class="title">runSelectLoop</span><span class="params">(String abiList)</span> </span>&#123;</span><br><span class="line">    ArrayList&lt;FileDescriptor&gt; fds = <span class="keyword">new</span> ArrayList&lt;FileDescriptor&gt;();</span><br><span class="line">    ArrayList&lt;ZygoteConnection&gt; peers = <span class="keyword">new</span> ArrayList&lt;ZygoteConnection&gt;();</span><br><span class="line"></span><br><span class="line">    fds.add(mServerSocket.getFileDescriptor());</span><br><span class="line">    peers.add(<span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">        StructPollfd[] pollFds = <span class="keyword">new</span> StructPollfd[fds.size()];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; pollFds.length; ++i) &#123;</span><br><span class="line">            pollFds[i] = <span class="keyword">new</span> StructPollfd();</span><br><span class="line">            pollFds[i].fd = fds.get(i);</span><br><span class="line">            pollFds[i].events = (<span class="keyword">short</span>) POLLIN;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Os.poll(pollFds, -<span class="number">1</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ErrnoException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"poll failed"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = pollFds.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; --i) &#123;</span><br><span class="line">            <span class="keyword">if</span> ((pollFds[i].revents &amp; POLLIN) == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (i == <span class="number">0</span>) &#123;</span><br><span class="line">                ZygoteConnection newPeer = acceptCommandPeer(abiList);</span><br><span class="line">                peers.add(newPeer);</span><br><span class="line">                fds.add(newPeer.getFileDesciptor());</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    ZygoteConnection connection = peers.get(i);</span><br><span class="line">                  	<span class="comment">// fork 子进程，并返回包含子进程 main() 函数的 Runnable 对象</span></span><br><span class="line">                    <span class="keyword">final</span> Runnable command = connection.processOneCommand(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (mIsForkChild) &#123;</span><br><span class="line">                        <span class="comment">// We're in the child. We should always have a command to run at this</span></span><br><span class="line">                        <span class="comment">// stage if processOneCommand hasn't called "exec".</span></span><br><span class="line">                        <span class="keyword">if</span> (command == <span class="keyword">null</span>) &#123;</span><br><span class="line">                            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"command == null"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="keyword">return</span> command;</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="comment">// We're in the server - we should never have any commands to run.</span></span><br><span class="line">                        <span class="keyword">if</span> (command != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"command != null"</span>);</span><br><span class="line">                        &#125;</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// We don't know whether the remote side of the socket was closed or</span></span><br><span class="line">                        <span class="comment">// not until we attempt to read from it from processOneCommand. This shows up as</span></span><br><span class="line">                        <span class="comment">// a regular POLLIN event in our regular processing loop.</span></span><br><span class="line">                        <span class="keyword">if</span> (connection.isClosedByPeer()) &#123;</span><br><span class="line">                            connection.closeSocket();</span><br><span class="line">                            peers.remove(i);</span><br><span class="line">                            fds.remove(i);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (!mIsForkChild) &#123;</span><br><span class="line">                        <span class="comment">// We're in the server so any exception here is one that has taken place</span></span><br><span class="line">                        <span class="comment">// pre-fork while processing commands or reading / writing from the</span></span><br><span class="line">                        <span class="comment">// control socket. Make a loud noise about any such exceptions so that</span></span><br><span class="line">                        <span class="comment">// we know exactly what failed and why.</span></span><br><span class="line"></span><br><span class="line">                        Slog.e(TAG, <span class="string">"Exception executing zygote command: "</span>, e);</span><br><span class="line"></span><br><span class="line">                        <span class="comment">// Make sure the socket is closed so that the other end knows immediately</span></span><br><span class="line">                        <span class="comment">// that something has gone wrong and doesn't time out waiting for a</span></span><br><span class="line">                        <span class="comment">// response.</span></span><br><span class="line">                        ZygoteConnection conn = peers.remove(i);</span><br><span class="line">                        conn.closeSocket();</span><br><span class="line"></span><br><span class="line">                        fds.remove(i);</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="comment">// We're in the child so any exception caught here has happened post</span></span><br><span class="line">                        <span class="comment">// fork and before we execute ActivityThread.main (or any other main()</span></span><br><span class="line">                        <span class="comment">// method). Log the details of the exception and bring down the process.</span></span><br><span class="line">                        Log.e(TAG, <span class="string">"Caught post-fork exception in child process."</span>, e);</span><br><span class="line">                        <span class="keyword">throw</span> e;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                    <span class="comment">// Reset the child flag, in the event that the child process is a child-</span></span><br><span class="line">                    <span class="comment">// zygote. The flag will not be consulted this loop pass after the Runnable</span></span><br><span class="line">                    <span class="comment">// is returned.</span></span><br><span class="line">                    mIsForkChild = <span class="keyword">false</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/ZygoteConnection.java#123</span></span><br><span class="line">    <span class="function">Runnable <span class="title">processOneCommand</span><span class="params">(ZygoteServer zygoteServer)</span> </span>&#123;</span><br><span class="line">        String args[];</span><br><span class="line">        Arguments parsedArgs = <span class="keyword">null</span>;</span><br><span class="line">        FileDescriptor[] descriptors;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            args = readArgumentList();</span><br><span class="line">            descriptors = mSocket.getAncillaryFileDescriptors();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"IOException on command socket"</span>, ex);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// readArgumentList returns null only when it has reached EOF with no available</span></span><br><span class="line">        <span class="comment">// data to read. This will only happen when the remote socket has disconnected.</span></span><br><span class="line">        <span class="keyword">if</span> (args == <span class="keyword">null</span>) &#123;</span><br><span class="line">            isEof = <span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> pid = -<span class="number">1</span>;</span><br><span class="line">        FileDescriptor childPipeFd = <span class="keyword">null</span>;</span><br><span class="line">        FileDescriptor serverPipeFd = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        parsedArgs = <span class="keyword">new</span> Arguments(args);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (parsedArgs.abiListQuery) &#123;</span><br><span class="line">            handleAbiListQuery();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (parsedArgs.preloadDefault) &#123;</span><br><span class="line">            handlePreload();</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (parsedArgs.preloadPackage != <span class="keyword">null</span>) &#123;</span><br><span class="line">            handlePreloadPackage(parsedArgs.preloadPackage, parsedArgs.preloadPackageLibs,</span><br><span class="line">                    parsedArgs.preloadPackageLibFileName, parsedArgs.preloadPackageCacheKey);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (parsedArgs.apiBlacklistExemptions != <span class="keyword">null</span>) &#123;</span><br><span class="line">            handleApiBlacklistExemptions(parsedArgs.apiBlacklistExemptions);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (parsedArgs.hiddenApiAccessLogSampleRate != -<span class="number">1</span>) &#123;</span><br><span class="line">            handleHiddenApiAccessLogSampleRate(parsedArgs.hiddenApiAccessLogSampleRate);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (parsedArgs.permittedCapabilities != <span class="number">0</span> || parsedArgs.effectiveCapabilities != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> ZygoteSecurityException(<span class="string">"Client may not specify capabilities: "</span> +</span><br><span class="line">                    <span class="string">"permitted=0x"</span> + Long.toHexString(parsedArgs.permittedCapabilities) +</span><br><span class="line">                    <span class="string">", effective=0x"</span> + Long.toHexString(parsedArgs.effectiveCapabilities));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        applyUidSecurityPolicy(parsedArgs, peer);</span><br><span class="line">        applyInvokeWithSecurityPolicy(parsedArgs, peer);</span><br><span class="line"></span><br><span class="line">        applyDebuggerSystemProperty(parsedArgs);</span><br><span class="line">        applyInvokeWithSystemProperty(parsedArgs);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[][] rlimits = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (parsedArgs.rlimits != <span class="keyword">null</span>) &#123;</span><br><span class="line">            rlimits = parsedArgs.rlimits.toArray(intArray2d);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[] fdsToIgnore = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (parsedArgs.invokeWith != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                FileDescriptor[] pipeFds = Os.pipe2(O_CLOEXEC);</span><br><span class="line">                childPipeFd = pipeFds[<span class="number">1</span>];</span><br><span class="line">                serverPipeFd = pipeFds[<span class="number">0</span>];</span><br><span class="line">                Os.fcntlInt(childPipeFd, F_SETFD, <span class="number">0</span>);</span><br><span class="line">                fdsToIgnore = <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;childPipeFd.getInt$(), serverPipeFd.getInt$()&#125;;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ErrnoException errnoEx) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Unable to set up pipe for invoke-with"</span>, errnoEx);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * In order to avoid leaking descriptors to the Zygote child,</span></span><br><span class="line"><span class="comment">         * the native code must close the two Zygote socket descriptors</span></span><br><span class="line"><span class="comment">         * in the child process before it switches from Zygote-root to</span></span><br><span class="line"><span class="comment">         * the UID and privileges of the application being launched.</span></span><br><span class="line"><span class="comment">         *</span></span><br><span class="line"><span class="comment">         * In order to avoid "bad file descriptor" errors when the</span></span><br><span class="line"><span class="comment">         * two LocalSocket objects are closed, the Posix file</span></span><br><span class="line"><span class="comment">         * descriptors are released via a dup2() call which closes</span></span><br><span class="line"><span class="comment">         * the socket and substitutes an open descriptor to /dev/null.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> [] fdsToClose = &#123; -<span class="number">1</span>, -<span class="number">1</span> &#125;;</span><br><span class="line"></span><br><span class="line">        FileDescriptor fd = mSocket.getFileDescriptor();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (fd != <span class="keyword">null</span>) &#123;</span><br><span class="line">            fdsToClose[<span class="number">0</span>] = fd.getInt$();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        fd = zygoteServer.getServerSocketFileDescriptor();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (fd != <span class="keyword">null</span>) &#123;</span><br><span class="line">            fdsToClose[<span class="number">1</span>] = fd.getInt$();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        fd = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        pid = Zygote.forkAndSpecialize(parsedArgs.uid, parsedArgs.gid, parsedArgs.gids,</span><br><span class="line">                parsedArgs.runtimeFlags, rlimits, parsedArgs.mountExternal, parsedArgs.seInfo,</span><br><span class="line">                parsedArgs.niceName, fdsToClose, fdsToIgnore, parsedArgs.startChildZygote,</span><br><span class="line">                parsedArgs.instructionSet, parsedArgs.appDataDir);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="comment">// in child</span></span><br><span class="line">                zygoteServer.setForkChild();</span><br><span class="line"></span><br><span class="line">                zygoteServer.closeServerSocket();</span><br><span class="line">                IoUtils.closeQuietly(serverPipeFd);</span><br><span class="line">                serverPipeFd = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">return</span> handleChildProc(parsedArgs, descriptors, childPipeFd,</span><br><span class="line">                        parsedArgs.startChildZygote);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// In the parent. A pid &lt; 0 indicates a failure and will be handled in</span></span><br><span class="line">                <span class="comment">// handleParentProc.</span></span><br><span class="line">                IoUtils.closeQuietly(childPipeFd);</span><br><span class="line">                childPipeFd = <span class="keyword">null</span>;</span><br><span class="line">                handleParentProc(pid, descriptors, serverPipeFd);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            IoUtils.closeQuietly(childPipeFd);</span><br><span class="line">            IoUtils.closeQuietly(serverPipeFd);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="forkSystemServer"><a href="#forkSystemServer" class="headerlink" title="forkSystemServer()"></a>forkSystemServer()</h2><p><em>com.android.server.SystemServer</em> 指定了要启动的 SystemServer。在这里实际上是会调用 linux 的 fork 系统调用，来复制一个新的进程。当复制完成后，会向父进程，也就是我们的 app_process 所在的进程返回 null，而向子进程，返回一个 Runnable。</p>
+<p>在这里还会关闭 ZygoteServer 开启的套接字监听，因为不需要：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">zygoteServer.closeServerSocket();</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Prepare the arguments and forks for the system server process.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Returns an &#123;<span class="doctag">@code</span> Runnable&#125; that provides an entrypoint into system_server code in the</span></span><br><span class="line"><span class="comment"> * child process, and &#123;<span class="doctag">@code</span> null&#125; in the parent.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Runnable <span class="title">forkSystemServer</span><span class="params">(String abiList, String socketName,</span></span></span><br><span class="line"><span class="function"><span class="params">        ZygoteServer zygoteServer)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> capabilities = posixCapabilitiesAsBits(</span><br><span class="line">        OsConstants.CAP_IPC_LOCK,</span><br><span class="line">        OsConstants.CAP_KILL,</span><br><span class="line">        OsConstants.CAP_NET_ADMIN,</span><br><span class="line">        OsConstants.CAP_NET_BIND_SERVICE,</span><br><span class="line">        OsConstants.CAP_NET_BROADCAST,</span><br><span class="line">        OsConstants.CAP_NET_RAW,</span><br><span class="line">        OsConstants.CAP_SYS_MODULE,</span><br><span class="line">        OsConstants.CAP_SYS_NICE,</span><br><span class="line">        OsConstants.CAP_SYS_PTRACE,</span><br><span class="line">        OsConstants.CAP_SYS_TIME,</span><br><span class="line">        OsConstants.CAP_SYS_TTY_CONFIG,</span><br><span class="line">        OsConstants.CAP_WAKE_ALARM,</span><br><span class="line">        OsConstants.CAP_BLOCK_SUSPEND</span><br><span class="line">    );</span><br><span class="line">    <span class="comment">/* Containers run without some capabilities, so drop any caps that are not available. */</span></span><br><span class="line">    StructCapUserHeader header = <span class="keyword">new</span> StructCapUserHeader(</span><br><span class="line">            OsConstants._LINUX_CAPABILITY_VERSION_3, <span class="number">0</span>);</span><br><span class="line">    StructCapUserData[] data;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        data = Os.capget(header);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ErrnoException ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Failed to capget()"</span>, ex);</span><br><span class="line">    &#125;</span><br><span class="line">    capabilities &amp;= ((<span class="keyword">long</span>) data[<span class="number">0</span>].effective) | (((<span class="keyword">long</span>) data[<span class="number">1</span>].effective) &lt;&lt; <span class="number">32</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Hardcoded command line to start the system server */</span></span><br><span class="line">    String args[] = &#123;</span><br><span class="line">        <span class="string">"--setuid=1000"</span>,</span><br><span class="line">        <span class="string">"--setgid=1000"</span>,</span><br><span class="line">        <span class="string">"--setgroups=1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,1018,1021,1023,1024,1032,1065,3001,3002,3003,3006,3007,3009,3010"</span>,</span><br><span class="line">        <span class="string">"--capabilities="</span> + capabilities + <span class="string">","</span> + capabilities,</span><br><span class="line">        <span class="string">"--nice-name=system_server"</span>,</span><br><span class="line">        <span class="string">"--runtime-args"</span>,</span><br><span class="line">        <span class="string">"--target-sdk-version="</span> + VMRuntime.SDK_VERSION_CUR_DEVELOPMENT,</span><br><span class="line">        <span class="string">"com.android.server.SystemServer"</span>,</span><br><span class="line">    &#125;;</span><br><span class="line">    ZygoteConnection.Arguments parsedArgs = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> pid;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        parsedArgs = <span class="keyword">new</span> ZygoteConnection.Arguments(args);</span><br><span class="line">        ZygoteConnection.applyDebuggerSystemProperty(parsedArgs);</span><br><span class="line">        ZygoteConnection.applyInvokeWithSystemProperty(parsedArgs);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span> profileSystemServer = SystemProperties.getBoolean(</span><br><span class="line">                <span class="string">"dalvik.vm.profilesystemserver"</span>, <span class="keyword">false</span>);</span><br><span class="line">        <span class="keyword">if</span> (profileSystemServer) &#123;</span><br><span class="line">            parsedArgs.runtimeFlags |= Zygote.PROFILE_SYSTEM_SERVER;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* Request to fork the system server process */</span></span><br><span class="line">        pid = Zygote.forkSystemServer(</span><br><span class="line">                parsedArgs.uid, parsedArgs.gid,</span><br><span class="line">                parsedArgs.gids,</span><br><span class="line">                parsedArgs.runtimeFlags,</span><br><span class="line">                <span class="keyword">null</span>,</span><br><span class="line">                parsedArgs.permittedCapabilities,</span><br><span class="line">                parsedArgs.effectiveCapabilities);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IllegalArgumentException ex) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(ex);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* For child process */</span></span><br><span class="line">    <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (hasSecondZygote(abiList)) &#123;</span><br><span class="line">            waitForSecondaryZygote(socketName);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        zygoteServer.closeServerSocket();</span><br><span class="line">        <span class="keyword">return</span> handleSystemServerProcess(parsedArgs);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="handleSystemServerProcess"><a href="#handleSystemServerProcess" class="headerlink" title="handleSystemServerProcess()"></a>handleSystemServerProcess()</h3><p>完成 fork 后的 SystemServer 的逻辑。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Finish remaining work for the newly forked system server process.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Runnable <span class="title">handleSystemServerProcess</span><span class="params">(ZygoteConnection.Arguments parsedArgs)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// set umask to 0077 so new files and directories will default to owner-only permissions.</span></span><br><span class="line">    Os.umask(S_IRWXG | S_IRWXO);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (parsedArgs.niceName != <span class="keyword">null</span>) &#123;</span><br><span class="line">        Process.setArgV0(parsedArgs.niceName);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> String systemServerClasspath = Os.getenv(<span class="string">"SYSTEMSERVERCLASSPATH"</span>);</span><br><span class="line">    <span class="keyword">if</span> (systemServerClasspath != <span class="keyword">null</span>) &#123;</span><br><span class="line">        performSystemServerDexOpt(systemServerClasspath);</span><br><span class="line">        <span class="comment">// Capturing profiles is only supported for debug or eng builds since selinux normally</span></span><br><span class="line">        <span class="comment">// prevents it.</span></span><br><span class="line">        <span class="keyword">boolean</span> profileSystemServer = SystemProperties.getBoolean(</span><br><span class="line">                <span class="string">"dalvik.vm.profilesystemserver"</span>, <span class="keyword">false</span>);</span><br><span class="line">        <span class="keyword">if</span> (profileSystemServer &amp;&amp; (Build.IS_USERDEBUG || Build.IS_ENG)) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                prepareSystemServerProfile(systemServerClasspath);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">                Log.wtf(TAG, <span class="string">"Failed to set up system server profile"</span>, e);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (parsedArgs.invokeWith != <span class="keyword">null</span>) &#123;</span><br><span class="line">        String[] args = parsedArgs.remainingArgs;</span><br><span class="line">        <span class="comment">// If we have a non-null system server class path, we'll have to duplicate the</span></span><br><span class="line">        <span class="comment">// existing arguments and append the classpath to it. ART will handle the classpath</span></span><br><span class="line">        <span class="comment">// correctly when we exec a new process.</span></span><br><span class="line">        <span class="keyword">if</span> (systemServerClasspath != <span class="keyword">null</span>) &#123;</span><br><span class="line">            String[] amendedArgs = <span class="keyword">new</span> String[args.length + <span class="number">2</span>];</span><br><span class="line">            amendedArgs[<span class="number">0</span>] = <span class="string">"-cp"</span>;</span><br><span class="line">            amendedArgs[<span class="number">1</span>] = systemServerClasspath;</span><br><span class="line">            System.arraycopy(args, <span class="number">0</span>, amendedArgs, <span class="number">2</span>, args.length);</span><br><span class="line">            args = amendedArgs;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        WrapperInit.execApplication(parsedArgs.invokeWith,</span><br><span class="line">                parsedArgs.niceName, parsedArgs.targetSdkVersion,</span><br><span class="line">                VMRuntime.getCurrentInstructionSet(), <span class="keyword">null</span>, args);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"Unexpected return from WrapperInit.execApplication"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        ClassLoader cl = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span> (systemServerClasspath != <span class="keyword">null</span>) &#123;</span><br><span class="line">            cl = createPathClassLoader(systemServerClasspath, parsedArgs.targetSdkVersion);</span><br><span class="line"></span><br><span class="line">            Thread.currentThread().setContextClassLoader(cl);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * Pass the remaining arguments to SystemServer.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">return</span> ZygoteInit.zygoteInit(parsedArgs.targetSdkVersion, parsedArgs.remainingArgs, cl);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* should never reach here */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ZygoteInit-zygoteInit"><a href="#ZygoteInit-zygoteInit" class="headerlink" title="ZygoteInit.zygoteInit()"></a>ZygoteInit.zygoteInit()</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * The main function called when started through the zygote process. This</span></span><br><span class="line"><span class="comment"> * could be unified with main(), if the native code in nativeFinishInit()</span></span><br><span class="line"><span class="comment"> * were rationalized with Zygote startup.&lt;p&gt;</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Current recognized args:</span></span><br><span class="line"><span class="comment"> * &lt;ul&gt;</span></span><br><span class="line"><span class="comment"> *   &lt;li&gt; &lt;code&gt; [--] &amp;lt;start class name&amp;gt;  &amp;lt;args&amp;gt;</span></span><br><span class="line"><span class="comment"> * &lt;/ul&gt;</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> targetSdkVersion target SDK version</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> argv arg strings</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Runnable <span class="title">zygoteInit</span><span class="params">(<span class="keyword">int</span> targetSdkVersion, String[] argv, ClassLoader classLoader)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (RuntimeInit.DEBUG) &#123;</span><br><span class="line">        Slog.d(RuntimeInit.TAG, <span class="string">"RuntimeInit: Starting application from zygote"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, <span class="string">"ZygoteInit"</span>);</span><br><span class="line">    RuntimeInit.redirectLogStreams();</span><br><span class="line"></span><br><span class="line">    RuntimeInit.commonInit();</span><br><span class="line">    ZygoteInit.nativeZygoteInit();</span><br><span class="line">    <span class="keyword">return</span> RuntimeInit.applicationInit(targetSdkVersion, argv, classLoader);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="ZygoteInit-nativeZygoteInit"><a href="#ZygoteInit-nativeZygoteInit" class="headerlink" title="ZygoteInit.nativeZygoteInit()"></a>ZygoteInit.nativeZygoteInit()</h3><p>这个最重要的是启动线程池。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// AndroidRunTime</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">com_android_internal_os_ZygoteInit_nativeZygoteInit</span><span class="params">(JNIEnv* env, jobject clazz)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    gCurRuntime-&gt;onZygoteInit();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// AppRunTime -&gt; app_main.cpp</span></span><br><span class="line">		<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">onZygoteInit</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        sp&lt;ProcessState&gt; proc = ProcessState::self();</span><br><span class="line">        ALOGV(<span class="string">"App process: starting thread pool.\n"</span>);</span><br><span class="line">        proc-&gt;startThreadPool();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="RuntimeInit-applicationInit"><a href="#RuntimeInit-applicationInit" class="headerlink" title="RuntimeInit.applicationInit()"></a>RuntimeInit.applicationInit()</h3><p>运行时初始化。执行初始化类。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// http://androidxref.com/9.0.0_r3/xref/frameworks/base/core/java/com/android/internal/os/RuntimeInit.java</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">static</span> Runnable <span class="title">applicationInit</span><span class="params">(<span class="keyword">int</span> targetSdkVersion, String[] argv,</span></span></span><br><span class="line"><span class="function"><span class="params">            ClassLoader classLoader)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// If the application calls System.exit(), terminate the process</span></span><br><span class="line">        <span class="comment">// immediately without running any shutdown hooks.  It is not possible to</span></span><br><span class="line">        <span class="comment">// shutdown an Android application gracefully.  Among other things, the</span></span><br><span class="line">        <span class="comment">// Android runtime shutdown hooks close the Binder driver, which can cause</span></span><br><span class="line">        <span class="comment">// leftover running threads to crash before the process actually exits.</span></span><br><span class="line">        nativeSetExitWithoutCleanup(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// We want to be fairly aggressive about heap utilization, to avoid</span></span><br><span class="line">        <span class="comment">// holding on to a lot of memory that isn't needed.</span></span><br><span class="line">        VMRuntime.getRuntime().setTargetHeapUtilization(<span class="number">0.75f</span>);</span><br><span class="line">        VMRuntime.getRuntime().setTargetSdkVersion(targetSdkVersion);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> Arguments args = <span class="keyword">new</span> Arguments(argv);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// The end of of the RuntimeInit event (see #zygoteInit).</span></span><br><span class="line">        Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Remaining arguments are passed to the start class's static main</span></span><br><span class="line">        <span class="keyword">return</span> findStaticMain(args.startClass, args.startArgs, classLoader);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Invokes a static "main(argv[]) method on class "className".</span></span><br><span class="line"><span class="comment">     * Converts various failing exceptions into RuntimeExceptions, with</span></span><br><span class="line"><span class="comment">     * the assumption that they will then cause the VM instance to exit.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> className Fully-qualified class name</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> argv Argument vector for main()</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> classLoader the classLoader to load &#123;<span class="doctag">@className</span>&#125; with</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">static</span> Runnable <span class="title">findStaticMain</span><span class="params">(String className, String[] argv,</span></span></span><br><span class="line"><span class="function"><span class="params">            ClassLoader classLoader)</span> </span>&#123;</span><br><span class="line">        Class&lt;?&gt; cl;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            cl = Class.forName(className, <span class="keyword">true</span>, classLoader);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ClassNotFoundException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(</span><br><span class="line">                    <span class="string">"Missing class when invoking static main "</span> + className,</span><br><span class="line">                    ex);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Method m;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            m = cl.getMethod(<span class="string">"main"</span>, <span class="keyword">new</span> Class[] &#123; String[]<span class="class">.<span class="keyword">class</span> &#125;)</span>;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (NoSuchMethodException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(</span><br><span class="line">                    <span class="string">"Missing static main on "</span> + className, ex);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (SecurityException ex) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(</span><br><span class="line">                    <span class="string">"Problem getting static main on "</span> + className, ex);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> modifiers = m.getModifiers();</span><br><span class="line">        <span class="keyword">if</span> (! (Modifier.isStatic(modifiers) &amp;&amp; Modifier.isPublic(modifiers))) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(</span><br><span class="line">                    <span class="string">"Main method is not public and static on "</span> + className);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * This throw gets caught in ZygoteInit.main(), which responds</span></span><br><span class="line"><span class="comment">         * by invoking the exception's run() method. This arrangement</span></span><br><span class="line"><span class="comment">         * clears up all the stack frames that were required in setting</span></span><br><span class="line"><span class="comment">         * up the process.</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> MethodAndArgsCaller(m, argv);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Helper class which holds a method and arguments and can call them. This is used as part of</span></span><br><span class="line"><span class="comment">     * a trampoline to get rid of the initial process setup stack frames.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MethodAndArgsCaller</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">        <span class="comment">/** method to call */</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> Method mMethod;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/** argument array */</span></span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> String[] mArgs;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">MethodAndArgsCaller</span><span class="params">(Method method, String[] args)</span> </span>&#123;</span><br><span class="line">            mMethod = method;</span><br><span class="line">            mArgs = args;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                mMethod.invoke(<span class="keyword">null</span>, <span class="keyword">new</span> Object[] &#123; mArgs &#125;);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IllegalAccessException ex) &#123;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(ex);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InvocationTargetException ex) &#123;</span><br><span class="line">                Throwable cause = ex.getCause();</span><br><span class="line">                <span class="keyword">if</span> (cause <span class="keyword">instanceof</span> RuntimeException) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> (RuntimeException) cause;</span><br><span class="line">                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cause <span class="keyword">instanceof</span> Error) &#123;</span><br><span class="line">                    <span class="keyword">throw</span> (Error) cause;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(ex);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="SystemServer-main"><a href="#SystemServer-main" class="headerlink" title="SystemServer.main()"></a>SystemServer.main()</h1><p>在子进程中，将会启动很多的安卓系统服务了：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">startBootstrapServices();</span><br><span class="line">startCoreServices();</span><br><span class="line">startOtherServices();</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// http://androidxref.com/9.0.0_r3/xref/frameworks/base/services/java/com/android/server/SystemServer.java</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * The main entry point from zygote.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">new</span> SystemServer().run();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            traceBeginAndSlog(<span class="string">"InitBeforeStartServices"</span>);</span><br><span class="line">            <span class="comment">// If a device's clock is before 1970 (before 0), a lot of</span></span><br><span class="line">            <span class="comment">// APIs crash dealing with negative numbers, notably</span></span><br><span class="line">            <span class="comment">// java.io.File#setLastModified, so instead we fake it and</span></span><br><span class="line">            <span class="comment">// hope that time from cell towers or NTP fixes it shortly.</span></span><br><span class="line">            <span class="keyword">if</span> (System.currentTimeMillis() &lt; EARLIEST_SUPPORTED_TIME) &#123;</span><br><span class="line">                Slog.w(TAG, <span class="string">"System clock is before 1970; setting to 1970."</span>);</span><br><span class="line">                SystemClock.setCurrentTimeMillis(EARLIEST_SUPPORTED_TIME);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">//</span></span><br><span class="line">            <span class="comment">// Default the timezone property to GMT if not set.</span></span><br><span class="line">            <span class="comment">//</span></span><br><span class="line">            String timezoneProperty =  SystemProperties.get(<span class="string">"persist.sys.timezone"</span>);</span><br><span class="line">            <span class="keyword">if</span> (timezoneProperty == <span class="keyword">null</span> || timezoneProperty.isEmpty()) &#123;</span><br><span class="line">                Slog.w(TAG, <span class="string">"Timezone not set; setting to GMT."</span>);</span><br><span class="line">                SystemProperties.set(<span class="string">"persist.sys.timezone"</span>, <span class="string">"GMT"</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// If the system has "persist.sys.language" and friends set, replace them with</span></span><br><span class="line">            <span class="comment">// "persist.sys.locale". Note that the default locale at this point is calculated</span></span><br><span class="line">            <span class="comment">// using the "-Duser.locale" command line flag. That flag is usually populated by</span></span><br><span class="line">            <span class="comment">// AndroidRuntime using the same set of system properties, but only the system_server</span></span><br><span class="line">            <span class="comment">// and system apps are allowed to set them.</span></span><br><span class="line">            <span class="comment">//</span></span><br><span class="line">            <span class="comment">// <span class="doctag">NOTE:</span> Most changes made here will need an equivalent change to</span></span><br><span class="line">            <span class="comment">// core/jni/AndroidRuntime.cpp</span></span><br><span class="line">            <span class="keyword">if</span> (!SystemProperties.get(<span class="string">"persist.sys.language"</span>).isEmpty()) &#123;</span><br><span class="line">                <span class="keyword">final</span> String languageTag = Locale.getDefault().toLanguageTag();</span><br><span class="line"></span><br><span class="line">                SystemProperties.set(<span class="string">"persist.sys.locale"</span>, languageTag);</span><br><span class="line">                SystemProperties.set(<span class="string">"persist.sys.language"</span>, <span class="string">""</span>);</span><br><span class="line">                SystemProperties.set(<span class="string">"persist.sys.country"</span>, <span class="string">""</span>);</span><br><span class="line">                SystemProperties.set(<span class="string">"persist.sys.localevar"</span>, <span class="string">""</span>);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// The system server should never make non-oneway calls</span></span><br><span class="line">            Binder.setWarnOnBlocking(<span class="keyword">true</span>);</span><br><span class="line">            <span class="comment">// The system server should always load safe labels</span></span><br><span class="line">            PackageItemInfo.setForceSafeLabels(<span class="keyword">true</span>);</span><br><span class="line">            <span class="comment">// Deactivate SQLiteCompatibilityWalFlags until settings provider is initialized</span></span><br><span class="line">            SQLiteCompatibilityWalFlags.init(<span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Here we go!</span></span><br><span class="line">            Slog.i(TAG, <span class="string">"Entered the Android system server!"</span>);</span><br><span class="line">            <span class="keyword">int</span> uptimeMillis = (<span class="keyword">int</span>) SystemClock.elapsedRealtime();</span><br><span class="line">            EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_SYSTEM_RUN, uptimeMillis);</span><br><span class="line">            <span class="keyword">if</span> (!mRuntimeRestart) &#123;</span><br><span class="line">                MetricsLogger.histogram(<span class="keyword">null</span>, <span class="string">"boot_system_server_init"</span>, uptimeMillis);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// In case the runtime switched since last boot (such as when</span></span><br><span class="line">            <span class="comment">// the old runtime was removed in an OTA), set the system</span></span><br><span class="line">            <span class="comment">// property so that it is in sync. We can | xq oqi't do this in</span></span><br><span class="line">            <span class="comment">// libnativehelper's JniInvocation::Init code where we already</span></span><br><span class="line">            <span class="comment">// had to fallback to a different runtime because it is</span></span><br><span class="line">            <span class="comment">// running as root and we need to be the system user to set</span></span><br><span class="line">            <span class="comment">// the property. http://b/11463182</span></span><br><span class="line">            SystemProperties.set(<span class="string">"persist.sys.dalvik.vm.lib.2"</span>, VMRuntime.getRuntime().vmLibrary());</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Mmmmmm... more memory!</span></span><br><span class="line">            VMRuntime.getRuntime().clearGrowthLimit();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// The system server has to run all of the time, so it needs to be</span></span><br><span class="line">            <span class="comment">// as efficient as possible with its memory usage.</span></span><br><span class="line">            VMRuntime.getRuntime().setTargetHeapUtilization(<span class="number">0.8f</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Some devices rely on runtime fingerprint generation, so make sure</span></span><br><span class="line">            <span class="comment">// we've defined it before booting further.</span></span><br><span class="line">            Build.ensureFingerprintProperty();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Within the system server, it is an error to access Environment paths without</span></span><br><span class="line">            <span class="comment">// explicitly specifying a user.</span></span><br><span class="line">            Environment.setUserRequired(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Within the system server, any incoming Bundles should be defused</span></span><br><span class="line">            <span class="comment">// to avoid throwing BadParcelableException.</span></span><br><span class="line">            BaseBundle.setShouldDefuse(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Within the system server, when parceling exceptions, include the stack trace</span></span><br><span class="line">            Parcel.setStackTraceParceling(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Ensure binder calls into the system always run at foreground priority.</span></span><br><span class="line">            BinderInternal.disableBackgroundScheduling(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Increase the number of binder threads in system_server</span></span><br><span class="line">            BinderInternal.setMaxThreads(sMaxBinderThreads);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Prepare the main looper thread (this thread).</span></span><br><span class="line">            android.os.Process.setThreadPriority(</span><br><span class="line">                android.os.Process.THREAD_PRIORITY_FOREGROUND);</span><br><span class="line">            android.os.Process.setCanSelfBackground(<span class="keyword">false</span>);</span><br><span class="line">            Looper.prepareMainLooper();</span><br><span class="line">            Looper.getMainLooper().setSlowLogThresholdMs(</span><br><span class="line">                    SLOW_DISPATCH_THRESHOLD_MS, SLOW_DELIVERY_THRESHOLD_MS);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Initialize native services.</span></span><br><span class="line">            System.loadLibrary(<span class="string">"android_servers"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Check whether we failed to shut down last time we tried.</span></span><br><span class="line">            <span class="comment">// This call may not return.</span></span><br><span class="line">            performPendingShutdown();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Initialize the system context.</span></span><br><span class="line">            createSystemContext();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Create the system service manager.</span></span><br><span class="line">            mSystemServiceManager = <span class="keyword">new</span> SystemServiceManager(mSystemContext);</span><br><span class="line">            mSystemServiceManager.setStartInfo(mRuntimeRestart,</span><br><span class="line">                    mRuntimeStartElapsedTime, mRuntimeStartUptime);</span><br><span class="line">            LocalServices.addService(SystemServiceManager<span class="class">.<span class="keyword">class</span>, <span class="title">mSystemServiceManager</span>)</span>;</span><br><span class="line">            <span class="comment">// Prepare the thread pool for init tasks that can be parallelized</span></span><br><span class="line">            SystemServerInitThreadPool.get();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            traceEnd();  <span class="comment">// InitBeforeStartServices</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Start services.</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            traceBeginAndSlog(<span class="string">"StartServices"</span>);</span><br><span class="line">            startBootstrapServices();</span><br><span class="line">            startCoreServices();</span><br><span class="line">            startOtherServices();</span><br><span class="line">            SystemServerInitThreadPool.shutdown();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">            Slog.e(<span class="string">"System"</span>, <span class="string">"******************************************"</span>);</span><br><span class="line">            Slog.e(<span class="string">"System"</span>, <span class="string">"************ Failure starting system services"</span>, ex);</span><br><span class="line">            <span class="keyword">throw</span> ex;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            traceEnd();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        StrictMode.initVmDefaults(<span class="keyword">null</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!mRuntimeRestart &amp;&amp; !isFirstBootOrUpgrade()) &#123;</span><br><span class="line">            <span class="keyword">int</span> uptimeMillis = (<span class="keyword">int</span>) SystemClock.elapsedRealtime();</span><br><span class="line">            MetricsLogger.histogram(<span class="keyword">null</span>, <span class="string">"boot_system_server_ready"</span>, uptimeMillis);</span><br><span class="line">            <span class="keyword">final</span> <span class="keyword">int</span> MAX_UPTIME_MILLIS = <span class="number">60</span> * <span class="number">1000</span>;</span><br><span class="line">            <span class="keyword">if</span> (uptimeMillis &gt; MAX_UPTIME_MILLIS) &#123;</span><br><span class="line">                Slog.wtf(SYSTEM_SERVER_TIMING_TAG,</span><br><span class="line">                        <span class="string">"SystemServer init took too long. uptimeMillis="</span> + uptimeMillis);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Loop forever.</span></span><br><span class="line">        Looper.loop();</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Main thread loop unexpectedly exited"</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>#</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android/" rel="tag"># Android</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Android/Android%E7%9A%84Launcher%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E4%BB%A3%E7%A0%81.html" rel="next" title="Android的Launcher启动流程代码">
+                  <i class="fa fa-chevron-left"></i> Android的Launcher启动流程代码
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#init"><span class="nav-number">1.</span> <span class="nav-text">init</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#app-process-命令"><span class="nav-number">2.</span> <span class="nav-text">app_process 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#AppRuntime"><span class="nav-number">2.1.</span> <span class="nav-text">AppRuntime</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AndroidRuntime"><span class="nav-number">2.2.</span> <span class="nav-text">AndroidRuntime</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZygoteInit-main"><span class="nav-number">2.3.</span> <span class="nav-text">ZygoteInit.main()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ZygoteServer-runSelectLoop-进程-fork"><span class="nav-number">2.4.</span> <span class="nav-text">ZygoteServer.runSelectLoop() - 进程 fork</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#forkSystemServer"><span class="nav-number">2.5.</span> <span class="nav-text">forkSystemServer()</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#handleSystemServerProcess"><span class="nav-number">2.5.1.</span> <span class="nav-text">handleSystemServerProcess()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZygoteInit-zygoteInit"><span class="nav-number">2.5.2.</span> <span class="nav-text">ZygoteInit.zygoteInit()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZygoteInit-nativeZygoteInit"><span class="nav-number">2.5.3.</span> <span class="nav-text">ZygoteInit.nativeZygoteInit()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RuntimeInit-applicationInit"><span class="nav-number">2.5.4.</span> <span class="nav-text">RuntimeInit.applicationInit()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SystemServer-main"><span class="nav-number">3.</span> <span class="nav-text">SystemServer.main()</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">297</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">115</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Android/Android%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html",
+            identifier: "Android/Android系统的启动过程.html",
+            title: "Android系统的启动过程"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
