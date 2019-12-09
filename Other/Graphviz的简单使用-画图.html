@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="之前在 Windows 画图一般都是用的 Visio ，但是切换到了 macOS，说实话还没有找到能够与其匹敌的软件。之前虽然看过 EdrawMax ，画出来的效果也不错，但是感觉有的时候画一个流程图用这么庞大的软件有点过分了嗷。不知道是在哪天看到了了 Grapviz 这个东东。顿时觉得这就是我想要的。">
+<meta name="keywords" content="Other,Graphviz">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Graphviz的简单使用-画图">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Other&#x2F;Graphviz%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8-%E7%94%BB%E5%9B%BE.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="之前在 Windows 画图一般都是用的 Visio ，但是切换到了 macOS，说实话还没有找到能够与其匹敌的软件。之前虽然看过 EdrawMax ，画出来的效果也不错，但是感觉有的时候画一个流程图用这么庞大的软件有点过分了嗷。不知道是在哪天看到了了 Grapviz 这个东东。顿时觉得这就是我想要的。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-09T13:15:20.000Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://gowa.club/Other/Graphviz%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8-%E7%94%BB%E5%9B%BE.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Graphviz的简单使用-画图 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Other/Graphviz%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8-%E7%94%BB%E5%9B%BE.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Graphviz的简单使用-画图
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-09 21:15:20" itemprop="dateCreated datePublished" datetime="2019-12-09T21:15:20+08:00">2019-12-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Other/" itemprop="url" rel="index">
+                    <span itemprop="name">Other</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Other/Graphviz%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8-%E7%94%BB%E5%9B%BE.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Other/Graphviz的简单使用-画图.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>之前在 Windows 画图一般都是用的 Visio ，但是切换到了 macOS，说实话还没有找到能够与其匹敌的软件。之前虽然看过 EdrawMax ，画出来的效果也不错，但是感觉有的时候画一个流程图用这么庞大的软件有点过分了嗷。不知道是在哪天看到了了 Grapviz 这个东东。顿时觉得这就是我想要的。</p>
+<a id="more"></a>
+
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><p><a href="https://graphviz.gitlab.io/download/" target="_blank" rel="noopener">Graphviz 的官方网站在这</a>。在开始使用之前我们可以不用了解具体的语法，但是我们先要了解几个基本的概念。（实话，Graphviz 的文档组织有够差的）。</p>
+<blockquote>
+<p>Graphviz 是一个开源的图形可视化软件。图形可视化用由抽象图和网络组成的图表来表示结构化信息的方式。<br>Graphviz 布局程序使用简单的文本描述的图作为输入，然后输出各种格式的图标。如：svg, pdf 等。</p>
+</blockquote>
+<h2 id="graph"><a href="#graph" class="headerlink" title="graph"></a>graph</h2><p>一个图，可以时有向的，也可以是无向的。用一系列的语句来描述一个图。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">graph	:	[ strict ] (graph | digraph) [ ID ] &apos;&#123;&apos; stmt_list &apos;&#125;&apos;</span><br></pre></td></tr></table></figure>
+
+<p>stmt_list 表示语句列表的意思。</p>
+<p>图即是由节点，边来组成的，同时一个图中，也可以包含多个子图。</p>
+<h2 id="node"><a href="#node" class="headerlink" title="node"></a>node</h2><p>node 节点，是图的基本元素。每个节点都可以指定多个属性及一个 ID。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ode_stmt	:	node_id [ attr_list ]</span><br><span class="line">node_id	:	ID [ port ]</span><br><span class="line">port	:	&apos;:&apos; ID [ &apos;:&apos; compass_pt ]</span><br><span class="line">|	&apos;:&apos; compass_pt</span><br></pre></td></tr></table></figure>
+<h2 id="edge"><a href="#edge" class="headerlink" title="edge"></a>edge</h2><p>边也是 图中的基本元素，用来连接两个 Node 。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">edge_stmt	:	(node_id | subgraph) edgeRHS [ attr_list ]</span><br><span class="line">edgeRHS	:	edgeop (node_id | subgraph) [ edgeRHS ]</span><br></pre></td></tr></table></figure>
+
+<p>每个边，也可以指定多个属性。</p>
+<h2 id="Subgraphs-and-Clusters"><a href="#Subgraphs-and-Clusters" class="headerlink" title="Subgraphs and Clusters"></a>Subgraphs and Clusters</h2><p>子图在 Graphviz 中扮演了三个角色。</p>
+<ol>
+<li>表示图结构，表示特定的 Node 和 Edge 应该被分组在一起。这是最常规的角色，通常指定有关图组件的语义信息。它还可以为 Edge 提供方便的简写。Edge 语句允许在其运算符的左侧和右侧都有子图。如 <code>A -&gt; {B C}</code> 与 <code>A -&gt; B; A -&gt; C;</code> 是一样的。</li>
+<li>第二个角色，提供对于设置属性的上下文。例如，一个子图可以定义在其内定义的所有节点的默认颜色是蓝色。在图形绘制的上下文中，一个更有趣的例子是:<code>subgraph { rank = same; A; B; C;}</code>。这个语句表明在进行 dot 绘制的时候  A, B, C 应该有相同的等级。</li>
+<li>第三个角色。直接涉及某些布局引擎如何布置图。如果子图的名称以 <strong>cluster</strong> 开头，Graphviz 会将这样的一个子图标记为特殊的 <strong>cluster</strong> 图。如果布局引擎支持，那么就会将这个 <strong>cluster</strong> 内的节点都绘制在一起，在其外部包裹一个矩形。 cluster 并不是 DOT 语言的一部分，不过被特定的布局引擎支持。</li>
+</ol>
+<h2 id="Roadmap"><a href="#Roadmap" class="headerlink" title="Roadmap"></a>Roadmap</h2><p>不是很明白 Roadmap 是表达了什么东西。不过按照描述，看起来应该是布局逻辑的意思。</p>
+<ul>
+<li><strong>dot</strong>：分等级或层级来绘制有向图。当边有是有方向的时候，就默认就会使用这个。布局算法的目标是<strong>在同一个方向绘制 Edge （从上至下，从左至右）然后会尽量的减少 Edge 的交错和长度</strong>。</li>
+<li><strong>neato</strong> <strong>spring model</strong> 布局模型。当图并不大（大概 100 节点）同时我们对图什么都不知道时会默认使用。 Neato 会尝试尽量最小化 <strong>全局能量函数（等效于统计多维标度）</strong>。尽管也可以使用使用最速下降的较早的Kamada-Kawai算法，但也可以通过应力最大化实现该解决方案。</li>
+<li><strong>fdp</strong> <strong>spring model</strong> 模型，与 neato 类似，但这是通过减少力量而不是消耗能量来实现的。Fdp实现了Fruchterman-Reingold启发式算法，其中包括一个多网格求解器，该求解器可以处理较大的图和集群的无向图</li>
+<li><strong>sfdp</strong> fdp的多尺度版本，用于大图的布局</li>
+<li><strong>twopi</strong> 在Graham Wills 97之后进行径向布局。根据其距给定根节点的距离，将节点放置在同心圆上。您可以设置根节点，也可以让twopi完成。</li>
+<li><strong>circo</strong> 圆形布局，紧接在Six and Tollis 99，Kauffman和Wiese 02之后。这适用于多个循环结构的某些图，例如某些电信网络。</li>
+</ul>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><p>我们一般用如下这样的命令来进行渲染：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">dot  -K 布局引擎 -T 输出格式 -O(-ofile)  &lt;dot files&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如 </p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">dot -K dot -T png -O 1.dot</span><br></pre></td></tr></table></figure>
+
+<h1 id="常用属性"><a href="#常用属性" class="headerlink" title="常用属性"></a>常用属性</h1><h2 id="Node-属性"><a href="#Node-属性" class="headerlink" title="Node 属性"></a>Node 属性</h2><ul>
+<li><p>color</p>
+</li>
+<li><p>colorschema</p>
+</li>
+<li><p>comment</p>
+</li>
+<li><p>distortion</p>
+</li>
+<li><p>fixedsize</p>
+</li>
+<li><p>fontcolor</p>
+</li>
+<li><p>fontname</p>
+</li>
+<li><p>fontsize</p>
+</li>
+<li><p>height</p>
+</li>
+<li><p>imagepos</p>
+</li>
+<li><p>imagescale</p>
+</li>
+<li><p>label</p>
+</li>
+<li><p>labelloc</p>
+</li>
+<li><p>layer</p>
+</li>
+<li><p>margin</p>
+</li>
+<li><p>nojustify</p>
+</li>
+<li><p>nslimit</p>
+</li>
+<li><p>nslimit1</p>
+</li>
+<li><p>ordering</p>
+</li>
+<li><p>orientation</p>
+</li>
+<li><p>penwidth</p>
+</li>
+<li><p>peripheries</p>
+</li>
+<li><p>pin</p>
+</li>
+<li><p>pos</p>
+</li>
+<li><p>rects</p>
+</li>
+<li><p>regular</p>
+</li>
+<li><p>root</p>
+</li>
+<li><p>samplepoints</p>
+</li>
+<li><p>shape</p>
+</li>
+<li><p>shapefile</p>
+</li>
+<li><p>skew</p>
+</li>
+<li><p>sortv</p>
+</li>
+<li><p>style</p>
+</li>
+<li><p>target</p>
+</li>
+<li><p>wdith</p>
+</li>
+<li><p>xlabel</p>
+</li>
+<li><p>xlp</p>
+</li>
+<li><p>z</p>
+<h2 id="Edge-属性"><a href="#Edge-属性" class="headerlink" title="Edge 属性"></a>Edge 属性</h2></li>
+<li><p>arrowhead</p>
+</li>
+<li><p>arrowsize</p>
+</li>
+<li><p>arrowtail</p>
+</li>
+<li><p>color</p>
+</li>
+<li><p>colorschema</p>
+</li>
+<li><p>comment</p>
+</li>
+<li><p>constraint</p>
+</li>
+<li><p>decorate</p>
+</li>
+<li><p>dir</p>
+</li>
+<li><p>edgeURL</p>
+</li>
+<li><p>edgehref</p>
+</li>
+<li><p>edgetarget</p>
+</li>
+<li><p>edgetooltip</p>
+</li>
+<li><p>fillcolor</p>
+</li>
+<li><p>fontcolor</p>
+</li>
+<li><p>fontname</p>
+</li>
+<li><p>fontsize</p>
+</li>
+<li><p>headURL</p>
+</li>
+<li><p>head_lp</p>
+</li>
+<li><p>headclip</p>
+</li>
+<li><p>headhref</p>
+</li>
+<li><p>headlabel</p>
+</li>
+<li><p>headport</p>
+</li>
+<li><p>headtarget</p>
+</li>
+<li><p>headtooltip</p>
+</li>
+<li><p>href</p>
+</li>
+<li><p>id</p>
+</li>
+<li><p>label</p>
+</li>
+<li><p>labelURL</p>
+</li>
+<li><p>labelangel</p>
+</li>
+<li><p>labeldistance</p>
+</li>
+<li><p>labelfloat</p>
+</li>
+<li><p>labelfontcolor</p>
+</li>
+<li><p>labelfontname</p>
+</li>
+<li><p>labelfontsize</p>
+</li>
+<li><p>labelhref</p>
+</li>
+<li><p>labeltarget</p>
+</li>
+<li><p>labeltooltip</p>
+</li>
+<li><p>layer</p>
+</li>
+<li><p>len</p>
+</li>
+<li><p>lhead</p>
+</li>
+<li><p>lp</p>
+</li>
+<li><p>ltail</p>
+</li>
+<li><p>minlen</p>
+</li>
+<li><p>nojustify</p>
+</li>
+<li><p>penwidth</p>
+</li>
+<li><p>pos</p>
+</li>
+<li><p>samehead</p>
+</li>
+<li><p>sametail</p>
+</li>
+<li><p>showboxes</p>
+</li>
+<li><p>style</p>
+</li>
+<li><p>tailURL</p>
+</li>
+<li><p>tail_lp</p>
+</li>
+<li><p>tailclip</p>
+</li>
+<li><p>tailhref</p>
+</li>
+<li><p>taillabel</p>
+</li>
+<li><p>tailport</p>
+</li>
+<li><p>tailtarget</p>
+</li>
+<li><p>tailtooltip</p>
+</li>
+<li><p>target</p>
+</li>
+<li><p>tooltip</p>
+</li>
+<li><p>weight</p>
+</li>
+<li><p>xlabel</p>
+</li>
+<li><p>xlp</p>
+</li>
+</ul>
+<h2 id="Root-Graph-属性"><a href="#Root-Graph-属性" class="headerlink" title="Root Graph 属性"></a>Root Graph 属性</h2><h2 id="Subgraph-属性"><a href="#Subgraph-属性" class="headerlink" title="Subgraph 属性"></a>Subgraph 属性</h2><h2 id="Cluster-Subgraph-属性"><a href="#Cluster-Subgraph-属性" class="headerlink" title="Cluster Subgraph 属性"></a>Cluster Subgraph 属性</h2><h1 id="plentUML"><a href="#plentUML" class="headerlink" title="plentUML"></a>plentUML</h1><p>这是一个基于 <a href="https://plantuml.com/" target="_blank" rel="noopener">plentUML</a> 是一个基于 Grapviz 的前端，其使用 UML 语法进行工作。我们用 UML 来描述的图，最终都会转换为 Grapviz 内的内容来进行绘制。不过其封装了一些内部的图形，所以说在画时序图，类图，活动图等的时候会更加的简单，不过灵活性也要差一些。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Other/" rel="tag"># Other</a>
+              <a href="/tags/Graphviz/" rel="tag"># Graphviz</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Android/Android%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html" rel="next" title="Android系统的启动过程">
+                  <i class="fa fa-chevron-left"></i> Android系统的启动过程
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#graph"><span class="nav-number">1.1.</span> <span class="nav-text">graph</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node"><span class="nav-number">1.2.</span> <span class="nav-text">node</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#edge"><span class="nav-number">1.3.</span> <span class="nav-text">edge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Subgraphs-and-Clusters"><span class="nav-number">1.4.</span> <span class="nav-text">Subgraphs and Clusters</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Roadmap"><span class="nav-number">1.5.</span> <span class="nav-text">Roadmap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令"><span class="nav-number">1.6.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常用属性"><span class="nav-number">2.</span> <span class="nav-text">常用属性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Node-属性"><span class="nav-number">2.1.</span> <span class="nav-text">Node 属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Edge-属性"><span class="nav-number">2.2.</span> <span class="nav-text">Edge 属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Root-Graph-属性"><span class="nav-number">2.3.</span> <span class="nav-text">Root Graph 属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Subgraph-属性"><span class="nav-number">2.4.</span> <span class="nav-text">Subgraph 属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cluster-Subgraph-属性"><span class="nav-number">2.5.</span> <span class="nav-text">Cluster Subgraph 属性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#plentUML"><span class="nav-number">3.</span> <span class="nav-text">plentUML</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">298</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">117</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Other/Graphviz%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8-%E7%94%BB%E5%9B%BE.html",
+            identifier: "Other/Graphviz的简单使用-画图.html",
+            title: "Graphviz的简单使用-画图"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
