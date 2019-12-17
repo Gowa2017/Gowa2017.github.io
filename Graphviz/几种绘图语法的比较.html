@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="自从用 Graphviz 来进行绘图后，感觉确实是非常强大的。同时呢，也看到了很多基于 Graphviz 来进行绘图的改进，如 PlantUML，Mermaid 等，我日常的笔记整理都是用的 markdown ，说实话，确实没有看到能很好的将这几者进行整合后的软件存在。">
+<meta name="keywords" content="Graphviz">
+<meta property="og:type" content="article">
+<meta property="og:title" content="几种绘图语法的比较">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Graphviz&#x2F;%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="自从用 Graphviz 来进行绘图后，感觉确实是非常强大的。同时呢，也看到了很多基于 Graphviz 来进行绘图的改进，如 PlantUML，Mermaid 等，我日常的笔记整理都是用的 markdown ，说实话，确实没有看到能很好的将这几者进行整合后的软件存在。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-16T14:48:46.000Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://gowa.club/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>几种绘图语法的比较 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          几种绘图语法的比较
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-16 22:48:46" itemprop="dateCreated datePublished" datetime="2019-12-16T22:48:46+08:00">2019-12-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Graphviz/" itemprop="url" rel="index">
+                    <span itemprop="name">Graphviz</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Graphviz/几种绘图语法的比较.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>自从用 Graphviz 来进行绘图后，感觉确实是非常强大的。同时呢，也看到了很多基于 Graphviz 来进行绘图的改进，如 PlantUML，Mermaid 等，我日常的笔记整理都是用的 markdown ，说实话，确实没有看到能很好的将这几者进行整合后的软件存在。</p>
+<a id="more"></a>
+
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>Graphviz 是用来进行图形渲染的，而如何定义图的话，则由不同的方式，常见的比如 PlantUML 和  Mermaid 就是两种非常流行的。</p>
+<p>我最是画流程图，甘特图比较多，架构图</p>
+<h2 id="PlantUML"><a href="#PlantUML" class="headerlink" title="PlantUML"></a>PlantUML</h2><p><a href="https://plantuml.com/" target="_blank" rel="noopener">PlantUML</a>  主要是针对于 UML 图行的实现，其定义了一套自己的语法，最终通过 Graphviz 来进行渲染出图。</p>
+<p>它能绘制的图有：</p>
+<ul>
+<li>序列图</li>
+<li>用例图</li>
+<li>类图</li>
+<li>活动图</li>
+<li>组件图</li>
+<li>状态图</li>
+<li>对象图</li>
+<li>部署图</li>
+<li>定时图</li>
+</ul>
+<p>同时还支持以下非 UML 的图：</p>
+<ul>
+<li>线框图形界面</li>
+<li>架构图</li>
+<li>规范和描述语言（DSL）</li>
+<li>Ditaa</li>
+<li>甘特图</li>
+<li>思维导图</li>
+</ul>
+<p>等等。其还封装了一堆堆小图标，可以让我们方便的显示。</p>
+<p>但比较头疼的是，对于很多 markdown 编辑器并没有原生对其进行支持。所以选择的是 VS CODE 加 PlantUML 插件来进行绘图。</p>
+<h2 id="Mermaid"><a href="#Mermaid" class="headerlink" title="Mermaid"></a>Mermaid</h2><p>这个就比较直接了，<a href="https://plantuml.com/" target="_blank" rel="noopener">Mermaid</a>，其本身就是为了能让我们用 markdown 式的语法来绘制：</p>
+<ul>
+<li>流程图</li>
+<li>序列图</li>
+<li>类图</li>
+<li>状态图</li>
+<li>甘特图</li>
+<li>Pie 表</li>
+</ul>
+<h1 id="相关软件"><a href="#相关软件" class="headerlink" title="相关软件"></a>相关软件</h1><p>就我常用而言， <a href="https://github.com/MacDownApp/macdown" target="_blank" rel="noopener">MacDown</a> 和  <a href="https://www.typora.io/" target="_blank" rel="noopener">Typora</a> 都原生对其进行了支持。之所以一直在这两者间进行混合使用的原因是：</p>
+<ul>
+<li>macdown 不支持文件夹视图，导出 PDF 的时候，没有书签目录，无法跳转。但其对 graphviz 的支持又是非常好的，支持各种引擎。甘特图还不支持 axisFormat 语法，看到的日期轴会是 w 以周为单位的。</li>
+<li>typora 导出有目录，对 Mermaid 的支持是最新最及时的，但是其对 graphviz 不原生支持，只能通过第三方接口如 <a href="https://www.gravio.com/" target="_blank" rel="noopener">gravio</a> 这样的网站接口来支持，而且就支持 dot 一种布局引擎，你让我能怎么办呢。如果说 typora 能原生的支持 graphviz 就完美了。</li>
+<li>vnote 这个支持 PlantUML，Mermaid，Graphviz ，其中 Mermaid 内建支持，其他两者是通过外挂程序进行渲染的。不过遗憾的是，<del>作者快一年了都还没有将 Mermaid 的 AxisFormat 语法提上更新的日程</del>（20191217晚上已经更新），而且导出的功能也不如 Typora。补充一下：本地 jar 的形式渲染  plantUML 好难受（<strong>可以使用在线服务，非常OK</strong>）。作者说导出是可以多种格式和书签的，自己用 pandoc 来进行自定义的命令就行了。</li>
+</ul>
+<h1 id="我想要的其实是…"><a href="#我想要的其实是…" class="headerlink" title="我想要的其实是…"></a>我想要的其实是…</h1><p>能够支持 graphviz ，主要是有的时候用不同的引擎来布局的时候，会省不少事，比如描述关系图的时候，用一个径向的布局就非常的OK的了。</p>
+<p>能够支持 PlantUML，用这个来进行做架构图或者是甘特图的时候也是非常的棒的。</p>
+<p>至于说 Mermaid，这个可以与 PlantUML 二选一就够了。</p>
+<p>导出的文档格式一定要有导航，否则的话 markdown 看起来是一回事，导出又是另外一回事这可就不那么完美了。</p>
+<p>实际上单纯写作来讲， macdown 是最完美的一个，当然，如果其能将 mermaid 进行支持到最新，然后导出能够支持目录就 OJBK 了。但据作者答复，应该是因为其所使用的框架，还做不到导出的 PDF 带目录这么一个事情。</p>
+<p>而 Typora 的话将内建的 graphviz 多种布局引擎给落实也完美了。有 mermaid 没有 plantUML 也能接受了。</p>
+<p>至于啊 Vnote ，这个用 QT 做的界面丑虽然丑点，无所谓，不过其 PDF 的导出格式的目录是页内跳转的（作者说用 wkhtmltopdf 是可以实现的），而不是书签的形式；同时其 mermaid 的支持没有升级也是个硬伤。</p>
+<p>慢慢再研究吧。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Graphviz/" rel="tag"># Graphviz</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/%E4%BD%BF%E7%94%A8C4-PlantUML%E6%9D%A5%E5%BF%AB%E9%80%9F%E7%9A%84%E6%8F%8F%E8%BF%B0%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84.html" rel="next" title="使用C4-PlantUML来快速的描述软件架构">
+                  <i class="fa fa-chevron-left"></i> 使用C4-PlantUML来快速的描述软件架构
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#实现"><span class="nav-number">1.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PlantUML"><span class="nav-number">1.1.</span> <span class="nav-text">PlantUML</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mermaid"><span class="nav-number">1.2.</span> <span class="nav-text">Mermaid</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关软件"><span class="nav-number">2.</span> <span class="nav-text">相关软件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#我想要的其实是…"><span class="nav-number">3.</span> <span class="nav-text">我想要的其实是…</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">300</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">120</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html",
+            identifier: "Graphviz/几种绘图语法的比较.html",
+            title: "几种绘图语法的比较"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
