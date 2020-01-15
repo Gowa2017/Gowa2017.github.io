@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="在文章 几种绘图语法的比较 中，我说了我想要的一个 markdown 编辑器， typora 实际上非常优秀，但不开源。 Macdown 非常不错，开源。通过将其 mermaid 进行升级，viz.js 进行升级后，感觉非常不错了，唯一还有一点，就是导出 pdf 没有 Toc，而只能在页内设置 Toc，所以来研究一下用 pandoc 来进行转换看看效果如何。">
+<meta name="keywords" content="macOS,Pandoc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用pandoc转换pdf加上书签目录">
+<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;macOS&#x2F;%E4%BD%BF%E7%94%A8pandoc%E8%BD%AC%E6%8D%A2pdf%E5%8A%A0%E4%B8%8A%E4%B9%A6%E7%AD%BE%E7%9B%AE%E5%BD%95.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="在文章 几种绘图语法的比较 中，我说了我想要的一个 markdown 编辑器， typora 实际上非常优秀，但不开源。 Macdown 非常不错，开源。通过将其 mermaid 进行升级，viz.js 进行升级后，感觉非常不错了，唯一还有一点，就是导出 pdf 没有 Toc，而只能在页内设置 Toc，所以来研究一下用 pandoc 来进行转换看看效果如何。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-31T14:28:56.000Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://gowa.club/macOS/%E4%BD%BF%E7%94%A8pandoc%E8%BD%AC%E6%8D%A2pdf%E5%8A%A0%E4%B8%8A%E4%B9%A6%E7%AD%BE%E7%9B%AE%E5%BD%95.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>使用pandoc转换pdf加上书签目录 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/macOS/%E4%BD%BF%E7%94%A8pandoc%E8%BD%AC%E6%8D%A2pdf%E5%8A%A0%E4%B8%8A%E4%B9%A6%E7%AD%BE%E7%9B%AE%E5%BD%95.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用pandoc转换pdf加上书签目录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-31 22:28:56" itemprop="dateCreated datePublished" datetime="2019-12-31T22:28:56+08:00">2019-12-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/macOS/" itemprop="url" rel="index">
+                    <span itemprop="name">macOS</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/macOS/%E4%BD%BF%E7%94%A8pandoc%E8%BD%AC%E6%8D%A2pdf%E5%8A%A0%E4%B8%8A%E4%B9%A6%E7%AD%BE%E7%9B%AE%E5%BD%95.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="macOS/使用pandoc转换pdf加上书签目录.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在文章 <a href="/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html" title="几种绘图语法的比较">几种绘图语法的比较</a> 中，我说了我想要的一个 markdown 编辑器， typora 实际上非常优秀，但不开源。 Macdown 非常不错，开源。通过将其 mermaid 进行升级，viz.js 进行升级后，感觉非常不错了，唯一还有一点，就是导出 pdf 没有 Toc，而只能在页内设置 Toc，所以来研究一下用 pandoc 来进行转换看看效果如何。</p>
+<a id="more"></a>
+
+<h1 id="pandoc"><a href="#pandoc" class="headerlink" title="pandoc"></a>pandoc</h1><p><a href="https://pandoc.org/" target="_blank" rel="noopener">pandoc 网站</a> 一句话介绍：</p>
+<blockquote>
+<p>如果你需要在一个标记文件格式到另外一种标记文件格式间进行转换，那么 pandoc 就是你的瑞士军刀。</p>
+</blockquote>
+<p>其可以在很多种文件间相互转换。</p>
+<p>我最在意的是从 md 到 pdf 或者 md 到 word 的转换。</p>
+<p>Typora 据说其转换是会将我们的代码转换成一自己专有的中间格式，进行导出。当然，其除了 pdf 和 html 外的导出是通过 pandoc 来实现的，其导出为 pdf 的效果实在是太棒了。</p>
+<h1 id="抽象语法树"><a href="#抽象语法树" class="headerlink" title="抽象语法树"></a>抽象语法树</h1><p>我们可以用命令来生成一个抽象语法树的 JSON 表示：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc -t json &lt;input file&gt;</span><br></pre></td></tr></table></figure>
+
+<p>如我的测试文件</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line"><span class="section"># header</span></span><br><span class="line">你好</span><br><span class="line">​<span class="code">```</span>mermaid</span><br><span class="line">graph TB;</span><br><span class="line">a --&gt; b;</span><br><span class="line">\<span class="code">`\`</span>\`</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   &quot;pandoc-api-version&quot; : [</span><br><span class="line">      1,</span><br><span class="line">      20</span><br><span class="line">   ],</span><br><span class="line">   &quot;meta&quot; : &#123;&#125;,</span><br><span class="line">   &quot;blocks&quot; : [</span><br><span class="line">      &#123;</span><br><span class="line">         &quot;c&quot; : [</span><br><span class="line">            1,</span><br><span class="line">            [</span><br><span class="line">               &quot;header&quot;,</span><br><span class="line">               [],</span><br><span class="line">               []</span><br><span class="line">            ],</span><br><span class="line">            [</span><br><span class="line">               &#123;</span><br><span class="line">                  &quot;c&quot; : &quot;header&quot;,</span><br><span class="line">                  &quot;t&quot; : &quot;Str&quot;</span><br><span class="line">               &#125;</span><br><span class="line">            ]</span><br><span class="line">         ],</span><br><span class="line">         &quot;t&quot; : &quot;Header&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">         &quot;c&quot; : [</span><br><span class="line">            &#123;</span><br><span class="line">               &quot;t&quot; : &quot;Str&quot;,</span><br><span class="line">               &quot;c&quot; : &quot;你好&quot;</span><br><span class="line">            &#125;</span><br><span class="line">         ],</span><br><span class="line">         &quot;t&quot; : &quot;Para&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">         &quot;c&quot; : [</span><br><span class="line">            [</span><br><span class="line">               &quot;&quot;,</span><br><span class="line">               [</span><br><span class="line">                  &quot;mermaid&quot;</span><br><span class="line">               ],</span><br><span class="line">               []</span><br><span class="line">            ],</span><br><span class="line">            &quot;graph TB;\na --&gt; b;&quot;</span><br><span class="line">         ],</span><br><span class="line">         &quot;t&quot; : &quot;CodeBlock&quot;</span><br><span class="line">      &#125;</span><br><span class="line">   ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一个 pandoc 的 AST 包含一个 <em>meta</em> 块（包含如标题，作者，日期）等的元数据及一个 <em>Block</em> 元素组成的列表。</p>
+<p>在我们的例子中，有三个 <em>Block</em> 元素:<strong>Header, Str, CodeBlock</strong>。每个都有一个内容列表（由 Inline 元素组成）。</p>
+<p>简单看一下 CodeBlock 的在 AST 内的组成，其包括两部分：</p>
+<ul>
+<li>Attr 包括三个参数：(identifier, [classes],[(key,value)]) 分别是标识符，类列表，k-v键值对列表</li>
+<li>Text 就是代码本身。事实pandoc 是进行了封装的 Unicode Text 字节</li>
+</ul>
+<p>在我们的 md 文件中，将代码的类型，标注成了 classes 。</p>
+<p>参考用 python 的一个 filter ，调用外部的 mermaid -cli 来进行渲染：</p>
+<p><a href="https://github.com/timofurrer/pandoc-mermaid-filter/blob/master/pandoc_mermaid_filter.py" target="_blank" rel="noopener">pandoc-mermaid-filter</a></p>
+<h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc -s -f gfm -t pdf -o outputfile</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>-f FORMAT, -r FORMAT, –from=FORMAT, –read=FORMAT  输入文件格式</li>
+<li>-t FORMAT, -w FORMAT, –to=FORMAT, –write=FORMAT 输出文件格式</li>
+<li>-o 输出文件</li>
+<li>-s, –standalone 增加页眉和页脚。<code>pdf</code>, <code>epub</code>, <code>epub3</code>, <code>fb2</code>, <code>docx</code>, 格式会自动设置此选项。</li>
+</ul>
+<h3 id="建立-PDF"><a href="#建立-PDF" class="headerlink" title="建立 PDF"></a>建立 PDF</h3><p>最简单的代码就是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc test.txt -o test.pdf</span><br></pre></td></tr></table></figure>
+
+<p>pandoc 默认使用 <strong>LaTeX</strong> 来建立 PDF 文件，这就要求我们首先安装 latex 引擎。当然，其也可以使用 <strong>ConText, roff ms, HTML 来作为中间格式</strong>。需要中间格式的时候，我们需要为输出文件设置一个 .pdf 扩展，然后添加 –pdf–engine 选项或者 <code>-t context, -t html 或者 -t ms</code>。用来生成中间文件的工具通过 <code>--pdf-engine</code> 来进行指定。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pandoc -V <span class="string">'CJKmainfont=Songti TC'</span> -V mainfont=Menlo --from gfm --listings --pdf-engine=xelatex</span><br></pre></td></tr></table></figure>
+
+
+
+<p>可以通过变量控制 PDF 的风格，这依赖于我们使用的中间文件格式：查看 <a href="https://pandoc.org/MANUAL.html#variables-for-latex" target="_blank" rel="noopener">variables for LaTeX</a>, <a href="https://pandoc.org/MANUAL.html#variables-for-context" target="_blank" rel="noopener">variables for ConTeXt</a>, <a href="https://pandoc.org/MANUAL.html#variables-for-wkhtmltopdf" target="_blank" rel="noopener">variables for <code>wkhtmltopdf</code></a>, <a href="https://pandoc.org/MANUAL.html#variables-for-ms" target="_blank" rel="noopener">variables for ms</a>. 。当我们使用  HTML 作为中间格式的时候，其输出可以用 <code>--css</code> 来控制风格</p>
+<p>如果要调试 PDF 的生成，我们可以通过查看其中间表示：不使用 <code>-o test.pdf</code> 我们使用 <code>-s -o test.tex</code> 来生成 LaTex。然后用 <code>pdflatex test.tex</code>来进行测试。</p>
+<p>当使用  LaTex 的时候，下面这些包必须可用（这些基本都包含在活跃的 Tex 版本中）： amsfonts, amsmath, lm, unicode-math, ifxetex, ifluatex, listings (如果使用 <em>–listings</em> 选项), fancyvrb, longtable, booktabs, graphicx (如果文档包含图片), hyperref, xcolor, ulem, geometry (geometry 变量已设置), setspace (与 <em>linestretch</em> 一起), and babel (with <em>lang</em>). </p>
+<p><code>xelatex</code> or <code>lualatex</code> 引擎需要 <a href="https://ctan.org/pkg/fontspec" target="_blank" rel="noopener"><code>fontspec</code></a>. <code>xelatex</code> 使用 <a href="https://ctan.org/pkg/polyglossia" target="_blank" rel="noopener"><code>polyglossia</code></a> (with <code>lang</code>), <a href="https://ctan.org/pkg/xecjk" target="_blank" rel="noopener"><code>xecjk</code></a>, and <a href="https://ctan.org/pkg/bidi" target="_blank" rel="noopener"><code>bidi</code></a> (with the <code>dir</code> variable set). </p>
+<p>如果设置了 <em>mathspec</em> 变量，<em>xelatex</em> 会使用 <em>mathspec</em> 而不是 <em>unicode-math</em>。</p>
+<p><em>upquote</em> 和 <em>microtype</em> 包可用的话就会被使用，当 <em>csquotes</em> 被设置为 true 或者元数据字段被设置为 true 时，<em>csquotes</em> 会因为 <em>typography</em> 而使用。</p>
+<p>下面这些包在存在的时候会用来提高输出的质量，但 pandoc 并不要求他们一定要存在： <em>upquote</em> (在逐字环境中使用直接引号), <em>microtype</em> (更好的间隔控制), <em>parskip</em> (更好的段间距控制), <em>xurl</em> (为了更好的URLs换行), <em>bookmark</em> (为更好的 PDF 书签), and <em>footnotehyper</em> or <em>footnote</em> (为了允许表中的脚注).</p>
+<h3 id="–pdf-engine"><a href="#–pdf-engine" class="headerlink" title="–pdf-engine"></a>–pdf-engine</h3><p>有多个 pdf 引擎：</p>
+<p><strong>pdflatex, lualatex, xelatex, latexmk, tectonic, wkhtmltopdf, weasyprint, prince, context, and pdfroff</strong></p>
+<p>如果引擎不在我们的路径变量中，那么就需要指定完整路径。如果没有指定这个选项， pandoc 会根据输出来决定使用哪一个默认的引擎：</p>
+<ul>
+<li>-t latex or none: pdflatex (other options: xelatex, lualatex, tectonic, latexmk)</li>
+<li>-t context: context</li>
+<li>-t html: wkhtmltopdf (other options: prince, weasyprint)</li>
+<li>-t ms: pdfroff</li>
+</ul>
+<h3 id="–toc-–table-of-contents"><a href="#–toc-–table-of-contents" class="headerlink" title="–toc, –table-of-contents"></a>–toc, –table-of-contents</h3><p>包含自动生成的 Toc（或者，<code>latex</code>, <code>context</code>, <code>docx</code>, <code>odt</code>, <code>opendocument</code>, <code>rst</code>, or <code>ms</code>, 情况下有指令需要生成）。这个选项必须配合 <code>-s/--standalone</code> 使用才有效，其在 <code>man, docbook4, docbook5, jats</code> 输出中无效。</p>
+<p>如果我们使用  <code>ms</code> 来生成 PDF，TOC 会出现在文档标题的前面，我们可以用 <code>--pdf-engine-opt==--no-toc-relocation</code> 来让其在文档后面。</p>
+<h3 id="–toc-depth-NUMBER"><a href="#–toc-depth-NUMBER" class="headerlink" title="–toc-depth=NUMBER"></a>–toc-depth=NUMBER</h3><p>指定要包含在 TOC 中的节等级。默认是3.</p>
+<h2 id="mactex"><a href="#mactex" class="headerlink" title="mactex"></a>mactex</h2><p>用 brew 已经找不到包了。所以我们可以安装 <a href="https://www.tug.org/mactex/aboutmactex.html" target="_blank" rel="noopener">macTex</a>，不过这玩意比较大。所以 pandoc 官方给了一个建议：</p>
+<blockquote>
+<p>默认情况下 pandoc 使用LaTeX 来生成 PDF 。 因为完整的 <a href="https://tug.org/mactex/" target="_blank" rel="noopener">MacTeX</a> 会使用 4GB 的磁盘空间，我们建议使用   <a href="http://www.tug.org/mactex/morepackages.html" target="_blank" rel="noopener">BasicTeX</a> or <a href="https://yihui.name/tinytex/" target="_blank" rel="noopener">TinyTeX</a> 同时使用 <code>tlmgr</code> 来根据需要安装其他包. 如果我们收到警告说字体不存在，我们可以：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tlmgr install collection-fontsrecommended</span><br></pre></td></tr></table></figure>
+
+
+</blockquote>
+<h2 id="BasicTex"><a href="#BasicTex" class="headerlink" title="BasicTex"></a>BasicTex</h2><p>直接 brew 安装：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew cask install basictex</span><br></pre></td></tr></table></figure>
+
+<p>安装后的目录在 </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/usr/local/texlive/2019basic</span><br></pre></td></tr></table></figure>
+
+<p>之后我们很多命令到能用了比如：pdflatex, xelatex, luatex 我们来试试。</p>
+<p>先装两个依赖：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">tlmgr  install titling lastpage</span><br></pre></td></tr></table></figure>
+
+<h2 id="中文字体"><a href="#中文字体" class="headerlink" title="中文字体"></a>中文字体</h2><p>使用命令 <code>fc-list :lang=zh</code>(fontconfig 包) 来查看有哪些中文字体:</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">System/Library/Assets/com_apple_MobileAsset_Font5/b2d7b382c0fbaa5777103242eb048983c40fb807.asset/AssetData/Kaiti.ttc: Kaiti TC,楷體\-繁,楷体\-繁:style=Bold,粗體,粗体</span><br><span class="line">/System/Library/Assets/com_apple_MobileAsset_Font5/1183acef85eb1efe456a14378a2eb985c09768c9.asset/AssetData/Lantinghei.ttc: Lantinghei TC,蘭亭黑\-繁,兰亭黑\-繁:style=Extralight,纖黑,纤黑</span><br><span class="line">/System/Library/Assets/com_apple_MobileAsset_Font5/940db29a0ab220999d9a1dbe3eb0819a718057b5.asset/AssetData/Libian.ttc: Libian SC,隸變\-簡,隶变\-简:style=Regular,標準體,常规体</span><br><span class="line">/System/Library/Fonts/STHeiti Medium.ttc: Heiti SC,黑體\-簡,黒体\-簡,Heiti\-간체,黑体\-简:style=中黑,Medium,Halbfett,Normaali,Moyen,Medio,ミディアム,중간체,Médio,Средний,Normal,中等,Media</span><br><span class="line">/System/Library/Assets/com_apple_MobileAsset_Font5/db09870736c6892b6a56035428f2b1b6d0a954fd.asset/AssetData/WawaTC-Regular.otf: Wawati TC,娃娃體\-繁,娃娃体\-繁:style=Regular,標準體,常规体</span><br><span class="line">/System/Library/Assets/com_apple_MobileAsset_Font5/ce85149bd68e9f8b</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc  年终总结.md -o srs.pdf --pdf-engine=xelatex -V CJKmainfont=&apos;Heiti SC&apos;</span><br></pre></td></tr></table></figure>
+
+<p><strong>我看网上大多的示例都是使用的是 mainfont 结果出错，非得用 CJKmainfont 才行，真是很坑</strong></p>
+<p>这是因为，网上使用的模板，与默认的模板不同，默认的模板位于 pandoc 目录下，比如我用 brew 安装的 pandoc 其模板位于：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">/usr/<span class="built_in">local</span>/Cellar/pandoc/2.8.1/share/x86_64-osx-ghc-8.8.1/pandoc-2.8.1/data/templates</span><br></pre></td></tr></table></figure>
+
+<p>下面，其中使用的就是 CJKmainfont 这个变量来设置字体的。</p>
+<p>至此，如何将 md 转换为 pdf 就已经是完成了。但遗留的问题就是：</p>
+<p><strong>对于我 md 里面使用的 graphviz , mermaid 图表，如何才能给我在 PDF 中转换出来呢？</strong></p>
+<h2 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h2><p>当使用 <code>-s/--standalone</code> 选项的时候，pandoc 会在自表示的文档在中，在需要时使用一个模板来添加页眉和页脚。如果要查看默认的模板，键入：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pandoc -D *FORMAT*</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>FORMAT 输出文档的格式。</li>
+</ul>
+<p>例如 </p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pandoc -D latex</span><br></pre></td></tr></table></figure>
+
+<p>我们可以使用  <code>--template</code> 来指定一个自定义的模板，或者，我们可以在系统的目录中对默认模板进行替换（将文件 <code>templates/default.*FORMAT*</code>放在用户的数据目录（通过命令 <code>pandoc --version</code>来查看）。（关于系统默认模板的目录位置，我使用 brew 安装的话是位于：<code>/usr/local/Cellar/pandoc/2.8.1/share/x86_64-osx-ghc-8.8.1/pandoc-2.8.1/data/templates</code> 下面：）</p>
+<p>但是有几个例外：</p>
+<ul>
+<li>odt 自定义 default.opendocument 模板</li>
+<li>pdf 自定义 defaut.latex 模板（或 在使用 -t context 时修改 default.context ，使用 ms 的时候自定义 default.ms，或在使用 -t html 的时候定义  -t html ）</li>
+<li>docx pptx 没有模板。</li>
+</ul>
+<p>模板会包含变量，我们可以通过命令行的 <code>-V/--variable</code> 来进行设置。</p>
+<h2 id="latex-模板语法"><a href="#latex-模板语法" class="headerlink" title="latex 模板语法"></a>latex 模板语法</h2><h2 id="过滤器-Filter"><a href="#过滤器-Filter" class="headerlink" title="过滤器 Filter"></a>过滤器 Filter</h2><p>Pandoc 提供了一个接口，用户可以用这个接口来编写程序（叫做过滤器）来在 pandoc 上的  AST （抽象语法树）进行操作。</p>
+<p>Pandoc 由一系列的 读入器(Reader) 和写出器（Writer）组成。当我们将一个文档从一种格式转换为另外一种格式的时候，首先会由 pandoc 将输入文档转换为解析为 pandoc 的中间格式——abstract syntax tree（抽象语法树），然后由 Writer 来进行输出。AST 定义在 <a href="https://hackage.haskell.org/package/pandoc-types/docs/Text-Pandoc-Definition.html" target="_blank" rel="noopener"><code>Text.Pandoc.Definition</code> in the <code>pandoc-types</code>package</a>. 模块中。</p>
+<p>一个 Filter 就是一个修改  AST 的程序：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">INPUT --reader--&gt; AST --filter--&gt; AST --writer--&gt; OUTPUT</span><br></pre></td></tr></table></figure>
+
+<p>Filter 被看成是一个管道，其从标准输入读入，然后输出到标准输出。其会消耗，然后产生一个 pandoc 的 AST  JSON 表示。Filter 可以用任何的程序写成。我们只需要在命令行中指定过滤器就行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc -s input.txt --filter pandoc-citeproc -o output.htl</span><br></pre></td></tr></table></figure>
+
+<p>有 一些第三方的过滤器： <a href="https://github.com/jgm/pandoc/wiki/Pandoc-Filters" target="_blank" rel="noopener">list of third party filters on the wiki</a>.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">   source format</span><br><span class="line">        ↓</span><br><span class="line">     (pandoc)</span><br><span class="line">        ↓</span><br><span class="line">JSON-formatted AST</span><br><span class="line">        ↓</span><br><span class="line">     (filter)</span><br><span class="line">        ↓</span><br><span class="line">JSON-formatted AST</span><br><span class="line">        ↓</span><br><span class="line">     (pandoc)</span><br><span class="line">        ↓</span><br><span class="line">  target format</span><br></pre></td></tr></table></figure>
+
+<p>如果我们要用 python 来编写 Filter 的话，可以使用  <em>pandocfilters</em> 这个包：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install pandocfilters</span><br></pre></td></tr></table></figure>
+
+<p>在最开头的例子中，我们可以来写一个过滤器：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">Pandoc filter to convert all level 2+ headers to paragraphs with</span></span><br><span class="line"><span class="string">emphasized text.</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pandocfilters <span class="keyword">import</span> toJSONFilter, Emph, Para</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">behead</span><span class="params">(key, value, format, meta)</span>:</span></span><br><span class="line">  <span class="keyword">if</span> key == <span class="string">'CodeBlock'</span>:</span><br><span class="line">    value[<span class="number">1</span>] = <span class="string">'code'</span></span><br><span class="line">    <span class="keyword">return</span> CodeBlock(value[<span class="number">0</span>],value[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">  toJSONFilter(behead)</span><br></pre></td></tr></table></figure>
+
+<p><code>toJSONFilter(behead)</code> 会遍历 AST，然后对每个元素应用 <em>behead</em>  action。如果 <em>behead</em> 没有返回值，那么这个节点就不会被改变；如果其返回一个对象，那么这个节点就会被替换；如果其返回一个列表，新的列表就会被拼接在一起。</p>
+<p>在这个过滤器中 <em>format, meta</em> 没有被使用，但 <em>format</em> 提供了一个对目标格式进行访问的途径，<em>meta</em> 提供了对文档元数据的访问。</p>
+<p>在我们的过滤器中，我们将 CodeBlock 中的内容就直接改成了 <em>code</em>。需要记住的是：</p>
+<ul>
+<li><p><strong>我们的过滤器读取的是 JSON AST 表示，也就是说 key,value 都是常规的 JSON 类型数据</strong></p>
+</li>
+<li><p><strong>我们的过滤器返回的一定要是一个 pandoc 类型，需要用 JSON 类型的数据来构造相应的对象</strong></p>
+</li>
+</ul>
+<p>更多的办法，就需要我们去研究 AST 的 JSON 表示了。</p>
+<p>##Lua filters</p>
+<p>传统的 pandoc filters 操作的是 JSON 表示的 AST，可以用任何语言来编写 filter 。</p>
+<p>尽管我们可以使用任何语言来编写 filter ，但其拥有很多不好的地方。首先，读入 JSON 和写出 JSON 都是有开销的（每个 filter 一对，两次）。其次，一个 filter 是否工作依赖用户的环境是否安装了 filter 的依赖。</p>
+<p>因此，从2.0 开始，就开始支持用 lua 来编写 filter 了，这样不需要任何额外的依赖。pandoc 内置了一个 5.3 版本的 lua 解释器。pandoc 的所有数据类型都已经注入到这个 Lua 环境中了</p>
+<h2 id="图表"><a href="#图表" class="headerlink" title="图表"></a>图表</h2><p>并不是非常好和统一的方式，准备自己研究一个比较好的办法来实现他。</p>
+<h3 id="mermaid"><a href="#mermaid" class="headerlink" title="mermaid"></a>mermaid</h3><p>需要通过装过滤器来完成，当前能看到有两个过滤器：</p>
+<ul>
+<li><a href="https://github.com/timofurrer/pandoc-mermaid-filter" target="_blank" rel="noopener">pandoc-mermaid-filter</a> python 写的，比较贴合常规使用</li>
+<li><a href="https://github.com/raghur/mermaid-filter" target="_blank" rel="noopener">mermaid-filter</a> nodejs 写就，当时其对于代码块的识别有点怪。所以我用第一个</li>
+</ul>
+<p><strong>安装过滤器</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install pandoc-mermaid-filter</span><br></pre></td></tr></table></figure>
+
+<p><strong>安装 mermaid cli</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">yarn add mermaid.cli</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm install mermaid.cli</span><br></pre></td></tr></table></figure>
+
+<p>不推荐全局安装。</p>
+<p><strong>开始转换</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">MERMAID_BIN=./node_modules/.bin/mmdc pandoc  年终总结.md -o srs.pdf --pdf-engine=xelatex -V CJKmainfont=<span class="string">'Songti SC'</span> --filter pandoc-mermaid-filter</span><br></pre></td></tr></table></figure>
+
+<p>但事实上，用过滤器的形式还是有点麻烦了，所以考虑一下如何用一个比较简单的方式来完成这个工作。</p>
+<p>当然，为了概念上的统一，一条路走到最后，还是值得一试的。</p>
+<h3 id="graphviz"><a href="#graphviz" class="headerlink" title="graphviz"></a>graphviz</h3><p>有一个预处理器可以让我们完成在 md 内插入 graphviz plantUML 图表。其本身就是为了 pandoc 而设计的。</p>
+<p><a href="http://cdsoft.fr/pp/" target="_blank" rel="noopener">Generic preprocessor (with pandoc in mind)</a></p>
+<p>暂时不细究，考虑还最终是不是要这样做再进行仔细的考虑。</p>
+<h3 id="plantUML"><a href="#plantUML" class="headerlink" title="plantUML"></a>plantUML</h3><p>同上</p>
+<h1 id="我的解决方案"><a href="#我的解决方案" class="headerlink" title="我的解决方案"></a>我的解决方案</h1><p>我日常是使用 <a href="https://github.com/MacDownApp/macdown" target="_blank" rel="noopener">macdown</a> 来写文档，也会使用  typora 来进行一些导出工作，因为其导出为 pdf 的效果非常棒。</p>
+<p>在 macdown ，其导出的 PDF 不支持 书签式的 TOC，也就是 docx 中的大纲，所以才萌生了用 pandoc 来实现的想法。</p>
+<p>其支持 mermaid, graphviz ，其具体的实现是：</p>
+<ul>
+<li>graphviz 使用了 <a href="http://viz-js.com" target="_blank" rel="noopener">viz-js</a> 来实现</li>
+<li>mermaid 使用的是 <a href="https://mermaidjs.github.io" target="_blank" rel="noopener">mermaidjs</a> 来实现。</li>
+</ul>
+<p>就此看来，我如果使用 js 来做过滤器，同时将 viz-js 和 meraidjs 引入到过滤器中的话，就能达到我在编辑器中所查看到的效果，和转换出来的效果一致。将 graphviz ，mermaid 的图表都渲染成 svg 格式，这样的效果就非常的OK了。</p>
+<p>在 <a href="https://github.com/jgm/pandoc/wiki/Pandoc-Filters" target="_blank" rel="noopener">pandoc github wiki filter 一节中</a>，列出了用 nodejs 来编写过滤器的办法。有一个模块 <a href="https://github.com/mvhenderson/pandoc-filter-node" target="_blank" rel="noopener">pandoc-filter-node</a> 来进行支持 js 的 filter 编写。</p>
+<h2 id="pdf-模板"><a href="#pdf-模板" class="headerlink" title="pdf 模板"></a>pdf 模板</h2><ul>
+<li><a href="http://www.github.com/kjhealy/pandoc-templates" target="_blank" rel="noopener">这里有一个模板集合</a></li>
+<li><a href="https://github.com/Wandmalfarbe/pandoc-latex-template" target="_blank" rel="noopener">这里还有一个模板</a> 我就使用的这个</li>
+</ul>
+<h2 id="markdown-解析器"><a href="#markdown-解析器" class="headerlink" title="markdown 解析器"></a>markdown 解析器</h2><p>我一般使用的是 Github Flavor markdown ，我们指定的时候加上 <code>-f gfm</code> 就可以了。</p>
+<h2 id="graphviz-mermaid-filter"><a href="#graphviz-mermaid-filter" class="headerlink" title="graphviz mermaid filter"></a>graphviz mermaid filter</h2><ul>
+<li><a href="https://github.com/raghur/mermaid-filter" target="_blank" rel="noopener">mermaid-filter</a> </li>
+<li><a href="https://github.com/Gowa2017/pandoc-graphviz-filter" target="_blank" rel="noopener">pandoc-graphviz-filter</a> 自己写了个，用的是 <a href="mailto:viz.js@1.8.2" target="_blank" rel="noopener">viz.js@1.8.2</a> 版本。</li>
+</ul>
+<p>这样实际上是可以达到与 我在  macdown 内进行编辑的时候的效果是一致的。</p>
+<h2 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h2><ul>
+<li>中文字体 使用 adobe 开源字体 <a href="https://github.com/adobe-fonts" target="_blank" rel="noopener">adobe-fonts</a></li>
+<li>英文字体</li>
+</ul>
+<p>字体的区别：</p>
+<ul>
+<li><strong>Serif 有衬线体</strong>  在字的笔划开始及结束的地方有额外的装饰，而且笔划的粗细会因直横的不同而有不同。相反的，Sans Serif 则没有这些额外的装饰，笔划粗细大致差不多。<strong>通常文章的内文、正文使用的是易读性较佳的 Serif 字体</strong>，这可增加易读性，而且长时间阅读下因为会以 word 为单位来阅读，较不容易疲倦。</li>
+<li><strong>Sans Serif 无衬线体</strong> <strong>而标题、表格内用字则採用较醒目的 Sans Serif 字体</strong>，它需要显着、醒目，但不必长时间盯着这些字来阅读。</li>
+<li><strong>Monospace</strong> <strong>所谓的等宽字体</strong>，是指每个字符宽度都一致的字体。一个著名的例子就是 Courier New 字体。因为字符宽度一致，所以特别容易对齐，能快速精确的定位到某行某列，因此经常用来显示代码。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/macOS/" rel="tag"># macOS</a>
+              <a href="/tags/Pandoc/" rel="tag"># Pandoc</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Git/%E5%85%B3%E4%BA%8E%E5%BB%BA%E7%AB%8BGit%E6%9C%8D%E5%8A%A1%E5%99%A8.html" rel="next" title="关于建立Git服务器">
+                  <i class="fa fa-chevron-left"></i> 关于建立Git服务器
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/JavaScript/%E5%85%B3%E4%BA%8Emermaid.cli%E6%B8%B2%E6%9F%93%E6%88%90%E5%9B%BE%E7%89%87%E6%96%87%E4%BB%B6%E7%9A%84%E8%BF%87%E7%A8%8B.html" rel="prev" title="关于mermaid.cli渲染成图片文件的过程">
+                  关于mermaid.cli渲染成图片文件的过程 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pandoc"><span class="nav-number">1.</span> <span class="nav-text">pandoc</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#抽象语法树"><span class="nav-number">2.</span> <span class="nav-text">抽象语法树</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本语法"><span class="nav-number">2.1.</span> <span class="nav-text">基本语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#建立-PDF"><span class="nav-number">2.1.1.</span> <span class="nav-text">建立 PDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#–pdf-engine"><span class="nav-number">2.1.2.</span> <span class="nav-text">–pdf-engine</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#–toc-–table-of-contents"><span class="nav-number">2.1.3.</span> <span class="nav-text">–toc, –table-of-contents</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#–toc-depth-NUMBER"><span class="nav-number">2.1.4.</span> <span class="nav-text">–toc-depth=NUMBER</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mactex"><span class="nav-number">2.2.</span> <span class="nav-text">mactex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BasicTex"><span class="nav-number">2.3.</span> <span class="nav-text">BasicTex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中文字体"><span class="nav-number">2.4.</span> <span class="nav-text">中文字体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例"><span class="nav-number">2.5.</span> <span class="nav-text">使用示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模板"><span class="nav-number">2.6.</span> <span class="nav-text">模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#latex-模板语法"><span class="nav-number">2.7.</span> <span class="nav-text">latex 模板语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#过滤器-Filter"><span class="nav-number">2.8.</span> <span class="nav-text">过滤器 Filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图表"><span class="nav-number">2.9.</span> <span class="nav-text">图表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mermaid"><span class="nav-number">2.9.1.</span> <span class="nav-text">mermaid</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#graphviz"><span class="nav-number">2.9.2.</span> <span class="nav-text">graphviz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#plantUML"><span class="nav-number">2.9.3.</span> <span class="nav-text">plantUML</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#我的解决方案"><span class="nav-number">3.</span> <span class="nav-text">我的解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pdf-模板"><span class="nav-number">3.1.</span> <span class="nav-text">pdf 模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#markdown-解析器"><span class="nav-number">3.2.</span> <span class="nav-text">markdown 解析器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#graphviz-mermaid-filter"><span class="nav-number">3.3.</span> <span class="nav-text">graphviz mermaid filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字体"><span class="nav-number">3.4.</span> <span class="nav-text">字体</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/macOS/%E4%BD%BF%E7%94%A8pandoc%E8%BD%AC%E6%8D%A2pdf%E5%8A%A0%E4%B8%8A%E4%B9%A6%E7%AD%BE%E7%9B%AE%E5%BD%95.html",
+            identifier: "macOS/使用pandoc转换pdf加上书签目录.html",
+            title: "使用pandoc转换pdf加上书签目录"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
