@@ -295,9 +295,39 @@
         <p>我们知道，进程在打开的时候，就默认已经打开了三个文件描述符 <strong>0, 1, 2</strong> 方便大不了 标准输入，标准输出，标准错误。而我们要进行重定向的时候，比如到一个文件的时候，实际上进程不会关心他到底是被重定向到什么地方了，他只需要依然向这三个描述符进行相关的 IO 操作就行了。所以，我们需要来了解一下文件描述符背后的一些内容。</p>
 <a id="more"></a>
 <h1 id="File-Descriptor"><a href="#File-Descriptor" class="headerlink" title="File Descriptor"></a>File Descriptor</h1><p>从 <strong>APUE</strong> 中我们可以看到，对于打开的文件其实上有三个数据结构：</p>
-<p><div class="language-dot"><br>digraph {<br>rankdir = LR<br>subgraph cluster_process_table{<br>label=”process table entry”<br>T[shape=record,label=”{fd flags | file pointers}|{<fd0> fd0 | <p0> p0}|{<fd1> fd1 | <p1> p1}|{<fd2> fd2 | <p2> p2}”]<br>}</p2></fd2></p1></fd1></p0></fd0></div></p>
-<p>subgraph cluster_open_file_table{<br>label=”file table entry\n maintain by kernel”<br>F1[shape=record,label=”<flag> flag | <offset> offset|  <vp> v-node pointer”]<br>F2[shape=record,label=”<flag> flag | <offset> offset|  <vp> v-node pointer”]<br>}</vp></offset></flag></vp></offset></flag></p>
-<p>subgraph cluster_v_node_table{<br>label=”v-node table entry\n”<br>V1[shape=record, label=”<v> v-node infomation 1  | <data> v_data”]<br>V2[shape=record, label=”<v> v-node infomation 2 | <data> v_data”]<br>I1[shape=record, label=”<i> i-node infomation 1 | <v> i_vnode”]<br>I2[shape=record, label=”<i> i-node infomation 2 | <v> i_vnode”]<br>}<br>T:p0-&gt; F1:flag<br>T:p1 -&gt; F2:flag<br>F1:vp -&gt; V1:v<br>F2:vp -&gt; V2:v<br>V1:data -&gt; I1:i<br>V2:data -&gt;I2:i<br>I1:v -&gt; V1:v<br>I2:v -&gt;V2:v<br>}<br>&lt;/div&gt;<br>对于上面这个图做简单的解释：</v></i></v></i></data></v></data></v></p>
+<div class="language-dot">
+digraph {
+rankdir = LR
+subgraph cluster_process_table{
+label="process table entry"
+T[shape=record,label="{fd flags | file pointers}|{<fd0> fd0 | <p0> p0}|{<fd1> fd1 | <p1> p1}|{<fd2> fd2 | <p2> p2}"]
+}
+
+subgraph cluster_open_file_table{
+label="file table entry\n maintain by kernel"
+F1[shape=record,label="<flag> flag | <offset> offset|  <vp> v-node pointer"]
+F2[shape=record,label="<flag> flag | <offset> offset|  <vp> v-node pointer"]
+}
+
+subgraph cluster_v_node_table{
+label="v-node table entry\n"
+V1[shape=record, label="<v> v-node infomation 1  | <data> v_data"]
+V2[shape=record, label="<v> v-node infomation 2 | <data> v_data"]
+I1[shape=record, label="<i> i-node infomation 1 | <v> i_vnode"]
+I2[shape=record, label="<i> i-node infomation 2 | <v> i_vnode"]
+}
+T:p0-> F1:flag
+T:p1 -> F2:flag
+F1:vp -> V1:v
+F2:vp -> V2:v
+V1:data -> I1:i
+V2:data ->I2:i
+I1:v -> V1:v
+I2:v ->V2:v
+}
+</v></i></v></i></data></v></data></v></vp></offset></flag></vp></offset></flag></p2></fd2></p1></fd1></p0></fd0></div>
+
+<p>对于上面这个图做简单的解释：</p>
 <ul>
 <li><strong>Process table entry 进程表项</strong>。在 <strong>进程表中</strong>，每个进程都会有一个记录项。每个进程表中的记录都会有已经打开的文件描述符表。每个文件描述符都于一个指向打开的文件表项指针。</li>
 <li><strong>File table entry 文件表项</strong> 对于所有打开的文件，内核将其维护在一个表内。每个表项都有一个指向 v-node 信息的指针。</li>
@@ -309,7 +339,7 @@
 </li>
 </ul>
 <p>所以呢，对于一个文件，是否是同一个文件，要看 v-node/i-node 是一样的，才能说明打开的是同一个文件。<br>而如果同一个文件被不同的进程打开两次，那么在内核维护的打开文件表中就会有两项。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">digraph &#123;</span><br><span class="line">rankdir = LR</span><br><span class="line">subgraph cluster_process_table_A&#123;</span><br><span class="line">label=&quot;process table entry&quot;</span><br><span class="line">T1[shape=record,label=&quot;&#123;fd flags | file pointers&#125;|&#123;&lt;fd0&gt; fd0 | &lt;p0&gt; p0&#125;|&#123;&lt;fd1&gt; fd1 | &lt;p1&gt; p1&#125;|&#123;&lt;fd2&gt; fd2 | &lt;p2&gt; p2&#125;&quot;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">subgraph cluster_process_table_B&#123;</span><br><span class="line">label=&quot;process table entry&quot;</span><br><span class="line">T2[shape=record,label=&quot;&#123;fd flags | file pointers&#125;|&#123;&lt;fd0&gt; fd0 | &lt;p0&gt; p0&#125;|&#123;&lt;fd1&gt; fd1 | &lt;p1&gt; p1&#125;|&#123;&lt;fd2&gt; fd2 | &lt;p2&gt; p2&#125;&quot;]</span><br><span class="line">&#125;</span><br><span class="line">subgraph cluster_open_file_table&#123;</span><br><span class="line">label=&quot;file table entry\n maintain by kernel&quot;</span><br><span class="line">F1[shape=record,label=&quot;&lt;flag&gt; flag | &lt;offset&gt; offset|  &lt;vp&gt; v-node pointer&quot;]</span><br><span class="line">F2[shape=record,label=&quot;&lt;flag&gt; flag | &lt;offset&gt; offset|  &lt;vp&gt; v-node pointer&quot;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">subgraph cluster_v_node_table&#123;</span><br><span class="line">label=&quot;v-node table entry\n&quot;</span><br><span class="line">V1[shape=record, label=&quot;&lt;v&gt; v-node infomation 1  | &lt;data&gt; v_data&quot;]</span><br><span class="line">I1[shape=record, label=&quot;&lt;i&gt; i-node infomation 1 | &lt;v&gt; i_vnode&quot;]</span><br><span class="line">&#125;</span><br><span class="line">T1:p0-&gt; F1:flag</span><br><span class="line">T2:p1 -&gt; F2:flag</span><br><span class="line">F1:vp -&gt; V1:v</span><br><span class="line">F2:vp -&gt; V1:v</span><br><span class="line">V1:data -&gt; I1:i</span><br><span class="line">I1:v -&gt; V1:v</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">digraph &#123;</span><br><span class="line">rankdir = LR</span><br><span class="line">subgraph cluster_process_table_A&#123;</span><br><span class="line">label=&quot;process table entry&quot;</span><br><span class="line">T1[shape=record,label=&quot;&#123;fd flags | file pointers&#125;|&#123;&lt;fd0&gt; fd0 | &lt;p0&gt; p0&#125;|&#123;&lt;fd1&gt; fd1 | &lt;p1&gt; p1&#125;|&#123;&lt;fd2&gt; fd2 | &lt;p2&gt; p2&#125;&quot;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">subgraph cluster_process_table_B&#123;</span><br><span class="line">label=&quot;process table entry&quot;</span><br><span class="line">T2[shape=record,label=&quot;&#123;fd flags | file pointers&#125;|&#123;&lt;fd0&gt; fd0 | &lt;p0&gt; p0&#125;|&#123;&lt;fd1&gt; fd1 | &lt;p1&gt; p1&#125;|&#123;&lt;fd2&gt; fd2 | &lt;p2&gt; p2&#125;&quot;]</span><br><span class="line">&#125;</span><br><span class="line">subgraph cluster_open_file_table&#123;</span><br><span class="line">label=&quot;file table entry\n maintain by kernel&quot;</span><br><span class="line">F1[shape=record,label=&quot;&lt;flag&gt; flag | &lt;offset&gt; offset|  &lt;vp&gt; v-node pointer&quot;]</span><br><span class="line">F2[shape=record,label=&quot;&lt;flag&gt; flag | &lt;offset&gt; offset|  &lt;vp&gt; v-node pointer&quot;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">subgraph cluster_v_node_table&#123;</span><br><span class="line">label=&quot;v-node table entry\n&quot;</span><br><span class="line">V1[shape=record, label=&quot;&lt;v&gt; v-node infomation 1  | &lt;data&gt; v_data&quot;]</span><br><span class="line">I1[shape=record, label=&quot;&lt;i&gt; i-node infomation 1 | &lt;v&gt; i_vnode&quot;]</span><br><span class="line">&#125;</span><br><span class="line">T1:p0-&gt; F1:flag</span><br><span class="line">T2:p1 -&gt; F2:flag</span><br><span class="line">F1:vp -&gt; V1:v</span><br><span class="line">F2:vp -&gt; V1:v</span><br><span class="line">V1:data -&gt; I1:i</span><br><span class="line">I1:v -&gt; V1:v</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h1><p>bash 中的重定向操作符有两类三个：</p>
 <ul>
 <li>输入重定向 <code>&lt;, &lt;&lt;, &lt;&lt;&lt;</code></li>
