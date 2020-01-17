@@ -47,19 +47,20 @@
   };
 </script>
 
-  <meta name="description" content="关于如何爱人在生活中细节的体现今天很麻烦，因为昨天晚上吃宵夜的时候，把媳妇一个袋子里面的文件给遗失在了夜市一条街上，临走的时候，也不是很清楚的记得到底是拿起走了，坐上出租车到县委的时候下车掉车上了，还是压根就没有从吃宵夜的地方拿起走。 介于是一个非常麻烦的事情，我就前往了镇派出所希望能通过监控进行一下检验。幸好，给行了这个方便，通过在里面花了几个小时的观察，先是确定出租车公司，是宏运的；但是晚上的">
-<meta property="og:type" content="website">
-<meta property="og:title" content="退思园">
-<meta property="og:url" content="https://gowa.club/diary/2017-12-28-从细节上为爱的人考虑并体现出爱.html">
+  <meta name="description" content="函数 Hooking 指的是一系列的在运行时用来拦截和改变已存函数行为的技术。本节使用动态加载API来演示一个进行 Hooking 的办法，主要是利用了 LD_PRELOAD 环境变量。LD_PRELOAD环境变量用来指定一个首先被加载器加载的共享库。先加载我们自己的共享库就能使我们拦截函数调用，接着我们就可以使用动态加载器的API来将原始的函数绑定到一个 函数指针，之后继续调用这个函数指针。也就">
+<meta name="keywords" content="Android,逆向,Hooking">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hooking-Linux中的共享库函数">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/Hooking-Linux中的共享库函数.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="关于如何爱人在生活中细节的体现今天很麻烦，因为昨天晚上吃宵夜的时候，把媳妇一个袋子里面的文件给遗失在了夜市一条街上，临走的时候，也不是很清楚的记得到底是拿起走了，坐上出租车到县委的时候下车掉车上了，还是压根就没有从吃宵夜的地方拿起走。 介于是一个非常麻烦的事情，我就前往了镇派出所希望能通过监控进行一下检验。幸好，给行了这个方便，通过在里面花了几个小时的观察，先是确定出租车公司，是宏运的；但是晚上的">
+<meta property="og:description" content="函数 Hooking 指的是一系列的在运行时用来拦截和改变已存函数行为的技术。本节使用动态加载API来演示一个进行 Hooking 的办法，主要是利用了 LD_PRELOAD 环境变量。LD_PRELOAD环境变量用来指定一个首先被加载器加载的共享库。先加载我们自己的共享库就能使我们拦截函数调用，接着我们就可以使用动态加载器的API来将原始的函数绑定到一个 函数指针，之后继续调用这个函数指针。也就">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-28T14:27:03.000Z">
+<meta property="og:updated_time" content="2019-11-20T02:55:12.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="退思园">
-<meta name="twitter:description" content="关于如何爱人在生活中细节的体现今天很麻烦，因为昨天晚上吃宵夜的时候，把媳妇一个袋子里面的文件给遗失在了夜市一条街上，临走的时候，也不是很清楚的记得到底是拿起走了，坐上出租车到县委的时候下车掉车上了，还是压根就没有从吃宵夜的地方拿起走。 介于是一个非常麻烦的事情，我就前往了镇派出所希望能通过监控进行一下检验。幸好，给行了这个方便，通过在里面花了几个小时的观察，先是确定出租车公司，是宏运的；但是晚上的">
+<meta name="twitter:title" content="Hooking-Linux中的共享库函数">
+<meta name="twitter:description" content="函数 Hooking 指的是一系列的在运行时用来拦截和改变已存函数行为的技术。本节使用动态加载API来演示一个进行 Hooking 的办法，主要是利用了 LD_PRELOAD 环境变量。LD_PRELOAD环境变量用来指定一个首先被加载器加载的共享库。先加载我们自己的共享库就能使我们拦截函数调用，接着我们就可以使用动态加载器的API来将原始的函数绑定到一个 函数指针，之后继续调用这个函数指针。也就">
 
-<link rel="canonical" href="https://gowa.club/diary/2017-12-28-从细节上为爱的人考虑并体现出爱.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/Hooking-Linux中的共享库函数.html">
 
 
 <script id="page-configurations">
@@ -67,14 +68,13 @@
   CONFIG.page = {
     sidebar: "",
     isHome: false,
-    isPost: false,
-    isPage: true,
+    isPost: true,
+    isPage: false,
     isArchive: false
   };
 </script>
 
-  <title> | 退思园
-  </title>
+  <title>Hooking-Linux中的共享库函数 | 退思园</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
     <script>
@@ -221,56 +221,136 @@
       <div class="main-inner">
         <div class="content-wrap">
           
-  
-  
 
           <div class="content">
             
 
   <div class="posts-expand">
-    
-    
-    
-    <div class="post-block" lang="zh-Hans">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Hooking-Linux中的共享库函数.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
       <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hooking-Linux中的共享库函数
+        </h1>
 
-<h1 class="post-title" itemprop="name headline">
-</h1>
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
 
-<div class="post-meta">
+              <time title="Created: 2019-11-20 10:55:12" itemprop="dateCreated datePublished" datetime="2019-11-20T10:55:12+08:00">2019-11-20</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/Hooking-Linux中的共享库函数.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/Hooking-Linux中的共享库函数.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
   
 
-</div>
+        </div>
+      </header>
 
-</header>
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-      
-      
-      <div class="post-body">
-          <h1 id="关于如何爱人在生活中细节的体现"><a href="#关于如何爱人在生活中细节的体现" class="headerlink" title="关于如何爱人在生活中细节的体现"></a>关于如何爱人在生活中细节的体现</h1><p>今天很麻烦，因为昨天晚上吃宵夜的时候，把媳妇一个袋子里面的文件给遗失在了夜市一条街上，临走的时候，也不是很清楚的记得到底是拿起走了，坐上出租车到县委的时候下车掉车上了，还是压根就没有从吃宵夜的地方拿起走。</p>
-<p>介于是一个非常麻烦的事情，我就前往了镇派出所希望能通过监控进行一下检验。幸好，给行了这个方便，通过在里面花了几个小时的观察，先是确定出租车公司，是宏运的；但是晚上的光线太强反光的看不清楚车牌号，沿着时间线追踪了这个车也还是无法看清楚。最终想了想还是观察一下我们上车的时候有没有拿着文件。</p>
-<p>时间回到我们上车的时候，从摄像头里面可以看到，我和媳妇儿两个人挽着手走着将要上车的时候，手里只提了几个苹果的塑料袋子和一个水瓶并没有文件，由此断定我们没有拿着文件上车，文件遗落在吃宵夜的地方了。</p>
-<p>幸好，开宵夜摊子的那家是霞霞家亲戚，于是顺理的就让媳妇打个电话去，下午的时候回了电话，确实是捡到了一个文件袋，已经帮忙收起来了。下午去拿就行了。</p>
-<p>媳妇下班后，前往李永莎家吃了晚饭，20点准时离开，去夜市一条街拿了文件就送我回家了。其实我是非常不愿意媳妇送我回家的，因为在乡下，媳妇一个人出来还要花点时间，而如果停车的地方不好的话还要一个人走好一截路才能回家，这凉风吹吹的感觉我自己体会得到，所以十分不想媳妇儿去体会。</p>
-<p>只是，媳妇在我家坐了一会我就让媳妇先回去了，结果媳妇儿停好车以后告诉我她手机即将没有电，马上去捡点药，顺便输最后一次夜。我内心当时的感觉说不出来，只是觉得媳妇儿好苦，我好蠢。</p>
-<p>我不知道我到底一天在关注些什么？是一直因为缺钱结婚的事情让我心头一直有话有事压抑着所以不去想其他的地方么？那为什么我有的时候还要想着去看书呢？是在逃避吧。？</p>
-<p>还是我压根就不知道怎么去爱人的，媳妇生病了，虽然是干咳。我却没有用心的想想好的办法来看看怎么解决这个问题，只是去输了两天液，都没有好，是继续输液还是怎么办我却没有和媳妇儿去沟通下去，最终却让媳妇儿一个人去输液，大晚上的？</p>
-<p>我到底该怎么样表达我对她的爱啊，对她的爱不是放在嘴上的吧，应该是从生活细节上进行关心处理，而不是让她有感觉到不适和无奈的心情才对吧。</p>
-<p>多想想吧，少年，为媳妇解决一些生活中可能提前会遇到的事情，了解她的对于各种事情的想法，一起沟通来找出解决的办法吧。而不是要么只关注自己的事情，要么只关注一下自己习惯了做的事情，人都是有情绪跟变化的，怎么可能会一成不变呢，媳妇儿，我看来跟我待久了，最终女人都会离开我看来是有原因的？</p>
-<p>所以 <strong>请关心媳妇的身体、请关注媳妇儿的情绪、请体会媳妇儿的难处</strong>。</p>
+        <p>函数 Hooking 指的是一系列的在运行时用来拦截和改变已存函数行为的技术。本节使用动态加载API来演示一个进行 Hooking 的办法，主要是利用了 <strong>LD_PRELOAD</strong> 环境变量。<strong>LD_PRELOAD</strong>环境变量用来指定一个首先被加载器加载的共享库。先加载我们自己的共享库就能使我们拦截函数调用，接着我们就可以使用动态加载器的API来将原始的函数绑定到一个 <strong>函数指针</strong>，之后继续调用这个函数指针。也就是说对原来的函数做了一个包装。<br><a id="more"></a></p>
+<h1 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="built_in">puts</span>(<span class="string">"Hello world!n"</span>);</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>共享库代码：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">puts</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *message)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> (* o_puts)(<span class="keyword">const</span> <span class="keyword">char</span> *message);</span><br><span class="line">    <span class="keyword">int</span> ret;</span><br><span class="line">    o_puts = dlsym(RTLD_NEXT, <span class="string">"puts"</span>);</span><br><span class="line">    o_puts(<span class="string">"hooking"</span>);</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strcmp</span>(message,<span class="string">"Hello world!n"</span>) == <span class="number">0</span>)&#123;</span><br><span class="line">        ret = o_puts(<span class="string">"Good Bye curel world!n"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        ret = o_puts(message);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个例子中，我们要对 <code>puts</code> 进行 hook，有几点要说明一下：</p>
+<ul>
+<li>我们定义了一个与原来的函数签名一样的 <code>puts</code> 函数。</li>
+<li>通过 dysm 找到 puts 符号指向的地址，然后使用一个指针指向它。</li>
+</ul>
+<h1 id="Compile"><a href="#Compile" class="headerlink" title="Compile"></a>Compile</h1><p>我们写了个自己的makefile文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">PLAT:=$(shell uname)</span><br><span class="line">CFLAG=-fPIC -ldl</span><br><span class="line">SO_SUFF=so</span><br><span class="line">SO_OUT=puts.$&#123;SO_SUFF&#125;</span><br><span class="line">DYFMT=-shared</span><br><span class="line">   ENV=LD_PRELOAD=./$&#123;SO_OUT&#125;</span><br><span class="line">ifeq ($&#123;PLAT&#125;,Darwin)</span><br><span class="line">   DYFMT=-dynamiclib</span><br><span class="line">   SO_SUFF=dylib</span><br><span class="line">   ENV=DYLD_FORCE_FLAT_NAMESPACE=1 DYLD_INSERT_LIBRARIES=$&#123;SO_OUT&#125; </span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">all: so a.c</span><br><span class="line">	cc a.c</span><br><span class="line">	$&#123;ENV&#125; ./a.out</span><br><span class="line">so: puts.c</span><br><span class="line">	cc $&#123;CFLAG&#125; $&#123;DYFMT&#125; -o puts.$&#123;SO_SUFF&#125; $?</span><br><span class="line">clean:</span><br><span class="line">	rm -f a.out *.o *.dylib</span><br></pre></td></tr></table></figure>
+<p>我们make 以后可以看到，输出了</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hooking</span><br><span class="line">Good Bye curel world!n</span><br></pre></td></tr></table></figure>
+<p>就是算注入进去了。</p>
 <p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
-      </div>
-      
-      
-      
     </div>
-    
 
     
     
     
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android/" rel="tag"># Android</a>
+              <a href="/tags/逆向/" rel="tag"># 逆向</a>
+              <a href="/tags/Hooking/" rel="tag"># Hooking</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Android/Riru来注入Zygote进程.html" rel="next" title="Riru来注入Zygote进程">
+                  <i class="fa fa-chevron-left"></i> Riru来注入Zygote进程
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/RxJava/Retrofit-OkHttp请求过程-源码阅读md.html" rel="prev" title="Retrofit-OkHttp请求过程-源码阅读">
+                  Retrofit-OkHttp请求过程-源码阅读 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
   </div>
 
 
@@ -307,7 +387,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关于如何爱人在生活中细节的体现"><span class="nav-number">1.</span> <span class="nav-text">关于如何爱人在生活中细节的体现</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hello-World"><span class="nav-number">1.</span> <span class="nav-text">Hello World</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Compile"><span class="nav-number">2.</span> <span class="nav-text">Compile</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -456,9 +536,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/diary/2017-12-28-从细节上为爱的人考虑并体现出爱.html",
-            identifier: "diary/2017-12-28-从细节上为爱的人考虑并体现出爱.html",
-            title: ""
+            url: "https://gowa.club/Linux-Unix/Hooking-Linux中的共享库函数.html",
+            identifier: "Linux-Unix/Hooking-Linux中的共享库函数.html",
+            title: "Hooking-Linux中的共享库函数"
           }
         }
       });

@@ -772,7 +772,7 @@
 <h1 id="Strings"><a href="#Strings" class="headerlink" title="Strings"></a>Strings</h1><p>Windows 在UI元素，文件名等中原生支持 Unicode 字符串。 Windows 用 UTF-16 编码来表示 Unicode 字符，意思就是每个字符都是一个 16bit 的值。UTF-16字符，也被叫做 <strong>宽字符</strong>，用以和 8-bit 的 ANSI 字符区别。 VC++ 编译器支持内建的 <strong>wchar_t</strong> 类型，<strong>WinNT.h</strong> 文件也定义了：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">wchar_t</span> WCHAR;</span><br></pre></td></tr></table></figure>
 <p>这两者我们可能都会遇到。如果要声明一个字面意义的宽字符，在字面字符前加上 <strong>L</strong>。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">wchar_t</span> a = <span class="string">L'a'</span>;</span><br><span class="line"><span class="keyword">wchar_t</span> *str = <span class="string">L"hello"</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">wchar_t</span> a = L'a';</span><br><span class="line"><span class="keyword">wchar_t</span> *str = <span class="string">L"hello"</span>;</span><br></pre></td></tr></table></figure>
 <h2 id="Unicode-与-ANSI-函数"><a href="#Unicode-与-ANSI-函数" class="headerlink" title="Unicode 与 ANSI 函数"></a>Unicode 与 ANSI 函数</h2><p>在 Windows 引入  Unicode 的时候，其提供了一过渡的方式，也就是提供了两套 API，一套接受的是 ANSI 字符，一套接受的是 Unicode 字符。</p>
 <ul>
 <li><strong>SetWindowTextA</strong> takes an ANSI string.</li>

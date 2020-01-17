@@ -314,7 +314,7 @@
 <li><code>onDestroy()</code> 当不再使用服务且准备将其销毁时，系统会调用此方法。服务应通过实现此方法来清理任何资源，如线程、注册的侦听器、接收器等。这是服务接收的最后一个调用。</li>
 </ul>
 <p>任何一个 Service 都是类  <strong>android.app.Service</strong> 的子类，所以我们可以从这个方面来看一下。任何 <strong>启动</strong> 服务，都是由另外一个组件调用  <code>startService()</code> 方法来实现的。比如我们在 Activity 里面启动一个服务。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, HelloService<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">startService(intent);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Intent intent = <span class="keyword">new</span> Intent(<span class="keyword">this</span>, HelloService.class);</span><br><span class="line">startService(intent);</span><br></pre></td></tr></table></figure>
 <p>我们知道 Activity 继承于 Context ，而 Context 的实现在  ContextImpl 中，</p>
 <h1 id="ContextImpl"><a href="#ContextImpl" class="headerlink" title="ContextImpl"></a>ContextImpl</h1><p>在这里需要注意 <code>mMainThread.getApplicationThread()</code>  这个代表了什么呢，这个是 IApplicationThread.Stub 的子类，ApplicationThread。而 mMainThread 代表的是 ActivityThread。</p>
 <ul>
