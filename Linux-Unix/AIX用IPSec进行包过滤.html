@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Aix">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AIX用IPSec进行包过滤">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;AIX%E7%94%A8IPSec%E8%BF%9B%E8%A1%8C%E5%8C%85%E8%BF%87%E6%BB%A4.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/AIX用IPSec进行包过滤.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Linux上有iptables这样好用的包过滤工具，AIX肯定也有，只是以前没有接触过而已，最近要公司要给一批AIX服务器进行安全加固，所以就用到了相关的知识。IPSEC是一个协议，HU－UX，SunOS，AIX都有类似的机制。此文讲述了IPSEC的开启及规则的建立。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.266Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AIX用IPSec进行包过滤">
+<meta name="twitter:description" content="Linux上有iptables这样好用的包过滤工具，AIX肯定也有，只是以前没有接触过而已，最近要公司要给一批AIX服务器进行安全加固，所以就用到了相关的知识。IPSEC是一个协议，HU－UX，SunOS，AIX都有类似的机制。此文讲述了IPSEC的开启及规则的建立。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/AIX%E7%94%A8IPSec%E8%BF%9B%E8%A1%8C%E5%8C%85%E8%BF%87%E6%BB%A4.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/AIX用IPSec进行包过滤.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/AIX%E7%94%A8IPSec%E8%BF%9B%E8%A1%8C%E5%8C%85%E8%BF%87%E6%BB%A4.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/AIX用IPSec进行包过滤.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -281,7 +283,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/AIX%E7%94%A8IPSec%E8%BF%9B%E8%A1%8C%E5%8C%85%E8%BF%87%E6%BB%A4.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/AIX用IPSec进行包过滤.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/AIX用IPSec进行包过滤.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -297,21 +299,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Linux上有iptables这样好用的包过滤工具，AIX肯定也有，只是以前没有接触过而已，最近要公司要给一批AIX服务器进行安全加固，所以就用到了相关的知识。IPSEC是一个协议，HU－UX，SunOS，AIX都有类似的机制。<br>此文讲述了IPSEC的开启及规则的建立。</p>
-<a id="more"></a>
-<h2 id="AIX上的IPSEC"><a href="#AIX上的IPSEC" class="headerlink" title="AIX上的IPSEC"></a>AIX上的IPSEC</h2><p>在AIX可以通过以下步骤打开IP Security<br>    smitty ipsec4 –&gt; Start/Stop IP Security –&gt; Start IP Security  [Now and After Reboot]<br>    <strong>注意，此时请将 Deny All Non_Secure IP Packets                     [no]</strong><br>敲Enter</p>
+        <p>Linux上有iptables这样好用的包过滤工具，AIX肯定也有，只是以前没有接触过而已，最近要公司要给一批AIX服务器进行安全加固，所以就用到了相关的知识。IPSEC是一个协议，HU－UX，SunOS，AIX都有类似的机制。<br>此文讲述了IPSEC的开启及规则的建立。<br><a id="more"></a></p>
+<h2 id="AIX上的IPSEC"><a href="#AIX上的IPSEC" class="headerlink" title="AIX上的IPSEC"></a>AIX上的IPSEC</h2><p>在AIX可以通过以下步骤打开IP Security<br>    smitty ipsec4 —&gt; Start/Stop IP Security —&gt; Start IP Security  [Now and After Reboot]<br>    <strong>注意，此时请将 Deny All Non_Secure IP Packets                     [no]</strong><br>敲Enter</p>
 <pre><code>Command: OK            stdout: yes           stderr: no
 Before command completion, additional instructions may appear below.
 ipsec_v4 Available
 Default rule for IPv4 in ODM has been changed.
-Successfully set default action to PERMIT</code></pre><p>此时启动，默认IPv4规则已经设置，同时默认动作是 PERMIT。<br>这时我们可以用命令查看一下设备状态</p>
+Successfully set default action to PERMIT
+</code></pre><p>此时启动，默认IPv4规则已经设置，同时默认动作是 PERMIT。<br>这时我们可以用命令查看一下设备状态</p>
 <pre><code>lsdev -C -c ipsec
 ipsec_v4 Available  IP Version 4 Security Extension
-ipsec_v6 Available  IP Version 6 Security Extension</code></pre><p>相关管理命令为： <strong>lsfilt mkfilt mvfilt chfilt ckfilt genfilt rmfilt</strong></p>
+ipsec_v6 Available  IP Version 6 Security Extension
+</code></pre><p>相关管理命令为： <strong>lsfilt mkfilt mvfilt chfilt ckfilt genfilt rmfilt</strong></p>
 <h3 id="查看规则"><a href="#查看规则" class="headerlink" title="查看规则"></a>查看规则</h3><pre><code>lsfilt -v4 -O
 1|permit|0.0.0.0|0.0.0.0|0.0.0.0|0.0.0.0|no|udp|eq|4001|eq|4001|both|both|no|all packets|0|all|0|||Default Rule
 2|*** Dynamic filter placement rule for IKE tunnels ***|no
-0|permit|0.0.0.0|0.0.0.0|0.0.0.0|0.0.0.0|yes|all|any|0|any|0|both|both|no|all packets|0|all|0|||Default Rule</code></pre><p>我们可以通过smitty来进行增加规则。</p>
+0|permit|0.0.0.0|0.0.0.0|0.0.0.0|0.0.0.0|yes|all|any|0|any|0|both|both|no|all packets|0|all|0|||Default Rule
+</code></pre><p>我们可以通过smitty来进行增加规则。</p>
 <pre><code>smitty ipsec4 --&gt; Advanced IP Security Configuration -&gt; Configure IP Security Filter Rules -&gt; Add an IP Security Filter Rules.
 
 * Rule Action                                        [permit]
@@ -333,11 +337,17 @@ ipsec_v6 Available  IP Version 6 Security Extension</code></pre><p>相关管理�
   Expiration Time  (sec)                             []
   Pattern Type                                       [none]
   Pattern                                            []
-  Description                                        []</code></pre><h3 id="genfilt命令增加规则"><a href="#genfilt命令增加规则" class="headerlink" title="genfilt命令增加规则"></a>genfilt命令增加规则</h3><p>genfilt与以上操作有异曲同工之效，基本命令模式</p>
-<pre><code>genfilt -v 4|6 [ -n fid] [ -a D|P|I|L|E|H|S ] -s s_addr -m s_mask [-d d_addr] [ -M d_mask] [ -g Y|N ] [ -c protocol] [ -o s_opr] [ -p s_port] [ -O d_opr] [ -P d_port] [ -r R|L|B ] [ -w I|O|B ] [ -l Y|N ] [ -f Y|N|O|H ] [ -t tid] [ -i interface] [-D description] [-e expiration_time] [-x quoted_pattern] [-X pattern_filename ] [-C antivirus_filename]</code></pre><p>-C antivirus_filename    指定抗病毒名。-C 标志意味着ClamAV病毒库的一些版本。<br>-D description    描述介绍。<br>-v 4|6    指定IP版本<br>-n fid    所添加ID将会被添加至第 fid 条规则之前<br>-a Action    D(eny) | P(ermit) | I(f) | (e)L(se) | E(ndif)。所有IF规则必须关联ENDIF规则结束。<br>-s s_addr    源地址<br>-m s_mask    源地址掩码<br>-d d_addr    目标地址<br>-M d_mask    目标地址掩码<br>-g Y|N    用于Permit规则，默认为Y，表示过滤规则可以使用源路由的IP包。<br>-c protocol    协议，默认all。有效值udp/icmp/icmpv6/tcp/tcp.ack/ospf/ipip/esp/ah/all<br>-o s_opr | ICMP Code Opertion    源端口或者ICMP类型 操作。有效值:lt/le/gt/ge/eq/neq/any。默认any，当-c ospf时，必须为any。<br>-p s_port    源端口或ICMP类型。<br>-O d_opr | ICMP Code Opertion    目标端口或者ICMP类型 操作。有效值:lt/le/gt/ge/eq/neq/any。默认any，当-c ospf时，必须为any。<br>-P d_port     目标端口或ICMP类型<br>-r R|L|B    路由，默认B。指定规则是用于R(转发包)、L（发往或来自本机的包）、B（两者都使用）<br>-w I|O|B    默认B。指定规则应用于I（输入包）、O（输出包）、B（两者都使用）。使用代-x -X或-C 模式是使用O选项无效，使用B有效，但只检查输入包。<br>-l Y|N    是否记录（匹配规则的包）日志，默认N。<br>-f Y|N|O|H    分段控制、默认为Y（所有包）。N（未分段包）、O（只用于分段和分段头）、H（只应用于分段头和未分段）。<br>-t tid    指定于该规则相关的通道标识，所有匹配包都要经过此通道。不指定此项，规则只作用于非流量通道。<br>-i interface    指定接口卡，默认为all。<br>-e expiration_time    过期时间（秒）。<br>-x pattern    匹配模式<br>-X patternfile    匹配模式文件。每行一个模式<br>常用举例：</p>
-<pre><code>genfilt -v 4 -a P -s 192.168.0.1 -m 255.255.255.0 -d 192.168.0.88 -M 255.255.255.255 [-o any] [-p 0] -O eq -P 22 [-r B] [-w B] -l Y [-f Y] [-i all] -D &quot;permit lan host visit port 22&quot; [-e 0]</code></pre><p>默认情况下我们加限制22端口的话，对所有的包都会进行规则匹配。可以利用默认的设置而进行简略</p>
+  Description                                        []
+</code></pre><h3 id="genfilt命令增加规则"><a href="#genfilt命令增加规则" class="headerlink" title="genfilt命令增加规则"></a>genfilt命令增加规则</h3><p>genfilt与以上操作有异曲同工之效，基本命令模式</p>
+<pre><code>genfilt -v 4|6 [ -n fid] [ -a D|P|I|L|E|H|S ] -s s_addr -m s_mask [-d d_addr] [ -M d_mask] [ -g Y|N ] [ -c protocol] [ -o s_opr] [ -p s_port] [ -O d_opr] [ -P d_port] [ -r R|L|B ] [ -w I|O|B ] [ -l Y|N ] [ -f Y|N|O|H ] [ -t tid] [ -i interface] [-D description] [-e expiration_time] [-x quoted_pattern] [-X pattern_filename ] [-C antivirus_filename]
+</code></pre><p>-C antivirus_filename    指定抗病毒名。-C 标志意味着ClamAV病毒库的一些版本。<br>-D description    描述介绍。<br>-v 4|6    指定IP版本<br>-n fid    所添加ID将会被添加至第 fid 条规则之前<br>-a Action    D(eny) | P(ermit) | I(f) | (e)L(se) | E(ndif)。所有IF规则必须关联ENDIF规则结束。<br>-s s_addr    源地址<br>-m s_mask    源地址掩码<br>-d d_addr    目标地址<br>-M d_mask    目标地址掩码<br>-g Y|N    用于Permit规则，默认为Y，表示过滤规则可以使用源路由的IP包。<br>-c protocol    协议，默认all。有效值udp/icmp/icmpv6/tcp/tcp.ack/ospf/ipip/esp/ah/all<br>-o s_opr | ICMP Code Opertion    源端口或者ICMP类型 操作。有效值:lt/le/gt/ge/eq/neq/any。默认any，当-c ospf时，必须为any。<br>-p s_port    源端口或ICMP类型。<br>-O d_opr | ICMP Code Opertion    目标端口或者ICMP类型 操作。有效值:lt/le/gt/ge/eq/neq/any。默认any，当-c ospf时，必须为any。<br>-P d_port     目标端口或ICMP类型<br>-r R|L|B    路由，默认B。指定规则是用于R(转发包)、L（发往或来自本机的包）、B（两者都使用）<br>-w I|O|B    默认B。指定规则应用于I（输入包）、O（输出包）、B（两者都使用）。使用代-x -X或-C 模式是使用O选项无效，使用B有效，但只检查输入包。<br>-l Y|N    是否记录（匹配规则的包）日志，默认N。<br>-f Y|N|O|H    分段控制、默认为Y（所有包）。N（未分段包）、O（只用于分段和分段头）、H（只应用于分段头和未分段）。<br>-t tid    指定于该规则相关的通道标识，所有匹配包都要经过此通道。不指定此项，规则只作用于非流量通道。<br>-i interface    指定接口卡，默认为all。<br>-e expiration_time    过期时间（秒）。<br>-x pattern    匹配模式<br>-X patternfile    匹配模式文件。每行一个模式<br>常用举例：</p>
+<pre><code>genfilt -v 4 -a P -s 192.168.0.1 -m 255.255.255.0 -d 192.168.0.88 -M 255.255.255.255 [-o any] [-p 0] -O eq -P 22 [-r B] [-w B] -l Y [-f Y] [-i all] -D &quot;permit lan host visit port 22&quot; [-e 0]
+</code></pre><p>默认情况下我们加限制22端口的话，对所有的包都会进行规则匹配。可以利用默认的设置而进行简略</p>
 <pre><code>genfilt -v 4 -a P -s 192.168.0.1 -m 255.255.255.0 -d 192.168.0.88 -M 255.255.255.255 -O eq -P 22
-genfilt -v 4 -a D -O eq -P 22</code></pre><h3 id="使命令生效"><a href="#使命令生效" class="headerlink" title="使命令生效"></a>使命令生效</h3><pre><code>mkfilt -v 4|6 [-d] [-u] [-z P|D] [-g start|stop] -i</code></pre><p>-u    激活rule table中的所有状态的规则。与-d 互斥<br>-d    停止表中规则。与-u 互斥<br>-z    使默认规则（最后一条）执行P或者D动作。<br>-g    日志启动与停止<br>-i    与-u一起使用，激活所有”active”状态规则。</p>
+genfilt -v 4 -a D -O eq -P 22
+</code></pre><h3 id="使命令生效"><a href="#使命令生效" class="headerlink" title="使命令生效"></a>使命令生效</h3><pre><code>mkfilt -v 4|6 [-d] [-u] [-z P|D] [-g start|stop] -i
+</code></pre><p>-u    激活rule table中的所有状态的规则。与-d 互斥<br>-d    停止表中规则。与-u 互斥<br>-z    使默认规则（最后一条）执行P或者D动作。<br>-g    日志启动与停止<br>-i    与-u一起使用，激活所有”active”状态规则。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -354,7 +364,7 @@ genfilt -v 4 -a D -O eq -P 22</code></pre><h3 id="使命令生效"><a href="#使
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/SYSLOG%E5%AE%A1%E8%AE%A1%E6%97%A5%E5%BF%97%E9%85%8D%E7%BD%AE.html" rel="next" title="SYSLOG审计日志配置">
+                <a href="/Linux-Unix/SYSLOG审计日志配置.html" rel="next" title="SYSLOG审计日志配置">
                   <i class="fa fa-chevron-left"></i> SYSLOG审计日志配置
                 </a>
             </div>
@@ -362,7 +372,7 @@ genfilt -v 4 -a D -O eq -P 22</code></pre><h3 id="使命令生效"><a href="#使
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/OpenSSH%E5%8D%87%E7%BA%A7.html" rel="prev" title="OpenSSH升级">
+                <a href="/Linux-Unix/OpenSSH升级.html" rel="prev" title="OpenSSH升级">
                   OpenSSH升级 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -424,20 +434,20 @@ genfilt -v 4 -a D -O eq -P 22</code></pre><h3 id="使命令生效"><a href="#使
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -449,10 +459,10 @@ genfilt -v 4 -a D -O eq -P 22</code></pre><h3 id="使命令生效"><a href="#使
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -481,10 +491,10 @@ genfilt -v 4 -a D -O eq -P 22</code></pre><h3 id="使命令生效"><a href="#使
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -559,7 +569,7 @@ genfilt -v 4 -a D -O eq -P 22</code></pre><h3 id="使命令生效"><a href="#使
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/AIX%E7%94%A8IPSec%E8%BF%9B%E8%A1%8C%E5%8C%85%E8%BF%87%E6%BB%A4.html",
+            url: "https://gowa.club/Linux-Unix/AIX用IPSec进行包过滤.html",
             identifier: "Linux-Unix/AIX用IPSec进行包过滤.html",
             title: "AIX用IPSec进行包过滤"
           }

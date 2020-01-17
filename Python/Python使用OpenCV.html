@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Python,OpenCV">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python使用OpenCV">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Python&#x2F;Python%E4%BD%BF%E7%94%A8OpenCV.html">
+<meta property="og:url" content="https://gowa.club/Python/Python使用OpenCV.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="想要进行图片的识别，或者配合上深度学习来进行一些实验，所以就看上了 OpenCv 这个库，Python 的使用非常的简单，一句话就能安装。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-12-01T13:37:53.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python使用OpenCV">
+<meta name="twitter:description" content="想要进行图片的识别，或者配合上深度学习来进行一些实验，所以就看上了 OpenCv 这个库，Python 的使用非常的简单，一句话就能安装。">
 
-<link rel="canonical" href="https://gowa.club/Python/Python%E4%BD%BF%E7%94%A8OpenCV.html">
+<link rel="canonical" href="https://gowa.club/Python/Python使用OpenCV.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/Python%E4%BD%BF%E7%94%A8OpenCV.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/Python使用OpenCV.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Python/Python%E4%BD%BF%E7%94%A8OpenCV.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Python/Python使用OpenCV.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/Python使用OpenCV.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,19 +294,16 @@
       
         <p>想要进行图片的识别，或者配合上深度学习来进行一些实验，所以就看上了 OpenCv 这个库，Python 的使用非常的简单，一句话就能安装。</p>
 <a id="more"></a>
-
 <p>我的环境是 macOS 10.15</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install opencv-python</span><br></pre></td></tr></table></figure>
-
 <p>然后在我的 venv 环境就能看到已经安装 了：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ls -1 venv/lib/python3.7/site-packages/cv2</span><br><span class="line">LICENSE-3RD-PARTY.txt</span><br><span class="line">LICENSE.txt</span><br><span class="line">__init__.py</span><br><span class="line">__pycache__</span><br><span class="line">cv2.cpython-37m-darwin.so</span><br><span class="line">data</span><br></pre></td></tr></table></figure>
-
 <p>那个 so 就是 opencv 编译出来的供我们进行调用的 C 库了。</p>
 <p>官方的 Demo:</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line">print(cv2.__version__)</span><br><span class="line"></span><br><span class="line">img = cv2.imread(<span class="string">'clouds.jpg'</span>)</span><br><span class="line">gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)</span><br><span class="line"></span><br><span class="line">cv2.imshow(<span class="string">"Over the Clouds"</span>, img)</span><br><span class="line">cv2.imshow(<span class="string">"Over the Clouds - gray"</span>, gray)</span><br><span class="line">cv2.waitKey(<span class="number">0</span>)</span><br><span class="line">cv2.destroyAllWindows()</span><br></pre></td></tr></table></figure>
-
 <p>其中， <strong>clouds.jpg</strong> 是一张图片，你可以自己弄一张放到自己的脚本目录下。</p>
 <p>执行后你就能看到两个窗口，一个窗口是原图，一个窗口是灰色的图。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -322,7 +321,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/%E5%AE%89%E8%A3%85Genymotion%E5%85%8D%E8%B4%B9%E7%89%88%E6%A8%A1%E6%8B%9F%E5%99%A8%E8%BF%9B%E8%A1%8C%E8%B0%83%E8%AF%95.html" rel="next" title="安装Genymotion免费版模拟器进行调试">
+                <a href="/Android/安装Genymotion免费版模拟器进行调试.html" rel="next" title="安装Genymotion免费版模拟器进行调试">
                   <i class="fa fa-chevron-left"></i> 安装Genymotion免费版模拟器进行调试
                 </a>
             </div>
@@ -330,7 +329,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Lua/Lua%E4%BD%BF%E7%94%A8luaOpenCV%E6%9D%A5%E4%BD%BF%E7%94%A8OpenCV%E5%BA%93.html" rel="prev" title="Lua使用luaOpenCV来使用OpenCV库">
+                <a href="/Lua/Lua使用luaOpenCV来使用OpenCV库.html" rel="prev" title="Lua使用luaOpenCV来使用OpenCV库">
                   Lua使用luaOpenCV来使用OpenCV库 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -391,20 +390,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -416,10 +415,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -448,10 +447,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -526,7 +525,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Python/Python%E4%BD%BF%E7%94%A8OpenCV.html",
+            url: "https://gowa.club/Python/Python使用OpenCV.html",
             identifier: "Python/Python使用OpenCV.html",
             title: "Python使用OpenCV"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Linux,Apue">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Unix编程中exec函数族的一点疑问">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;Unix%E7%BC%96%E7%A8%8B%E4%B8%ADexec%E5%87%BD%E6%95%B0%E6%97%8F%E7%9A%84%E4%B8%80%E7%82%B9%E7%96%91%E9%97%AE.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/Unix编程中exec函数族的一点疑问.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="在观看 AUPE8.12节 解释器文件 的时候，很迷惑不不解。问题不出在这几个函数，而在于看后面章节文解释器的时候发现一个很奇妙的问题。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.271Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Unix编程中exec函数族的一点疑问">
+<meta name="twitter:description" content="在观看 AUPE8.12节 解释器文件 的时候，很迷惑不不解。问题不出在这几个函数，而在于看后面章节文解释器的时候发现一个很奇妙的问题。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/Unix%E7%BC%96%E7%A8%8B%E4%B8%ADexec%E5%87%BD%E6%95%B0%E6%97%8F%E7%9A%84%E4%B8%80%E7%82%B9%E7%96%91%E9%97%AE.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/Unix编程中exec函数族的一点疑问.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Unix%E7%BC%96%E7%A8%8B%E4%B8%ADexec%E5%87%BD%E6%95%B0%E6%97%8F%E7%9A%84%E4%B8%80%E7%82%B9%E7%96%91%E9%97%AE.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Unix编程中exec函数族的一点疑问.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -281,7 +283,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/Unix%E7%BC%96%E7%A8%8B%E4%B8%ADexec%E5%87%BD%E6%95%B0%E6%97%8F%E7%9A%84%E4%B8%80%E7%82%B9%E7%96%91%E9%97%AE.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/Unix编程中exec函数族的一点疑问.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/Unix编程中exec函数族的一点疑问.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -297,24 +299,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在观看 <strong>AUPE8.12节 解释器文件</strong> 的时候，很迷惑不不解。问题不出在这几个函数，而在于看后面章节文解释器的时候发现一个很奇妙的问题。　</p>
-<a id="more"></a>
+        <p>在观看 <strong>AUPE8.12节 解释器文件</strong> 的时候，很迷惑不不解。问题不出在这几个函数，而在于看后面章节文解释器的时候发现一个很奇妙的问题。　<br><a id="more"></a></p>
 <h1 id="exec函数族的定义"><a href="#exec函数族的定义" class="headerlink" title="exec函数族的定义"></a>exec函数族的定义</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt; </span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execl</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">const</span> <span class="keyword">char</span> *arg0, </span></span></span><br><span class="line"><span class="function"><span class="params">... <span class="comment">/* (char *)0 */</span> )</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">char</span> *<span class="keyword">const</span> argv [])</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execle</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">const</span> <span class="keyword">char</span> *arg0, ...</span></span></span><br><span class="line"><span class="function"><span class="params">           <span class="comment">/* (char *)0,  char *const envp[] */</span> )</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execve</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">char</span> *<span class="keyword">const</span></span></span></span><br><span class="line"><span class="function"><span class="params"> 	argv[], <span class="keyword">char</span> *<span class="keyword">const</span> envp [])</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execlp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">const</span> <span class="keyword">char</span> *arg0,</span></span></span><br><span class="line"><span class="function"><span class="params"> ... <span class="comment">/* (char *)0 */</span> )</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execvp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">char</span> *<span class="keyword">const</span> argv [])</span></span>;</span><br></pre></td></tr></table></figure>
-
 <p>第一个参数是路径名或者文件名， 后续的是一连串字符串参数或者指针数组。来研究一下文中的小程序。</p>
 <h1 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"apue.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span>    *env_init[] = &#123; <span class="string">"USER=unknown"</span>, <span class="string">"PATH=/tmp"</span>, <span class="literal">NULL</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">main(<span class="keyword">void</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">pid_t</span>   pid;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        err_sys(<span class="string">"fork error"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;  <span class="comment">/* specify pathname, specify environment */</span></span><br><span class="line">        <span class="keyword">if</span> (execle(<span class="string">"/home/sar/bin/echoall"</span>, <span class="string">"echoall"</span>, <span class="string">"myarg1"</span>,</span><br><span class="line">                <span class="string">"MY ARG2"</span>, (<span class="keyword">char</span> *)<span class="number">0</span>, env_init) &lt; <span class="number">0</span>)</span><br><span class="line">            err_sys(<span class="string">"execle error"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (waitpid(pid, <span class="literal">NULL</span>, <span class="number">0</span>) &lt; <span class="number">0</span>)</span><br><span class="line">        err_sys(<span class="string">"wait error"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((pid = fork()) &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        err_sys(<span class="string">"fork error"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (pid == <span class="number">0</span>) &#123;  <span class="comment">/* specify filename, inherit environment */</span></span><br><span class="line">        <span class="keyword">if</span> (execlp(<span class="string">"echoall"</span>, <span class="string">"echoall"</span>, <span class="string">"only 1 arg"</span>, (<span class="keyword">char</span> *)<span class="number">0</span>) &lt; <span class="number">0</span>)</span><br><span class="line">            err_sys(<span class="string">"execlp error"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"apue.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">main(<span class="keyword">int</span> argc, <span class="keyword">char</span> *argv[])</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span>         i;</span><br><span class="line">    <span class="keyword">char</span>        **ptr;</span><br><span class="line">    <span class="keyword">extern</span> <span class="keyword">char</span> **environ;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; argc; i++)      <span class="comment">/* echo all command-line args */</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"argv[%d]: %s\n"</span>, i, argv[i]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (ptr = environ; *ptr != <span class="number">0</span>; ptr++)   <span class="comment">/* and all env strings */</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%s\n"</span>, *ptr);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>对于：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">execle(<span class="string">"/home/sar/bin/echoall"</span>, <span class="string">"echoall"</span>, <span class="string">"myarg1"</span>,</span><br><span class="line">            <span class="string">"MY ARG2"</span>, (<span class="keyword">char</span> *)<span class="number">0</span>, env_init)</span><br></pre></td></tr></table></figure>
-
 <p>的调用，感性的判断认为，应该是将<code>echoall myarg1 &quot;MY ARG2&quot;</code>三个参数传给<code>echoall</code>那么，加上程序本身，应该是有四个参数，然而结果却不是如此。<br>输出的结果是：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">argv[0]: echoall</span><br><span class="line">argv[1]: myarg1</span><br><span class="line">argv[2]: MY ARG2</span><br></pre></td></tr></table></figure>
-
 <p>为何argv[0]会变成了传入的第二个参数呢。翻看英文版看到仔细的阅读了一下。</p>
 <blockquote>
 <p>Note also that we set the first argument, argv[0] in the new program, to be the filename component of the pathname.<br>Some shells set this argument to be the complete pathname. This is a convention only.<br>We can set argv[0] to any string we like.</p>
 </blockquote>
 <p>这是把 <strong>传入exec执行程序的第一个参数 新程序的<code>argv[0]</code></strong> 设置为路径名的文件名部分。<br>某些shell会把这个参数设置为完整路径名，只是为了方便。<br>我们可以把<code>argv[0]</code>设置为任何值(pathname为完整的情况下)  </p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -332,7 +331,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/Linux%E4%B8%8B%E7%9A%84%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E7%9A%84%E6%9D%83%E9%99%90.html" rel="next" title="Linux下的文件与目录的权限">
+                <a href="/Linux-Unix/Linux下的文件与目录的权限.html" rel="next" title="Linux下的文件与目录的权限">
                   <i class="fa fa-chevron-left"></i> Linux下的文件与目录的权限
                 </a>
             </div>
@@ -340,7 +339,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/Linux%E7%9A%84%E7%94%A8%E6%88%B7%E6%9D%83%E9%99%90%E4%B8%8ESaved-set-user-id.html" rel="prev" title="Linux的用户权限与Saved set-user-id">
+                <a href="/Linux-Unix/Linux的用户权限与Saved-set-user-id.html" rel="prev" title="Linux的用户权限与Saved set-user-id">
                   Linux的用户权限与Saved set-user-id <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -402,20 +401,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -427,10 +426,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -459,10 +458,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -537,7 +536,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/Unix%E7%BC%96%E7%A8%8B%E4%B8%ADexec%E5%87%BD%E6%95%B0%E6%97%8F%E7%9A%84%E4%B8%80%E7%82%B9%E7%96%91%E9%97%AE.html",
+            url: "https://gowa.club/Linux-Unix/Unix编程中exec函数族的一点疑问.html",
             identifier: "Linux-Unix/Unix编程中exec函数族的一点疑问.html",
             title: "Unix编程中exec函数族的一点疑问"
           }

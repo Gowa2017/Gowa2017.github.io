@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Linux,运维,Iptables">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Iptables在大流量的情况下启动导致服务拒绝">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;Iptables%E5%9C%A8%E5%A4%A7%E6%B5%81%E9%87%8F%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%90%AF%E5%8A%A8%E5%AF%BC%E8%87%B4%E6%9C%8D%E5%8A%A1%E6%8B%92%E7%BB%9D.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/Iptables在大流量的情况下启动导致服务拒绝.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="大多数情况下我都喜欢也习惯于iptables来进行端口限制，转发，甚至过滤等操作，作为安全加固，在流量小的情况下是可靠的，但，但面对巨大的流量的时候，就会出现意料之外的情况了。这不，我最近就遇到了。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.269Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Iptables在大流量的情况下启动导致服务拒绝">
+<meta name="twitter:description" content="大多数情况下我都喜欢也习惯于iptables来进行端口限制，转发，甚至过滤等操作，作为安全加固，在流量小的情况下是可靠的，但，但面对巨大的流量的时候，就会出现意料之外的情况了。这不，我最近就遇到了。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/Iptables%E5%9C%A8%E5%A4%A7%E6%B5%81%E9%87%8F%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%90%AF%E5%8A%A8%E5%AF%BC%E8%87%B4%E6%9C%8D%E5%8A%A1%E6%8B%92%E7%BB%9D.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/Iptables在大流量的情况下启动导致服务拒绝.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Iptables%E5%9C%A8%E5%A4%A7%E6%B5%81%E9%87%8F%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%90%AF%E5%8A%A8%E5%AF%BC%E8%87%B4%E6%9C%8D%E5%8A%A1%E6%8B%92%E7%BB%9D.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Iptables在大流量的情况下启动导致服务拒绝.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -281,7 +283,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/Iptables%E5%9C%A8%E5%A4%A7%E6%B5%81%E9%87%8F%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%90%AF%E5%8A%A8%E5%AF%BC%E8%87%B4%E6%9C%8D%E5%8A%A1%E6%8B%92%E7%BB%9D.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/Iptables在大流量的情况下启动导致服务拒绝.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/Iptables在大流量的情况下启动导致服务拒绝.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -297,19 +299,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>大多数情况下我都喜欢也习惯于iptables来进行端口限制，转发，甚至过滤等操作，作为安全加固，在流量小的情况下是可靠的，但，但面对巨大的流量的时候，就会出现意料之外的情况了。这不，我最近就遇到了。</p>
-<a id="more"></a>
+        <p>大多数情况下我都喜欢也习惯于iptables来进行端口限制，转发，甚至过滤等操作，作为安全加固，在流量小的情况下是可靠的，但，但面对巨大的流量的时候，就会出现意料之外的情况了。这不，我最近就遇到了。<br><a id="more"></a></p>
 <h1 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h1><p>DNS服务器平时对外提供服务，QPS大概是3万-5万，安全厂商进行扫描的时候出现安全漏洞，需要用将端口进行限制。于是我就用了一条语句增加了规则，这机器之前并未启动iptables。</p>
 <pre><code>iptables -A INPUT -s 192.168.1.0/24 -p tcp -m tcp --dprot 22 -j ACCEPT
-iptables -A INPUT -p tcp -m tcp --dport 22 -j REJECT</code></pre><p>乍一看，是正常的，确实工作得也还不错。可过了一会机器就不能登录了。连忙前往机房，查看了一下日志 <code>nf_conntrack: table full, dropping packet</code>。<br>在这种情况下，启动iptables是不科学的，即使设置<code>net.netfilter.nf_conntrack_max/net.netfilter.nf_conntrack_tcp_timeout_established</code>流量大了也会出现问题。</p>
+iptables -A INPUT -p tcp -m tcp --dport 22 -j REJECT
+</code></pre><p>乍一看，是正常的，确实工作得也还不错。可过了一会机器就不能登录了。连忙前往机房，查看了一下日志 <code>nf_conntrack: table full, dropping packet</code>。<br>在这种情况下，启动iptables是不科学的，即使设置<code>net.netfilter.nf_conntrack_max/net.netfilter.nf_conntrack_tcp_timeout_established</code>流量大了也会出现问题。</p>
 <h1 id="为什么会出现这样情况"><a href="#为什么会出现这样情况" class="headerlink" title="为什么会出现这样情况"></a>为什么会出现这样情况</h1><p>启动iptables的时候，就会加载<code>nf_conntrack</code>模块，运行于内核，用来跟踪链接状态，iptables的<code>nat和state</code>模块就会用到其跟踪的状态。<br>查看一下iptables的默认规则就会发现其中一条规则：  </p>
-<pre><code>iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</code></pre><p>这一条一般都在第一个，是为了将相关联的，通信中的状态直接放行，而不用匹配到最终规则后才用默认动作<code>ACCEPT</code>进行处理。<br>但这完全没有任何意义，对于DNS服务器来说，其并不需要进行后续连接状态的跟踪，响应报文就OK了，而iptable在启动后，每个报文都会匹配一下规则，并且被<code>nf_conntrack</code>跟踪状态，但无法跟踪，则会丢包，拒绝服务。    </p>
+<pre><code>iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+</code></pre><p>这一条一般都在第一个，是为了将相关联的，通信中的状态直接放行，而不用匹配到最终规则后才用默认动作<code>ACCEPT</code>进行处理。<br>但这完全没有任何意义，对于DNS服务器来说，其并不需要进行后续连接状态的跟踪，响应报文就OK了，而iptable在启动后，每个报文都会匹配一下规则，并且被<code>nf_conntrack</code>跟踪状态，但无法跟踪，则会丢包，拒绝服务。    </p>
 <h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><p>我们应该将<code>DNS服务53端口出去或进来</code>的包都禁用跟踪，这需要在raw/PREROUTING进行处理。</p>
 <pre><code>iptables -t raw -A PREROUTING -p udp -m udp --dport 53 -j NOTRACK
-iptables -t raw -A OUTPUT -p udp -m udp --sport 53 -j NOTRACK</code></pre><p>同样再本地环回接口来的包我们也不应该进行跟踪处理：   </p>
+iptables -t raw -A OUTPUT -p udp -m udp --sport 53 -j NOTRACK
+</code></pre><p>同样再本地环回接口来的包我们也不应该进行跟踪处理：   </p>
 <pre><code>iptables -t raw -A PREROUTING -i lo -j NOTRACK
-iptables -t raw -A OUTPUT -o lo -j NOTRACK</code></pre><p>但是但我们进行这样的规则实质后，后续的任何依赖链接状态的规则都将不能正常工作，因为无法匹配其状态。</p>
+iptables -t raw -A OUTPUT -o lo -j NOTRACK
+</code></pre><p>但是但我们进行这样的规则实质后，后续的任何依赖链接状态的规则都将不能正常工作，因为无法匹配其状态。</p>
 <p>或者我们可以将流量的过滤放在上层的防火墙设备进行，这样就最好了。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -320,7 +326,7 @@ iptables -t raw -A OUTPUT -o lo -j NOTRACK</code></pre><p>但是但我们进行�
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
+              <a href="/tags/运维/" rel="tag"># 运维</a>
               <a href="/tags/Iptables/" rel="tag"># Iptables</a>
           </div>
 
@@ -328,7 +334,7 @@ iptables -t raw -A OUTPUT -o lo -j NOTRACK</code></pre><p>但是但我们进行�
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/Shell%E7%BC%96%E7%A8%8B%E4%B8%8EC%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%90%8C.html" rel="next" title="Shell编程与C的一些不同">
+                <a href="/Linux-Unix/Shell编程与C的一些不同.html" rel="next" title="Shell编程与C的一些不同">
                   <i class="fa fa-chevron-left"></i> Shell编程与C的一些不同
                 </a>
             </div>
@@ -336,7 +342,7 @@ iptables -t raw -A OUTPUT -o lo -j NOTRACK</code></pre><p>但是但我们进行�
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/Linux%E4%B8%8B%E7%9A%84%E6%96%87%E4%BB%B6%E4%B8%8E%E7%9B%AE%E5%BD%95%E7%9A%84%E6%9D%83%E9%99%90.html" rel="prev" title="Linux下的文件与目录的权限">
+                <a href="/Linux-Unix/Linux下的文件与目录的权限.html" rel="prev" title="Linux下的文件与目录的权限">
                   Linux下的文件与目录的权限 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -398,20 +404,20 @@ iptables -t raw -A OUTPUT -o lo -j NOTRACK</code></pre><p>但是但我们进行�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -423,10 +429,10 @@ iptables -t raw -A OUTPUT -o lo -j NOTRACK</code></pre><p>但是但我们进行�
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -455,10 +461,10 @@ iptables -t raw -A OUTPUT -o lo -j NOTRACK</code></pre><p>但是但我们进行�
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -533,7 +539,7 @@ iptables -t raw -A OUTPUT -o lo -j NOTRACK</code></pre><p>但是但我们进行�
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/Iptables%E5%9C%A8%E5%A4%A7%E6%B5%81%E9%87%8F%E7%9A%84%E6%83%85%E5%86%B5%E4%B8%8B%E5%90%AF%E5%8A%A8%E5%AF%BC%E8%87%B4%E6%9C%8D%E5%8A%A1%E6%8B%92%E7%BB%9D.html",
+            url: "https://gowa.club/Linux-Unix/Iptables在大流量的情况下启动导致服务拒绝.html",
             identifier: "Linux-Unix/Iptables在大流量的情况下启动导致服务拒绝.html",
             title: "Iptables在大流量的情况下启动导致服务拒绝"
           }

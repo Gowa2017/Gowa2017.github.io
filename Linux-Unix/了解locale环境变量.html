@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Linux,运维">
 <meta property="og:type" content="article">
 <meta property="og:title" content="了解locale环境变量">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;%E4%BA%86%E8%A7%A3locale%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/了解locale环境变量.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="locale 可以用几个环境变量来改变。当然，之前在 TLPI 上看到过，但是都忘记得差不多了。正好遇到了，macOS 中在 vim 用 + 寄存器复制出来的中文是乱码的。所以需要了解一下。locale 被位置敏感的程序用来渲染文字，正确的显示货币值，时间和日期的格式等等。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-09T12:41:33.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="了解locale环境变量">
+<meta name="twitter:description" content="locale 可以用几个环境变量来改变。当然，之前在 TLPI 上看到过，但是都忘记得差不多了。正好遇到了，macOS 中在 vim 用 + 寄存器复制出来的中文是乱码的。所以需要了解一下。locale 被位置敏感的程序用来渲染文字，正确的显示货币值，时间和日期的格式等等。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/%E4%BA%86%E8%A7%A3locale%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/了解locale环境变量.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/%E4%BA%86%E8%A7%A3locale%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/了解locale环境变量.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/%E4%BA%86%E8%A7%A3locale%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/了解locale环境变量.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/了解locale环境变量.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,13 +294,10 @@
       
         <p>locale 可以用几个环境变量来改变。当然，之前在 TLPI 上看到过，但是都忘记得差不多了。正好遇到了，macOS 中在 vim 用 + 寄存器复制出来的中文是乱码的。所以需要了解一下。<br>locale 被位置敏感的程序用来渲染文字，正确的显示货币值，时间和日期的格式等等。</p>
 <a id="more"></a>
-
 <h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>macOS 在英文界面的时候，我查看了一下 locale 相关的变量：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ locale</span><br><span class="line">LANG=</span><br><span class="line">LC_COLLATE=<span class="string">"C"</span></span><br><span class="line">LC_CTYPE=<span class="string">"UTF-8"</span></span><br><span class="line">LC_MESSAGES=<span class="string">"C"</span></span><br><span class="line">LC_MONETARY=<span class="string">"C"</span></span><br><span class="line">LC_NUMERIC=<span class="string">"C"</span></span><br><span class="line">LC_TIME=<span class="string">"C"</span></span><br><span class="line">LC_ALL=</span><br></pre></td></tr></table></figure>
-
 <p>再切换到中文界面：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ locale</span><br><span class="line">LANG=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_COLLATE=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_CTYPE=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_MESSAGES=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_MONETARY=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_NUMERIC=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_TIME=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_ALL=</span><br></pre></td></tr></table></figure>
-
 <p>看来影响的原因就是因为 locale 设置的问题。</p>
 <h1 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h1><p>locale 的格式类似 <code>language[_territory][.codeset][@modifier]</code>。 例如 ： zh_CN.UTF-8</p>
 <ul>
@@ -310,7 +309,7 @@
 <h1 id="变量解释"><a href="#变量解释" class="headerlink" title="变量解释"></a>变量解释</h1><h2 id="LANG"><a href="#LANG" class="headerlink" title="LANG"></a>LANG</h2><p>安装的默认 locale。</p>
 <p>在没有设置 <strong>LC_*</strong> 变量的情况下，就会使用  <strong>LANG</strong> 变量。</p>
 <ul>
-<li>LC_ALL 覆盖 LANG 及其他 LC_* 变量的设置。</li>
+<li>LC<em>ALL 覆盖 LANG 及其他 LC</em>* 变量的设置。</li>
 <li>LC_COLLATE 影响用来排序和正则式的规则。设置为 C 会让 ls 命令将 . 放在前面，大写的比小写的更前面。</li>
 <li>LC_TIME 时间日期格式。</li>
 <li>LC_CTYPE 代表 正则 表达式 匹配, 字符类(character classification), 转换, 区分大小写 的 比较, 以及 宽字符 函数.</li>
@@ -325,10 +324,9 @@
 </ul>
 <p>我们可以利用设置 L_ALL 或者  LANG 变量了更改语言和字符集。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">localectl  <span class="built_in">set</span>-locale LANG=zh_CN.utf8</span><br></pre></td></tr></table></figure>
-
 <p>然后退出重新登录。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">locale</span><br><span class="line">LANG=zh_CN.utf8</span><br><span class="line">LC_CTYPE=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_NUMERIC=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_TIME=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_COLLATE=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_MONETARY=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_MESSAGES=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_PAPER=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_NAME=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_ADDRESS=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_TELEPHONE=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_MEASUREMENT=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_IDENTIFICATION=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_ALL=</span><br></pre></td></tr></table></figure>
-
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -339,14 +337,14 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
+              <a href="/tags/运维/" rel="tag"># 运维</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/Retrofit%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%BB%BA%E7%AB%8B%E5%8F%8A%E4%B8%8ERxJava%E7%9A%84%E4%BD%BF%E7%94%A8.html" rel="next" title="Retrofit对象的建立及与RxJava的使用">
+                <a href="/Android/Retrofit对象的建立及与RxJava的使用.html" rel="next" title="Retrofit对象的建立及与RxJava的使用">
                   <i class="fa fa-chevron-left"></i> Retrofit对象的建立及与RxJava的使用
                 </a>
             </div>
@@ -354,7 +352,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/Java%E7%9A%84Lambda-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8%E5%8F%8AStream.html" rel="prev" title="Java的Lambda-方法引用及Stream">
+                <a href="/Java/Java的Lambda-方法引用及Stream.html" rel="prev" title="Java的Lambda-方法引用及Stream">
                   Java的Lambda-方法引用及Stream <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -416,20 +414,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -441,10 +439,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -473,10 +471,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -551,7 +549,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/%E4%BA%86%E8%A7%A3locale%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F.html",
+            url: "https://gowa.club/Linux-Unix/了解locale环境变量.html",
             identifier: "Linux-Unix/了解locale环境变量.html",
             title: "了解locale环境变量"
           }

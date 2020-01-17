@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="JavaScript,Vue">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;JavaScript&#x2F;Vue%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8ESLint-Vuter-Prettier%E6%9D%A5%E8%BF%9B%E8%A1%8C%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8E%E6%A3%80%E6%9F%A5.html">
+<meta property="og:url" content="https://gowa.club/JavaScript/Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="某个项目需要用到。但是代码风格不一致的问题，和 eslint 老报错的问题很是困扰了哦，网络上找的文章一般都是直接贴配置文件，很坑，总是不能达到目的，所以来看一下官方文档。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-02-22T11:53:38.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查">
+<meta name="twitter:description" content="某个项目需要用到。但是代码风格不一致的问题，和 eslint 老报错的问题很是困扰了哦，网络上找的文章一般都是直接贴配置文件，很坑，总是不能达到目的，所以来看一下官方文档。">
 
-<link rel="canonical" href="https://gowa.club/JavaScript/Vue%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8ESLint-Vuter-Prettier%E6%9D%A5%E8%BF%9B%E8%A1%8C%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8E%E6%A3%80%E6%9F%A5.html">
+<link rel="canonical" href="https://gowa.club/JavaScript/Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Vue%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8ESLint-Vuter-Prettier%E6%9D%A5%E8%BF%9B%E8%A1%8C%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8E%E6%A3%80%E6%9F%A5.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/JavaScript/Vue%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8ESLint-Vuter-Prettier%E6%9D%A5%E8%BF%9B%E8%A1%8C%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8E%E6%A3%80%E6%9F%A5.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/JavaScript/Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,7 +294,6 @@
       
         <p>某个项目需要用到。但是代码风格不一致的问题，和 eslint 老报错的问题很是困扰了哦，网络上找的文章一般都是直接贴配置文件，很坑，总是不能达到目的，所以来看一下官方文档。</p>
 <a id="more"></a>
-
 <h1 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h1><p>首先看一下三个东西的描述都是怎么样的：</p>
 <ul>
 <li><a href="https://vuejs.github.io/vetur/" target="_blank" rel="noopener"><strong>Vetur</strong></a>：一个专门针对Vue开发的 VS code 插件。</li>
@@ -307,14 +308,13 @@
 <p>可用的格式化工具有：</p>
 <ul>
 <li><strong>prettier</strong>: For css/scss/less/js/ts.</li>
-<li><strong>prettier-eslint</strong>: For js. Run prettier and eslint –fix.</li>
+<li><strong>prettier-eslint</strong>: For js. Run prettier and eslint —fix.</li>
 <li><strong>prettyhtml</strong>: For html.</li>
 <li><strong>stylus-supremacy</strong>: For stylus.</li>
 <li><strong>vscode-typescript</strong>: For js/ts. The same js/ts formatter for VS Code.</li>
 </ul>
 <p>当前默认的 Formatter 如下：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"vetur.format.defaultFormatter.html"</span>: <span class="string">"prettyhtml"</span>,</span><br><span class="line">  <span class="string">"vetur.format.defaultFormatter.css"</span>: <span class="string">"prettier"</span>,</span><br><span class="line">  <span class="string">"vetur.format.defaultFormatter.postcss"</span>: <span class="string">"prettier"</span>,</span><br><span class="line">  <span class="string">"vetur.format.defaultFormatter.scss"</span>: <span class="string">"prettier"</span>,</span><br><span class="line">  <span class="string">"vetur.format.defaultFormatter.less"</span>: <span class="string">"prettier"</span>,</span><br><span class="line">  <span class="string">"vetur.format.defaultFormatter.stylus"</span>: <span class="string">"stylus-supremacy"</span>,</span><br><span class="line">  <span class="string">"vetur.format.defaultFormatter.js"</span>: <span class="string">"prettier"</span>,</span><br><span class="line">  <span class="string">"vetur.format.defaultFormatter.ts"</span>: <span class="string">"prettier"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p><strong>Vetur bundles all the above formatters. When Vetur observes a local install of the formattesr, it’ll prefer to use the local version.</strong><br>Vetur 已经打包了所有的格式化工具。如果本地有安装一个版本的话，会优先调用本地的版本。</p>
 </blockquote>
@@ -327,10 +327,8 @@
 </ul>
 <p><strong>开启保存时格式化</strong></p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">"editor.formatOnSave"</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>还可以针对特定的语言才开启：</p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="comment">// Set the default</span></span><br><span class="line">	<span class="attr">"editor.formatOnSave"</span>: <span class="literal">false</span>,</span><br><span class="line">	<span class="comment">// Enable per-language</span></span><br><span class="line">	<span class="attr">"[javascript]"</span>: &#123;</span><br><span class="line">    <span class="attr">"editor.formatOnSave"</span>: <span class="literal">true</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>对于 prettier 的配置方式有多种：</p>
 <ol>
 <li>.prettierrc 文件。</li>
@@ -368,7 +366,6 @@
 </ul>
 <p>我觉得我应该开启的选项有：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="string">"prettier.semi"</span>: <span class="literal">false</span>,</span><br><span class="line">	<span class="string">"prettier.singleQuote"</span>: <span class="literal">true</span>,</span><br><span class="line">	<span class="string">"prettier.eslintIntegration"</span>: <span class="literal">true</span></span><br><span class="line">	<span class="string">"prettier.disableLanguages"</span>: []</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>不知道为什么会 vue 给关掉呢。</p>
 <h1 id="ESLint"><a href="#ESLint" class="headerlink" title="ESLint"></a>ESLint</h1><p>ESLint 用来做代码检查，经过上面的步骤，我们代码是按照 prettier 的格式来进行格式化的。但 ESLint 的检查规则与其有不一样的地方。介于我们不想有冲突产生，所以我们有两种办法来将 prettier 与 ESLint 集成。</p>
 <p>我们首先开启 ESLint：</p>
@@ -381,29 +378,23 @@
 </ol>
 <h2 id="ESLint-运行-Prettier"><a href="#ESLint-运行-Prettier" class="headerlink" title="ESLint 运行 Prettier"></a>ESLint 运行 Prettier</h2><p>安装插件 <a href="https://github.com/prettier/eslint-plugin-prettier" target="_blank" rel="noopener">https://github.com/prettier/eslint-plugin-prettier</a></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add --dev prettier eslint-plugin-prettier</span><br></pre></td></tr></table></figure>
-
 <p>配置 .eslintrc.js</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"plugins"</span>: [<span class="string">"prettier"</span>],</span><br><span class="line">  <span class="string">"rules"</span>: &#123;</span><br><span class="line">    <span class="string">"prettier/prettier"</span>: <span class="string">"error"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="关闭-ESLint-格式化规则"><a href="#关闭-ESLint-格式化规则" class="headerlink" title="关闭 ESLint 格式化规则"></a>关闭 ESLint 格式化规则</h2><p>安装  <a href="https://github.com/prettier/eslint-config-prettier" target="_blank" rel="noopener">https://github.com/prettier/eslint-config-prettier</a></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add --dev eslint-config-prettier</span><br></pre></td></tr></table></figure>
-
 <p>编辑  .eslintrc.js</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"extends"</span>: [<span class="string">"prettier"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="同时使用以上两种方法"><a href="#同时使用以上两种方法" class="headerlink" title="同时使用以上两种方法"></a>同时使用以上两种方法</h2><p><code>eslint-plugin-prettier</code> 有一个 <code>recommended</code> 配置，其开启了 <code>eslint-plugin-prettier</code> 和 <code>eslint-config-prettier</code>。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"extends"</span>: [<span class="string">"plugin:prettier/recommended"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>记住要先安装两个插件：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yarn add --dev eslint-plugin-prettier eslint-config-prettier</span><br></pre></td></tr></table></figure>
-
 <h1 id="最终解决方案"><a href="#最终解决方案" class="headerlink" title="最终解决方案"></a>最终解决方案</h1><ul>
 <li>安装 Vetur 插件</li>
 <li>安装 ESLint 插件</li>
 </ul>
 <h2 id="VS-Code-settings-配置："><a href="#VS-Code-settings-配置：" class="headerlink" title="VS Code settings 配置："></a>VS Code settings 配置：</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"editor.formatOnSave"</span>: <span class="literal">true</span>, <span class="comment">// 保存时格式化</span></span><br><span class="line">  <span class="string">"javascript.format.enable"</span>: <span class="literal">false</span>, <span class="comment">// 关闭自带的格式化</span></span><br><span class="line">  <span class="string">"eslint.enable"</span>: <span class="literal">true</span>, <span class="comment">// 启用eslint</span></span><br><span class="line">  <span class="string">"eslint.autoFixOnSave"</span>: <span class="literal">true</span>, <span class="comment">// 保存时自动修复</span></span><br><span class="line">  <span class="string">"eslint.validate"</span>: [</span><br><span class="line">    <span class="string">"javascript"</span>,</span><br><span class="line">    <span class="string">"javascriptreact"</span>,</span><br><span class="line">    <span class="string">"vue"</span></span><br><span class="line">  ], <span class="comment">// eslint 识别格式</span></span><br><span class="line">  <span class="string">"vetur.format.defaultFormatterOptions"</span>: &#123;</span><br><span class="line">    <span class="string">"prettier"</span>: &#123;</span><br><span class="line">      <span class="string">"singleQuote"</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="string">"semi"</span>: <span class="literal">false</span></span><br><span class="line">    &#125;, <span class="comment">// vetur 调用 prettier 的配置</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="eslintrc-js"><a href="#eslintrc-js" class="headerlink" title=".eslintrc.js"></a>.eslintrc.js</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://eslint.org/docs/user-guide/configuring</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  root: <span class="literal">true</span>,</span><br><span class="line">  parserOptions: &#123;</span><br><span class="line">    parser: <span class="string">'babel-eslint'</span></span><br><span class="line">  &#125;,</span><br><span class="line">  env: &#123;</span><br><span class="line">    browser: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention</span></span><br><span class="line">  <span class="comment">// consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.</span></span><br><span class="line">  extends: [<span class="string">'plugin:vue/essential'</span>],</span><br><span class="line">  <span class="comment">// required to lint *.vue files</span></span><br><span class="line">  plugins: [<span class="string">'vue'</span>,],</span><br><span class="line">  <span class="comment">// add your custom rules here</span></span><br><span class="line">  rules: &#123;</span><br><span class="line">    <span class="comment">// allow debugger during development</span></span><br><span class="line">    <span class="string">'no-debugger'</span>: process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="string">'error'</span> : <span class="string">'off'</span>,</span><br><span class="line">    semi: [<span class="string">'error'</span>, <span class="string">'never'</span>], <span class="comment">// 取消分号</span></span><br><span class="line">    quotes: [<span class="string">'error'</span>, <span class="string">'single'</span>] <span class="comment">// 使用单引号</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -421,7 +412,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Cocos2d-X/%E5%85%B3%E4%BA%8ECocos2d-Lua%E4%BD%BF%E7%94%A8NDK%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B%E7%9A%84%E8%A7%A3%E6%9E%90.html" rel="next" title="关于Cocos2d-Lua使用NDK编译过程的解析">
+                <a href="/Cocos2d-X/关于Cocos2d-Lua使用NDK编译过程的解析.html" rel="next" title="关于Cocos2d-Lua使用NDK编译过程的解析">
                   <i class="fa fa-chevron-left"></i> 关于Cocos2d-Lua使用NDK编译过程的解析
                 </a>
             </div>
@@ -429,7 +420,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%B8%B8%E6%A0%87.html" rel="prev" title="MySQL存储过程中的游标">
+                <a href="/数据库/MySQL存储过程中的游标.html" rel="prev" title="MySQL存储过程中的游标">
                   MySQL存储过程中的游标 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -491,20 +482,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -516,10 +507,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -548,10 +539,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -626,7 +617,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/JavaScript/Vue%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8ESLint-Vuter-Prettier%E6%9D%A5%E8%BF%9B%E8%A1%8C%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8E%E6%A3%80%E6%9F%A5.html",
+            url: "https://gowa.club/JavaScript/Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查.html",
             identifier: "JavaScript/Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查.html",
             title: "Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查"
           }

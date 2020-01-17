@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,24 +41,26 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
 </script>
 
-  <meta name="description" content="从 Retrofit&#x2F;OkHttp 中的依赖而来，其封装 的一些IO操作，其里面有两个关键的概念 source, sink ，这两个概念我在 Lua 中也看到，典型的是 ltn12，source 是源， sink 是终点的意思，可以将其看做是输出。">
+  <meta name="description" content="从 Retrofit/OkHttp 中的依赖而来，其封装 的一些IO操作，其里面有两个关键的概念 source, sink ，这两个概念我在 Lua 中也看到，典型的是 ltn12，source 是源， sink 是终点的意思，可以将其看做是输出。">
 <meta name="keywords" content="Android,Okio">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Okio的概念和使用">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Okio%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8.html">
+<meta property="og:url" content="https://gowa.club/Android/Okio的概念和使用.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="从 Retrofit&#x2F;OkHttp 中的依赖而来，其封装 的一些IO操作，其里面有两个关键的概念 source, sink ，这两个概念我在 Lua 中也看到，典型的是 ltn12，source 是源， sink 是终点的意思，可以将其看做是输出。">
+<meta property="og:description" content="从 Retrofit/OkHttp 中的依赖而来，其封装 的一些IO操作，其里面有两个关键的概念 source, sink ，这两个概念我在 Lua 中也看到，典型的是 ltn12，source 是源， sink 是终点的意思，可以将其看做是输出。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-26T01:41:37.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Okio的概念和使用">
+<meta name="twitter:description" content="从 Retrofit/OkHttp 中的依赖而来，其封装 的一些IO操作，其里面有两个关键的概念 source, sink ，这两个概念我在 Lua 中也看到，典型的是 ltn12，source 是源， sink 是终点的意思，可以将其看做是输出。">
 
-<link rel="canonical" href="https://gowa.club/Android/Okio%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8.html">
+<link rel="canonical" href="https://gowa.club/Android/Okio的概念和使用.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Okio%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Okio的概念和使用.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/Okio%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/Okio的概念和使用.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Okio的概念和使用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,7 +294,6 @@
       
         <p>从 Retrofit/OkHttp 中的依赖而来，其封装 的一些IO操作，其里面有两个关键的概念 <code>source, sink</code> ，这两个概念我在 Lua 中也看到，典型的是 <a href="http://w3.impa.br/~diego/software/luasocket/old/luasocket-2.0-beta3/ltn12.html" target="_blank" rel="noopener">ltn12</a>，source 是源， sink 是终点的意思，可以将其看做是输出。 </p>
 <a id="more"></a>
-
 <p><a href="https://github.com/square/okio" target="_blank" rel="noopener">Okio 的项目地址</a></p>
 <h1 id="ByteStrings-and-Buffers"><a href="#ByteStrings-and-Buffers" class="headerlink" title="ByteStrings and Buffers"></a>ByteStrings and Buffers</h1><p>Okio 围绕两种类型：ByteStrings 与 Buffer 来构造，将很多的能力都封装到了简单的API中。</p>
 <ul>
@@ -303,7 +304,6 @@
 <h1 id="Sources-and-Sinks"><a href="#Sources-and-Sinks" class="headerlink" title="Sources and Sinks"></a>Sources and Sinks</h1><p>类似 InputStream 和 OutStream，但有一些关键的不同，Sources and Sinks 会与 InputStream， OutStream 进行交互。</p>
 <p>source 与 sink 都很简单，只有三个方法：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Source</span> <span class="keyword">extends</span> <span class="title">Closeable</span> </span>&#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Removes at least 1, and up to &#123;<span class="doctag">@code</span> byteCount&#125; bytes from this and appends</span></span><br><span class="line"><span class="comment">   * them to &#123;<span class="doctag">@code</span> sink&#125;. Returns the number of bytes read, or -1 if this</span></span><br><span class="line"><span class="comment">   * source is exhausted.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="function"><span class="keyword">long</span> <span class="title">read</span><span class="params">(Buffer sink, <span class="keyword">long</span> byteCount)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Returns the timeout for this source. */</span></span><br><span class="line">  <span class="function">Timeout <span class="title">timeout</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Closes this source and releases the resources held by this source. It is an</span></span><br><span class="line"><span class="comment">   * error to read a closed source. It is safe to close a source more than once.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Sink</span> <span class="keyword">extends</span> <span class="title">Closeable</span>, <span class="title">Flushable</span> </span>&#123;</span><br><span class="line">  <span class="comment">/** Removes &#123;<span class="doctag">@code</span> byteCount&#125; bytes from &#123;<span class="doctag">@code</span> source&#125; and appends them to this. */</span></span><br><span class="line">  <span class="function"><span class="keyword">void</span> <span class="title">write</span><span class="params">(Buffer source, <span class="keyword">long</span> byteCount)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Pushes all buffered bytes to their final destination. */</span></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">void</span> <span class="title">flush</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/** Returns the timeout for this sink. */</span></span><br><span class="line">  <span class="function">Timeout <span class="title">timeout</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Pushes all buffered bytes to their final destination and releases the</span></span><br><span class="line"><span class="comment">   * resources held by this sink. It is an error to write a closed sink. It is</span></span><br><span class="line"><span class="comment">   * safe to close a sink more than once.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="meta">@Override</span> <span class="function"><span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>可以看到， source 与 sink 都是在 Buffer 上进行操作的，所以，这是IO间进行交互的桥梁。</p>
 <h1 id="BufferedSink-BufferedSource"><a href="#BufferedSink-BufferedSource" class="headerlink" title="BufferedSink BufferedSource"></a>BufferedSink BufferedSource</h1><p>一般来说，一个 InputStream OutputStream 上的数据是位于内核空间的。我们都需要将其读取到用户空间后才能进行操作。如果我们不进行缓冲，那么势必造成用户空间的内存暴涨，甚至造成 OOM，所以对于 source 和 sink 都有一个子类，通过缓冲区来进行操作。我们以 BufferedSource 为例来看，其实现类是RealBufferedSource。</p>
 <h2 id="read"><a href="#read" class="headerlink" title="read()"></a>read()</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">read</span><span class="params">(Buffer sink, <span class="keyword">long</span> byteCount)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (sink == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"sink == null"</span>);</span><br><span class="line">  <span class="keyword">if</span> (byteCount &lt; <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"byteCount &lt; 0: "</span> + byteCount);</span><br><span class="line">  <span class="keyword">if</span> (closed) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalStateException(<span class="string">"closed"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (buffer.size == <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">long</span> read = source.read(buffer, Segment.SIZE);</span><br><span class="line">    <span class="keyword">if</span> (read == -<span class="number">1</span>) <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">long</span> toRead = Math.min(byteCount, buffer.size);</span><br><span class="line">  <span class="keyword">return</span> buffer.read(sink, toRead);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -311,6 +311,7 @@
 <h2 id="readAll"><a href="#readAll" class="headerlink" title="readAll()"></a>readAll()</h2><p>BufferedSource 的 readAll 方法提供了这点：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">readAll</span><span class="params">(Sink sink)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (sink == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"sink == null"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">long</span> totalBytesWritten = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (source.read(buffer, Segment.SIZE) != -<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">long</span> emitByteCount = buffer.completeSegmentByteCount();</span><br><span class="line">    <span class="keyword">if</span> (emitByteCount &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      totalBytesWritten += emitByteCount;</span><br><span class="line">      sink.write(buffer, emitByteCount);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (buffer.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    totalBytesWritten += buffer.size();</span><br><span class="line">    sink.write(buffer, buffer.size());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> totalBytesWritten;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以看到，都是通过每 Segment.SIZE 一次进行读取，然后再写出的。对于 BufferedSink 也是一样，也是通过缓冲区进行逐次写入。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -328,7 +329,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/RxJava/Retrofit-OkHttp%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BBmd.html" rel="next" title="Retrofit-OkHttp请求过程-源码阅读">
+                <a href="/RxJava/Retrofit-OkHttp请求过程-源码阅读md.html" rel="next" title="Retrofit-OkHttp请求过程-源码阅读">
                   <i class="fa fa-chevron-left"></i> Retrofit-OkHttp请求过程-源码阅读
                 </a>
             </div>
@@ -336,7 +337,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Docker/Docker%E7%9A%84overlay2%E7%AE%80%E8%BF%B0.html" rel="prev" title="Docker的overlay2简述">
+                <a href="/Docker/Docker的overlay2简述.html" rel="prev" title="Docker的overlay2简述">
                   Docker的overlay2简述 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -398,20 +399,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -423,10 +424,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -455,10 +456,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -533,7 +534,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/Okio%E7%9A%84%E6%A6%82%E5%BF%B5%E5%92%8C%E4%BD%BF%E7%94%A8.html",
+            url: "https://gowa.club/Android/Okio的概念和使用.html",
             identifier: "Android/Okio的概念和使用.html",
             title: "Okio的概念和使用"
           }

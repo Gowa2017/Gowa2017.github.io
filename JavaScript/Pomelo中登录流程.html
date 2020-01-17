@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="JavaScript,Pomelo">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Pomelo中登录流程">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;JavaScript&#x2F;Pomelo%E4%B8%AD%E7%99%BB%E5%BD%95%E6%B5%81%E7%A8%8B.html">
+<meta property="og:url" content="https://gowa.club/JavaScript/Pomelo中登录流程.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Pomelo做棋牌和小游戏确实是不错的，所以来了解一下其登录流程。客户端连接的建立是由 connector 组件完成的，在我们配置的 servers.json 中，只有前端服务器 frontend:true 才会加载这个组件（一般来说，我们只会设置 game, connector 为前端服务器）。同时这个组件会依赖 session 组件来维护连接信息。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-12-31T12:53:59.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pomelo中登录流程">
+<meta name="twitter:description" content="Pomelo做棋牌和小游戏确实是不错的，所以来了解一下其登录流程。客户端连接的建立是由 connector 组件完成的，在我们配置的 servers.json 中，只有前端服务器 frontend:true 才会加载这个组件（一般来说，我们只会设置 game, connector 为前端服务器）。同时这个组件会依赖 session 组件来维护连接信息。">
 
-<link rel="canonical" href="https://gowa.club/JavaScript/Pomelo%E4%B8%AD%E7%99%BB%E5%BD%95%E6%B5%81%E7%A8%8B.html">
+<link rel="canonical" href="https://gowa.club/JavaScript/Pomelo中登录流程.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Pomelo%E4%B8%AD%E7%99%BB%E5%BD%95%E6%B5%81%E7%A8%8B.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Pomelo中登录流程.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/JavaScript/Pomelo%E4%B8%AD%E7%99%BB%E5%BD%95%E6%B5%81%E7%A8%8B.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/JavaScript/Pomelo中登录流程.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/Pomelo中登录流程.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,20 +294,16 @@
       
         <p>Pomelo做棋牌和小游戏确实是不错的，所以来了解一下其登录流程。客户端连接的建立是由 connector 组件完成的，在我们配置的 servers.json 中，只有前端服务器 frontend:true 才会加载这个组件（一般来说，我们只会设置 game, connector 为前端服务器）。同时这个组件会依赖 session 组件来维护连接信息。</p>
 <a id="more"></a>
-
 <h1 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h1><p>一般来说，我们会和 gate 建立连接，请求一个可以接入服务器的 connector。 之后我们就会和对应的 connector 建立连接。我们以 网易 demo中的 lordofpomelo 来看。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// web-server/public/js/ui/clientManager.js</span></span><br><span class="line"></span><br><span class="line">      $.post(httpHost + <span class="string">'login'</span>, &#123;<span class="attr">username</span>: username, <span class="attr">password</span>: pwd&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (data.code === <span class="number">501</span>) &#123;</span><br><span class="line">          alert(<span class="string">'Username or password is invalid!'</span>);</span><br><span class="line">          loading = <span class="literal">false</span>;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (data.code !== <span class="number">200</span>) &#123;</span><br><span class="line">          alert(<span class="string">'Username is not exists!'</span>);</span><br><span class="line">          loading = <span class="literal">false</span>;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        authEntry(data.uid, data.token, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">          loading = <span class="literal">false</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">        localStorage.setItem(<span class="string">'username'</span>, username);</span><br><span class="line">      &#125;);</span><br></pre></td></tr></table></figure>
-
 <p>有点意外哈，其是用 post 的方式在当前网页上进行登录的。我们看一下登录的过程：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// web-server/app.js</span></span><br><span class="line"></span><br><span class="line">app.post(<span class="string">'/login'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">req, res</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> msg = req.body;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> username = msg.username;</span><br><span class="line">  <span class="keyword">var</span> pwd = msg.password;</span><br><span class="line">  <span class="keyword">if</span> (!username || !pwd) &#123;</span><br><span class="line">    res.send(&#123;<span class="attr">code</span>: <span class="number">500</span>&#125;);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  userDao.getUserByName(username, <span class="function"><span class="keyword">function</span>(<span class="params">err, user</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err || !user) &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'username not exist!'</span>);</span><br><span class="line">      res.send(&#123;<span class="attr">code</span>: <span class="number">500</span>&#125;);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (pwd !== user.password) &#123;</span><br><span class="line">      <span class="comment">// TODO code</span></span><br><span class="line">      <span class="comment">// password is wrong</span></span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'password incorrect!'</span>);</span><br><span class="line">      res.send(&#123;<span class="attr">code</span>: <span class="number">501</span>&#125;);</span><br><span class="line">      <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">console</span>.log(username + <span class="string">' login!'</span>);</span><br><span class="line">    res.send(&#123;<span class="attr">code</span>: <span class="number">200</span>, <span class="attr">token</span>: Token.create(user.id, <span class="built_in">Date</span>.now(), secret), <span class="attr">uid</span>: user.id&#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
 <p>简单的验证了一下账号密码后，通过 user.id，和当前时间生成一个 token 进行返回。</p>
 <p>从第一部分我们知道，在登录成功后，其调用了 authEntry() 方法。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">authEntry</span>(<span class="params">uid, token, callback</span>) </span>&#123;</span><br><span class="line">  queryEntry(uid, <span class="function"><span class="keyword">function</span>(<span class="params">host, port</span>) </span>&#123;</span><br><span class="line">    entry(host, port, token, callback);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">queryEntry</span>(<span class="params">uid, callback</span>) </span>&#123;</span><br><span class="line">  pomelo.init(&#123;<span class="attr">host</span>: config.GATE_HOST, <span class="attr">port</span>: config.GATE_PORT, <span class="attr">log</span>: <span class="literal">true</span>&#125;, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    pomelo.request(<span class="string">'gate.gateHandler.queryEntry'</span>, &#123; <span class="attr">uid</span>: uid&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">      pomelo.disconnect();</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span>(data.code === <span class="number">2001</span>) &#123;</span><br><span class="line">        alert(<span class="string">'Servers error!'</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      callback(data.host, data.port);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">  </span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">entry</span>(<span class="params">host, port, token, callback</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// init socketClient</span></span><br><span class="line">  <span class="comment">// TODO for development</span></span><br><span class="line">  <span class="keyword">if</span>(host === <span class="string">'127.0.0.1'</span>) &#123;</span><br><span class="line">    host = config.GATE_HOST;</span><br><span class="line">  &#125;</span><br><span class="line">  pomelo.init(&#123;<span class="attr">host</span>: host, <span class="attr">port</span>: port, <span class="attr">log</span>: <span class="literal">true</span>&#125;, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    pomelo.request(<span class="string">'connector.entryHandler.entry'</span>, &#123;<span class="attr">token</span>: token&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> player = data.player;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (callback) &#123;</span><br><span class="line">        callback(data.code);</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (data.code == <span class="number">1001</span>) &#123;</span><br><span class="line">        alert(<span class="string">'Login fail!'</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (data.code == <span class="number">1003</span>) &#123;</span><br><span class="line">        alert(<span class="string">'Username not exists!'</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (data.code != <span class="number">200</span>) &#123;</span><br><span class="line">        alert(<span class="string">'Login Fail!'</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// init handler</span></span><br><span class="line">      loginMsgHandler.init();</span><br><span class="line">      gameMsgHandler.init();</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (!player || player.id &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">        switchManager.selectView(<span class="string">"heroSelectPanel"</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        afterLogin(data);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>其基本经历了，与 game建立连接，获取 connector， 与 connector 建立连接，进行进入请求的过程。接下来到客户端我们的处理。</p>
 <h1 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h1><p>客户端最终发送了一个 <code>pomelo.request(&#39;connector.entryHandler.entry&#39;, {token: token}, function(data) {}</code> 的请求，这个请求根据其路由回由  connector.entryHandler.entry 处理，一目了然。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">pro.entry = <span class="function"><span class="keyword">function</span>(<span class="params">msg, session, next</span>) </span>&#123;</span><br><span class="line">	<span class="keyword">var</span> token = msg.token, self = <span class="keyword">this</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span>(!token) &#123;</span><br><span class="line">		next(<span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'invalid entry request: empty token'</span>), &#123;<span class="attr">code</span>: Code.FAIL&#125;);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> uid, players, player;</span><br><span class="line">	<span class="keyword">async</span>.waterfall([</span><br><span class="line">		<span class="function"><span class="keyword">function</span>(<span class="params">cb</span>) </span>&#123;</span><br><span class="line">			<span class="comment">// auth token 根据 token 来计算机出 user</span></span><br><span class="line">			self.app.rpc.auth.authRemote.auth(session, token, cb);</span><br><span class="line">		&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">code, user, cb</span>) </span>&#123;</span><br><span class="line">			<span class="comment">// query player info by user id</span></span><br><span class="line">			<span class="keyword">if</span>(code !== Code.OK) &#123;</span><br><span class="line">				next(<span class="literal">null</span>, &#123;<span class="attr">code</span>: code&#125;);</span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span>(!user) &#123;</span><br><span class="line">				next(<span class="literal">null</span>, &#123;<span class="attr">code</span>: Code.ENTRY.FA_USER_NOT_EXIST&#125;);</span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			uid = user.id;</span><br><span class="line">			userDao.getPlayersByUid(user.id, cb);</span><br><span class="line">		&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">res, cb</span>) </span>&#123;</span><br><span class="line">			<span class="comment">// generate session and register chat status</span></span><br><span class="line">			players = res;</span><br><span class="line">			self.app.get(<span class="string">'sessionService'</span>).kick(uid, cb);</span><br><span class="line">		&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">cb</span>) </span>&#123;</span><br><span class="line">            <span class="comment">// 将 serssion 与 uid 相绑定。</span></span><br><span class="line">			session.bind(uid, cb);</span><br><span class="line">		&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">cb</span>) </span>&#123;</span><br><span class="line">			<span class="keyword">if</span>(!players || players.length === <span class="number">0</span>) &#123;</span><br><span class="line">				next(<span class="literal">null</span>, &#123;<span class="attr">code</span>: Code.OK&#125;);</span><br><span class="line">				<span class="keyword">return</span>;</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">			player = players[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 设置一些信息到 session 中</span></span><br><span class="line">			session.set(<span class="string">'serverId'</span>, self.app.get(<span class="string">'areaIdMap'</span>)[player.areaId]);</span><br><span class="line">			session.set(<span class="string">'playername'</span>, player.name);</span><br><span class="line">			session.set(<span class="string">'playerId'</span>, player.id);</span><br><span class="line">			session.on(<span class="string">'closed'</span>, onUserLeave.bind(<span class="literal">null</span>, self.app));</span><br><span class="line">			session.pushAll(cb);</span><br><span class="line">		&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">cb</span>) </span>&#123;</span><br><span class="line">            <span class="comment">// 加入频道</span></span><br><span class="line">			self.app.rpc.chat.chatRemote.add(session, player.userId, player.name,</span><br><span class="line">				channelUtil.getGlobalChannelName(), cb);</span><br><span class="line">		&#125;</span><br><span class="line">	], <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">		<span class="keyword">if</span>(err) &#123;</span><br><span class="line">			next(err, &#123;<span class="attr">code</span>: Code.FAIL&#125;);</span><br><span class="line">			<span class="keyword">return</span>;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		next(<span class="literal">null</span>, &#123;<span class="attr">code</span>: Code.OK, <span class="attr">player</span>: players ? players[<span class="number">0</span>] : <span class="literal">null</span>&#125;);</span><br><span class="line">	&#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
 <p>看起来很简单，先是验证了一下 token 是否有效，接着就调用了一系列的函数。这里不禁就要问一下 waterfall 是什么意思。根据 <a href="https://caolan.github.io/async/docs.html" target="_blank" rel="noopener">官方定义</a>。 waterfall 是序列化的执行一个数组内的异步函数，每个函数的输出作为下一函数的输入；如果有任何函数出错，那么就会立刻执行最后的那个回调函数。同时异步函数的形式的最后一个回调函数形入 function cb(err, results….)。</p>
 <p>其执行过程是：</p>
 <ol>
@@ -318,6 +316,7 @@
 <li>返回。</li>
 </ol>
 <p>我在这里有一个疑问就是，session 是在哪里建立的？是 connector 服务器（前端服务器） 加载的 connector组件， session 组件在连接建立的时候创建的。所以能传递给 entry 函数。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -335,7 +334,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/JavaScript/Pomelo%E5%86%85%E5%BB%BA%E7%BB%84%E4%BB%B6%E5%8F%8A%E6%B8%B8%E6%88%8F%E9%9C%80%E8%A6%81%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF.html" rel="next" title="Pomelo内建组件及游戏需要实现的一些东西">
+                <a href="/JavaScript/Pomelo内建组件及游戏需要实现的一些东西.html" rel="next" title="Pomelo内建组件及游戏需要实现的一些东西">
                   <i class="fa fa-chevron-left"></i> Pomelo内建组件及游戏需要实现的一些东西
                 </a>
             </div>
@@ -343,7 +342,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/JavaScript/Pomelo%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B.html" rel="prev" title="Pomelo的启动流程">
+                <a href="/JavaScript/Pomelo的启动流程.html" rel="prev" title="Pomelo的启动流程">
                   Pomelo的启动流程 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -405,20 +404,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -430,10 +429,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -462,10 +461,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -540,7 +539,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/JavaScript/Pomelo%E4%B8%AD%E7%99%BB%E5%BD%95%E6%B5%81%E7%A8%8B.html",
+            url: "https://gowa.club/JavaScript/Pomelo中登录流程.html",
             identifier: "JavaScript/Pomelo中登录流程.html",
             title: "Pomelo中登录流程"
           }

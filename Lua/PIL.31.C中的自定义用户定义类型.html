@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Lua,PIL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PIL.31.C中的自定义用户定义类型">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Lua&#x2F;PIL.31.C%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%A8%E6%88%B7%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B.html">
+<meta property="og:url" content="https://gowa.club/Lua/PIL.31.C中的自定义用户定义类型.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="通过实现了一个 BitArray 来展示如何将 C 中的数据类型交给 Lua 来进行管理。基本的逻辑就是利用了 userdata 这么一个 Lua 的数据类型。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-10-15T00:52:25.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PIL.31.C中的自定义用户定义类型">
+<meta name="twitter:description" content="通过实现了一个 BitArray 来展示如何将 C 中的数据类型交给 Lua 来进行管理。基本的逻辑就是利用了 userdata 这么一个 Lua 的数据类型。">
 
-<link rel="canonical" href="https://gowa.club/Lua/PIL.31.C%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%A8%E6%88%B7%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B.html">
+<link rel="canonical" href="https://gowa.club/Lua/PIL.31.C中的自定义用户定义类型.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.31.C%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%A8%E6%88%B7%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.31.C中的自定义用户定义类型.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/PIL.31.C%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%A8%E6%88%B7%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/PIL.31.C中的自定义用户定义类型.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/PIL.31.C中的自定义用户定义类型.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,10 +294,8 @@
       
         <p>通过实现了一个 BitArray 来展示如何将 C 中的数据类型交给 Lua 来进行管理。基本的逻辑就是利用了 userdata 这么一个 Lua 的数据类型。</p>
 <a id="more"></a>
-
 <p>对于要实现的这个 Boolean 数组，先定义了以下几个宏：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;limits.h&gt;</span></span></span><br><span class="line">      </span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BITS_PER_WORD (CHAR_BIT * sizeof(unsigned int))</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> I_WORD(i)     ((unsigned int)(i) / BITS_PER_WORD)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> I_BIT(i)      (1 &lt;&lt; ((unsigned int)(i) % BITS_PER_WORD))”</span></span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>BITS_PER_WORD 是每个 usigned int 中的位数。</li>
 <li>I_WORD 用来计算索引  i  处于哪一个 WORD。</li>
@@ -303,100 +303,69 @@
 </ul>
 <p>将数组定义成如下：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">BitArray</span> &#123;</span></span><br><span class="line">  <span class="keyword">int</span> <span class="built_in">size</span>;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> value[<span class="number">1</span>];</span><br><span class="line">&#125; BitArray;</span><br></pre></td></tr></table></figure>
-
 <p>这里 value 的大小是 1 ，而不是0，是因为 C89 不允许值为 0 的数组，我们会在实际代码中的分配这个尺寸，有 <strong>n</strong> 个元素的 BitArray 大小用以下表达式来计算：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">sizeof</span>(BitArray) + I_WORD(n<span class="number">-1</span>)*<span class="keyword">sizeof</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span>)</span><br></pre></td></tr></table></figure>
-
 <p>之所以将 n 减去，是因为我们在定义  BitArray 的时候，就已经给他留出了一 1 个元素的位置。</p>
 <h1 id="UserData"><a href="#UserData" class="headerlink" title="UserData"></a>UserData</h1><p>在第一个版本，我们会显式的调用 <code>set/get</code> 来获取值，如：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">a = array.new(<span class="number">1000</span>)</span><br><span class="line"><span class="keyword">for</span> i=<span class="number">1</span>, <span class="number">1000</span> <span class="keyword">do</span></span><br><span class="line">	array.set(a, i, i % <span class="number">2</span> == <span class="number">0</span>)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(array.get(a, <span class="number">10</span>))</span><br><span class="line"><span class="built_in">print</span>(array.get(a, <span class="number">11</span>))</span><br><span class="line"><span class="built_in">print</span>(array.size(a))</span><br></pre></td></tr></table></figure>
-
-
-
 <p>在后面会改造成用面象对象的版本，如 <code>a:get(i)</code> 这样。</p>
 <p>这几个操作的 C 代码如下：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">newArray</span> <span class="params">(lua_State *L)</span></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> i;</span><br><span class="line">  <span class="keyword">size_t</span> nbytes;</span><br><span class="line">  BitArray *a;</span><br><span class="line">  <span class="keyword">int</span> n = (<span class="keyword">int</span>)luaL_checkinteger(L, <span class="number">1</span>); <span class="comment">/* 需要的 bit 数量 */</span></span><br><span class="line">  luaL_argcheck(L, n &gt;= <span class="number">1</span>, <span class="number">1</span>, <span class="string">"invalid size"</span>);</span><br><span class="line">  nbytes = <span class="keyword">sizeof</span>(BitArray) + I_WORD(n - <span class="number">1</span>)*<span class="keyword">sizeof</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span>);</span><br><span class="line">  </span><br><span class="line">  a = (BitArray *)lua_newuserdata(L, nbytes);</span><br><span class="line">  a-&gt;<span class="built_in">size</span> = n;</span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= I_WORD(n - <span class="number">1</span>); i++)</span><br><span class="line">    a-&gt;value[i] = <span class="number">0</span>; <span class="comment">/* 初始化 */</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">setarray</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">        BitArray *a = (BitArray *)lua_touserdata(L, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">int</span> index = (<span class="keyword">int</span>)luaL_checkinteger(L, <span class="number">2</span>) - <span class="number">1</span>;</span><br><span class="line">      </span><br><span class="line">        luaL_argcheck(L, a != <span class="literal">NULL</span>, <span class="number">1</span>, <span class="string">"'array' expected"</span>);</span><br><span class="line">        luaL_argcheck(L, <span class="number">0</span> &lt;= index &amp;&amp; index &lt; a-&gt;<span class="built_in">size</span>, <span class="number">2</span>,</span><br><span class="line">                         <span class="string">"index out of range"</span>);</span><br><span class="line">        luaL_checkany(L, <span class="number">3</span>);</span><br><span class="line">      </span><br><span class="line">        <span class="keyword">if</span> (lua_toboolean(L, <span class="number">3</span>))</span><br><span class="line">          a-&gt;values[I_WORD(index)] |= I_BIT(index);  <span class="comment">/* set bit */</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">          a-&gt;values[I_WORD(index)] &amp;= ~I_BIT(index);  <span class="comment">/* reset bit */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getarray</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">        BitArray *a = (BitArray *)lua_touserdata(L, <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">int</span> index = (<span class="keyword">int</span>)luaL_checkinteger(L, <span class="number">2</span>) - <span class="number">1</span>;</span><br><span class="line">      </span><br><span class="line">        luaL_argcheck(L, a != NULL, 1, ”'array' expected");</span><br><span class="line">        luaL_argcheck(L, <span class="number">0</span> &lt;= index &amp;&amp; index &lt; a-&gt;<span class="built_in">size</span>, <span class="number">2</span>,</span><br><span class="line">                         <span class="string">"index out of range"</span>);</span><br><span class="line">        luaL_checkany(L, <span class="number">3</span>);</span><br><span class="line">      </span><br><span class="line">        <span class="keyword">if</span> (lua_toboolean(L, <span class="number">3</span>))</span><br><span class="line">          a-&gt;values[I_WORD(index)] |= I_BIT(index);  <span class="comment">/* set bit */</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">          a-&gt;values[I_WORD(index)] &amp;= ~I_BIT(index);  <span class="comment">/* reset bit */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <p>我们的定义个考虑是如何在 Lua 中表示 C 类型， Lua 提供了一个叫做 <em>userdata</em> 的基础类型。一个 <em>userdata</em> 提供了一块内存区域， Lua 没有对其进行任何预定义的操作，因此我们可以用它来存储任何内容。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">lua_newuserdata</span> <span class="params">(lua_State *L, <span class="keyword">size_t</span> <span class="built_in">size</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-
 <p>这个函数会分配一块 <em>size</em> 大小的内存，然后会将返回的 <em>userdata</em> 压到栈上，然后返回这个内存块的地址。如果因为某些原因我们需要通过其他途径来分配内存，我们可以创建一个指针大小的 <em>userdata</em>，然后用它来存在指向真正内存区域的指针。在 <strong>第32章 资源管理</strong> 有进行介绍。</p>
-<p>我们的第一个函数 <code>newarray()</code> 使用  <code>lua_newuserdata</code> 来创建新数组。代码很直观，其检查我们数组大小（以 bit 来计量），计算出以 byte 为的大小，以这个合适的大小来创建一个 <em>userdata*，初始化内容，最后返回 *userdata</em> 到指针。</p>
+<p>我们的第一个函数 <code>newarray()</code> 使用  <code>lua_newuserdata</code> 来创建新数组。代码很直观，其检查我们数组大小（以 bit 来计量），计算出以 byte 为的大小，以这个合适的大小来创建一个 <em>userdata</em>，初始化内容，最后返回 <em>userdata</em> 到指针。</p>
 <p><code>setarray</code> 接收三个参数：数组本身，索引，新值。其假设索引是从 1 开始的，和 Lua 一样。因为 Lua 可以用任何值来表示 Boolean，所以我们用 <code>luaL_checkany</code> 来检查是否存在第三个参数就行了。如果我们的参数错误，那么就会得出一个比较明确的提示信息：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">array.set(<span class="number">0</span>, <span class="number">11</span>, <span class="number">0</span>)</span><br><span class="line">  <span class="comment">--&gt; stdin:1: bad argument #1 to 'set' ('array' expected)</span></span><br><span class="line">array.set(a, <span class="number">1</span>)</span><br><span class="line">  <span class="comment">--&gt; stdin:1: bad argument #3 to 'set' (value expected)”</span></span><br></pre></td></tr></table></figure>
-
-
-
 <p>最后一个函数 <code>getarray</code>，与 <code>setarray</code> 类似，不细说。</p>
 <p>我们也要定义一个函数来获取我们数组的大小：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getsize</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  BitArray *a = (BitArray *)lua_touserdata(L, <span class="number">1</span>);</span><br><span class="line">  luaL_argcheck(L, a != <span class="literal">NULL</span>, <span class="number">1</span>, <span class="string">"'array' expected"</span>);</span><br><span class="line">  lua_pushinteger(L, a-&gt;<span class="built_in">size</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>接下来我们就需要把这些函数给注册到 Lua，我们利用了 <code>luaL_newlib</code> 函数：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">luaL_Reg</span> <span class="title">arraylib</span> [] = &#123;</span></span><br><span class="line">  &#123;<span class="string">"new"</span>, newarray&#125;,</span><br><span class="line">  &#123;<span class="string">"set"</span>, setarray&#125;,</span><br><span class="line">  &#123;<span class="string">"get"</span>, getarray&#125;,</span><br><span class="line">  &#123;<span class="string">"size"</span>, getsize&#125;,</span><br><span class="line">  &#123;<span class="literal">NULL</span>, <span class="literal">NULL</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">luaopen_array</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  luaL_newlib(L, arraylib);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>这样我们就可以用文首的那种形式来调用这些函数，构造对象了。</p>
-<h1 id="元表-Metatables"><a href="#元表-Metatables" class="headerlink" title="元表(Metatables)"></a>元表(Metatables)</h1><p>我们当前的实现有一个很主要的危险。如果用户以写出了这样的代码：<code>array.set(io.stdin, 1, false)</code>。<em>io.stdin</em> 是一个值是一个 <em>userdata</em>，其中存储一个指向<em>流 File*</em> 的指针。因为其是一个 <em>userdata</em>，因此 <code>array.set</code> 会接受这个参数。可能的结果就是内存错误。Lua 库中这种行为是不可预知的。无论我们如何使用一个库，我们都不应该让 C 环境或者 Lua 系统给崩溃掉。</p>
+<h1 id="元表-Metatables"><a href="#元表-Metatables" class="headerlink" title="元表(Metatables)"></a>元表(Metatables)</h1><p>我们当前的实现有一个很主要的危险。如果用户以写出了这样的代码：<code>array.set(io.stdin, 1, false)</code>。<em>io.stdin</em> 是一个值是一个 <em>userdata</em>，其中存储一个指向<em>流 File** 的指针。因为其是一个 </em>userdata*，因此 <code>array.set</code> 会接受这个参数。可能的结果就是内存错误。Lua 库中这种行为是不可预知的。无论我们如何使用一个库，我们都不应该让 C 环境或者 Lua 系统给崩溃掉。</p>
 <p>通常，用来区别一个 <em>userdata</em> 类型与另外一个 <em>userdata</em> 类型的方法是为其创建一个特定的 元表。每当我们创建一个 <em>userdata</em> 的时候，我们就为其指定一个对应的 <strong>元表</strong>；每当我们获取一个 <em>userdata</em> 的时候，我们都要检查其是否拥有对应的 <strong>元表</strong>。Lua 代码是无法修改 <em>userdata</em> 的 <strong>元表</strong> 的，所以其无法欺骗这种检查。</p>
 <p>我们也需要空间来存在这个新的 metatable，以便我们在创建 <em>userdata</em> 的时候能够访问它，同时用它来检查一个 <em>userdata</em> 是否有正确的类型。有两种可选的方法：1）存储在全局注册表；2）作为库函数中的 <strong>上值</strong> 存储。这个可以根据自己的需求来，为了将 C 类型注册到全局注册表，使用 <strong>类型名称</strong> 作为键，使用 metatable 作为值。需要注意的就是，键名一定不要和其他的相冲突。我们的例子中使用 <strong>LuaBook.array</strong> 来作为键。</p>
 <p>Lua的辅助库提供了一些函数来帮助我们。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span>   <span class="title">luaL_newmetatable</span> <span class="params">(lua_State *L, <span class="keyword">const</span> <span class="keyword">char</span> *tname)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span>  <span class="title">luaL_getmetatable</span> <span class="params">(lua_State *L, <span class="keyword">const</span> <span class="keyword">char</span> *tname)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> *<span class="title">luaL_checkudata</span>   <span class="params">(lua_State *L, <span class="keyword">int</span> index,</span></span></span><br><span class="line"><span class="function"><span class="params">                                       <span class="keyword">const</span> <span class="keyword">char</span> *tname)</span></span>;”</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>luaL_newmetatable 创建一个新表（将会被用做 metatable），将其放在栈顶，以 tname 为索引存储在全局注册表内。</li>
 <li>luaL_getmetatable 从全局注册表内用键 tname 获取 metatable。</li>
-<li>luaL_checkudata 检查栈上的位置 index 是否是一个 <em>userdata*，同时其有一个名叫 tname 的元表。不是 *userdata</em> 或没有对应的元表都会产生一个错误，否则的话，其会返回 <em>userdata</em> 的地址。</li>
+<li>luaL_checkudata 检查栈上的位置 index 是否是一个 <em>userdata</em>，同时其有一个名叫 tname 的元表。不是 <em>userdata</em> 或没有对应的元表都会产生一个错误，否则的话，其会返回 <em>userdata</em> 的地址。</li>
 </ul>
 <p>现在开始我们的改造，第一步是改变打开库的函数，使其先创建 metatable：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">luaopen_array</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  luaL_newmetatable(L, <span class="string">"LuaBook.array"</span>);</span><br><span class="line">  luaL_newlib(L, arraylib);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>下一步就是改造创建对象的函数：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">newarray</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">int</span> i;</span><br><span class="line">  <span class="keyword">size_t</span> nbytes;</span><br><span class="line">  BitArray *a;</span><br><span class="line">  <span class="keyword">int</span> n = (<span class="keyword">int</span>)luaL_checkinteger(L, <span class="number">1</span>); <span class="comment">/* 需要的 bit 数量 */</span></span><br><span class="line">  luaL_argcheck(L, n &gt;= <span class="number">1</span>, <span class="number">1</span>, <span class="string">"invalid size"</span>);</span><br><span class="line">  nbytes = <span class="keyword">sizeof</span>(BitArray) + I_WORD(n - <span class="number">1</span>)*<span class="keyword">sizeof</span>(<span class="keyword">unsigned</span> <span class="keyword">int</span>);</span><br><span class="line"></span><br><span class="line">  a = (BitArray *)lua_newuserdata(L, nbytes);</span><br><span class="line">  a-&gt;<span class="built_in">size</span> = n;</span><br><span class="line">  <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt;= I_WORD(n - <span class="number">1</span>); i++)</span><br><span class="line">    a-&gt;value[i] = <span class="number">0</span>; <span class="comment">/* 初始化 */</span></span><br><span class="line"></span><br><span class="line">  luaL_getmetatable(L, <span class="string">"LuaBook.array"</span>);</span><br><span class="line">  lua_setmetatable(L, <span class="number">-2</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">/* new userdata is already on the stack */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><code>lua_setmetatable</code> 会从栈顶弹出一个表，并此表设置为 对应索引处的元表。在我们的代码中，索引处的对象是 <em>userdata</em>。</p>
 <p>最后，<code>setarray,getarray,getsize</code> 必须检查他们收到的参数是否是一个有效的数组。我们简化任务，点定义了宏：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> checkarray(L) \</span></span><br><span class="line">				(BitArray *)luaL_checkudata(L, <span class="number">1</span>, <span class="string">"LuaBook.array"</span>)</span><br></pre></td></tr></table></figure>
-
 <p>改造后的 <code>getsize</code> 看起来是这样：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getsize</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  BitArray *a = checkarray(L);</span><br><span class="line">  lua_pushinteger(L, a-&gt;<span class="built_in">size</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>因为 <code>setarray, getarray</code> 都使用相同的代码来读取和检查其第二个参数，我们来构造一个新的辅助函数：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> *<span class="title">getparams</span> <span class="params">(lua_State *L,</span></span></span><br><span class="line"><span class="function"><span class="params">                                <span class="keyword">unsigned</span> <span class="keyword">int</span> *mask)</span> </span>&#123;</span><br><span class="line">  BitArray *a = checkarray(L);</span><br><span class="line">  <span class="keyword">int</span> index = (<span class="keyword">int</span>)luaL_checkinteger(L, <span class="number">2</span>) - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  luaL_argcheck(L, <span class="number">0</span> &lt;= index &amp;&amp; index &lt; a-&gt;<span class="built_in">size</span>, <span class="number">2</span>,</span><br><span class="line">                   <span class="string">"index out of range"</span>);</span><br><span class="line"></span><br><span class="line">  *mask = I_BIT(index);  <span class="comment">/* mask to access correct bit */</span></span><br><span class="line">  <span class="keyword">return</span> &amp;a-&gt;values[I_WORD(index)]; <span class="comment">/* word address */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">setarray</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> mask;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> *entry = getparams(L, &amp;mask);</span><br><span class="line">  luaL_checkany(L, <span class="number">3</span>);</span><br><span class="line">  <span class="keyword">if</span> (lua_toboolean(L, <span class="number">3</span>))</span><br><span class="line">    *entry |= mask;”</span><br><span class="line">  <span class="keyword">int</span> index = (<span class="keyword">int</span>)luaL_checkinteger(L, <span class="number">2</span>) - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">  luaL_argcheck(L, <span class="number">0</span> &lt;= index &amp;&amp; index &lt; a-&gt;<span class="built_in">size</span>, <span class="number">2</span>,</span><br><span class="line">                   <span class="string">"index out of range"</span>);</span><br><span class="line"></span><br><span class="line">  *mask = I_BIT(index);  <span class="comment">/* mask to access correct bit */</span></span><br><span class="line">  <span class="keyword">return</span> &amp;a-&gt;values[I_WORD(index)]; <span class="comment">/* word address */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">setarray</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> mask;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> *entry = getparams(L, &amp;mask);</span><br><span class="line">  luaL_checkany(L, <span class="number">3</span>);</span><br><span class="line">  <span class="keyword">if</span> (lua_toboolean(L, <span class="number">3</span>))</span><br><span class="line">    *entry |= mask;</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    *entry &amp;= ~mask;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getarray</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> mask;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> *entry = getparams(L, &amp;mask);</span><br><span class="line">  lua_pushboolean(L, *entry &amp; mask);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>采用这种办法，之前说到的代码就不会被禁止执行：</p>
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line">a = <span class="built_in">array</span>.<span class="built_in">get</span>(io.<span class="built_in">stdin</span>, <span class="number">10</span>)</span><br><span class="line">--&gt; bad argument #1 to 'get' (LuaBook.array expected, got FILE*)”</span><br></pre></td></tr></table></figure>
-
-
-
 <h1 id="面向对象访问"><a href="#面向对象访问" class="headerlink" title="面向对象访问"></a>面向对象访问</h1><p>我们的下一步动作是将我们新的类型转换为对象，然后我们就可以用面向对象的语法来操纵它了，如：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">a = array.new(<span class="number">1000</span>)</span><br><span class="line"><span class="built_in">print</span>(a:size())     <span class="comment">--&gt; 1000</span></span><br><span class="line">a:set(<span class="number">10</span>, <span class="literal">true</span>)</span><br><span class="line"><span class="built_in">print</span>(a:get(<span class="number">10</span>))    <span class="comment">--&gt; true”</span></span><br></pre></td></tr></table></figure>
-
-<p>我们要记住一 的：<code>a:size()</code> 与 <code>a.size(a)</code>  一致的，不过是个语法糖而已。因此，我们必须让表达式<code>a.size</code> 来返回我们的函数 <code>getsize()</code>。这里的关键在于 <strong>__index</strong> 元方法。对于表来说，如果其在表内找不到一个键的存在，那么就其就会调用这个元方法。对于 <em>userdata*，其总是会访问到，因为 *userdata</em> 是没有任何键的。</p>
+<p>我们要记住一 的：<code>a:size()</code> 与 <code>a.size(a)</code>  一致的，不过是个语法糖而已。因此，我们必须让表达式<code>a.size</code> 来返回我们的函数 <code>getsize()</code>。这里的关键在于 <strong>__index</strong> 元方法。对于表来说，如果其在表内找不到一个键的存在，那么就其就会调用这个元方法。对于 <em>userdata</em>，其总是会访问到，因为 <em>userdata</em> 是没有任何键的。</p>
 <p>假设我们运行下面的代码：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">do</span></span><br><span class="line">  <span class="keyword">local</span> metaarray = <span class="built_in">getmetatable</span>(array.new(<span class="number">1</span>))</span><br><span class="line">  metaarray.<span class="built_in">__index</span> = metaarray</span><br><span class="line">  metaarray.set = array.set</span><br><span class="line">  metaarray.get = array.get</span><br><span class="line">  metaarray.size = array.size</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>首先，我们创建一个数组，目的只是为了获取它的元表，然后将其赋值给 metaarray。（我们不可以从 Lua 代码内设置 userdata 的元表，但是我们可以获取它）。接着我们设置 <em>metaarray.__index = metaarray</em>。当我们计算 <code>a.size</code>的时候，Lua 在 对象 a 内找不到键 <em>size</em>，因为对象是一个<em>userdata</em>。那么 Lua 就会尝试在 a 的元表中的 元方法 <strong>__index</strong> 获取值。然而，metaarray.size 是 array.size，所以 a.size(a) 会调用到 array.size(a)，和我们的希望一致。</p>
 <p>当然，我们可以在 C 中写类似的东西，甚至干得更好：现在这些数组是对象，有其自定义的操作哦，我们不再需要将这些操作放在表 array 内。我们的库只需要导出的只有一个函数  <code>new</code>，用来创建数组对象。所有其他的操作都只是以方法的形式提供。 C 代码可以直接这样进行注册。</p>
 <p>操作 <code>getsize, getarray, setarray</code> 不需要做什么改变，改变的是我们怎么样注册他们。也就是说，我们需要改变我们打开这个库的代码。首先，我们需要两个独立的函数列表：一个针对常规的函数，一个针对对象的方法：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">luaL_Reg</span> <span class="title">arraylib_f</span> [] = &#123;</span></span><br><span class="line">  &#123;<span class="string">"new"</span>, newarray&#125;,</span><br><span class="line">  &#123;<span class="literal">NULL</span>, <span class="literal">NULL</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">luaL_Reg</span> <span class="title">arraylib_m</span> [] = &#123;</span></span><br><span class="line">  &#123;<span class="string">"set"</span>, setarray&#125;,</span><br><span class="line">  &#123;<span class="string">"get"</span>, getarray&#125;,</span><br><span class="line">  &#123;<span class="string">"size"</span>, getsize&#125;,</span><br><span class="line">  &#123;<span class="literal">NULL</span>, <span class="literal">NULL</span>&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
 <p>新版本的 <code>luaopen_array</code> 函数必须创建 <strong>元表</strong>，同时将其赋给自己的 <strong>__index</strong> 元方法，同时将所有的方法都注册到这个元表内，最后创建和填充 array 表：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">luaopen_array</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  luaL_newmetatable(L, <span class="string">"LuaBook.array"</span>);  <span class="comment">/* create metatable */</span></span><br><span class="line">  lua_pushvalue(L, <span class="number">-1</span>);  <span class="comment">/* duplicate the metatable */</span></span><br><span class="line">  lua_setfield(L, <span class="number">-2</span>, <span class="string">"__index"</span>);  <span class="comment">/* mt.__index = mt */</span></span><br><span class="line">  luaL_setfuncs(L, arraylib_m, <span class="number">0</span>);  <span class="comment">/* register metamethods */</span></span><br><span class="line">  luaL_newlib(L, arraylib_f);  <span class="comment">/* create lib table */</span></span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>这里，我们再次使用了 <code>luaL_setfunc</code> 来将 arraylib_m 中的方法注册到元表。然后我们使用 <code>luaL_newlib</code> 来建立一个新表，同时将 arraylib_f 中的方法注册进去。</p>
 <p>最后，我们为我们的类型添加一个 <strong>__tostring</strong> 方法，以便于让 <code>print(a)</code> 会打印出 <strong>array</strong>，加上其大小。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">array2string</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  BitArray *a = checkarray(L);</span><br><span class="line">  lua_pushfstring(L, <span class="string">"array(%d)"</span>, a-&gt;<span class="built_in">size</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
 <h1 id="数组访问"><a href="#数组访问" class="headerlink" title="数组访问"></a>数组访问</h1><p>一个更好的选择是使用面向对象中的数组概念来访问我们的数组：用 <code>a[i]</code> 代替 <code>a:get(i)</code>。在我们的例子中 ，这实现起来很简单 ，我们我们的 <code>getarry, setarray</code> 本身就接受索引作为参数的。一个比较快的在 Lua 中进行实现的方法如下：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> metaarray = <span class="built_in">getmetatable</span>(array.new(<span class="number">1</span>))</span><br><span class="line">metaarray.<span class="built_in">__index</span> = array.get</span><br><span class="line">metaarray.<span class="built_in">__newindex</span> = array.set</span><br><span class="line">metaarray.<span class="built_in">__len</span> = array.size</span><br></pre></td></tr></table></figure>
-
 <p>注意了，这种形式，不是我们以面向对象的 C 代码注册的时候使用的，而时使用前一种形式的。</p>
 <p>当我们以 a[1] 的形式进行访问的时候，实际上访问的是 <code>array.get(a,1)</code>，所以就能很好的达到我们的目标。</p>
 <p>当然，我们也可以在 C 里面做这个事情：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">luaL_Reg</span> <span class="title">arraylib_f</span> [] = &#123;</span></span><br><span class="line">  &#123;<span class="string">"new"</span>, newarray&#125;,</span><br><span class="line">  &#123;<span class="literal">NULL</span>, <span class="literal">NULL</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">luaL_Reg</span> <span class="title">arraylib_m</span> [] = &#123;</span></span><br><span class="line">  &#123;<span class="string">"__newindex"</span>, setarray&#125;,</span><br><span class="line">  &#123;<span class="string">"__index"</span>, getarray&#125;,</span><br><span class="line">  &#123;<span class="string">"__len"</span>, getsize&#125;,</span><br><span class="line">  &#123;<span class="string">"__tostring"</span>, array2string&#125;,</span><br><span class="line">  &#123;<span class="literal">NULL</span>, <span class="literal">NULL</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">luaopen_array</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  luaL_newmetatable(L, <span class="string">"LuaBook.array"</span>);</span><br><span class="line">  luaL_setfuncs(L, arraylib_m, <span class="number">0</span>);</span><br><span class="line">  luaL_newlib(L, arraylib_f);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>当然，我们如果不需要数组形式访问的话就不需要这样了。</p>
 <h1 id="LightUserdata"><a href="#LightUserdata" class="headerlink" title="LightUserdata"></a>LightUserdata</h1><p>我们之前所说的 <em>userdata</em> 实际上指的是 full userdata。Lua 有另外一种 userdata，叫做 Light userdata。</p>
 <p>一个 Light Userdata 实际上是一个代表 C 指针的值，一个 <code>void *</code> 值。一个 Light Userdata 是一个值，不是一个对象；我们不会创建它（就跟我们不会创建 number 一样）。</p>
@@ -415,6 +384,7 @@
 <p>事实上，两种方法的区别就是：在什么地方设置对象的元表的差异。</p>
 <h3 id="在-Lua-中实现"><a href="#在-Lua-中实现" class="headerlink" title="在 Lua 中实现"></a>在 Lua 中实现</h3><p>将库函数全部导出。在 Lua 调用对应的函数，生成一个 Full Userdata 对象。如果对象在建立的时候已经设置了元表，我们直接在元表 <strong>__index</strong> 指向的表内设置对应的库函数即可。一般来说，我们都会将 <strong>元表的 __index 设置为元表自身</strong>，所以直接在元表内进行操作是可行的。因为我们是在 Lua 内设置元表对应到我们的库函数，所以导出所有的库函数这是必然需要的。</p>
 <h3 id="在-C-中实现"><a href="#在-C-中实现" class="headerlink" title="在 C 中实现"></a>在 C 中实现</h3><p>只导出新建对象的函数到 Lua。将其余所有的要作为方法的函数放到一个全局的表内，然后将所有的要用做方法的函数导出到这个全局表内。然后在新建对象的时候，就将此表设置为对象的元表。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -432,7 +402,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Lua/windows-vs2017-%E7%8E%AF%E5%A2%83%E7%BC%96%E8%AF%91lua.html" rel="next" title="windows-vs2017-环境编译lua">
+                <a href="/Lua/windows-vs2017-环境编译lua.html" rel="next" title="windows-vs2017-环境编译lua">
                   <i class="fa fa-chevron-left"></i> windows-vs2017-环境编译lua
                 </a>
             </div>
@@ -440,7 +410,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Lua/PIL.32.Lua%E4%B8%AD%E7%9A%84%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86.html" rel="prev" title="PIL.32.Lua中的资源管理">
+                <a href="/Lua/PIL.32.Lua中的资源管理.html" rel="prev" title="PIL.32.Lua中的资源管理">
                   PIL.32.Lua中的资源管理 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -502,20 +472,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -527,10 +497,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -559,10 +529,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -637,7 +607,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Lua/PIL.31.C%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%A8%E6%88%B7%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B.html",
+            url: "https://gowa.club/Lua/PIL.31.C中的自定义用户定义类型.html",
             identifier: "Lua/PIL.31.C中的自定义用户定义类型.html",
             title: "PIL.31.C中的自定义用户定义类型"
           }

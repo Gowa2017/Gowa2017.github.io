@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Linux,运维">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在Linux为开启SFTP">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;%E5%9C%A8Linux%E4%B8%BA%E5%BC%80%E5%90%AFSFTP.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/在Linux为开启SFTP.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="新技能GET，虽然不是什么麻烦的事情，但是不仔细的用过还是会走不少弯路，再加上网络上的教程都是不明不白的，不会让你知其所以然。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-08-13T09:31:31.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在Linux为开启SFTP">
+<meta name="twitter:description" content="新技能GET，虽然不是什么麻烦的事情，但是不仔细的用过还是会走不少弯路，再加上网络上的教程都是不明不白的，不会让你知其所以然。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/%E5%9C%A8Linux%E4%B8%BA%E5%BC%80%E5%90%AFSFTP.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/在Linux为开启SFTP.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/%E5%9C%A8Linux%E4%B8%BA%E5%BC%80%E5%90%AFSFTP.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/在Linux为开启SFTP.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/%E5%9C%A8Linux%E4%B8%BA%E5%BC%80%E5%90%AFSFTP.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/在Linux为开启SFTP.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/在Linux为开启SFTP.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,7 +294,6 @@
       
         <p>新技能GET，虽然不是什么麻烦的事情，但是不仔细的用过还是会走不少弯路，再加上网络上的教程都是不明不白的，不会让你知其所以然。</p>
 <a id="more"></a>
-
 <p>SFTP，也就是 SSH File Tranfer Protocol，是 FTP 文件传输协议的安全版本。其在一个 SSH（安全 Shell） 数据流上进行数据传输和数据访问。</p>
 <p>所以其前提是要有一个 SSH 连接，然后在此连接上进行数据传输而已了。</p>
 <p>其中权限的控制用到了 Linux 本身的权限机制，而如何区分是一个 纯粹的 SSH 连接还是一个 SFTP 连接，就由我们对 SSH 服务端进行定义了。</p>
@@ -304,13 +305,12 @@
 <p>就是说，对于 chroot 使用的路径，所有者必须是 root 并且，其他权限位不能有任何可写权限。</p>
 <h1 id="用户"><a href="#用户" class="headerlink" title="用户"></a>用户</h1><p>增加sftp 组及用户。</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">groupadd sftpuser</span><br><span class="line">useradd hgypt -d /upload -g sftpuser  -s /sbin/nologin <span class="comment"># 指定家目录，组，及启动shell（禁止登录）</span></span><br></pre></td></tr></table></figure>
-
 <h1 id="目录设置"><a href="#目录设置" class="headerlink" title="目录设置"></a>目录设置</h1><p>我们要将所有的 sftp 用户，到限制在 /data/interface 目录下，每个用户对应一个目录</p>
 <p>以下命令 root 执行：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mkdir -p /data/interface/hgypt</span><br><span class="line">chmod 711 -R /data <span class="comment"># 所有目录所有者都是root ，同时全部取消写权限，只有执行权限</span></span><br><span class="line">chmod 755 /data/interface/hgypt</span><br><span class="line"><span class="comment"># 设置一个 sftp 用户拥有的目录</span></span><br><span class="line">mkdir -p /data/interface/hgypt/upload</span><br><span class="line">chown hgypt:hgypt /data/interface/hgypt/upload</span><br><span class="line">chmod 600 /data/interface/hgypt/upload <span class="comment"># 只允许sftp 用户进行读</span></span><br></pre></td></tr></table></figure>
 <h1 id="ssh-配置"><a href="#ssh-配置" class="headerlink" title="ssh 配置"></a>ssh 配置</h1><p>针对特定的用户组，执行 chroot 设置：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Match Group sftpusers</span><br><span class="line">ChrootDirectory /data/interface/%u</span><br><span class="line">ForceCommand internal-sftp</span><br></pre></td></tr></table></figure>
-
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -321,14 +321,14 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
+              <a href="/tags/运维/" rel="tag"># 运维</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/RxJava/%E5%85%B3%E4%BA%8ERxJava%E6%93%8D%E4%BD%9C%E7%AC%A6flatMap%E4%B8%8EconcatMap%E7%9A%84%E6%8E%A2%E7%A9%B6.html" rel="next" title="关于RxJava操作符flatMap与concatMap的探究">
+                <a href="/RxJava/关于RxJava操作符flatMap与concatMap的探究.html" rel="next" title="关于RxJava操作符flatMap与concatMap的探究">
                   <i class="fa fa-chevron-left"></i> 关于RxJava操作符flatMap与concatMap的探究
                 </a>
             </div>
@@ -336,7 +336,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Windows/Windows%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html" rel="prev" title="Windows中的线程">
+                <a href="/Windows/Windows中的线程.html" rel="prev" title="Windows中的线程">
                   Windows中的线程 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -398,20 +398,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -423,10 +423,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -455,10 +455,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -533,7 +533,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/%E5%9C%A8Linux%E4%B8%BA%E5%BC%80%E5%90%AFSFTP.html",
+            url: "https://gowa.club/Linux-Unix/在Linux为开启SFTP.html",
             identifier: "Linux-Unix/在Linux为开启SFTP.html",
             title: "在Linux为开启SFTP"
           }

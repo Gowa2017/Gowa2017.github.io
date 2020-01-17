@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Golang">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用代理让go能get官方网站golang.org的包">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Golang&#x2F;%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E8%AE%A9go%E8%83%BDget%E5%AE%98%E6%96%B9%E7%BD%91%E7%AB%99golang.org%E7%9A%84%E5%8C%85.html">
+<meta property="og:url" content="https://gowa.club/Golang/使用代理让go能get官方网站golang.org的包.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="开始学golang变成的时候，需要设置一下IDE，用的是vim，然后配合官方推荐的vim-go插件，然后这个插件需要装很多附加的包，有的是从golang.org网站下载的，很多时候都无法下载，国内就是这么蛋疼。后面使用了代理进行了配置才能下载。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-20T13:36:12.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用代理让go能get官方网站golang.org的包">
+<meta name="twitter:description" content="开始学golang变成的时候，需要设置一下IDE，用的是vim，然后配合官方推荐的vim-go插件，然后这个插件需要装很多附加的包，有的是从golang.org网站下载的，很多时候都无法下载，国内就是这么蛋疼。后面使用了代理进行了配置才能下载。">
 
-<link rel="canonical" href="https://gowa.club/Golang/%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E8%AE%A9go%E8%83%BDget%E5%AE%98%E6%96%B9%E7%BD%91%E7%AB%99golang.org%E7%9A%84%E5%8C%85.html">
+<link rel="canonical" href="https://gowa.club/Golang/使用代理让go能get官方网站golang.org的包.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Golang/%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E8%AE%A9go%E8%83%BDget%E5%AE%98%E6%96%B9%E7%BD%91%E7%AB%99golang.org%E7%9A%84%E5%8C%85.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Golang/使用代理让go能get官方网站golang.org的包.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Golang/%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E8%AE%A9go%E8%83%BDget%E5%AE%98%E6%96%B9%E7%BD%91%E7%AB%99golang.org%E7%9A%84%E5%8C%85.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Golang/使用代理让go能get官方网站golang.org的包.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Golang/使用代理让go能get官方网站golang.org的包.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,15 +292,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>开始学golang变成的时候，需要设置一下IDE，用的是vim，然后配合官方推荐的vim-go插件，然后这个插件需要装很多附加的包，有的是从golang.org网站下载的，很多时候都无法下载，国内就是这么蛋疼。后面使用了代理进行了配置才能下载。</p>
-<a id="more"></a>
+        <p>开始学golang变成的时候，需要设置一下IDE，用的是vim，然后配合官方推荐的vim-go插件，然后这个插件需要装很多附加的包，有的是从golang.org网站下载的，很多时候都无法下载，国内就是这么蛋疼。后面使用了代理进行了配置才能下载。<br><a id="more"></a></p>
 <h1 id="代理"><a href="#代理" class="headerlink" title="代理"></a>代理</h1><p>首先需要开启一个代理，本地用的是ss代理，开启了http代理服务器，然后进行设置。设置环境变量：</p>
 <p>ss客户端用的是 Shadowsocks-NG。</p>
 <pre><code>export http_proxy=https://localhost:1087
-export https_proxy=https://localhost:1087</code></pre><p>然后使用<code>go get</code>就可以正常下载了。</p>
+export https_proxy=https://localhost:1087
+</code></pre><p>然后使用<code>go get</code>就可以正常下载了。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$go get -v golang.org/x/tools/guru</span><br><span class="line">Fetching https://golang.org/x/tools/guru?go-get=1</span><br><span class="line">Parsing meta tags from https://golang.org/x/tools/guru?go-get=1 (status code 200)</span><br><span class="line">get &quot;golang.org/x/tools/guru&quot;: found meta tag get.metaImport&#123;Prefix:&quot;golang.org/x/tools&quot;, VCS:&quot;git&quot;, RepoRoot:&quot;https://go.googlesource.com/tools&quot;&#125; at https://golang.org/x/tools/guru?go-get=1</span><br><span class="line">get &quot;golang.org/x/tools/guru&quot;: verifying non-authoritative meta tag</span><br><span class="line">Fetching https://golang.org/x/tools?go-get=1</span><br><span class="line">Parsing meta tags from https://golang.org/x/tools?go-get=1 (status code 200)</span><br><span class="line">golang.org/x/tools (download)</span><br><span class="line">package golang.org/x/tools/guru: cannot find package &quot;golang.org/x/tools/guru&quot; in any of:</span><br><span class="line">	/usr/local/go/src/golang.org/x/tools/guru (from $GOROOT)</span><br><span class="line">	/Users/wodediannao/go/src/golang.org/x/tools/guru (from $GOPATH)</span><br><span class="line">wodedianaodeAir:src shouzheng.zhang$ go get -v  golang.org/x/tools/cmd/guru</span><br><span class="line">golang.org/x/tools/go/buildutil</span><br><span class="line">golang.org/x/tools/go/types/typeutil</span><br><span class="line">golang.org/x/tools/go/ast/astutil</span><br><span class="line">golang.org/x/tools/cmd/guru/serial</span><br><span class="line">golang.org/x/tools/container/intsets</span><br><span class="line">golang.org/x/tools/refactor/importgraph</span><br><span class="line">golang.org/x/tools/go/ssa</span><br><span class="line">golang.org/x/tools/go/loader</span><br><span class="line">golang.org/x/tools/go/callgraph</span><br><span class="line">golang.org/x/tools/go/ssa/ssautil</span><br><span class="line">golang.org/x/tools/go/pointer</span><br><span class="line">golang.org/x/tools/go/callgraph/static</span><br><span class="line">golang.org/x/tools/cmd/guru</span><br></pre></td></tr></table></figure>
-
 <p>大功告成</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -315,7 +317,7 @@ export https_proxy=https://localhost:1087</code></pre><p>然后使用<code>go ge
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/java%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%ACIO.html" rel="next" title="java中的基本IO">
+                <a href="/Java/java中的基本IO.html" rel="next" title="java中的基本IO">
                   <i class="fa fa-chevron-left"></i> java中的基本IO
                 </a>
             </div>
@@ -323,7 +325,7 @@ export https_proxy=https://localhost:1087</code></pre><p>然后使用<code>go ge
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Lua/lua%E4%B8%AD%E7%9A%84C-API%E5%8F%8A%E4%BB%A3%E7%A0%81%E6%B5%81%E7%A8%8B.html" rel="prev" title="lua中的C-API及代码流程">
+                <a href="/Lua/lua中的C-API及代码流程.html" rel="prev" title="lua中的C-API及代码流程">
                   lua中的C-API及代码流程 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -385,20 +387,20 @@ export https_proxy=https://localhost:1087</code></pre><p>然后使用<code>go ge
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -410,10 +412,10 @@ export https_proxy=https://localhost:1087</code></pre><p>然后使用<code>go ge
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -442,10 +444,10 @@ export https_proxy=https://localhost:1087</code></pre><p>然后使用<code>go ge
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -520,7 +522,7 @@ export https_proxy=https://localhost:1087</code></pre><p>然后使用<code>go ge
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Golang/%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E8%AE%A9go%E8%83%BDget%E5%AE%98%E6%96%B9%E7%BD%91%E7%AB%99golang.org%E7%9A%84%E5%8C%85.html",
+            url: "https://gowa.club/Golang/使用代理让go能get官方网站golang.org的包.html",
             identifier: "Golang/使用代理让go能get官方网站golang.org的包.html",
             title: "使用代理让go能get官方网站golang.org的包"
           }

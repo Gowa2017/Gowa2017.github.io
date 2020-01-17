@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Asm,逆向">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于汇编中的PTR操作符">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Asm&#x2F;%E5%85%B3%E4%BA%8E%E6%B1%87%E7%BC%96%E4%B8%AD%E7%9A%84PTR%E6%93%8D%E4%BD%9C%E7%AC%A6.html">
+<meta property="og:url" content="https://gowa.club/Asm/关于汇编中的PTR操作符.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="每当看到 WORD PTR [EAX] 类似的代码的时候就很疑惑，这里的 WORD， PTR到底代表了什么意思呢？　 PTR 表示是一个 Pointer 的意思么？很难分说得清。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-10-20T16:00:17.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于汇编中的PTR操作符">
+<meta name="twitter:description" content="每当看到 WORD PTR [EAX] 类似的代码的时候就很疑惑，这里的 WORD， PTR到底代表了什么意思呢？　 PTR 表示是一个 Pointer 的意思么？很难分说得清。">
 
-<link rel="canonical" href="https://gowa.club/Asm/%E5%85%B3%E4%BA%8E%E6%B1%87%E7%BC%96%E4%B8%AD%E7%9A%84PTR%E6%93%8D%E4%BD%9C%E7%AC%A6.html">
+<link rel="canonical" href="https://gowa.club/Asm/关于汇编中的PTR操作符.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Asm/%E5%85%B3%E4%BA%8E%E6%B1%87%E7%BC%96%E4%B8%AD%E7%9A%84PTR%E6%93%8D%E4%BD%9C%E7%AC%A6.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Asm/关于汇编中的PTR操作符.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Asm/%E5%85%B3%E4%BA%8E%E6%B1%87%E7%BC%96%E4%B8%AD%E7%9A%84PTR%E6%93%8D%E4%BD%9C%E7%AC%A6.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Asm/关于汇编中的PTR操作符.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Asm/关于汇编中的PTR操作符.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,28 +294,25 @@
       
         <p>每当看到 <code>WORD PTR [EAX]</code> 类似的代码的时候就很疑惑，这里的 WORD， PTR到底代表了什么意思呢？　 PTR 表示是一个 Pointer 的意思么？很难分说得清。</p>
 <a id="more"></a>
-
 <h1 id="PTR"><a href="#PTR" class="headerlink" title="PTR"></a>PTR</h1><p><a href="http://www.c-jump.com/CIS77/ASM/Instructions/I77_0200_ptr_directive.htm" target="_blank" rel="noopener">在这个系列的地址中</a>，对汇编有一些简单的指令的说明，其中就说到，有的时候我们会出现指令不明的情况，如：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.DATA</span><br><span class="line">        table1 WORD 20 DUP (0)</span><br><span class="line">        status BYTE 7 DUP (1)</span><br><span class="line">        ..</span><br><span class="line">        mov    EBX, OFFSET table1</span><br><span class="line">        mov    ESI, OFFSET status</span><br><span class="line">        mov    [EBX], 100</span><br><span class="line">        mov    [ESI], 100</span><br></pre></td></tr></table></figure>
 <p>对于我们最后的两个指令来说，[] 其应该是对 EBS/ESI 内存储的地址指向人内存写入 <strong>byte</strong> 大小，还是 <strong>word</strong> 大小。</p>
 <p>所以这个时候就必须使用 <code>WORD PTR, BYTE PTR</code> 这两个类型修饰符来进行说明</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov	WORD PTR [EBX], 100</span><br><span class="line">mov	BYTE PTR [ESI], 100</span><br></pre></td></tr></table></figure>
-
 <p>其作用，是用来指明我们在一个内存操作的时候，要进行内存操作的大小是多少。</p>
 <p>通常， PTR 操作符强制将表达式被当做一个特定类型的指针使用。</p>
 <p>事实上，，PTR 要表达就是：<strong>取地址的意思</strong>。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.DATA</span><br><span class="line">num DWORD 0</span><br><span class="line">.CODE</span><br><span class="line">mov 	ax, WORD PTR [num]; Load a word-size value from a DWORD</span><br></pre></td></tr></table></figure>
-
 <p>这个所表达的确切意思应该是：<strong>num 地址处的数据是 WORD 大小，取得他的地址</strong>。</p>
-<h1 id=""><a href="#" class="headerlink" title="[]"></a>[]</h1><p>这个操作符，有的地方把它叫做索引操作符，当我们把它应用到一个 <strong>直接内存操作数</strong> 时它和 操作符 <strong>+</strong> 工作得一样。</p>
+<h1 id><a href="#" class="headerlink" title="[]"></a>[]</h1><p>这个操作符，有的地方把它叫做索引操作符，当我们把它应用到一个 <strong>直接内存操作数</strong> 时它和 操作符 <strong>+</strong> 工作得一样。</p>
 <p>如</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov	ax, array[ 2 ]</span><br><span class="line">mov 	ax, array + 2</span><br></pre></td></tr></table></figure>
 <p>都是将内存 array 的第二个 WORD 值放到寄存器 ax 内。</p>
 <p>[]操作符内可以放入任何的直接内存操作数。如，</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mov 	ax, var</span><br><span class="line">mov	ax, [var]</span><br></pre></td></tr></table></figure>
-
 <p>是等价的。</p>
 <p>但是，建议的是，总是将内存地址放在 [] 内，用来表示我们是需要其地址处的内容，而不是地址本身。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -324,14 +323,14 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Asm/" rel="tag"># Asm</a>
-              <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"># 逆向</a>
+              <a href="/tags/逆向/" rel="tag"># 逆向</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Asm/%E6%B1%87%E7%BC%96%E4%B8%AD%E5%85%B3%E4%BA%8E%E5%AF%B9%E4%BA%8EPointer%E7%9A%84%E4%B8%80%E4%B8%AA%E6%8F%8F%E8%BF%B0.html" rel="next" title="汇编中关于对于Pointer的一个描述">
+                <a href="/Asm/汇编中关于对于Pointer的一个描述.html" rel="next" title="汇编中关于对于Pointer的一个描述">
                   <i class="fa fa-chevron-left"></i> 汇编中关于对于Pointer的一个描述
                 </a>
             </div>
@@ -339,7 +338,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8Sqlplus%E5%8A%A8%E6%80%81%E6%89%A7%E8%A1%8CSQL%E5%91%BD%E4%BB%A4.html" rel="prev" title="使用Sqlplus动态执行SQL命令">
+                <a href="/数据库/使用Sqlplus动态执行SQL命令.html" rel="prev" title="使用Sqlplus动态执行SQL命令">
                   使用Sqlplus动态执行SQL命令 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -401,20 +400,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -426,10 +425,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -458,10 +457,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -536,7 +535,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Asm/%E5%85%B3%E4%BA%8E%E6%B1%87%E7%BC%96%E4%B8%AD%E7%9A%84PTR%E6%93%8D%E4%BD%9C%E7%AC%A6.html",
+            url: "https://gowa.club/Asm/关于汇编中的PTR操作符.html",
             identifier: "Asm/关于汇编中的PTR操作符.html",
             title: "关于汇编中的PTR操作符"
           }

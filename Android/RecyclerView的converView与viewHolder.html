@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RecyclerView的converView与viewHolder">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;RecyclerView%E7%9A%84converView%E4%B8%8EviewHolder.html">
+<meta property="og:url" content="https://gowa.club/Android/RecyclerView的converView与viewHolder.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="当前 ListView 很多时候都已经被 RecyclerView 替代了。相对而言，RecyclerView 更加的灵活和高级。 在 RecyclerView 中，几种不同的组件相互工作来显示数据。RecyclerView 通过我们提供的 LayoutManager 来获取 View 进行填充。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-21T04:54:17.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RecyclerView的converView与viewHolder">
+<meta name="twitter:description" content="当前 ListView 很多时候都已经被 RecyclerView 替代了。相对而言，RecyclerView 更加的灵活和高级。 在 RecyclerView 中，几种不同的组件相互工作来显示数据。RecyclerView 通过我们提供的 LayoutManager 来获取 View 进行填充。">
 
-<link rel="canonical" href="https://gowa.club/Android/RecyclerView%E7%9A%84converView%E4%B8%8EviewHolder.html">
+<link rel="canonical" href="https://gowa.club/Android/RecyclerView的converView与viewHolder.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/RecyclerView%E7%9A%84converView%E4%B8%8EviewHolder.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/RecyclerView的converView与viewHolder.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/RecyclerView%E7%9A%84converView%E4%B8%8EviewHolder.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/RecyclerView的converView与viewHolder.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/RecyclerView的converView与viewHolder.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -293,27 +295,25 @@
         <p>当前 <em>ListView</em> 很多时候都已经被 <em>RecyclerView</em> 替代了。相对而言，<em>RecyclerView</em> 更加的灵活和高级。</p>
 <p>在 <em>RecyclerView</em> 中，几种不同的组件相互工作来显示数据。<em>RecyclerView</em> 通过我们提供的 <em>LayoutManager</em> 来获取 View 进行填充。 </p>
 <a id="more"></a>
-
 <p><em>RecyclerView</em> 中的 View 通过 <em>view holder</em> 来进行表示。<em>view holder</em> 对象是我们继承 了 <em>RecyclerView.ViewHolder</em> 的类的实例。每个 <em>View Holder</em> 负责用一个 View 来显示单个的数据项。</p>
-<p><em>RecyclerView</em> 只会创建能在屏幕上显示的那么多个 <em>view holder<em>。当用户滑动列表的时候，</em>RecyclerView</em> 会将离开屏幕的 view 绑定到新滑动到屏幕的数据项。</p>
-<p><strong>view holder</strong> 通过 <em>adapter</em> 进行管理，我们会通过继承 <em>RecyclerView.Adapter</em> 来实现。adapter 会根据需要来创建 <em>view holder<em>，然后将数据绑定到 *view holder</em>。其通过将 *view holder</em> 给到一个位置，然后调用 adapter 的 <code>onBindViewHolder()</code> 方法。这个方法会使用 <em>view holder</em> 的位置来决定其应该显示什么数据。</p>
+<p><em>RecyclerView</em> 只会创建能在屏幕上显示的那么多个 <em>view holder</em>。当用户滑动列表的时候，<em>RecyclerView</em> 会将离开屏幕的 view 绑定到新滑动到屏幕的数据项。</p>
+<p><strong>view holder</strong> 通过 <em>adapter</em> 进行管理，我们会通过继承 <em>RecyclerView.Adapter</em> 来实现。adapter 会根据需要来创建 <em>view holder</em>，然后将数据绑定到 <em>view holder</em>。其通过将 <em>view holder</em> 给到一个位置，然后调用 adapter 的 <code>onBindViewHolder()</code> 方法。这个方法会使用 <em>view holder</em> 的位置来决定其应该显示什么数据。</p>
 <p><em>RecyclerView</em> 做了很多优化，我们自己就不用干这些事情了：</p>
 <ul>
-<li>当列表第一次展示，其会在列表的两边都绑定一些 <em>view holder<em>。例如，如果视图要显示 0-9 位置的数据，</em>RecyclerView</em> 会创建这些 <em>view holder</em>，但是他也可能会创建位置 10 的 <em>view holder</em>。这样，如果用户滑动列表的话，下一个元素就会立马显示出来。</li>
-<li>当用户滑动列表的时候，<em>RecyclerView</em> 根据需要创建 <em>view holder<em>。其也会保存已经离开了屏幕的 *view holder</em>，以便复用。这样， *view holder</em> 不用重新创建及从布局扩张，而只需要更新 <em>view holder</em> 的内容就行了。</li>
+<li>当列表第一次展示，其会在列表的两边都绑定一些 <em>view holder</em>。例如，如果视图要显示 0-9 位置的数据，<em>RecyclerView</em> 会创建这些 <em>view holder</em>，但是他也可能会创建位置 10 的 <em>view holder</em>。这样，如果用户滑动列表的话，下一个元素就会立马显示出来。</li>
+<li>当用户滑动列表的时候，<em>RecyclerView</em> 根据需要创建 <em>view holder</em>。其也会保存已经离开了屏幕的 <em>view holder</em>，以便复用。这样， <em>view holder</em> 不用重新创建及从布局扩张，而只需要更新 <em>view holder</em> 的内容就行了。</li>
 <li>当显示的内容变了。可以耐用 <code>RecyclerView.Adapter.notify...()</code>方法。</li>
 </ul>
 <h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>如果我们在 Activity 内添加一个 RecyclerView，我们一般会有如下的代码：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyActivity</span> <span class="keyword">extends</span> <span class="title">Activity</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> RecyclerView recyclerView;</span><br><span class="line">    <span class="keyword">private</span> RecyclerView.Adapter mAdapter;</span><br><span class="line">    <span class="keyword">private</span> RecyclerView.LayoutManager layoutManager;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.my_activity);</span><br><span class="line">        recyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// use this setting to improve performance if you know that changes</span></span><br><span class="line">        <span class="comment">// in content do not change the layout size of the RecyclerView</span></span><br><span class="line">        recyclerView.setHasFixedSize(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// use a linear layout manager</span></span><br><span class="line">        layoutManager = <span class="keyword">new</span> LinearLayoutManager(<span class="keyword">this</span>);</span><br><span class="line">        recyclerView.setLayoutManager(layoutManager);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// specify an adapter (see also next example)</span></span><br><span class="line">        mAdapter = <span class="keyword">new</span> MyAdapter(myDataset);</span><br><span class="line">        recyclerView.setAdapter(mAdapter);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>同时我们还需要一个 适配器：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAdapter</span> <span class="keyword">extends</span> <span class="title">RecyclerView</span>.<span class="title">Adapter</span>&lt;<span class="title">MyAdapter</span>.<span class="title">MyViewHolder</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String[] mDataset;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Provide a reference to the views for each data item</span></span><br><span class="line">    <span class="comment">// Complex data items may need more than one view per item, and</span></span><br><span class="line">    <span class="comment">// you provide access to all the views for a data item in a view holder</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyViewHolder</span> <span class="keyword">extends</span> <span class="title">RecyclerView</span>.<span class="title">ViewHolder</span> </span>&#123;</span><br><span class="line">        <span class="comment">// each data item is just a string in this case</span></span><br><span class="line">        <span class="keyword">public</span> TextView textView;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">MyViewHolder</span><span class="params">(TextView v)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">super</span>(v);</span><br><span class="line">            textView = v;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Provide a suitable constructor (depends on the kind of dataset)</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyAdapter</span><span class="params">(String[] myDataset)</span> </span>&#123;</span><br><span class="line">        mDataset = myDataset;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create new views (invoked by the layout manager)</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> MyAdapter.<span class="function">MyViewHolder <span class="title">onCreateViewHolder</span><span class="params">(ViewGroup parent,</span></span></span><br><span class="line"><span class="function"><span class="params">                                                   <span class="keyword">int</span> viewType)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// create a new view</span></span><br><span class="line">        TextView v = (TextView) LayoutInflater.from(parent.getContext())</span><br><span class="line">                .inflate(R.layout.my_text_view, parent, <span class="keyword">false</span>);</span><br><span class="line">        ...</span><br><span class="line">        MyViewHolder vh = <span class="keyword">new</span> MyViewHolder(v);</span><br><span class="line">        <span class="keyword">return</span> vh;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Replace the contents of a view (invoked by the layout manager)</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBindViewHolder</span><span class="params">(MyViewHolder holder, <span class="keyword">int</span> position)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// - get element from your dataset at this position</span></span><br><span class="line">        <span class="comment">// - replace the contents of the view with that element</span></span><br><span class="line">        holder.textView.setText(mDataset[position]);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Return the size of your dataset (invoked by the layout manager)</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getItemCount</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mDataset.length;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>布局管理器会调用 适配器 的 <code>onCreateViewHolder()</code> 方法。这个方法需要构造一个 <em>RecyclerView.ViewHolder</em>，同时设置其用来显示内容的 View。<strong>ViewHoler</strong> 的类型必须与 Adapter 类签名声明的类型一致。通常，会通过扩张一个 xml 布局文件来获取视图。因为此时 VH 并没有被赋予实际的值，所以方法不会设置View 的内容。</p>
 <p>接着布局管理器会将 VH 与数据相绑定。其通过调用 <code>onBindViewHolder()</code>方法来达成，同时会将 VH 在 RecyclerView 中的位置作为参数。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><em>RecyclerView</em> 的内容通过 VH 进行表示，VH 会与一个 VIEW 绑定，这个VIEW 一般通过 xml 布局文件进行扩张。</p>
 <p><em>RecyclerView</em> 只会创建屏幕上能能够显示的那么多个 VH，滑出屏幕的会缓存也进行复用。</p>
 <p><em>RecyclerView</em> 中的 VH 保留了对 VIEW 中各个控件的引用，每次需要改变内容的时候不需要 <code>findViewById()</code>，直接对引用的控件进行操作即可。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -330,7 +330,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/Android-View%E7%9A%84%E7%BB%98%E5%88%B6%E8%BF%87%E7%A8%8B.html" rel="next" title="Android-View的绘制过程">
+                <a href="/Android/Android-View的绘制过程.html" rel="next" title="Android-View的绘制过程">
                   <i class="fa fa-chevron-left"></i> Android-View的绘制过程
                 </a>
             </div>
@@ -338,7 +338,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/Gson%E5%B8%B8%E8%A7%84%E4%BD%BF%E7%94%A8-fromJson().html" rel="prev" title="Gson常规使用-fromJson()">
+                <a href="/Java/Gson常规使用-fromJson().html" rel="prev" title="Gson常规使用-fromJson()">
                   Gson常规使用-fromJson() <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -400,20 +400,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -425,10 +425,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -457,10 +457,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -535,7 +535,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/RecyclerView%E7%9A%84converView%E4%B8%8EviewHolder.html",
+            url: "https://gowa.club/Android/RecyclerView的converView与viewHolder.html",
             identifier: "Android/RecyclerView的converView与viewHolder.html",
             title: "RecyclerView的converView与viewHolder"
           }

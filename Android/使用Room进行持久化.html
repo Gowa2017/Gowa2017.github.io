@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,16 +51,18 @@
 <meta name="keywords" content="Android,Room">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用Room进行持久化">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;%E4%BD%BF%E7%94%A8Room%E8%BF%9B%E8%A1%8C%E6%8C%81%E4%B9%85%E5%8C%96.html">
+<meta property="og:url" content="https://gowa.club/Android/使用Room进行持久化.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Room 是谷歌推荐的架构组件之一，用来进行本地数据的持久化，其在 Sqlite 上提供了一些更方便使用的封装。但是事实上我感觉其使用相对  ObjectBox 好像更麻烦一些。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;room_architecture.png">
+<meta property="og:image" content="https://gowa.club/res/room_architecture.png">
 <meta property="og:updated_time" content="2019-05-08T02:14:56.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;room_architecture.png">
+<meta name="twitter:title" content="使用Room进行持久化">
+<meta name="twitter:description" content="Room 是谷歌推荐的架构组件之一，用来进行本地数据的持久化，其在 Sqlite 上提供了一些更方便使用的封装。但是事实上我感觉其使用相对  ObjectBox 好像更麻烦一些。">
+<meta name="twitter:image" content="https://gowa.club/res/room_architecture.png">
 
-<link rel="canonical" href="https://gowa.club/Android/%E4%BD%BF%E7%94%A8Room%E8%BF%9B%E8%A1%8C%E6%8C%81%E4%B9%85%E5%8C%96.html">
+<link rel="canonical" href="https://gowa.club/Android/使用Room进行持久化.html">
 
 
 <script id="page-configurations">
@@ -230,7 +232,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/%E4%BD%BF%E7%94%A8Room%E8%BF%9B%E8%A1%8C%E6%8C%81%E4%B9%85%E5%8C%96.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/使用Room进行持久化.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -276,7 +278,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/%E4%BD%BF%E7%94%A8Room%E8%BF%9B%E8%A1%8C%E6%8C%81%E4%B9%85%E5%8C%96.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/使用Room进行持久化.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/使用Room进行持久化.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,40 +294,34 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Room 是谷歌推荐的架构组件之一，用来进行本地数据的持久化，其在 Sqlite 上提供了一些更方便使用的封装。但是事实上我感觉其使用相对  ObjectBox 好像更麻烦一些。</p>
-<a id="more"></a>
-
+        <p>Room 是谷歌推荐的架构组件之一，用来进行本地数据的持久化，其在 Sqlite 上提供了一些更方便使用的封装。但是事实上我感觉其使用相对  ObjectBox 好像更麻烦一些。<br><a id="more"></a></p>
 <h1 id="Room-基本组件"><a href="#Room-基本组件" class="headerlink" title="Room 基本组件"></a>Room 基本组件</h1><p>有三个主要的组成部分：</p>
 <ul>
 <li><p>DataBase 包含数据库持有者，作为应用程序的到应用持久化，关系型数据的底层连接的主要访问点。使用 <code>@Database</code> 注解的类需要满足三个条件：</p>
 <ul>
-<li><p>是一个继承自 <em>RoomDatabase</em> 的抽象类</p>
-</li>
-<li><p>包含一个列表，列表内是所有与此注解类的相关联的实体类。</p>
-</li>
+<li>是一个继承自 <em>RoomDatabase</em> 的抽象类</li>
+<li>包含一个列表，列表内是所有与此注解类的相关联的实体类。</li>
 <li><p>有一个无参抽象方法，返回一个以 <code>@Dao</code> 注解的类</p>
 <p>可以在运行时，通过调用  <code>Room.databaseBuilder()</code> 或者 <code>Room.inMemoryDatabaseBuilder()</code> 来获得一个 <em>Database</em> 的实例。</p>
 </li>
 </ul>
 </li>
-<li><p>Entity 代表数据库中的一个表</p>
-</li>
-<li><p>Dao 包含用来访问数据库的方法。</p>
-</li>
+<li>Entity 代表数据库中的一个表</li>
+<li>Dao 包含用来访问数据库的方法。</li>
 </ul>
 <ol>
 <li>应用使用  Room 数据库来获取与其相关的<strong>数据访问对象（DAOs）</strong>。</li>
 <li>使用 Dao 来获取实体，同时将修改后的数据保存回实体。</li>
 <li>Entity 使用  get/set 获取与修改对应表上的列值。</li>
 </ol>
-<p><img src="../res/room_architecture.png" alt=""></p>
+<p><img src="../res/room_architecture.png" alt></p>
 <h1 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h1><h2 id="Entity"><a href="#Entity" class="headerlink" title="Entity"></a>Entity</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">    <span class="meta">@PrimaryKey</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> uid;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ColumnInfo</span>(name = <span class="string">"first_name"</span>)</span><br><span class="line">    <span class="keyword">public</span> String firstName;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ColumnInfo</span>(name = <span class="string">"last_name"</span>)</span><br><span class="line">    <span class="keyword">public</span> String lastName;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="Dao"><a href="#Dao" class="headerlink" title="Dao"></a>Dao</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Dao</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user"</span>)</span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">getAll</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user WHERE uid IN (:userIds)"</span>)</span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">loadAllByIds</span><span class="params">(<span class="keyword">int</span>[] userIds)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Query</span>(<span class="string">"SELECT * FROM user WHERE first_name LIKE :first AND "</span> +</span><br><span class="line">           <span class="string">"last_name LIKE :last LIMIT 1"</span>)</span><br><span class="line">    <span class="function">User <span class="title">findByName</span><span class="params">(String first, String last)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Insert</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">insertAll</span><span class="params">(User... users)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Delete</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">(User user)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="Database（一般设置为单例）"><a href="#Database（一般设置为单例）" class="headerlink" title="Database（一般设置为单例）"></a>Database（一般设置为单例）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Database</span>(entities = &#123;User<span class="class">.<span class="keyword">class</span>&#125;, <span class="title">version</span> </span>= <span class="number">1</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AppDatabase</span> <span class="keyword">extends</span> <span class="title">RoomDatabase</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> UserDao <span class="title">userDao</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="获取-Database-实例"><a href="#获取-Database-实例" class="headerlink" title="获取 Database 实例"></a>获取 Database 实例</h2><p><code>java
+AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+        AppDatabase.class, &quot;database-name&quot;).build();</code><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
-<h2 id="获取-Database-实例"><a href="#获取-Database-实例" class="headerlink" title="获取 Database 实例"></a>获取 Database 实例</h2><figure class="highlight"><table><tr><td class="code"><pre><span class="line">AppDatabase db = Room.databaseBuilder(getApplicationContext(),</span><br><span class="line">        AppDatabase.class, "database-name").build();</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -342,7 +338,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/Android%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E8%8F%9C%E5%8D%95.html" rel="next" title="Android中的一些菜单">
+                <a href="/Android/Android中的一些菜单.html" rel="next" title="Android中的一些菜单">
                   <i class="fa fa-chevron-left"></i> Android中的一些菜单
                 </a>
             </div>
@@ -350,7 +346,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/%E5%85%B3%E4%BA%8E%E5%9C%A8Module%E4%B8%AD%E6%B7%BB%E5%8A%A0aar%E5%8C%85%E6%97%A0%E6%95%88%E7%9A%84%E9%97%AE%E9%A2%98.html" rel="prev" title="关于在Module中添加aar包无效的问题">
+                <a href="/Android/关于在Module中添加aar包无效的问题.html" rel="prev" title="关于在Module中添加aar包无效的问题">
                   关于在Module中添加aar包无效的问题 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -412,20 +408,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -437,10 +433,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -469,10 +465,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -547,7 +543,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/%E4%BD%BF%E7%94%A8Room%E8%BF%9B%E8%A1%8C%E6%8C%81%E4%B9%85%E5%8C%96.html",
+            url: "https://gowa.club/Android/使用Room进行持久化.html",
             identifier: "Android/使用Room进行持久化.html",
             title: "使用Room进行持久化"
           }

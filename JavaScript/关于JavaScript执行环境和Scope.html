@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于JavaScript执行环境和Scope">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;JavaScript&#x2F;%E5%85%B3%E4%BA%8EJavaScript%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83%E5%92%8CScope.html">
+<meta property="og:url" content="https://gowa.club/JavaScript/关于JavaScript执行环境和Scope.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="此文章来源于 medium 上作者的系列文章，做个翻译和记录，感觉讲得比较直观易解。javascript-demystified">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-01-02T01:46:23.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于JavaScript执行环境和Scope">
+<meta name="twitter:description" content="此文章来源于 medium 上作者的系列文章，做个翻译和记录，感觉讲得比较直观易解。javascript-demystified">
 
-<link rel="canonical" href="https://gowa.club/JavaScript/%E5%85%B3%E4%BA%8EJavaScript%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83%E5%92%8CScope.html">
+<link rel="canonical" href="https://gowa.club/JavaScript/关于JavaScript执行环境和Scope.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/%E5%85%B3%E4%BA%8EJavaScript%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83%E5%92%8CScope.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/关于JavaScript执行环境和Scope.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/JavaScript/%E5%85%B3%E4%BA%8EJavaScript%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83%E5%92%8CScope.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/JavaScript/关于JavaScript执行环境和Scope.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/关于JavaScript执行环境和Scope.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,10 +294,8 @@
       
         <p>此文章来源于 medium 上作者的系列文章，做个翻译和记录，感觉讲得比较直观易解。<a href="https://codeburst.io/javascript-demystified-variable-hoisting-c3c4d2e8fd40" target="_blank" rel="noopener">javascript-demystified</a></p>
 <a id="more"></a>
-
 <h1 id="变量提升"><a href="#变量提升" class="headerlink" title="变量提升"></a>变量提升</h1><p>其开篇几以一个非常简单的例子来问大家：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'x is'</span>, x)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> x</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'x is'</span>, x)</span><br><span class="line"></span><br><span class="line">x = <span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'x is'</span>, x)</span><br></pre></td></tr></table></figure>
-
 <p>三个 <code>console.log</code> 的输出是什么。结果是：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">x is undefined</span><br><span class="line">x is undefined</span><br><span class="line">x is 5</span><br></pre></td></tr></table></figure>
 <p>为什么会是这个结果而不是其他的？</p>
@@ -303,15 +303,12 @@
 <p>JavaScript 的解释器会在解释（编译） js 脚本的时候，类似于把所有的变量的声明提升到最前，所以，你可以在看起来变量声明之前使用它，不过得到的是一个 undefined 的值。 undefined 是一个正常值，我把它理解为和 null, Nan 差不多这样。</p>
 <h1 id="函数提升"><a href="#函数提升" class="headerlink" title="函数提升"></a>函数提升</h1><p>第一个例子：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">sayHello()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayHello</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">hello</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Hello!'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  hello()</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">hello</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Hey!'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>输出是什么？</p>
 <p>第二个例子：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">sayHello()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayHello</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">hello</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Hello!'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  hello()</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">var</span> hello = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Hey!'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>这个的输出又是什么。</p>
 <p>第三个例子：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">sayHello()</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> sayHello = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">hello</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Hello!'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  hello()</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">hello</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Hey!'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>结果：</p>
 <ol>
 <li>第一个例子输出是 Hey!</li>
@@ -324,20 +321,14 @@
 <p>第三个例子一样不用说了，因为其是变量，在执行  sayHello() 的时候，var sayHello  的值是 undefined ，所以肯定会报错了。</p>
 <p>对于第三个例子： </p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> sayHello = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">hello</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Hello!'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  hello()</span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">hello</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Hey!'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>叫做函数表达式，是不会进行提升的。</p>
 <h1 id="Scope"><a href="#Scope" class="headerlink" title="Scope"></a>Scope</h1><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> greet = <span class="string">'Hello!'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayHi</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'2: '</span>, greet)</span><br><span class="line">  <span class="keyword">var</span> greet = <span class="string">'Ciao!'</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'3: '</span>, greet)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'1: '</span>, greet)</span><br><span class="line">sayHi()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'4: '</span>, greet)</span><br></pre></td></tr></table></figure>
-
 <p>输出的结果是：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">1: Hello!</span><br><span class="line">2: undefined</span><br><span class="line">3: Ciao!</span><br><span class="line">4: Hello!</span><br></pre></td></tr></table></figure>
-
 <p>作者在这里的提醒是： 作用域 和 执行环境 非常的相近，但并不一样。</p>
 <h2 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h2><p>作用域定义了你所处代码位置，能访问的变量和函数。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> greet = <span class="string">'Hello!'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayHi</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'1: '</span>, greet)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sayHi()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'2: '</span>, greet)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1: Hello!</span></span><br><span class="line"><span class="comment">// 2: Hello!</span></span><br></pre></td></tr></table></figure>
-
-
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sayHi</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> greet = <span class="string">'Hello!'</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'1: '</span>, greet)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sayHi()</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'2: '</span>, greet)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1: Hello!</span></span><br><span class="line"><span class="comment">// ReferenceError: greet is not defined</span></span><br></pre></td></tr></table></figure>
-
 <p>为什么第二个例子的输出会是 引用错误？</p>
 <p>第一个和第二个例子的不同再于：greet 定义的位置不同，一个位于 sayHi 函数内，一个在 sayHi 函数外。我们可以在函数内访问函数外定义的 greet，相反则不能。这是因为，在函数外第一的变量 greet 具有全局作用域，而在 sayHi 内定义的只有本地作用域。</p>
 <p>那么 全局作用域和本地作用域又是什么？</p>
@@ -356,7 +347,6 @@
 </ol>
 <p>现在我们来看一下下面的代码：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> globalThis = <span class="keyword">this</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myFunc</span> (<span class="params"></span>) </span>&#123;  </span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'globalThis: '</span>, globalThis)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'this inside: '</span>, <span class="keyword">this</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(globalThis === <span class="keyword">this</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myFunc()</span><br><span class="line"></span><br><span class="line"><span class="comment">// globalThis: Window &#123;...&#125;</span></span><br><span class="line"><span class="comment">// this inside: Window &#123;...&#125;</span></span><br><span class="line"><span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-
 <p>你可能会有疑问，为什么 globalThis 与 myFunc 内的 this 指向同一个对象呢，虽然，我们是在一个不同的作用域内访问了 this。</p>
 <p>这就是我们之前重复的：作用域与执行环境并不一样。但是，作用域在执行环境的定义上，扮演了一个非常关键的角色。</p>
 <p>那么，到底什么是执行环境？</p>
@@ -378,36 +368,28 @@
 </blockquote>
 <p>下面的例子就显示了上面说的内容：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(one) <span class="comment">// undefined</span></span><br><span class="line"><span class="built_in">console</span>.log(two)  <span class="comment">// ReferenceError: two is not defined</span></span><br><span class="line"><span class="built_in">console</span>.log(three) <span class="comment">// ReferenceError: three is not defined</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> one = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myFunc</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(one) <span class="comment">// 1</span></span><br><span class="line">  <span class="built_in">console</span>.log(two) <span class="comment">// undefined</span></span><br><span class="line">  <span class="built_in">console</span>.log(three) <span class="comment">// ReferenceError: three is not defined</span></span><br><span class="line">  <span class="keyword">var</span> two = <span class="number">2</span></span><br><span class="line">  <span class="built_in">console</span>.log(two) <span class="comment">// 2</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myOtherFunc</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(one) <span class="comment">// 1</span></span><br><span class="line">  <span class="built_in">console</span>.log(two) <span class="comment">// ReferenceError: two is not defined</span></span><br><span class="line">  <span class="built_in">console</span>.log(three) <span class="comment">// undefined</span></span><br><span class="line">  <span class="keyword">var</span> three = <span class="number">3</span></span><br><span class="line">  <span class="built_in">console</span>.log(three) <span class="comment">// 3</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myFunc()</span><br><span class="line">myOtherFunc()</span><br></pre></td></tr></table></figure>
-
 <h3 id="this-的值"><a href="#this-的值" class="headerlink" title="this 的值"></a>this 的值</h3><p>每个执行环境都有一个特殊的变量 <code>this</code>。<code>this</code> 指向代表了当前代码在其内执行的那个对象。。</p>
-<p>在下面的例子中，全局执行环境中 <em>this</em> 的值是 <em>window_。而在 _myFunc</em> 函数内 <em>this</em> 的值也是 _window_。</p>
+<p>在下面的例子中，全局执行环境中 <em>this</em> 的值是 <em>window</em>。而在 <em>myFunc</em> 函数内 <em>this</em> 的值也是 <em>window</em>。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> globalThis = <span class="keyword">this</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">myFunc</span> (<span class="params"></span>) </span>&#123;  </span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'globalThis: '</span>, globalThis)</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'this inside: '</span>, <span class="keyword">this</span>)</span><br><span class="line">  <span class="built_in">console</span>.log(globalThis === <span class="keyword">this</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myFunc()</span><br><span class="line"></span><br><span class="line"><span class="comment">// globalThis: Window &#123;...&#125;</span></span><br><span class="line"><span class="comment">// this inside: Window &#123;...&#125;</span></span><br><span class="line"><span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-
 <p>但是，怎么解释下面这个例子：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> globalThis = <span class="keyword">this</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myObj = &#123;</span><br><span class="line">  myMethod: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'globalThis: '</span>, globalThis)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'this inside: '</span>, <span class="keyword">this</span>)</span><br><span class="line">    <span class="built_in">console</span>.log(globalThis === <span class="keyword">this</span>)</span><br><span class="line">    <span class="built_in">console</span>.log(myObj === <span class="keyword">this</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myObj.myMethod()</span><br><span class="line"></span><br><span class="line"><span class="comment">// globalThis: Window &#123; ... &#125;</span></span><br><span class="line"><span class="comment">// this inside: &#123; myMethod: f &#125;</span></span><br><span class="line"><span class="comment">// false</span></span><br><span class="line"><span class="comment">// true</span></span><br></pre></td></tr></table></figure>
-
 <p>这是因为 <em>this</em> 在有一个执行对象的时候，就指向那个执行对象； 如果没有一个执行对象，那么它就指向全局环境。</p>
-<h3 id="执行对象"><a href="#执行对象" class="headerlink" title="执行对象"></a>执行对象</h3><p>在上面的例子中，当 myMethod() 在第12行执行的时候，其前面有一个对 <em>myObj</em> 的引用————这就是它的执行对象。这样，在 <code>myMethod()</code> 的执行环境中，this 就指向了  _myObj_。</p>
+<h3 id="执行对象"><a href="#执行对象" class="headerlink" title="执行对象"></a>执行对象</h3><p>在上面的例子中，当 myMethod() 在第12行执行的时候，其前面有一个对 <em>myObj</em> 的引用————这就是它的执行对象。这样，在 <code>myMethod()</code> 的执行环境中，this 就指向了  <em>myObj</em>。</p>
 <p>那么，你能知道下面例子中的 this 输出是什么么：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> myObj = &#123;</span><br><span class="line">  myMethod: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="keyword">this</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> myFunc = myObj.myMethod</span><br><span class="line">myFunc()</span><br></pre></td></tr></table></figure>
-
-<p>输出会是 <em>Window_，而不是 _myObj</em> ， 为什么？因为 <strong>this 只是在执行的时候才会被设置为执行对象</strong>。</p>
+<p>输出会是 <em>Window</em>，而不是 <em>myObj</em> ， 为什么？因为 <strong>this 只是在执行的时候才会被设置为执行对象</strong>。</p>
 <p>那么下一个的输出呢？</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> myObj = &#123;</span><br><span class="line">  myMethod: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;    </span><br><span class="line">    myFunc()</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">myFunc</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="keyword">this</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myObj.myMethod()</span><br></pre></td></tr></table></figure>
-
-<p>还是 _Window_。</p>
+<p>还是 <em>Window</em>。</p>
 <h3 id="this-与-self"><a href="#this-与-self" class="headerlink" title="this 与 self"></a>this 与 self</h3><p>看起来我们不能对 <em>this</em> 有什么有用的操作，真的是这样么？当在嵌套的函数中的时候，如果 this 指向一个全局对象是很不好的事情，因为调用是在一个对象内进行的。</p>
 <p>常规的方法是把 this 赋值给一个变量：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> myObj = &#123;</span><br><span class="line">  myMethod: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> self = <span class="keyword">this</span></span><br><span class="line">    myFunc()</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">myFunc</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'this: '</span>, <span class="keyword">this</span>)</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">'self: '</span>, self)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myObj.myMethod()</span><br><span class="line"></span><br><span class="line"><span class="comment">// this: Window &#123; ... &#125;</span></span><br><span class="line"><span class="comment">// self: &#123; myMethod: f &#125;</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="bind-call-apply"><a href="#bind-call-apply" class="headerlink" title="bind(), call(), apply()"></a>bind(), call(), apply()</h3><p>另外一种来操作 this 值的方式是调用内建的方法：  <code>call(), bind(), apply()</code>。任何一个 JavaScript 函数都可以调用这三个方法。所有他们三个做的事情都一样————以一个对象作为参数，把这个对象作为执行环境的父对象————只有轻微的不同。</p>
 <ul>
 <li>bind() 返回一个函数，不过其 this 也被设置</li>
 <li>call(), apply()：执行调用。</li>
 </ul>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> greet = <span class="string">'Hello!'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">showGreet</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>.greet)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> casualGreet = &#123; <span class="attr">greet</span>: <span class="string">'Hey!'</span> &#125;</span><br><span class="line"></span><br><span class="line">showGreet()                    <span class="comment">// Hello!</span></span><br><span class="line">showGreet.bind(casualGreet)()  <span class="comment">// Hey!</span></span><br><span class="line">showGreet.call(casualGreet)    <span class="comment">// Hey!</span></span><br><span class="line">showGreet.apply(casualGreet)   <span class="comment">// Hey!</span></span><br></pre></td></tr></table></figure>
-
-
 <h2 id="执行栈"><a href="#执行栈" class="headerlink" title="执行栈"></a>执行栈</h2><p>一个简单的规则，调用函数，就会建立执行环境。</p>
 <p>那么接下来呢？</p>
 <p>假如你的代码中有两个函数。你事实上拥有三个执行环境（包括全局执行环境）。我们需要更深入的了解一下执行栈</p>
@@ -420,20 +402,16 @@
 <p>上面这个过程就是为什么 JS 被称作是单线程的原因。</p>
 <h1 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h1><p>下面的例子会打印出什么。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> name = <span class="string">'John'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">greet</span> (<span class="params">name</span>) </span>&#123;  </span><br><span class="line">  <span class="keyword">return</span> (<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Hello '</span> + name)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> sayHello = greet(name)</span><br><span class="line"></span><br><span class="line">name = <span class="string">'Sam'</span></span><br><span class="line"></span><br><span class="line">sayHello()</span><br></pre></td></tr></table></figure>
-
 <p>答案是：Hello John。</p>
 <p>即使我们在调用  sayHello() 之前改变了 name 的值，输出不会变化。就好像 name 的值，以前在其改变前被捕捉了。</p>
 <p>这就是 闭包了。</p>
-<p>##　Scope Chain </p>
-<p>在一个执行环境中，包含了一个作用域链，保留了对其外部作用域的引用，直到全局作用域。但事实上我们并不知道作用域链是怎么样建立的。我们需要介绍一个新的角色了————函数的[[scope]]属性。</p>
+<h2 id="Scope-Chain"><a href="#Scope-Chain" class="headerlink" title="　Scope Chain "></a>　Scope Chain </h2><p>在一个执行环境中，包含了一个作用域链，保留了对其外部作用域的引用，直到全局作用域。但事实上我们并不知道作用域链是怎么样建立的。我们需要介绍一个新的角色了————函数的[[scope]]属性。</p>
 <h2 id="scope-Property"><a href="#scope-Property" class="headerlink" title="[[scope]] Property"></a>[[scope]] Property</h2><p>每个函数，在<strong>建立</strong>的时候，就被谁知了一个内部的属性 [[scope]]，属性的值就是当前执行环境的作用域链。</p>
 <p>当函数被调用的时候，会建立一个新的执行环境，同时新的执行环境的作用域链，此作用域链引用了所有的本地作用域变量。<br>这个作用域链还会以一个单独的属性来继承 [[scope]] 的值。这就是一个作用域链怎么样引用外部作用域的了。</p>
 <p>需要记住的是， [[scope]] 属性是在函数被建立的时候设置的，而不是在其被调用或运行的时候。当函数运行的时候，新的执行环境的作用域链中的变量引用了这个 [[scope]]。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// scope chain: &#123; a: undefined &#125;</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="string">'global'</span></span><br><span class="line"><span class="comment">// scope chain: &#123; a: 'global' &#125;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">outer</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// [[scope]]: &#123; a: 'global' &#125;</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// scope chain: &#123; b: undefined, outerScope: [[scope]] &#125;  </span></span><br><span class="line">  <span class="keyword">var</span> b = <span class="string">'outer'</span></span><br><span class="line">  <span class="comment">// scope chain: &#123; b: 'outer', outerScope: [[scope]] &#125;</span></span><br><span class="line">  </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">inner</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// [[scope]]: &#123;</span></span><br><span class="line">    <span class="comment">//   b: 'outer',</span></span><br><span class="line">    <span class="comment">//   outerScope: &#123; a: 'global' &#125;</span></span><br><span class="line">    <span class="comment">// &#125;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// scope chain: &#123; c: undefined, outerScope: [[scope]] &#125;</span></span><br><span class="line">    <span class="keyword">var</span> c = <span class="string">'inner'</span></span><br><span class="line">    <span class="comment">// scope chain: &#123; c: 'inner', outerScope: [[scope]] &#125;</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'a:'</span>, a)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'b:'</span>, b)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'c:'</span>, c)</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  inner()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">outer()</span><br><span class="line"></span><br><span class="line"><span class="comment">// a: global</span></span><br><span class="line"><span class="comment">// b: outer</span></span><br><span class="line"><span class="comment">// c: inner</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="闭包-1"><a href="#闭包-1" class="headerlink" title="闭包"></a>闭包</h3><p>在上面的例子中，我们来想一下这样的场景：我想在将来的某个时刻执行 inner() 函数，而不是立刻在 outer 内调用？那么在  inner() 的 console.log() 会打印出什么来？</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">'global'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">outer</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> b = <span class="string">'outer'</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">inner</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> c = <span class="string">'inner'</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'a:'</span>, a)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'b:'</span>, b)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'c:'</span>, c)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> innerFunc = outer()</span><br><span class="line">innerFunc()</span><br><span class="line"></span><br><span class="line"><span class="comment">// a: global</span></span><br><span class="line"><span class="comment">// b: outer</span></span><br><span class="line"><span class="comment">// c: inner</span></span><br></pre></td></tr></table></figure>
-
 <p>事实上，对外部变量的引用：</p>
 <ol>
 <li>在函数建立时创建</li>
@@ -443,9 +421,9 @@
 <h3 id="通过引用，而不是值"><a href="#通过引用，而不是值" class="headerlink" title="通过引用，而不是值"></a>通过引用，而不是值</h3><p>需要注意，一个闭包捕捉对外部变量的引用，而不是他们的值。其记住的是，在哪里去找到变量，这些变量在不同的时间不同的地方可以代表不同的值。</p>
 <p>换句话说，闭包内变量的值可以被修改。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">'global'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">outer</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> b = <span class="string">'outer'</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">inner</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> c = <span class="string">'inner'</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'a:'</span>, a)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'b:'</span>, b)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'c:'</span>, c)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> innerFunc = outer()</span><br><span class="line"></span><br><span class="line">a = <span class="string">'GLOBAL'</span></span><br><span class="line"></span><br><span class="line">innerFunc()</span><br><span class="line"></span><br><span class="line"><span class="comment">// a: GLOBAL</span></span><br><span class="line"><span class="comment">// b: outer</span></span><br><span class="line"><span class="comment">// c: inner</span></span><br></pre></td></tr></table></figure>
-
 <p>你可能会有疑问，为什么本节开头的那个例子输出的却是 John，而不是 Sam。</p>
 <p>这就有所不同了，因为我们的 name 是作为参数传递给 sayHello() 的，其实已经是本地作用域内的变量了，所以你再改变全局变量的值已经不会影响它了。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -462,7 +440,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/JavaScript/Pomelo%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B.html" rel="next" title="Pomelo的启动流程">
+                <a href="/JavaScript/Pomelo的启动流程.html" rel="next" title="Pomelo的启动流程">
                   <i class="fa fa-chevron-left"></i> Pomelo的启动流程
                 </a>
             </div>
@@ -470,7 +448,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Vim/Vim%E5%B8%B8%E7%94%A8%E6%8F%92%E4%BB%B6%E6%B8%85%E5%8D%95.html" rel="prev" title="Vim常用插件清单">
+                <a href="/Vim/Vim常用插件清单.html" rel="prev" title="Vim常用插件清单">
                   Vim常用插件清单 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -518,7 +496,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#变量提升"><span class="nav-number">1.</span> <span class="nav-text">变量提升</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数提升"><span class="nav-number">2.</span> <span class="nav-text">函数提升</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scope"><span class="nav-number">3.</span> <span class="nav-text">Scope</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域"><span class="nav-number">3.1.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全局作用域"><span class="nav-number">3.2.</span> <span class="nav-text">全局作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地作用域"><span class="nav-number">3.3.</span> <span class="nav-text">本地作用域</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#执行环境-Execution-context-EC"><span class="nav-number">4.</span> <span class="nav-text">执行环境(Execution context- EC)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EC-SCOPE"><span class="nav-number">4.1.</span> <span class="nav-text">EC != SCOPE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EC定义"><span class="nav-number">4.2.</span> <span class="nav-text">EC定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存建立环节"><span class="nav-number">4.3.</span> <span class="nav-text">内存建立环节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域-Scope"><span class="nav-number">4.3.1.</span> <span class="nav-text">作用域 Scope</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域链-Scope-Chain"><span class="nav-number">4.3.2.</span> <span class="nav-text">作用域链 Scope Chain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#this-的值"><span class="nav-number">4.3.3.</span> <span class="nav-text">this 的值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行对象"><span class="nav-number">4.3.4.</span> <span class="nav-text">执行对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#this-与-self"><span class="nav-number">4.3.5.</span> <span class="nav-text">this 与 self</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bind-call-apply"><span class="nav-number">4.3.6.</span> <span class="nav-text">bind(), call(), apply()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行栈"><span class="nav-number">4.4.</span> <span class="nav-text">执行栈</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#闭包"><span class="nav-number">5.</span> <span class="nav-text">闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#scope-Property"><span class="nav-number">5.1.</span> <span class="nav-text">[[scope]] Property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#闭包-1"><span class="nav-number">5.1.1.</span> <span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过引用，而不是值"><span class="nav-number">5.1.2.</span> <span class="nav-text">通过引用，而不是值</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#变量提升"><span class="nav-number">1.</span> <span class="nav-text">变量提升</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函数提升"><span class="nav-number">2.</span> <span class="nav-text">函数提升</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Scope"><span class="nav-number">3.</span> <span class="nav-text">Scope</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域"><span class="nav-number">3.1.</span> <span class="nav-text">作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全局作用域"><span class="nav-number">3.2.</span> <span class="nav-text">全局作用域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地作用域"><span class="nav-number">3.3.</span> <span class="nav-text">本地作用域</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#执行环境-Execution-context-EC"><span class="nav-number">4.</span> <span class="nav-text">执行环境(Execution context- EC)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EC-SCOPE"><span class="nav-number">4.1.</span> <span class="nav-text">EC != SCOPE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EC定义"><span class="nav-number">4.2.</span> <span class="nav-text">EC定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存建立环节"><span class="nav-number">4.3.</span> <span class="nav-text">内存建立环节</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域-Scope"><span class="nav-number">4.3.1.</span> <span class="nav-text">作用域 Scope</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作用域链-Scope-Chain"><span class="nav-number">4.3.2.</span> <span class="nav-text">作用域链 Scope Chain</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#this-的值"><span class="nav-number">4.3.3.</span> <span class="nav-text">this 的值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行对象"><span class="nav-number">4.3.4.</span> <span class="nav-text">执行对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#this-与-self"><span class="nav-number">4.3.5.</span> <span class="nav-text">this 与 self</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bind-call-apply"><span class="nav-number">4.3.6.</span> <span class="nav-text">bind(), call(), apply()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行栈"><span class="nav-number">4.4.</span> <span class="nav-text">执行栈</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#闭包"><span class="nav-number">5.</span> <span class="nav-text">闭包</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Scope-Chain"><span class="nav-number">5.1.</span> <span class="nav-text">　Scope Chain </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#scope-Property"><span class="nav-number">5.2.</span> <span class="nav-text">[[scope]] Property</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#闭包-1"><span class="nav-number">5.2.1.</span> <span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过引用，而不是值"><span class="nav-number">5.2.2.</span> <span class="nav-text">通过引用，而不是值</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -532,20 +510,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -557,10 +535,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -589,10 +567,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -667,7 +645,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/JavaScript/%E5%85%B3%E4%BA%8EJavaScript%E6%89%A7%E8%A1%8C%E7%8E%AF%E5%A2%83%E5%92%8CScope.html",
+            url: "https://gowa.club/JavaScript/关于JavaScript执行环境和Scope.html",
             identifier: "JavaScript/关于JavaScript执行环境和Scope.html",
             title: "关于JavaScript执行环境和Scope"
           }

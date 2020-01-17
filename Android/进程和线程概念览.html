@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Java,Android,Thread">
 <meta property="og:type" content="article">
 <meta property="og:title" content="进程和线程概念览">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A6%82%E5%BF%B5%E8%A7%88.html">
+<meta property="og:url" content="https://gowa.club/Android/进程和线程概念览.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="当某个应用组件启动且该应用没有运行其他任何组件时，Android 系统会使用单个执行线程为应用启动新的 Linux 进程。默认情况下，同一应用的所有组件在相同的进程和线程（称为“主”线程）中运行。 如果某个应用组件启动且该应用已存在进程（因为存在该应用的其他组件），则该组件会在此进程内启动并使用相同的执行线程。 但是，您可以安排应用中的其他组件在单独的进程中运行，并为任何进程创建额外的线程。 本文">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-08T14:49:37.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="进程和线程概念览">
+<meta name="twitter:description" content="当某个应用组件启动且该应用没有运行其他任何组件时，Android 系统会使用单个执行线程为应用启动新的 Linux 进程。默认情况下，同一应用的所有组件在相同的进程和线程（称为“主”线程）中运行。 如果某个应用组件启动且该应用已存在进程（因为存在该应用的其他组件），则该组件会在此进程内启动并使用相同的执行线程。 但是，您可以安排应用中的其他组件在单独的进程中运行，并为任何进程创建额外的线程。 本文">
 
-<link rel="canonical" href="https://gowa.club/Android/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A6%82%E5%BF%B5%E8%A7%88.html">
+<link rel="canonical" href="https://gowa.club/Android/进程和线程概念览.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A6%82%E5%BF%B5%E8%A7%88.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/进程和线程概念览.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A6%82%E5%BF%B5%E8%A7%88.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/进程和线程概念览.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/进程和线程概念览.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -291,12 +293,10 @@
 
       
         <p>当某个应用组件启动且该应用没有运行其他任何组件时，Android 系统会使用单个执行线程为应用启动新的 Linux 进程。默认情况下，同一应用的所有组件在相同的进程和线程（称为“主”线程）中运行。 如果某个应用组件启动且该应用已存在进程（因为存在该应用的其他组件），则该组件会在此进程内启动并使用相同的执行线程。 但是，您可以安排应用中的其他组件在单独的进程中运行，并为任何进程创建额外的线程。</p>
-<p>本文档介绍进程和线程在 Android 应用中的工作方式。</p>
-<a id="more"></a>
-<p><a href="https://developer.android.google.cn/guide/components/processes-and-threads" target="_blank" rel="noopener">文章来源：安卓官方API GUIDES</a>`</p>
+<p>本文档介绍进程和线程在 Android 应用中的工作方式。<br><a id="more"></a><br><a href="https://developer.android.google.cn/guide/components/processes-and-threads" target="_blank" rel="noopener">文章来源：安卓官方API GUIDES</a>`</p>
 <h1 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h1><p>默认情况下，同一应用的所有组件均在相同的进程中运行，且大多数应用都不会改变这一点。 但是，如果您发现需要控制某个组件所属的进程，则可在清单文件中执行此操作。</p>
-<p>各类组件元素的清单文件条目—<activity>、<service>、<receiver> 和 <provider>—均支持 android:process 属性，此属性可以指定该组件应在哪个进程运行。您可以设置此属性，使每个组件均在各自的进程中运行，或者使一些组件共享一个进程，而其他组件则不共享。 此外，您还可以设置 android:process，使不同应用的组件在相同的进程中运行，但前提是这些应用共享相同的 Linux 用户 ID 并使用相同的证书进行签署。</p>
-<p>此外，<application> 元素还支持 android:process 属性，以设置适用于所有组件的默认值。</p>
+<p>各类组件元素的清单文件条目—<activity>、<service>、<receiver> 和 <provider>—均支持 android:process 属性，此属性可以指定该组件应在哪个进程运行。您可以设置此属性，使每个组件均在各自的进程中运行，或者使一些组件共享一个进程，而其他组件则不共享。 此外，您还可以设置 android:process，使不同应用的组件在相同的进程中运行，但前提是这些应用共享相同的 Linux 用户 ID 并使用相同的证书进行签署。</provider></receiver></service></activity></p>
+<p>此外，<application> 元素还支持 android:process 属性，以设置适用于所有组件的默认值。</application></p>
 <p>如果内存不足，而其他为用户提供更紧急服务的进程又需要内存时，Android 可能会决定在某一时刻关闭某一进程。在被终止进程中运行的应用组件也会随之销毁。 当这些组件需要再次运行时，系统将为它们重启进程。</p>
 <p>决定终止哪个进程时，Android 系统将权衡它们对用户的相对重要程度。例如，相对于托管可见 Activity 的进程而言，它更有可能关闭托管屏幕上不再可见的 Activity 的进程。 因此，是否终止某个进程的决定取决于该进程中所运行组件的状态。 下面，我们介绍决定终止进程所用的规则。</p>
 <h1 id="进程生命周期"><a href="#进程生命周期" class="headerlink" title="进程生命周期"></a>进程生命周期</h1><p>Android 系统将尽量长时间地保持应用进程，但为了新建进程或运行更重要的进程，最终需要移除旧进程来回收内存。 为了确定保留或终止哪些进程，系统会根据进程中正在运行的组件以及这些组件的状态，将每个进程放入“重要性层次结构”中。 必要时，系统会首先消除重要性最低的进程，然后是重要性略逊的进程，依此类推，以回收系统资源。</p>
@@ -340,7 +340,7 @@
 <li>View.postDelayed(Runnable, long)</li>
 </ul>
 <p>例如，您可以通过使用 View.post(Runnable) 方法修复上述代码：</p>
-<p>public void onClick(View v) {<br>    new Thread(new Runnable() {<br>        public void run() {<br>            final Bitmap bitmap =<br>                    loadImageFromNetwork(“<a href="http://example.com/image.png&quot;" target="_blank" rel="noopener">http://example.com/image.png&quot;</a>);<br>            mImageView.post(new Runnable() {<br>                public void run() {<br>                    mImageView.setImageBitmap(bitmap);<br>                }<br>            });<br>        }<br>    }).start();<br>}</p>
+<p>public void onClick(View v) {<br>    new Thread(new Runnable() {<br>        public void run() {<br>            final Bitmap bitmap =<br>                    loadImageFromNetwork(“<a href="http://example.com/image.png" target="_blank" rel="noopener">http://example.com/image.png</a>“);<br>            mImageView.post(new Runnable() {<br>                public void run() {<br>                    mImageView.setImageBitmap(bitmap);<br>                }<br>            });<br>        }<br>    }).start();<br>}</p>
 <p>现在，上述实现属于线程安全型：在单独的线程中完成网络操作，而在 UI 线程中操纵 ImageView。</p>
 <p>但是，随着操作日趋复杂，这类代码也会变得复杂且难以维护。 要通过工作线程处理更复杂的交互，可以考虑在工作线程中使用 Handler 处理来自 UI 线程的消息。当然，最好的解决方案或许是扩展 AsyncTask 类，此类简化了与 UI 进行交互所需执行的工作线程任务。</p>
 <h2 id="使用-AsyncTask"><a href="#使用-AsyncTask" class="headerlink" title="使用 AsyncTask"></a>使用 AsyncTask</h2><p>AsyncTask 允许对用户界面执行异步操作。 它会先阻塞工作线程中的操作，然后在 UI 线程中发布结果，而无需您亲自处理线程和/或处理程序。</p>
@@ -363,6 +363,7 @@
 <p>同样，内容提供程序也可接收来自其他进程的数据请求。尽管 ContentResolver 和 ContentProvider 类隐藏了如何管理进程间通信的细节，但响应这些请求的 ContentProvider 方法（query()、insert()、delete()、update() 和 getType() 方法）将从内容提供程序所在进程的线程池中调用，而不是从进程的 UI 线程调用。 由于这些方法可能会同时从任意数量的线程调用，因此它们也必须实现为线程安全方法。</p>
 <h1 id="进程间通信"><a href="#进程间通信" class="headerlink" title="进程间通信"></a>进程间通信</h1><p>Android 利用远程过程调用 (RPC) 提供了一种进程间通信 (IPC) 机制，通过这种机制，由 Activity 或其他应用组件调用的方法将（在其他进程中）远程执行，而所有结果将返回给调用方。 这就要求把方法调用及其数据分解至操作系统可以识别的程度，并将其从本地进程和地址空间传输至远程进程和地址空间，然后在远程进程中重新组装并执行该调用。 然后，返回值将沿相反方向传输回来。 Android 提供了执行这些 IPC 事务所需的全部代码，因此您只需集中精力定义和实现 RPC 编程接口即可。</p>
 <p>要执行 IPC，必须使用 bindService() 将应用绑定到服务上。如需了解详细信息，请参阅服务开发者指南。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -381,7 +382,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/android%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html" rel="next" title="Android中的线程">
+                <a href="/Android/android中的线程.html" rel="next" title="Android中的线程">
                   <i class="fa fa-chevron-left"></i> Android中的线程
                 </a>
             </div>
@@ -389,7 +390,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Git/Git%E5%91%BD%E4%BB%A4-stash.html" rel="prev" title="Git命令-stash">
+                <a href="/Git/Git命令-stash.html" rel="prev" title="Git命令-stash">
                   Git命令-stash <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -451,20 +452,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -476,10 +477,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -508,10 +509,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -586,7 +587,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A6%82%E5%BF%B5%E8%A7%88.html",
+            url: "https://gowa.club/Android/进程和线程概念览.html",
             identifier: "Android/进程和线程概念览.html",
             title: "进程和线程概念览"
           }

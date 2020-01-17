@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用join进行联合查询">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;%E4%BD%BF%E7%94%A8join%E8%BF%9B%E8%A1%8C%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2.html">
+<meta property="og:url" content="https://gowa.club/数据库/使用join进行联合查询.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="单表已经无法满足我们的需求了，总不能把所有的数据字段都放在一个表撒，所以分表就是必须的，关联查询，经常会用到。就比如公司最近的业务就是一个主表，存储状态数据。所有的相关数据分布在好几张表内，如何建立有效高效的查询，就非常必要了。好久没有管理数据库，都快忘记了。现在来复习一下。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-07-07T07:36:52.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用join进行联合查询">
+<meta name="twitter:description" content="单表已经无法满足我们的需求了，总不能把所有的数据字段都放在一个表撒，所以分表就是必须的，关联查询，经常会用到。就比如公司最近的业务就是一个主表，存储状态数据。所有的相关数据分布在好几张表内，如何建立有效高效的查询，就非常必要了。好久没有管理数据库，都快忘记了。现在来复习一下。">
 
-<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8join%E8%BF%9B%E8%A1%8C%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2.html">
+<link rel="canonical" href="https://gowa.club/数据库/使用join进行联合查询.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8join%E8%BF%9B%E8%A1%8C%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/使用join进行联合查询.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -259,7 +261,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8join%E8%BF%9B%E8%A1%8C%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/使用join进行联合查询.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/使用join进行联合查询.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,27 +292,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>单表已经无法满足我们的需求了，总不能把所有的数据字段都放在一个表撒，所以分表就是必须的，关联查询，经常会用到。就比如公司最近的业务就是一个主表，存储状态数据。所有的相关数据分布在好几张表内，如何建立有效高效的查询，就非常必要了。好久没有管理数据库，都快忘记了。现在来复习一下。</p>
-<a id="more"></a>
-
+        <p>单表已经无法满足我们的需求了，总不能把所有的数据字段都放在一个表撒，所以分表就是必须的，关联查询，经常会用到。就比如公司最近的业务就是一个主表，存储状态数据。所有的相关数据分布在好几张表内，如何建立有效高效的查询，就非常必要了。好久没有管理数据库，都快忘记了。现在来复习一下。<br><a id="more"></a></p>
 <h1 id="select-语句"><a href="#select-语句" class="headerlink" title="select 语句"></a>select 语句</h1><p>由于join是在select内使用的，我们还需要来观察一下select的基本格式：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    [<span class="keyword">ALL</span> | <span class="keyword">DISTINCT</span> | <span class="keyword">DISTINCTROW</span> ]</span><br><span class="line">      [<span class="keyword">HIGH_PRIORITY</span>]</span><br><span class="line">      [<span class="keyword">STRAIGHT_JOIN</span>]</span><br><span class="line">      [<span class="keyword">SQL_SMALL_RESULT</span>] [<span class="keyword">SQL_BIG_RESULT</span>] [<span class="keyword">SQL_BUFFER_RESULT</span>]</span><br><span class="line">      [<span class="keyword">SQL_CACHE</span> | SQL_NO_CACHE] [<span class="keyword">SQL_CALC_FOUND_ROWS</span>]</span><br><span class="line">    select_expr [, select_expr ...]</span><br><span class="line">    [<span class="keyword">FROM</span> table_references</span><br><span class="line">      [<span class="keyword">PARTITION</span> partition_list]</span><br><span class="line">    [<span class="keyword">WHERE</span> where_condition]</span><br><span class="line">    [<span class="keyword">GROUP</span> <span class="keyword">BY</span> &#123;col_name | expr | <span class="keyword">position</span>&#125;</span><br><span class="line">      [<span class="keyword">ASC</span> | <span class="keyword">DESC</span>], ... [<span class="keyword">WITH</span> <span class="keyword">ROLLUP</span>]]</span><br><span class="line">    [<span class="keyword">HAVING</span> where_condition]</span><br><span class="line">    [<span class="keyword">ORDER</span> <span class="keyword">BY</span> &#123;col_name | expr | <span class="keyword">position</span>&#125;</span><br><span class="line">      [<span class="keyword">ASC</span> | <span class="keyword">DESC</span>], ...]</span><br><span class="line">    [<span class="keyword">LIMIT</span> &#123;[<span class="keyword">offset</span>,] <span class="keyword">row_count</span> | <span class="keyword">row_count</span> <span class="keyword">OFFSET</span> <span class="keyword">offset</span>&#125;]</span><br><span class="line">    [<span class="keyword">PROCEDURE</span> procedure_name(argument_list)]</span><br><span class="line">    [<span class="keyword">INTO</span> <span class="keyword">OUTFILE</span> <span class="string">'file_name'</span></span><br><span class="line">        [<span class="built_in">CHARACTER</span> <span class="keyword">SET</span> charset_name]</span><br><span class="line">        export_options</span><br><span class="line">      | <span class="keyword">INTO</span> <span class="keyword">DUMPFILE</span> <span class="string">'file_name'</span></span><br><span class="line">      | <span class="keyword">INTO</span> var_name [, var_name]]</span><br><span class="line">    [<span class="keyword">FOR</span> <span class="keyword">UPDATE</span> | <span class="keyword">LOCK</span> <span class="keyword">IN</span> <span class="keyword">SHARE</span> <span class="keyword">MODE</span>]]</span><br></pre></td></tr></table></figure>
 <p>简单地说，select语句就是：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> what <span class="keyword">from</span> which_table <span class="keyword">where</span> conditon;</span><br></pre></td></tr></table></figure>
-
 <p>也就是上面语句中的 <em>table_references</em>。对于表的引用，可能是一个，也可能是多个。</p>
 <h1 id="table-references"><a href="#table-references" class="headerlink" title="table_references"></a>table_references</h1><p>对于 表的引用， 可能有多种形式。</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">table_references:</span><br><span class="line">    escaped_table_reference [, escaped_table_reference] ...</span><br><span class="line"></span><br><span class="line">escaped_table_reference:</span><br><span class="line">    table_reference</span><br><span class="line">  | &#123; OJ table_reference &#125;</span><br><span class="line"></span><br><span class="line">table_reference:</span><br><span class="line">    table_factor</span><br><span class="line">  | join_table</span><br><span class="line"></span><br><span class="line">table_factor:</span><br><span class="line">    tbl_name [PARTITION (partition_names)]</span><br><span class="line">        [[AS] alias] [index_hint_list]</span><br><span class="line">  | table_subquery [AS] alias</span><br><span class="line">  | ( table_references )</span><br><span class="line"></span><br><span class="line">join_table:</span><br><span class="line">    table_reference [INNER | CROSS] JOIN table_factor [join_condition]</span><br><span class="line">  | table_reference STRAIGHT_JOIN table_factor</span><br><span class="line">  | table_reference STRAIGHT_JOIN table_factor ON conditional_expr</span><br><span class="line">  | table_reference &#123;LEFT|RIGHT&#125; [OUTER] JOIN table_reference join_condition</span><br><span class="line">  | table_reference NATURAL [&#123;LEFT|RIGHT&#125; [OUTER]] JOIN table_factor</span><br><span class="line"></span><br><span class="line">join_condition:</span><br><span class="line">    ON conditional_expr</span><br><span class="line">  | USING (column_list)</span><br><span class="line"></span><br><span class="line">index_hint_list:</span><br><span class="line">    index_hint [, index_hint] ...</span><br><span class="line"></span><br><span class="line">index_hint:</span><br><span class="line">    <span class="keyword">USE</span> &#123;<span class="keyword">INDEX</span>|<span class="keyword">KEY</span>&#125;</span><br><span class="line">      [<span class="keyword">FOR</span> &#123;<span class="keyword">JOIN</span>|<span class="keyword">ORDER</span> <span class="keyword">BY</span>|<span class="keyword">GROUP</span> <span class="keyword">BY</span>&#125;] ([index_list])</span><br><span class="line">  | <span class="keyword">IGNORE</span> &#123;<span class="keyword">INDEX</span>|<span class="keyword">KEY</span>&#125;</span><br><span class="line">      [<span class="keyword">FOR</span> &#123;<span class="keyword">JOIN</span>|<span class="keyword">ORDER</span> <span class="keyword">BY</span>|<span class="keyword">GROUP</span> <span class="keyword">BY</span>&#125;] (index_list)</span><br><span class="line">  | <span class="keyword">FORCE</span> &#123;<span class="keyword">INDEX</span>|<span class="keyword">KEY</span>&#125;</span><br><span class="line">      [<span class="keyword">FOR</span> &#123;<span class="keyword">JOIN</span>|<span class="keyword">ORDER</span> <span class="keyword">BY</span>|<span class="keyword">GROUP</span> <span class="keyword">BY</span>&#125;] (index_list)</span><br><span class="line"></span><br><span class="line">index_list:</span><br><span class="line">    index_name [, index_name] ...</span><br></pre></td></tr></table></figure>
-
 <p>一个表引用，也被称为 join 表达式。</p>
 <p>一个表引用（当引用的是分区表的时候）可能会包含一个 <em>PARTITION</em> 选项，这包括一个 逗号分隔的分区 列表，子分区，或者两者皆有。这个选项跟随在表的后面，但在别名之前。这个选项的影响是，数据只会从列出的分区或子分区内选出。没有列出的表数据不会去查询。</p>
 <p><strong>table_factor</strong>的语法在标准SQL的基础上在MySQL中进行了扩展。标准的SQL只接受 <strong>table_reference</strong>，而不接受在括号内的 <strong>table_reference</strong> 列表。</p>
 <p>这是一个保守的扩展，处于 列表中的逗号 都被认为是一个 <code>inner join</code>。如：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t1 <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> (t2, t3, t4)</span><br><span class="line">                 <span class="keyword">ON</span> (t2.a = t1.a <span class="keyword">AND</span> t3.b = t1.b <span class="keyword">AND</span> t4.c = t1.c)</span><br></pre></td></tr></table></figure>
-
 <p>等于：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t1 <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> (t2 <span class="keyword">CROSS</span> <span class="keyword">JOIN</span> t3 <span class="keyword">CROSS</span> <span class="keyword">JOIN</span> t4)</span><br><span class="line">                 <span class="keyword">ON</span> (t2.a = t1.a <span class="keyword">AND</span> t3.b = t1.b <span class="keyword">AND</span> t4.c = t1.c)</span><br></pre></td></tr></table></figure>
-
 <p>在MySql中，<code>JOIN, CROSS JOIN, INNER JOIN</code>语法上是相同的，可以相互替换。标准的SQL内就是不相等的，<code>INNER JOIN</code>会与一个<code>ON</code>语句配合使用，<code>CROSS JOIN</code>在其他情况下使用。</p>
 <p>通常，如果 join 表达式内 只有  <em>inner join</em>操作，那么括号可以忽略。<a href="https://dev.mysql.com/doc/refman/5.7/en/nested-join-optimization.html" target="_blank" rel="noopener">MySQL支持嵌套Join，嵌套索引的优化</a>。</p>
 <p>索引提示可以用来指定 MySQL 的优化器怎么样利用 索引。更多信息查看 <a href="https://dev.mysql.com/doc/refman/5.7/en/index-hints.html" target="_blank" rel="noopener">索引提示</a>。</p>
@@ -320,19 +316,17 @@
 <li>使用别名， <em>as</em> 可以省略</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.name, t2.salary</span><br><span class="line">  <span class="keyword">FROM</span> employee <span class="keyword">AS</span> t1 <span class="keyword">INNER</span> <span class="keyword">JOIN</span> info <span class="keyword">AS</span> t2 <span class="keyword">ON</span> t1.name = t2.name;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> t1.name, t2.salary</span><br><span class="line">  <span class="keyword">FROM</span> employee t1 <span class="keyword">INNER</span> <span class="keyword">JOIN</span> info t2 <span class="keyword">ON</span> t1.name = t2.name;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><code>table_subquery</code>在From语句中被看做一个 派成表 或子查询。<a href="https://dev.mysql.com/doc/refman/5.7/en/derived-tables.html" target="_blank" rel="noopener">Section 13.2.10.8, “Derived Tables”</a>。这样的查询必须要有一个别名，作为结果表名称。比如：</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> (<span class="keyword">SELECT</span> <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>) <span class="keyword">AS</span> t1;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><code>INNER JOIN</code> 与<code>,</code> 在没有 join 条件的时候是相等的，都会在指定的表上产生一个 笛卡尔积 结果集（每个表的每一行都会与其他表的任何一行进行 JOIN）。 然而，<code>,</code> 的优先级小于 <code>INNER JOIN, CROSS JOIN, LEFT JOIN,</code>等。如果你有Join条件的时候，混合使用 逗号 和其他 Join 类型，一个类似 <em>Unknown column ‘col_name’ in ‘on clause’</em> 错误就可能会出现。我们后面会看看怎么样处理这样的信息。</li>
 <li>位于 <code>ON</code> 后的 <strong>conditional_expr</strong> 可以是任何 <code>WHERE</code> 语句内可用的表达式。通常，<code>ON</code> 语句用来表示怎么样JOIN表，而<code>WHERE</code>用来限制包括在结果中的行。</li>
 <li>在<code>LEFT JOIN</code>中，在 <code>ON 或 USING</code> 部分 在右表中，没有匹配的行，那么，右表对应的那一行将会返回全是NULL。可以用这个事实来查找在表中在另外一个表内不重复的行。</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> left_tbl.*</span><br><span class="line">  <span class="keyword">FROM</span> left_tbl <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> right_tbl <span class="keyword">ON</span> left_tbl.id = right_tbl.id</span><br><span class="line">  <span class="keyword">WHERE</span> right_tbl.id <span class="keyword">IS</span> <span class="literal">NULL</span>;</span><br></pre></td></tr></table></figure>
-<p>这个例子寻找在 <em>left_tbl*中，对应 *id</em> 在右表中 不存在的记录。 参考<a href="https://dev.mysql.com/doc/refman/5.7/en/outer-join-optimization.html" target="_blank" rel="noopener">Outer Join 优化</a></p>
+<p>这个例子寻找在 <em>left_tbl</em>中，对应 <em>id</em> 在右表中 不存在的记录。 参考<a href="https://dev.mysql.com/doc/refman/5.7/en/outer-join-optimization.html" target="_blank" rel="noopener">Outer Join 优化</a></p>
 <ul>
 <li><code>USING(column_list</code>语句列出了在join的表内必须都包含的列，如果 表<em>a, b</em>都包含有列 <em>c1, c2, c3</em>，下面的语句会比较两个表中对应的列。 </li>
 <li>两个表的<code>NATURAL [LEFT] JOIN</code>被定义来语法上与 一个 含有 <code>USING</code>（包含两表中所有列）的 <code>INNER JOIN</code> 或 <code>LEFT JOIN</code>。</li>
@@ -346,16 +340,13 @@
 </ul>
 <p>一些例子：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table1, table2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table1 <span class="keyword">INNER</span> <span class="keyword">JOIN</span> table2 <span class="keyword">ON</span> table1.id = table2.id;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table1 <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> table2 <span class="keyword">ON</span> table1.id = table2.id;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table1 <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> table2 <span class="keyword">USING</span> (<span class="keyword">id</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> table1 <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> table2 <span class="keyword">ON</span> table1.id = table2.id</span><br><span class="line">  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> table3 <span class="keyword">ON</span> table2.id = table3.id;</span><br></pre></td></tr></table></figure>
-
 <p>Natural joins 和使用了 <code>USING</code>的join，包括 Outer join 变量，根据 SQL：2003标准处理。</p>
 <ul>
 <li><code>NATURAL</code>Join的重复行不会出现。</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t1 (i <span class="built_in">INT</span>, j <span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t2 (k <span class="built_in">INT</span>, j <span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> t1 <span class="keyword">VALUES</span>(<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> t2 <span class="keyword">VALUES</span>(<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t1 <span class="keyword">NATURAL</span> <span class="keyword">JOIN</span> t2;</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t1 <span class="keyword">JOIN</span> t2 <span class="keyword">USING</span> (j);</span><br></pre></td></tr></table></figure>
-
 <p>输出结果如下：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">+------+------+------+</span><br><span class="line">| j    | i    | k    |</span><br><span class="line">+------+------+------+</span><br><span class="line">|    1 |    1 |    1 |</span><br><span class="line">+------+------+------+</span><br><span class="line">+------+------+------+</span><br><span class="line">| j    | i    | k    |</span><br><span class="line">+------+------+------+</span><br><span class="line">|    1 |    1 |    1 |</span><br><span class="line">+------+------+------+</span><br></pre></td></tr></table></figure>
-
 <p> 在第一个<code>select</code>语句中，<em>j</em> 在两个表中都有，所以其成为了一个 join 列，根据 标准SQL，其在结果集内只出现一次。类似，在第二个<code>select</code>中，<em>j</em> 是一个 <code>USING</code> 中的列，其也只会出现一次。</p>
 <p> 冗余的列消除了，列顺序根据标准SQL，如下产生：</p>
 <ol>
@@ -365,56 +356,44 @@
 </ol>
 <p>两个共有的列合并为一列通过联合操作来定义 。这就是说，对于 <em>t1.a</em> 与 <em>t2.a</em> 在单个结果列中的定义是 <code>a = COALESE(t1.a, t2.a)</code>：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">COALESCE(x, y) = (CASE WHEN x IS NOT NULL THEN x ELSE y <span class="keyword">END</span>)</span><br></pre></td></tr></table></figure>
-
 <p>如果 join操作是其他类型的join，结果列是指定join表的所有列的集合。</p>
 <p><code>COALESCE</code>操作的一个后果就是，对于 <code>outer join</code>，如果其中一个表的列总是NULL的话，它总是会包含 非NULL的那一列。如果两个表中的这一列都不为空，或者都为空，其值是相同的，哪个值作为结果其实不重要。一个简单的的解释这个情况的办法是，把一个 outer join 的 合并列 看作是一个 Join 操作的 inner 表的公共列。假设表  <em>t1(a, b)</em>  和 表 <em>t2(a, c)</em>有以下内容：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">t1    t2</span><br><span class="line"><span class="comment">----  ----</span></span><br><span class="line">1 x   2 z</span><br><span class="line">2 y   3 w</span><br></pre></td></tr></table></figure>
-
 <p>下面这个join的结果是，其中，列 a 包含的是 <em>t1.a</em>的值：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">ysql&gt; SELECT * FROM t1 NATURAL LEFT JOIN t2;</span><br><span class="line">+<span class="comment">------+------+------+</span></span><br><span class="line">| a    | b    | c    |</span><br><span class="line">+<span class="comment">------+------+------+</span></span><br><span class="line">|    1 | x    | NULL |</span><br><span class="line">|    2 | y    | z    |</span><br><span class="line">+<span class="comment">------+------+------+</span></span><br></pre></td></tr></table></figure>
-
 <p>而对于下面这个：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM t1 NATURAL RIGHT JOIN t2;</span><br><span class="line">+<span class="comment">------+------+------+</span></span><br><span class="line">| a    | c    | b    |</span><br><span class="line">+<span class="comment">------+------+------+</span></span><br><span class="line">|    2 | z    | y    |</span><br><span class="line">|    3 | w    | NULL |</span><br><span class="line">+<span class="comment">------+------+------+</span></span><br></pre></td></tr></table></figure>
-
 <p>其包含的是 <em>t2.a</em> 的值。</p>
 <p>我们把他与 <code>JOIN ... ON</code> 相比较：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM t1 LEFT JOIN t2 ON (t1.a = t2.a);</span><br><span class="line">+<span class="comment">------+------+------+------+</span></span><br><span class="line">| a    | b    | a    | c    |</span><br><span class="line">+<span class="comment">------+------+------+------+</span></span><br><span class="line">|    1 | x    | NULL | NULL |</span><br><span class="line">|    2 | y    |    2 | z    |</span><br><span class="line">+<span class="comment">------+------+------+------+</span></span><br><span class="line">mysql&gt; SELECT * FROM t1 RIGHT JOIN t2 ON (t1.a = t2.a);</span><br><span class="line">+<span class="comment">------+------+------+------+</span></span><br><span class="line">| a    | b    | a    | c    |</span><br><span class="line">+<span class="comment">------+------+------+------+</span></span><br><span class="line">|    2 | y    |    2 | z    |</span><br><span class="line">| NULL | NULL |    3 | w    |</span><br><span class="line">+<span class="comment">------+------+------+------+</span></span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><code>USING</code> 语句可以被 <code>ON</code> 语句重写。然而，尽管他们很相似，但他们并不总是一样。比如下面这两个：</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">a LEFT JOIN b USING (c1, c2, c3)</span><br><span class="line">a LEFT JOIN b ON a.c1 = b.c1 AND a.c2 = b.c2 AND a.c3 = b.c3</span><br></pre></td></tr></table></figure>
-
 <p>如果我们想要判断哪个满足 join 条件，两者语法上是一致的。</p>
 <p>但如果我们是想要决定 <code>select *</code> 会显示哪些列的时候，这就不一样了。<code>USING</code> 操作选择列中 联合 后的值，<code>ON</code> 会显示表中所有的列。对于 <code>USING</code> JOIN，<code>SELECT *</code> 会选择这些值：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">COALESCE(a.c1, b.c1), COALESCE(a.c2, b.c2), COALESCE(a.c3, b.c3)</span><br></pre></td></tr></table></figure>
-
 <p>而对于 <code>ON</code>：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">a.c1, a.c2, a.c3, b.c1, b.c2, b.c3</span><br></pre></td></tr></table></figure>
-
 <p>在 inner join中，<code>COALESCE(a.c1, b.c1)</code> 与  <em>a.c1</em> 或 <em>b.c1</em> 相似，因为两者值是相同的。对于 outer join（如 LEFT JOIN），其中有一个值可能是 NULL，这列将会被忽略。</p>
 <ul>
 <li><code>ON</code> 只能引用其操作数。</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t1 (i1 <span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t2 (i2 <span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t3 (i3 <span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t1 <span class="keyword">JOIN</span> t2 <span class="keyword">ON</span> (i1 = i3) <span class="keyword">JOIN</span> t3;</span><br></pre></td></tr></table></figure>
-
-<p>这将会出现一个错误 *Unknown column ‘i3’ in ‘on clause’ *，因为 I3 位于表 t3内，其并不是 <code>ON</code> 的操作数，因为这样写：</p>
+<p>这将会出现一个错误 <em>Unknown column ‘i3’ in ‘on clause’ </em>，因为 I3 位于表 t3内，其并不是 <code>ON</code> 的操作数，因为这样写：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t1 <span class="keyword">JOIN</span> t2 <span class="keyword">JOIN</span> t3 <span class="keyword">ON</span> (i1 = i3);</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><code>JOIN</code> 的优先级高于 <code>,</code>，所以 <code>t1, t2 JOIN t3</code> 会被 预编译为 <code>t1, (t2 join t3)</code>，而不是 <code>((t1, t2) JOIN t3</code>。这也会影响  <code>ON</code> 语句哦。</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t1 (i1 <span class="built_in">INT</span>, j1 <span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t2 (i2 <span class="built_in">INT</span>, j2 <span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> t3 (i3 <span class="built_in">INT</span>, j3 <span class="built_in">INT</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> t1 <span class="keyword">VALUES</span>(<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> t2 <span class="keyword">VALUES</span>(<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> t3 <span class="keyword">VALUES</span>(<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> t1, t2 <span class="keyword">JOIN</span> t3 <span class="keyword">ON</span> (t1.i1 = t3.i3);</span><br></pre></td></tr></table></figure>
-
-<p>很明显，上面的语句也会出现一个错误。*Unknown column ‘t1.i1’ in ‘on clause’ *。</p>
+<p>很明显，上面的语句也会出现一个错误。<em>Unknown column ‘t1.i1’ in ‘on clause’ </em>。</p>
 <p>为了正确的执行语句，我们应该这样做：</p>
 <p><code>SELECT * FROM (t1, t2) JOIN t3 ON (t1.i1 = t3.i3);</code> 用 括号把先前的两个表给包围起来。</p>
 <p><code>SELECT * FROM t1 JOIN t2 JOIN t3 ON (t1.i1 = t3.i3);</code> 避免使用 逗号 操作符。</p>
 <h1 id="UPDATE"><a href="#UPDATE" class="headerlink" title="UPDATE"></a>UPDATE</h1><p>update 也支持 table_reference 这样的形式来指定关联表。</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> [<span class="keyword">LOW_PRIORITY</span>] [<span class="keyword">IGNORE</span>] table_reference</span><br><span class="line">    <span class="keyword">SET</span> assignment_list</span><br><span class="line">    [<span class="keyword">WHERE</span> where_condition]</span><br><span class="line">    [<span class="keyword">ORDER</span> <span class="keyword">BY</span> ...]</span><br><span class="line">    [<span class="keyword">LIMIT</span> <span class="keyword">row_count</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">value</span>:</span><br><span class="line">    &#123;expr | <span class="keyword">DEFAULT</span>&#125;</span><br><span class="line"></span><br><span class="line">assignment:</span><br><span class="line">    col_name = <span class="keyword">value</span></span><br><span class="line"></span><br><span class="line">assignment_list:</span><br><span class="line">    assignment [, assignment] ...</span><br></pre></td></tr></table></figure>
-
-
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">update</span> sm_com_register_applicationstatus a <span class="keyword">join</span> <span class="string">`v_sm_company`</span> b <span class="keyword">on</span> a.com_name = b.qymc <span class="keyword">set</span> a.status=<span class="string">'5'</span>, a.<span class="string">`is_auto_enter`</span> =<span class="string">'1'</span> <span class="keyword">where</span> a.status=<span class="string">'14'</span>;</span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -431,7 +410,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/%E5%AE%89%E5%8D%93%E8%A2%AB%E5%BC%BA%E6%9D%80%E5%90%8E%E5%8F%B0%E6%81%A2%E5%A4%8D%E6%97%B6%E5%80%99%E5%B4%A9%E6%BA%83%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95.html" rel="next" title="安卓被强杀后台恢复时候崩溃的解决办法">
+                <a href="/Android/安卓被强杀后台恢复时候崩溃的解决办法.html" rel="next" title="安卓被强杀后台恢复时候崩溃的解决办法">
                   <i class="fa fa-chevron-left"></i> 安卓被强杀后台恢复时候崩溃的解决办法
                 </a>
             </div>
@@ -439,7 +418,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/SpringMVC%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.html" rel="prev" title="SpringMVC工作流程">
+                <a href="/Java/SpringMVC工作流程.html" rel="prev" title="SpringMVC工作流程">
                   SpringMVC工作流程 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -501,20 +480,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -526,10 +505,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -558,10 +537,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -636,7 +615,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8join%E8%BF%9B%E8%A1%8C%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2.html",
+            url: "https://gowa.club/数据库/使用join进行联合查询.html",
             identifier: "数据库/使用join进行联合查询.html",
             title: "使用join进行联合查询"
           }

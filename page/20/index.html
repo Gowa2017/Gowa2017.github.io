@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -49,10 +49,11 @@
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="退思园">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;page&#x2F;20&#x2F;index.html">
+<meta property="og:url" content="https://gowa.club/page/20/index.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="退思园">
 
 <link rel="canonical" href="https://gowa.club/page/20/">
 
@@ -224,7 +225,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/%E5%88%A9%E7%94%A8idea%E8%B0%83%E8%AF%95maven%E9%A1%B9%E7%9B%AE.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/vnc在CentOS的开启相关知识.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -238,7 +239,114 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Java/%E5%88%A9%E7%94%A8idea%E8%B0%83%E8%AF%95maven%E9%A1%B9%E7%9B%AE.html" class="post-title-link" itemprop="url">利用idea调试maven项目</a>
+            <a href="/Linux-Unix/vnc在CentOS的开启相关知识.html" class="post-title-link" itemprop="url">vnc在CentOS的开启相关知识</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-18 10:02:22" itemprop="dateCreated datePublished" datetime="2018-07-18T10:02:22+08:00">2018-07-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/vnc在CentOS的开启相关知识.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/vnc在CentOS的开启相关知识.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>自己用才MAC，但是公司用的VPN是网御星云的，必须在windows下用，但是服务器配置还可以，单独用的话有点浪费。于是装了CentOS，KVM布置了一个虚拟机，然后准备开启VNC来支持。另外，所使用的idea也需要在图形化的界面下进行调试，也需要开启VNC。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>简单来说，就是我们在服务器上启动一个 vnc服务器，CentOS的叫做 <strong>Xvnc</strong>，此服务器会接受我们 我们的连接，然后监控窗口系统的信息发送给我们，再把我们的操作反馈到服务器的窗口信息。 所以，使用 vnc 的前提是，我们开启了窗口系统，怎么开启，这里不赘述，自行谷歌。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>先安装 gnome 桌面环境:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum groupinstall &quot;GNOME Desktop&quot;</span><br></pre></td></tr></table></figure>
+<p>CentOS上的安装，非常简单：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install vncserver</span><br></pre></td></tr></table></figure>
+<p>就OK了，然后，直接在当前用户下执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vncserver</span><br></pre></td></tr></table></figure>
+<p>就OK了，但是这里有很多细节其实我们还不知道的。</p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>执行 <code>vncserver</code> 命令的时候，我们可以指定很多选项，如果不指定任何选项的话，会默认使用第一个可用的 显示ID，通常是 1。用这个显示ID启动  Xvnc，在Xvnc会话里启动窗口管理器。我们可以以 <code>vncserver :13</code>这样的形式指定显示ID。</p>
+<ol>
+<li><code>$HOME/.vnc/xstartup</code> 一个shell脚本，指定当VNC桌面开始时执行的 X 程序。如果这文件不存在，vncserver会建立一个默认的 xstartup 脚本，此脚本尝试 启动你选择的窗口管理器。</li>
+<li><code>/etc/tigervnc/vncserver-config-defaults</code> 这是一个可选的，系统层面的文件与<code>$HOME/.vnc/config</code>相等。如果此文件存在并定义了传递给Xvnc的选项，所有用户都会默认使用这些选项。<code>$HOME/.vnc/config</code>会重写这个文件内设置。文件的加载顺序是：<code>/etc/tigervnc/vncserver-config-defaults, $HOME/.vnc/config,  /etc/tigervnc/vncserver-config-mandatory</code>所有文件都不一定要求必须存在。</li>
+<li><code>/etc/tigervnc/vncserver-config-mandatory</code>系统层面与<code>$HOME/.vnc/config</code>想等的配置文件。如果这个文件定义了参数，那么就其会覆盖 <code>$HOME/.vnc/config</code>内定义的对应参数。</li>
+<li><code>$HOME/.vnc/config</code> 用户的配置文件</li>
+<li><code>$HOME/.vnc/passwd</code> 密码文件</li>
+<li><code>$HOME/.vnc/host:display#.log</code> 日志文件</li>
+<li><code>$HOME/.vnc/host:display#.pid</code> pid文件</li>
+</ol>
+<h1 id="以服务的形式启动CentOS-7"><a href="#以服务的形式启动CentOS-7" class="headerlink" title="以服务的形式启动CentOS 7"></a>以服务的形式启动CentOS 7</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@.service</span><br></pre></td></tr></table></figure>
+<p>把此文件中的 <user> 一用户名替代 。</user></p>
+<p>执行 <code>systemctl daemon-reload</code></p>
+<p>执行 <code>systemctl enable vncserver@&lt;display&gt;.service</code></p>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>以服务的形式启动失败了，最后是以命令的形式进行启动的。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/利用idea调试maven项目.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Java/利用idea调试maven项目.html" class="post-title-link" itemprop="url">利用idea调试maven项目</a>
         </h1>
 
         <div class="post-meta">
@@ -271,7 +379,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/%E5%88%A9%E7%94%A8idea%E8%B0%83%E8%AF%95maven%E9%A1%B9%E7%9B%AE.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/利用idea调试maven项目.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/利用idea调试maven项目.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -308,6 +416,7 @@
 <li>在 Deployment 标签下，点 + 号添加我们的 smart.war exploded 。</li>
 <li>运行即可</li>
 </ol>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -327,7 +436,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/CentOS%E4%B8%AD%E7%9A%84ip%E5%91%BD%E4%BB%A4.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/CentOS中的ip命令.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -341,7 +450,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Linux-Unix/CentOS%E4%B8%AD%E7%9A%84ip%E5%91%BD%E4%BB%A4.html" class="post-title-link" itemprop="url">CentOS中的ip命令</a>
+            <a href="/Linux-Unix/CentOS中的ip命令.html" class="post-title-link" itemprop="url">CentOS中的ip命令</a>
         </h1>
 
         <div class="post-meta">
@@ -374,7 +483,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/CentOS%E4%B8%AD%E7%9A%84ip%E5%91%BD%E4%BB%A4.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/CentOS中的ip命令.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/CentOS中的ip命令.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -392,19 +501,17 @@
       
           <p>据说ifconfig命令已经过时了，而且都比较推荐转移到ip命令。虽然好久不接触运维但是还是需要了解一下。</p>
 <h1 id="基本格式"><a href="#基本格式" class="headerlink" title="基本格式"></a>基本格式</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ip help</span><br><span class="line">Usage: ip [ OPTIONS ] OBJECT &#123; COMMAND | help &#125;</span><br><span class="line">       ip [ -force ] -batch filename</span><br><span class="line">where  OBJECT := &#123; link | address | addrlabel | route | rule | neigh | ntable |</span><br><span class="line">                   tunnel | tuntap | maddress | mroute | mrule | monitor | xfrm |</span><br><span class="line">                   netns | l2tp | macsec | tcp_metrics | token &#125;</span><br><span class="line">       OPTIONS := &#123; -V[ersion] | -s[tatistics] | -d[etails] | -r[esolve] |</span><br><span class="line">                    -h[uman-readable] | -iec |</span><br><span class="line">                    -f[amily] &#123; inet | inet6 | ipx | dnet | bridge | link &#125; |</span><br><span class="line">                    -4 | -6 | -I | -D | -B | -0 |</span><br><span class="line">                    -l[oops] &#123; maximum-addr-flush-attempts &#125; |</span><br><span class="line">                    -o[neline] | -t[imestamp] | -ts[hort] | -b[atch] [filename] |</span><br><span class="line">                    -rc[vbuf] [size] | -n[etns] name | -a[ll] &#125;</span><br></pre></td></tr></table></figure>
-
 <p>可以看到，其基本格式是 <code>ip 选项 操纵对象 操纵命令</code> 的形式，而其可以操纵的对象还有点多啊</p>
 <h1 id="操作对象"><a href="#操作对象" class="headerlink" title="操作对象"></a>操作对象</h1><h2 id="link-链路层"><a href="#link-链路层" class="headerlink" title="link 链路层"></a>link 链路层</h2><p>多数时候我们应该不会操纵这些东西，所以只看一下基本的命令格式就算了：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ip link help</span><br><span class="line">Usage: ip link add [link DEV] [ name ] NAME</span><br><span class="line">                   [ txqueuelen PACKETS ]</span><br><span class="line">                   [ address LLADDR ]</span><br><span class="line">                   [ broadcast LLADDR ]</span><br><span class="line">                   [ mtu MTU ]</span><br><span class="line">                   [ numtxqueues QUEUE_COUNT ]</span><br><span class="line">                   [ numrxqueues QUEUE_COUNT ]</span><br><span class="line">                   type TYPE [ ARGS ]</span><br><span class="line">       ip link delete &#123; DEVICE | dev DEVICE | group DEVGROUP &#125; type TYPE [ ARGS ]</span><br><span class="line"></span><br><span class="line">       ip link set &#123; DEVICE | dev DEVICE | group DEVGROUP &#125;</span><br><span class="line">	                  [ &#123; up | down &#125; ]</span><br><span class="line">	                  [ type TYPE ARGS ]</span><br><span class="line">	                  [ arp &#123; on | off &#125; ]</span><br><span class="line">	                  [ dynamic &#123; on | off &#125; ]</span><br><span class="line">	                  [ multicast &#123; on | off &#125; ]</span><br><span class="line">	                  [ allmulticast &#123; on | off &#125; ]</span><br><span class="line">	                  [ promisc &#123; on | off &#125; ]</span><br><span class="line">	                  [ trailers &#123; on | off &#125; ]</span><br><span class="line">	                  [ txqueuelen PACKETS ]</span><br><span class="line">	                  [ name NEWNAME ]</span><br><span class="line">	                  [ address LLADDR ]</span><br><span class="line">	                  [ broadcast LLADDR ]</span><br><span class="line">	                  [ mtu MTU ]</span><br><span class="line">	                  [ netns &#123; PID | NAME &#125; ]</span><br><span class="line">	                  [ link-netnsid ID ]</span><br><span class="line">			  [ alias NAME ]</span><br><span class="line">	                  [ vf NUM [ mac LLADDR ]</span><br><span class="line">				   [ vlan VLANID [ qos VLAN-QOS ] ]</span><br><span class="line">				   [ rate TXRATE ]</span><br><span class="line">				   [ max_tx_rate TXRATE ]</span><br><span class="line">				   [ min_tx_rate TXRATE ]</span><br><span class="line">				   [ spoofchk &#123; on | off&#125; ]</span><br><span class="line">				   [ query_rss &#123; on | off&#125; ]</span><br><span class="line">				   [ state &#123; auto | enable | disable&#125; ] ]</span><br><span class="line">				   [ trust &#123; on | off&#125; ] ]</span><br><span class="line">			  [ master DEVICE ]</span><br><span class="line">			  [ nomaster ]</span><br><span class="line">			  [ addrgenmode &#123; eui64 | none &#125; ]</span><br><span class="line">	                  [ protodown &#123; on | off &#125; ]</span><br><span class="line">       ip link show [ DEVICE | group GROUP ] [up] [master DEV] [type TYPE]</span><br><span class="line">       ip link help [ TYPE ]</span><br><span class="line"></span><br><span class="line">TYPE := &#123; vlan | veth | vcan | dummy | ifb | macvlan | macvtap |</span><br><span class="line">          bridge | bond | ipoib | ip6tnl | ipip | sit | vxlan |</span><br><span class="line">          gre | gretap | ip6gre | ip6gretap | vti | nlmon |</span><br><span class="line">          bond_slave | geneve | bridge_slave | macsec &#125;</span><br></pre></td></tr></table></figure>
-
 <p>基本的命令有 <code>add/set/delete/show</code>，根据链路层的定义，链路层的设备有多种类型，还可以设置各种属性，如MTU，IPV6地址等。</p>
 <p>我们可能会用到的应该就是  <code>ip link set eth0 down</code> 这样的了，开启或者关闭网卡。</p>
 <h2 id="addr-网络层"><a href="#addr-网络层" class="headerlink" title="addr 网络层"></a>addr 网络层</h2><p>这个可能是用得最多的一个命令了，先看一下命令格式：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ip addr help</span><br><span class="line">Usage: ip address &#123;add|change|replace&#125; IFADDR dev IFNAME [ LIFETIME ]</span><br><span class="line">                                                      [ CONFFLAG-LIST ]</span><br><span class="line">       ip address del IFADDR dev IFNAME [mngtmpaddr]</span><br><span class="line">       ip address &#123;save|flush&#125; [ dev IFNAME ] [ scope SCOPE-ID ]</span><br><span class="line">                            [ to PREFIX ] [ FLAG-LIST ] [ label LABEL ] [up]</span><br><span class="line">       ip address [ show [ dev IFNAME ] [ scope SCOPE-ID ] [ master DEVICE ]</span><br><span class="line">                         [ type TYPE ] [ to PREFIX ] [ FLAG-LIST ]</span><br><span class="line">                         [ label LABEL ] [up] ]</span><br><span class="line">       ip address &#123;showdump|restore&#125;</span><br><span class="line">IFADDR := PREFIX | ADDR peer PREFIX</span><br><span class="line">          [ broadcast ADDR ] [ anycast ADDR ]</span><br><span class="line">          [ label IFNAME ] [ scope SCOPE-ID ]</span><br><span class="line">SCOPE-ID := [ host | link | global | NUMBER ]</span><br><span class="line">FLAG-LIST := [ FLAG-LIST ] FLAG</span><br><span class="line">FLAG  := [ permanent | dynamic | secondary | primary |</span><br><span class="line">           [-]tentative | [-]deprecated | [-]dadfailed | temporary |</span><br><span class="line">           CONFFLAG-LIST ]</span><br><span class="line">CONFFLAG-LIST := [ CONFFLAG-LIST ] CONFFLAG</span><br><span class="line">CONFFLAG  := [ home | nodad | mngtmpaddr | noprefixroute | autojoin ]</span><br><span class="line">LIFETIME := [ valid_lft LFT ] [ preferred_lft LFT ]</span><br><span class="line">LFT := forever | SECONDS</span><br><span class="line">TYPE := &#123; vlan | veth | vcan | dummy | ifb | macvlan | macvtap |</span><br><span class="line">          bridge | bond | ipoib | ip6tnl | ipip | sit | vxlan |</span><br><span class="line">          gre | gretap | ip6gre | ip6gretap | vti | nlmon |</span><br><span class="line">          bond_slave | ipvlan | geneve | bridge_slave | vrf | macsec &#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="add"><a href="#add" class="headerlink" title="add"></a>add</h3><p><code>ip addr add 192.168.1.2/24 dev lo</code></p>
 <h3 id="del"><a href="#del" class="headerlink" title="del"></a>del</h3><p><code>ip addr del 192.168.1.2/24 dev lo</code></p>
 <h2 id="route-路由"><a href="#route-路由" class="headerlink" title="route 路由"></a>route 路由</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ip route help</span><br><span class="line">Usage: ip route &#123; list | flush &#125; SELECTOR</span><br><span class="line">       ip route save SELECTOR</span><br><span class="line">       ip route restore</span><br><span class="line">       ip route showdump</span><br><span class="line">       ip route get ADDRESS [ from ADDRESS iif STRING ]</span><br><span class="line">                            [ oif STRING ]  [ tos TOS ]</span><br><span class="line">                            [ mark NUMBER ]</span><br><span class="line">       ip route &#123; add | del | change | append | replace &#125; ROUTE</span><br><span class="line">SELECTOR := [ root PREFIX ] [ match PREFIX ] [ exact PREFIX ]</span><br><span class="line">            [ table TABLE_ID ] [ proto RTPROTO ]</span><br><span class="line">            [ type TYPE ] [ scope SCOPE ]</span><br><span class="line">ROUTE := NODE_SPEC [ INFO_SPEC ]</span><br><span class="line">NODE_SPEC := [ TYPE ] PREFIX [ tos TOS ]</span><br><span class="line">             [ table TABLE_ID ] [ proto RTPROTO ]</span><br><span class="line">             [ scope SCOPE ] [ metric METRIC ]</span><br><span class="line">INFO_SPEC := NH OPTIONS FLAGS [ nexthop NH ]...</span><br><span class="line">NH := [ via ADDRESS ] [ dev STRING ] [ weight NUMBER ] NHFLAGS</span><br><span class="line">OPTIONS := FLAGS [ mtu NUMBER ] [ advmss NUMBER ]</span><br><span class="line">           [ rtt TIME ] [ rttvar TIME ] [reordering NUMBER ]</span><br><span class="line">           [ window NUMBER ] [ cwnd NUMBER ] [ initcwnd NUMBER ]</span><br><span class="line">           [ ssthresh NUMBER ] [ realms REALM ] [ src ADDRESS ]</span><br><span class="line">           [ rto_min TIME ] [ hoplimit NUMBER ] [ initrwnd NUMBER ]</span><br><span class="line">           [ features FEATURES ] [ quickack BOOL ] [ congctl NAME ]</span><br><span class="line">           [ expires TIME ]</span><br><span class="line">TYPE := &#123; unicast | local | broadcast | multicast | throw |</span><br><span class="line">          unreachable | prohibit | blackhole | nat &#125;</span><br><span class="line">TABLE_ID := [ local | main | default | all | NUMBER ]</span><br><span class="line">SCOPE := [ host | link | global | NUMBER ]</span><br><span class="line">NHFLAGS := [ onlink | pervasive ]</span><br><span class="line">RTPROTO := [ kernel | boot | static | NUMBER ]</span><br><span class="line">TIME := NUMBER[s|ms]</span><br><span class="line">BOOL := [1|0]</span><br><span class="line">FEATURES := ecn</span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -424,7 +531,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/%E4%BA%86%E8%A7%A3REST.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/了解REST.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -438,7 +545,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Java/%E4%BA%86%E8%A7%A3REST.html" class="post-title-link" itemprop="url">了解REST</a>
+            <a href="/Java/了解REST.html" class="post-title-link" itemprop="url">了解REST</a>
         </h1>
 
         <div class="post-meta">
@@ -471,7 +578,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/%E4%BA%86%E8%A7%A3REST.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/了解REST.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/了解REST.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -510,7 +617,7 @@
 <li>2XX - success</li>
 <li>3XX - redirection</li>
 <li>4XX - client error</li>
-<li>5XX - server error</li>
+<li>5XX - server error<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></li>
 </ul>
 
       
@@ -531,7 +638,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/%E5%BC%80%E5%90%AF%E4%B8%BB%E6%9C%BA%E5%AF%B9IPv6%E7%9A%84%E6%94%AF%E6%8C%81.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/开启主机对IPv6的支持.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -545,7 +652,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Linux-Unix/%E5%BC%80%E5%90%AF%E4%B8%BB%E6%9C%BA%E5%AF%B9IPv6%E7%9A%84%E6%94%AF%E6%8C%81.html" class="post-title-link" itemprop="url">开启主机对IPv6的支持</a>
+            <a href="/Linux-Unix/开启主机对IPv6的支持.html" class="post-title-link" itemprop="url">开启主机对IPv6的支持</a>
         </h1>
 
         <div class="post-meta">
@@ -578,7 +685,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/%E5%BC%80%E5%90%AF%E4%B8%BB%E6%9C%BA%E5%AF%B9IPv6%E7%9A%84%E6%94%AF%E6%8C%81.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/开启主机对IPv6的支持.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/开启主机对IPv6的支持.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -599,14 +706,13 @@
 <p>用 <code>strace ./mol_node</code> 就能看出点端倪了。</p>
 <h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><h2 id="模块加载"><a href="#模块加载" class="headerlink" title="模块加载"></a>模块加载</h2><p>内核协议栈要支持IpV6，首先要加载 ipv6模块。在文件中 <code>/etc/modprobe.d/disable_ipv6.conf</code> 中有类似字样：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">alias ipv6 off</span><br><span class="line">options ipv6 disable=1</span><br></pre></td></tr></table></figure>
-
 <p>看名字就能知道，我们需要把 off 改为 on， 1 改为0.</p>
 <p>这样才会加载进来模块。</p>
 <h2 id="网络支持"><a href="#网络支持" class="headerlink" title="网络支持"></a>网络支持</h2><p>文件 <code>/etc/sysconfig/network</code><br>中，<code>NETWORKING_IPV6=no</code> 改为 <code>NETWORKING_IPV6=yes</code></p>
 <h2 id="系统配置"><a href="#系统配置" class="headerlink" title="系统配置"></a>系统配置</h2><p><code>/etc/sysctl.conf</code> 把下列选项都改为1:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net.ipv6.conf.all.disable_ipv6 = 1</span><br><span class="line">net.ipv6.conf.default.disable_ipv6 = 1</span><br><span class="line">net.ipv6.conf.lo.disable_ipv6 = 1</span><br></pre></td></tr></table></figure>
-
 <p>重启了之后，一看。果然可以了。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -626,7 +732,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%9A%84MVP%E6%9E%B6%E6%9E%84.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android中使用的MVP架构.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -640,7 +746,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Android/android%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%9A%84MVP%E6%9E%B6%E6%9E%84.html" class="post-title-link" itemprop="url">android中使用的MVP架构</a>
+            <a href="/Android/android中使用的MVP架构.html" class="post-title-link" itemprop="url">android中使用的MVP架构</a>
         </h1>
 
         <div class="post-meta">
@@ -673,7 +779,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/android%E4%B8%AD%E4%BD%BF%E7%94%A8%E7%9A%84MVP%E6%9E%B6%E6%9E%84.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/android中使用的MVP架构.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/android中使用的MVP架构.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -703,27 +809,22 @@
 <h2 id="Contract"><a href="#Contract" class="headerlink" title="Contract"></a>Contract</h2><p>代码中使用了一个 接口类来定义每个 View, Presenter要实现的接口。</p>
 <p>每个activity/fragment都会定义附加逻辑及model。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TasksContract</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">interface</span> <span class="title">View</span> <span class="keyword">extends</span> <span class="title">BaseView</span>&lt;<span class="title">Presenter</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">setLoadingIndicator</span><span class="params">(<span class="keyword">boolean</span> active)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showTasks</span><span class="params">(List&lt;Task&gt; tasks)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showAddTask</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showTaskDetailsUi</span><span class="params">(String taskId)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showTaskMarkedComplete</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showTaskMarkedActive</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showCompletedTasksCleared</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showLoadingTasksError</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showNoTasks</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showActiveFilterLabel</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showCompletedFilterLabel</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showAllFilterLabel</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showNoActiveTasks</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showNoCompletedTasks</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showSuccessfullySavedMessage</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">boolean</span> <span class="title">isActive</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showFilteringPopUpMenu</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">interface</span> <span class="title">Presenter</span> <span class="keyword">extends</span> <span class="title">BasePresenter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">result</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">loadTasks</span><span class="params">(<span class="keyword">boolean</span> forceUpdate)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">addNewTask</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">openTaskDetails</span><span class="params">(@NonNull Task requestedTask)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">completeTask</span><span class="params">(@NonNull Task completedTask)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">activateTask</span><span class="params">(@NonNull Task activeTask)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">clearCompletedTasks</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">setFiltering</span><span class="params">(TasksFilterType requestType)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function">TasksFilterType <span class="title">getFiltering</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>定义了V/P需要实现的接口。</p>
 <h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>通过在 View 中来初始化 Presenter：，在 <code>onCreate()</code>方法中：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> TasksPresenter mTasksPresenter;</span><br><span class="line"></span><br><span class="line">    mTasksPresenter = <span class="keyword">new</span> TasksPresenter(</span><br><span class="line">            Injection.provideTasksRepository(getApplicationContext()), tasksFragment);</span><br></pre></td></tr></table></figure>
-
 <p>这样就获得了对 Presenter 的引用。第一个参数是传递给构造器的 model实现，这个有点特别，因为他实现了缓存等操作比较复杂，我们先不关注这个。</p>
 <p>在 Presenter的构造器中：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">TasksPresenter</span><span class="params">(@NonNull TasksRepository tasksRepository, @NonNull TasksContract.View tasksView)</span> </span>&#123;</span><br><span class="line">    mTasksRepository = checkNotNull(tasksRepository, <span class="string">"tasksRepository cannot be null"</span>);</span><br><span class="line">    mTasksView = checkNotNull(tasksView, <span class="string">"tasksView cannot be null!"</span>);</span><br><span class="line"></span><br><span class="line">    mTasksView.setPresenter(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>其持有了 model/view，所以其就能进行两者的调用操作了。</p>
 <h3 id="Presenter-与-Model交互"><a href="#Presenter-与-Model交互" class="headerlink" title="Presenter 与 Model交互"></a>Presenter 与 Model交互</h3><p>看一个简单的方法，当需要获取所有的任务列表的时候，在 View中会看到如此的调用：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">mPresenter.loadTasks(<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
-
 <p>但我们观察一下这个方法，会发现：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">mTasksRepository.getTasks(<span class="keyword">new</span> TasksDataSource.LoadTasksCallback() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onTasksLoaded</span><span class="params">(List&lt;Task&gt; tasks)</span> </span>&#123;</span><br><span class="line">        List&lt;Task&gt; tasksToShow = <span class="keyword">new</span> ArrayList&lt;Task&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// This callback may be called twice, once for the cache and once for loading</span></span><br><span class="line">        <span class="comment">// the data from the server API, so we check before decrementing, otherwise</span></span><br><span class="line">        <span class="comment">// it throws "Counter has been corrupted!" exception.</span></span><br><span class="line">        <span class="keyword">if</span> (!EspressoIdlingResource.getIdlingResource().isIdleNow()) &#123;</span><br><span class="line">            EspressoIdlingResource.decrement(); <span class="comment">// Set app as idle.</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// We filter the tasks based on the requestType</span></span><br><span class="line">        <span class="keyword">for</span> (Task task : tasks) &#123;</span><br><span class="line">            <span class="keyword">switch</span> (mCurrentFiltering) &#123;</span><br><span class="line">                <span class="keyword">case</span> ALL_TASKS:</span><br><span class="line">                    tasksToShow.add(task);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> ACTIVE_TASKS:</span><br><span class="line">                    <span class="keyword">if</span> (task.isActive()) &#123;</span><br><span class="line">                        tasksToShow.add(task);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> COMPLETED_TASKS:</span><br><span class="line">                    <span class="keyword">if</span> (task.isCompleted()) &#123;</span><br><span class="line">                        tasksToShow.add(task);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    tasksToShow.add(task);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// The view may not be able to handle UI updates anymore</span></span><br><span class="line">        <span class="keyword">if</span> (!mTasksView.isActive()) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (showLoadingUI) &#123;</span><br><span class="line">            mTasksView.setLoadingIndicator(<span class="keyword">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        processTasks(tasksToShow);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDataNotAvailable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// The view may not be able to handle UI updates anymore</span></span><br><span class="line">        <span class="keyword">if</span> (!mTasksView.isActive()) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        mTasksView.showLoadingTasksError();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
 <p>其实是调用了 model去获取任务，调用方法的时候，同时传递给 model一个回调，其在获取数据成功后就会进行回调：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">        mTasksRepository.getTasks(<span class="keyword">new</span> TasksDataSource.LoadTasksCallback() &#123;</span><br><span class="line">... ...</span><br><span class="line"></span><br><span class="line">processTasks(tasks);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">processTasks</span><span class="params">(List&lt;Task&gt; tasks)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (tasks.isEmpty()) &#123;</span><br><span class="line">            <span class="comment">// Show a message indicating there are no tasks for that filter type.</span></span><br><span class="line">            processEmptyTasks();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// Show the list of tasks</span></span><br><span class="line">            mTasksView.showTasks(tasks);</span><br><span class="line">            <span class="comment">// Set the filter label's text.</span></span><br><span class="line">            showFilterLabel();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>回调过后，其就调用 View 的方法来更新界面显示了。</p>
 <p>瞧，多么简单。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -743,7 +844,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Word-OOXML%E4%B8%AD%E7%9A%84drawingML.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Word-OOXML中的drawingML.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -757,7 +858,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Java/Word-OOXML%E4%B8%AD%E7%9A%84drawingML.html" class="post-title-link" itemprop="url">Word-OOXML中的drawingML</a>
+            <a href="/Java/Word-OOXML中的drawingML.html" class="post-title-link" itemprop="url">Word-OOXML中的drawingML</a>
         </h1>
 
         <div class="post-meta">
@@ -790,7 +891,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/Word-OOXML%E4%B8%AD%E7%9A%84drawingML.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/Word-OOXML中的drawingML.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Word-OOXML中的drawingML.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -808,7 +909,6 @@
       
           <p>DrawingML中的所有媒体对象都存储在一个<strong>图片形状</strong>中。这个图片形状使用一个 <code>blipFill</code> 元素来显示媒体对象。如果是音频的情况下，使用的是图标；在视频情况下，使用的是一个一帧来显示。</p>
 <h1 id="简单例子"><a href="#简单例子" class="headerlink" title="简单例子"></a>简单例子</h1><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">  <span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span> ...<span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId4"</span> <span class="attr">r:link</span>=<span class="string">""</span> /&gt;</span> <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:fillRect</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span> ... <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p><code>blipFill</code>元素用来引用图片文件，因为引用的是这个文件包内的文件，所以使用了一个 关联ID（relationship ID）。</p>
 <h1 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h1><p>DrawingML 文件格式被分解为下面的三个部分：</p>
 <ul>
@@ -819,13 +919,10 @@
 <p>下面一个一个的来看这个。</p>
 <h2 id="指定基本图片"><a href="#指定基本图片" class="headerlink" title="指定基本图片"></a>指定基本图片</h2><p>图片通过 <code>pic</code> 元素插入文档中，这与 <code>shape</code> 元素类似，但有一些关键的不同，这些关键的不同使图片信息保存得更加完整。基本的图片会包含一个 <code>blipfill</code> 元素和一些基本的 <code>non-visual</code>（不可见）属性 。</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPr</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">name</span>=<span class="string">"St_Patrick's_Day.jpg"</span>/&gt;</span> <span class="tag">&lt;<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"1"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:nvPr</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId2"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1346200"</span> <span class="attr">y</span>=<span class="string">"914400"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"3657600"</span> <span class="attr">cy</span>=<span class="string">"2743200"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:ln</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:ln</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <h2 id="给图片指定属性"><a href="#给图片指定属性" class="headerlink" title="给图片指定属性"></a>给图片指定属性</h2><p>现在基本的图片已经指定了，我们可以可以把注意力转移到更复杂的属性上面，比如重新着色，图片描述等。下面的例子中，把 绿色 转变成了紫色。这可以通过 <code>duotone</code> 元素来实现，这个元素允许两个基本的颜色来重新着色整个图片。一个用于在图片的暗色部分，一个用于图片的亮色部分。</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPr</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">name</span>=<span class="string">"St_Patrick's_Day.jpg"</span> <span class="attr">descr</span>=<span class="string">"This is a Saint Patrick's day picture"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">p:nvPr</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId2"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:duotone</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">a:srgbClr</span> <span class="attr">val</span>=<span class="string">"000000"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:schemeClr</span> <span class="attr">val</span>=<span class="string">"accent4"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">a:duotone</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:blip</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1346200"</span> <span class="attr">y</span>=<span class="string">"914400"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"3657600"</span> <span class="attr">cy</span>=<span class="string">"2743200"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:ln</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:ln</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <h2 id="转换图片"><a href="#转换图片" class="headerlink" title="转换图片"></a>转换图片</h2><p>现在，基本属性和附加属性都已经指定了，现在我们可以配合形状属性来使用了。下面的例子用同一张图片，加上了3D视角，一个简单的阴影，一个边框。这些形状属性可以同样使用到<code>shape</code>元素。一个图片特定的不同就是，边框。形状的边框只会向外，而图片是内外都会扩张。</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPr</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">name</span>=<span class="string">"St_Patrick's_Day.jpg"</span> <span class="attr">descr</span>=<span class="string">"This is a Saint Patrick's day picture"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">p:nvPr</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId2"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:duotone</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:srgbClr</span> <span class="attr">val</span>=<span class="string">"000000"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:schemeClr</span> <span class="attr">val</span>=<span class="string">"accent4"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:duotone</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:blip</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1346200"</span> <span class="attr">y</span>=<span class="string">"914400"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"3657600"</span> <span class="attr">cy</span>=<span class="string">"2743200"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:ln</span> <span class="attr">w</span>=<span class="string">"57150"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:solidFill</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:schemeClr</span> <span class="attr">val</span>=<span class="string">"bg1"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:solidFill</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:ln</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:effectLst</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:outerShdw</span> <span class="attr">blurRad</span>=<span class="string">"50800"</span> <span class="attr">dist</span>=<span class="string">"50800"</span> <span class="attr">dir</span>=<span class="string">"2700000"</span> <span class="attr">algn</span>=<span class="string">"tl"</span> <span class="attr">rotWithShape</span>=<span class="string">"0"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:srgbClr</span> <span class="attr">val</span>=<span class="string">"7D7D7D"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a:alpha</span> <span class="attr">val</span>=<span class="string">"65000"</span>/&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">a:srgbClr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:outerShdw</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:effectLst</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:scene3d</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:camera</span> <span class="attr">prst</span>=<span class="string">"perspectiveRelaxedModerately"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:lightRig</span> <span class="attr">rig</span>=<span class="string">"threePt"</span> <span class="attr">dir</span>=<span class="string">"t"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:rot</span> <span class="attr">lat</span>=<span class="string">"0"</span> <span class="attr">lon</span>=<span class="string">"0"</span> <span class="attr">rev</span>=<span class="string">"18900000"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">a:lightRig</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:scene3d</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <h1 id="坐标系统及变换"><a href="#坐标系统及变换" class="headerlink" title="坐标系统及变换"></a>坐标系统及变换</h1><h2 id="坐标系统"><a href="#坐标系统" class="headerlink" title="坐标系统"></a>坐标系统</h2><p>所有的 drawingML形状都位于一个2D的笛卡尔空间内，原点是（0，0），原点位于左上角。坐标的单位以 <strong>EMU（914400EMUS 1 英寸）</strong>，可为正也可为负。</p>
 <h2 id="形状变换"><a href="#形状变换" class="headerlink" title="形状变换"></a>形状变换</h2><p>一个 形状变换 可以总结为下面的连续操作：</p>
 <ol>
@@ -836,31 +933,26 @@
 <p>为了渲染不在一个组内的形状，渲染器简单的对原始形状应用形状变换。</p>
 <h3 id="缩放和转换形状"><a href="#缩放和转换形状" class="headerlink" title="缩放和转换形状"></a>缩放和转换形状</h3><p>形状可以水平缩放，垂直缩放，尺寸转换或者填充一个给定的边界盒子。边界盒子通过指定 <code>offset</code> 的 x,y 来指定（<code>a:off</code> 的 x,y 属性）以及 <code>extents</code> x,y （<code>a:ext</code>的 x,y，两者都必须大于或者等于0）。边界盒子的左上角位于 offset指定的，边界盒子的右下角位于 offset + extent。</p>
 <p>如果开始的形状 宽度为0（垂直线）， <code>cx</code> 和 <code>a:ext</code> 属性会被忽略，水平缩放被跳过。类似，如果 开始形状的高度为0，<code>cy, a:ext</code>都会被忽略，然后垂直缩放被跳过。</p>
-<p> <img src="../res/drawingML01.png" alt=""></p>
+<p> <img src="../res/drawingML01.png" alt></p>
 <p> 上面的形状可以如下表示：</p>
  <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1866680"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1371600"</span> <span class="attr">cy</span>=<span class="string">"1371600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>在上面的例子中，当转换这个形状来填充指定的边界盒子的时候，任何给这个形状的效果都会消失。</p>
 </blockquote>
 <p>这个例子显示了，在缩放形状的时候，不需要任何额外的参数。边界盒子用来表示缩放已经足够了。下面的XML片段表示了一个 星形 的 <code>offset, extents</code>在缩放前后的效果。在这个实际的例子中，边界盒子被选择来具有相同的左上角，也就是同样的<code>offset</code>。</p>
-<p><img src="../res/drawingML02.png" alt=""></p>
+<p><img src="../res/drawingML02.png" alt></p>
 <p>缩放前：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1066800"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1371600"</span> <span class="attr">cy</span>=<span class="string">"1371600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>缩放后：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1066800"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"2438400"</span> <span class="attr">cy</span>=<span class="string">"2133600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="形状旋转"><a href="#形状旋转" class="headerlink" title="形状旋转"></a>形状旋转</h3><p>通过 <code>rot</code> 属性来表示旋转。形状会围绕 边界盒子的中心顺时针旋转，角度由 <code>rot</code> 指定。每个单位是 1/1000 弧分（1/60000 度）。</p>
 <p>上面例子中小的个星星经过 45度顺时针旋转后，就变成了下面这样。</p>
-<p><img src="../res/drawingML03.png" alt=""></p>
+<p><img src="../res/drawingML03.png" alt></p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span> <span class="attr">rot</span>=<span class="string">"2700000"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1066800"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1371600"</span> <span class="attr">cy</span>=<span class="string">"1371600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="翻转形状"><a href="#翻转形状" class="headerlink" title="翻转形状"></a>翻转形状</h3><p>翻转，是在一个 水平线，和垂直线，于中心点相交 处进行反射。<code>flipH, flipV</code> 属性控制水平和垂直翻转。这两个数值都可以没有，也可以都等于0 ，这个时候表明不需要进行翻转，都等于1表示需要进行翻转。</p>
 <p>下面的例子就是水平和垂直进行了翻转。</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span> <span class="attr">flipH</span>=<span class="string">"1"</span> <span class="attr">flipV</span>=<span class="string">"1"</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"3964937"</span> <span class="attr">y</span>=<span class="string">"2652643"</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"168838"</span> <span class="attr">cy</span>=<span class="string">"1219199"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="../res/drawingML04.png" alt=""></p>
+<p><img src="../res/drawingML04.png" alt></p>
 <h1 id="形状定义和属性"><a href="#形状定义和属性" class="headerlink" title="形状定义和属性"></a>形状定义和属性</h1><p>DrawingML我使用一般就是针对形状和属性进行，这包括两个方便的主题：</p>
 <ol>
 <li>预定义的形状</li>
@@ -869,7 +961,6 @@
 <h2 id="坐标系统-1"><a href="#坐标系统-1" class="headerlink" title="坐标系统"></a>坐标系统</h2><p>为了指定一个形状，我们要先了解一些高等级的系统，就叫做坐标系统吧。这就是文档，形状，和路径的坐标系统，下面我们会介绍。</p>
 <h3 id="文档坐标系统"><a href="#文档坐标系统" class="headerlink" title="文档坐标系统"></a>文档坐标系统</h3><p>为了在文档内指定一个形状，我们必须要先了解文档坐标系统。这个系统也拥有 <strong>x, y</strong>组件，而且从 (0,0)开始，位于 左上角。这个坐标向右，向下增长。文档的坐标的单位是 <strong>EMU（ 91440 EMUs /英寸，36000 EMUs/cm）</strong>。还有，为了给形状指定一个位置，还要指定形状的宽高，这也叫做形状的 <code>extent</code>。这个值的单位也是 EMU。为了指定这两个值，可以如下面这样：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:sp</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"3200400"</span> <span class="attr">y</span>=<span class="string">"1600200"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1200000"</span> <span class="attr">cy</span>=<span class="string">"1000000"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:sp</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>这里我们会看到，新形状被放在 文档中(3200400, 1600200）位置。其大小为 1200000 EMUs，1000000 EMUs。</p>
 <p>宽高就设置了形状包含的边界盒子。</p>
 <h3 id="形状坐标系统"><a href="#形状坐标系统" class="headerlink" title="形状坐标系统"></a>形状坐标系统</h3><p>现在我们有了形状，我们可以进入形状内部的坐标系了。形状坐标系也有 <code>x,y</code> 组件，（0，0）位于左上角。 宽高通过 extent来指定，单位也是EMU。这个坐标系用来定义 很多形状属性的位置。</p>
@@ -880,12 +971,10 @@
 <h2 id="指定一个预定义形状"><a href="#指定一个预定义形状" class="headerlink" title="指定一个预定义形状"></a>指定一个预定义形状</h2><p>准确来说，有187个预定义的形状可以使用。</p>
 <h3 id="使用预定义形状"><a href="#使用预定义形状" class="headerlink" title="使用预定义形状"></a>使用预定义形状</h3><p>指定一个预定义形状非常的简单，下面我们来指定一个星形：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">p:sp</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1981200"</span> <span class="attr">y</span>=<span class="string">"533400"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1143000"</span> <span class="attr">cy</span>=<span class="string">"1066800"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"heart"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:sp</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="调整一个预定义形状"><a href="#调整一个预定义形状" class="headerlink" title="调整一个预定义形状"></a>调整一个预定义形状</h3><p>有的时候预定义形状也不是很够用我们就需要进行一些调整。预定义的形状使用  线，曲线，就和一个自定义形状被定义时一样。为了允许调整这样预定义形状，我们定义了一些属性，而不是关注规格。</p>
 <p>下面的代码可以指定一个形状：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:sp</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"3276600"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"978408"</span> <span class="attr">cy</span>=<span class="string">"484632"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rightArrow"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:avLst</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:gd</span> <span class="attr">name</span>=<span class="string">"adj1"</span> <span class="attr">fmla</span>=<span class="string">"val 50000"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:gd</span> <span class="attr">name</span>=<span class="string">"adj2"</span> <span class="attr">fmla</span>=<span class="string">"val 50000"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:avLst</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:sp</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -905,7 +994,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/%E5%8D%87%E7%BA%A7glibc%E5%88%B02.18%E5%8F%8A%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/升级glibc到2.18及出现的问题.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -919,7 +1008,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Linux-Unix/%E5%8D%87%E7%BA%A7glibc%E5%88%B02.18%E5%8F%8A%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html" class="post-title-link" itemprop="url">升级glibc到2.18及出现的问题</a>
+            <a href="/Linux-Unix/升级glibc到2.18及出现的问题.html" class="post-title-link" itemprop="url">升级glibc到2.18及出现的问题</a>
         </h1>
 
         <div class="post-meta">
@@ -952,7 +1041,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/%E5%8D%87%E7%BA%A7glibc%E5%88%B02.18%E5%8F%8A%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/升级glibc到2.18及出现的问题.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/升级glibc到2.18及出现的问题.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -971,7 +1060,7 @@
           <p>同时要用个mol_node这个东西来挂挖矿的钱包，但是libc库要求最低是2.18，但是我这个最低的是2.17的，当然不能用了，还好，gcc 4.8.5的，直接用来编译升级就好了。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Linux-Unix/%E5%8D%87%E7%BA%A7glibc%E5%88%B02.18%E5%8F%8A%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html#more" rel="contents">
+              <a class="btn" href="/Linux-Unix/升级glibc到2.18及出现的问题.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -995,7 +1084,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/SpringMVC%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/SpringMVC工作流程.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1009,7 +1098,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Java/SpringMVC%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.html" class="post-title-link" itemprop="url">SpringMVC工作流程</a>
+            <a href="/Java/SpringMVC工作流程.html" class="post-title-link" itemprop="url">SpringMVC工作流程</a>
         </h1>
 
         <div class="post-meta">
@@ -1042,7 +1131,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/SpringMVC%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/SpringMVC工作流程.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/SpringMVC工作流程.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -1058,10 +1147,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>转行开始安卓了，以前做运维的很多技能都用不着了，但是开发这个东西，还是需要经验和技术的积累。比如说什么 Spring,Mybatis,bootstrap等等，以前只接触服务端开发，压根就不知道这些东西啊。正好，让我们从jeeplus这个公司大佬用着的框架来熟悉一下。</p>
+          <p>转行开始安卓了，以前做运维的很多技能都用不着了，但是开发这个东西，还是需要经验和技术的积累。比如说什么 Spring,Mybatis,bootstrap等等，以前只接触服务端开发，压根就不知道这些东西啊。正好，让我们从jeeplus这个公司大佬用着的框架来熟悉一下。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Java/SpringMVC%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B.html#more" rel="contents">
+              <a class="btn" href="/Java/SpringMVC工作流程.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1085,7 +1174,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8join%E8%BF%9B%E8%A1%8C%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/使用join进行联合查询.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1099,7 +1188,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8join%E8%BF%9B%E8%A1%8C%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2.html" class="post-title-link" itemprop="url">使用join进行联合查询</a>
+            <a href="/数据库/使用join进行联合查询.html" class="post-title-link" itemprop="url">使用join进行联合查询</a>
         </h1>
 
         <div class="post-meta">
@@ -1117,7 +1206,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -1132,7 +1221,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8join%E8%BF%9B%E8%A1%8C%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/使用join进行联合查询.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/使用join进行联合查询.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -1148,100 +1237,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>单表已经无法满足我们的需求了，总不能把所有的数据字段都放在一个表撒，所以分表就是必须的，关联查询，经常会用到。就比如公司最近的业务就是一个主表，存储状态数据。所有的相关数据分布在好几张表内，如何建立有效高效的查询，就非常必要了。好久没有管理数据库，都快忘记了。现在来复习一下。</p>
+          <p>单表已经无法满足我们的需求了，总不能把所有的数据字段都放在一个表撒，所以分表就是必须的，关联查询，经常会用到。就比如公司最近的业务就是一个主表，存储状态数据。所有的相关数据分布在好几张表内，如何建立有效高效的查询，就非常必要了。好久没有管理数据库，都快忘记了。现在来复习一下。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%BD%BF%E7%94%A8join%E8%BF%9B%E8%A1%8C%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/%E5%AE%89%E5%8D%93%E8%A2%AB%E5%BC%BA%E6%9D%80%E5%90%8E%E5%8F%B0%E6%81%A2%E5%A4%8D%E6%97%B6%E5%80%99%E5%B4%A9%E6%BA%83%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Android/%E5%AE%89%E5%8D%93%E8%A2%AB%E5%BC%BA%E6%9D%80%E5%90%8E%E5%8F%B0%E6%81%A2%E5%A4%8D%E6%97%B6%E5%80%99%E5%B4%A9%E6%BA%83%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95.html" class="post-title-link" itemprop="url">安卓被强杀后台恢复时候崩溃的解决办法</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-06-18 11:50:35" itemprop="dateCreated datePublished" datetime="2018-06-18T11:50:35+08:00">2018-06-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Android/%E5%AE%89%E5%8D%93%E8%A2%AB%E5%BC%BA%E6%9D%80%E5%90%8E%E5%8F%B0%E6%81%A2%E5%A4%8D%E6%97%B6%E5%80%99%E5%B4%A9%E6%BA%83%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/安卓被强杀后台恢复时候崩溃的解决办法.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>业务场景是这样的，用户在登录的时候，登录成功后会返回用户相当信息。当然，这个用户信息就放在了一个单例 的userManager里面。所有的Manager都是在Application建立的时候进行注册的。现在的问题就是，如果进入后台模式，再重新进入的话，很多基于用户ID的查询显示都会出现NPE错误。因为userManager中保存用户信息的变量已经被重新回收初始化了。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Android/%E5%AE%89%E5%8D%93%E8%A2%AB%E5%BC%BA%E6%9D%80%E5%90%8E%E5%8F%B0%E6%81%A2%E5%A4%8D%E6%97%B6%E5%80%99%E5%B4%A9%E6%BA%83%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95.html#more" rel="contents">
+              <a class="btn" href="/数据库/使用join进行联合查询.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1309,20 +1308,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1334,10 +1333,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -1366,10 +1365,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         

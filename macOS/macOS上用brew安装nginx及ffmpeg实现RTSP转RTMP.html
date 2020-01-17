@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,24 +41,26 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
 </script>
 
-  <meta name="description" content="安装ffmpegbrew install ffmpeg --with-ffplay  ffplay 是一个播放器，可以直接播放各种流。 支持RTMP的Nginxbrew tap denji&#x2F;nginxbrew install nginx-full --with-rtmp-modulebrew info nginx-full https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;cf74a34af15">
+  <meta name="description" content="安装ffmpegbrew install ffmpeg --with-ffplay ffplay 是一个播放器，可以直接播放各种流。 支持RTMP的Nginxbrew tap denji/nginxbrew install nginx-full --with-rtmp-modulebrew info nginx-full https://www.jianshu.com/p/cf74a34af15d">
 <meta name="keywords" content="brew,macOS,ffmpeg">
 <meta property="og:type" content="article">
 <meta property="og:title" content="macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;macOS&#x2F;macOS%E4%B8%8A%E7%94%A8brew%E5%AE%89%E8%A3%85nginx%E5%8F%8Affmpeg%E5%AE%9E%E7%8E%B0RTSP%E8%BD%ACRTMP.html">
+<meta property="og:url" content="https://gowa.club/macOS/macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="安装ffmpegbrew install ffmpeg --with-ffplay  ffplay 是一个播放器，可以直接播放各种流。 支持RTMP的Nginxbrew tap denji&#x2F;nginxbrew install nginx-full --with-rtmp-modulebrew info nginx-full https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;cf74a34af15">
+<meta property="og:description" content="安装ffmpegbrew install ffmpeg --with-ffplay ffplay 是一个播放器，可以直接播放各种流。 支持RTMP的Nginxbrew tap denji/nginxbrew install nginx-full --with-rtmp-modulebrew info nginx-full https://www.jianshu.com/p/cf74a34af15d">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-07-18T14:15:24.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP">
+<meta name="twitter:description" content="安装ffmpegbrew install ffmpeg --with-ffplay ffplay 是一个播放器，可以直接播放各种流。 支持RTMP的Nginxbrew tap denji/nginxbrew install nginx-full --with-rtmp-modulebrew info nginx-full https://www.jianshu.com/p/cf74a34af15d">
 
-<link rel="canonical" href="https://gowa.club/macOS/macOS%E4%B8%8A%E7%94%A8brew%E5%AE%89%E8%A3%85nginx%E5%8F%8Affmpeg%E5%AE%9E%E7%8E%B0RTSP%E8%BD%ACRTMP.html">
+<link rel="canonical" href="https://gowa.club/macOS/macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/macOS/macOS%E4%B8%8A%E7%94%A8brew%E5%AE%89%E8%A3%85nginx%E5%8F%8Affmpeg%E5%AE%9E%E7%8E%B0RTSP%E8%BD%ACRTMP.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/macOS/macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/macOS/macOS%E4%B8%8A%E7%94%A8brew%E5%AE%89%E8%A3%85nginx%E5%8F%8Affmpeg%E5%AE%9E%E7%8E%B0RTSP%E8%BD%ACRTMP.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/macOS/macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="macOS/macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -291,12 +293,10 @@
 
       
         <h1 id="安装ffmpeg"><a href="#安装ffmpeg" class="headerlink" title="安装ffmpeg"></a>安装ffmpeg</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">brew install ffmpeg --with-ffplay</span><br></pre></td></tr></table></figure>
-
 <p>ffplay 是一个播放器，可以直接播放各种流。</p>
 <h1 id="支持RTMP的Nginx"><a href="#支持RTMP的Nginx" class="headerlink" title="支持RTMP的Nginx"></a>支持RTMP的Nginx</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">brew tap denji/nginx</span><br><span class="line">brew install nginx-full --with-rtmp-module</span><br><span class="line">brew info nginx-full</span><br></pre></td></tr></table></figure>
 <p><a href="https://www.jianshu.com/p/cf74a34af15d" target="_blank" rel="noopener">https://www.jianshu.com/p/cf74a34af15d</a></p>
 <h1 id="推流"><a href="#推流" class="headerlink" title="推流"></a>推流</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ffmpeg -re -rtsp_transport tcp -i <span class="string">"rtsp://host/dss/monitor/params?cameraid=1000025%2412&amp;substream=1"</span> -f flv -vcodec libx264 -vprofile baseline -acodec aac -ar 44100 -strict -2 -ac 1 -f flv -s 1280x720 -q 10 <span class="string">"rtmp://localhost:1935/mylive/1"</span></span><br></pre></td></tr></table></figure>
-
 <a id="more"></a>
 <h1 id="Nginx-官方配置"><a href="#Nginx-官方配置" class="headerlink" title="Nginx 官方配置"></a>Nginx 官方配置</h1><p><a href="https://github.com/arut/nginx-rtmp-module" target="_blank" rel="noopener">https://github.com/arut/nginx-rtmp-module</a></p>
 <h1 id="关于使用微信小程序-IOS-无法播放的问题"><a href="#关于使用微信小程序-IOS-无法播放的问题" class="headerlink" title="关于使用微信小程序 IOS 无法播放的问题"></a>关于使用微信小程序 IOS 无法播放的问题</h1><p>这个问题同时在使用的时候用到，安卓是正常的，IOS就是不行，查看了一下后台，连流都没有拉起来，参考此问题的描述：<a href="https://developers.weixin.qq.com/community/develop/doc/00046825fd89e02188584eef157000" target="_blank" rel="noopener">live-player iOS端解码失败 安卓正常</a></p>
@@ -305,9 +305,8 @@
 <h1 id="关于动态推流的设置-nginx-RTMP"><a href="#关于动态推流的设置-nginx-RTMP" class="headerlink" title="关于动态推流的设置(nginx+RTMP)"></a>关于动态推流的设置(nginx+RTMP)</h1><p>基本原理是 nginx 开启 rtmp 的支持，当访问 rtmp 链接的时候，执行外挂进行，进行推流命令，就行流的发布。</p>
 <p>也就是说在 nginx  的配置中配置一下外挂 shell 脚本，在 shell 脚本中进行 ffmepg 的推流操作。</p>
 <h2 id="nginx-com"><a href="#nginx-com" class="headerlink" title="nginx.com"></a>nginx.com</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rtmp &#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 1935;</span><br><span class="line">        application live &#123;</span><br><span class="line">            live on;</span><br><span class="line">            exec_options on;</span><br><span class="line">            exec_kill_signal term;</span><br><span class="line">            exec_pull pull_rtsp_stream.sh $app $name;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="comment">##################################################</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># nginx build shell</span></span><br><span class="line"><span class="comment"># created by hzm</span></span><br><span class="line"><span class="comment"># 2015.12.21</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">##################################################</span></span><br><span class="line"></span><br><span class="line">mgw_ip=<span class="string">"127.0.0.1"</span></span><br><span class="line">mgw_port=9090</span><br><span class="line">log_file=<span class="string">"./../logs/pull_rtsp_stream.log"</span></span><br><span class="line">app=<span class="variable">$1</span></span><br><span class="line">name=<span class="variable">$2</span></span><br><span class="line"></span><br><span class="line">on_die()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"channel:<span class="variable">$name</span> receive term signal, kill pid:$$ child_pid:$!"</span> &gt;&gt; <span class="variable">$log_file</span></span><br><span class="line">    <span class="built_in">kill</span> -2 $!</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"mgw_ip:<span class="variable">$mgw_ip</span>, mgw_port:<span class="variable">$mgw_port</span>,app:<span class="variable">$&#123;app&#125;</span> name:<span class="variable">$&#123;name&#125;</span>"</span> &gt;&gt; <span class="variable">$log_file</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=./</span><br><span class="line">(./ffmpeg  -i <span class="string">"rtsp://<span class="variable">$&#123;mgw_ip&#125;</span>:<span class="variable">$&#123;mgw_port&#125;</span>/dss/monitor/param?<span class="variable">$&#123;name&#125;</span>"</span> -profile:v baseline -level 3.0 -vcodec copy -acodec copy  -f flv <span class="string">"rtmp://127.0.0.1:1935/<span class="variable">$&#123;app&#125;</span>/<span class="variable">$&#123;name&#125;</span>"</span>)&amp;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">trap</span> <span class="string">'on_die'</span> TERM</span><br><span class="line"><span class="built_in">wait</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"channel: <span class="variable">$&#123;name&#125;</span> exit"</span> &gt;&gt; <span class="variable">$log_file</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">exit</span> 0</span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -326,7 +325,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Cpp/%E5%9C%A8C++%E4%B8%8EJava%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%90%8C.html" rel="next" title="在C++与Java中的一些不同">
+                <a href="/Cpp/在C++与Java中的一些不同.html" rel="next" title="在C++与Java中的一些不同">
                   <i class="fa fa-chevron-left"></i> 在C++与Java中的一些不同
                 </a>
             </div>
@@ -334,7 +333,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Windows/%E5%85%B3%E4%BA%8EWindows%E7%9A%84%E5%86%85%E6%A0%B8%E5%AF%B9%E8%B1%A1.html" rel="prev" title="关于Windows的内核对象">
+                <a href="/Windows/关于Windows的内核对象.html" rel="prev" title="关于Windows的内核对象">
                   关于Windows的内核对象 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -396,20 +395,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -421,10 +420,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -453,10 +452,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -531,7 +530,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/macOS/macOS%E4%B8%8A%E7%94%A8brew%E5%AE%89%E8%A3%85nginx%E5%8F%8Affmpeg%E5%AE%9E%E7%8E%B0RTSP%E8%BD%ACRTMP.html",
+            url: "https://gowa.club/macOS/macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP.html",
             identifier: "macOS/macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP.html",
             title: "macOS上用brew安装nginx及ffmpeg实现RTSP转RTMP"
           }

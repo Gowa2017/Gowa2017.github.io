@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,16 +51,18 @@
 <meta name="keywords" content="Windows">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Windows-程序工作过程">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Windows&#x2F;Windows-%E7%A8%8B%E5%BA%8F%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B.html">
+<meta property="og:url" content="https://gowa.club/Windows/Windows-程序工作过程.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="我们来写一个最小的 Windows 程序。其只会显示一个空白窗口。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https:&#x2F;&#x2F;docs.microsoft.com&#x2F;zh-cn&#x2F;windows&#x2F;desktop&#x2F;learnwin32&#x2F;images&#x2F;window01.png">
+<meta property="og:image" content="https://docs.microsoft.com/zh-cn/windows/desktop/learnwin32/images/window01.png">
 <meta property="og:updated_time" content="2019-06-18T15:46:02.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;docs.microsoft.com&#x2F;zh-cn&#x2F;windows&#x2F;desktop&#x2F;learnwin32&#x2F;images&#x2F;window01.png">
+<meta name="twitter:title" content="Windows-程序工作过程">
+<meta name="twitter:description" content="我们来写一个最小的 Windows 程序。其只会显示一个空白窗口。">
+<meta name="twitter:image" content="https://docs.microsoft.com/zh-cn/windows/desktop/learnwin32/images/window01.png">
 
-<link rel="canonical" href="https://gowa.club/Windows/Windows-%E7%A8%8B%E5%BA%8F%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B.html">
+<link rel="canonical" href="https://gowa.club/Windows/Windows-程序工作过程.html">
 
 
 <script id="page-configurations">
@@ -230,7 +232,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/Windows-%E7%A8%8B%E5%BA%8F%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/Windows-程序工作过程.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -276,7 +278,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Windows/Windows-%E7%A8%8B%E5%BA%8F%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Windows/Windows-程序工作过程.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Windows/Windows-程序工作过程.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,11 +296,9 @@
       
         <p>我们来写一个最小的 Windows 程序。其只会显示一个空白窗口。</p>
 <a id="more"></a>
-
-<p><img src="https://docs.microsoft.com/zh-cn/windows/desktop/learnwin32/images/window01.png" alt=""></p>
+<p><img src="https://docs.microsoft.com/zh-cn/windows/desktop/learnwin32/images/window01.png" alt></p>
 <p>代码如下：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> UNICODE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> UNICODE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> </span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;windows.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">LRESULT CALLBACK <span class="title">WindowProc</span><span class="params">(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> WINAPI <span class="title">wWinMain</span><span class="params">(HINSTANCE hInstance, HINSTANCE, PWSTR pCmdLine, <span class="keyword">int</span> nCmdShow)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Register the window class.</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">wchar_t</span> CLASS_NAME[]  = <span class="string">L"Sample Window Class"</span>;</span><br><span class="line">    </span><br><span class="line">    WNDCLASS wc = &#123; &#125;;</span><br><span class="line"></span><br><span class="line">    wc.lpfnWndProc   = WindowProc;</span><br><span class="line">    wc.hInstance     = hInstance;</span><br><span class="line">    wc.lpszClassName = CLASS_NAME;</span><br><span class="line"></span><br><span class="line">    RegisterClass(&amp;wc);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create the window.</span></span><br><span class="line"></span><br><span class="line">    HWND hwnd = CreateWindowEx(</span><br><span class="line">        <span class="number">0</span>,                              <span class="comment">// Optional window styles.</span></span><br><span class="line">        CLASS_NAME,                     <span class="comment">// Window class</span></span><br><span class="line">        <span class="string">L"Learn to Program Windows"</span>,    <span class="comment">// Window text</span></span><br><span class="line">        WS_OVERLAPPEDWINDOW,            <span class="comment">// Window style</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// Size and position</span></span><br><span class="line">        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,</span><br><span class="line"></span><br><span class="line">        <span class="literal">NULL</span>,       <span class="comment">// Parent window    </span></span><br><span class="line">        <span class="literal">NULL</span>,       <span class="comment">// Menu</span></span><br><span class="line">        hInstance,  <span class="comment">// Instance handle</span></span><br><span class="line">        <span class="literal">NULL</span>        <span class="comment">// Additional application data</span></span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (hwnd == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ShowWindow(hwnd, nCmdShow);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Run the message loop.</span></span><br><span class="line"></span><br><span class="line">    MSG msg = &#123; &#125;;</span><br><span class="line">    <span class="keyword">while</span> (GetMessage(&amp;msg, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="number">0</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        TranslateMessage(&amp;msg);</span><br><span class="line">        DispatchMessage(&amp;msg);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">LRESULT CALLBACK <span class="title">WindowProc</span><span class="params">(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (uMsg)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> WM_DESTROY:</span><br><span class="line">        PostQuitMessage(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">case</span> WM_PAINT:</span><br><span class="line">        &#123;</span><br><span class="line">            PAINTSTRUCT ps;</span><br><span class="line">            HDC hdc = BeginPaint(hwnd, &amp;ps);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            FillRect(hdc, &amp;ps.rcPaint, (HBRUSH) (COLOR_WINDOW+<span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">            EndPaint(hwnd, &amp;ps);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> DefWindowProc(hwnd, uMsg, wParam, lParam);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <ol>
 <li><strong>wWinMain</strong> 是程序入口。当程序运行的时候，其注册一些关于窗口行为的信息。其中最重要的就是 <code>WindowProc</code> 函数。这个函数定义了窗口的行为——其外观，如何与用户交互等等。</li>
 <li>接着建立了一个窗口，并获得了表示此窗口的句柄</li>
@@ -308,7 +308,6 @@
 <h1 id="建立窗口"><a href="#建立窗口" class="headerlink" title="建立窗口"></a>建立窗口</h1><h2 id="窗口类"><a href="#窗口类" class="headerlink" title="窗口类"></a>窗口类</h2><p>一个 <em>窗口类</em> 定义了一系列多个窗口可能会共有的行为。</p>
 <p>每个窗口必须与一个窗口类相关联。要注意的是，一个窗口类，并不是一个 C++ 类。其是一个操作系统内部的数据结构。窗口类在系统运行时注册。如果要注册一个新的窗口类，需要填充 <strong>WNDCLASS</strong> 结构：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Register the window class.</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">wchar_t</span> CLASS_NAME[]  = <span class="string">L"Sample Window Class"</span>;</span><br><span class="line">    </span><br><span class="line">    WNDCLASS wc = &#123; &#125;;</span><br><span class="line"></span><br><span class="line">    wc.lpfnWndProc   = WindowProc;</span><br><span class="line">    wc.hInstance     = hInstance;</span><br><span class="line">    wc.lpszClassName = CLASS_NAME;</span><br></pre></td></tr></table></figure>
-
 <p>必须指定下列成员：</p>
 <ul>
 <li>lpfnWndProc 一个指向应用定义的指针，被称作是窗口程序。</li>
@@ -317,9 +316,7 @@
 </ul>
 <p>然后用 RegisterClass 函数进行注册到系统：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">RegisterClass(&amp;wc);</span><br></pre></td></tr></table></figure>
-
 <h2 id="新建窗口"><a href="#新建窗口" class="headerlink" title="新建窗口"></a>新建窗口</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">HWND hwnd = CreateWindowEx(</span><br><span class="line">        <span class="number">0</span>,                              <span class="comment">// Optional window styles.</span></span><br><span class="line">        CLASS_NAME,                     <span class="comment">// Window class</span></span><br><span class="line">        <span class="string">L"Learn to Program Windows"</span>,    <span class="comment">// Window text</span></span><br><span class="line">        WS_OVERLAPPEDWINDOW,            <span class="comment">// Window style</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// Size and position</span></span><br><span class="line">        CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,</span><br><span class="line"></span><br><span class="line">        <span class="literal">NULL</span>,       <span class="comment">// Parent window    </span></span><br><span class="line">        <span class="literal">NULL</span>,       <span class="comment">// Menu</span></span><br><span class="line">        hInstance,  <span class="comment">// Instance handle</span></span><br><span class="line">        <span class="literal">NULL</span>        <span class="comment">// Additional application data</span></span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (hwnd == <span class="literal">NULL</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    ShowWindow(hwnd, nCmdShow);</span><br></pre></td></tr></table></figure>
-
 <h1 id="窗口消息"><a href="#窗口消息" class="headerlink" title="窗口消息"></a>窗口消息</h1><p>一个 GUI 应用必须响应用户或者系统的事件。</p>
 <ul>
 <li>用户事件。鼠标点击，键盘按下，屏幕触摸，动作等等</li>
@@ -328,34 +325,29 @@
 <p>事件可能在程序的任何时间发生，任何顺序。我们如何来组织一个未知的执行流呢？</p>
 <p>因此，系统使用了一个叫做信息传输模型。系统通过向应用窗口传递消息来通信。一个消息只是一个数字的代码来表示特定的事件。例如，如果用户按下了左键，窗口会收到一个如下的消息代码：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WM_LBUTTONDOWN    0x0201</span></span><br></pre></td></tr></table></figure>
-
 <p>某些消息会有数据相关联。为了传递消息，系统就会调用窗口程序。</p>
 <h1 id="消息循环"><a href="#消息循环" class="headerlink" title="消息循环"></a>消息循环</h1><p>一个应用可能会接受上千个消息。同时，一个应用可以有多个窗口，每个都有其自己的窗口处理程序。程序如何进行分发消息呢？应用就需要一个循环来获取这些消息并分发到对应的窗口。</p>
 <p>对于创建窗口的每个线程，系统都会为其建立一个消息队列。这个队列会保留所有这个线程建立的窗口消息。这个消息队列对我们的程序来说是透明的。我们无法直接操作这个队列。但我们可以通过函数来获取消息：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">MSG msg;</span><br><span class="line">GetMessage(&amp;msg, NULL, 0, 0);</span><br></pre></td></tr></table></figure>
-
 <p>这个函数会从队列首取出一个消息。如果队列为空，函数会阻塞，直到有消息到达，但并不会让我们的程序没有响应。如果我们要进行一些后台任务，我们可以建立一些新的线程来完成。</p>
 <p>GetMessage 函数会填充 MSG 数据结构，包括了目标窗口及消息代码。其他的三个参数让我们可以过滤我们想要从队列获取的消息。多数情况下都是 0 值。</p>
 <p>虽然 MSG 已经获取了数据，但我们一般不会直接处理，而是会将其传递给两个其他函数。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">TranslateMessage(&amp;msg); </span><br><span class="line">DispatchMessage(&amp;msg);</span><br></pre></td></tr></table></figure>
-
 <p>TranslateMessage 和键盘输入相关，其将按键输入转换为字符。我们不需要清楚其是怎么工作的，只要记住在 DispatchMessage 前调用它就对了。</p>
 <p>DispatchMessage 告诉操作系统去调用消息目标窗口的处理程序。换句话说，操作系统会在去 窗口表内寻找窗口的句柄，接着找到其此窗口相关联的函数指针，然后调用它。</p>
 <p>当窗口处理程序返回时，其返回到 DispatchMessage。其实就是在消息循环中取出下一个消息。我们必须有一个循环来获取消息并进行分发。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// WARNING: Don't actually write your loop this way.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> (<span class="number">1</span>)      </span><br><span class="line">&#123;</span><br><span class="line">    GetMessage(&amp;msg, <span class="literal">NULL</span>, <span class="number">0</span>,  <span class="number">0</span>);</span><br><span class="line">    TranslateMessage(&amp;msg); </span><br><span class="line">    DispatchMessage(&amp;msg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>上面这样写，循环永远不会结束。通常，GetMessage 返回一个非0值。如果我们想要退回应用，且跳出循环，调用 PostQuitMessage。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">PostQuitMessage(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
-
 <p>这样才是正确的姿势：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Correct.</span></span><br><span class="line"></span><br><span class="line">MSG msg = &#123; &#125;;</span><br><span class="line"><span class="keyword">while</span> (GetMessage(&amp;msg, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="number">0</span>))</span><br><span class="line">&#123;</span><br><span class="line">    TranslateMessage(&amp;msg);</span><br><span class="line">    DispatchMessage(&amp;msg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h1 id="Posted-消息与-Sent-消息"><a href="#Posted-消息与-Sent-消息" class="headerlink" title="Posted 消息与 Sent 消息"></a>Posted 消息与 Sent 消息</h1><p>两者的区别可能会混淆：</p>
 <ul>
 <li>Posting 消息，意味着消息进入消息队列，通过消息循环来分发（GetMessage, DispatchMessage）</li>
 <li>Sending 意味着消息跳过了队列，系统会直接调用窗口处理程序。</li>
 </ul>
 <p>当前，这两个区别不重要。我们的窗口程序处理所有的消息。然而，某些消息跳过了队列然后直接到了我们的窗口处理程序。然而，如果应用在窗口间通信的时候就会有区别了。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -372,7 +364,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Windows/Windows-SDK-API%E7%BC%96%E7%A8%8B%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D.html" rel="next" title="Windows-SDK-API编程基本介绍">
+                <a href="/Windows/Windows-SDK-API编程基本介绍.html" rel="next" title="Windows-SDK-API编程基本介绍">
                   <i class="fa fa-chevron-left"></i> Windows-SDK-API编程基本介绍
                 </a>
             </div>
@@ -380,7 +372,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Windows/COM%E5%9C%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8.html" rel="prev" title="COM在程序中的使用">
+                <a href="/Windows/COM在程序中的使用.html" rel="prev" title="COM在程序中的使用">
                   COM在程序中的使用 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -442,20 +434,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -467,10 +459,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -499,10 +491,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -577,7 +569,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Windows/Windows-%E7%A8%8B%E5%BA%8F%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B.html",
+            url: "https://gowa.club/Windows/Windows-程序工作过程.html",
             identifier: "Windows/Windows-程序工作过程.html",
             title: "Windows-程序工作过程"
           }

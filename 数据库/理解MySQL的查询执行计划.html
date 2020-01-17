@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="理解MySQL的查询执行计划">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;%E7%90%86%E8%A7%A3MySQL%E7%9A%84%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92.html">
+<meta property="og:url" content="https://gowa.club/数据库/理解MySQL的查询执行计划.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="根据表，列，索引和WHERE子句中的条件的详细信息，MySQL优化器会考虑许多技术来有效地执行SQ​​L查询中涉及的查找。可以在不读取所有行的情况下执行对巨大表的查询;可以在不比较每个行组合的情况下执行涉及多个表的连接。优化程序选择执行最有效查询的操作集称为“查询执行计划”，也称为EXPLAIN计划。您的目标是识别EXPLAIN计划中表明查询已经过优化的方面，并了解SQL语法和索引技术，以便在看到">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-08-22T05:09:25.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解MySQL的查询执行计划">
+<meta name="twitter:description" content="根据表，列，索引和WHERE子句中的条件的详细信息，MySQL优化器会考虑许多技术来有效地执行SQ​​L查询中涉及的查找。可以在不读取所有行的情况下执行对巨大表的查询;可以在不比较每个行组合的情况下执行涉及多个表的连接。优化程序选择执行最有效查询的操作集称为“查询执行计划”，也称为EXPLAIN计划。您的目标是识别EXPLAIN计划中表明查询已经过优化的方面，并了解SQL语法和索引技术，以便在看到">
 
-<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E7%90%86%E8%A7%A3MySQL%E7%9A%84%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92.html">
+<link rel="canonical" href="https://gowa.club/数据库/理解MySQL的查询执行计划.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E7%90%86%E8%A7%A3MySQL%E7%9A%84%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/理解MySQL的查询执行计划.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -259,7 +261,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E7%90%86%E8%A7%A3MySQL%E7%9A%84%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/理解MySQL的查询执行计划.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/理解MySQL的查询执行计划.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,9 +292,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>根据表，列，索引和WHERE子句中的条件的详细信息，MySQL优化器会考虑许多技术来有效地执行SQ​​L查询中涉及的查找。可以在不读取所有行的情况下执行对巨大表的查询;可以在不比较每个行组合的情况下执行涉及多个表的连接。优化程序选择执行最有效查询的操作集称为“查询执行计划”，也称为EXPLAIN计划。您的目标是识别EXPLAIN计划中表明查询已经过优化的方面，并了解SQL语法和索引技术，以便在看到一些低效的操作时改进计划。</p>
-<a id="more"></a>
-
+        <p>根据表，列，索引和WHERE子句中的条件的详细信息，MySQL优化器会考虑许多技术来有效地执行SQ​​L查询中涉及的查找。可以在不读取所有行的情况下执行对巨大表的查询;可以在不比较每个行组合的情况下执行涉及多个表的连接。优化程序选择执行最有效查询的操作集称为“查询执行计划”，也称为EXPLAIN计划。您的目标是识别EXPLAIN计划中表明查询已经过优化的方面，并了解SQL语法和索引技术，以便在看到一些低效的操作时改进计划。<br><a id="more"></a></p>
 <h1 id="使用EXPLAIN优化查询"><a href="#使用EXPLAIN优化查询" class="headerlink" title="使用EXPLAIN优化查询"></a>使用EXPLAIN优化查询</h1><p>EXPLAIN语句提供有关MySQL如何执行语句的信息：</p>
 <ul>
 <li>当您在SELECT语句之前使用关键字EXPLAIN时，MySQL会显示优化程序中有关语句执行计划的信息。也就是说，MySQL解释了它将如何处理语句，包括有关表如何连接以及以何种顺序连接的信息。有关使用EXPLAIN获取执行计划信息的信息，请参见第下一节“EXPLAIN输出格式”。</li>
@@ -313,6 +313,7 @@
 </blockquote>
 <h2 id="EXPLAIN-Output-Columns"><a href="#EXPLAIN-Output-Columns" class="headerlink" title="EXPLAIN Output Columns"></a>EXPLAIN Output Columns</h2><p>本节介绍EXPLAIN生成的输出列。后面的部分提供有关类型和额外列的其他信息。</p>
 <p>EXPLAIN的每个输出行都提供有关一个表的信息。每行包含表“EXPLAIN输出列”中汇总的值，并在表后面进行了更详细的描述。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -320,7 +321,8 @@
 <th>Meaning</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>id</td>
 <td>The SELECT identifier</td>
 </tr>
@@ -368,8 +370,10 @@
 <td>Extra</td>
 <td>Additional information</td>
 </tr>
-</tbody></table>
-<h3 id="id"><a href="#id" class="headerlink" title="id"></a><strong>id</strong></h3><p>select 标识符。在本次查询中 select 的序列号。如果此行引用的是其他行的 union，那么序列可以是 <code>NULL</code>。在这种情况下，<em>table*列会显示一个类似</em>&lt;unionM,N&gt;<em>的值来表明这一行引用了 Id 为 *M,N</em> 行的查询结果 联合。</p>
+</tbody>
+</table>
+</div>
+<h3 id="id"><a href="#id" class="headerlink" title="id"></a><strong>id</strong></h3><p>select 标识符。在本次查询中 select 的序列号。如果此行引用的是其他行的 union，那么序列可以是 <code>NULL</code>。在这种情况下，<em>table</em>列会显示一个类似<em><unionm,n></unionm,n></em>的值来表明这一行引用了 Id 为 <em>M,N</em> 行的查询结果 联合。</p>
 <h3 id="select-type"><a href="#select-type" class="headerlink" title="select_type"></a><strong>select_type</strong></h3><p>可能有下面这些值。</p>
 <ul>
 <li><strong>SIMPLE</strong>    Simple SELECT (not using UNION or subqueries)</li>
@@ -388,8 +392,8 @@
 <p>子查询的可缓存性与查询缓存中查询结果的缓存不同（<a href="https://dev.mysql.com/doc/refman/5.5/en/query-cache-operation.html" target="_blank" rel="noopener">Section 8.10.3.1, “How the Query Cache Operates”</a>。查询执行期间发生子查询缓存，而查询缓存仅在查询执行完成后用于存储结果。</p>
 <h3 id="table"><a href="#table" class="headerlink" title="table"></a>table</h3><p>输出行引用的表的名称。这也可以是以下值之一:</p>
 <ul>
-<li>&lt;unionM,N&gt;:该行引用的是id值为M和N的行的并集。</li>
-<li><derivedN>:行引用的是id值为N的行的派生表结果。例如，派生表可能来自FROM中的子查询</li>
+<li><unionm,n>:该行引用的是id值为M和N的行的并集。</unionm,n></li>
+<li><derivedn>:行引用的是id值为N的行的派生表结果。例如，派生表可能来自FROM中的子查询</derivedn></li>
 </ul>
 <h3 id="partitions"><a href="#partitions" class="headerlink" title="partitions"></a>partitions</h3><p>记录将与查询匹配的分区。仅当使用PARTITIONS关键字时，才会显示此列。对于非分区表，该值为NULL。<a href="https://dev.mysql.com/doc/refman/5.5/en/partitioning-info.html" target="_blank" rel="noopener">Section 19.3.4, “Obtaining Information About Partitions”</a></p>
 <h3 id="type"><a href="#type" class="headerlink" title="type"></a>type</h3><p>join 类型。详见下一节。</p>
@@ -414,17 +418,14 @@
 <li><strong>const</strong> 表最多有一个匹配行，在查询开始的时候就会读取。因为只有一行，所以这一行内的列可以被优化器当做常量对待。const表非常快，因为它们只读一次。当您将PRIMARY KEY或UNIQUE索引的所有部分与常量值进行比较时，将使用const。在以下查询中，tbl_name可用作const表：   </li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tbl_name <span class="keyword">WHERE</span> primary_key=<span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tbl_name</span><br><span class="line">  <span class="keyword">WHERE</span> primary_key_part1=<span class="number">1</span> <span class="keyword">AND</span> primary_key_part2=<span class="number">2</span>;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><strong>eq_ref</strong> 对于前面表格中的每个行组合，从该表中读取一行。除了 <code>system,const</code>，这是最佳的join方式了。当一个索引的所有部分被join使用且此索引是主键或 <code>UNIQUE NOT NULL</code>索引的时候被使用。当使用 <code>=</code>操作符在索引列的时候，可以使用 <code>eq_ref</code>。比较值可以是常量，也可以是使用在此表之前读取的表中的列的表达式，在下面的例子中，MySQL可以使用 <code>eq_ref</code> join 来处理<em>ref_table</em>：</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> ref_table,other_table</span><br><span class="line">  <span class="keyword">WHERE</span> ref_table.key_column=other_table.column;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> ref_table,other_table</span><br><span class="line">  <span class="keyword">WHERE</span> ref_table.key_column_part1=other_table.column</span><br><span class="line">  <span class="keyword">AND</span> ref_table.key_column_part2=<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><strong>ref</strong> 对于前面表中的每个行组合，将从此表中读取具有匹配索引值的所有行。如果连接仅使用键的最左前缀或者键不是PRIMARY KEY或UNIQUE索引，则使用ref（换句话说，其不能根据索引值找到唯一行的时候）。当使用的索引只会匹配几行的时候，这是一个非常不错的join类型。<code>ref</code>可以在索引列上使用 <code>=&lt;&gt;</code>这样的操作符上使用。</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> ref_table <span class="keyword">WHERE</span> key_column=expr;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> ref_table,other_table</span><br><span class="line">  <span class="keyword">WHERE</span> ref_table.key_column=other_table.column;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> ref_table,other_table</span><br><span class="line">  <span class="keyword">WHERE</span> ref_table.key_column_part1=other_table.column</span><br><span class="line">  <span class="keyword">AND</span> ref_table.key_column_part2=<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><strong>fulltext</strong> 使用FULLTEXT索引执行连接</li>
 <li><strong>ref_or_null</strong> 这和 <code>ref</code>有点类似，不同的是MySQL会有一个额外操作，就是会搜索包含NULL的行。这个join类型优化经常用来在解析子查询。<a href="https://dev.mysql.com/doc/refman/5.5/en/is-null-optimization.html" target="_blank" rel="noopener">Section 8.2.1.9, “IS NULL Optimization”</a></li>
@@ -440,12 +441,10 @@
 <li><strong>index_subquery</strong> 与<code>index_merge</code>类似。其会替换 <code>in</code> 查询，但是其在子查询内的 非唯一的索引上工作，如：</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">value IN (<span class="keyword">SELECT</span> key_column <span class="keyword">FROM</span> single_table <span class="keyword">WHERE</span> some_expr)</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><strong>range</strong> 给定范围内的行被获取。<code>key</code> 列表示使用了什么索引。<code>key_len</code>表明使用的所有最长长度。<code>ref</code>列为null。当一个索引列与一个常量进行比较（使用 <code>=, &lt;&gt;, &gt;, &gt;=, &lt;, &lt;=, IS NULL, &lt;=&gt;, BETWEEN, LIKE, or IN()</code>操作）会使用：</li>
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tbl_name</span><br><span class="line">  <span class="keyword">WHERE</span> key_column = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tbl_name</span><br><span class="line">  <span class="keyword">WHERE</span> key_column <span class="keyword">BETWEEN</span> <span class="number">10</span> <span class="keyword">and</span> <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tbl_name</span><br><span class="line">  <span class="keyword">WHERE</span> key_column <span class="keyword">IN</span> (<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> tbl_name</span><br><span class="line">  <span class="keyword">WHERE</span> key_part1 = <span class="number">10</span> <span class="keyword">AND</span> key_part2 <span class="keyword">IN</span> (<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>);</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><strong>index</strong> 与ALL类似，但是是扫描所有索引。有两种发生方式。<br>如果索引是当前查询的覆盖索引且能用来满足所有从表内需要的数据，那么只扫描索引树。在这种情况下，列<code>Extra</code>会显示<em>Using index</em>。索引扫描比ALL快，因为索引比表数据小多了。<br>使用索引中的读取执行全表扫描，以按索引顺序查找数据行。<code>Uses index</code>不会出现在<code>Extra</code>列。<br>当查询仅使用属于单个索引的列时，MySQL可以使用此连接类型</li>
 <li><strong>ALL</strong> 全表扫描</li>
@@ -469,7 +468,7 @@
 <ul>
 <li><strong>Range checked for each record (index map: N)</strong></li>
 </ul>
-<h2 id="EXPLAIN-Output-Interpretation"><a href="#EXPLAIN-Output-Interpretation" class="headerlink" title="EXPLAIN Output Interpretation"></a>EXPLAIN Output Interpretation</h2><h1 id="扩展EXPLAIN-输出格式"><a href="#扩展EXPLAIN-输出格式" class="headerlink" title="扩展EXPLAIN 输出格式"></a>扩展EXPLAIN 输出格式</h1><h1 id="估计查询性能"><a href="#估计查询性能" class="headerlink" title="估计查询性能"></a>估计查询性能</h1>
+<h2 id="EXPLAIN-Output-Interpretation"><a href="#EXPLAIN-Output-Interpretation" class="headerlink" title="EXPLAIN Output Interpretation"></a>EXPLAIN Output Interpretation</h2><h1 id="扩展EXPLAIN-输出格式"><a href="#扩展EXPLAIN-输出格式" class="headerlink" title="扩展EXPLAIN 输出格式"></a>扩展EXPLAIN 输出格式</h1><h1 id="估计查询性能"><a href="#估计查询性能" class="headerlink" title="估计查询性能"></a>估计查询性能<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></h1>
     </div>
 
     
@@ -485,7 +484,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%B8%80%E6%AC%A1%E6%83%A8%E7%97%9B%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E7%BB%8F%E5%8E%86.html" rel="next" title="一次惨痛的数据库恢复经历">
+                <a href="/数据库/一次惨痛的数据库恢复经历.html" rel="next" title="一次惨痛的数据库恢复经历">
                   <i class="fa fa-chevron-left"></i> 一次惨痛的数据库恢复经历
                 </a>
             </div>
@@ -493,7 +492,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/dom4j%E6%9D%A5%E8%A7%A3%E6%9E%90xml-%E7%9C%81%E5%B8%82%E5%8C%BA-%E4%B8%89%E7%BA%A7%E8%81%94%E5%8A%A8%E9%80%89%E6%8B%A9.html" rel="prev" title="dom4j来解析xml-省市区-三级联动选择">
+                <a href="/Java/dom4j来解析xml-省市区-三级联动选择.html" rel="prev" title="dom4j来解析xml-省市区-三级联动选择">
                   dom4j来解析xml-省市区-三级联动选择 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -541,7 +540,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用EXPLAIN优化查询"><span class="nav-number">1.</span> <span class="nav-text">使用EXPLAIN优化查询</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EXPLAIN输出格式"><span class="nav-number">2.</span> <span class="nav-text">EXPLAIN输出格式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EXPLAIN-Output-Columns"><span class="nav-number">2.1.</span> <span class="nav-text">EXPLAIN Output Columns</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#id"><span class="nav-number">2.1.1.</span> <span class="nav-text">id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-type"><span class="nav-number">2.1.2.</span> <span class="nav-text">select_type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#table"><span class="nav-number">2.1.3.</span> <span class="nav-text">table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#partitions"><span class="nav-number">2.1.4.</span> <span class="nav-text">partitions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type"><span class="nav-number">2.1.5.</span> <span class="nav-text">type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#possible-keys"><span class="nav-number">2.1.6.</span> <span class="nav-text">possible_keys</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#key"><span class="nav-number">2.1.7.</span> <span class="nav-text">key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#key-len"><span class="nav-number">2.1.8.</span> <span class="nav-text">key_len</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ref"><span class="nav-number">2.1.9.</span> <span class="nav-text">ref</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rows"><span class="nav-number">2.1.10.</span> <span class="nav-text">rows</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filtered"><span class="nav-number">2.1.11.</span> <span class="nav-text">filtered</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Extra"><span class="nav-number">2.1.12.</span> <span class="nav-text">Extra</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXPLAIN-Join-Types"><span class="nav-number">2.2.</span> <span class="nav-text">EXPLAIN Join Types</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXPLAIN-Extra-Information"><span class="nav-number">2.3.</span> <span class="nav-text">EXPLAIN Extra Information</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXPLAIN-Output-Interpretation"><span class="nav-number">2.4.</span> <span class="nav-text">EXPLAIN Output Interpretation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#扩展EXPLAIN-输出格式"><span class="nav-number">3.</span> <span class="nav-text">扩展EXPLAIN 输出格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#估计查询性能"><span class="nav-number">4.</span> <span class="nav-text">估计查询性能</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#使用EXPLAIN优化查询"><span class="nav-number">1.</span> <span class="nav-text">使用EXPLAIN优化查询</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EXPLAIN输出格式"><span class="nav-number">2.</span> <span class="nav-text">EXPLAIN输出格式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#EXPLAIN-Output-Columns"><span class="nav-number">2.1.</span> <span class="nav-text">EXPLAIN Output Columns</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#id"><span class="nav-number">2.1.1.</span> <span class="nav-text">id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#select-type"><span class="nav-number">2.1.2.</span> <span class="nav-text">select_type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#table"><span class="nav-number">2.1.3.</span> <span class="nav-text">table</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#partitions"><span class="nav-number">2.1.4.</span> <span class="nav-text">partitions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type"><span class="nav-number">2.1.5.</span> <span class="nav-text">type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#possible-keys"><span class="nav-number">2.1.6.</span> <span class="nav-text">possible_keys</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#key"><span class="nav-number">2.1.7.</span> <span class="nav-text">key</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#key-len"><span class="nav-number">2.1.8.</span> <span class="nav-text">key_len</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ref"><span class="nav-number">2.1.9.</span> <span class="nav-text">ref</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rows"><span class="nav-number">2.1.10.</span> <span class="nav-text">rows</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filtered"><span class="nav-number">2.1.11.</span> <span class="nav-text">filtered</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Extra"><span class="nav-number">2.1.12.</span> <span class="nav-text">Extra</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXPLAIN-Join-Types"><span class="nav-number">2.2.</span> <span class="nav-text">EXPLAIN Join Types</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXPLAIN-Extra-Information"><span class="nav-number">2.3.</span> <span class="nav-text">EXPLAIN Extra Information</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EXPLAIN-Output-Interpretation"><span class="nav-number">2.4.</span> <span class="nav-text">EXPLAIN Output Interpretation</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#扩展EXPLAIN-输出格式"><span class="nav-number">3.</span> <span class="nav-text">扩展EXPLAIN 输出格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#估计查询性能"><span class="nav-number">4.</span> <span class="nav-text">估计查询性能let graphviz_engines = [&quot;circo&quot;,    &quot;dot&quot;,    &quot;fdp&quot;,    &quot;neato&quot;,    &quot;osage&quot;,    &quot;twopi&quot;];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);    for (let i = 0; i &lt; domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r =&gt; {            dom.innerHTML =&#39;&#39;;dom.append(r); });        } catch (e) {            console.error(&quot;Error when parsing node:&quot;, dom, e);        }    }}let init = function () {    for (let i = 0; i &lt; graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != &quot;undefined&quot;) {    window.addEventListener(&quot;load&quot;, init, false);} else {    window.attachEvent(&quot;onload&quot;, init);}</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -555,20 +554,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -580,10 +579,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -612,10 +611,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -690,7 +689,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E7%90%86%E8%A7%A3MySQL%E7%9A%84%E6%9F%A5%E8%AF%A2%E6%89%A7%E8%A1%8C%E8%AE%A1%E5%88%92.html",
+            url: "https://gowa.club/数据库/理解MySQL的查询执行计划.html",
             identifier: "数据库/理解MySQL的查询执行计划.html",
             title: "理解MySQL的查询执行计划"
           }

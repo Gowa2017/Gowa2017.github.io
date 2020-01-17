@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Windows">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Windows读写配置文件">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Windows&#x2F;Windows%E8%AF%BB%E5%86%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html">
+<meta property="og:url" content="https://gowa.club/Windows/Windows读写配置文件.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Windows 一般都存放在 ini 文件中。这种文件的格式可以说是分节的键值对这样。而windows 也提供了几组 API 来对这样的文件进行读写。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-09-27T04:38:25.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Windows读写配置文件">
+<meta name="twitter:description" content="Windows 一般都存放在 ini 文件中。这种文件的格式可以说是分节的键值对这样。而windows 也提供了几组 API 来对这样的文件进行读写。">
 
-<link rel="canonical" href="https://gowa.club/Windows/Windows%E8%AF%BB%E5%86%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html">
+<link rel="canonical" href="https://gowa.club/Windows/Windows读写配置文件.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/Windows%E8%AF%BB%E5%86%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/Windows读写配置文件.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Windows/Windows%E8%AF%BB%E5%86%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Windows/Windows读写配置文件.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Windows/Windows读写配置文件.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,37 +294,22 @@
       
         <p>Windows 一般都存放在 ini 文件中。这种文件的格式可以说是分节的键值对这样。而windows 也提供了几组 API 来对这样的文件进行读写。</p>
 <a id="more"></a>
-
-
-
 <h1 id="文件格式"><a href="#文件格式" class="headerlink" title="文件格式"></a>文件格式</h1><p>INI 文件有三种形式的元素：<strong>节，参数，注释</strong>。</p>
 <h2 id="节"><a href="#节" class="headerlink" title="节"></a>节</h2><p>每个节，单独占一行，以 <code>[section]</code> 形式展示。</p>
 <h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><p>每个参数项包括一个键值对 <code>key=value</code>。</p>
 <h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2><p>以 <code>;</code> 开始的内容。</p>
 <h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="comment">; last modified 1 April 2001 by John Doe  </span></span><br><span class="line"><span class="section">[owner]</span>  </span><br><span class="line"><span class="attr">name</span>=John Doe  </span><br><span class="line"><span class="attr">organization</span>=Acme Products     </span><br><span class="line"><span class="section">[database]</span>  </span><br><span class="line"><span class="attr">server</span>=<span class="number">192.0</span>.<span class="number">2.42</span>     </span><br><span class="line"><span class="comment">; use IP address in case network name resolution is not working  </span></span><br><span class="line"><span class="attr">port</span>=<span class="number">143</span>  </span><br><span class="line"><span class="attr">file</span> = <span class="string">"acme payroll.dat"</span></span><br></pre></td></tr></table></figure>
-
-
-
 <h1 id="API函数"><a href="#API函数" class="headerlink" title="API函数"></a>API函数</h1><p>函数有如下 {Get|Set}PrivateProfile{Int | String | Section | SectionNames}[A|W]。</p>
 <h2 id="节-1"><a href="#节-1" class="headerlink" title="节"></a>节</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">WritePrivateProfileSectionA</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCSTR lpAppName,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCSTR lpString,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCSTR lpFileName</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">BOOL <span class="title">WritePrivateProfileSectionW</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCWSTR lpAppName,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCWSTR lpString,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCWSTR lpFileName</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
-
 <p>其中 lpAppName 指定节名称，lpString 指定 “key=value” 类似字符串，lpFileName 指定文件，如”.\\config.ini”</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">WritePrivateProfileSection(_T(<span class="string">"acc1"</span>), _T(<span class="string">"password=1234"</span>), m_szAccCfgName);</span><br></pre></td></tr></table></figure>
-
-
-
 <h1 id="参数-1"><a href="#参数-1" class="headerlink" title="参数"></a>参数</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">WritePrivateProfileStringA</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCSTR lpAppName,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCSTR lpKeyName,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCSTR lpString,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCSTR lpFileName</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function">BOOL <span class="title">WritePrivateProfileStringW</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCWSTR lpAppName,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCWSTR lpKeyName,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCWSTR lpString,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCWSTR lpFileName</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
-
 <p>这是对值中的某一项进行写入：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">WritePrivateProfileString(_T(<span class="string">"acc2"</span>), _T(<span class="string">"password"</span>),_T(<span class="string">"4567"</span>), m_szAccCfgName);</span><br></pre></td></tr></table></figure>
-
-
-
 <h1 id="获取所有节"><a href="#获取所有节" class="headerlink" title="获取所有节"></a>获取所有节</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">DWORD <span class="title">GetPrivateProfileSectionNames</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">  LPTSTR  lpszReturnBuffer,</span></span></span><br><span class="line"><span class="function"><span class="params">  DWORD   nSize,</span></span></span><br><span class="line"><span class="function"><span class="params">  LPCTSTR lpFileName</span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
-
 <p>需要注意的是，返回的节是品在一起放在 lpszReturnBuffer 的，我们必须通过轮循的形式把他给取回来：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">TCHAR buff[<span class="number">1024</span>];</span><br><span class="line">GetPrivateProfileSectionNames(buff,<span class="number">1024</span>,_T(<span class="string">".\\config.ini"</span>));</span><br><span class="line">PTCHAR p = buff;</span><br><span class="line"><span class="keyword">while</span> (*p != <span class="literal">NULL</span>)</span><br><span class="line">&#123;</span><br><span class="line">    OutputDebugString(p);</span><br><span class="line">    p+= <span class="number">1</span> + _tcslen(p);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -339,16 +326,16 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Cpp/C++%E4%B8%AD%E7%9A%84const%E4%B8%80%E4%BA%9B%E8%AF%AF%E8%A7%A3.html" rel="next" title="C++中的const一些误解">
-                  <i class="fa fa-chevron-left"></i> C++中的const一些误解
+                <a href="/RxJava/RxJava之retryWhen操作符.html" rel="next" title="RxJava之retryWhen操作符">
+                  <i class="fa fa-chevron-left"></i> RxJava之retryWhen操作符
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Windows/MFC-CMap%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8%E7%9A%84%E6%80%AA%E5%BC%82.html" rel="prev" title="MFC-CMap类的使用的怪异">
-                  MFC-CMap类的使用的怪异 <i class="fa fa-chevron-right"></i>
+                <a href="/Cpp/C++中的const一些误解.html" rel="prev" title="C++中的const一些误解">
+                  C++中的const一些误解 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -409,20 +396,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -434,10 +421,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -466,10 +453,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -544,7 +531,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Windows/Windows%E8%AF%BB%E5%86%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html",
+            url: "https://gowa.club/Windows/Windows读写配置文件.html",
             identifier: "Windows/Windows读写配置文件.html",
             title: "Windows读写配置文件"
           }

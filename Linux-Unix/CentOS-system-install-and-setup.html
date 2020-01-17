@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,12 +51,14 @@
 <meta name="keywords" content="Linux,CentOS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CentOS system install and setup">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;CentOS-system-install-and-setup.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/CentOS-system-install-and-setup.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="大多数时候我们需要安装系统并进行一下配置，乃至加固等，这就记录一下，下次就不弄到处去找来给人了。包括LVM建立、服务启动设置、SSH设置、网卡配置、源配置">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.267Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CentOS system install and setup">
+<meta name="twitter:description" content="大多数时候我们需要安装系统并进行一下配置，乃至加固等，这就记录一下，下次就不弄到处去找来给人了。包括LVM建立、服务启动设置、SSH设置、网卡配置、源配置">
 
 <link rel="canonical" href="https://gowa.club/Linux-Unix/CentOS-system-install-and-setup.html">
 
@@ -297,26 +299,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>大多数时候我们需要安装系统并进行一下配置，乃至加固等，这就记录一下，下次就不弄到处去找来给人了。<br>包括LVM建立、服务启动设置、SSH设置、网卡配置、源配置</p>
-<a id="more"></a>
+        <p>大多数时候我们需要安装系统并进行一下配置，乃至加固等，这就记录一下，下次就不弄到处去找来给人了。<br>包括LVM建立、服务启动设置、SSH设置、网卡配置、源配置<br><a id="more"></a></p>
 <h2 id="1安装时分区建立"><a href="#1安装时分区建立" class="headerlink" title="1安装时分区建立"></a>1安装时分区建立</h2><ol>
 <li>建立/boot分区 500M /swap 10000M</li>
 <li>剩余空间建立PV</li>
 <li>PV加入VG</li>
-<li>建立LV 全部挂在到/<h2 id="2安装模式选择"><a href="#2安装模式选择" class="headerlink" title="2安装模式选择"></a>2安装模式选择</h2>基本安装 开发工具全部装，SERVER 全部不选，中文语言支持装上，记得gcc一定要安装<h2 id="3设置DVD源"><a href="#3设置DVD源" class="headerlink" title="3设置DVD源"></a>3设置DVD源</h2> mkdir /media/dvd<br> mount /dev/cdrom /media/dvd<br> cd /etc/yum.repos.d<br> mv CentOS-Base.repo CentOS-Base.repo.bak</li>
-</ol>
-<p>** 修改 baseurl 增加**</p>
-<pre><code>file:///media/dvd</code></pre><p>设置enable=1</p>
-<pre><code>yum clear all</code></pre><h2 id="4服务开启"><a href="#4服务开启" class="headerlink" title="4服务开启"></a>4服务开启</h2><pre><code>chkconfig --level 35 ntpd on
-chkconfig --level 35 sshd on
-chkconfig --level 35 network on
-chkconfig --level 35 iptables off
-chkconfig --level 35 networkmanager off
-service networkmanager stop</code></pre><h2 id="5禁止root登录"><a href="#5禁止root登录" class="headerlink" title="5禁止root登录"></a>5禁止root登录</h2><pre><code>sed -i &apos;s/PermitRootLogin yes/PermitRootLogin no/&apos; /etc/ssh/sshd_config</code></pre><h2 id="6增加用户并修改密码"><a href="#6增加用户并修改密码" class="headerlink" title="6增加用户并修改密码"></a>6增加用户并修改密码</h2><pre><code>groupadd lcims
-useradd -d /lcims -s /bin/bash -g lcims lcims
-chown lcims.lcims /data
-passwd lcims</code></pre><h2 id="7修改显示模式"><a href="#7修改显示模式" class="headerlink" title="7修改显示模式"></a>7修改显示模式</h2><pre><code>echo &quot;export PS1=&apos;[\u@\h $PWD]# &apos;&quot; &gt;&gt; /etc/profile
-source /etc/profile</code></pre><h2 id="8主机名"><a href="#8主机名" class="headerlink" title="8主机名"></a>8主机名</h2><pre><code>vim /etc/sysconfig/network</code></pre><h2 id="9双网卡配置"><a href="#9双网卡配置" class="headerlink" title="9双网卡配置"></a>9双网卡配置</h2><ol>
+<li><p>建立LV 全部挂在到/</p>
+<h2 id="2安装模式选择"><a href="#2安装模式选择" class="headerlink" title="2安装模式选择"></a>2安装模式选择</h2><p>基本安装 开发工具全部装，SERVER 全部不选，中文语言支持装上，记得gcc一定要安装</p>
+<h2 id="3设置DVD源"><a href="#3设置DVD源" class="headerlink" title="3设置DVD源"></a>3设置DVD源</h2><p> mkdir /media/dvd<br> mount /dev/cdrom /media/dvd<br> cd /etc/yum.repos.d<br> mv CentOS-Base.repo CentOS-Base.repo.bak<br><strong> 修改 baseurl 增加</strong></p>
+<p> file:///media/dvd<br>设置enable=1</p>
+<p> yum clear all</p>
+<h2 id="4服务开启"><a href="#4服务开启" class="headerlink" title="4服务开启"></a>4服务开启</h2><p> chkconfig —level 35 ntpd on<br> chkconfig —level 35 sshd on<br> chkconfig —level 35 network on<br> chkconfig —level 35 iptables off<br> chkconfig —level 35 networkmanager off<br> service networkmanager stop</p>
+<h2 id="5禁止root登录"><a href="#5禁止root登录" class="headerlink" title="5禁止root登录"></a>5禁止root登录</h2><p> sed -i ‘s/PermitRootLogin yes/PermitRootLogin no/‘ /etc/ssh/sshd_config</p>
+<h2 id="6增加用户并修改密码"><a href="#6增加用户并修改密码" class="headerlink" title="6增加用户并修改密码"></a>6增加用户并修改密码</h2><p> groupadd lcims<br> useradd -d /lcims -s /bin/bash -g lcims lcims<br> chown lcims.lcims /data<br> passwd lcims</p>
+<h2 id="7修改显示模式"><a href="#7修改显示模式" class="headerlink" title="7修改显示模式"></a>7修改显示模式</h2><p> echo “export PS1=’[\u@\h $PWD]# ‘“ &gt;&gt; /etc/profile<br> source /etc/profile</p>
+<h2 id="8主机名"><a href="#8主机名" class="headerlink" title="8主机名"></a>8主机名</h2><p> vim /etc/sysconfig/network</p>
+<h2 id="9双网卡配置"><a href="#9双网卡配置" class="headerlink" title="9双网卡配置"></a>9双网卡配置</h2></li>
 <li><p>检查是否支持（默认情况下是支持的)</p>
 <p> cat /boot/config-2.6.32-431.el6.x86_64 | grep -i CONFIG_BONDING<br>config-XX是内核版本号 出现 CONFIG_BONDING=m说明支持，继续下一步，否则要进行编译内核支持。</p>
 </li>
@@ -345,7 +343,7 @@ source /etc/profile</code></pre><h2 id="8主机名"><a href="#8主机名" class=
 <p> ifconfig -a | grep HW</p>
 </li>
 <li><p>运行状态检查</p>
-<p>cat /proc/net/bonding/bond0</p>
+<p>cat /proc/net/bonding/bond0<br><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 </li>
 </ol>
 
@@ -370,7 +368,7 @@ source /etc/profile</code></pre><h2 id="8主机名"><a href="#8主机名" class=
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/AIX-chsec%E5%91%BD%E4%BB%A4%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html" rel="prev" title="AIX-chsec命令修改配置文件">
+                <a href="/Linux-Unix/AIX-chsec命令修改配置文件.html" rel="prev" title="AIX-chsec命令修改配置文件">
                   AIX-chsec命令修改配置文件 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -432,20 +430,20 @@ source /etc/profile</code></pre><h2 id="8主机名"><a href="#8主机名" class=
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -457,10 +455,10 @@ source /etc/profile</code></pre><h2 id="8主机名"><a href="#8主机名" class=
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -489,10 +487,10 @@ source /etc/profile</code></pre><h2 id="8主机名"><a href="#8主机名" class=
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         

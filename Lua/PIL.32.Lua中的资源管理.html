@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Lua,PIL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PIL.32.Lua中的资源管理">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Lua&#x2F;PIL.32.Lua%E4%B8%AD%E7%9A%84%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86.html">
+<meta property="og:url" content="https://gowa.club/Lua/PIL.32.Lua中的资源管理.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="在 PIL.31.C中的自定义用户定义类型 中，我们实现的 Boolean 数组不用担心资源管理的事情。这些数组只需要内存空间。每个代表一个数组的 Full Userdata 都有其自己的内存空间，这些内存空间是由 Lua 进行管理的。当一个数组变成垃圾（就是说程序不可访问了），Lua 最终会回收和释放那些内存。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-10-15T13:16:20.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PIL.32.Lua中的资源管理">
+<meta name="twitter:description" content="在 PIL.31.C中的自定义用户定义类型 中，我们实现的 Boolean 数组不用担心资源管理的事情。这些数组只需要内存空间。每个代表一个数组的 Full Userdata 都有其自己的内存空间，这些内存空间是由 Lua 进行管理的。当一个数组变成垃圾（就是说程序不可访问了），Lua 最终会回收和释放那些内存。">
 
-<link rel="canonical" href="https://gowa.club/Lua/PIL.32.Lua%E4%B8%AD%E7%9A%84%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86.html">
+<link rel="canonical" href="https://gowa.club/Lua/PIL.32.Lua中的资源管理.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.32.Lua%E4%B8%AD%E7%9A%84%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.32.Lua中的资源管理.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/PIL.32.Lua%E4%B8%AD%E7%9A%84%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/PIL.32.Lua中的资源管理.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/PIL.32.Lua中的资源管理.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,14 +292,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在 <a href="/Lua/PIL.31.C%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%A8%E6%88%B7%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B.html" title="PIL.31.C中的自定义用户定义类型">PIL.31.C中的自定义用户定义类型</a> 中，我们实现的 Boolean 数组不用担心资源管理的事情。这些数组只需要内存空间。每个代表一个数组的 Full Userdata 都有其自己的内存空间，这些内存空间是由 Lua 进行管理的。当一个数组变成垃圾（就是说程序不可访问了），Lua 最终会回收和释放那些内存。</p>
+        <p>在 <a href="/Lua/PIL.31.C中的自定义用户定义类型.html" title="PIL.31.C中的自定义用户定义类型">PIL.31.C中的自定义用户定义类型</a> 中，我们实现的 Boolean 数组不用担心资源管理的事情。这些数组只需要内存空间。每个代表一个数组的 Full Userdata 都有其自己的内存空间，这些内存空间是由 Lua 进行管理的。当一个数组变成垃圾（就是说程序不可访问了），Lua 最终会回收和释放那些内存。</p>
 <a id="more"></a>
-
 <p>但事情不是总是这么简单啊。有的时候，有些对除了内存之外，可能还需要其他的资源，比如说文件描述符，窗口句柄等等。（这些资源也是内存，但不过是由其他部分的系统进行管理）。在这种情况下，当这个对象被回收的时候，与之相应的其他资源也应该被释放。</p>
 <p>Lua 提供了一个元方法  <strong>__gc</strong> 来进行资源的释放。为了演示这个元方法的使用，本章会为外部特性开发两个 Lua 绑定。第一个例子就是实现一个遍历目录的函数。第二个例子就是个比较大的，绑定到 <strong>Expat</strong>，一个开源 XML 解析器。</p>
 <h1 id="目录遍历"><a href="#目录遍历" class="headerlink" title="目录遍历"></a>目录遍历</h1><p>我们将会像下面一样使用我们的实现函数：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> fname <span class="keyword">in</span> dir.<span class="built_in">open</span>(<span class="string">"."</span>) <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">print</span>(fname)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>dir.open 会返回一个迭代器，然后可用其来遍历整个目录，在 C 中，我们需要一个 DIR 结构（典型的是 POSIX 系统）。</p>
 <p>DIR 结构的实例通过 <code>opendir</code> 来建立，其必须显式的通过 <code>closedir</code> 进行释放。在我们新的实现中，我们无法将 DIR 的实例保存在一个本地变量中，因为其必须在几个调用间查询这个值。更深入一点，我们不能只是在获取了最后一个名字后就关闭目录；如果程序跳出了循环，迭代器将永远也不会获取到最后一个名字。因此，为了确保 DIR 实例总是能被释放，我们将 DIR 实例的地址放到一个 userdata 内，并用这个 Full Userdata 的 <strong>__gc</strong> 元方法来释放目录结构实例。</p>
 <p>尽管在这个过程中 Full Userdata 的角色很重要，但其并不一定需要对 Lua 可见。 <code>dir.open</code> 会返回一个迭代函数，这就是 Lua 所看到的。这个目录（Full Userdata）可以是迭代函数的上值。这样的话，迭代函数就对这个结构有直接的访问权限，但 Lua 代码却是不能的。</p>
@@ -309,14 +309,13 @@
 </ol>
 <p>通常，我们也会需要一个额外的函数来进行初始化，例如是建立和初始化目录的元表。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"lua.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"lauxlib.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* forward declaration for the iterator function */</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">dir_iter</span> <span class="params">(lua_State *L)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">l_dir</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span> *path = luaL_checkstring(L, <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* create a userdata to store a DIR address */</span></span><br><span class="line">  DIR **d = (DIR **)lua_newuserdata(L, <span class="keyword">sizeof</span>(DIR *));</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* pre-initialize it */</span></span><br><span class="line">  *d = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* set its metatable */</span></span><br><span class="line">  luaL_getmetatable(L, <span class="string">"LuaBook.dir"</span>);</span><br><span class="line">  lua_setmetatable(L, <span class="number">-2</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* try to open the given directory */</span></span><br><span class="line">  *d = opendir(path);</span><br><span class="line">  <span class="keyword">if</span> (*d == <span class="literal">NULL</span>)  <span class="comment">/* error opening the directory? */</span></span><br><span class="line">    luaL_error(L, <span class="string">"cannot open %s: %s"</span>, path, strerror(errno));</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* creates and returns the iterator function;</span></span><br><span class="line"><span class="comment">     its sole upvalue, the directory userdata,</span></span><br><span class="line"><span class="comment">     is already on the top of the stack */</span></span><br><span class="line">  lua_pushcclosure(L, dir_iter, <span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>函数中有个需要注意的地方就是我们必须在打开目录前建立 Full Userdata。如果不这样做，如果我们先打开了目录，结果在 建立 Full Userdata 的时候出现错误，那么就会造成这个目录结构的泄漏。我们按照这样的顺序进行操作，一旦 DIR 结构建立，那么就会立即与 Userdata 关联起来，无论之后发生什么，都可以通过 Userdata 的 <strong>__gc</strong> 元方法来回收内存。</p>
 <p>还有一个需要注意的地方就是 Userdata 的一致性。一旦我们设置了它的元表，那么  <strong>__gc</strong> 元方法无论如何都会被调用。所以，在设置元表前，我们要先初始化 Userdata 为 NULL 来保证其有一个定义良好的值。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">dir_iter</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  DIR *d = *(DIR **)lua_touserdata(L, lua_upvalueindex(<span class="number">1</span>));</span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">dirent</span> *<span class="title">entry</span> = <span class="title">readdir</span>(<span class="title">d</span>);</span></span><br><span class="line">  <span class="keyword">if</span> (entry != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    lua_pushstring(L, entry-&gt;d_name);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">0</span>;  <span class="comment">/* no more values to return */</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">dir_gc</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  DIR *d = *(DIR **)lua_touserdata(L, <span class="number">1</span>);</span><br><span class="line">  <span class="keyword">if</span> (d) closedir(d);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">luaL_Reg</span> <span class="title">dirlib</span> [] = &#123;</span></span><br><span class="line">  &#123;<span class="string">"open"</span>, l_dir&#125;,</span><br><span class="line">  &#123;<span class="literal">NULL</span>, <span class="literal">NULL</span>&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">luaopen_dir</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">  luaL_newmetatable(L, <span class="string">"LuaBook.dir"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* set its __gc field */</span></span><br><span class="line">  lua_pushcfunction(L, dir_gc);</span><br><span class="line">  lua_setfield(L, <span class="number">-2</span>, <span class="string">"__gc"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* create the library */</span></span><br><span class="line">  luaL_newlib(L, dirlib);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>代码很直观，迭代器从其上值获取 DIR 结构的地址，然后调用 <code>readdir</code> 来读取目录。</p>
 <p><code>dir_gc</code> 函数给 <strong>__gc</strong> 元方法使用。这个元方法会关闭一个目录。我们需要注意一个情况：如果在初始化的时候，目录可能会是 NULL。</p>
 <h1 id="XML-解析器"><a href="#XML-解析器" class="headerlink" title="XML 解析器"></a>XML 解析器</h1><p>有空再看了。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -334,7 +333,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Lua/PIL.31.C%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%A8%E6%88%B7%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B.html" rel="next" title="PIL.31.C中的自定义用户定义类型">
+                <a href="/Lua/PIL.31.C中的自定义用户定义类型.html" rel="next" title="PIL.31.C中的自定义用户定义类型">
                   <i class="fa fa-chevron-left"></i> PIL.31.C中的自定义用户定义类型
                 </a>
             </div>
@@ -342,7 +341,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Lua/PIL.30.%E7%BC%96%E5%86%99C%E5%87%BD%E6%95%B0%E7%9A%84%E6%8A%80%E6%9C%AF.html" rel="prev" title="PIL.30.编写C函数的技术">
+                <a href="/Lua/PIL.30.编写C函数的技术.html" rel="prev" title="PIL.30.编写C函数的技术">
                   PIL.30.编写C函数的技术 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -404,20 +403,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -429,10 +428,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -461,10 +460,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -539,7 +538,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Lua/PIL.32.Lua%E4%B8%AD%E7%9A%84%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86.html",
+            url: "https://gowa.club/Lua/PIL.32.Lua中的资源管理.html",
             identifier: "Lua/PIL.32.Lua中的资源管理.html",
             title: "PIL.32.Lua中的资源管理"
           }

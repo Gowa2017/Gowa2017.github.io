@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Linux,Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="去掉文件编码中的BOM标记">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;%E5%8E%BB%E6%8E%89%E6%96%87%E4%BB%B6%E7%BC%96%E7%A0%81%E4%B8%AD%E7%9A%84BOM%E6%A0%87%E8%AE%B0.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/去掉文件编码中的BOM标记.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="在编译一个 Demo 项目的时候，发现居然会出错。很奇怪，文件打开也正常。然后查找了一下关键字符就出来了。具体错误就是 非法字符: &amp;#39;\ufeff&amp;#39; package com.dh.groupTree;">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-10-26T15:21:10.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="去掉文件编码中的BOM标记">
+<meta name="twitter:description" content="在编译一个 Demo 项目的时候，发现居然会出错。很奇怪，文件打开也正常。然后查找了一下关键字符就出来了。具体错误就是 非法字符: &amp;#39;\ufeff&amp;#39; package com.dh.groupTree;">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/%E5%8E%BB%E6%8E%89%E6%96%87%E4%BB%B6%E7%BC%96%E7%A0%81%E4%B8%AD%E7%9A%84BOM%E6%A0%87%E8%AE%B0.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/去掉文件编码中的BOM标记.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/%E5%8E%BB%E6%8E%89%E6%96%87%E4%BB%B6%E7%BC%96%E7%A0%81%E4%B8%AD%E7%9A%84BOM%E6%A0%87%E8%AE%B0.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/去掉文件编码中的BOM标记.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/%E5%8E%BB%E6%8E%89%E6%96%87%E4%BB%B6%E7%BC%96%E7%A0%81%E4%B8%AD%E7%9A%84BOM%E6%A0%87%E8%AE%B0.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/去掉文件编码中的BOM标记.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/去掉文件编码中的BOM标记.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -293,12 +295,11 @@
         <p>在编译一个 Demo 项目的时候，发现居然会出错。很奇怪，文件打开也正常。然后查找了一下关键字符就出来了。具体错误就是 <code>非法字符: &#39;\ufeff&#39;
 package com.dh.groupTree;</code></p>
 <a id="more"></a>
-
 <h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>原因是 微软下的 utf-8 编码加了 bom 标记。使用 <code>file</code> 命令来查看。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">file *</span><br><span class="line">GroupListActivity.java:     UTF-8 Unicode text, with CRLF line terminators</span><br><span class="line">GroupListAdapter.java:      UTF-8 Unicode (with BOM) text, with CRLF line terminators</span><br><span class="line">GroupListGetTask.java:      UTF-8 Unicode text, with CRLF line terminators</span><br><span class="line">GroupListManager.java:      UTF-8 Unicode text, with CRLF line terminators</span><br><span class="line">SearchChannelsAdapter.java: UTF-8 Unicode (with BOM) text, with CRLF line terminators</span><br></pre></td></tr></table></figure>
-
 <p>OK，然后在 <a href="https://unix.stackexchange.com/questions/381230/how-can-i-remove-the-bom-from-a-utf-8-file" target="_blank" rel="noopener">https://unix.stackexchange.com/questions/381230/how-can-i-remove-the-bom-from-a-utf-8-file</a><br>这里找到了好办法。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sed -i '1s/^\xEF\xBB\xBF//' GroupListAdapter.java</span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -316,7 +317,7 @@ package com.dh.groupTree;</code></p>
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/macOS/macOS%E7%94%A8HomeBrew%E5%AE%89%E8%A3%85Sqlplus.html" rel="next" title="macOS用HomeBrew安装Sqlplus">
+                <a href="/macOS/macOS用HomeBrew安装Sqlplus.html" rel="next" title="macOS用HomeBrew安装Sqlplus">
                   <i class="fa fa-chevron-left"></i> macOS用HomeBrew安装Sqlplus
                 </a>
             </div>
@@ -324,7 +325,7 @@ package com.dh.groupTree;</code></p>
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Python/%E5%A6%82%E4%BD%95%E5%9C%A8TensorFlow%E4%B8%AD%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-01.html" rel="prev" title="如何在TensorFlow中建立一个神经网络-01">
+                <a href="/Python/如何在TensorFlow中建立一个神经网络-01.html" rel="prev" title="如何在TensorFlow中建立一个神经网络-01">
                   如何在TensorFlow中建立一个神经网络-01 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -386,20 +387,20 @@ package com.dh.groupTree;</code></p>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -411,10 +412,10 @@ package com.dh.groupTree;</code></p>
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -443,10 +444,10 @@ package com.dh.groupTree;</code></p>
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -521,7 +522,7 @@ package com.dh.groupTree;</code></p>
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/%E5%8E%BB%E6%8E%89%E6%96%87%E4%BB%B6%E7%BC%96%E7%A0%81%E4%B8%AD%E7%9A%84BOM%E6%A0%87%E8%AE%B0.html",
+            url: "https://gowa.club/Linux-Unix/去掉文件编码中的BOM标记.html",
             identifier: "Linux-Unix/去掉文件编码中的BOM标记.html",
             title: "去掉文件编码中的BOM标记"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Docker">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Docker配置加速-镜像-源">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Docker&#x2F;Docker%E9%85%8D%E7%BD%AE%E5%8A%A0%E9%80%9F-%E9%95%9C%E5%83%8F-%E6%BA%90.html">
+<meta property="og:url" content="https://gowa.club/Docker/Docker配置加速-镜像-源.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="为了加快下载速度">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-28T06:33:55.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Docker配置加速-镜像-源">
+<meta name="twitter:description" content="为了加快下载速度">
 
-<link rel="canonical" href="https://gowa.club/Docker/Docker%E9%85%8D%E7%BD%AE%E5%8A%A0%E9%80%9F-%E9%95%9C%E5%83%8F-%E6%BA%90.html">
+<link rel="canonical" href="https://gowa.club/Docker/Docker配置加速-镜像-源.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Docker/Docker%E9%85%8D%E7%BD%AE%E5%8A%A0%E9%80%9F-%E9%95%9C%E5%83%8F-%E6%BA%90.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Docker/Docker配置加速-镜像-源.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Docker/Docker%E9%85%8D%E7%BD%AE%E5%8A%A0%E9%80%9F-%E9%95%9C%E5%83%8F-%E6%BA%90.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Docker/Docker配置加速-镜像-源.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Docker/Docker配置加速-镜像-源.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,11 +292,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>为了加快下载速度</p>
-<a id="more"></a>
-
+        <p>为了加快下载速度<br><a id="more"></a></p>
 <h1 id="镜像加速"><a href="#镜像加速" class="headerlink" title="镜像加速"></a>镜像加速</h1><p><a href="https://yeasy.gitbooks.io/docker_practice/install/mirror.html" target="_blank" rel="noopener">https://yeasy.gitbooks.io/docker_practice/install/mirror.html</a></p>
 <h1 id="apt-get-源加速"><a href="#apt-get-源加速" class="headerlink" title="apt-get 源加速"></a>apt-get 源加速</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cp /etc/apt/sources.list /etc/apt/sources.list.bak</span><br><span class="line">sed -i <span class="string">'s/security.ubuntu.com/mirrors.ustc.edu.cn/g'</span> /etc/apt/sources.list</span><br><span class="line">apt-get update</span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -311,7 +312,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Docker/Docker%E7%9A%84%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84.html" rel="next" title="Docker的网络结构">
+                <a href="/Docker/Docker的网络结构.html" rel="next" title="Docker的网络结构">
                   <i class="fa fa-chevron-left"></i> Docker的网络结构
                 </a>
             </div>
@@ -319,7 +320,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Python/Python%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5%E5%86%85%E5%AE%B9.html" rel="prev" title="Python解析网页内容">
+                <a href="/Python/Python解析网页内容.html" rel="prev" title="Python解析网页内容">
                   Python解析网页内容 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -381,20 +382,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -406,10 +407,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -438,10 +439,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -516,7 +517,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Docker/Docker%E9%85%8D%E7%BD%AE%E5%8A%A0%E9%80%9F-%E9%95%9C%E5%83%8F-%E6%BA%90.html",
+            url: "https://gowa.club/Docker/Docker配置加速-镜像-源.html",
             identifier: "Docker/Docker配置加速-镜像-源.html",
             title: "Docker配置加速-镜像-源"
           }

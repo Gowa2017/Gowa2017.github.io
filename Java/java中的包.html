@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Java,The Java Tutorial">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java中的包">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;java%E4%B8%AD%E7%9A%84%E5%8C%85.html">
+<meta property="og:url" content="https://gowa.club/Java/java中的包.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="有的时候需要把具有相关关系的类组织在一起，而且对于可见性而言，同一个包内的类和方法默认是相互可见，所以将其组织成为一个包是非常的有必要的。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-18T01:37:03.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="java中的包">
+<meta name="twitter:description" content="有的时候需要把具有相关关系的类组织在一起，而且对于可见性而言，同一个包内的类和方法默认是相互可见，所以将其组织成为一个包是非常的有必要的。">
 
-<link rel="canonical" href="https://gowa.club/Java/java%E4%B8%AD%E7%9A%84%E5%8C%85.html">
+<link rel="canonical" href="https://gowa.club/Java/java中的包.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/java%E4%B8%AD%E7%9A%84%E5%8C%85.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/java中的包.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/java%E4%B8%AD%E7%9A%84%E5%8C%85.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/java中的包.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/java中的包.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,9 +292,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>有的时候需要把具有相关关系的类组织在一起，而且对于可见性而言，同一个包内的类和方法默认是相互可见，所以将其组织成为一个包是非常的有必要的。</p>
-<a id="more"></a>
-
+        <p>有的时候需要把具有相关关系的类组织在一起，而且对于可见性而言，同一个包内的类和方法默认是相互可见，所以将其组织成为一个包是非常的有必要的。<br><a id="more"></a></p>
 <h1 id="创建和使用包"><a href="#创建和使用包" class="headerlink" title="创建和使用包"></a>创建和使用包</h1><p>为了让类型更加的容易查找和使用，避免命名冲突，权限控制，程序员可以把相关的类型组织到包里面。</p>
 <blockquote>
 <p>定义：一个包是一系列相关联的类型的集合来提供权限保护和命名空间管理。这里的<strong>类型</strong>指的是<em>类，接口，枚举和注释类型</em>。枚举和注释是特殊的类和接口，因此，在这里我们说的类型一般是指 类 和 接口。</p>
@@ -300,7 +300,6 @@
 <p>Java平台本身的类型被是很多通过函数组织类的包成员；基础的类在<em>java.lang</em>内，读写I/O类在<em>java.io</em>。</p>
 <p>假设你编写了一系列代表图形对象的类，比如，圆、矩形、线和点。同时还有一个接口<em>Draggable</em>，如果某类可以被鼠标拖动，就实现了这个接口。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//in the Draggable.java file</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Draggable</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//in the Graphic.java file</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Graphic</span> </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//in the Circle.java file</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Circle</span> <span class="keyword">extends</span> <span class="title">Graphic</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Draggable</span> </span>&#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//in the Rectangle.java file</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> <span class="keyword">extends</span> <span class="title">Graphic</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Draggable</span> </span>&#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//in the Point.java file</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Point</span> <span class="keyword">extends</span> <span class="title">Graphic</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Draggable</span> </span>&#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//in the Line.java file</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Line</span> <span class="keyword">extends</span> <span class="title">Graphic</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Draggable</span> </span>&#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>可能会因为以下的原因把这些类和接口组织在一个包内：</p>
 <ul>
 <li>你或者其他程序员可以了解哪些类型是相关的</li>
@@ -315,7 +314,6 @@
 </blockquote>
 <p>如果把前文中的图形接口和类放在一个叫做 <em>graphics</em> ，大概需要6和文件：   </p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//in the Draggable.java file</span></span><br><span class="line"><span class="keyword">package</span> graphics;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Draggable</span> </span>&#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//in the Graphic.java file</span></span><br><span class="line"><span class="keyword">package</span> graphics;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Graphic</span> </span>&#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//in the Circle.java file</span></span><br><span class="line"><span class="keyword">package</span> graphics;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Circle</span> <span class="keyword">extends</span> <span class="title">Graphic</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Draggable</span> </span>&#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//in the Rectangle.java file</span></span><br><span class="line"><span class="keyword">package</span> graphics;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> <span class="keyword">extends</span> <span class="title">Graphic</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Draggable</span> </span>&#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//in the Point.java file</span></span><br><span class="line"><span class="keyword">package</span> graphics;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Point</span> <span class="keyword">extends</span> <span class="title">Graphic</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Draggable</span> </span>&#123;</span><br><span class="line">    . . .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>//in the Line.java file<br>package graphics;<br>public class Line extends Graphic<br>    implements Draggable {<br>    . . .<br>}</p>
 <p>如果不使用一个<code>package</code>声明，那么所有的类型默认在一个未命名的包内。未命名包只会在非常小或者临时的应用或刚刚开始一个项目的时候使用，更多时候应该以命名的包开始一个文件。  </p>
 <h2 id="命名"><a href="#命名" class="headerlink" title="命名"></a>命名</h2><p>全世界都程序员都在用java编写类和接口，就会出现不同的程序员对不同的类型使用同样的命名。实际上，前一个例子只做了这个事情：在<em>java.awt</em>包已有一个<em>Rectangle</em>类的情况下定义了一个类<em>Rectangle</em>。编译器允许具有不同包的类具有同样的名字。对于<em>Rectangle</em>类的完整引用包含了包名。因此，对于<em>graphics</em>包中的<em>Rectangle</em>类的完整引用是<em>graphics.Rectangle</em>，而在<em>java.awt</em>中是<em>java.awt.Rectangle</em>。  </p>
@@ -323,8 +321,9 @@
 <h3 id="命名约定"><a href="#命名约定" class="headerlink" title="命名约定"></a>命名约定</h3><p>包名全部小写，避免与类名或接口名冲突。</p>
 <p>公司会使用他们域名的反转来左右包名开头————比如，<em>com.example.mypackage</em>这个包名表明<em>mypackage</em>这个包是由<em>example.com</em>上的程序员编写的。  </p>
 <p>在一个公司内出现命名的冲突由他们自己的约定来控制，或许在公司名后面加上区域或项目名（比如，<em>com.example.region.mypackage</em>）。  </p>
-<p>java本身的基础包由*java. or javax *开头。   </p>
+<p>java本身的基础包由<em>java. or javax </em>开头。   </p>
 <p>某些情况下，域名可能不是一个有效的包名。这在域名包含特殊符号或者连字符。以数字或者其他非法字符开头的包名是不允许的，包名也不能包含保留的关键字，如<code>int</code>。在这种情况下，建议的约定是加上一个下划线。比如：  </p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -332,7 +331,8 @@
 <th>包名前缀</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>hyphenated-name.example.org</td>
 <td>org.exambple.hyphenated_name</td>
 </tr>
@@ -344,7 +344,9 @@
 <td>123name.example.com</td>
 <td>com.example._123name</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="使用包成员"><a href="#使用包成员" class="headerlink" title="使用包成员"></a>使用包成员</h2><p>组成包的类型被称作<code>包成员(package members)</code>。  </p>
 <p>在包外想使用一个<code>public</code>的包成员，必须做下面其中一项：  </p>
 <ul>
@@ -355,21 +357,25 @@
 <p>不同的情况适用不同的办法，接下来的章节会说到。  </p>
 <h3 id="通过完整引用来使用"><a href="#通过完整引用来使用" class="headerlink" title="通过完整引用来使用"></a>通过完整引用来使用</h3><p>截止现在，大多数例子都是通过简单的名字来引用类型，比如<em>Rectangle</em>和<em>StackOfInts</em>。在编写的代码属于同一个包，或那个包成员已经被导入。  </p>
 <p>如果想引用一个没有被导入的包成员，必须使用完整的引用，这包含了包名。下面是一个对定义在<em>graphics</em>包中的<em>Rectangle</em>类的完整引用例子：</p>
-<pre><code>graphics.Rectangle</code></pre><p>可以用完整引用来创建 <em>graphics.Rectangle</em>的一个实例：</p>
-<pre><code>graphics.Rectangle myRect = new graphics.Rectangle();</code></pre><p>完整引用是不经常使用的。但是，当一个名字重复使用的时候，重复的敲同样的代码就非常的烦躁，代码也会变得难以阅读。因此，我们可以<code>import</code>这个成员，或者整个包，以便用简单的名字进行引用。  </p>
+<pre><code>graphics.Rectangle
+</code></pre><p>可以用完整引用来创建 <em>graphics.Rectangle</em>的一个实例：</p>
+<pre><code>graphics.Rectangle myRect = new graphics.Rectangle();
+</code></pre><p>完整引用是不经常使用的。但是，当一个名字重复使用的时候，重复的敲同样的代码就非常的烦躁，代码也会变得难以阅读。因此，我们可以<code>import</code>这个成员，或者整个包，以便用简单的名字进行引用。  </p>
 <h3 id="导入一个包成员"><a href="#导入一个包成员" class="headerlink" title="导入一个包成员"></a>导入一个包成员</h3><p>要在当前文件导入一个成员，在任何定义之前，<code>package</code>声明（如果有）之后使用<code>import</code>声明。下面是如何在<em>graphics</em>中导入<em>Rectangle</em>类：  </p>
-<pre><code>import graphics.Rectangle</code></pre><p>现在就可以用简单名字来引用<em>Rectangle</em>：  </p>
-<pre><code>Rectangle myRectangle = new Rectangle();</code></pre><p>在只使用<em>graphics</em>中少数几个成员的时候这工作得很好。但当你要使用一个包类的很多类型的时候，应该<code>import</code>整个包。  </p>
+<pre><code>import graphics.Rectangle
+</code></pre><p>现在就可以用简单名字来引用<em>Rectangle</em>：  </p>
+<pre><code>Rectangle myRectangle = new Rectangle();
+</code></pre><p>在只使用<em>graphics</em>中少数几个成员的时候这工作得很好。但当你要使用一个包类的很多类型的时候，应该<code>import</code>整个包。  </p>
 <h3 id="导入整个包"><a href="#导入整个包" class="headerlink" title="导入整个包"></a>导入整个包</h3><p>下面是导入整个包：</p>
-<pre><code>import graphics.*;</code></pre><p>现在就可以通过简单名字来引用<em>graphics</em>中的所有类和接口了：  </p>
+<pre><code>import graphics.*;
+</code></pre><p>现在就可以通过简单名字来引用<em>graphics</em>中的所有类和接口了：  </p>
 <pre><code>Circle myCircle = new Circle();
-Rectangle myRectangle = new Rectangle();</code></pre><p><code>import</code>声明中的<code>*</code>只能用来指定包内的所有类。其不能用来匹配包类的一些类。比如，下面的例子就不会匹配<em>graphics</em>包中以<em>A</em>开头的类：  </p>
+Rectangle myRectangle = new Rectangle();
+</code></pre><p><code>import</code>声明中的<code>*</code>只能用来指定包内的所有类。其不能用来匹配包类的一些类。比如，下面的例子就不会匹配<em>graphics</em>包中以<em>A</em>开头的类：  </p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// does not work</span></span><br><span class="line"><span class="keyword">import</span> graphics.A*;</span><br></pre></td></tr></table></figure>
-
 <p>这将会产生一个编译错误。在<code>import</code>中，我们一般导入一个成员，或者整个包。  </p>
 <blockquote>
-<p>另外，很少使用的一种<code>import</code>格式允许导入 <code>public</code>嵌套的类。比如，在<em>graphics.Rectangle<em>类中包含了实用的嵌套类，比如</em>Rectangle.DoubleWide<em>和</em>Rectangle.Square<em>，可以用下面的语句导入</em>Retangle*及其嵌套的类：<br><code>import graphics.Rectangle;</code><br>`import graphics.Rectangle.</em>;<code>**第二个语句将不会导入***Rectangle*。
-另外一个不常用的</code>import<code>形式，</code>static import`声明，将会在本节最后介绍。</p>
+<p>另外，很少使用的一种<code>import</code>格式允许导入 <code>public</code>嵌套的类。比如，在<em>graphics.Rectangle</em>类中包含了实用的嵌套类，比如<em>Rectangle.DoubleWide</em>和<em>Rectangle.Square</em>，可以用下面的语句导入<em>Retangle</em>及其嵌套的类：<br><code>import graphics.Rectangle;</code><br><code>import graphics.Rectangle.*;</code><br><strong>第二个语句将不会导入*</strong>Rectangle*。<br>另外一个不常用的<code>import</code>形式，<code>static import</code>声明，将会在本节最后介绍。</p>
 </blockquote>
 <p>为了方便，Java编译器会为每个源文件导入两个包：</p>
 <ul>
@@ -377,56 +383,62 @@ Rectangle myRectangle = new Rectangle();</code></pre><p><code>import</code>声�
 <li>当前包（当前文件的包）</li>
 </ul>
 <h3 id="包的层级"><a href="#包的层级" class="headerlink" title="包的层级"></a>包的层级</h3><p>首先，包看起来是分层的，但其实不是。比如，Java API包含了一个<em>java.awt</em>包，一个<em>java.awt.color</em>包，一个<em>java.awt.font</em>包，还有其他以<em>java.awt</em>开始的包。然后，<em>java.awt.color， java.awt.font</em>包，还有其他<em>java.awt.xxxx</em>包<strong>并不</strong>包含在<em>java.awt</em>包内。前缀<em>java.awt(the Java Abstract Windows Toolkit)</em>用来表示一大堆有关联的包，但并不表示包含关系。</p>
-<p>导入<em>java.awt.*</em>会导入<em>java.awt</em>包中的所有类型，但是<strong>不会</strong>导入<em>java.awt.color, java.awt.font</em>或其他以<em>java.awt.xxxx</em>开头的包。如果现在我们想使用<em>java.awt.color</em>中的类型，那么我们必须也进行导入。  </p>
+<p>导入<em>java.awt.**会导入</em>java.awt<em>包中的所有类型，但是<strong>不会</strong>导入</em>java.awt.color, java.awt.font<em>或其他以</em>java.awt.xxxx<em>开头的包。如果现在我们想使用</em>java.awt.color*中的类型，那么我们必须也进行导入。  </p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import java.awt.*;</span><br><span class="line">import java.awt.color.*;</span><br></pre></td></tr></table></figure>
-
 <h3 id="命名混乱"><a href="#命名混乱" class="headerlink" title="命名混乱"></a>命名混乱</h3><p>如一个包内的成员名与另外一个包内的成员名相同，而两个包都已导入，那么必须用完整的引用来进行区别。比如，<em>graphics</em>包定义了一个类<em>Rectangle</em>。<em>java.awt</em>包也定义了一个<em>Rectangle</em>类。如果<em>graphics, java.awt</em>都已导入，下面的代码是不确定的：</p>
-<pre><code>Rectangle rect;</code></pre><p>在这样的情况下，必须使用完整引用来表示我们到底是用使用的是哪个包中的<em>Rectangle</em>类：</p>
-<pre><code>graphics.Rectangle rect;</code></pre><h3 id="静态导入声明"><a href="#静态导入声明" class="headerlink" title="静态导入声明"></a>静态导入声明</h3><p>有些情况下，我们需要经常访问一些静态的字段(static final fields， 常量)和静态方法。</p>
+<pre><code>Rectangle rect;
+</code></pre><p>在这样的情况下，必须使用完整引用来表示我们到底是用使用的是哪个包中的<em>Rectangle</em>类：</p>
+<pre><code>graphics.Rectangle rect;
+</code></pre><h3 id="静态导入声明"><a href="#静态导入声明" class="headerlink" title="静态导入声明"></a>静态导入声明</h3><p>有些情况下，我们需要经常访问一些静态的字段(static final fields， 常量)和静态方法。</p>
 <p>在这些类上加上前缀会导致一大堆代码。<em>static import</em>声明可以让我们导入要使用的静态方法和常量而不用在类前加上前缀。  </p>
 <p><em>java.lang.Math</em>包定义了<em>PI</em>常量和很多静态方法，包括<em>sin(), cos(), tan(), square(), max(), min(), exp(),</em>等。比如：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">double</span> PI = <span class="number">3.141592653589793</span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">double</span> <span class="title">cos</span><span class="params">(<span class="keyword">double</span> a)</span></span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>我们要在其他类中使用这些对象的时候，要加上类名：</p>
-<pre><code>double r = Math.cos(Math.PI * theta);</code></pre><p>但我们可以使用<em>static import</em>声明来导入<em>java.lang.Math</em>的静态成员而避免使用前缀名。<em>Math</em>类的静态成员可以被分别导入：</p>
-<pre><code>import static java.lang.Math.PI;</code></pre><p>或按组：</p>
-<pre><code>import static java.lang.Math.*;</code></pre><p>一旦导入了，这些静态成员就不用进行完整引用了。比如，前面的例子可以用下面的来表示：</p>
-<pre><code>double r = cos(PI * theta);</code></pre><p>很明显，我们也可以编写包含静态常量和静态方法的类，以便经常使用。比如：</p>
-<pre><code>import static mypackage.MyConstants.*;</code></pre><blockquote>
+<pre><code>double r = Math.cos(Math.PI * theta);
+</code></pre><p>但我们可以使用<em>static import</em>声明来导入<em>java.lang.Math</em>的静态成员而避免使用前缀名。<em>Math</em>类的静态成员可以被分别导入：</p>
+<pre><code>import static java.lang.Math.PI;
+</code></pre><p>或按组：</p>
+<pre><code>import static java.lang.Math.*;
+</code></pre><p>一旦导入了，这些静态成员就不用进行完整引用了。比如，前面的例子可以用下面的来表示：</p>
+<pre><code>double r = cos(PI * theta);
+</code></pre><p>很明显，我们也可以编写包含静态常量和静态方法的类，以便经常使用。比如：</p>
+<pre><code>import static mypackage.MyConstants.*;
+</code></pre><blockquote>
 <p>谨慎的使用<em>import static</em>。频繁的使用这个语句会导致代码难以阅读和维护，因为阅读者很难清楚的知道到底哪个类定义了一个实际上的静态对象。合适的使用，<em>import static</em>通过移除类名重复让代码更易读。</p>
-</blockquote>
 <h2 id="管理源文件和类文件"><a href="#管理源文件和类文件" class="headerlink" title="管理源文件和类文件"></a>管理源文件和类文件</h2><p>很多Java 平台的实现依赖分层的文件系统来管理源和类文件，即使这并不是<em>Java Language Specification</em>要求的。约束如下。</p>
-<p>将<em>类，接口，枚举，注解*类型的代码放到一个一个 *.java</em> 结尾的文本内。比如： </p>
+</blockquote>
+<p>将<em>类，接口，枚举，注解</em>类型的代码放到一个一个 <em>.java</em> 结尾的文本内。比如： </p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// in the Rectangle.java file</span></span><br><span class="line"><span class="keyword">package</span> graphics;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Rectange</span> </span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>然后，将源文件放在一个包名对应的目录内。</p>
-<pre><code>.../graphics/Rectangle.java</code></pre><p>对包成员名字的引用和对文件名字的路径是对应的（UNIX）：</p>
+<pre><code>.../graphics/Rectangle.java
+</code></pre><p>对包成员名字的引用和对文件名字的路径是对应的（UNIX）：</p>
 <ul>
 <li><strong>class name</strong>-<em>graphics.REctangle</em></li>
 <li><strong>pathname to file</strong>-<em>graphics/Rectangle.java</em></li>
 </ul>
 <p>可能你会意识到，一个公司会用他们反转的域名作为包名。比如我们在所有的包名前加上<em>com.example</em>。而包名的每个部位对应了一个子目录。因此，<em>com.example.graphics</em>包有一个<em>Rectangle.java</em>源文件，可能会像下面这样的形式在文件系统内体现：</p>
-<pre><code>.../com/example/graphics/Rectangle.java</code></pre><p>在编译源文件的时候，编译器会为每个定义的类型创建一个不同的输出文件。基本的名字是类型的名字，后缀是<em>.class</em>。比如，源文件是这样的：</p>
+<pre><code>.../com/example/graphics/Rectangle.java
+</code></pre><p>在编译源文件的时候，编译器会为每个定义的类型创建一个不同的输出文件。基本的名字是类型的名字，后缀是<em>.class</em>。比如，源文件是这样的：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// in the Rectangle.java file</span></span><br><span class="line"><span class="keyword">package</span> com.example.graphics;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Rectangle</span> </span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Helper</span> </span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>编译后的文件将会如下:</p>
 <pre><code>&lt;path to the parent directory of the output files&gt;/com/example/graphics/Rectangle.class
-&lt;path to the parent directory of the output files&gt;/com/example/graphics/Helper.class</code></pre><p>和<em>.java*源文件类似，编译后的</em>.class<em>文件也会有一系列的子目录来表示对应的包名。然后，</em>.class<em>文件不一定一定要和</em>.java*的路径一样。可以把源文件和类文件放在不同的目录中，如：</p>
+&lt;path to the parent directory of the output files&gt;/com/example/graphics/Helper.class
+</code></pre><p>和<em>.java</em>源文件类似，编译后的<em>.class</em>文件也会有一系列的子目录来表示对应的包名。然后，<em>.class</em>文件不一定一定要和<em>.java</em>的路径一样。可以把源文件和类文件放在不同的目录中，如：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;path_one&gt;\sources\com\example\graphics\Rectangle.java</span><br><span class="line"></span><br><span class="line">&lt;path_two&gt;\classes\com\example\graphics\Rectangle.class</span><br></pre></td></tr></table></figure>
 <p>这样做的话，可以将<em>classes</em>目录给其他程序员而他们不能访问源文件。</p>
 <p>我们应该这样来管理源和类文件以便编译器和JVM可以找到所有我们使用的类型。</p>
 <p><em>classes</em>目录的完整路径，<em>path_to/classes</em>，被称做<em>class path</em>，以环境变量<em>CLASSPATH</em>来设置。编译器和JVM都通过在这个路径后面加上类文件名来组成完整路径。比如：</p>
-<pre><code>&lt;path_to&gt;/classes</code></pre><p>是你的<em>CLASSPATH</em>，包名是<code>com.example.graphics</code>，那么，编译器和JVM就会在</p>
-<pre><code>&lt;path_to&gt;/classes/com/example/graphics</code></pre><p>中去寻找<em>.class</em>文件。</p>
+<pre><code>&lt;path_to&gt;/classes
+</code></pre><p>是你的<em>CLASSPATH</em>，包名是<code>com.example.graphics</code>，那么，编译器和JVM就会在</p>
+<pre><code>&lt;path_to&gt;/classes/com/example/graphics
+</code></pre><p>中去寻找<em>.class</em>文件。</p>
 <p>默认情况下，编译器和JVM会搜索当前目录和包含 java 平台类的<em>JAR</em>文件，这些目录相当于自动包含到了类路径中。</p>
 <h3 id="设置-CLASSPATH-系统变量"><a href="#设置-CLASSPATH-系统变量" class="headerlink" title="设置 CLASSPATH 系统变量"></a>设置 CLASSPATH 系统变量</h3><p>为了显示<em>CLASSPATH</em>变量，使用命令来进行展示：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In Windows:   C:\&gt; set CLASSPATH</span><br><span class="line">In UNIX:      % echo $CLASSPATH</span><br></pre></td></tr></table></figure>
-
-<p>删除变量：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In Windows:   C:\&gt; set CLASSPATH=</span><br><span class="line">In UNIX:      % unset CLASSPATH; export CLASSPATH</span><br></pre></td></tr></table></figure>
-
-<p>设置变量：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In Windows:   C:\&gt; set CLASSPATH=C:\users\george\java\classes</span><br><span class="line">In UNIX:      % CLASSPATH=/home/george/java/classes; export CLASSPATH</span><br></pre></td></tr></table></figure>
-
+<p>删除变量：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In Windows:   C:\&gt; set CLASSPATH=</span><br><span class="line">In UNIX:      % unset CLASSPATH; export CLASSPATH</span><br></pre></td></tr></table></figure></p>
+<p>设置变量：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In Windows:   C:\&gt; set CLASSPATH=C:\users\george\java\classes</span><br><span class="line">In UNIX:      % CLASSPATH=/home/george/java/classes; export CLASSPATH</span><br></pre></td></tr></table></figure></p>
 <h1 id="问题和练习"><a href="#问题和练习" class="headerlink" title="问题和练习"></a>问题和练习</h1><p>假设你已经写了一些类。然后，你决定把他们放三个包内，如下表。而且现在这些类在默认包内（没有<em>package</em>语句）。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -434,7 +446,8 @@ Rectangle myRectangle = new Rectangle();</code></pre><p><code>import</code>声�
 <th>类名</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>mygame.server</td>
 <td>Server</td>
 </tr>
@@ -446,12 +459,15 @@ Rectangle myRectangle = new Rectangle();</code></pre><p><code>import</code>声�
 <td>mygame.client</td>
 <td>Client</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <ol>
 <li>为了将每个源文件放在正确的包内，要添加什么代码？</li>
 <li>我们需要创建一些子目录，并把源文件放在相应的地方。哪些目录是必须创建的？每个子目录对应哪个源文件？</li>
 <li>需要不需要更多的改变来使编译器正确运行？如果需要，为什么？</li>
 </ol>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -469,7 +485,7 @@ Rectangle myRectangle = new Rectangle();</code></pre><p><code>import</code>声�
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/macOS/macOS%E4%B8%AD%E7%9A%84%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86launchdctl%E6%89%8B%E5%86%8C.html" rel="next" title="macOS中的服务管理launchdctl手册">
+                <a href="/macOS/macOS中的服务管理launchdctl手册.html" rel="next" title="macOS中的服务管理launchdctl手册">
                   <i class="fa fa-chevron-left"></i> macOS中的服务管理launchdctl手册
                 </a>
             </div>
@@ -477,7 +493,7 @@ Rectangle myRectangle = new Rectangle();</code></pre><p><code>import</code>声�
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/sed%E4%B8%AD%E7%9A%84%E5%88%86%E6%94%AF%E4%B8%8E%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6.html" rel="prev" title="sed中的分支与流程控制">
+                <a href="/Linux-Unix/sed中的分支与流程控制.html" rel="prev" title="sed中的分支与流程控制">
                   sed中的分支与流程控制 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -539,20 +555,20 @@ Rectangle myRectangle = new Rectangle();</code></pre><p><code>import</code>声�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -564,10 +580,10 @@ Rectangle myRectangle = new Rectangle();</code></pre><p><code>import</code>声�
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -596,10 +612,10 @@ Rectangle myRectangle = new Rectangle();</code></pre><p><code>import</code>声�
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -674,7 +690,7 @@ Rectangle myRectangle = new Rectangle();</code></pre><p><code>import</code>声�
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/java%E4%B8%AD%E7%9A%84%E5%8C%85.html",
+            url: "https://gowa.club/Java/java中的包.html",
             identifier: "Java/java中的包.html",
             title: "java中的包"
           }

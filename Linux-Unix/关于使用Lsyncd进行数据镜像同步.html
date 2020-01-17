@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Linux,运维,Lsyncd">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于使用Lsyncd进行数据镜像同步">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8Lsyncd%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E9%95%9C%E5%83%8F%E5%90%8C%E6%AD%A5.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/关于使用Lsyncd进行数据镜像同步.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="公司的业务没有做共享存储，而是采用 Lsyncd 来进行两台服务器间的文件同步（主要是 图片，文书等）。但是有的时候会出现问题，比如在某一台设备挂了的时候，重启了，另外一台机器上存在的文件居然会被删除，我很纳闷这到底是怎么回事。所以想来学习一下这个内容。 简介Lsyncd 是一个开源项目，项目地址在这里 。 wiki地址在这里 Lsyncd会观察某一目录树的事件监控接口（ inotify 或 fs">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-09-08T04:23:44.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于使用Lsyncd进行数据镜像同步">
+<meta name="twitter:description" content="公司的业务没有做共享存储，而是采用 Lsyncd 来进行两台服务器间的文件同步（主要是 图片，文书等）。但是有的时候会出现问题，比如在某一台设备挂了的时候，重启了，另外一台机器上存在的文件居然会被删除，我很纳闷这到底是怎么回事。所以想来学习一下这个内容。 简介Lsyncd 是一个开源项目，项目地址在这里 。 wiki地址在这里 Lsyncd会观察某一目录树的事件监控接口（ inotify 或 fs">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8Lsyncd%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E9%95%9C%E5%83%8F%E5%90%8C%E6%AD%A5.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/关于使用Lsyncd进行数据镜像同步.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8Lsyncd%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E9%95%9C%E5%83%8F%E5%90%8C%E6%AD%A5.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/关于使用Lsyncd进行数据镜像同步.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8Lsyncd%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E9%95%9C%E5%83%8F%E5%90%8C%E6%AD%A5.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/关于使用Lsyncd进行数据镜像同步.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/关于使用Lsyncd进行数据镜像同步.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -300,13 +302,11 @@
 <h2 id="简单使用例子"><a href="#简单使用例子" class="headerlink" title="简单使用例子"></a>简单使用例子</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">lsyncd -rsync /home remotehost.org::share/</span><br></pre></td></tr></table></figure>
 <p>这会观察本地目录 /home 及其子目录，将所有的变化同步到远程主机 remotehost.org 中的 share 目录。</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">lsyncd -rsyncssh /home remotehost.org backup-home/</span><br></pre></td></tr></table></figure>
-
 <p>这个命令也会观察和同步 /home 目录。不同的是其使用一个 ssh 连接，其会将 move 事件在远程主机上执行，而不是重新传输文件。</p>
 <h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><p>Lsyncd 的配置文件以 Lua 语法来写。其设计目的是简单而高效。这两者并不矛盾，但某些妥协是必须的。为了尽可能的达到这两个目的，Lsyncd 的配置可以在不同的层达成。 较低的层增加了适应性，同时界面变得更具吸引力。</p>
 <h2 id="Settings"><a href="#Settings" class="headerlink" title="Settings"></a>Settings</h2><p>对于所有层的脚本， <code>settings</code> 调用可以被用来改变服务层的配置。</p>
 <p>比如，下面的配置就会告诉 Lsyncd 将日志记录在 /tmp/lsyncd.log ，然后把其状态信息阶段性的更新到 /tmp/lsyncd.status ，并且，不要成为一个 daemon 进程。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">settings &#123;</span><br><span class="line">   logfile    = <span class="string">"/tmp/lsyncd.log"</span>,</span><br><span class="line">   statusFile = <span class="string">"/tmp/lsyncd.status"</span>,</span><br><span class="line">   nodaemon   = <span class="literal">true</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>如果是从2.0升级来的话，要注意到 <code>settings</code> 变成了一个函数，而不是一个变量。所以 <strong>必须</strong> 删除 <code>settings</code> 与 <code>{</code> 间的 <code>=</code> 号。</p>
 </blockquote>
@@ -330,19 +330,15 @@
 <h2 id="Layer-4（默认配置）"><a href="#Layer-4（默认配置）" class="headerlink" title="Layer 4（默认配置）"></a>Layer 4（默认配置）</h2><p>可以从三个默认的配置实现中选择一个：<strong>rsync, direct, rsyncssh</strong>。</p>
 <p>如果要将本地目录使用默认的 rsync 行为来同步，只需要把下面的代码加入配置文件：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">sync &#123;</span><br><span class="line">	defalut.rsync,</span><br><span class="line">	source = <span class="string">"DIRNAME"</span>,</span><br><span class="line">	target = <span class="string">"DIRNAME"</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
-<p>参数的顺序不重要。如果 target 是一非本地路径，那么需要填写是一个<strong>绝对路径</strong>。可以也这种方式添加多个 <code>sync</code> 。源目录可以相同，也可不相同，这都没有什么问题。每个 <em>sync</em> 都必须指定 <em>source*。 根据我们所选择的行为，其他的 *sync</em> 可能都不同。可选：可以在每个 <em>sync</em> 内重写 <em>maxDelays, maxProcesses</em> 参数。</p>
+<p>参数的顺序不重要。如果 target 是一非本地路径，那么需要填写是一个<strong>绝对路径</strong>。可以也这种方式添加多个 <code>sync</code> 。源目录可以相同，也可不相同，这都没有什么问题。每个 <em>sync</em> 都必须指定 <em>source</em>。 根据我们所选择的行为，其他的 <em>sync</em> 可能都不同。可选：可以在每个 <em>sync</em> 内重写 <em>maxDelays, maxProcesses</em> 参数。</p>
 <p>也可以通过将默认init函数设置为false来跳过初始rsync进程：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">sync &#123;</span><br><span class="line">    default.rsync,</span><br><span class="line">    source = <span class="string">"DIRNAME"</span>,</span><br><span class="line">    target = <span class="string">"DIRNAME"</span>,</span><br><span class="line">    init   = <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>这是一个可能很危险的优化;因此，只有在启动 Lsyncd 时确定源和目标是同步的，才能使用它。</p>
 <p>您可以选择的默认行为如下：</p>
 <h3 id="default-rsync"><a href="#default-rsync" class="headerlink" title="default.rsync"></a>default.rsync</h3><p>默认的 <em>rsync</em> 配置会在单独的 1000 个事件发生，或铀时到达 <em>delay</em> 秒后动作。其会把所有有变更的文件过滤列表传递给派生的 Rsync 进程（通过管道）。Lsyncd 可能以如下的形式调用  Rsync ：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">/usr/bin/rsync -ltsd --delete --include-from=- --exclude=* SOURCE TARGET</span><br></pre></td></tr></table></figure>
-
 <p>可以通过  <em>rsync</em> 参数来设置，调用 Rsync 时的选项：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">sync &#123;</span><br><span class="line">    default.rsync,</span><br><span class="line">    source    = <span class="string">"/home/user/src/"</span>,</span><br><span class="line">    target    = <span class="string">"foohost.com:~/trg/"</span>,</span><br><span class="line">    delay     = <span class="number">15</span>, </span><br><span class="line">    rsync     = &#123;</span><br><span class="line">        binary   = <span class="string">"/usr/local/bin/rsync"</span>,</span><br><span class="line">        archive  = <span class="literal">true</span>,</span><br><span class="line">        compress = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>下表是一些 <em>sync</em> 参数的选项。可以先看一下 <em>Rsync</em> 命令的文档来更详细的了解。</p>
 <table>
 <tbody><tr><td> <b>parameter</b>
@@ -677,9 +673,12 @@
 ### default.rsyncssh
 这个与上一配置的不同之处就是在移动文件或文件夹的时候，是通过 ssh 命令来执行，而不是重新传输文件。这个配置文件会像 *default.rsync* 那样派生出 *Rsync* 进程和一个 `/usr/bin/ssh HOST mv ORIGIN DESTINATION` 命令。
 
-<p>这个配置文件不需要 <em>target</em> 参数，其需要分开的两个参数 <em>host, targetdir</em> 。</p>
-<p>可以使用rsync参数更改Rsync的选项，如上面描述的default.rsync。</p>
-<p>通过 <em>ssh</em> 可以配置的参数如下：</p>
+这个配置文件不需要 *target* 参数，其需要分开的两个参数 *host, targetdir* 。
+
+可以使用rsync参数更改Rsync的选项，如上面描述的default.rsync。
+
+通过 *ssh* 可以配置的参数如下：
+
 <table>
 
  <tbody><tr><td> binary
@@ -716,7 +715,6 @@
 
 <p>例子：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">settings &#123;</span><br><span class="line">    logfile = <span class="string">"/var/log/lsyncd.log"</span>,</span><br><span class="line">    statusFile = <span class="string">"/var/log/lsyncd-status.log"</span>,</span><br><span class="line">    statusInterval = <span class="number">20</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sync &#123;</span><br><span class="line">   default.rsyncssh,</span><br><span class="line">   source=<span class="string">"/srcdir"</span>,</span><br><span class="line">   host=<span class="string">"remotehost"</span>,</span><br><span class="line">   excludeFrom=<span class="string">"/etc/lsyncd.exclude"</span>,</span><br><span class="line">   targetdir=<span class="string">"/dstdir"</span>,</span><br><span class="line">   rsync = &#123;</span><br><span class="line">     archive = <span class="literal">true</span>,</span><br><span class="line">     compress = <span class="literal">false</span>,</span><br><span class="line">     whole_file = <span class="literal">false</span></span><br><span class="line">   &#125;,</span><br><span class="line">   ssh = &#123;</span><br><span class="line">     port = <span class="number">1234</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <blockquote>
 <p>注意 <em>rsync</em> 与 <em>ssh</em> 间的逗号。<br>如果是从2.0升级来的话，要注意到 <code>settings</code> 变成了一个函数，而不是一个变量。所以 <strong>必须</strong> 删除 <code>settings</code> 与 <code>{</code> 间的 <code>=</code> 号。</p>
 </blockquote>
@@ -748,7 +746,6 @@
 <h3 id="default-direct"><a href="#default-direct" class="headerlink" title="default.direct"></a>default.direct</h3><p>这个配置能以更好的性能同步两个本地目录（相对于 default.rsync）。<br>default.direct 与 default.rsync 一样，在启动的时候使用 <code>rsync</code> 来初始化同步。然而，在常规操作中，default.direct 使用 <code>/bin/cp, /bin/move, /bin/mv</code> 来保持同步。所有的参数都和 default.rsync 一致。</p>
 <p>例子：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">sync &#123;</span><br><span class="line">    default.direct,</span><br><span class="line">    source  = <span class="string">"/home/user/src/"</span>,</span><br><span class="line">    target  = <span class="string">"/home/user/trg/"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h3 id="Exclusions"><a href="#Exclusions" class="headerlink" title="Exclusions"></a>Exclusions</h3><p>还有参数可以指定给 <em>sync{}</em>：</p>
 <ul>
 <li>excludeFrom = FILENAME 从文件内加载排除规则，一行一条规则</li>
@@ -800,9 +797,8 @@
 
 <h2 id="Layer-3-开始动作"><a href="#Layer-3-开始动作" class="headerlink" title="Layer 3 开始动作"></a>Layer 3 开始动作</h2><p>本层，可创建自定义配置。下面的例子使用 bash 命令保持一个本地目录的同步：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">bash = &#123;</span><br><span class="line">    delay = <span class="number">5</span>,</span><br><span class="line">    maxProcesses = <span class="number">3</span>,</span><br><span class="line">    onCreate = <span class="string">"cp -r ^sourcePathname ^targetPathname"</span>,</span><br><span class="line">    onModify = <span class="string">"cp -r ^sourcePathname ^targetPathname"</span>,</span><br><span class="line">    onDelete = <span class="string">"rm -rf ^targetPathname"</span>,</span><br><span class="line">    onMove   = <span class="string">"mv ^o.targetPathname ^d.targetPathname"</span>,</span><br><span class="line">    onStartup = <span class="string">'[[ if [ "$(ls -A ^source)" ]; then cp -r ^source* ^target; fi]]'</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>我们一步步的来解释这个例子。技术上说，所有的 Lsyncd 配置都是一个 Lua 表，里面以<em>键值对*填充。先建立一个  *bash</em> 变量，并给他赋予一个值 <em>{…}</em>。</p>
+<p>我们一步步的来解释这个例子。技术上说，所有的 Lsyncd 配置都是一个 Lua 表，里面以<em>键值对</em>填充。先建立一个  <em>bash</em> 变量，并给他赋予一个值 <em>{…}</em>。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">bash = &#123;</span><br><span class="line">	...</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-
 <p>接着就以一个 </p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">delay = <span class="number">5</span>,</span><br></pre></td></tr></table></figure>
 <p>来进行填充一个设置项。如果不要延时的话，就不要设置这个项，那么 Lsyncd 会在有变化的时候立即动作。</p>
@@ -815,15 +811,13 @@
 <li><strong>onMove</strong> 当文件或目录在可观察的文件树内移动</li>
 <li><strong>onStartup</strong> 只在 Lsyncd 启动时调用</li>
 </ul>
-<p>当没有 <em>onMove</em> 定义，或 移动动作是从外部进入目录数，或从当前可观察目录树到外部，那么动作会分解为 <em>onDelete</em> 或 <em>onCreate*。 *onStartup</em> 时会屏蔽所有的其他动作，直到其完成。</p>
+<p>当没有 <em>onMove</em> 定义，或 移动动作是从外部进入目录数，或从当前可观察目录树到外部，那么动作会分解为 <em>onDelete</em> 或 <em>onCreate</em>。 <em>onStartup</em> 时会屏蔽所有的其他动作，直到其完成。</p>
 <p>以 Lua String 的形式指定要进行的操作。这些操作可以被任何 Lua 运行的方式进行分隔，在上面的例子中是 <em>‘TEXT’, “TEXT”, or ‘[[TEXT]]’</em> 。</p>
 <p>以 <code>/</code> 开始的操作，告诉 Lsyncd  在开始的时候直接执行二进制命令而不是派成一个shell。如：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">onCreate = <span class="string">"/usr/bin/zip /usr/var/all.zip ^sourcePath"</span></span><br><span class="line">onModify = <span class="string">"/usr/bin/zip /usr/var/all.zip ^sourcePath"</span></span><br></pre></td></tr></table></figure>
-
 <p>将会把所有新建立和修改的文件使用绝对路径添加到 <em>/usr/var/all.zip</em>。任何不是以 <code>/</code> 开头的命令会使 Lsyncd 派生一个 shell 进程，并以命令的形式进行执行动作。</p>
 <h3 id="Variables-变量"><a href="#Variables-变量" class="headerlink" title="Variables 变量"></a>Variables 变量</h3><p>变量参数通过 <code>^</code> 来指定。要注意，变量在双引号内是隐式引用的，如果想要他们是另外一个双引号引用字符串的一部分，那么需要进入更深的一层了。如：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">onCreate   = <span class="string">'[[ su user -c "/usr/bin/zip /usr/var/all.zip ^o.sourcePath " ]],</span></span><br></pre></td></tr></table></figure>
-
 <p>会展开成 <code>su user -c &quot;/usr/bin/zip /usr/var/all.zip &quot;source&quot;&quot;</code> 这并不正确。必须走更深一层重写上面的语句：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">onCreate = <span class="function"><span class="keyword">function</span><span class="params">(event)</span></span></span><br><span class="line">   spawnShell(<span class="string">'[[ su user -c "/usr/bin/zip /usr/var/all.zip \"$1\"" ]], event.sourcePath)</span></span><br><span class="line"><span class="string"> end</span></span><br></pre></td></tr></table></figure>
 <p>看起来是一个 lua 函数哦。</p>
@@ -867,13 +861,10 @@
 <p>对于 <code>onMove</code> 事件， <code>o., d.</code> 可以放在 <em>path, pathname, sourcePath, sourcePathname, targetPath, targetPathname</em> 来指定 move 的源或者目标。没有这些变量的话，就引用 move 的源。</p>
 <p>上面的例子中，将文件或目录移动到目标目录内：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">onMove = <span class="string">"mv ^o.targePathname ^d.targetPathname"</span>,</span><br></pre></td></tr></table></figure>
-
 <h3 id="执行控制-退出代码"><a href="#执行控制-退出代码" class="headerlink" title="执行控制(退出代码)"></a>执行控制(退出代码)</h3><p>这个例子的启动时有几个单词。看起来有点复杂，那其只仅是一些简单的 bash 脚本， Lsyncd 没有制定任何东西。其只是简单的递归复制源到目标，不过其首先测试源目录内有没有文件。否则的话，命令会返回一个非 0 的错误代码。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">onStartup = <span class="string">'[[ if [ "$(ls -A ^source)" ]; then cp -r ^source* ^target; fi ]],</span></span><br></pre></td></tr></table></figure>
-
 <p>默认情况下， Lsyncd 会忽略所有的返回值，但 onStartup 是个例外，因为需要根据这个返回值来判断能否继续执行。你可以通过添加一个 <em>exitcodes</em> 参数来改变这个行为：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">exitcodes = &#123; [<span class="number">0</span>] = <span class="string">"ok"</span>, [<span class="number">1</span>] =  <span class="string">"again"</span>, [<span class="number">2</span>] = <span class="string">"die"</span>&#125;</span><br></pre></td></tr></table></figure>
-
 <p>键为退出代码指定所需操作的字符串。</p>
 <ul>
 <li>again 一定时间后重新执行动作，或者 1秒 （delay设置为 immediate）</li>
@@ -884,10 +875,9 @@
 <p>不像 Layer 3 一样给事件指定字符串， Lua 函数也可用来做些正确的事情。</p>
 <p>下面例子会把所有 <em>.ps</em> 结尾的文件转换为 PDF：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">autopdf = &#123;</span><br><span class="line">	onCreate = <span class="function"><span class="keyword">function</span><span class="params">(event)</span></span></span><br><span class="line">		<span class="built_in">log</span>(<span class="string">"Normal"</span>, <span class="string">"got an create event"</span>)</span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">string</span>.ends(event.pathname, <span class="string">".ps"</span>) <span class="keyword">then</span></span><br><span class="line">			spawn(event, <span class="string">"/usr/bin/ps2pdf"</span>, event.sourcePath)</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>这个函数可以包含任何合法的 Lua 代码。</p>
 <p>Lsyncd 提供了在用户脚本中可用的一系列函数。</p>
-<h3 id="log-Category-…"><a href="#log-Category-…" class="headerlink" title="log(Category, …)"></a>log(Category, …)</h3><p>记录一条消息到 <em>file/stdout/syslog*。第一个参数是分类，其他的参数字符都会被记录。日志分类必须以大写字母开始。 *Normal, Error</em> 是标准的分类。所有其他的分类都是为了调试。</p>
+<h3 id="log-Category-…"><a href="#log-Category-…" class="headerlink" title="log(Category, …)"></a>log(Category, …)</h3><p>记录一条消息到 <em>file/stdout/syslog</em>。第一个参数是分类，其他的参数字符都会被记录。日志分类必须以大写字母开始。 <em>Normal, Error</em> 是标准的分类。所有其他的分类都是为了调试。</p>
 <h3 id="spawn-Event-Binary-…"><a href="#spawn-Event-Binary-…" class="headerlink" title="spawn(Event, Binary, …)"></a>spawn(Event, Binary, …)</h3><p>派生一个新进程，把事件（列表）作为第一个参数。第二个参数指定要调用的二进制命令。其他的参数都是给这个二进制命令的。</p>
 <p>如果第三个参数是 <code>&lt;</code> ，那么从第四个开始的参数就不会当作参数传递给命令。第四个参数将被当做字符串通过 stdin 以管道的形式传递给命令。</p>
 <p>不要使用 Lua 的 <code>os.execute</code> 而不使用 <code>spawn</code>，因为它会阻塞进程直到命令执行完毕。 Lsyncd 的 <code>spawn</code> 会立即返回，而子进程会继续执行。</p>
@@ -968,14 +958,12 @@
 <p><code>onMove</code> 动作有两个参数，就是 move 动作的源与目标。</p>
 <p>下面的例子会记录所有的移动事件：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">tattleMove = &#123;</span><br><span class="line">		onMove = <span class="function"><span class="keyword">function</span><span class="params">(oEvent, dEvent)</span></span></span><br><span class="line">			<span class="built_in">log</span>(<span class="string">"Normal"</span>, <span class="string">"A moved happened from "</span>, oEvent.pathname, <span class="string">"to"</span>, dEvent.pathname)</span><br><span class="line">		<span class="keyword">end</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>动作函数应该短而且快。其会在 Lsyncd 的主线程内运行。如果要做很多长时的事情，那么调用 <code>spawn{}</code> 来开启一个子进程。</p>
 <p>一个事件只能关联一个子进程。</p>
 <p>第3层只是Lsyncd在初始化时自动为您编写第2层函数。在第3层配置上使用-log FWrite启动Lsyncd，以查看它为您动态写入和加载的功能。因此，层3和层2也可以随意混合。</p>
 <h2 id="Layer-1：入口"><a href="#Layer-1：入口" class="headerlink" title="Layer 1：入口"></a>Layer 1：入口</h2><p>Layer 2允许我们为每个事件建立一个子进程。然而，当以 rsync 默认行为的时候你可能为几个事件调用一个进程。这就可以通过 入口 来实现。当一个事件发生的时候， Lsyncd 会调用 <code>action</code> 项，同时以 <code>inlet</code> 作为第一个参数。<code>inlet</code> 可以用来抓取一个事件，或者事件列表。</p>
 <p>下面就是默认的 rsync 使用的 <code>action</code> 函数：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">action = <span class="function"><span class="keyword">function</span><span class="params">( inlet )</span></span></span><br><span class="line">   <span class="keyword">local</span> elist = inlet.getEvents( )</span><br><span class="line">   <span class="keyword">local</span> <span class="built_in">config</span> = inlet.getConfig( )</span><br><span class="line">   <span class="keyword">local</span> paths = elist.getPaths( )</span><br><span class="line">   <span class="built_in">log</span>( <span class="string">"Normal"</span>, <span class="string">"rsyncing list\n"</span>, <span class="built_in">table</span>.<span class="built_in">concat</span>( paths, <span class="string">'\n'</span> ) )</span><br><span class="line">   spawn(elist, <span class="string">'/usr/bin/rsync'</span>,</span><br><span class="line">       <span class="string">'&lt;'</span>, <span class="built_in">table</span>.<span class="built_in">concat</span>( paths, <span class="string">'\000'</span> ),</span><br><span class="line">       <span class="string">'--delete'</span>,</span><br><span class="line">       <span class="built_in">config</span>.rsync._computed,</span><br><span class="line">       <span class="string">'--from0'</span>,</span><br><span class="line">       <span class="string">'--include-from=-'</span>,</span><br><span class="line">       <span class="string">'--exclude=*'</span>,</span><br><span class="line">       <span class="built_in">config</span>.source,</span><br><span class="line">       <span class="built_in">config</span>.target</span><br><span class="line">   )</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p><code>inlet</code> 的函数如下：</p>
 <table>
   <thead>
@@ -1039,16 +1027,14 @@
 <p>小心调用getEvents（）及其函数，因为根据事件的数量，它们会导致相当多的CPU负载</p>
 <p>如果用户脚本没有自己提供第1层操作，则第2层功能就是遵循默认加载的第1层操作。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-----</span></span><br><span class="line"><span class="comment">-- Default action calls user scripts on**** functions.</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">action = <span class="function"><span class="keyword">function</span><span class="params">( inlet )</span></span></span><br><span class="line">    <span class="comment">-- in case of moves getEvent returns the origin and destination of the move</span></span><br><span class="line">    <span class="keyword">local</span> event, event2 = inlet.getEvent( )</span><br><span class="line">    <span class="keyword">local</span> <span class="built_in">config</span> = inlet.getConfig( )</span><br><span class="line">    <span class="keyword">local</span> func = <span class="built_in">config</span>[ <span class="string">'on'</span>.. event.etype ]</span><br><span class="line">    <span class="keyword">if</span> func</span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        func( event, event2 )</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="comment">-- if function didnt change the wait status its not interested</span></span><br><span class="line">    <span class="comment">-- in this event -&gt; drop it.</span></span><br><span class="line">    <span class="keyword">if</span> event.<span class="built_in">status</span> == <span class="string">"wait"</span></span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        inlet.discardEvent( event )</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span>,</span><br></pre></td></tr></table></figure>
-
 <p>如果在配置中找不到“onMove”字段，Lsyncd将自动将Move事件拆分为Create和Delete事件。当处理在第1层动作函数中移动时，只需将“onMove”设置为“true”即可。</p>
 <p>除了<code>action</code>之外，Lsyncd在初始化时为每个sync {}调用init。这是默认的init函数，如果用户脚本没有，则会加载该函数。它为第2层和第3层提供onStartup（）功能。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-----</span></span><br><span class="line"><span class="comment">-- called on (re)initalizing of lsyncd.</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">init = <span class="function"><span class="keyword">function</span><span class="params">( inlet )</span></span></span><br><span class="line">    <span class="keyword">local</span> <span class="built_in">config</span> = inlet.getConfig( )</span><br><span class="line">    <span class="comment">-- calls a startup if provided by user script.</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">type</span>( <span class="built_in">config</span>.onStartup ) == <span class="string">"function"</span></span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">local</span> event = inlet.createBlanketEvent( )</span><br><span class="line">        <span class="built_in">config</span>.onStartup( event )</span><br><span class="line">        <span class="keyword">if</span> event.<span class="built_in">status</span> == <span class="string">'wait'</span></span><br><span class="line">	<span class="keyword">then</span></span><br><span class="line">            <span class="comment">-- user script did not spawn anything</span></span><br><span class="line">            <span class="comment">-- thus the blanket event is deleted again.</span></span><br><span class="line">            inlet.discardEvent( event )</span><br><span class="line">        <span class="keyword">end</span> </span><br><span class="line">    <span class="keyword">end</span> </span><br><span class="line"><span class="keyword">end</span>,</span><br></pre></td></tr></table></figure>
-
 <p>另一个例子是default.rsync的init。特别地，它会更改配置，因为如果不存在，它会向目标添加斜杠。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-----</span></span><br><span class="line"><span class="comment">-- Spawns the recursive startup sync</span></span><br><span class="line"><span class="comment">-- </span></span><br><span class="line">init = <span class="function"><span class="keyword">function</span><span class="params">( inlet )</span></span></span><br><span class="line">    <span class="keyword">local</span> <span class="built_in">config</span> = inlet.getConfig( )</span><br><span class="line">    <span class="keyword">local</span> event = inlet.createBlanketEvent( )</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">string</span>.<span class="built_in">sub</span>(<span class="built_in">config</span>.target, <span class="number">-1</span>) ~= <span class="string">"/"</span></span><br><span class="line">    <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">config</span>.target = <span class="built_in">config</span>.target .. <span class="string">"/"</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">log</span>(<span class="string">"Normal"</span>, <span class="string">"recursive startup rsync: "</span>, <span class="built_in">config</span>.source,</span><br><span class="line">        <span class="string">" -&gt; "</span>, <span class="built_in">config</span>.target)</span><br><span class="line">	</span><br><span class="line">    spawn(event,</span><br><span class="line">        <span class="string">"/usr/bin/rsync"</span>,</span><br><span class="line">        <span class="string">"--delete"</span>,</span><br><span class="line">        <span class="built_in">config</span>.rsync._computed .. <span class="string">"r"</span>,</span><br><span class="line">        <span class="built_in">config</span>.source,</span><br><span class="line">        <span class="built_in">config</span>.target</span><br><span class="line">    )</span><br><span class="line"><span class="keyword">end</span>,</span><br></pre></td></tr></table></figure>
-
 <p>当子进程完成并收集其僵尸进程时，Lsyncd会调用collect条目的功能。 当回收返回 <code>again</code> 时，agent（event [list]）会被设置为 “wait”， 且将会在 <em>delay</em> 秒内变为就绪。<br>默认的collect函数在exitcodes []表中查找退出代码的条目。否则，下面大多数不幸的长代码除了制作好的日志消息之外什么都不做。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-----</span></span><br><span class="line"><span class="comment">-- Called when collecting a finished child process</span></span><br><span class="line"><span class="comment">--</span></span><br><span class="line">collect = <span class="function"><span class="keyword">function</span><span class="params">(agent, exitcode)</span></span></span><br><span class="line">	<span class="keyword">local</span> <span class="built_in">config</span> = agent.<span class="built_in">config</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">not</span> agent.isList <span class="keyword">and</span> agent.etype == <span class="string">"Blanket"</span> <span class="keyword">then</span></span><br><span class="line">		<span class="keyword">if</span> exitcode == <span class="number">0</span></span><br><span class="line">		<span class="keyword">then</span></span><br><span class="line">			<span class="built_in">log</span>(<span class="string">"Normal"</span>, <span class="string">"Startup of '"</span>,agent.source,<span class="string">"' finished."</span>)</span><br><span class="line">		<span class="keyword">elseif</span> <span class="built_in">config</span>.exitcodes <span class="keyword">and</span></span><br><span class="line">		       <span class="built_in">config</span>.exitcodes[exitcode] == <span class="string">"again"</span></span><br><span class="line">		<span class="keyword">then</span></span><br><span class="line">			<span class="built_in">log</span>(<span class="string">"Normal"</span>,</span><br><span class="line">				<span class="string">"Retrying startup of '"</span>,agent.source,<span class="string">"'."</span>)</span><br><span class="line">			<span class="keyword">return</span> <span class="string">"again"</span></span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="built_in">log</span>(<span class="string">"Error"</span>, <span class="string">"Failure on startup of '"</span>,agent.source,<span class="string">"'."</span>)</span><br><span class="line">			terminate(<span class="number">-1</span>) <span class="comment">-- ERRNO</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">local</span> rc = <span class="built_in">config</span>.exitcodes <span class="keyword">and</span> <span class="built_in">config</span>.exitcodes[exitcode]</span><br><span class="line">	<span class="keyword">if</span> rc == <span class="string">"die"</span></span><br><span class="line">	<span class="keyword">then</span></span><br><span class="line">		<span class="keyword">return</span> rc</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> agent.isList</span><br><span class="line">	<span class="keyword">then</span></span><br><span class="line">		<span class="keyword">if</span> rc == <span class="string">"again"</span></span><br><span class="line">		<span class="keyword">then</span></span><br><span class="line">			<span class="built_in">log</span>(<span class="string">"Normal"</span>, <span class="string">"Retrying a list on exitcode = "</span>,exitcode)</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="built_in">log</span>(<span class="string">"Normal"</span>, <span class="string">"Finished a list = "</span>,exitcode)</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="keyword">if</span> rc == <span class="string">"again"</span></span><br><span class="line">		<span class="keyword">then</span></span><br><span class="line">			<span class="built_in">log</span>(<span class="string">"Normal"</span>, <span class="string">"Retrying "</span>,agent.etype,</span><br><span class="line">				<span class="string">" on "</span>,agent.sourcePath,<span class="string">" = "</span>,exitcode)</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="built_in">log</span>(<span class="string">"Normal"</span>, <span class="string">"Finished "</span>,agent.etype,</span><br><span class="line">				<span class="string">" on "</span>,agent.sourcePath,<span class="string">" = "</span>,exitcode)</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">return</span> rc</span><br><span class="line"><span class="keyword">end</span>,</span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -1059,7 +1045,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
+              <a href="/tags/运维/" rel="tag"># 运维</a>
               <a href="/tags/Lsyncd/" rel="tag"># Lsyncd</a>
           </div>
 
@@ -1067,7 +1053,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Python/TensorFlow%E7%9A%84%E7%8E%AF%E5%A2%83%E5%AE%89%E8%A3%85.html" rel="next" title="TensorFlow的环境安装">
+                <a href="/Python/TensorFlow的环境安装.html" rel="next" title="TensorFlow的环境安装">
                   <i class="fa fa-chevron-left"></i> TensorFlow的环境安装
                 </a>
             </div>
@@ -1075,7 +1061,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/MVP%E6%9E%B6%E6%9E%84%E6%8C%87%E5%AF%BC%E6%80%A7%E8%AF%B4%E6%98%8E.html" rel="prev" title="MVP架构指导性说明">
+                <a href="/Android/MVP架构指导性说明.html" rel="prev" title="MVP架构指导性说明">
                   MVP架构指导性说明 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -1137,20 +1123,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1162,10 +1148,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -1194,10 +1180,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -1272,7 +1258,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8Lsyncd%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E9%95%9C%E5%83%8F%E5%90%8C%E6%AD%A5.html",
+            url: "https://gowa.club/Linux-Unix/关于使用Lsyncd进行数据镜像同步.html",
             identifier: "Linux-Unix/关于使用Lsyncd进行数据镜像同步.html",
             title: "关于使用Lsyncd进行数据镜像同步"
           }

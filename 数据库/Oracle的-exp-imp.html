@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,24 +41,26 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
 </script>
 
-  <meta name="description" content="Oracle数据库的备份，可以通过物化视图，可以通过物理备份（需要关闭数据库），可以通过热备份（归档模式）等方式，但是如果数据量小的时候我可以通过导入&#x2F;导出数据来进行备份，类似于mysqldump命令。">
+  <meta name="description" content="Oracle数据库的备份，可以通过物化视图，可以通过物理备份（需要关闭数据库），可以通过热备份（归档模式）等方式，但是如果数据量小的时候我可以通过导入/导出数据来进行备份，类似于mysqldump命令。">
 <meta name="keywords" content="数据库,Oralce">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Oracle的 exp&#x2F;imp">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;Oracle%E7%9A%84-exp-imp.html">
+<meta property="og:url" content="https://gowa.club/数据库/Oracle的-exp-imp.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="Oracle数据库的备份，可以通过物化视图，可以通过物理备份（需要关闭数据库），可以通过热备份（归档模式）等方式，但是如果数据量小的时候我可以通过导入&#x2F;导出数据来进行备份，类似于mysqldump命令。">
+<meta property="og:description" content="Oracle数据库的备份，可以通过物化视图，可以通过物理备份（需要关闭数据库），可以通过热备份（归档模式）等方式，但是如果数据量小的时候我可以通过导入/导出数据来进行备份，类似于mysqldump命令。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.270Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Oracle的 exp&#x2F;imp">
+<meta name="twitter:description" content="Oracle数据库的备份，可以通过物化视图，可以通过物理备份（需要关闭数据库），可以通过热备份（归档模式）等方式，但是如果数据量小的时候我可以通过导入/导出数据来进行备份，类似于mysqldump命令。">
 
-<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E7%9A%84-exp-imp.html">
+<link rel="canonical" href="https://gowa.club/数据库/Oracle的-exp-imp.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E7%9A%84-exp-imp.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/Oracle的-exp-imp.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -266,7 +268,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -281,7 +283,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E7%9A%84-exp-imp.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/Oracle的-exp-imp.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/Oracle的-exp-imp.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -297,166 +299,182 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Oracle数据库的备份，可以通过物化视图，可以通过物理备份（需要关闭数据库），可以通过热备份（归档模式）等方式，但是如果数据量小的时候我可以通过导入/导出数据来进行备份，类似于mysqldump命令。</p>
-<a id="more"></a>
+        <p>Oracle数据库的备份，可以通过物化视图，可以通过物理备份（需要关闭数据库），可以通过热备份（归档模式）等方式，但是如果数据量小的时候我可以通过导入/导出数据来进行备份，类似于mysqldump命令。<br><a id="more"></a></p>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>exp/imp命令具有三种方式（级别）的导出，<strong>全库（FULL）、用户（OWNER）、表（TABLE）</strong></p>
 <ul>
-<li>完全（需要具有所有<strong>exp_full_database</strong>权限或者以<strong>特权用户sys/system</strong>）<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">EXP SYSTEM/MANAGER BUFFER=34567 FILE=/<span class="keyword">backup</span>/<span class="string">`date`</span>.dmp DIRECT=y <span class="keyword">FULL</span>=Y</span><br></pre></td></tr></table></figure></li>
-<li>用户（用户所有对象被导出）<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">EXP SCOTT/TIGER BUFFER=34567 FILE=/<span class="keyword">backup</span>/<span class="string">`date`</span>-<span class="string">`id-un`</span>.dmp DIRECT=y OWNER=SCOTT</span><br></pre></td></tr></table></figure></li>
-<li>表（用户的T1、T2表被导出）<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">EXP SCOTT/TIGER BUFFER=34567 FILE=/<span class="keyword">backup</span>/<span class="string">`date`</span>-<span class="string">`id-un`</span>.dmp DIRECT=y OWNER=SCOTT <span class="keyword">TABLES</span>=(T1,T2)</span><br></pre></td></tr></table></figure>
+<li><p>完全（需要具有所有<strong>exp_full_database</strong>权限或者以<strong>特权用户sys/system</strong>）</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">EXP SYSTEM/MANAGER BUFFER=34567 FILE=/<span class="keyword">backup</span>/<span class="string">`date`</span>.dmp DIRECT=y <span class="keyword">FULL</span>=Y</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>用户（用户所有对象被导出）</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">EXP SCOTT/TIGER BUFFER=34567 FILE=/<span class="keyword">backup</span>/<span class="string">`date`</span>-<span class="string">`id-un`</span>.dmp DIRECT=y OWNER=SCOTT</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>表（用户的T1、T2表被导出）</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">EXP SCOTT/TIGER BUFFER=34567 FILE=/<span class="keyword">backup</span>/<span class="string">`date`</span>-<span class="string">`id-un`</span>.dmp DIRECT=y OWNER=SCOTT <span class="keyword">TABLES</span>=(T1,T2)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 <blockquote>
 <p>上面的命令可以用 <strong>imp</strong> 进行替换。 </p>
 </blockquote>
-</li>
-</ul>
 <p><strong>direct=y：</strong>直接导出模式，数据直接从磁盘中读取到导出session的UGA中，跳过SQL命令处理层。避免了不必要的数据转换，然后将纪录返回给导出客户端，然后写到导出文件。<br>跳过了SQL命令处理层表示DIRECT导出不支持QUERY选项。<br>设置大的<strong>RECORDLENGTH</strong>值（最大64K）可以减少IO，加快速度。</p>
-<h1 id="exp命令格式"><a href="#exp命令格式" class="headerlink" title="exp命令格式"></a>exp命令格式</h1><pre><code>EXP KEYWORD=value or KEYWORD=(value1,value2,...,valueN)</code></pre><p>例子：</p>
+<h1 id="exp命令格式"><a href="#exp命令格式" class="headerlink" title="exp命令格式"></a>exp命令格式</h1><pre><code>EXP KEYWORD=value or KEYWORD=(value1,value2,...,valueN)
+</code></pre><p>例子：</p>
 <pre><code>EXP SCOTT/TIGER GRANTS=Y TABLES=(EMP,DEPT,MGR)
-           or TABLES=(T1:P1,T1:P2)  #if T1 is partitioned table</code></pre><blockquote>
+           or TABLES=(T1:P1,T1:P2)  #if T1 is partitioned table
+</code></pre><blockquote>
 <p>我们可以通过 <code>exp help=y</code>来看所有的选项</p>
 </blockquote>
 <p>以下选项:<strong>USERID</strong>必须是第一个。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>Keyword</th>
-<th align="center">Description (Default)</th>
-<th align="center">Keyword</th>
-<th align="center">Description (Default)</th>
+<th style="text-align:center">Description (Default)</th>
+<th style="text-align:center">Keyword</th>
+<th style="text-align:center">Description (Default)</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>USERID</td>
-<td align="center">username/password</td>
-<td align="center">FULL</td>
-<td align="center">export entire file (N)</td>
+<td style="text-align:center">username/password</td>
+<td style="text-align:center">FULL</td>
+<td style="text-align:center">export entire file (N)</td>
 </tr>
 <tr>
 <td>BUFFER</td>
-<td align="center">size of data buffer</td>
-<td align="center">OWNER</td>
-<td align="center">list of owner usernames</td>
+<td style="text-align:center">size of data buffer</td>
+<td style="text-align:center">OWNER</td>
+<td style="text-align:center">list of owner usernames</td>
 </tr>
 <tr>
 <td>FILE</td>
-<td align="center">output files (EXPDAT.DMP)</td>
-<td align="center">TABLES</td>
-<td align="center">list of table names</td>
+<td style="text-align:center">output files (EXPDAT.DMP)</td>
+<td style="text-align:center">TABLES</td>
+<td style="text-align:center">list of table names</td>
 </tr>
 <tr>
 <td>COMPRESS</td>
-<td align="center">import into one extent (Y)</td>
-<td align="center">RECORDLENGTH</td>
-<td align="center">length of IO record</td>
+<td style="text-align:center">import into one extent (Y)</td>
+<td style="text-align:center">RECORDLENGTH</td>
+<td style="text-align:center">length of IO record</td>
 </tr>
 <tr>
 <td>GRANTS</td>
-<td align="center">export grants (Y)</td>
-<td align="center">INCTYPE</td>
-<td align="center">incremental export type</td>
+<td style="text-align:center">export grants (Y)</td>
+<td style="text-align:center">INCTYPE</td>
+<td style="text-align:center">incremental export type</td>
 </tr>
 <tr>
 <td>INDEXES</td>
-<td align="center">export indexes (Y)</td>
-<td align="center">RECORD</td>
-<td align="center">track incr. export (Y)</td>
+<td style="text-align:center">export indexes (Y)</td>
+<td style="text-align:center">RECORD</td>
+<td style="text-align:center">track incr. export (Y)</td>
 </tr>
 <tr>
 <td>DIRECT</td>
-<td align="center">direct path (N)</td>
-<td align="center">TRIGGERS</td>
-<td align="center">export triggers (Y)</td>
+<td style="text-align:center">direct path (N)</td>
+<td style="text-align:center">TRIGGERS</td>
+<td style="text-align:center">export triggers (Y)</td>
 </tr>
 <tr>
 <td>LOG</td>
-<td align="center">log file of screen output</td>
-<td align="center">STATISTICS</td>
-<td align="center">analyze objects (ESTIMATE)</td>
+<td style="text-align:center">log file of screen output</td>
+<td style="text-align:center">STATISTICS</td>
+<td style="text-align:center">analyze objects (ESTIMATE)</td>
 </tr>
 <tr>
 <td>ROWS</td>
-<td align="center">export data rows (Y)</td>
-<td align="center">PARFILE</td>
-<td align="center">parameter filename</td>
+<td style="text-align:center">export data rows (Y)</td>
+<td style="text-align:center">PARFILE</td>
+<td style="text-align:center">parameter filename</td>
 </tr>
 <tr>
 <td>CONSISTENT</td>
-<td align="center">cross-table consistency(N)</td>
-<td align="center">CONSTRAINTS</td>
-<td align="center">export constraints (Y)</td>
+<td style="text-align:center">cross-table consistency(N)</td>
+<td style="text-align:center">CONSTRAINTS</td>
+<td style="text-align:center">export constraints (Y)</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p><strong>更多选项：</strong></p>
 <blockquote>
 <p>OBJECT_CONSISTENT    transaction set to read only during object export (N)<br>FEEDBACK             display progress every x rows (0)<br>FILESIZE             maximum size of each dump file<br>FLASHBACK_SCN        SCN used to set session snapshot back to<br>FLASHBACK_TIME       time used to get the SCN closest to the specified time<br>QUERY                select clause used to export a subset of a table<br>RESUMABLE            suspend when a space related error is encountered(N)<br>RESUMABLE_NAME       text string used to identify resumable statement<br>RESUMABLE_TIMEOUT    wait time for RESUMABLE<br>TTS_FULL_CHECK       perform full or partial dependency check for TTS<br>VOLSIZE              number of bytes to write to each tape volume<br>TABLESPACES          list of tablespaces to export<br>TRANSPORT_TABLESPACE export transportable tablespace metadata (N)<br>TEMPLATE             template name which invokes iAS mode export</p>
 </blockquote>
-<h1 id="imp命令格式"><a href="#imp命令格式" class="headerlink" title="imp命令格式"></a>imp命令格式</h1><pre><code>IMP KEYWORD=value or KEYWORD=(value1,value2,...,valueN)</code></pre><p>例子：</p>
-<pre><code>IMP SCOTT/TIGER IGNORE=Y TABLES=(EMP,DEPT) FULL=N
-         or TABLES=(T1:P1,T1:P2), #if T1 is partitioned table</code></pre><p>以下选项:<strong>USERID</strong>必须是第一个。</p>
+<h1 id="imp命令格式"><a href="#imp命令格式" class="headerlink" title="imp命令格式"></a>imp命令格式</h1><pre><code> IMP KEYWORD=value or KEYWORD=(value1,value2,...,valueN)
+</code></pre><p>例子：</p>
+<pre><code> IMP SCOTT/TIGER IGNORE=Y TABLES=(EMP,DEPT) FULL=N
+          or TABLES=(T1:P1,T1:P2), #if T1 is partitioned table
+</code></pre><p>以下选项:<strong>USERID</strong>必须是第一个。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>Keyword</th>
-<th align="center">Description (Default)</th>
-<th align="center">Keyword</th>
-<th align="center">Description (Default)</th>
+<th style="text-align:center">Description (Default)</th>
+<th style="text-align:center">Keyword</th>
+<th style="text-align:center">Description (Default)</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>USERID</td>
-<td align="center">username/password</td>
-<td align="center">FULL</td>
-<td align="center">import entire file (N)</td>
+<td style="text-align:center">username/password</td>
+<td style="text-align:center">FULL</td>
+<td style="text-align:center">import entire file (N)</td>
 </tr>
 <tr>
 <td>BUFFER</td>
-<td align="center">size of data buffer</td>
-<td align="center">FROMUSER</td>
-<td align="center">list of owner usernames</td>
+<td style="text-align:center">size of data buffer</td>
+<td style="text-align:center">FROMUSER</td>
+<td style="text-align:center">list of owner usernames</td>
 </tr>
 <tr>
 <td>FILE</td>
-<td align="center">input files (EXPDAT.DMP)</td>
-<td align="center">TOUSER</td>
-<td align="center">list of usernames</td>
+<td style="text-align:center">input files (EXPDAT.DMP)</td>
+<td style="text-align:center">TOUSER</td>
+<td style="text-align:center">list of usernames</td>
 </tr>
 <tr>
 <td>SHOW</td>
-<td align="center">just list file contents (N)</td>
-<td align="center">TABLES</td>
-<td align="center">list of table names</td>
+<td style="text-align:center">just list file contents (N)</td>
+<td style="text-align:center">TABLES</td>
+<td style="text-align:center">list of table names</td>
 </tr>
 <tr>
 <td>IGNORE</td>
-<td align="center">ignore create errors (N)</td>
-<td align="center">RECORDLENGTH</td>
-<td align="center">length of IO record</td>
+<td style="text-align:center">ignore create errors (N)</td>
+<td style="text-align:center">RECORDLENGTH</td>
+<td style="text-align:center">length of IO record</td>
 </tr>
 <tr>
 <td>GRANTS</td>
-<td align="center">import grants (Y)</td>
-<td align="center">INCTYPE</td>
-<td align="center">incremental import type</td>
+<td style="text-align:center">import grants (Y)</td>
+<td style="text-align:center">INCTYPE</td>
+<td style="text-align:center">incremental import type</td>
 </tr>
 <tr>
 <td>INDEXES</td>
-<td align="center">import indexes (Y)</td>
-<td align="center">COMMIT</td>
-<td align="center">commit array insert (N)</td>
+<td style="text-align:center">import indexes (Y)</td>
+<td style="text-align:center">COMMIT</td>
+<td style="text-align:center">commit array insert (N)</td>
 </tr>
 <tr>
 <td>ROWS</td>
-<td align="center">import data rows (Y)</td>
-<td align="center">PARFILE</td>
-<td align="center">parameter filename</td>
+<td style="text-align:center">import data rows (Y)</td>
+<td style="text-align:center">PARFILE</td>
+<td style="text-align:center">parameter filename</td>
 </tr>
 <tr>
 <td>LOG</td>
-<td align="center">log file of screen output</td>
-<td align="center">CONSTRAINTS</td>
-<td align="center">import constraints (Y)</td>
+<td style="text-align:center">log file of screen output</td>
+<td style="text-align:center">CONSTRAINTS</td>
+<td style="text-align:center">import constraints (Y)</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <p><strong>更多选项：</strong></p>
 <blockquote>
 <p>DESTROY                overwrite tablespace data file (N)<br>INDEXFILE              write table/index info to specified file<br>SKIP_UNUSABLE_INDEXES  skip maintenance of unusable indexes (N)<br>FEEDBACK               display progress every x rows(0)<br>TOID_NOVALIDATE        skip validation of specified type ids<br>FILESIZE               maximum size of each dump file<br>STATISTICS             import precomputed statistics (always)<br>RESUMABLE              suspend when a space related error is encountered(N)<br>RESUMABLE_NAME         text string used to identify resumable statement<br>RESUMABLE_TIMEOUT      wait time for RESUMABLE<br>COMPILE                compile procedures, packages, and functions (Y)<br>STREAMS_CONFIGURATION  import streams general metadata (Y)<br>STREAMS_INSTANTIATION  import streams instantiation metadata (N)<br>VOLSIZE                number of bytes in file on each volume of a file on tape</p>
@@ -464,6 +482,7 @@
 <p>The following keywords <strong>only apply to transportable tablespaces</strong></p>
 <blockquote>
 <p>TRANSPORT_TABLESPACE import transportable tablespace metadata (N)<br>TABLESPACES tablespaces to be transported into database<br>DATAFILES datafiles to be transported into database<br>TTS_OWNERS users that own data in the transportable tablespace set</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 </blockquote>
 
     </div>
@@ -474,7 +493,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
+              <a href="/tags/数据库/" rel="tag"># 数据库</a>
               <a href="/tags/Oralce/" rel="tag"># Oralce</a>
           </div>
 
@@ -482,7 +501,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E7%9A%84%E7%89%A9%E5%8C%96%E8%A7%86%E5%9B%BE.html" rel="next" title="Oracle的物化视图">
+                <a href="/数据库/Oracle的物化视图.html" rel="next" title="Oracle的物化视图">
                   <i class="fa fa-chevron-left"></i> Oracle的物化视图
                 </a>
             </div>
@@ -490,7 +509,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/Linux%E4%B8%8B%E7%9A%84%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E5%91%BD%E4%BB%A4sar.html" rel="prev" title="Linux下的系统监控命令sar">
+                <a href="/Linux-Unix/Linux下的系统监控命令sar.html" rel="prev" title="Linux下的系统监控命令sar">
                   Linux下的系统监控命令sar <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -552,20 +571,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -577,10 +596,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -609,10 +628,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -687,7 +706,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E7%9A%84-exp-imp.html",
+            url: "https://gowa.club/数据库/Oracle的-exp-imp.html",
             identifier: "数据库/Oracle的-exp-imp.html",
             title: "Oracle的 exp/imp"
           }

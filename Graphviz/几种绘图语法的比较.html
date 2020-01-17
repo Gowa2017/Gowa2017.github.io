@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Graphviz">
 <meta property="og:type" content="article">
 <meta property="og:title" content="几种绘图语法的比较">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Graphviz&#x2F;%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html">
+<meta property="og:url" content="https://gowa.club/Graphviz/几种绘图语法的比较.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="自从用 Graphviz 来进行绘图后，感觉确实是非常强大的。同时呢，也看到了很多基于 Graphviz 来进行绘图的改进，如 PlantUML，Mermaid 等，我日常的笔记整理都是用的 markdown ，说实话，确实没有看到能很好的将这几者进行整合后的软件存在。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-12-16T14:48:46.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="几种绘图语法的比较">
+<meta name="twitter:description" content="自从用 Graphviz 来进行绘图后，感觉确实是非常强大的。同时呢，也看到了很多基于 Graphviz 来进行绘图的改进，如 PlantUML，Mermaid 等，我日常的笔记整理都是用的 markdown ，说实话，确实没有看到能很好的将这几者进行整合后的软件存在。">
 
-<link rel="canonical" href="https://gowa.club/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html">
+<link rel="canonical" href="https://gowa.club/Graphviz/几种绘图语法的比较.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Graphviz/几种绘图语法的比较.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Graphviz/几种绘图语法的比较.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Graphviz/几种绘图语法的比较.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,7 +294,6 @@
       
         <p>自从用 Graphviz 来进行绘图后，感觉确实是非常强大的。同时呢，也看到了很多基于 Graphviz 来进行绘图的改进，如 PlantUML，Mermaid 等，我日常的笔记整理都是用的 markdown ，说实话，确实没有看到能很好的将这几者进行整合后的软件存在。</p>
 <a id="more"></a>
-
 <h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><p>Graphviz 是用来进行图形渲染的，而如何定义图的话，则由不同的方式，常见的比如 PlantUML 和  Mermaid 就是两种非常流行的。</p>
 <p>我最是画流程图，甘特图比较多，架构图</p>
 <h2 id="PlantUML"><a href="#PlantUML" class="headerlink" title="PlantUML"></a>PlantUML</h2><p><a href="https://plantuml.com/" target="_blank" rel="noopener">PlantUML</a>  主要是针对于 UML 图行的实现，其定义了一套自己的语法，最终通过 Graphviz 来进行渲染出图。</p>
@@ -342,6 +343,7 @@
 <p>而 Typora 的话将内建的 graphviz 多种布局引擎给落实也完美了。有 mermaid 没有 plantUML 也能接受了。</p>
 <p>至于啊 Vnote ，这个用 QT 做的界面丑虽然丑点，无所谓，不过其 PDF 的导出格式的目录是页内跳转的（作者说用 wkhtmltopdf 是可以实现的），而不是书签的形式；同时其 mermaid 的支持没有升级也是个硬伤。</p>
 <p>慢慢再研究吧。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -358,7 +360,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/%E4%BD%BF%E7%94%A8C4-PlantUML%E6%9D%A5%E5%BF%AB%E9%80%9F%E7%9A%84%E6%8F%8F%E8%BF%B0%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84.html" rel="next" title="使用C4-PlantUML来快速的描述软件架构">
+                <a href="/软件架构/使用C4-PlantUML来快速的描述软件架构.html" rel="next" title="使用C4-PlantUML来快速的描述软件架构">
                   <i class="fa fa-chevron-left"></i> 使用C4-PlantUML来快速的描述软件架构
                 </a>
             </div>
@@ -366,7 +368,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Git/%E5%85%B3%E4%BA%8E%E5%BB%BA%E7%AB%8BGit%E6%9C%8D%E5%8A%A1%E5%99%A8.html" rel="prev" title="关于建立Git服务器">
+                <a href="/Git/关于建立Git服务器.html" rel="prev" title="关于建立Git服务器">
                   关于建立Git服务器 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -428,20 +430,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -453,10 +455,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -485,10 +487,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -563,7 +565,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html",
+            url: "https://gowa.club/Graphviz/几种绘图语法的比较.html",
             identifier: "Graphviz/几种绘图语法的比较.html",
             title: "几种绘图语法的比较"
           }

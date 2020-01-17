@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL主从复制会出现的问题">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html">
+<meta property="og:url" content="https://gowa.club/数据库/MySQL主从复制会出现的问题.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="公司本来业务量不大，但是为了备份，或者是因为很多视图上的查询有很多锁的问题，导致很多时候连登录都登录不上，就准备做一下读写分里，通过主从复制来实现。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-12-17T02:30:20.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL主从复制会出现的问题">
+<meta name="twitter:description" content="公司本来业务量不大，但是为了备份，或者是因为很多视图上的查询有很多锁的问题，导致很多时候连登录都登录不上，就准备做一下读写分里，通过主从复制来实现。">
 
-<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html">
+<link rel="canonical" href="https://gowa.club/数据库/MySQL主从复制会出现的问题.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/MySQL主从复制会出现的问题.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -259,7 +261,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/MySQL主从复制会出现的问题.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/MySQL主从复制会出现的问题.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,16 +294,16 @@
       
         <p>公司本来业务量不大，但是为了备份，或者是因为很多视图上的查询有很多锁的问题，导致很多时候连登录都登录不上，就准备做一下读写分里，通过主从复制来实现。</p>
 <a id="more"></a>
-
 <h1 id="行与语句"><a href="#行与语句" class="headerlink" title="行与语句"></a>行与语句</h1><p>基于行的复制会复制变更的每一行，但是如果在类似与 update … set date=now() 这样的语句就会很坑爹。</p>
 <p>基于语句的复制，会被执行更新操作的语句进行重放。但是有时候这个重放的顺序可能不一致，同样，，update … set date = now() 这样的情况下，有可能主从服务器时间不一致呢？</p>
 <p>所以呢默认的情况下，MySQL 自己使用了一种 mixed 的方式来混合，一种出现问题的时候就使用另外一种来进行。</p>
 <h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>配置 主从复制是非常简单的。原理就是，主机把变更事件写入二进制日志，从机获取日志，然后重放日志。</p>
 <p>直接贴配置了。懒得讲了：</p>
 <h2 id="Master"><a href="#Master" class="headerlink" title="Master"></a>Master</h2><figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">datadir</span>=/data/mysql/data</span><br><span class="line"><span class="attr">socket</span>=/data/mysql/mysql.sock</span><br><span class="line"><span class="attr">character_set_server</span>=utf8mb4</span><br><span class="line"><span class="attr">lower_case_table_names</span> = <span class="number">1</span></span><br><span class="line"><span class="attr">max_connections</span>=<span class="number">2000</span></span><br><span class="line"><span class="attr">group_concat_max_len</span> = <span class="number">5120</span></span><br><span class="line"></span><br><span class="line"><span class="attr">log-bin</span> = mysql_bin_log</span><br><span class="line"><span class="attr">server-id</span> = <span class="number">1</span></span><br><span class="line"><span class="attr">innodb_flush_log_at_trx_commit</span>=<span class="number">1</span> <span class="comment"># 事务日志的同步设置。为0，每秒写入日志并同步到磁盘； 1 默认值，事务提交刷新到磁盘；为2时，事务提交就写到日志，但刷新到磁盘每秒一次。</span></span><br><span class="line"><span class="attr">sync_binlog</span>=<span class="number">1</span>  <span class="comment"># 当事务提交时，由 MySQL刷新到 bin_log 设置为0，由 内核来执行。为 N(N&gt;1)时，有 N个提交后进行刷新。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="attr">slow_query_log</span> = <span class="number">1</span></span><br><span class="line"><span class="attr">long_query_time</span> = <span class="number">3</span></span><br><span class="line"><span class="attr">slow_query_log_file</span>=/data/mysql/log/slow_query.log</span><br><span class="line"><span class="attr">max_allowed_packet</span>=<span class="number">20</span>M</span><br><span class="line"><span class="attr">expire_logs_days</span>=<span class="number">15</span></span><br><span class="line"><span class="attr">sql_mode</span> = strict_trans_tables,no_zero_in_date,no_zero_date,error_for_division_by_zero,no_auto_create_user,no_engine_substitution</span><br><span class="line"><span class="attr">event_scheduler</span> = <span class="literal">ON</span></span><br><span class="line"><span class="attr">symbolic-links</span>=<span class="number">0</span></span><br><span class="line"><span class="attr">log-error</span>=/var/log/mysqld.log</span><br><span class="line"><span class="attr">pid-file</span>=/var/run/mysqld/mysqld.pid</span><br><span class="line"><span class="section">[client]</span></span><br><span class="line"><span class="attr">default-character-set</span>=utf8mb4</span><br><span class="line"><span class="attr">socket</span>=/data/mysql/mysql.sock</span><br><span class="line"><span class="section">[mysql]</span></span><br><span class="line"><span class="attr">default-character-set</span>=utf8mb4</span><br><span class="line"><span class="attr">socket</span>=/data/mysql/mysql.sock</span><br></pre></td></tr></table></figure>
-
 <h2 id="Slave"><a href="#Slave" class="headerlink" title="Slave"></a>Slave</h2><p>多加几句就行：</p>
-<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="attr">server-id</span> = <span class="number">2</span> <span class="comment"># 此参数一定不能和主配置文件中的相同</span></span><br><span class="line"><span class="attr">skip-slave-start</span>=<span class="literal">true</span>  <span class="comment"># 手动启动同步线程</span></span><br><span class="line"><span class="attr">read_only</span>=<span class="literal">ON</span>                     <span class="comment">#开启的只读模式</span></span><br><span class="line"><span class="attr">relay-log</span>=relay-bin	<span class="comment">#中继日志命名</span></span><br><span class="line"><span class="attr">relay-log-index</span>=relay-bin.index 中继日志索引文件</span><br><span class="line"></span><br><span class="line"><span class="comment"># 我们不只同步我们关注的业务库。</span></span><br><span class="line"><span class="attr">replicate_wild_ignore_table</span> =sys.%</span><br><span class="line"><span class="attr">replicate_wild_ignore_table</span> =mysql.%</span><br><span class="line"><span class="attr">replicate_wild_ignore_table</span> =performance_schema.%</span><br><span class="line"><span class="attr">replicate_wild_ignore_table</span> =information_schema.%</span><br></pre></td></tr></table></figure>
+<p>```ini<br>server-id = 2 # 此参数一定不能和主配置文件中的相同<br>skip-slave-start=true  # 手动启动同步线程<br>read_only=ON                     #开启的只读模式<br>relay-log=relay-bin    #中继日志命名<br>relay-log-index=relay-bin.index 中继日志索引文件</p>
+<h1 id="我们不只同步我们关注的业务库。"><a href="#我们不只同步我们关注的业务库。" class="headerlink" title="我们不只同步我们关注的业务库。"></a>我们不只同步我们关注的业务库。</h1><p>replicate_wild_ignore_table =sys.%<br>replicate_wild_ignore_table =mysql.%<br>replicate_wild_ignore_table =performance_schema.%<br>replicate_wild_ignore_table =information_schema.%<br>```<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
     </div>
 
     
@@ -317,7 +319,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/JavaScript/JavaScript%E7%9A%84%E5%8E%9F%E5%9E%8B.html" rel="next" title="JavaScript的原型继承与原型链">
+                <a href="/JavaScript/JavaScript的原型.html" rel="next" title="JavaScript的原型继承与原型链">
                   <i class="fa fa-chevron-left"></i> JavaScript的原型继承与原型链
                 </a>
             </div>
@@ -325,7 +327,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Cocos-Creator/Cocos%20Creator%E6%8E%A5%E5%85%A5%E6%94%AF%E4%BB%98%E5%AE%9E%E7%8E%B0.html" rel="prev" title="Cocos Creator接入支付实现">
+                <a href="/Cocos-Creator/Cocos Creator接入支付实现.html" rel="prev" title="Cocos Creator接入支付实现">
                   Cocos Creator接入支付实现 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -373,7 +375,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#行与语句"><span class="nav-number">1.</span> <span class="nav-text">行与语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置"><span class="nav-number">2.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Master"><span class="nav-number">2.1.</span> <span class="nav-text">Master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Slave"><span class="nav-number">2.2.</span> <span class="nav-text">Slave</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#行与语句"><span class="nav-number">1.</span> <span class="nav-text">行与语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#配置"><span class="nav-number">2.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Master"><span class="nav-number">2.1.</span> <span class="nav-text">Master</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Slave"><span class="nav-number">2.2.</span> <span class="nav-text">Slave</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#我们不只同步我们关注的业务库。"><span class="nav-number">3.</span> <span class="nav-text">我们不只同步我们关注的业务库。</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -387,20 +389,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -412,10 +414,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -444,10 +446,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -522,7 +524,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E4%BC%9A%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98.html",
+            url: "https://gowa.club/数据库/MySQL主从复制会出现的问题.html",
             identifier: "数据库/MySQL主从复制会出现的问题.html",
             title: "MySQL主从复制会出现的问题"
           }

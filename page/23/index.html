@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -49,10 +49,11 @@
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="退思园">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;page&#x2F;23&#x2F;index.html">
+<meta property="og:url" content="https://gowa.club/page/23/index.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="退思园">
 
 <link rel="canonical" href="https://gowa.club/page/23/">
 
@@ -224,7 +225,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/rsync%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/LVM的介绍及使用.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -238,7 +239,111 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Linux-Unix/rsync%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5.html" class="post-title-link" itemprop="url">rsync进行数据同步</a>
+            <a href="/Linux-Unix/LVM的介绍及使用.html" class="post-title-link" itemprop="url">LVM的介绍及使用</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-03-14 07:28:23" itemprop="dateCreated datePublished" datetime="2018-03-14T07:28:23+08:00">2018-03-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/LVM的介绍及使用.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/LVM的介绍及使用.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>LVM是Linux内核中的一个 逻辑卷组管理工具；其管理磁盘驱动器或类似的块存储设备。其利用了内核的 <code>device-mapper</code> 特性来给系统提供独立于底层磁盘的分区。使用LVM，抽象了你的存储然后拥有的是<em>虚拟分区</em>，这使 <em>扩展/收缩</em> 更加容易。</p>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><ul>
+<li><p>物理卷（PV/Physical volume）<br>可在其上建立卷组的分区或硬盘。每个PV都有一个特殊的头部，并且被分隔成PE。把PV想象成用来建立硬盘驱动的巨大块。</p>
+</li>
+<li><p>卷组（VG/Volume group）<br>一组用来当作存储卷的PV（像一个硬盘一样提供服务）。其包含LV。可以把vg想象成硬盘驱动器。</p>
+</li>
+<li>逻辑卷（LV、Logical volume）<br>存在于卷组内的<code>虚拟/逻辑 分区</code>，由PE组成。把PV想象成常规分区。</li>
+<li>物理扩展（PE、Physical extend）<br>PV中的最小单位，可以被分配给LV（默认是 4MB）。PE是硬盘的一部分，然后可以被分配给任何分区。</li>
+</ul>
+<p>例子<br><img src="/res/Lvm-1.svg" alt="Various elements of the LVM"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Physical disks</span><br><span class="line">                </span><br><span class="line">  Disk1 (/dev/sda):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Partition1 50 GiB (Physical volume) |Partition2 80 GiB (Physical volume)     |</span><br><span class="line">    |/dev/sda1                           |/dev/sda2                               |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |</span><br><span class="line">                                  </span><br><span class="line">  Disk2 (/dev/sdb):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Partition1 120 GiB (Physical volume)                 |</span><br><span class="line">    |/dev/sdb1                                            |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LVM logical volumes</span><br><span class="line"></span><br><span class="line">  Volume Group1 (/dev/MyStorage/ = /dev/sda1 + /dev/sda2 + /dev/sdb1):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Logical volume1 15 GiB  |Logical volume2 35 GiB      |Logical volume3 200 GiB              |</span><br><span class="line">    |/dev/MyStorage/rootvol  |/dev/MyStorage/homevol      |/dev/MyStorage/mediavol              |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|</span><br><span class="line">```   </span><br><span class="line"> </span><br><span class="line">![nner workings of the version 1 of LVM. In this diagram, PE stands for a Physical Extent.](/res/500px-LVM1.svg.png)</span><br><span class="line"></span><br><span class="line"># LV类型</span><br><span class="line">除了简单的LV外，LVM支持 *snapshots（快照）、LV缓存（logical volume caching）、预分配的LV、RAID*，</span><br><span class="line"></span><br><span class="line">## Snapshots（快照）</span><br><span class="line">LVM允许你对系统以一个更效率的方式做快照。其利用了一种叫做 **COW（copy-on-write）**技术。初始建立的快照只是简单的包含对真实数据inodes的 **硬链接**。因此，如果数据一直没有改变，快照几乎只是包含了Inode的指针，而不是数据本身。当修改一个快照指向的文件或者目录，LVM会自动克隆被快照引用老的数据。所以，可以使用35GB来快照一个系统，当预计修改少于2GB的时候，可以只留下2G的空闲空间（在原始和快照分区上都要）。想要创建快照，必须在 VG内有未分配的空间。快照也会像其他卷一样消耗VG的空间。因此，如果想要使用快照来备份 root 分区，那么不要把VG的空间全部分配给 root LV。</span><br><span class="line"></span><br><span class="line">### 配置</span><br><span class="line">如此简单的就可以建立一个 快照LV：</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line">lvcreate --size 100M --snapshot --name snap01 /dev/mapper/vg0-vg</span><br></pre></td></tr></table></figure>
+<p>上面建立这个快照，在快照卷充满以前我们只能修改100M的数据。</p>
+<p>当 <em>snap01</em> 建立后就可以把 <em>pv</em> 这个LV恢复到之前的状态：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lvconvert --merge /dev/mapper/vg0-snap01</span><br></pre></td></tr></table></figure>
+<p>如果原始的LV是活跃的，合并会在下一次重启时发生。</p>
+<p>合并后 快照不会继续存在。</p>
+<p>可以建立多个快照，然后每个都可以任意合并到原始的LV。</p>
+<p>快照可以挂载或以 <code>dd, tar</code> 命令备份。以 <code>dd</code> 备份的文件尺寸将会是 快照卷内存在的数据尺寸。想要恢复的时候，建立一个快照，挂载，接着把备份的文件解压过去。最后，和原始的LV合并。</p>
+<p>快照的主要用途是用来提供对文件系统的冷备份。</p>
+<h1 id="简单命令"><a href="#简单命令" class="headerlink" title="简单命令"></a>简单命令</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">lvmdiskscan  <span class="comment"># list all your devices capable of being used as a physical volume</span></span><br><span class="line">pvcreate DEVICE <span class="comment"># Create a physical volume on them</span></span><br><span class="line">pvcreate /dev/sda2 <span class="comment"># </span></span><br><span class="line">pvdisplay <span class="comment"># track created physical volumes</span></span><br><span class="line"></span><br><span class="line">vgcreate VolGroup00 /dev/sda2 <span class="comment"># create vg on pvs</span></span><br><span class="line">vgextend VolGroup00 /dev/sdb1 <span class="comment"># add vg /dev/sdb1 to vg VolGroup00</span></span><br><span class="line">vgdisplay <span class="comment"># track vg</span></span><br><span class="line"></span><br><span class="line">vgcreate VolGroup00 /</span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/rsync进行数据同步.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Linux-Unix/rsync进行数据同步.html" class="post-title-link" itemprop="url">rsync进行数据同步</a>
         </h1>
 
         <div class="post-meta">
@@ -271,7 +376,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/rsync%E8%BF%9B%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/rsync进行数据同步.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/rsync进行数据同步.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -310,11 +415,14 @@
 </blockquote>
 <h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>可以以类似 rcp 的方式使用 rsync，必须指定源和目标，其中一个可能会是远程主机。</p>
 <p>也许最好的方式是以实际的例子进行展示：</p>
-<pre><code>rsync -t *.c foo:src/</code></pre><p>这将会传输任何匹配 <code>*.c</code> 格式的文件到机器foo上的 src 目录内。如果foo机器上有些文件已经存在，那么rsync会使用远程更新协议来发送不同的部分。</p>
-<pre><code>rsync -avz foo:src/bar /data/tmp</code></pre><p>这会递归将远程foo机器上，src/bar 目录 传输到 /data/tmp/bar。文件以<code>archive</code>模式传输，这能确保 符号链接，设备文件，属性，权限，所有信息都被完整传输。同时，使用压缩可以减少传输的数据量。</p>
-<pre><code>rsync -avz foo:src/bar/ /data/tmp</code></pre><p>源后拖尾的 <code>/</code> 改变了行为，将不会在目标上建立一个目录。</p>
+<pre><code>rsync -t *.c foo:src/
+</code></pre><p>这将会传输任何匹配 <code>*.c</code> 格式的文件到机器foo上的 src 目录内。如果foo机器上有些文件已经存在，那么rsync会使用远程更新协议来发送不同的部分。</p>
+<pre><code>rsync -avz foo:src/bar /data/tmp
+</code></pre><p>这会递归将远程foo机器上，src/bar 目录 传输到 /data/tmp/bar。文件以<code>archive</code>模式传输，这能确保 符号链接，设备文件，属性，权限，所有信息都被完整传输。同时，使用压缩可以减少传输的数据量。</p>
+<pre><code>rsync -avz foo:src/bar/ /data/tmp
+</code></pre><p>源后拖尾的 <code>/</code> 改变了行为，将不会在目标上建立一个目录。</p>
 <h1 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Usage: rsync [OPTION]... SRC [SRC]... DEST</span><br><span class="line">  or   rsync [OPTION]... SRC [SRC]... [USER@]HOST:DEST</span><br><span class="line">  or   rsync [OPTION]... SRC [SRC]... [USER@]HOST::DEST</span><br><span class="line">  or   rsync [OPTION]... SRC [SRC]... rsync://[USER@]HOST[:PORT]/DEST</span><br><span class="line">  or   rsync [OPTION]... [USER@]HOST:SRC [DEST]</span><br><span class="line">  or   rsync [OPTION]... [USER@]HOST::SRC [DEST]</span><br><span class="line">  or   rsync [OPTION]... rsync://[USER@]HOST[:PORT]/SRC [DEST]</span><br><span class="line">The &apos;:&apos; usages connect via remote shell, while &apos;::&apos; &amp; &apos;rsync://&apos; usages connect</span><br><span class="line">to an rsync daemon, and require SRC or DEST to start with a module name.</span><br><span class="line"></span><br><span class="line">Options</span><br><span class="line"> -v, --verbose               increase verbosity</span><br><span class="line"> -q, --quiet                 suppress non-error messages</span><br><span class="line">     --no-motd               suppress daemon-mode MOTD (see manpage caveat)</span><br><span class="line"> -c, --checksum              skip based on checksum, not mod-time &amp; size</span><br><span class="line"> -a, --archive               archive mode; same as -rlptgoD (no -H)</span><br><span class="line">     --no-OPTION             turn off an implied OPTION (e.g. --no-D)</span><br><span class="line"> -r, --recursive             recurse into directories</span><br><span class="line"> -R, --relative              use relative path names</span><br><span class="line">     --no-implied-dirs       don&apos;t send implied dirs with --relative</span><br><span class="line"> -b, --backup                make backups (see --suffix &amp; --backup-dir)</span><br><span class="line">     --backup-dir=DIR        make backups into hierarchy based in DIR</span><br><span class="line">     --suffix=SUFFIX         set backup suffix (default ~ w/o --backup-dir)</span><br><span class="line"> -u, --update                skip files that are newer on the receiver</span><br><span class="line">     --inplace               update destination files in-place (SEE MAN PAGE)</span><br><span class="line">     --append                append data onto shorter files</span><br><span class="line"> -d, --dirs                  transfer directories without recursing</span><br><span class="line"> -l, --links                 copy symlinks as symlinks</span><br><span class="line"> -L, --copy-links            transform symlink into referent file/dir</span><br><span class="line">     --copy-unsafe-links     only &quot;unsafe&quot; symlinks are transformed</span><br><span class="line">     --safe-links            ignore symlinks that point outside the source tree</span><br><span class="line"> -k, --copy-dirlinks         transform symlink to a dir into referent dir</span><br><span class="line"> -K, --keep-dirlinks         treat symlinked dir on receiver as dir</span><br><span class="line"> -H, --hard-links            preserve hard links</span><br><span class="line"> -p, --perms                 preserve permissions</span><br><span class="line">     --executability         preserve the file&apos;s executability</span><br><span class="line">     --chmod=CHMOD           affect file and/or directory permissions</span><br><span class="line"> -o, --owner                 preserve owner (super-user only)</span><br><span class="line"> -g, --group                 preserve group</span><br><span class="line">     --devices               preserve device files (super-user only)</span><br><span class="line">     --specials              preserve special files</span><br><span class="line"> -D                          same as --devices --specials</span><br><span class="line"> -t, --times                 preserve times</span><br><span class="line"> -O, --omit-dir-times        omit directories when preserving times</span><br><span class="line">     --super                 receiver attempts super-user activities</span><br><span class="line"> -S, --sparse                handle sparse files efficiently</span><br><span class="line"> -n, --dry-run               show what would have been transferred</span><br><span class="line"> -W, --whole-file            copy files whole (without rsync algorithm)</span><br><span class="line"> -x, --one-file-system       don&apos;t cross filesystem boundaries</span><br><span class="line"> -B, --block-size=SIZE       force a fixed checksum block-size</span><br><span class="line"> -e, --rsh=COMMAND           specify the remote shell to use</span><br><span class="line">     --rsync-path=PROGRAM    specify the rsync to run on the remote machine</span><br><span class="line">     --existing              skip creating new files on receiver</span><br><span class="line">     --ignore-existing       skip updating files that already exist on receiver</span><br><span class="line">     --remove-source-files   sender removes synchronized files (non-dirs)</span><br><span class="line">     --del                   an alias for --delete-during</span><br><span class="line">     --delete                delete extraneous files from destination dirs</span><br><span class="line">     --delete-before         receiver deletes before transfer (default)</span><br><span class="line">     --delete-during         receiver deletes during transfer, not before</span><br><span class="line">     --delete-after          receiver deletes after transfer, not before</span><br><span class="line">     --delete-excluded       also delete excluded files from destination dirs</span><br><span class="line">     --ignore-errors         delete even if there are I/O errors</span><br><span class="line">     --force                 force deletion of directories even if not empty</span><br><span class="line">     --max-delete=NUM        don&apos;t delete more than NUM files</span><br><span class="line">     --max-size=SIZE         don&apos;t transfer any file larger than SIZE</span><br><span class="line">     --min-size=SIZE         don&apos;t transfer any file smaller than SIZE</span><br><span class="line">     --partial               keep partially transferred files</span><br><span class="line">     --partial-dir=DIR       put a partially transferred file into DIR</span><br><span class="line">     --delay-updates         put all updated files into place at transfer&apos;s end</span><br><span class="line"> -m, --prune-empty-dirs      prune empty directory chains from the file-list</span><br><span class="line">     --numeric-ids           don&apos;t map uid/gid values by user/group name</span><br><span class="line">     --timeout=TIME          set I/O timeout in seconds</span><br><span class="line"> -I, --ignore-times          don&apos;t skip files that match in size and mod-time</span><br><span class="line">     --size-only             skip files that match in size</span><br><span class="line">     --modify-window=NUM     compare mod-times with reduced accuracy</span><br><span class="line"> -T, --temp-dir=DIR          create temporary files in directory DIR</span><br><span class="line"> -y, --fuzzy                 find similar file for basis if no dest file</span><br><span class="line">     --compare-dest=DIR      also compare destination files relative to DIR</span><br><span class="line">     --copy-dest=DIR         ... and include copies of unchanged files</span><br><span class="line">     --link-dest=DIR         hardlink to files in DIR when unchanged</span><br><span class="line"> -z, --compress              compress file data during the transfer</span><br><span class="line">     --compress-level=NUM    explicitly set compression level</span><br><span class="line"> -C, --cvs-exclude           auto-ignore files the same way CVS does</span><br><span class="line"> -f, --filter=RULE           add a file-filtering RULE</span><br><span class="line"> -F                          same as --filter=&apos;dir-merge /.rsync-filter&apos;</span><br><span class="line">                             repeated: --filter=&apos;- .rsync-filter&apos;</span><br><span class="line">     --exclude=PATTERN       exclude files matching PATTERN</span><br><span class="line">     --exclude-from=FILE     read exclude patterns from FILE</span><br><span class="line">     --include=PATTERN       don&apos;t exclude files matching PATTERN</span><br><span class="line">     --include-from=FILE     read include patterns from FILE</span><br><span class="line">     --files-from=FILE       read list of source-file names from FILE</span><br><span class="line"> -0, --from0                 all *-from/filter files are delimited by 0s</span><br><span class="line">     --address=ADDRESS       bind address for outgoing socket to daemon</span><br><span class="line">     --port=PORT             specify double-colon alternate port number</span><br><span class="line">     --sockopts=OPTIONS      specify custom TCP options</span><br><span class="line">     --blocking-io           use blocking I/O for the remote shell</span><br><span class="line">     --stats                 give some file-transfer stats</span><br><span class="line"> -8, --8-bit-output          leave high-bit chars unescaped in output</span><br><span class="line"> -h, --human-readable        output numbers in a human-readable format</span><br><span class="line">     --progress              show progress during transfer</span><br><span class="line"> -P                          same as --partial --progress</span><br><span class="line"> -i, --itemize-changes       output a change-summary for all updates</span><br><span class="line">     --out-format=FORMAT     output updates using the specified FORMAT</span><br><span class="line">     --log-file=FILE         log what we&apos;re doing to the specified FILE</span><br><span class="line">     --log-file-format=FMT   log updates using the specified FMT</span><br><span class="line">     --password-file=FILE    read password from FILE</span><br><span class="line">     --list-only             list the files instead of copying them</span><br><span class="line">     --bwlimit=KBPS          limit I/O bandwidth; KBytes per second</span><br><span class="line">     --write-batch=FILE      write a batched update to FILE</span><br><span class="line">     --only-write-batch=FILE like --write-batch but w/o updating destination</span><br><span class="line">     --read-batch=FILE       read a batched update from FILE</span><br><span class="line">     --protocol=NUM          force an older protocol version to be used</span><br><span class="line"> -E, --extended-attributes   copy extended attributes</span><br><span class="line">     --cache                 disable fcntl(F_NOCACHE)</span><br><span class="line"> -4, --ipv4                  prefer IPv4</span><br><span class="line"> -6, --ipv6                  prefer IPv6</span><br><span class="line">     --version               print version number</span><br><span class="line">(-h) --help                  show this help (-h works with no other options)</span><br></pre></td></tr></table></figure>
-
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -334,7 +442,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%97%A5%E5%BF%97%E6%A0%BC%E5%BC%8F.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/MySQL二进制日志格式.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -348,7 +456,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%97%A5%E5%BF%97%E6%A0%BC%E5%BC%8F.html" class="post-title-link" itemprop="url">MySQL二进制日志格式</a>
+            <a href="/数据库/MySQL二进制日志格式.html" class="post-title-link" itemprop="url">MySQL二进制日志格式</a>
         </h1>
 
         <div class="post-meta">
@@ -366,7 +474,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -381,7 +489,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%97%A5%E5%BF%97%E6%A0%BC%E5%BC%8F.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/MySQL二进制日志格式.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/MySQL二进制日志格式.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -415,6 +523,7 @@
 <p>在MySQL5.5中，默认的二进制日志格式是 STATEMET。</p>
 <p>日志格式可以被存储引擎设置或限制。这用来避免在使用不同存储引擎的主从服务器在执行特定语句时的问题。</p>
 <p>在基于语句的复制中，<strong>在复制非确定性的语句时可能会出现问题</strong>。在确定一个语句使用基于语句的复制是否安全时，MySQL会确定能不能保证这个语句可以用基于语句的格式进行复制。如果不能保证，则会抛出警告。为了避免这个问题，可以采用基于行的复制。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -434,7 +543,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos2d-X/cocos2dx-lua%E4%B8%AD%E5%85%B3%E4%BA%8E%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8F%8A%E4%BD%BF%E7%94%A8.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -448,7 +557,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Cocos2d-X/cocos2dx-lua%E4%B8%AD%E5%85%B3%E4%BA%8E%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8F%8A%E4%BD%BF%E7%94%A8.html" class="post-title-link" itemprop="url">Cocos2d-X-lua中关于类的实现及使用</a>
+            <a href="/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html" class="post-title-link" itemprop="url">Cocos2d-X-lua中关于类的实现及使用</a>
         </h1>
 
         <div class="post-meta">
@@ -481,7 +590,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Cocos2d-X/cocos2dx-lua%E4%B8%AD%E5%85%B3%E4%BA%8E%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8F%8A%E4%BD%BF%E7%94%A8.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -500,7 +609,7 @@
           <p>Lua中，没有什么其他的数据对象，只有表。但是其提供的元表和元方法，让我们的程序有了更多的可能。另外，我们必须明白一点的就是，cocos2dx框架中，开启了一个Lua State，我们所有的脚本，逻辑都是在这里面执行，然后这个里面会调用一些 cocos2dx 导出给 lua 使用的接口，最终还是通过 c 代码来完成工作的。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Cocos2d-X/cocos2dx-lua%E4%B8%AD%E5%85%B3%E4%BA%8E%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8F%8A%E4%BD%BF%E7%94%A8.html#more" rel="contents">
+              <a class="btn" href="/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -524,7 +633,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos2d-X/cocos2dx-lua%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B.lua.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos2d-X/cocos2dx-lua的启动流程.lua.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -538,7 +647,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Cocos2d-X/cocos2dx-lua%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B.lua.html" class="post-title-link" itemprop="url">Cocos2d-X-lua的启动流程.lua</a>
+            <a href="/Cocos2d-X/cocos2dx-lua的启动流程.lua.html" class="post-title-link" itemprop="url">Cocos2d-X-lua的启动流程.lua</a>
         </h1>
 
         <div class="post-meta">
@@ -571,7 +680,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Cocos2d-X/cocos2dx-lua%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B.lua.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Cocos2d-X/cocos2dx-lua的启动流程.lua.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cocos2d-X/cocos2dx-lua的启动流程.lua.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -589,10 +698,11 @@
       
           <p>可能以前用的项目就是Lua，所以比较喜欢Lua。服务端也用skynet框架，都用Lua，能统一的话是最好的了。完全是个人爱好。但是有必要看一下，我对客户端是最不熟的了，图形这一块。</p>
 <h1 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h1><p>新建一个Lua项目后:</p>
-<pre><code>cocos new -l lua -p com.example.me -d game</code></pre><p>进入目录：</p>
-<pre><code>cd game/MyLuaGame/frameworks/rutime-src/Classes</code></pre><p><strong>AppDelegate.cpp</strong>是我们需要关注的文件。他干了一系列的事情：</p>
+<pre><code>cocos new -l lua -p com.example.me -d game
+</code></pre><p>进入目录：</p>
+<pre><code>cd game/MyLuaGame/frameworks/rutime-src/Classes
+</code></pre><p><strong>AppDelegate.cpp</strong>是我们需要关注的文件。他干了一系列的事情：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">bool</span> AppDelegate::applicationDidFinishLaunching()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// set default FPS</span></span><br><span class="line">    Director::getInstance()-&gt;setAnimationInterval(<span class="number">1.0</span> / <span class="number">60.0f</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// register lua module</span></span><br><span class="line">    <span class="comment">// 注册 lua 模块</span></span><br><span class="line">    <span class="keyword">auto</span> engine = LuaEngine::getInstance();</span><br><span class="line">    ScriptEngineManager::getInstance()-&gt;setScriptEngine(engine);</span><br><span class="line">    lua_State* L = engine-&gt;getLuaStack()-&gt;getLuaState();</span><br><span class="line">    lua_module_register(L);</span><br><span class="line"></span><br><span class="line">    register_all_packages();</span><br><span class="line"></span><br><span class="line">    LuaStack* <span class="built_in">stack</span> = engine-&gt;getLuaStack();</span><br><span class="line">    <span class="built_in">stack</span>-&gt;setXXTEAKeyAndSign(<span class="string">"2dxLua"</span>, <span class="built_in">strlen</span>(<span class="string">"2dxLua"</span>), <span class="string">"XXTEA"</span>, <span class="built_in">strlen</span>(<span class="string">"XXTEA"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//register custom function</span></span><br><span class="line">    <span class="comment">//LuaStack* stack = engine-&gt;getLuaStack();</span></span><br><span class="line">    <span class="comment">//register_custom_function(stack-&gt;getLuaState());</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 添加的这两个路径，我们其实都不用手动在项目内添加了</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> CC_64BITS</span></span><br><span class="line">    FileUtils::getInstance()-&gt;addSearchPath(<span class="string">"src/64bit"</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    FileUtils::getInstance()-&gt;addSearchPath(<span class="string">"src"</span>);</span><br><span class="line">    FileUtils::getInstance()-&gt;addSearchPath(<span class="string">"res"</span>);</span><br><span class="line">    <span class="keyword">if</span> (engine-&gt;executeScriptFile(<span class="string">"main.lua"</span>))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>这个类其实就干了两个事情：</p>
 <ul>
 <li>开个Lua State 把模块都注册进去</li>
@@ -603,13 +713,10 @@
 <p>这样的代码已经不需要了。程序已经自动注册了这两个路径了。程序会自动在这两个地方寻找资源。</p>
 <h1 id="模块及函数的注册到State"><a href="#模块及函数的注册到State" class="headerlink" title="模块及函数的注册到State"></a>模块及函数的注册到State</h1><h2 id="lua-module-register-L"><a href="#lua-module-register-L" class="headerlink" title="lua_module_register(L);"></a>lua_module_register(L);</h2><p>这玩意会在我们的Lua State内注册一系列的模块。我们取个例子来看一下，比如第一个模块。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// frameworks/cocos2d-x/cocos/scripting/lua-bindings/manual/lua_module_register.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lua_module_register</span><span class="params">(lua_State* L)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Don't change the module register order unless you know what your are doing</span></span><br><span class="line">    register_cocosdenshion_module(L);</span><br><span class="line">    register_network_module(L);</span><br><span class="line">    register_cocosbuilder_module(L);</span><br><span class="line">    register_cocostudio_module(L);</span><br><span class="line">    register_ui_module(L);</span><br><span class="line">    register_extension_module(L);</span><br><span class="line">    register_spine_module(L);</span><br><span class="line">    register_cocos3d_module(L);</span><br><span class="line">    register_audioengine_module(L);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> CC_USE_3D_PHYSICS &amp;&amp; CC_ENABLE_BULLET_INTEGRATION</span></span><br><span class="line">    register_physics3d_module(L);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> CC_USE_NAVMESH</span></span><br><span class="line">    register_navmesh_module(L);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="register-cocosdenshion-module"><a href="#register-cocosdenshion-module" class="headerlink" title="register_cocosdenshion_module"></a>register_cocosdenshion_module</h2><p>这个函数干的活比较简单，就是获取一下Lua的全局环境，然后把所有的模块内容注册进去。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//scripting/lua-bindings/manual/cocosdenshion/lua_cocos2dx_cocosdenshion_manual.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span>  <span class="title">register_cocosdenshion_module</span><span class="params">(lua_State* L)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    lua_getglobal(L, <span class="string">"_G"</span>);</span><br><span class="line">    <span class="keyword">if</span> (lua_istable(L,<span class="number">-1</span>))<span class="comment">//stack:...,_G,</span></span><br><span class="line">    &#123;</span><br><span class="line">        register_all_cocos2dx_cocosdenshion(L);</span><br><span class="line">    &#125;</span><br><span class="line">    lua_pop(L, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>真正干活的，还是下面一个函数。</p>
-<h2 id="register-all-cocos2dx-cocosdenshion"><a href="#register-all-cocos2dx-cocosdenshion" class="headerlink" title="register_all_cocos2dx_cocosdenshion"></a>register_all_cocos2dx_cocosdenshion</h2><p>tolua 没有用过，但是一下他们的代码就知道了。很明显，是用了<code>open, module, beginmodule, endmodule</code>来干活的。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">TOLUA_API <span class="keyword">int</span> <span class="title">register_all_cocos2dx_cocosdenshion</span><span class="params">(lua_State* tolua_S)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        tolua_open(tolua_S);</span><br><span class="line"></span><br><span class="line">        tolua_module(tolua_S,<span class="string">"cc"</span>,<span class="number">0</span>);</span><br><span class="line">        tolua_beginmodule(tolua_S,<span class="string">"cc"</span>);</span><br><span class="line"></span><br><span class="line">        lua_register_cocos2dx_cocosdenshion_SimpleAudioEngine(tolua_S);</span><br><span class="line"></span><br><span class="line">        tolua_endmodule(tolua_S);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<h2 id="register-all-cocos2dx-cocosdenshion"><a href="#register-all-cocos2dx-cocosdenshion" class="headerlink" title="register_all_cocos2dx_cocosdenshion"></a>register_all_cocos2dx_cocosdenshion</h2><p>tolua 没有用过，但是一下他们的代码就知道了。很明显，是用了<code>open, module, beginmodule, endmodule</code>来干活的。<br><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">TOLUA_API <span class="keyword">int</span> <span class="title">register_all_cocos2dx_cocosdenshion</span><span class="params">(lua_State* tolua_S)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        tolua_open(tolua_S);</span><br><span class="line"></span><br><span class="line">        tolua_module(tolua_S,<span class="string">"cc"</span>,<span class="number">0</span>);</span><br><span class="line">        tolua_beginmodule(tolua_S,<span class="string">"cc"</span>);</span><br><span class="line"></span><br><span class="line">        lua_register_cocos2dx_cocosdenshion_SimpleAudioEngine(tolua_S);</span><br><span class="line"></span><br><span class="line">        tolua_endmodule(tolua_S);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h3 id="小插曲"><a href="#小插曲" class="headerlink" title="小插曲"></a>小插曲</h3><p>我们先来看一下，Lua关于注册表的概念。</p>
 <blockquote>
 <p>Lua提供了应该注册表，这个表可以被任何C代码用来存储任何的Lua值。注册表总是位于伪索引 <strong>LUA_REISTRYINDEX</strong>上（并不在Lua State的真正的栈上）。任何C库都可以使用这个表来存储数据，但必须谨慎选择键，以避免出现冲突。典型滴，用一包含你库名的字符串作为键，或者是一个light userdata（C对象的指针），或者任何被自己代码创建的Lua对象。和变量名字一样，以一个下划线后跟大写字母的字符串是保留的。</p>
@@ -620,18 +727,15 @@
 <p>我们可以假设这个注册表刚开始的时候是这样的：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">t_reg = &#123;  [LUA_RIDX_MAINTHREAD] = value,</span><br><span class="line">			 [LUA_RIDX_GLOBALS] = <span class="built_in">_G</span>,</span><br><span class="line">			 &#125;</span><br></pre></td></tr></table></figure>
 <h3 id="lua-settable-lua-rawset"><a href="#lua-settable-lua-rawset" class="headerlink" title="lua_settable lua_rawset"></a>lua_settable lua_rawset</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">luasettable(L, index)</span><br><span class="line">luarawset(L, index)</span><br></pre></td></tr></table></figure>
-
 <p>这两个函数和代码 <code>t[k] = v</code>是一样的，<em>t</em> 就是位于 <em>index</em> 处的值，<em>v</em> 是栈的顶部的值， <em>k</em> 是在栈顶部下的值。</p>
 <p>这两个函数会将 键 和 值都弹出。</p>
 <p>不同的是，<code>luarawset</code> 并不会触发事件 <strong>__newindex</strong> 的元方法。</p>
 <h3 id="lua-gettable-lua-rawget"><a href="#lua-gettable-lua-rawget" class="headerlink" title="lua_gettable lua_rawget"></a>lua_gettable lua_rawget</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line">lua_gettable(L, index)</span><br><span class="line">lua_rawget(L, index)</span><br></pre></td></tr></table></figure>
-
-<p>把 <em>t[k]<em>的值压入栈，</em>t</em> 是 <em>index</em> 指定的值，<em>k</em> 是栈顶部的值。</p>
+<p>把 <em>t[k]</em>的值压入栈，<em>t</em> 是 <em>index</em> 指定的值，<em>k</em> 是栈顶部的值。</p>
 <p>这两个函数都会把键弹出，然后把结果值压入那个位置。<code>lua_rawget</code>不会触发 <strong>__index</strong> 事件的元方法。</p>
 <p>返回值是是结果值的类型。</p>
 <h2 id="tolua"><a href="#tolua" class="headerlink" title="tolua"></a>tolua</h2><h3 id="tolua-open"><a href="#tolua-open" class="headerlink" title="tolua_open"></a>tolua_open</h3><p>首先调用的是 <code>tolua_open</code> 函数：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// frameworks/cocos2d-x/external/lua/tolua/tolua_map.c</span></span><br><span class="line"></span><br><span class="line"><span class="function">TOLUA_API <span class="keyword">void</span> <span class="title">tolua_open</span> <span class="params">(lua_State* L)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> top = lua_gettop(L);</span><br><span class="line">    <span class="comment">// 检查 tolua 是否打开。用 t["tolua_opened"] = true | false 来判断</span></span><br><span class="line">    lua_pushstring(L,<span class="string">"tolua_opened"</span>);</span><br><span class="line">    lua_rawget(L,LUA_REGISTRYINDEX);</span><br><span class="line">    <span class="keyword">if</span> (!lua_isboolean(L,<span class="number">-1</span>))</span><br><span class="line">    &#123;</span><br><span class="line">    	<span class="comment">// 如果没打开就打开它</span></span><br><span class="line">    	<span class="comment">// t_reg["tolua_opened"] = 1</span></span><br><span class="line">        lua_pushstring(L,<span class="string">"tolua_opened"</span>);</span><br><span class="line">        lua_pushboolean(L,<span class="number">1</span>);</span><br><span class="line">        lua_rawset(L,LUA_REGISTRYINDEX);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// create value root table</span></span><br><span class="line">        <span class="comment">// 建立根表</span></span><br><span class="line">        <span class="comment">// t_reg["tolua_value_root"] = &#123;&#125;</span></span><br><span class="line">        lua_pushstring(L, TOLUA_VALUE_ROOT);</span><br><span class="line">        lua_newtable(L);</span><br><span class="line">        lua_rawset(L, LUA_REGISTRYINDEX);</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> LUA_VERSION_NUM <span class="comment">/* only prior to lua 5.1 */</span></span></span><br><span class="line">        <span class="comment">/* create peer object table */</span></span><br><span class="line">        lua_pushstring(L, <span class="string">"tolua_peers"</span>);</span><br><span class="line">        lua_newtable(L);</span><br><span class="line">        <span class="comment">/* make weak key metatable for peers indexed by userdata object */</span></span><br><span class="line">        lua_newtable(L);</span><br><span class="line">        lua_pushliteral(L, <span class="string">"__mode"</span>);</span><br><span class="line">        lua_pushliteral(L, <span class="string">"k"</span>);</span><br><span class="line">        lua_rawset(L, <span class="number">-3</span>);                <span class="comment">/* stack: string peers mt */</span></span><br><span class="line">        lua_setmetatable(L, <span class="number">-2</span>);   <span class="comment">/* stack: string peers */</span></span><br><span class="line">        lua_rawset(L,LUA_REGISTRYINDEX);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">        <span class="comment">/* create object ptr -&gt; udata mapping table */</span></span><br><span class="line">        lua_pushstring(L,<span class="string">"tolua_ubox"</span>);</span><br><span class="line">        lua_newtable(L);</span><br><span class="line">        <span class="comment">/* make weak value metatable for ubox table to allow userdata to be</span></span><br><span class="line"><span class="comment">           garbage-collected */</span></span><br><span class="line">        lua_newtable(L);</span><br><span class="line">        lua_pushliteral(L, <span class="string">"__mode"</span>);</span><br><span class="line">        lua_pushliteral(L, <span class="string">"v"</span>);</span><br><span class="line">        lua_rawset(L, <span class="number">-3</span>);               <span class="comment">/* stack: string ubox mt */</span></span><br><span class="line">        lua_setmetatable(L, <span class="number">-2</span>);  <span class="comment">/* stack: string ubox */</span></span><br><span class="line">        lua_rawset(L,LUA_REGISTRYINDEX);</span><br><span class="line"></span><br><span class="line"><span class="comment">//        /* create object ptr -&gt; class type mapping table */</span></span><br><span class="line"><span class="comment">//        lua_pushstring(L, "tolua_ptr2type");</span></span><br><span class="line"><span class="comment">//        lua_newtable(L);</span></span><br><span class="line"><span class="comment">//        lua_rawset(L, LUA_REGISTRYINDEX);</span></span><br><span class="line"></span><br><span class="line">        lua_pushstring(L,<span class="string">"tolua_super"</span>);</span><br><span class="line">        lua_newtable(L);</span><br><span class="line">        lua_rawset(L,LUA_REGISTRYINDEX);</span><br><span class="line">        lua_pushstring(L,<span class="string">"tolua_gc"</span>);</span><br><span class="line">        lua_newtable(L);</span><br><span class="line">        lua_rawset(L,LUA_REGISTRYINDEX);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* create gc_event closure */</span></span><br><span class="line">        lua_pushstring(L, <span class="string">"tolua_gc_event"</span>);</span><br><span class="line">        lua_pushstring(L, <span class="string">"tolua_gc"</span>);</span><br><span class="line">        lua_rawget(L, LUA_REGISTRYINDEX);</span><br><span class="line">        lua_pushstring(L, <span class="string">"tolua_super"</span>);</span><br><span class="line">        lua_rawget(L, LUA_REGISTRYINDEX);</span><br><span class="line">        lua_pushcclosure(L, class_gc_event, <span class="number">2</span>);</span><br><span class="line">        lua_rawset(L, LUA_REGISTRYINDEX);</span><br><span class="line"></span><br><span class="line">        tolua_newmetatable(L,<span class="string">"tolua_commonclass"</span>);</span><br><span class="line"></span><br><span class="line">        tolua_module(L,<span class="literal">NULL</span>,<span class="number">0</span>);</span><br><span class="line">        tolua_beginmodule(L,<span class="literal">NULL</span>);</span><br><span class="line">        tolua_module(L,<span class="string">"tolua"</span>,<span class="number">0</span>);</span><br><span class="line">        tolua_beginmodule(L,<span class="string">"tolua"</span>);</span><br><span class="line">        tolua_function(L,<span class="string">"type"</span>,tolua_bnd_type);</span><br><span class="line">        tolua_function(L,<span class="string">"takeownership"</span>,tolua_bnd_takeownership);</span><br><span class="line">        tolua_function(L,<span class="string">"releaseownership"</span>,tolua_bnd_releaseownership);</span><br><span class="line">        tolua_function(L,<span class="string">"cast"</span>,tolua_bnd_cast);</span><br><span class="line">        tolua_function(L,<span class="string">"isnull"</span>,tolua_bnd_isnulluserdata);</span><br><span class="line">        tolua_function(L,<span class="string">"inherit"</span>, tolua_bnd_inherit);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> LUA_VERSION_NUM <span class="comment">/* lua 5.1 */</span></span></span><br><span class="line">        tolua_function(L, <span class="string">"setpeer"</span>, tolua_bnd_setpeer);</span><br><span class="line">        tolua_function(L, <span class="string">"getpeer"</span>, tolua_bnd_getpeer);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">        tolua_function(L,<span class="string">"getcfunction"</span>, tolua_bnd_getcfunction);</span><br><span class="line">        tolua_function(L,<span class="string">"iskindof"</span>, tolua_bnd_iskindof);</span><br><span class="line"></span><br><span class="line">        tolua_endmodule(L);</span><br><span class="line">        tolua_endmodule(L);</span><br><span class="line">    &#125;</span><br><span class="line">    lua_settop(L,top);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>这些都不用多说了，反正就是在 注册表内，添加两很多元素。</p>
 <h3 id="tolua-module"><a href="#tolua-module" class="headerlink" title="tolua_module"></a>tolua_module</h3><p>这个函数会创建一个模块。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// frameworks/cocos2d-x/external/lua/tolua/tolua_map.c</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function">TOLUA_API <span class="keyword">void</span> <span class="title">tolua_module</span> <span class="params">(lua_State* L, <span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">int</span> hasvar)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (name)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/* tolua module */</span></span><br><span class="line">        lua_pushstring(L,name);</span><br><span class="line">        lua_rawget(L,<span class="number">-2</span>);</span><br><span class="line">        <span class="keyword">if</span> (!lua_istable(L,<span class="number">-1</span>))  <span class="comment">/* check if module already exists */</span></span><br><span class="line">        &#123;</span><br><span class="line">            lua_pop(L,<span class="number">1</span>);</span><br><span class="line">            lua_newtable(L);</span><br><span class="line">            lua_pushstring(L,name);</span><br><span class="line">            lua_pushvalue(L,<span class="number">-2</span>);</span><br><span class="line">            lua_rawset(L,<span class="number">-4</span>);       <span class="comment">/* assing module into module */</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">/* global table */</span></span><br><span class="line">        lua_pushvalue(L,LUA_GLOBALSINDEX);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (hasvar)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (!tolua_ismodulemetatable(L))  <span class="comment">/* check if it already has a module metatable */</span></span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">/* create metatable to get/set C/C++ variable */</span></span><br><span class="line">            lua_newtable(L);</span><br><span class="line">            tolua_moduleevents(L);</span><br><span class="line">            <span class="keyword">if</span> (lua_getmetatable(L,<span class="number">-2</span>))</span><br><span class="line">                lua_setmetatable(L,<span class="number">-2</span>);  <span class="comment">/* set old metatable as metatable of metatable */</span></span><br><span class="line">            lua_setmetatable(L,<span class="number">-2</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    lua_pop(L,<span class="number">1</span>);               <span class="comment">/* pop module */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -645,13 +749,12 @@
 <p>不信你看一下，项目中 src 目录下的 cocos中。全是这样干的。</p>
 <p>在我们所有的项目中，都有：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span> <span class="string">"config"</span></span><br><span class="line"><span class="built_in">require</span> <span class="string">"cocos.init"</span></span><br></pre></td></tr></table></figure>
-
 <p>其实就是加载我们的配置文件，然后再加载 cocos Lua封装的初始化文件。打开 <em>cocos/init.lua</em> 就可以看到，其一一个个个 require 语句，用来加载封装成Lua的各个模块。</p>
 <p>我们关注有一句：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- src/cocos/init.lua</span></span><br><span class="line"><span class="keyword">if</span> CC_USE_FRAMEWORK <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">require</span> <span class="string">"cocos.framework.init"</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>其实这一段，是用了更高层的封装，更加方便使用，其实应该就是 Quick 干的事情。</p>
 <p>如果我们在我们的 <em>config.lua</em> 中定义了这个变量，那么，就可以使用那些封装了。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -671,7 +774,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.16Lua%E7%9A%84%E7%BC%96%E8%AF%91%E3%80%81%E6%89%A7%E8%A1%8C%E5%92%8C%E9%94%99%E8%AF%AF.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.16Lua的编译、执行和错误.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -685,7 +788,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Lua/PIL.16Lua%E7%9A%84%E7%BC%96%E8%AF%91%E3%80%81%E6%89%A7%E8%A1%8C%E5%92%8C%E9%94%99%E8%AF%AF.html" class="post-title-link" itemprop="url">PIL.16Lua的编译、执行</a>
+            <a href="/Lua/PIL.16Lua的编译、执行和错误.html" class="post-title-link" itemprop="url">PIL.16Lua的编译、执行</a>
         </h1>
 
         <div class="post-meta">
@@ -718,7 +821,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/PIL.16Lua%E7%9A%84%E7%BC%96%E8%AF%91%E3%80%81%E6%89%A7%E8%A1%8C%E5%92%8C%E9%94%99%E8%AF%AF.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/PIL.16Lua的编译、执行和错误.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/PIL.16Lua的编译、执行和错误.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -734,10 +837,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>尽管我们说Lua是一个解释型的语言，但Lua总是在运行代码前会编译成一种中间格式。（这并不重要，很多解释型也会这样做）编译阶段的存在对于解释型语言听起来有点不太对。然而，解释型语言的重要特性不是说他们不会被编译，而是说其轻易执行在空中生成的代码。我们可以说，一个<code>dofile</code>这样的函数存在给为了我们把Lua称为解释型语言的资格。</p>
+          <p>尽管我们说Lua是一个解释型的语言，但Lua总是在运行代码前会编译成一种中间格式。（这并不重要，很多解释型也会这样做）编译阶段的存在对于解释型语言听起来有点不太对。然而，解释型语言的重要特性不是说他们不会被编译，而是说其轻易执行在空中生成的代码。我们可以说，一个<code>dofile</code>这样的函数存在给为了我们把Lua称为解释型语言的资格。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Lua/PIL.16Lua%E7%9A%84%E7%BC%96%E8%AF%91%E3%80%81%E6%89%A7%E8%A1%8C%E5%92%8C%E9%94%99%E8%AF%AF.html#more" rel="contents">
+              <a class="btn" href="/Lua/PIL.16Lua的编译、执行和错误.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -761,7 +864,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.17Lua%E4%B8%AD%E7%9A%84%E6%A8%A1%E5%9D%97%E4%B8%8E%E5%8C%85.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.17Lua中的模块与包.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -775,7 +878,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Lua/PIL.17Lua%E4%B8%AD%E7%9A%84%E6%A8%A1%E5%9D%97%E4%B8%8E%E5%8C%85.html" class="post-title-link" itemprop="url">PIL.17Lua中的模块与包</a>
+            <a href="/Lua/PIL.17Lua中的模块与包.html" class="post-title-link" itemprop="url">PIL.17Lua中的模块与包</a>
         </h1>
 
         <div class="post-meta">
@@ -808,7 +911,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/PIL.17Lua%E4%B8%AD%E7%9A%84%E6%A8%A1%E5%9D%97%E4%B8%8E%E5%8C%85.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/PIL.17Lua中的模块与包.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/PIL.17Lua中的模块与包.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -827,7 +930,7 @@
           <p>通常，Lua并不设置什么规则，而是提供足够的方法给开发者来实现最适合他们自己的规则。然而，这些方法对于模块来说工作得并不好。模块系统的一个重要目的就是允许不同的团队共享代码。通用规则的缺乏阻碍了这个共享的实现。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Lua/PIL.17Lua%E4%B8%AD%E7%9A%84%E6%A8%A1%E5%9D%97%E4%B8%8E%E5%8C%85.html#more" rel="contents">
+              <a class="btn" href="/Lua/PIL.17Lua中的模块与包.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -851,7 +954,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.22-Lua%E4%B8%AD%E7%9A%84%E7%8E%AF%E5%A2%83.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.22-Lua中的环境.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -865,7 +968,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Lua/PIL.22-Lua%E4%B8%AD%E7%9A%84%E7%8E%AF%E5%A2%83.html" class="post-title-link" itemprop="url">PIL.22-Lua中的环境</a>
+            <a href="/Lua/PIL.22-Lua中的环境.html" class="post-title-link" itemprop="url">PIL.22-Lua中的环境</a>
         </h1>
 
         <div class="post-meta">
@@ -898,7 +1001,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/PIL.22-Lua%E4%B8%AD%E7%9A%84%E7%8E%AF%E5%A2%83.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/PIL.22-Lua中的环境.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/PIL.22-Lua中的环境.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -914,10 +1017,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>在大多数编程语言中，全局变量是非常讨厌的。一方面，使用全局变量会导致复杂的代码，让程序中不相关的不相关的部分看起来纠缠在了一起。另一方面，谨慎的使用全局变量可以很好的表达一个程序中的全局部分；但是，全局常量是没有大的问题的，但是像Lua一样的动态语言没有办法来分别一个变量是不是常量。</p>
+          <p>在大多数编程语言中，全局变量是非常讨厌的。一方面，使用全局变量会导致复杂的代码，让程序中不相关的不相关的部分看起来纠缠在了一起。另一方面，谨慎的使用全局变量可以很好的表达一个程序中的全局部分；但是，全局常量是没有大的问题的，但是像Lua一样的动态语言没有办法来分别一个变量是不是常量。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Lua/PIL.22-Lua%E4%B8%AD%E7%9A%84%E7%8E%AF%E5%A2%83.html#more" rel="contents">
+              <a class="btn" href="/Lua/PIL.22-Lua中的环境.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -941,7 +1044,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/skynet%E4%B8%ADsproto%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/skynet中sproto使用示例.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -955,7 +1058,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Lua/skynet%E4%B8%ADsproto%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B.html" class="post-title-link" itemprop="url">skynet中sproto使用示例</a>
+            <a href="/Lua/skynet中sproto使用示例.html" class="post-title-link" itemprop="url">skynet中sproto使用示例</a>
         </h1>
 
         <div class="post-meta">
@@ -988,7 +1091,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/skynet%E4%B8%ADsproto%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/skynet中sproto使用示例.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/skynet中sproto使用示例.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -1004,10 +1107,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Sproto是一个用C编写的高效序列化库，主要是想用来做Lua绑定。类似Google的 protocol buffers，但是速度更快。其设计得非常简单。只支持Lua支持的几种数据类型，其可以很容易的绑定到其他动态语言，或者直接在C中使用。</p>
+          <p>Sproto是一个用C编写的高效序列化库，主要是想用来做Lua绑定。类似Google的 protocol buffers，但是速度更快。其设计得非常简单。只支持Lua支持的几种数据类型，其可以很容易的绑定到其他动态语言，或者直接在C中使用。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Lua/skynet%E4%B8%ADsproto%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B.html#more" rel="contents">
+              <a class="btn" href="/Lua/skynet中sproto使用示例.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1031,7 +1134,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/IO%E7%9A%84%E9%98%BB%E5%A1%9E%E4%B8%8E%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/IO的阻塞与多路复用.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1045,7 +1148,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Linux-Unix/IO%E7%9A%84%E9%98%BB%E5%A1%9E%E4%B8%8E%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.html" class="post-title-link" itemprop="url">IO的阻塞与多路复用</a>
+            <a href="/Linux-Unix/IO的阻塞与多路复用.html" class="post-title-link" itemprop="url">IO的阻塞与多路复用</a>
         </h1>
 
         <div class="post-meta">
@@ -1078,7 +1181,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/IO%E7%9A%84%E9%98%BB%E5%A1%9E%E4%B8%8E%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/IO的阻塞与多路复用.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/IO的阻塞与多路复用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -1094,100 +1197,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>对于大多数的编程场景来多，很多时候的任务都是在处理I/O，因为读写设备的不同，所以需要花很多的心思来整。从POSIX的标准来看，其提供了 select, poll来实现多个描述符的监控读写。而Linux自身还实现了一个更高效的  epoll。</p>
+          <p>对于大多数的编程场景来多，很多时候的任务都是在处理I/O，因为读写设备的不同，所以需要花很多的心思来整。从POSIX的标准来看，其提供了 select, poll来实现多个描述符的监控读写。而Linux自身还实现了一个更高效的  epoll。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Linux-Unix/IO%E7%9A%84%E9%98%BB%E5%A1%9E%E4%B8%8E%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/skynet%E4%B8%AD%E7%9A%84%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1%E4%B8%8E%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Lua/skynet%E4%B8%AD%E7%9A%84%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1%E4%B8%8E%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86.html" class="post-title-link" itemprop="url">skynet中的网络服务与消息处理</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-02-13 18:07:32" itemprop="dateCreated datePublished" datetime="2018-02-13T18:07:32+08:00">2018-02-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Lua/" itemprop="url" rel="index">
-                    <span itemprop="name">Lua</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Lua/skynet%E4%B8%AD%E7%9A%84%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1%E4%B8%8E%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/skynet中的网络服务与消息处理.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>网络信息与普通消息的封装似乎有所不同，所以关注一下这个过程是非常的有必要的。我们先从网络服务的注册开始说起。skynet封装了一个socket库作为Lua模块来给我们使用。我们可以看一下对于一个socket的注册是怎么样的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Lua/skynet%E4%B8%AD%E7%9A%84%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1%E4%B8%8E%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86.html#more" rel="contents">
+              <a class="btn" href="/Linux-Unix/IO的阻塞与多路复用.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1255,20 +1268,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1280,10 +1293,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -1312,10 +1325,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         

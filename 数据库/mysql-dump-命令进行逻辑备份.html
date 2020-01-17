@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="MySQL,Linux,数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql-dump 命令进行逻辑备份">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;mysql-dump-%E5%91%BD%E4%BB%A4%E8%BF%9B%E8%A1%8C%E9%80%BB%E8%BE%91%E5%A4%87%E4%BB%BD.html">
+<meta property="og:url" content="https://gowa.club/数据库/mysql-dump-命令进行逻辑备份.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="mysqldump经常用来备份数据库成为语句样式。但没有详细的一下具体的办法。其实很多东西都能在info里面找到非常详细的说明，只是，我们太忙了，只想要一个答案，而无心去看而已，所以呢，就把用得到的都看一下来记录吧。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.271Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mysql-dump 命令进行逻辑备份">
+<meta name="twitter:description" content="mysqldump经常用来备份数据库成为语句样式。但没有详细的一下具体的办法。其实很多东西都能在info里面找到非常详细的说明，只是，我们太忙了，只想要一个答案，而无心去看而已，所以呢，就把用得到的都看一下来记录吧。">
 
-<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql-dump-%E5%91%BD%E4%BB%A4%E8%BF%9B%E8%A1%8C%E9%80%BB%E8%BE%91%E5%A4%87%E4%BB%BD.html">
+<link rel="canonical" href="https://gowa.club/数据库/mysql-dump-命令进行逻辑备份.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql-dump-%E5%91%BD%E4%BB%A4%E8%BF%9B%E8%A1%8C%E9%80%BB%E8%BE%91%E5%A4%87%E4%BB%BD.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/mysql-dump-命令进行逻辑备份.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -266,7 +268,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -281,7 +283,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql-dump-%E5%91%BD%E4%BB%A4%E8%BF%9B%E8%A1%8C%E9%80%BB%E8%BE%91%E5%A4%87%E4%BB%BD.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/mysql-dump-命令进行逻辑备份.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/mysql-dump-命令进行逻辑备份.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -297,29 +299,43 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>mysqldump经常用来备份数据库成为语句样式。但没有详细的一下具体的办法。<br>其实很多东西都能在info里面找到非常详细的说明，只是，我们太忙了，只想要一个答案，而无心去看而已，所以呢，就把用得到的都看一下来记录吧。</p>
-<a id="more"></a>
-<h1 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h1><pre><code>mysqldump [options] [db_name [tbl_name ...]]</code></pre><p>当不指定<code>tbl_name</code> 或者使用了 <code>--databases | --all-databases</code>， 整个库都会被备份。<br>同时，mysqldump <strong>不会备份</strong> <code>INFOMATION_SCHEMA</code> 库，即使你显式的指定。  </p>
+        <p>mysqldump经常用来备份数据库成为语句样式。但没有详细的一下具体的办法。<br>其实很多东西都能在info里面找到非常详细的说明，只是，我们太忙了，只想要一个答案，而无心去看而已，所以呢，就把用得到的都看一下来记录吧。<br><a id="more"></a></p>
+<h1 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h1><pre><code>mysqldump [options] [db_name [tbl_name ...]]
+</code></pre><p>当不指定<code>tbl_name</code> 或者使用了 <code>--databases | --all-databases</code>， 整个库都会被备份。<br>同时，mysqldump <strong>不会备份</strong> <code>INFOMATION_SCHEMA</code> 库，即使你显式的指定。  </p>
 <h2 id="选项options"><a href="#选项options" class="headerlink" title="选项options"></a>选项options</h2><h3 id="选项组"><a href="#选项组" class="headerlink" title="选项组"></a>选项组</h3><p><strong><code>--opt</code></strong> 同等于 <code>--add-drop-table --add-locks --create-options --disable-keys --extend-insert --lock-tables --quick --set-charset</code> 这是一个默认的选项组。<br><strong><code>--compact</code></strong> 同等于 <code>--skip-add-drop-table --skip-add-locks --skip-comments --skip-disable-keys --skip-set-charset</code></p>
-<h3 id="选项的反转"><a href="#选项的反转" class="headerlink" title="选项的反转"></a>选项的反转</h3><p>我们可以用<code>--skip-opt or --skip-compact</code> 来进行反转以上选项。<br>当我们想对–opt组中的某些选项进行<strong>取消</strong>的时候，我们可以用<code>--skip</code>来操作:<br>比如，要取消<code>extend inserts</code> 跟 <code>memory buffing</code>:</p>
-<pre><code>[--opt] --skip-extend-inserts --skip-quick。</code></pre><blockquote>
-<p>（–opt可选是因为其是默认开启的）。</p>
+<h3 id="选项的反转"><a href="#选项的反转" class="headerlink" title="选项的反转"></a>选项的反转</h3><p>我们可以用<code>--skip-opt or --skip-compact</code> 来进行反转以上选项。<br>当我们想对—opt组中的某些选项进行<strong>取消</strong>的时候，我们可以用<code>--skip</code>来操作:<br>比如，要取消<code>extend inserts</code> 跟 <code>memory buffing</code>:</p>
+<pre><code>[--opt] --skip-extend-inserts --skip-quick。
+</code></pre><blockquote>
+<p>（—opt可选是因为其是默认开启的）。</p>
 </blockquote>
 <p>如果我们要<strong>取消</strong><code>--opt</code>中的除禁止索引跟锁表外的选项，则可以用:</p>
-<pre><code>--skip-opt --disable-keys --lock-tables。</code></pre><p>如果是在组选项中要选择性的关闭或者开启一些功能，顺序很重要。</p>
-<pre><code>--disable-keys --lock-tables --skip-opt </code></pre><p>将不会获得你想要的效果。</p>
-<h3 id="可能的缓存问题"><a href="#可能的缓存问题" class="headerlink" title="可能的缓存问题"></a>可能的缓存问题</h3><p>mysqldump 可以逐行的获取-备份表内容（至文件），同时可以在备份（至文件）前将整个内容缓存到内存中。<br>数据过大的时候开启缓存会产生问题，想要逐行的进行备份，用<code>--quick</code>(或–opt，组选项中开启了–quick)，想要开启缓存那么用<code>--skip-quick</code>即可</p>
-<h3 id="更多的选项"><a href="#更多的选项" class="headerlink" title="更多的选项"></a>更多的选项</h3><p><code>--help, -?</code> 显示帮助信息<br><code>--add-drop-database</code> 在<code>CREATE DATABASE..</code>语句前加上<code>DROP DATABASE ...</code>。典型的使用是跟<code>--all-databases</code> 或<code>--databases</code>。<br><code>--add-drop-table</code> 在<code>CREATE TABLE ...</code>语句前加上<code>DROP TABLE ...</code>。<br><code>--add-locks</code> 在每个导出语句前后加上<code>LOCK TABLES</code>与<code>UNLOCK TABLES</code>，这样插入速度会更快。 更多见 <strong>7.3.2节 INSERT语句的速度</strong><br><code>--all-databases,-A</code> 与<code>--databases 所有库名...</code>等价，备份所有库，表[infomation_schema除外]<br><code>--allow-keywords</code> 允许建立field名为关键字的列，在每列加上表名作为前缀。<br><code>--character-set-dir=path</code> 字符集安装路径，更多见 <strong>9.5 字符节设置</strong><br><code>--comments,-i</code> 默认开启，在备份文件写入版本、主机等信息。<code>--skip-comments</code> 关闭<br><code>--compact</code> 更紧凑的输出。将会开启<code>--skip-add-drop-table --skip-add-locks --skip-comments --skip-disable-keys --skip-set-charset</code><br><code>--compatible=name</code> 为了与其他数据库系统兼容，<code>name={ansi | mysql323 | mysql40 | postgresql | oracle | msssql | db2 | maxdb | no_key_options | no_table_options | no_field_options}</code>多个选项的话用逗号分开。但这并不能保证就一定能与其他数据库兼容，只是保证输出尽量兼容。更多见 <strong>5.1.6 服务器SQL模式</strong><br><code>--complate-insert,-c</code> 使用包含列的完整插入语句。<br><code>--compress,-C</code> 如果clien and server 支持压缩的话就压缩所有信息。<br><code>--create-options</code> 包含所有MySQL <code>CREATE TABLE</code> 语句支持的表选项<br><code>--databases,-B</code> 多个库<br><code>--debug[=debug_options],-#[debug_options]</code> 调试日志，<code>debug_options</code>典型格式<code>d:t:o,file_name</code>,默认值<code>d:t:o,/tmp/mysqldump.trace</code><br><code>--debug_info</code> 在程序退出的时候打印 <strong>内存和CPU的使用情况</strong>。 5.0.32增加<br><code>--cdefault-character-set=charset-name</code> 用charset-name 作为默认的字符集。如果没指定charset-name的话，默认使用utf8,早些版本用的是latin1。此选项对用<code>--tab</code>选项产生的文件没有影响。<br><code>--delayed-insert</code> 用<code>INSERT DELAYED</code> 代替 <code>INSERT</code><br><code>--delete-master-logs</code> 在主从服务器上，在备份操作完成后会给服务器一个<code>PURGE BINARY LOGS</code>语句，删除二进制日志。此选项自动开启<code>--master-data</code><br><code>--disable-keys, -K</code>  用<code>/*!40000 ALTER TABLE tbl_name DISABLE KEYS */;</code>和<code>/*!40000 ALTER TABLE tbl_name ENABLE KEYS*/</code>包围<code>INSERT</code>。这会让插入的时候更快，因为所有索引都在所有行插入完毕后建立。只有在非唯一索引的MyISAM表有效。<br><code>--dump-date</code> 在<code>--comments</code> 开启的情况下，默认在文件尾加上一条注释<code>-- Dump complete on DATE</code>。<code>--skip-dump-date</code>关闭，默认情况开启。<br><code>--extend-insert, -e</code> 使用多行的<code>INSERT</code>语句包含不止一条的值列表。会产生更小的<code>dump file</code>和更快的插入速度。<br><code>--fields-terminated-by=...,--fields-enclosed-by=...,--fields-optionally-enclosed-by=...,--fields=escaped-by=...</code> 与<code>--tab</code>选项同用，与<code>LOAD DATA INFILE</code>有相同意义。<br><code>--first-slave</code> 5.5已删除，使用<code>--lock-all-tables</code>替代。<br><code>--flush-logs, -F</code> 备份前刷新日志，需要<code>RELOAD</code>权限。当与<code>--all-databases</code>，每个库被备份时都会刷新。当使用<code>--lock-all-tables or --master-data</code>，日志只有在所有表在锁定的时候被刷新一次。想要备份跟日志一起刷新，就要配合<code>--lock-all-tables or --master-data</code>。<br><code>--flush-privileges</code> 备份库后发送<code>FLUSH PRIVILEGES</code>语句到服务器。当其他有库依赖于此库进行恢复的时候必须使用。<br><code>--force, -f</code> 出错依然继续。<br><code>--host=host_name, -h host_name</code> 指定主机，默认<code>localhost</code><br><code>--hex-blob</code> 二进制列用16进制表示(<code>abc</code>-&gt;<code>ox616263</code>)，受影响的数据类型是<code>BINARY,VARBINARY,BLOB</code><br><code>--ignore-table=db_name.tbl_name</code> 忽略表或视图，多张表就多次使用。<br><code>--insert-ignore</code> <code>INSERT IGNORE ...</code> 代替<code>INSERT</code>语句<br><code>--lines-terminated-by=...</code>  与–tab 选项联用<br><code>--lock-all-tables, -x</code> 所有库的表锁定。通过在备份期间产生一个<code>read lock</code>全局读锁，会自动关闭<code>--single-transaction</code>和<code>--lock-tables</code>。<br><code>--lock-tables, -l</code> 每个库备份前锁表。MyISAM表用<code>READ LOCAL</code>锁定来允许同步插入。事务性的表（InnoDb/BDB)，<code>--single-transaction</code>选项更好，因为不需要锁表。 因为<code>--lock-tables</code>为每个库单独锁表，并不能保证在备份在文件后的内容在库间逻辑上的一致。<br><code>--log-error=file_name</code> 默认情况下不作记录，此选项将警告或错误附加到<code>file_name</code><br><code>--single-transaction</code> 备份前发送<code>START TRANSACTION SQL</code>语句给服务器，对事务性的表很有用。当<code>BEGIN</code>被执行的时候，其备份各库的一致状态，且不会阻塞任何应用。必须记住的是，只有事务表（<code>innoDB/BDB</code>）才会在一致状态下备份。假入是MyISAM，其状态依然会有可能改变。在备份期间，为了保证成功（备份文件正常、二进制文件坐标正确），其他连接不可使用任何一个： <code>{ ALTER TABLE | CREATE TABLE | DROP TABLE | RENAME TABLE | TRUNCATE TABLE}</code>语句。因为一致性读与这些语句是不隔离的， 在要备份的表上执行这几个语句会使 mysqldump执行的 <code>SELECT</code>命令重新读取表内容而得到错误的内容或者失败。<code>--single-transaction</code>与<code>--lock-tables</code>是互斥的，因为<code>--lock-tables</code>会让所有未提交的事务悄悄的提交。对于较大的表，应该结合<code>--quick</code>使用。<br><code>--master-data[=value]</code> 产生的备份文件可以作用当前主从服务器的从属服务器。这将导致备份出来的文件含有一个<code>CHANGE MASTER TO</code>语句,指明二进制日志 （file name 和 position)与被备份服务器一致。 在导入从服务器后可以从主服务器日志处开始同步复制。 默认是value是1,如果值是2,只是写在信息式的写在注释内，并不生效。 此选项要求<code>RELOAD</code>权限和二进制日志必须开启。<code>--master-data</code>自动关闭<code>--lock-tables</code>。在<code>--single-transaction</code>没指定的情况下开启<code>--lock-all-tables</code>（这样情况下全局读锁只会在开始备份的产生很短的时间）。无论什么情况，备份的时刻日志就会产生动作。<br>在已有的从服务器上备份出文件再做一个从服务器也是可以的。</p>
+<pre><code>--skip-opt --disable-keys --lock-tables。
+</code></pre><p>如果是在组选项中要选择性的关闭或者开启一些功能，顺序很重要。</p>
+<pre><code>--disable-keys --lock-tables --skip-opt 
+</code></pre><p>将不会获得你想要的效果。</p>
+<h3 id="可能的缓存问题"><a href="#可能的缓存问题" class="headerlink" title="可能的缓存问题"></a>可能的缓存问题</h3><p>mysqldump 可以逐行的获取-备份表内容（至文件），同时可以在备份（至文件）前将整个内容缓存到内存中。<br>数据过大的时候开启缓存会产生问题，想要逐行的进行备份，用<code>--quick</code>(或—opt，组选项中开启了—quick)，想要开启缓存那么用<code>--skip-quick</code>即可</p>
+<h3 id="更多的选项"><a href="#更多的选项" class="headerlink" title="更多的选项"></a>更多的选项</h3><p><code>--help, -?</code> 显示帮助信息<br><code>--add-drop-database</code> 在<code>CREATE DATABASE..</code>语句前加上<code>DROP DATABASE ...</code>。典型的使用是跟<code>--all-databases</code> 或<code>--databases</code>。<br><code>--add-drop-table</code> 在<code>CREATE TABLE ...</code>语句前加上<code>DROP TABLE ...</code>。<br><code>--add-locks</code> 在每个导出语句前后加上<code>LOCK TABLES</code>与<code>UNLOCK TABLES</code>，这样插入速度会更快。 更多见 <strong>7.3.2节 INSERT语句的速度</strong><br><code>--all-databases,-A</code> 与<code>--databases 所有库名...</code>等价，备份所有库，表[infomation<em>schema除外]<br><code>--allow-keywords</code> 允许建立field名为关键字的列，在每列加上表名作为前缀。<br><code>--character-set-dir=path</code> 字符集安装路径，更多见 <strong>9.5 字符节设置</strong><br><code>--comments,-i</code> 默认开启，在备份文件写入版本、主机等信息。<code>--skip-comments</code> 关闭<br><code>--compact</code> 更紧凑的输出。将会开启<code>--skip-add-drop-table --skip-add-locks --skip-comments --skip-disable-keys --skip-set-charset</code><br><code>--compatible=name</code> 为了与其他数据库系统兼容，<code>name={ansi | mysql323 | mysql40 | postgresql | oracle | msssql | db2 | maxdb | no_key_options | no_table_options | no_field_options}</code>多个选项的话用逗号分开。但这并不能保证就一定能与其他数据库兼容，只是保证输出尽量兼容。更多见 <strong>5.1.6 服务器SQL模式</strong><br><code>--complate-insert,-c</code> 使用包含列的完整插入语句。<br><code>--compress,-C</code> 如果clien and server 支持压缩的话就压缩所有信息。<br><code>--create-options</code> 包含所有MySQL <code>CREATE TABLE</code> 语句支持的表选项<br><code>--databases,-B</code> 多个库<br><code>--debug[=debug_options],-#[debug_options]</code> 调试日志，<code>debug_options</code>典型格式<code>d:t:o,file_name</code>,默认值<code>d:t:o,/tmp/mysqldump.trace</code><br><code>--debug_info</code> 在程序退出的时候打印 <em>_内存和CPU的使用情况</em></em>。 5.0.32增加<br><code>--cdefault-character-set=charset-name</code> 用charset-name 作为默认的字符集。如果没指定charset-name的话，默认使用utf8,早些版本用的是latin1。此选项对用<code>--tab</code>选项产生的文件没有影响。<br><code>--delayed-insert</code> 用<code>INSERT DELAYED</code> 代替 <code>INSERT</code><br><code>--delete-master-logs</code> 在主从服务器上，在备份操作完成后会给服务器一个<code>PURGE BINARY LOGS</code>语句，删除二进制日志。此选项自动开启<code>--master-data</code><br><code>--disable-keys, -K</code>  用<code>/*!40000 ALTER TABLE tbl_name DISABLE KEYS */;</code>和<code>/*!40000 ALTER TABLE tbl_name ENABLE KEYS*/</code>包围<code>INSERT</code>。这会让插入的时候更快，因为所有索引都在所有行插入完毕后建立。只有在非唯一索引的MyISAM表有效。<br><code>--dump-date</code> 在<code>--comments</code> 开启的情况下，默认在文件尾加上一条注释<code>-- Dump complete on DATE</code>。<code>--skip-dump-date</code>关闭，默认情况开启。<br><code>--extend-insert, -e</code> 使用多行的<code>INSERT</code>语句包含不止一条的值列表。会产生更小的<code>dump file</code>和更快的插入速度。<br><code>--fields-terminated-by=...,--fields-enclosed-by=...,--fields-optionally-enclosed-by=...,--fields=escaped-by=...</code> 与<code>--tab</code>选项同用，与<code>LOAD DATA INFILE</code>有相同意义。<br><code>--first-slave</code> 5.5已删除，使用<code>--lock-all-tables</code>替代。<br><code>--flush-logs, -F</code> 备份前刷新日志，需要<code>RELOAD</code>权限。当与<code>--all-databases</code>，每个库被备份时都会刷新。当使用<code>--lock-all-tables or --master-data</code>，日志只有在所有表在锁定的时候被刷新一次。想要备份跟日志一起刷新，就要配合<code>--lock-all-tables or --master-data</code>。<br><code>--flush-privileges</code> 备份库后发送<code>FLUSH PRIVILEGES</code>语句到服务器。当其他有库依赖于此库进行恢复的时候必须使用。<br><code>--force, -f</code> 出错依然继续。<br><code>--host=host_name, -h host_name</code> 指定主机，默认<code>localhost</code><br><code>--hex-blob</code> 二进制列用16进制表示(<code>abc</code>-&gt;<code>ox616263</code>)，受影响的数据类型是<code>BINARY,VARBINARY,BLOB</code><br><code>--ignore-table=db_name.tbl_name</code> 忽略表或视图，多张表就多次使用。<br><code>--insert-ignore</code> <code>INSERT IGNORE ...</code> 代替<code>INSERT</code>语句<br><code>--lines-terminated-by=...</code>  与—tab 选项联用<br><code>--lock-all-tables, -x</code> 所有库的表锁定。通过在备份期间产生一个<code>read lock</code>全局读锁，会自动关闭<code>--single-transaction</code>和<code>--lock-tables</code>。<br><code>--lock-tables, -l</code> 每个库备份前锁表。MyISAM表用<code>READ LOCAL</code>锁定来允许同步插入。事务性的表（InnoDb/BDB)，<code>--single-transaction</code>选项更好，因为不需要锁表。 因为<code>--lock-tables</code>为每个库单独锁表，并不能保证在备份在文件后的内容在库间逻辑上的一致。<br><code>--log-error=file_name</code> 默认情况下不作记录，此选项将警告或错误附加到<code>file_name</code><br><code>--single-transaction</code> 备份前发送<code>START TRANSACTION SQL</code>语句给服务器，对事务性的表很有用。当<code>BEGIN</code>被执行的时候，其备份各库的一致状态，且不会阻塞任何应用。必须记住的是，只有事务表（<code>innoDB/BDB</code>）才会在一致状态下备份。假入是MyISAM，其状态依然会有可能改变。在备份期间，为了保证成功（备份文件正常、二进制文件坐标正确），其他连接不可使用任何一个： <code>{ ALTER TABLE | CREATE TABLE | DROP TABLE | RENAME TABLE | TRUNCATE TABLE}</code>语句。因为一致性读与这些语句是不隔离的， 在要备份的表上执行这几个语句会使 mysqldump执行的 <code>SELECT</code>命令重新读取表内容而得到错误的内容或者失败。<code>--single-transaction</code>与<code>--lock-tables</code>是互斥的，因为<code>--lock-tables</code>会让所有未提交的事务悄悄的提交。对于较大的表，应该结合<code>--quick</code>使用。<br><code>--master-data[=value]</code> 产生的备份文件可以作用当前主从服务器的从属服务器。这将导致备份出来的文件含有一个<code>CHANGE MASTER TO</code>语句,指明二进制日志 （file name 和 position)与被备份服务器一致。 在导入从服务器后可以从主服务器日志处开始同步复制。 默认是value是1,如果值是2,只是写在信息式的写在注释内，并不生效。 此选项要求<code>RELOAD</code>权限和二进制日志必须开启。<code>--master-data</code>自动关闭<code>--lock-tables</code>。在<code>--single-transaction</code>没指定的情况下开启<code>--lock-all-tables</code>（这样情况下全局读锁只会在开始备份的产生很短的时间）。无论什么情况，备份的时刻日志就会产生动作。<br>在已有的从服务器上备份出文件再做一个从服务器也是可以的。</p>
 <ol>
-<li>停止从服务器进程，获取其状态：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql &gt; STOP SLAVE SQL_THREAD;</span><br><span class="line">mysql &gt; SHOW SLAVE STATUS;</span><br></pre></td></tr></table></figure></li>
-<li>从上面得到主服务器二进制日制的坐标：<code>Relay_Master_Log_File Exec_Master_Log_Pos</code>字段，把他给记做<code>file_name file_pos</code>。</li>
-<li>dump 从服务器。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shell &gt; mysqldump --master-data=2 --all-database &gt; dumpfile</span><br></pre></td></tr></table></figure></li>
-<li>重启从服务器线程<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql &gt; START SLAVE;</span><br></pre></td></tr></table></figure></li>
-<li>新从服务器，导入dumpfile.<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shell &gt; mysql &lt; dumpfile</span><br></pre></td></tr></table></figure></li>
-<li>在新从服务器上，设置同步坐标。(file_name file_pos)<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; CHANGE MASTER TO MASTER_LOG_FILE=file_name MASTER_LOG_POS=file_pos;</span><br></pre></td></tr></table></figure>
-自行添加CHAGE MASTER TO 需要的参数，比如主服务器地址等。<br><code>--no-autocommit</code> 以<code>set autocommit=0</code> 和<code>COMMIT</code>语句来包围<code>INSERT</code>语句。<br><code>--no-create-db, -n</code> 当<code>--databases,-B | --all-databases</code>指定的时候，禁用<code>CREATE DATABASES</code>语句<br><code>--no-create-info, -t</code> 不写出重新创建备份表的<code>CREATE TABLE</code>语句<br><code>--no-data, -d</code> 只要表结构。<br><code>--no-set-names, -N</code> 等价于<code>--skip-set-charset</code><br><code>--order-by-primary</code> 当主键、或唯一索引存在的时候以此排序列行。当MyISAM表要转到InnoDB表的时候，但会花费更多时间。<br><code>--password[=password],-p[password]</code> 密码<br><code>-pipe, -W</code><br><code>--port=port_num, -P port_num</code><br><code>--quick, -q</code> 对于dump大表很实用。强制mysqldump一次获取一行而不是获得整个记录并且进行缓存。<br><code>--quote-names, -Q</code><br><code>--result-file=file_name, -r file_name</code> 重定向至文件<br><code>--routines, -R</code> 包括函数跟结构。但没有时间戳，新导入的时间就是重新建立过程的时间戳。想要原来的时间戳，导出mysql.proc表后进行恢复。<br><code>--set-charset</code> 将<code>SET NAMES default_character_set</code>加到输出中。该选项默认启用。要想禁用SET NAMES语句，使用<code>--skip-set-charset</code>。<br><code>--skip-comments</code> 参见<code>--comments</code>选项的描述。<br><code>--socket=path, -S path</code> 当连接localhost(为默认主机)时使用的套接字文件。<br><code>--tab=path, -T path</code> 产生tab分割的数据文件。对于每个转储的表，mysqldump创建一个包含创建表的<code>CREATE TABLE</code>语句的<code>tbl_name.sql</code>文件，和一个包含其数据的<code>tbl_name.txt</code>文件。选项值为写入文件的目录。<br> 默认情况，.txt数据文件的格式是在列值和每行后面的新行之间使用tab字符。可以使用<code>--fields-xxx</code>和<code>--line--xxx</code>选项明显指定格式。<br> 注释：该选项只适用于mysqldump与mysqld服务器在同一台机器上运行时。你必须具有FILE权限，并且服务器必须有在你指定的目录中有写文件的许可。<br><code>--tables</code> 覆盖—database或-B选项。选项后面的所有参量被看作表名。</li>
+<li><p>停止从服务器进程，获取其状态：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql &gt; STOP SLAVE SQL_THREAD;</span><br><span class="line">mysql &gt; SHOW SLAVE STATUS;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从上面得到主服务器二进制日制的坐标：<code>Relay_Master_Log_File Exec_Master_Log_Pos</code>字段，把他给记做<code>file_name file_pos</code>。</p>
+</li>
+<li><p>dump 从服务器。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shell &gt; mysqldump --master-data=2 --all-database &gt; dumpfile</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>重启从服务器线程</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql &gt; START SLAVE;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>新从服务器，导入dumpfile.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shell &gt; mysql &lt; dumpfile</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在新从服务器上，设置同步坐标。(file_name file_pos)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; CHANGE MASTER TO MASTER_LOG_FILE=file_name MASTER_LOG_POS=file_pos;</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<p>–tariggers –skip-triggers<br><code>--user=user_name, -u user_name</code> 用户名<br><code>--verbose, -v</code> 冗长模式。打印出程序操作的详细信息。<br><code>--version, -V</code> 显示版本信息并退出。<br><code>--xml, -X</code> 转存为xml文件</p>
+<p>自行添加CHAGE MASTER TO 需要的参数，比如主服务器地址等。<br><code>--no-autocommit</code> 以<code>set autocommit=0</code> 和<code>COMMIT</code>语句来包围<code>INSERT</code>语句。<br><code>--no-create-db, -n</code> 当<code>--databases,-B | --all-databases</code>指定的时候，禁用<code>CREATE DATABASES</code>语句<br><code>--no-create-info, -t</code> 不写出重新创建备份表的<code>CREATE TABLE</code>语句<br><code>--no-data, -d</code> 只要表结构。<br><code>--no-set-names, -N</code> 等价于<code>--skip-set-charset</code><br><code>--order-by-primary</code> 当主键、或唯一索引存在的时候以此排序列行。当MyISAM表要转到InnoDB表的时候，但会花费更多时间。<br><code>--password[=password],-p[password]</code> 密码<br><code>-pipe, -W</code><br><code>--port=port_num, -P port_num</code><br><code>--quick, -q</code> 对于dump大表很实用。强制mysqldump一次获取一行而不是获得整个记录并且进行缓存。<br><code>--quote-names, -Q</code><br><code>--result-file=file_name, -r file_name</code> 重定向至文件<br><code>--routines, -R</code> 包括函数跟结构。但没有时间戳，新导入的时间就是重新建立过程的时间戳。想要原来的时间戳，导出mysql.proc表后进行恢复。<br><code>--set-charset</code> 将<code>SET NAMES default_character_set</code>加到输出中。该选项默认启用。要想禁用SET NAMES语句，使用<code>--skip-set-charset</code>。<br><code>--skip-comments</code> 参见<code>--comments</code>选项的描述。<br><code>--socket=path, -S path</code> 当连接localhost(为默认主机)时使用的套接字文件。<br><code>--tab=path, -T path</code> 产生tab分割的数据文件。对于每个转储的表，mysqldump创建一个包含创建表的<code>CREATE TABLE</code>语句的<code>tbl_name.sql</code>文件，和一个包含其数据的<code>tbl_name.txt</code>文件。选项值为写入文件的目录。<br>    默认情况，.txt数据文件的格式是在列值和每行后面的新行之间使用tab字符。可以使用<code>--fields-xxx</code>和<code>--line--xxx</code>选项明显指定格式。<br>    注释：该选项只适用于mysqldump与mysqld服务器在同一台机器上运行时。你必须具有FILE权限，并且服务器必须有在你指定的目录中有写文件的许可。<br><code>--tables</code> 覆盖—-database或-B选项。选项后面的所有参量被看作表名。<br>—tariggers —skip-triggers<br><code>--user=user_name, -u user_name</code> 用户名<br><code>--verbose, -v</code> 冗长模式。打印出程序操作的详细信息。<br><code>--version, -V</code> 显示版本信息并退出。<br><code>--xml, -X</code> 转存为xml文件</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -331,14 +347,14 @@
           <div class="post-tags">
               <a href="/tags/MySQL/" rel="tag"># MySQL</a>
               <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
+              <a href="/tags/数据库/" rel="tag"># 数据库</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Device/Raid%E7%A3%81%E7%9B%98%E5%86%97%E4%BD%99%E9%98%B5%E5%88%97%E7%9A%84%E7%90%86%E8%A7%A3.html" rel="next" title="Raid磁盘冗余阵列的理解">
+                <a href="/Device/Raid磁盘冗余阵列的理解.html" rel="next" title="Raid磁盘冗余阵列的理解">
                   <i class="fa fa-chevron-left"></i> Raid磁盘冗余阵列的理解
                 </a>
             </div>
@@ -346,7 +362,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/Gawk%E6%95%99%E7%A8%8B.html" rel="prev" title="Gawk教程">
+                <a href="/Linux-Unix/Gawk教程.html" rel="prev" title="Gawk教程">
                   Gawk教程 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -408,20 +424,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -433,10 +449,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -465,10 +481,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -543,7 +559,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/mysql-dump-%E5%91%BD%E4%BB%A4%E8%BF%9B%E8%A1%8C%E9%80%BB%E8%BE%91%E5%A4%87%E4%BB%BD.html",
+            url: "https://gowa.club/数据库/mysql-dump-命令进行逻辑备份.html",
             identifier: "数据库/mysql-dump-命令进行逻辑备份.html",
             title: "mysql-dump 命令进行逻辑备份"
           }

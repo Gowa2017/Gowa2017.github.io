@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Curl,Linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="curl-http脚本">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;curl-http%E8%84%9A%E6%9C%AC.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/curl-http脚本.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="HTTP Scripting背景这个文档假设你对HTTP和一些网络知识有了基本的了解。随着越来越多的应用转移到了Web服务上，“HTTP Scripting”已经变得越来越被人们所需要。为了能自动的从网站上获得信息、伪造用户、传输数据或者上传数据到服务器上都是非常重要的任务。Curl是一个命令行工具，用来进行所有类型的URL操作或者数据传输，但这个文档只把重心放在怎么用它来和一实际的HTTP服务器">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-12-11T11:37:34.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="curl-http脚本">
+<meta name="twitter:description" content="HTTP Scripting背景这个文档假设你对HTTP和一些网络知识有了基本的了解。随着越来越多的应用转移到了Web服务上，“HTTP Scripting”已经变得越来越被人们所需要。为了能自动的从网站上获得信息、伪造用户、传输数据或者上传数据到服务器上都是非常重要的任务。Curl是一个命令行工具，用来进行所有类型的URL操作或者数据传输，但这个文档只把重心放在怎么用它来和一实际的HTTP服务器">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/curl-http%E8%84%9A%E6%9C%AC.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/curl-http脚本.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/curl-http%E8%84%9A%E6%9C%AC.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/curl-http脚本.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/curl-http%E8%84%9A%E6%9C%AC.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/curl-http脚本.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/curl-http脚本.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,18 +296,25 @@
 <h2 id="HTTP-协议"><a href="#HTTP-协议" class="headerlink" title="HTTP 协议"></a>HTTP 协议</h2><p>HTTP协议建立在TCP/IP之上，用来从网页服务器获取数据。这个协议也允许客户端以几种不同的方式向服务器发送数据，接下来我们就会看到。<br>HTTP是一个解释性的<strong>ASCII</strong>文本行由客户端发送到服务器以请求一个实际的动作，然后服务器会在返回客户端真正需要的内容之前返回一些文本行。<br>现在，curl充当一个客户端，发送一个请求。这个请求包含一种方式（<strong>GET, POST, HEAD等</strong>），一些请求头部或者请求主体。服务器返回状态行，响应头部和响应主体。这个“主体”怎么解释，由你的请求而定，比如会是HTML数据，或者一张图片。</p>
 <h2 id="观察协议"><a href="#观察协议" class="headerlink" title="观察协议"></a>观察协议</h2><p>用curl的<code>--verbose(-v)</code>选项会展示出curl发送的是何种数据以及一些其他信息。<br>一般情况下这个选项已经够用，但如果还不够详细的时候，可以用<code>--trace</code>和<code>--tarce-ascii</code>会更加详细。</p>
 <pre><code>curl --trace-ascii debugdump.txt http://www.baidu.com
-curl --verbose http://www.baidu.com</code></pre><h2 id="观察时间"><a href="#观察时间" class="headerlink" title="观察时间"></a>观察时间</h2><p>大多数时候我们确实想知道在整个请求回应过程中发生了什么，但某些时候我们可能只关注一下这耗费了多少时间。这个时候<code>--trace-time</code>选项就起了作用了。<br>这个选项会在每个跟踪输出的行前打印时间。</p>
+curl --verbose http://www.baidu.com
+</code></pre><h2 id="观察时间"><a href="#观察时间" class="headerlink" title="观察时间"></a>观察时间</h2><p>大多数时候我们确实想知道在整个请求回应过程中发生了什么，但某些时候我们可能只关注一下这耗费了多少时间。这个时候<code>--trace-time</code>选项就起了作用了。<br>这个选项会在每个跟踪输出的行前打印时间。</p>
 <h2 id="观察响应"><a href="#观察响应" class="headerlink" title="观察响应"></a>观察响应</h2><p>默认情况下，curl会把响应发送到标准输出。你可以用<code>-o</code>或者<code>-O</code>选项来进行重定向。</p>
 <h1 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h1><p><strong>URL</strong>（Uniform Resource Locator）格式指的是你怎么样指定在网络上的地址或者资源。比如 <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a>这样的地址。<br>RFC 3986是对这个的规范性文档。但是呢，你可能会发现，它的称呼是URI，而不是URL。</p>
 <h2 id="主机"><a href="#主机" class="headerlink" title="主机"></a>主机</h2><p>大多数时候我们用主机名而不会直接指定IP地址，为了方便记忆。这个主机名到IP地址的解析，是由DNS来进行解析的，可能是公共的，也可能是内部的。<br>在某些时候，为了调试的需要，我们可以用<code>--resolve</code>为主机名指定一个不同的IP地址，而不是其原来定义的地址。如</p>
-<pre><code>curl --resolve www.baidu.com:80:www.163.com http://www.baidu.com</code></pre><h2 id="端口号"><a href="#端口号" class="headerlink" title="端口号"></a>端口号</h2><p>多数情况下，每个服务都有一个标准的端口号，比如HTTP的标准端口是80,但有的时候可能你会使用非标准的端口号如：</p>
-<pre><code>curl http://www.baidu.com:1234</code></pre><p>有的时候，你也想指定一个代理：</p>
-<pre><code>curl --proxy http://proxy.example.org:4321 http://www.baidu.com</code></pre><h2 id="用户名与密码"><a href="#用户名与密码" class="headerlink" title="用户名与密码"></a>用户名与密码</h2><p>在使用中可能有些网站需要账号密码才能进行访问。那你就可以这样：</p>
+<pre><code>curl --resolve www.baidu.com:80:www.163.com http://www.baidu.com
+</code></pre><h2 id="端口号"><a href="#端口号" class="headerlink" title="端口号"></a>端口号</h2><p>多数情况下，每个服务都有一个标准的端口号，比如HTTP的标准端口是80,但有的时候可能你会使用非标准的端口号如：</p>
+<pre><code>curl http://www.baidu.com:1234
+</code></pre><p>有的时候，你也想指定一个代理：</p>
+<pre><code>curl --proxy http://proxy.example.org:4321 http://www.baidu.com
+</code></pre><h2 id="用户名与密码"><a href="#用户名与密码" class="headerlink" title="用户名与密码"></a>用户名与密码</h2><p>在使用中可能有些网站需要账号密码才能进行访问。那你就可以这样：</p>
 <pre><code>curl http://user:password@www.baidu.com/
-curl -u user:password http://www.baidu.com</code></pre><p>但是，在当前的网站，可能已经不在用这样的方式进行用户的权限性验证了。而采用cookies或者表单了。</p>
+curl -u user:password http://www.baidu.com
+</code></pre><p>但是，在当前的网站，可能已经不在用这样的方式进行用户的权限性验证了。而采用cookies或者表单了。</p>
 <h1 id="获取一个页面"><a href="#获取一个页面" class="headerlink" title="获取一个页面"></a>获取一个页面</h1><h2 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h2><p>这是最简单的情况，如：</p>
-<pre><code>curl www.baidu.com</code></pre><p>服务器返回的头部信息一般情况下是隐藏的，你可以用 <code>--include(-i)</code>选项让他显示出来。</p>
-<h2 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h2>
+<pre><code>curl www.baidu.com
+</code></pre><p>服务器返回的头部信息一般情况下是隐藏的，你可以用 <code>--include(-i)</code>选项让他显示出来。</p>
+<h2 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h2><p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
     </div>
 
     
@@ -322,7 +331,7 @@ curl -u user:password http://www.baidu.com</code></pre><p>但是，在当前的�
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql%E7%9A%84Information-Schema-%E5%85%83%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EShow%E8%AF%AD%E5%8F%A5.html" rel="next" title="Mysql的Information_Schema 元数据库与Show语句">
+                <a href="/数据库/Mysql的Information-Schema-元数据库与Show语句.html" rel="next" title="Mysql的Information_Schema 元数据库与Show语句">
                   <i class="fa fa-chevron-left"></i> Mysql的Information_Schema 元数据库与Show语句
                 </a>
             </div>
@@ -330,7 +339,7 @@ curl -u user:password http://www.baidu.com</code></pre><p>但是，在当前的�
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Vim/vim-%E5%88%A9%E7%94%A8Vundle%E7%AE%A1%E7%90%86%E6%8F%92%E4%BB%B6.html" rel="prev" title="vim-利用Vundle管理插件">
+                <a href="/Vim/vim-利用Vundle管理插件.html" rel="prev" title="vim-利用Vundle管理插件">
                   vim-利用Vundle管理插件 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -392,20 +401,20 @@ curl -u user:password http://www.baidu.com</code></pre><p>但是，在当前的�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -417,10 +426,10 @@ curl -u user:password http://www.baidu.com</code></pre><p>但是，在当前的�
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -449,10 +458,10 @@ curl -u user:password http://www.baidu.com</code></pre><p>但是，在当前的�
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -527,7 +536,7 @@ curl -u user:password http://www.baidu.com</code></pre><p>但是，在当前的�
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/curl-http%E8%84%9A%E6%9C%AC.html",
+            url: "https://gowa.club/Linux-Unix/curl-http脚本.html",
             identifier: "Linux-Unix/curl-http脚本.html",
             title: "curl-http脚本"
           }

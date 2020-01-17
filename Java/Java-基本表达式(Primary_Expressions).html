@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Java,The Java Tutorial">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java-基本表达式(Primary_Expressions)">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;Java-%E5%9F%BA%E6%9C%AC%E8%A1%A8%E8%BE%BE%E5%BC%8F(Primary_Expressions).html">
+<meta property="og:url" content="https://gowa.club/Java/Java-基本表达式(Primary_Expressions).html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="基本表达式包含了最简单的类型的表达式，其他类似的表达式都由他们来构建：字面表达式，class字面表达式，字段访问，方法调用，数组访问。一个括号表达式语法上也被看成是一个基本表达式。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-03-22T01:49:25.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java-基本表达式(Primary_Expressions)">
+<meta name="twitter:description" content="基本表达式包含了最简单的类型的表达式，其他类似的表达式都由他们来构建：字面表达式，class字面表达式，字段访问，方法调用，数组访问。一个括号表达式语法上也被看成是一个基本表达式。">
 
-<link rel="canonical" href="https://gowa.club/Java/Java-%E5%9F%BA%E6%9C%AC%E8%A1%A8%E8%BE%BE%E5%BC%8F(Primary_Expressions).html">
+<link rel="canonical" href="https://gowa.club/Java/Java-基本表达式(Primary_Expressions).html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Java-%E5%9F%BA%E6%9C%AC%E8%A1%A8%E8%BE%BE%E5%BC%8F(Primary_Expressions).html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Java-基本表达式(Primary_Expressions).html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/Java-%E5%9F%BA%E6%9C%AC%E8%A1%A8%E8%BE%BE%E5%BC%8F(Primary_Expressions).html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/Java-基本表达式(Primary_Expressions).html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Java-基本表达式(Primary_Expressions).html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,14 +292,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>基本表达式包含了最简单的类型的表达式，其他类似的表达式都由他们来构建：字面表达式，class字面表达式，字段访问，方法调用，数组访问。一个括号表达式语法上也被看成是一个基本表达式。</p>
-<a id="more"></a>
-<p>网页内容地址 <a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.8" target="_blank" rel="noopener">15.8. Primary Expressions</a></p>
+        <p>基本表达式包含了最简单的类型的表达式，其他类似的表达式都由他们来构建：字面表达式，class字面表达式，字段访问，方法调用，数组访问。一个括号表达式语法上也被看成是一个基本表达式。<br><a id="more"></a><br>网页内容地址 <a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.8" target="_blank" rel="noopener">15.8. Primary Expressions</a></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Primary:</span><br><span class="line">    PrimaryNoNewArray</span><br><span class="line">    ArrayCreationExpression</span><br><span class="line"></span><br><span class="line">PrimaryNoNewArray:</span><br><span class="line">    Literal</span><br><span class="line">    Type . class</span><br><span class="line">    void . class</span><br><span class="line">    this</span><br><span class="line">    ClassName . this</span><br><span class="line">    ( Expression )</span><br><span class="line">    ClassInstanceCreationExpression</span><br><span class="line">    FieldAccess</span><br><span class="line">    MethodInvocation</span><br><span class="line">    ArrayAccess</span><br></pre></td></tr></table></figure>
-
 <h1 id="类字面量"><a href="#类字面量" class="headerlink" title="类字面量"></a>类字面量</h1><p>一个类字面量表达式由 类，接口，数组的名字，或基本类型，伪类型 void，后跟上 <code>.class</code> 组成。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ClassLiteral:</span><br><span class="line">TypeName &#123;[ ]&#125; . class </span><br><span class="line">NumericType &#123;[ ]&#125; . class </span><br><span class="line">boolean &#123;[ ]&#125; . class </span><br><span class="line">void . class</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li><strong>C.class</strong>，C是一个类，接口，数组的名字，其类型是 <code>Class &lt;C&gt;</code>。</li>
 <li><strong>p.class</strong>，p 是基本类型， 的类型是 <code>Class &lt;B&gt;</code>，其中 B 是 p 在经常了黑盒转换后类型的表达式。</li>
@@ -309,18 +307,16 @@
 <p>其中，<strong>T</strong> 是被 Class 对象所模仿的 类 的类型。如，<strong>String.class</strong> 的类型是 <code>Class &lt;String&gt;</code>。当需要模仿的类是未知的时候，使用 <code>Class &lt;?&gt;</code>。</p>
 <p>其类声明：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Class</span>&lt;<span class="title">T</span>&gt;</span></span><br><span class="line"><span class="class"><span class="keyword">extends</span> <span class="title">Object</span></span></span><br><span class="line"><span class="class"><span class="keyword">implements</span> <span class="title">Serializable</span>, <span class="title">GenericDeclaration</span>, <span class="title">Type</span>, <span class="title">AnnotatedElement</span></span></span><br></pre></td></tr></table></figure>
-
 <p>Class类的实例代表了一个Java应用中的 类 和 接口。枚举是一种类，注释是一种接口。每个数组都属于一个类，这个类是被 Class 对象反射的，所有的数组共享这个 Class 对象反射的类，因此所有数组具有相同的元素类型。基本的Java类型 (<strong>boolean, byte, char, short, long, int, fload, double</strong>）以及 <strong>void</strong> 都代表一个 Class 对象。</p>
 <p>Class没有公开的构造器。Class对象会被 Java 虚拟机以类的形式自动构建，这种类在类加载器中加载且会调用 <code>defineClass</code> 方法。</p>
 <p>下面的例子使用，<strong>Class</strong> 对象来打印一个对象的类名：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printClassName</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">	System.out.println(<span class="string">"The class of "</span> + obj + <span class="string">" is "</span> + obj.getClass().getName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
 <h1 id="泛型类"><a href="#泛型类" class="headerlink" title="泛型类"></a>泛型类</h1><p>我们经常会看见类似的类声明：</p>
 <p>在开源项目 <a href="https://github.com/CymChad/BaseRecyclerViewAdapterHelper" target="_blank" rel="noopener">BaseRecyclerViewAdapterHelper</a>中就有：   </p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> </span></span><br><span class="line"><span class="class"><span class="title">BaseQuickAdapter</span>&lt;<span class="title">T</span>, <span class="title">K</span> <span class="keyword">extends</span> <span class="title">BaseViewHolder</span>&gt; </span></span><br><span class="line"><span class="class"><span class="keyword">extends</span> <span class="title">RecyclerView</span>.<span class="title">Adapter</span>&lt;<span class="title">K</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这表示，我们在这个类中使用的关于 T ，K 类型可以是任意我们传入的。</p>
 <p>当然，仔细理解了才会明白这是什么意思。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -338,7 +334,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/android_studio%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97-%E9%85%8D%E7%BD%AE%E6%9E%84%E5%BB%BA%E6%A6%82%E8%A7%88.html" rel="next" title="android_studio用户指南-配置构建概览">
+                <a href="/Android/android_studio用户指南-配置构建概览.html" rel="next" title="android_studio用户指南-配置构建概览">
                   <i class="fa fa-chevron-left"></i> android_studio用户指南-配置构建概览
                 </a>
             </div>
@@ -346,7 +342,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/svn%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E4%BD%BF%E7%94%A8.html" rel="prev" title="svn命令行的使用">
+                <a href="/Android/svn命令行的使用.html" rel="prev" title="svn命令行的使用">
                   svn命令行的使用 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -408,20 +404,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -433,10 +429,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -465,10 +461,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -543,7 +539,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/Java-%E5%9F%BA%E6%9C%AC%E8%A1%A8%E8%BE%BE%E5%BC%8F(Primary_Expressions).html",
+            url: "https://gowa.club/Java/Java-基本表达式(Primary_Expressions).html",
             identifier: "Java/Java-基本表达式(Primary_Expressions).html",
             title: "Java-基本表达式(Primary_Expressions)"
           }

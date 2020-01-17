@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="android中的canvas使用">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;android%E4%B8%AD%E7%9A%84canvas%E4%BD%BF%E7%94%A8.html">
+<meta property="og:url" content="https://gowa.club/Android/android中的canvas使用.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="canvas类中拥有 draw 调用。联系要绘制某些内容的话，需要四个组件：用来存储像素的bitmap，用来包含绘制调用的Canvas，绘制区域（如矩行，路径，文字，bitmap），以及一个画刷（用来定义绘制的颜色和风格）。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-08-05T01:20:16.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="android中的canvas使用">
+<meta name="twitter:description" content="canvas类中拥有 draw 调用。联系要绘制某些内容的话，需要四个组件：用来存储像素的bitmap，用来包含绘制调用的Canvas，绘制区域（如矩行，路径，文字，bitmap），以及一个画刷（用来定义绘制的颜色和风格）。">
 
-<link rel="canonical" href="https://gowa.club/Android/android%E4%B8%AD%E7%9A%84canvas%E4%BD%BF%E7%94%A8.html">
+<link rel="canonical" href="https://gowa.club/Android/android中的canvas使用.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android%E4%B8%AD%E7%9A%84canvas%E4%BD%BF%E7%94%A8.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android中的canvas使用.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/android%E4%B8%AD%E7%9A%84canvas%E4%BD%BF%E7%94%A8.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/android中的canvas使用.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/android中的canvas使用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,30 +292,23 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>canvas类中拥有 <code>draw</code> 调用。联系要绘制某些内容的话，需要四个组件：<strong>用来存储像素的bitmap，用来包含绘制调用的Canvas，绘制区域（如矩行，路径，文字，bitmap），以及一个画刷（用来定义绘制的颜色和风格）</strong>。</p>
-<a id="more"></a>
-
+        <p>canvas类中拥有 <code>draw</code> 调用。联系要绘制某些内容的话，需要四个组件：<strong>用来存储像素的bitmap，用来包含绘制调用的Canvas，绘制区域（如矩行，路径，文字，bitmap），以及一个画刷（用来定义绘制的颜色和风格）</strong>。<br><a id="more"></a></p>
 <p>本章参考原文：<a href="https://guides.codepath.com/android/Basic-Painting-with-Views" target="_blank" rel="noopener">https://guides.codepath.com/android/Basic-Painting-with-Views</a>。</p>
 <h1 id="自定义一个View"><a href="#自定义一个View" class="headerlink" title="自定义一个View"></a>自定义一个View</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleDrawingView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">SimpleDrawingView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(context, attrs);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在我们的布局文件内加入这个自定义的View：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">hello.gowa.com.myapplication.customview.SimpleDrawingView</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-
 <h1 id="定义绘制"><a href="#定义绘制" class="headerlink" title="定义绘制"></a>定义绘制</h1><h2 id="定义画刷"><a href="#定义画刷" class="headerlink" title="定义画刷"></a>定义画刷</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleDrawingView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">  <span class="comment">// setup initial color</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> paintColor = Color.BLACK;</span><br><span class="line">  <span class="comment">// defines paint and canvas</span></span><br><span class="line">  <span class="keyword">private</span> Paint drawPaint;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">SimpleDrawingView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(context, attrs);</span><br><span class="line">    setFocusable(<span class="keyword">true</span>);</span><br><span class="line">    setFocusableInTouchMode(<span class="keyword">true</span>);</span><br><span class="line">    setupPaint();</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Setup paint with color and stroke styles</span></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setupPaint</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    drawPaint = <span class="keyword">new</span> Paint();</span><br><span class="line">    drawPaint.setColor(paintColor);</span><br><span class="line">    drawPaint.setAntiAlias(<span class="keyword">true</span>);</span><br><span class="line">    drawPaint.setStrokeWidth(<span class="number">5</span>);</span><br><span class="line">    drawPaint.setStyle(Paint.Style.STROKE);</span><br><span class="line">    drawPaint.setStrokeJoin(Paint.Join.ROUND);</span><br><span class="line">    drawPaint.setStrokeCap(Paint.Cap.ROUND);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="重写onDraw函数"><a href="#重写onDraw函数" class="headerlink" title="重写onDraw函数"></a>重写onDraw函数</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">  canvas.drawCircle(<span class="number">50</span>, <span class="number">50</span>, <span class="number">20</span>, drawPaint);</span><br><span class="line">  drawPaint.setColor(Color.GREEN);</span><br><span class="line">  canvas.drawCircle(<span class="number">50</span>, <span class="number">150</span>, <span class="number">20</span>, drawPaint);</span><br><span class="line">  drawPaint.setColor(Color.BLUE);</span><br><span class="line">  canvas.drawCircle(<span class="number">50</span>, <span class="number">250</span>, <span class="number">20</span>, drawPaint);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>上面的代码，绘制了三个不同颜色的圆。形状的绘制，通过 Canvas里面的各种调用来实现的。</p>
 <h1 id="处理触摸事件"><a href="#处理触摸事件" class="headerlink" title="处理触摸事件"></a>处理触摸事件</h1><p>如果现在我们想在每次用户触摸一下屏幕的时候，就在触摸的地方绘制一个圈，那我们就必须跟踪用户所触摸的每个点。在<code>onTouch</code>事件中我们可以获得这个坐标。：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleDrawingView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">  <span class="comment">// setup initial color</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> paintColor = Color.BLACK;</span><br><span class="line">  <span class="comment">// defines paint and canvas</span></span><br><span class="line">  <span class="keyword">private</span> Paint drawPaint;</span><br><span class="line">  <span class="comment">// Store circles to draw each time the user touches down</span></span><br><span class="line">  <span class="keyword">private</span> List&lt;Point&gt; circlePoints;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">SimpleDrawingView</span><span class="params">(Context context, AttributeSet attrs)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(context, attrs);</span><br><span class="line">    setupPaint(); <span class="comment">// same as before</span></span><br><span class="line">    circlePoints = <span class="keyword">new</span> ArrayList&lt;Point&gt;();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Draw each circle onto the view</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (Point p : circlePoints) &#123;</span><br><span class="line">      canvas.drawCircle(p.x, p.y, <span class="number">5</span>, drawPaint);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Append new circle each time user presses on screen</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">float</span> touchX = event.getX();</span><br><span class="line">    <span class="keyword">float</span> touchY = event.getY();</span><br><span class="line">    circlePoints.add(<span class="keyword">new</span> Point(Math.round(touchX), Math.round(touchY)));</span><br><span class="line">    <span class="comment">// indicate view should be redrawn</span></span><br><span class="line">    postInvalidate();</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setupPaint</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// same as before</span></span><br><span class="line">    drawPaint.setStyle(Paint.Style.FILL); <span class="comment">// change to fill</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="根据路径绘制"><a href="#根据路径绘制" class="headerlink" title="根据路径绘制"></a>根据路径绘制</h1><p><em>Path<em>类可以包含多个线条，轮廓甚至其他形状。我们添加一个</em>Path</em> 变量来跟踪我们的绘制：</p>
+<h1 id="根据路径绘制"><a href="#根据路径绘制" class="headerlink" title="根据路径绘制"></a>根据路径绘制</h1><p><em>Path</em>类可以包含多个线条，轮廓甚至其他形状。我们添加一个<em>Path</em> 变量来跟踪我们的绘制：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleDrawingView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Path path = <span class="keyword">new</span> Path();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Get x and y and append them to the path</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">float</span> pointX = event.getX();</span><br><span class="line">        <span class="keyword">float</span> pointY = event.getY();</span><br><span class="line">        <span class="comment">// Checks for the event that occurs</span></span><br><span class="line">        <span class="keyword">switch</span> (event.getAction()) &#123;</span><br><span class="line">        <span class="keyword">case</span> MotionEvent.ACTION_DOWN:</span><br><span class="line">            <span class="comment">// Starts a new line in the path</span></span><br><span class="line">            path.moveTo(pointX, pointY);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> MotionEvent.ACTION_MOVE:</span><br><span class="line">            <span class="comment">// Draws line between last point and this point</span></span><br><span class="line">            path.lineTo(pointX, pointY);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       postInvalidate(); <span class="comment">// Indicate view should be redrawn</span></span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">true</span>; <span class="comment">// Indicate we've consumed the touch</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>在<code>onDraw</code>中进行绘制路径：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleDrawingView</span> <span class="keyword">extends</span> <span class="title">View</span> </span>&#123;</span><br><span class="line">  <span class="comment">// ... onTouchEvent ...</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// Draws the path created during the touch events</span></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">      canvas.drawPath(path, drawPaint);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">setupPaint</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// same as before</span></span><br><span class="line">    drawPaint.setStyle(Paint.Style.STROKE); <span class="comment">// change back to stroke</span></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>后面的效果类似于手写字一样。</p>
 <h1 id="用-bitmap缓存来提高效率"><a href="#用-bitmap缓存来提高效率" class="headerlink" title="用 bitmap缓存来提高效率"></a>用 bitmap缓存来提高效率</h1><p>当在 canvas上绘制的时候，可以将图片缓存到 bitmap 来大大的提高效率。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -330,7 +325,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Git/git-svn%E6%9D%A5%E7%AE%A1%E7%90%86svn%E4%BB%93%E5%BA%93.html" rel="next" title="git-svn来管理svn仓库">
+                <a href="/Git/git-svn来管理svn仓库.html" rel="next" title="git-svn来管理svn仓库">
                   <i class="fa fa-chevron-left"></i> git-svn来管理svn仓库
                 </a>
             </div>
@@ -338,7 +333,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/android%E9%9B%86%E6%88%90%E8%85%BE%E8%AE%AFX5%E5%86%85%E6%A0%B8%E6%B5%8F%E8%A7%88office%E6%96%87%E4%BB%B6.html" rel="prev" title="android集成腾讯X5内核浏览office文件">
+                <a href="/Android/android集成腾讯X5内核浏览office文件.html" rel="prev" title="android集成腾讯X5内核浏览office文件">
                   android集成腾讯X5内核浏览office文件 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -400,20 +395,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -425,10 +420,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -457,10 +452,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -535,7 +530,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/android%E4%B8%AD%E7%9A%84canvas%E4%BD%BF%E7%94%A8.html",
+            url: "https://gowa.club/Android/android中的canvas使用.html",
             identifier: "Android/android中的canvas使用.html",
             title: "android中的canvas使用"
           }

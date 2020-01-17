@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="偶尔遇到MySQL几个BUG似的地方">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;%E5%81%B6%E5%B0%94%E9%81%87%E5%88%B0MySQL%E5%87%A0%E4%B8%AABUG%E4%BC%BC%E7%9A%84%E5%9C%B0%E6%96%B9.html">
+<meta property="og:url" content="https://gowa.club/数据库/偶尔遇到MySQL几个BUG似的地方.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="今天在删除和查询数据的时候，发现了几个以前没有注意的地方。我有一列值，里面有 NULL，有字符值。然后我用 != 字符这样的情况去居然过滤不出来。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-12-26T08:08:25.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="偶尔遇到MySQL几个BUG似的地方">
+<meta name="twitter:description" content="今天在删除和查询数据的时候，发现了几个以前没有注意的地方。我有一列值，里面有 NULL，有字符值。然后我用 != 字符这样的情况去居然过滤不出来。">
 
-<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%81%B6%E5%B0%94%E9%81%87%E5%88%B0MySQL%E5%87%A0%E4%B8%AABUG%E4%BC%BC%E7%9A%84%E5%9C%B0%E6%96%B9.html">
+<link rel="canonical" href="https://gowa.club/数据库/偶尔遇到MySQL几个BUG似的地方.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%81%B6%E5%B0%94%E9%81%87%E5%88%B0MySQL%E5%87%A0%E4%B8%AABUG%E4%BC%BC%E7%9A%84%E5%9C%B0%E6%96%B9.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/偶尔遇到MySQL几个BUG似的地方.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -259,7 +261,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%81%B6%E5%B0%94%E9%81%87%E5%88%B0MySQL%E5%87%A0%E4%B8%AABUG%E4%BC%BC%E7%9A%84%E5%9C%B0%E6%96%B9.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/偶尔遇到MySQL几个BUG似的地方.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/偶尔遇到MySQL几个BUG似的地方.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,25 +294,20 @@
       
         <p>今天在删除和查询数据的时候，发现了几个以前没有注意的地方。我有一列值，里面有 NULL，有字符值。然后我用 != 字符这样的情况去居然过滤不出来。</p>
 <a id="more"></a>
-
 <h1 id="字符比较"><a href="#字符比较" class="headerlink" title="字符比较"></a>字符比较</h1><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> a(a <span class="built_in">INT</span> AUTO_INCREMENT, b <span class="built_in">CHAR</span>(<span class="number">20</span>) <span class="keyword">DEFAULT</span> <span class="literal">NULL</span>, PRIMARY <span class="keyword">KEY</span> (<span class="string">`a`</span>));</span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> a(<span class="string">`b`</span>) <span class="keyword">VALUES</span> (<span class="string">'and'</span>),(<span class="string">'or'</span>),(<span class="string">'but'</span>),(<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> a <span class="keyword">where</span> b != <span class="string">'and'</span>;</span><br></pre></td></tr></table></figure>
-
 <p>NULL 值的行居然没有出来，这是为什么？</p>
 <p>官方文档说明：NULL意味着 <strong>一个不存在的，未知的值</strong>，所以和其他值有所不同。</p>
 <p>需要用 IS NULL 或者  IS NOT NULL 来测试 。任何数学上的比较都没有效比如：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT 1 = NULL, 1 &lt;&gt; NULL, 1 &lt; NULL, 1 &gt; NULL;</span><br><span class="line">+<span class="comment">----------+-----------+----------+----------+</span></span><br><span class="line">| 1 = NULL | 1 &lt;&gt; NULL | 1 &lt; NULL | 1 &gt; NULL |</span><br><span class="line">+<span class="comment">----------+-----------+----------+----------+</span></span><br><span class="line">|     NULL |      NULL |     NULL |     NULL |</span><br><span class="line">+<span class="comment">----------+-----------+----------+----------+</span></span><br></pre></td></tr></table></figure>
-
 <p>其返回值，都是NULL。</p>
 <p>0 和 NULL 意味着 false，其他值都表示 true。对一个布尔操作默认 trueth 值是 1。</p>
 <p>应该说，字符比较也返回 NULL。</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; SELECT '1' = NULL, 1 &lt;&gt; NULL, 1 &lt; NULL, 1 &gt; NULL;</span><br><span class="line">+<span class="comment">----------+-----------+----------+----------+</span></span><br><span class="line">| 1 = NULL | 1 &lt;&gt; NULL | 1 &lt; NULL | 1 &gt; NULL |</span><br><span class="line">+<span class="comment">----------+-----------+----------+----------+</span></span><br><span class="line">|     NULL |      NULL |     NULL |     NULL |</span><br><span class="line">+<span class="comment">----------+-----------+----------+----------+</span></span><br></pre></td></tr></table></figure>
-
 <h1 id="多表删除"><a href="#多表删除" class="headerlink" title="多表删除"></a>多表删除</h1><p>另外一个问题是我用类似</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">delete</span> a <span class="keyword">from</span> t1 a, t2 b <span class="keyword">where</span> a.id = b.id;</span><br></pre></td></tr></table></figure>
-
 <p>这个语句会报错，表示找不到 表  a 。</p>
 <p>这就是一个问题：</p>
-<p>在多表删除中，我们删除表只能使用  <strong>别名</strong>， 而不能用我们引用的表的名称。</p>
+<p>在多表删除中，我们删除表只能使用  <strong>别名</strong>， 而不能用我们引用的表的名称。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -327,7 +324,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Cocos-Creator/Cocos%20Creator%E6%8E%A5%E5%85%A5%E6%94%AF%E4%BB%98%E5%AE%9E%E7%8E%B0.html" rel="next" title="Cocos Creator接入支付实现">
+                <a href="/Cocos-Creator/Cocos Creator接入支付实现.html" rel="next" title="Cocos Creator接入支付实现">
                   <i class="fa fa-chevron-left"></i> Cocos Creator接入支付实现
                 </a>
             </div>
@@ -335,7 +332,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/JavaScript/Pomelo%E5%86%85%E5%BB%BA%E7%BB%84%E4%BB%B6%E5%8F%8A%E6%B8%B8%E6%88%8F%E9%9C%80%E8%A6%81%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%9C%E8%A5%BF.html" rel="prev" title="Pomelo内建组件及游戏需要实现的一些东西">
+                <a href="/JavaScript/Pomelo内建组件及游戏需要实现的一些东西.html" rel="prev" title="Pomelo内建组件及游戏需要实现的一些东西">
                   Pomelo内建组件及游戏需要实现的一些东西 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -397,20 +394,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -422,10 +419,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -454,10 +451,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -532,7 +529,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E5%81%B6%E5%B0%94%E9%81%87%E5%88%B0MySQL%E5%87%A0%E4%B8%AABUG%E4%BC%BC%E7%9A%84%E5%9C%B0%E6%96%B9.html",
+            url: "https://gowa.club/数据库/偶尔遇到MySQL几个BUG似的地方.html",
             identifier: "数据库/偶尔遇到MySQL几个BUG似的地方.html",
             title: "偶尔遇到MySQL几个BUG似的地方"
           }

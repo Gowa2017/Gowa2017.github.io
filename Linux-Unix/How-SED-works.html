@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,12 +51,14 @@
 <meta name="keywords" content="Linux,SED,运维,Shell">
 <meta property="og:type" content="article">
 <meta property="og:title" content="How SED works">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;How-SED-works.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/How-SED-works.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Linux下三大神器之一的sed，为你处理字符，批量替换，提供了超级效率的操作方法。sed是面向流(stream)，更确切的说是字符流，以行为单位进行操作。循环直至结束。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.267Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="How SED works">
+<meta name="twitter:description" content="Linux下三大神器之一的sed，为你处理字符，批量替换，提供了超级效率的操作方法。sed是面向流(stream)，更确切的说是字符流，以行为单位进行操作。循环直至结束。">
 
 <link rel="canonical" href="https://gowa.club/Linux-Unix/How-SED-works.html">
 
@@ -297,8 +299,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Linux下三大神器之一的<code>sed</code>，为你处理字符，批量替换，提供了超级效率的操作方法。<br><code>sed</code>是面向<code>流(stream)</code>，更确切的说是<code>字符流</code>，以行为单位进行操作。循环直至结束。</p>
-<a id="more"></a>
+        <p>Linux下三大神器之一的<code>sed</code>，为你处理字符，批量替换，提供了超级效率的操作方法。<br><code>sed</code>是面向<code>流(stream)</code>，更确切的说是<code>字符流</code>，以行为单位进行操作。循环直至结束。<br><a id="more"></a></p>
 <h1 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h1><p>sed 使用了两个数据缓存器  活动的 <strong>pattern space</strong>, 辅助的 <strong>hold space</strong> 。其刚开始命令的时候都是空的。<br>sed 按以下循环进行工作:  </p>
 <ol>
 <li>sed读取输入文件的一行，移除尾部的换行符，然后放入<strong>pattern_space</strong>。  </li>
@@ -311,7 +312,8 @@
 <p>理解 sed 每次只会读取输入的一行到缓冲区，对与理解 <code>n</code> 和<code>N</code>命令非常有用。</p>
 </blockquote>
 <h1 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h1><p>通常情况下我们是这样使用sed的：</p>
-<pre><code>sed OPTIONS... [SCRIPT] [INPUTFILE...]</code></pre><h2 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h2><p>OPTIONS可以说如下值[多个]</p>
+<pre><code>sed OPTIONS... [SCRIPT] [INPUTFILE...]
+</code></pre><h2 id="Options"><a href="#Options" class="headerlink" title="Options"></a>Options</h2><p>OPTIONS可以说如下值[多个]</p>
 <p><code>--help</code> 帮助<br><code>--version</code> 版本信息<br><code>-n --quiet --silent</code> 默认情况下，完成一行的处理后，sed默认打印pattern space的内容，此选项将关闭默认打印。<br><code>-e SCRIPT --expression=SCRIPT</code> 指定执行的命令，可以多次使用。当然，也可以用{}进行分组指定。<br><code>-f SCRIPT-file --file=SCRIPT-file</code> 在文件中指定执行命令。<br><code>-i</code> 直接修改输出到文件，而不是到标准输出<br><code>-l N | --line-length=N</code> 指定<code>l</code>命令换行的长度。长度为0表明从不换行，如果没有指定的话，值就是70。<br><code>-b --binary</code> 当操作系统区别文本文件和二进制文件的时候有用。<br><code>--follow-symlinks</code> 指定<code>-i</code>选项的时候，如果输入文件是一个符号链接则会跟随链接到文件。默认情况是不跟随。<br><code>-E | -r | --regexp-extend</code> 扩展正则表达式。<br><code>-u | --unbufferd</code> 尽量少的缓存输入和输入。(当用<code>tail -f</code>作为输入的时候，这个选项可以让你尽快的看到结果)</p>
 <h2 id="退出状态"><a href="#退出状态" class="headerlink" title="退出状态"></a>退出状态</h2><ul>
 <li>0 success  </li>
@@ -319,24 +321,35 @@
 <li>2 One or more input file specified could not be opend </li>
 <li>4 An I/O error。</li>
 </ul>
-<h1 id="范围的指定"><a href="#范围的指定" class="headerlink" title="范围的指定"></a>范围的指定</h1><p>我们可以指定动作执行的范围（文件中的哪些行），及需要执行的命令（ <strong>pattern_space</strong> )上执行。<br><code>number</code> 一个确切的数字，指定某行<br><code>$</code> 最后一行<br><code>first~step</code> first=起始 step=步长，想取奇数行就用 1<del>2,每五行就用 1</del>5。 <strong>GNU SED扩展</strong><br><code>/regexp/</code> 满足正则表达式的行。如果正则表达式内包含<code>/</code>，需要使用<code>\</code>进行转义。<br><code>\%regexp%</code> 为了避免上面那样的反引，你可以用任何一个符号来代替<code>%</code>。<br><code>/regexp/I</code> <code>\%regexp%I</code> 以大小写不敏感的方式来匹配正则式。 <strong>GNU 扩展</strong><br><code>/regexp/M</code> <code>\%regexp%M</code> 多行模式匹配正则式。这个时候<code>^</code>表示其前有一个换行，<code>$</code>表示其后跟随一个换行。 <strong>GNU扩展</strong><br><code>ADDR1,+N</code> <code>ADDR1</code>及其后的N行。 <strong>GNU 扩展</strong><br><code>ADDR1,~N</code> 找到ADDR1后的，继续匹配直到是N的倍数的行。 <em>注意与first~step区别,这条是匹配到了就不继续匹配了,而first-step是匹配到结束。</em> <strong>GNU 扩展</strong><br><code>!</code> 跟随在一个地址范围后，其意义是就是不匹配地址范围表达式的才会被选择。 <strong>GNU扩展</strong>  </p>
+<h1 id="范围的指定"><a href="#范围的指定" class="headerlink" title="范围的指定"></a>范围的指定</h1><p>我们可以指定动作执行的范围（文件中的哪些行），及需要执行的命令（ <strong>pattern_space</strong> )上执行。<br><code>number</code> 一个确切的数字，指定某行<br><code>$</code> 最后一行<br><code>first~step</code> first=起始 step=步长，想取奇数行就用 1~2,每五行就用 1~5。 <strong>GNU SED扩展</strong><br><code>/regexp/</code> 满足正则表达式的行。如果正则表达式内包含<code>/</code>，需要使用<code>\</code>进行转义。<br><code>\%regexp%</code> 为了避免上面那样的反引，你可以用任何一个符号来代替<code>%</code>。<br><code>/regexp/I</code> <code>\%regexp%I</code> 以大小写不敏感的方式来匹配正则式。 <strong>GNU 扩展</strong><br><code>/regexp/M</code> <code>\%regexp%M</code> 多行模式匹配正则式。这个时候<code>^</code>表示其前有一个换行，<code>$</code>表示其后跟随一个换行。 <strong>GNU扩展</strong><br><code>ADDR1,+N</code> <code>ADDR1</code>及其后的N行。 <strong>GNU 扩展</strong><br><code>ADDR1,~N</code> 找到ADDR1后的，继续匹配直到是N的倍数的行。 <em>注意与first~step区别,这条是匹配到了就不继续匹配了,而first-step是匹配到结束。</em> <strong>GNU 扩展</strong><br><code>!</code> 跟随在一个地址范围后，其意义是就是不匹配地址范围表达式的才会被选择。 <strong>GNU扩展</strong>  </p>
 <h1 id="常用的命令"><a href="#常用的命令" class="headerlink" title="常用的命令"></a>常用的命令</h1><p><code>#</code> 注释<br><code>q</code> [EXIT-CODE] 只接受一个地址范围参数，打印当前 <strong>pattern_ space</strong> 后退出，并返回退出码。 <strong>GNU扩展</strong><br><code>d</code> 删除当前 <strong>pattern_ space</strong>，立即开始处理下一行，不会继续执行之后的命令。 </p>
 <pre><code>seq 3 | sed 2d 
-seq 3 | sed </code></pre><p><code>D</code> 如果 <strong>pattern_ space</strong> <em>没有</em> 换行符，等同于<code>d</code>命令。否则，将 <strong>pattern_ space</strong> 内容删除到第一个换行符为止，然后重新在 <strong>pattern_ space</strong> 上执行命令,并不会读入下一行到 <strong>pattern_ space</strong>。<br><code>p</code> 打印当前 <strong>pattern_ space</strong> 到标准输出，一般跟 <code>-n</code>选项配合使用  </p>
-<pre><code>seq 3 | sed -n 2p</code></pre><p><code>P</code> 打印 <strong>pattern_ space</strong> 到出现第一个换行符的位置<br><code>n</code> 如果自动打印没有被<code>-n</code>关闭，此命令会打印当前 <strong>pattern_ space</strong>， 然后把内容替换为下一行，如果没有输入了，就停止执行命令。<br>这个命令对于跳过某些行非常有用，比如处理每 <code>Nth</code>行。  </p>
-<pre><code>seq 6 | sed &apos;n;n;s/./x/&apos;</code></pre><p><code>N</code> 给 <strong>pattern_ space</strong> 添加一个换行符 同时将下一行的输入读进来。如果没有输入，不执行命令即退出。<br><code>{commands}</code> 一连串命令集合，以’;’分割开的多条命令，在 <strong>pattern_ space</strong> 上执行。 <strong>GNU特性</strong>  </p>
-<pre><code>seq 3 | sed -n &apos;2{s/2/X/ ; p} </code></pre><hr>
+seq 3 | sed 
+</code></pre><p><code>D</code> 如果 <strong>pattern_ space</strong> <em>没有</em> 换行符，等同于<code>d</code>命令。否则，将 <strong>pattern_ space</strong> 内容删除到第一个换行符为止，然后重新在 <strong>pattern_ space</strong> 上执行命令,并不会读入下一行到 <strong>pattern_ space</strong>。<br><code>p</code> 打印当前 <strong>pattern_ space</strong> 到标准输出，一般跟 <code>-n</code>选项配合使用  </p>
+<pre><code>seq 3 | sed -n 2p
+</code></pre><p><code>P</code> 打印 <strong>pattern_ space</strong> 到出现第一个换行符的位置<br><code>n</code> 如果自动打印没有被<code>-n</code>关闭，此命令会打印当前 <strong>pattern_ space</strong>， 然后把内容替换为下一行，如果没有输入了，就停止执行命令。<br>这个命令对于跳过某些行非常有用，比如处理每 <code>Nth</code>行。  </p>
+<pre><code>seq 6 | sed &#39;n;n;s/./x/&#39;
+</code></pre><p><code>N</code> 给 <strong>pattern_ space</strong> 添加一个换行符 同时将下一行的输入读进来。如果没有输入，不执行命令即退出。<br><code>{commands}</code> 一连串命令集合，以’;’分割开的多条命令，在 <strong>pattern_ space</strong> 上执行。 <strong>GNU特性</strong>  </p>
+<pre><code>seq 3 | sed -n &#39;2{s/2/X/ ; p} 
+</code></pre><hr>
 <h2 id="s-替换命令"><a href="#s-替换命令" class="headerlink" title="s 替换命令"></a><strong><code>s</code> 替换命令</strong></h2><p>命令原型:</p>
-<pre><code>s/REGEXP/REPLACEMENT/FLAGS </code></pre><p><code>/</code>号同样可以用 其他符号代替，如:# % 等等避免<code>/</code>需要用转义<br><strong>工作流程是</strong><br>用REGEXP匹配 <strong>pattern_ space</strong> 如果成功，就用REPLACEMENT替换。<br>REGEXP 可以用 ‘(‘ ‘)‘进行分组，<br>在REPLACEMENT，可以用 \1..9 进行引用，&amp;代表整个匹配的内容</p>
-<p>在 <strong>GNU扩展</strong> 内 你还用一组’&#39;跟’L’,’l’,’U’,’u’,’E’ 组成的序列。但这些并不常用。<br><code>\L</code> 将REPLACEMENT变换为小写，直到 <code>\U</code> or <code>\E</code>出现。<br><code>\l</code> 将REPLACEMENT中的下一个字符转变为小写.<br><code>\U</code> 将REPLACEMENT变换为大写，直到 <code>\L</code> or <code>\E</code>出现。<br><code>\u</code> 将REPLACEMENT中的下一个字符转变为大写.<br><code>\E</code> 在REPLACEMENT中结束<code>\L</code>,<code>\U</code>的作用。</p>
+<pre><code>s/REGEXP/REPLACEMENT/FLAGS 
+</code></pre><p><code>/</code>号同样可以用 其他符号代替，如:# % 等等避免<code>/</code>需要用转义<br><strong>工作流程是</strong><br>用REGEXP匹配 <strong>pattern_ space</strong> 如果成功，就用REPLACEMENT替换。<br>REGEXP 可以用 ‘(‘ ‘)‘进行分组，<br>在REPLACEMENT，可以用 \1..9 进行引用，&amp;代表整个匹配的内容</p>
+<p>在 <strong>GNU扩展</strong> 内 你还用一组’\’跟’L’,’l’,’U’,’u’,’E’ 组成的序列。但这些并不常用。<br><code>\L</code> 将REPLACEMENT变换为小写，直到 <code>\U</code> or <code>\E</code>出现。<br><code>\l</code> 将REPLACEMENT中的下一个字符转变为小写.<br><code>\U</code> 将REPLACEMENT变换为大写，直到 <code>\L</code> or <code>\E</code>出现。<br><code>\u</code> 将REPLACEMENT中的下一个字符转变为大写.<br><code>\E</code> 在REPLACEMENT中结束<code>\L</code>,<code>\U</code>的作用。</p>
 <p><strong>FLAGS：</strong><br><code>g</code> 替换 <strong>pattern_ space</strong> 内所有匹配的位置。不加此标志，只替换第一次匹配的位置<br><code>NUMBER</code> 替换 <strong>pattern_ space</strong> 内第<code>NUMBER</code>匹配位置。（POSIX内并 <strong>没有定义</strong> NUMBER 与g一起使用会是什么情况，<strong>GNU内，则表示从第NUMBER到最后一个匹配的位置</strong>)<br><code>w FILENAME</code> 如果s命令成功执行，将输出写到文件内。<strong>GNU扩展 支持使用<code>/dev/stdout /dev/stderr</code></strong><br><code>e</code> 如果s命令匹配成功，在 <strong>pattern_ space</strong> 内的内容将会被当作命令执行，同时 <strong>pattern_ space</strong>被替换为命令的输出。 <strong>GNU 扩展</strong><br><code>p</code> 打印出匹配后的 <strong>pattern_ space</strong>。同时指定<code>ep</code> 或<code>pe</code> 效果是不一样的。pe将会打印找到的命令，然后打印e输出，ep只是打印e的输出<br><code>I,i</code> 以大小写不敏感的方式来匹配正则式。<strong>GNU 扩展</strong><br><code>M,m</code> 多行模式匹配正则式。这个时候<code>^</code>表示其前有一个换行，<code>$</code>表示其后跟随一个换行。<strong>GNU扩展</strong> </p>
-<h2 id="y-命令"><a href="#y-命令" class="headerlink" title="y 命令"></a><code>y</code> 命令</h2><pre><code>y/SOURCE_CHARS/DEST-CHARS/</code></pre><p>逐个替换为对应位置的字符比如 y/abc/ABC/ 凡 a被替换为A b替换为B</p>
+<h2 id="y-命令"><a href="#y-命令" class="headerlink" title="y 命令"></a><code>y</code> 命令</h2><pre><code>y/SOURCE_CHARS/DEST-CHARS/
+</code></pre><p>逐个替换为对应位置的字符比如 y/abc/ABC/ 凡 a被替换为A b替换为B</p>
 <h2 id="其他命令"><a href="#其他命令" class="headerlink" title="其他命令"></a>其他命令</h2><p><strong>a\<br>TEXT</strong> (append)在当前循环输出后面加上TEXT。如果你用<code>-n</code>命令关闭了打印的话，则只打印<code>TEXT</code>。  </p>
-<pre><code>seq 3 | sed &apos;2a\hello&apos;</code></pre><p><strong>i\<br>TEXT</strong> (insert)在当前输出前加上<code>TEXT</code>。 </p>
-<pre><code>seq 3 | sed &apos;2i\hello&apos; </code></pre><p><strong>c\<br>TEXT</strong> 删除 <strong>pattern_ space</strong> 打印<code>TEXT</code>  </p>
-<pre><code>seq 3 | sed &apos;2c\hello&apos;</code></pre><p><code>=</code> 打印当前输入的是第几行，后面跟随一个换行符<br><code>l N</code> 清晰的模式打印 <strong>pattern_ space</strong> ，<code>N</code>是行宽，中文全变成\232 \245这样的的了。行尾加上$<br><code>r FILENAME</code> 读取文件到当前循环的输出流后。文件名不存在也没事，就当读了个空。 <strong>GNU扩展支持 /dev/stdin</strong>  </p>
-<pre><code>seq 3 | sed &apos;2r/etc/passwd&apos;</code></pre><p><code>w FILENAME</code> 将 <strong>pattern_ space</strong> 写到文件。 <strong>GNU扩展支持/dev/stderr /dev/stdout</strong> 文件将被创建（当不存在）或被截短（当已存在），在没有读入行之前。所有w指令(包括s成功执行的w标志)不会关闭或者重新打开文件（提高效率）  </p>
-<pre><code>seq 3 | sed &apos;2woutfile&apos;</code></pre><p><code>h</code> 用 <strong>pattern_ space</strong> 的内容替换 <strong>hold_ space</strong><br><code>H</code> 在 <strong>hold_ space</strong> 后加一个换行符 同时把 <strong>pattern_ space</strong> 的内容copy 过来<br><code>g</code> 用 <strong>hold_ space <em>_的内容替换 __pattern</em> space</strong>的内容<br><code>G</code> 在 <strong>pattern_ space</strong> 后加一个换行符 同时把 <strong>hold_ space</strong> 的内容copy 过来<br><code>x</code> 交换 <strong>pattern_ space</strong> 和 <strong>hold_ space</strong>的内容<br><code>:</code> LABEL 设置个标签<br><code>b</code> LABEL 无条件跳往 LABEL标签。下一循环开始的时候，将会忽略这个标签<br><code>t</code> LABEL s成功执行后跳转到LABEL标签  </p>
+<pre><code>seq 3 | sed &#39;2a\hello&#39;
+</code></pre><p><strong>i\<br>TEXT</strong> (insert)在当前输出前加上<code>TEXT</code>。 </p>
+<pre><code>seq 3 | sed &#39;2i\hello&#39; 
+</code></pre><p><strong>c\<br>TEXT</strong> 删除 <strong>pattern_ space</strong> 打印<code>TEXT</code>  </p>
+<pre><code>seq 3 | sed &#39;2c\hello&#39;
+</code></pre><p><code>=</code> 打印当前输入的是第几行，后面跟随一个换行符<br><code>l N</code> 清晰的模式打印 <strong>pattern_ space</strong> ，<code>N</code>是行宽，中文全变成\232 \245这样的的了。行尾加上$<br><code>r FILENAME</code> 读取文件到当前循环的输出流后。文件名不存在也没事，就当读了个空。 <strong>GNU扩展支持 /dev/stdin</strong>  </p>
+<pre><code>seq 3 | sed &#39;2r/etc/passwd&#39;
+</code></pre><p><code>w FILENAME</code> 将 <strong>pattern_ space</strong> 写到文件。 <strong>GNU扩展支持/dev/stderr /dev/stdout</strong> 文件将被创建（当不存在）或被截短（当已存在），在没有读入行之前。所有w指令(包括s成功执行的w标志)不会关闭或者重新打开文件（提高效率）  </p>
+<pre><code>seq 3 | sed &#39;2woutfile&#39;
+</code></pre><p><code>h</code> 用 <strong>pattern_ space</strong> 的内容替换 <strong>hold_ space</strong><br><code>H</code> 在 <strong>hold_ space</strong> 后加一个换行符 同时把 <strong>pattern_ space</strong> 的内容copy 过来<br><code>g</code> 用 <strong>hold_ space </strong>的内容替换 <strong>pattern_ space</strong>的内容<br><code>G</code> 在 <strong>pattern_ space</strong> 后加一个换行符 同时把 <strong>hold_ space</strong> 的内容copy 过来<br><code>x</code> 交换 <strong>pattern_ space</strong> 和 <strong>hold_ space</strong>的内容<br><code>:</code> LABEL 设置个标签<br><code>b</code> LABEL 无条件跳往 LABEL标签。下一循环开始的时候，将会忽略这个标签<br><code>t</code> LABEL s成功执行后跳转到LABEL标签  </p>
 <h1 id="标签使用"><a href="#标签使用" class="headerlink" title="标签使用"></a>标签使用</h1><p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD<br>标签主要使用 <code>:, t, b</code>三个命令实现的，分别是 <strong>设置标签，替换成功后跳转，无条件跳转</strong>三个意思。</p>
 <p>=======</p>
 <blockquote>
@@ -359,6 +372,7 @@ seq 3 | sed </code></pre><p><code>D</code> 如果 <strong>pattern_ space</strong
 <p><strong>居中</strong>  </p>
 <p>我们可以以79个字符为宽度把文本居中：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed -e :a -e <span class="string">'s/^.\&#123;1,77\&#125;/ &amp; /'</span></span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -370,7 +384,7 @@ seq 3 | sed </code></pre><p><code>D</code> 如果 <strong>pattern_ space</strong
           <div class="post-tags">
               <a href="/tags/Linux/" rel="tag"># Linux</a>
               <a href="/tags/SED/" rel="tag"># SED</a>
-              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
+              <a href="/tags/运维/" rel="tag"># 运维</a>
               <a href="/tags/Shell/" rel="tag"># Shell</a>
           </div>
 
@@ -378,7 +392,7 @@ seq 3 | sed </code></pre><p><code>D</code> 如果 <strong>pattern_ space</strong
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/Basic-RegEx%E4%B8%8EExtend-RegEx.html" rel="next" title="Basic RegEx与Extend RegEx">
+                <a href="/Linux-Unix/Basic-RegEx与Extend-RegEx.html" rel="next" title="Basic RegEx与Extend RegEx">
                   <i class="fa fa-chevron-left"></i> Basic RegEx与Extend RegEx
                 </a>
             </div>
@@ -386,7 +400,7 @@ seq 3 | sed </code></pre><p><code>D</code> 如果 <strong>pattern_ space</strong
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/Linux%E5%88%A9%E7%94%A8Cron%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E7%BC%96%E5%86%99%E8%84%9A%E6%9C%AC%E7%9A%84%E6%B3%A8%E6%84%8F.html" rel="prev" title="Linux利用Cron定时任务编写脚本的注意">
+                <a href="/Linux-Unix/Linux利用Cron定时任务编写脚本的注意.html" rel="prev" title="Linux利用Cron定时任务编写脚本的注意">
                   Linux利用Cron定时任务编写脚本的注意 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -448,20 +462,20 @@ seq 3 | sed </code></pre><p><code>D</code> 如果 <strong>pattern_ space</strong
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -473,10 +487,10 @@ seq 3 | sed </code></pre><p><code>D</code> 如果 <strong>pattern_ space</strong
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -505,10 +519,10 @@ seq 3 | sed </code></pre><p><code>D</code> 如果 <strong>pattern_ space</strong
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         

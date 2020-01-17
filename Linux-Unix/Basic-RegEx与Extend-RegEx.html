@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,24 +41,26 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
 </script>
 
-  <meta name="description" content="当我们使用sed&#x2F;awk&#x2F;grep的时候，必然会用到的就是正则表达式，对与我们选取与操作字符串非常的有用。但却有两种比较常见的表达式，BRE(Basic RegEx)和ERE(Extent RegEx)，这其中确有些不同。">
+  <meta name="description" content="当我们使用sed/awk/grep的时候，必然会用到的就是正则表达式，对与我们选取与操作字符串非常的有用。但却有两种比较常见的表达式，BRE(Basic RegEx)和ERE(Extent RegEx)，这其中确有些不同。">
 <meta name="keywords" content="Shell,RegEx">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Basic RegEx与Extend RegEx">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;Basic-RegEx%E4%B8%8EExtend-RegEx.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/Basic-RegEx与Extend-RegEx.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="当我们使用sed&#x2F;awk&#x2F;grep的时候，必然会用到的就是正则表达式，对与我们选取与操作字符串非常的有用。但却有两种比较常见的表达式，BRE(Basic RegEx)和ERE(Extent RegEx)，这其中确有些不同。">
+<meta property="og:description" content="当我们使用sed/awk/grep的时候，必然会用到的就是正则表达式，对与我们选取与操作字符串非常的有用。但却有两种比较常见的表达式，BRE(Basic RegEx)和ERE(Extent RegEx)，这其中确有些不同。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.267Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Basic RegEx与Extend RegEx">
+<meta name="twitter:description" content="当我们使用sed/awk/grep的时候，必然会用到的就是正则表达式，对与我们选取与操作字符串非常的有用。但却有两种比较常见的表达式，BRE(Basic RegEx)和ERE(Extent RegEx)，这其中确有些不同。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/Basic-RegEx%E4%B8%8EExtend-RegEx.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/Basic-RegEx与Extend-RegEx.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Basic-RegEx%E4%B8%8EExtend-RegEx.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Basic-RegEx与Extend-RegEx.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -281,7 +283,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/Basic-RegEx%E4%B8%8EExtend-RegEx.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/Basic-RegEx与Extend-RegEx.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/Basic-RegEx与Extend-RegEx.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -297,8 +299,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>当我们使用sed/awk/grep的时候，必然会用到的就是<code>正则表达式</code>，对与我们选取与操作字符串非常的有用。但却有两种比较常见的表达式，<code>BRE(Basic RegEx)和ERE(Extent RegEx)</code>，这其中确有些不同。</p>
-<a id="more"></a>
+        <p>当我们使用sed/awk/grep的时候，必然会用到的就是<code>正则表达式</code>，对与我们选取与操作字符串非常的有用。但却有两种比较常见的表达式，<code>BRE(Basic RegEx)和ERE(Extent RegEx)</code>，这其中确有些不同。<br><a id="more"></a></p>
 <h1 id="不同"><a href="#不同" class="headerlink" title="不同"></a>不同</h1><p>在GNU上来说，<code>BRE</code>与<code>ERE</code>的不同在于几个元字符的意义 <strong>不同</strong> ：<code>?</code>, <code>+</code>, <code>()</code>, <code>{}</code>, <code>|</code>。<br><code>BRE</code> 要求在这几个字符加上 <code>\</code> 才能表示特殊意义，否则就匹配其自己，而在<code>ERE</code>中，匹配其自己需要用<code>\</code>转义。</p>
 <blockquote>
 <p><code>\|</code> 是一个GNU扩展，<code>BRE</code>并不提供这个功能。  </p>
@@ -306,6 +307,7 @@
 <p>Linux中，<code>SED</code>(通过<code>-r/-E</code>支持<code>ERE</code>)、<code>VIM</code>、<code>GREP</code>（通过<code>-E</code>选项支持<code>ERE</code>)使用的是<code>BRE</code>，<code>GAWK</code>使用的是<code>ERE</code>。</p>
 <h1 id="BRE"><a href="#BRE" class="headerlink" title="BRE"></a>BRE</h1><p><code>CHAR</code>    匹配指定字符。<br><code>.</code>    匹配任意一个字符。<br><code>^</code>    匹配行首非空字符。<br><code>$</code>    匹配行尾非空字符。<br><code>[LIST] [^LIST]</code>    匹配/不匹配指定字符。<br><code>(REGEXP1 | REGEXP2)</code>    匹配REGEXP1或REGEXP2。 <strong>GNU扩展</strong><br><code>REGEXP1REGEXP2</code>    匹配两个连续的RegEx。<br><code>\n</code>    换行符<br><code>\CHAR</code>    转义字符。<code>$, *, ., \, ^</code><br><code>*</code>    匹配任意次数。<br><code>\+</code>    匹配&gt;=1次。<br><code>\?</code>    匹配0或1次。<br><code>\{I\}</code>    匹配I次。<br><code>\{I,J\}</code>    匹配I&lt;=N&lt;=J次。<br><code>\{I,\}</code>    匹配I &lt;= N次。<br><code>\(REGEXP\)</code>    分组，用[1-9]引用。<br><code>\DIGIT</code>    匹配上面的分组  </p>
 <h1 id="ERE"><a href="#ERE" class="headerlink" title="ERE"></a>ERE</h1><p><code>.</code>    匹配任意一个字符。<br><code>CHAR</code>    匹配指定字符。<br><code>^</code>    匹配行首非空字符。<br><code>$</code>    匹配行尾非空字符。<br><code>[LIST] [^LIST]</code>    匹配/不匹配指定字符。<br><code>(REGEXP1 | REGEXP2)</code>    匹配REGEXP1或REGEXP2。 <strong>GNU扩展</strong><br><code>REGEXP1REGEXP2</code>    匹配两个连续的RegEx。<br><code>\n</code>    换行符<br><code>\CHAR</code>    转义字符。<code>$, *, ., \, ^</code><br><code>*</code>    匹配任意次数。<br><strong><code>+</code>    匹配&gt;=1次。</strong><br><strong><code>?</code>    匹配0或1次。</strong><br><strong><code>{I}</code>    匹配I次。</strong><br><strong><code>{I,J}</code>    匹配I&lt;=N&lt;=J次。</strong><br><strong><code>{I,}</code>    匹配I &lt;= N次。</strong><br><strong><code>{,J}</code>    匹配N &lt;= J次。 GNU特性</strong><br><code>\(REGEXP\)</code>    分组，用[1-9]引用。<br><code>\DIGIT</code>    匹配上面的分组  </p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -323,7 +325,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/TCP-IP/OSPF%E5%8D%8F%E8%AE%AE%E5%8F%8A%E5%85%B6%E9%85%8D%E7%BD%AE%E5%AE%9E%E7%8E%B0.html" rel="next" title="OSPF协议及其配置实现">
+                <a href="/TCP-IP/OSPF协议及其配置实现.html" rel="next" title="OSPF协议及其配置实现">
                   <i class="fa fa-chevron-left"></i> OSPF协议及其配置实现
                 </a>
             </div>
@@ -393,20 +395,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -418,10 +420,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -450,10 +452,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -528,7 +530,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/Basic-RegEx%E4%B8%8EExtend-RegEx.html",
+            url: "https://gowa.club/Linux-Unix/Basic-RegEx与Extend-RegEx.html",
             identifier: "Linux-Unix/Basic-RegEx与Extend-RegEx.html",
             title: "Basic RegEx与Extend RegEx"
           }

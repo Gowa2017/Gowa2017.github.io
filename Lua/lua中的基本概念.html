@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Lua">
 <meta property="og:type" content="article">
 <meta property="og:title" content="lua中的基本概念">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Lua&#x2F;lua%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5.html">
+<meta property="og:url" content="https://gowa.club/Lua/lua中的基本概念.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="lua中的基本概念包括：值和类型，环境变量及全局环境变量，错误处理，元表及元方法，垃圾回收，协程等。以前从来没有看过，现在仔细的深入了解一下。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-22T00:56:35.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="lua中的基本概念">
+<meta name="twitter:description" content="lua中的基本概念包括：值和类型，环境变量及全局环境变量，错误处理，元表及元方法，垃圾回收，协程等。以前从来没有看过，现在仔细的深入了解一下。">
 
-<link rel="canonical" href="https://gowa.club/Lua/lua%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5.html">
+<link rel="canonical" href="https://gowa.club/Lua/lua中的基本概念.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/lua%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/lua中的基本概念.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/lua%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/lua中的基本概念.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/lua中的基本概念.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,9 +292,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>lua中的基本概念包括：值和类型，环境变量及全局环境变量，错误处理，元表及元方法，垃圾回收，协程等。以前从来没有看过，现在仔细的深入了解一下。</p>
-<a id="more"></a>
-<p>文章来源，<a href="http://www.lua.org/manual/5.3/manual.html#2" target="_blank" rel="noopener">lua官方文档第二章</a></p>
+        <p>lua中的基本概念包括：值和类型，环境变量及全局环境变量，错误处理，元表及元方法，垃圾回收，协程等。以前从来没有看过，现在仔细的深入了解一下。<br><a id="more"></a><br>文章来源，<a href="http://www.lua.org/manual/5.3/manual.html#2" target="_blank" rel="noopener">lua官方文档第二章</a></p>
 <h1 id="值和类型"><a href="#值和类型" class="headerlink" title="值和类型"></a>值和类型</h1><p>Lua是一个<em>动态类型</em>语言。也就是说值变量没有类型；只有值有。语言中没有类型定义。所有的值携带了自身类型。</p>
 <p>Lua中的所有值是<em>第一类</em>的值。这是说所有的值都可以被存储在变量内，或者作为参数传递给函数，或者作为函数返回值。</p>
 <p>有8种基本的类型：<em>nil, boolean, number, string, function, thread, table, userdate</em>。<em>nil</em>类型只有一个值，<strong>nil</strong>，这何其他所有的值不同；其常常表示缺少一个可用的值。<em>boolean</em>有两个值，<strong>false, true</strong>。<strong>nil, false</strong>都表达否定条件；其他值表示<em>true</em>。<em>number</em>表示整数和实数（浮点）。<em>string</em>代表不可变的字节序列。Lua是8-bit的字符：字符串可以包含任何8-bit的值，包括<code>\0</code>。Lua与编码无关，其不对字符的内容做任何假设。</p>
@@ -354,13 +354,12 @@
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- 当 __index 是一个函数时</span></span><br><span class="line">mt = &#123;&#125;</span><br><span class="line">mt.<span class="built_in">__index</span> = <span class="function"><span class="keyword">function</span> <span class="params">(table, key)</span></span> <span class="built_in">print</span>(<span class="string">"in t.mt.__index"</span>); <span class="built_in">print</span>(<span class="built_in">table</span>, key); <span class="keyword">return</span> <span class="string">"mt.__index return"</span> <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> t = &#123; <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line"><span class="built_in">setmetatable</span>(t, mt)</span><br><span class="line"><span class="built_in">print</span>(t[<span class="number">8</span>])</span><br></pre></td></tr></table></figure>
 <p>我们在没有键<em>8</em>的时候进行索引访问，其输出如下:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">in t.mt.__index</span><br><span class="line">table: 0x7fa797604200	8</span><br><span class="line">mt.__index return</span><br></pre></td></tr></table></figure>
-
 <p>在这里面，我们设置的<code>__index</code>事件函数的返回值是一个字符串<em>mt.__index return</em>，结果确实如此。</p>
 <p>当<code>__index</code>是一个表的时候：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">a = &#123; x = <span class="number">1</span>, y = <span class="number">2</span>, z = <span class="number">3</span>&#125;</span><br><span class="line">b = &#123; <span class="number">1</span>, <span class="number">2</span> ,<span class="number">3</span>&#125;</span><br><span class="line">b.<span class="built_in">__index</span> = b</span><br><span class="line"><span class="built_in">setmetatable</span>(a, b)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(a[<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
-
 <p>其输出是: </p>
-<pre><code>1</code></pre><p>说明确实是访问了其元表中<code>__index</code>事件中表的对应索引值。确实如上所说。</p>
+<pre><code>1
+</code></pre><p>说明确实是访问了其元表中<code>__index</code>事件中表的对应索引值。确实如上所说。</p>
 <ul>
 <li><strong>__newindex</strong>: 索引赋值<code>table[key] = value</code>。跟<code>__index</code>事件类似，这个事件在<em>table</em>不是一个表或<em>key</em>不在<em>table</em>中时发生。元方法在<em>table</em>表内寻找。</li>
 </ul>
@@ -368,16 +367,12 @@
 <p>如果有一个<code>__newindex</code>元方法，Lua不会进行一个原始的赋值。（如果必要，元方法自身可以调用<code>rawset</code>来进行原始赋值）。</p>
 <p>当元方法是一个函数时：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">mt1 = &#123;&#125;</span><br><span class="line">mt1.<span class="built_in">__newindex</span> = <span class="function"><span class="keyword">function</span> <span class="params">(table, key, value)</span></span> <span class="built_in">print</span>(<span class="built_in">table</span>, key, value);<span class="keyword">return</span> <span class="string">"hello"</span> <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">t = &#123;&#125;</span><br><span class="line"><span class="built_in">setmetatable</span>(t, mt1)</span><br><span class="line"></span><br><span class="line">t.a = <span class="string">"world"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(t.a)</span><br></pre></td></tr></table></figure>
-
 <p>输出是:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">table: 0x7fe611c070c0	a	world</span><br><span class="line">nil</span><br></pre></td></tr></table></figure>
-
 <p>如果是一个表呢：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">a = &#123;&#125;</span><br><span class="line">mt = &#123;&#125;</span><br><span class="line">mt.<span class="built_in">__newindex</span> = a</span><br><span class="line"></span><br><span class="line">t = &#123;&#125;</span><br><span class="line"><span class="built_in">setmetatable</span>(t, mt)</span><br><span class="line"></span><br><span class="line">t.a = <span class="string">"world"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(t.a, a.a)</span><br></pre></td></tr></table></figure>
-
 <p>输出是：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nil		world</span><br></pre></td></tr></table></figure>
-
 <p>其结果就是，赋值赋到了<code>__newindex</code>元方法的表中。</p>
 <ul>
 <li><strong>__call</strong>: 调用操作<code>func(args)</code>。这在Lua调用一个非函数的值时发生（也就是说，<em>func</em>不是一个函数）。元方法在<em>func</em>内寻找。如果找到，<em>func</em>作为第一个参数调用元方法，后面是原始的参数<em>args</em>。调用结果就是操作的结果。（这是唯一一个允许多个结果的元方法）。</li>
@@ -411,18 +406,14 @@
 <p>跟<code>coroutine.create()</code>相似，<code>coroutime.wrap()</code>函数也会创建一个协程，但其会返回一个函数而不是协程自身，调用这个函数的时候会重启协程。传递到这个函数的参数会作为<code>coroutine.resume()</code>的额外参数。<code>coroutine.wrap()</code>返回所有被<code>coroutine.resume()</code>返回的值，不包括第一个（布尔错误代码）。与<code>coroutine.resume</code>不一样的是，<code>coroutine.wrap</code>不会捕捉任何错误；任何错误都会抛给调用者。</p>
 <p>我们看一下下面的代码来研究一个协程是怎么工作的：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span> <span class="params">(a)</span></span></span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"foo"</span>,a)</span><br><span class="line">	<span class="keyword">return</span> coroutine.<span class="built_in">yield</span>(<span class="number">2</span>*a)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">co = coroutine.<span class="built_in">create</span>(<span class="function"><span class="keyword">function</span> <span class="params">(a,b)</span></span></span><br><span class="line">		<span class="built_in">print</span>(<span class="string">"co-body"</span>, a, b)</span><br><span class="line">		<span class="keyword">local</span> r = foo(a+<span class="number">1</span>)</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">"co-body"</span>, r)</span><br><span class="line">		<span class="keyword">local</span> r, s = coroutine.<span class="built_in">yield</span>(a+b, a-b)</span><br><span class="line">		<span class="built_in">print</span>(<span class="string">"co-body"</span>, r, s)</span><br><span class="line">		<span class="keyword">return</span> b, <span class="string">"end"</span></span><br><span class="line">	<span class="keyword">end</span>)</span><br><span class="line"></span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"main"</span>, coroutine.<span class="built_in">resume</span>(co, <span class="number">1</span>, <span class="number">10</span>))</span><br><span class="line"> 	<span class="built_in">print</span>(<span class="string">"main"</span>, coroutine.<span class="built_in">resume</span>(co, <span class="string">"r"</span>))</span><br><span class="line"> 	<span class="built_in">print</span>(<span class="string">"main"</span>, coroutine.<span class="built_in">resume</span>(co, <span class="string">"x"</span>, <span class="string">"y"</span>))</span><br><span class="line"> 	<span class="built_in">print</span>(<span class="string">"main"</span>, coroutine.<span class="built_in">resume</span>(co, <span class="string">"x"</span>, <span class="string">"y"</span>))</span><br></pre></td></tr></table></figure>
-
 <p>当运行的时候，会产生下面的输出：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">co-body <span class="number">1</span>       <span class="number">10</span></span><br><span class="line">  foo     <span class="number">2</span></span><br><span class="line">  main    <span class="literal">true</span>    <span class="number">4</span></span><br><span class="line">  co-body r</span><br><span class="line">  main    <span class="literal">true</span>    <span class="number">11</span>      <span class="number">-9</span></span><br><span class="line">  co-body x       y</span><br><span class="line">  main    <span class="literal">true</span>    <span class="number">10</span>      <span class="keyword">end</span></span><br><span class="line">  main    <span class="literal">false</span>   cannot <span class="built_in">resume</span> dead coroutine</span><br></pre></td></tr></table></figure>
-
-
-
 <p>同样可以通过C API来创建和操作协程：查看函数<code>lua_newthread(), lua_resume, lua_yield</code>。<br>我们来仔细的看一下这个过程。</p>
 <ol>
 <li>首先建立一个协程<em>co</em></li>
 <li><code>coroutine.resume(co, 1, 10)</code>会以参数<code>1, 10</code>启动<code>co</code>。首先打印出<em>co-body, 1, 10</em>然后调用<code>foo(1 + 1)</code>。</li>
 <li>在<code>foo()</code>中，打印出参数的值这里是2，然后放弃当前协程。放弃协程会返回<code>coroutine.yield()</code>返回的值，已经<strong>true</strong>。所以输出是<code>main true 4</code></li>
-<li>从调用<code>foo(a+1)</code>的位置重启协程，这会继续执行，被调用<code>coroutine.yield(a+b, a-b)</code>返回值是<code>true 11 -9</code>。</li>
+<li>从调用<code>foo(a+1)</code>的位置重启协程，这会继续执行，被调用<code>coroutine.yield(a+b, a-b)</code>返回值是<code>true 11 -9</code>。<br><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></li>
 </ol>
 
     </div>
@@ -440,7 +431,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Lua/lua%E4%B8%AD%E7%9A%84C-API%E5%8F%8A%E4%BB%A3%E7%A0%81%E6%B5%81%E7%A8%8B.html" rel="next" title="lua中的C-API及代码流程">
+                <a href="/Lua/lua中的C-API及代码流程.html" rel="next" title="lua中的C-API及代码流程">
                   <i class="fa fa-chevron-left"></i> lua中的C-API及代码流程
                 </a>
             </div>
@@ -448,7 +439,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Lua/lua%E4%B8%AD%E7%9A%84%E8%A1%A8%E5%8F%8A%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1.html" rel="prev" title="lua中的表及面向对象">
+                <a href="/Lua/lua中的表及面向对象.html" rel="prev" title="lua中的表及面向对象">
                   lua中的表及面向对象 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -510,20 +501,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -535,10 +526,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -567,10 +558,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -645,7 +636,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Lua/lua%E4%B8%AD%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5.html",
+            url: "https://gowa.club/Lua/lua中的基本概念.html",
             identifier: "Lua/lua中的基本概念.html",
             title: "lua中的基本概念"
           }

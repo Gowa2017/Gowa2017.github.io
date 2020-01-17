@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -49,10 +49,11 @@
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="退思园">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;index.html">
+<meta property="og:url" content="https://gowa.club/index.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="退思园">
 
 <link rel="canonical" href="https://gowa.club/">
 
@@ -224,7 +225,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/%E5%85%B3%E4%BA%8Emermaid.cli%E6%B8%B2%E6%9F%93%E6%88%90%E5%9B%BE%E7%89%87%E6%96%87%E4%BB%B6%E7%9A%84%E8%BF%87%E7%A8%8B.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Bash中的IO与重定向.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -238,7 +239,97 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/JavaScript/%E5%85%B3%E4%BA%8Emermaid.cli%E6%B8%B2%E6%9F%93%E6%88%90%E5%9B%BE%E7%89%87%E6%96%87%E4%BB%B6%E7%9A%84%E8%BF%87%E7%A8%8B.html" class="post-title-link" itemprop="url">关于mermaid.cli渲染成图片文件的过程</a>
+            <a href="/Linux-Unix/Bash中的IO与重定向.html" class="post-title-link" itemprop="url">Bash中的IO与重定向</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-01-17 12:04:35" itemprop="dateCreated datePublished" datetime="2020-01-17T12:04:35+08:00">2020-01-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux-Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/Bash中的IO与重定向.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/Bash中的IO与重定向.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我们知道，进程在打开的时候，就默认已经打开了三个文件描述符 <strong>0, 1, 2</strong> 方便大不了 标准输入，标准输出，标准错误。而我们要进行重定向的时候，比如到一个文件的时候，实际上进程不会关心他到底是被重定向到什么地方了，他只需要依然向这三个描述符进行相关的 IO 操作就行了。所以，我们需要来了解一下文件描述符背后的一些内容。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/Linux-Unix/Bash中的IO与重定向.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/关于mermaid.cli渲染成图片文件的过程.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/JavaScript/关于mermaid.cli渲染成图片文件的过程.html" class="post-title-link" itemprop="url">关于mermaid.cli渲染成图片文件的过程</a>
         </h1>
 
         <div class="post-meta">
@@ -271,7 +362,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/JavaScript/%E5%85%B3%E4%BA%8Emermaid.cli%E6%B8%B2%E6%9F%93%E6%88%90%E5%9B%BE%E7%89%87%E6%96%87%E4%BB%B6%E7%9A%84%E8%BF%87%E7%A8%8B.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/JavaScript/关于mermaid.cli渲染成图片文件的过程.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/关于mermaid.cli渲染成图片文件的过程.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,7 +381,7 @@
           <p>根据 mermaid 官方文档的说明， mermaid 实际上分成两个部分。<a href="https://github.com/mermaid-js/mermaid/blob/develop/src/mermaid.js" target="_blank" rel="noopener">mermaid.js</a> 是作为网页集成模块，<a href="https://github.com/mermaid-js/mermaid/blob/develop/src/mermaidAPI.js" target="_blank" rel="noopener">mermaidAPI</a> 是用来进行定制更多细节的，事实上 mermaid.js 就使用了 mermaidAPI 来进行一些默认的设置。最核心的，其实还是 mermaidAPI 的 <code>render()</code> 方法，其会将我们定义的图表渲染成 svg 代码。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/JavaScript/%E5%85%B3%E4%BA%8Emermaid.cli%E6%B8%B2%E6%9F%93%E6%88%90%E5%9B%BE%E7%89%87%E6%96%87%E4%BB%B6%E7%9A%84%E8%BF%87%E7%A8%8B.html#more" rel="contents">
+              <a class="btn" href="/JavaScript/关于mermaid.cli渲染成图片文件的过程.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -314,7 +405,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/macOS/%E4%BD%BF%E7%94%A8pandoc%E8%BD%AC%E6%8D%A2pdf%E5%8A%A0%E4%B8%8A%E4%B9%A6%E7%AD%BE%E7%9B%AE%E5%BD%95.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/macOS/使用pandoc转换pdf加上书签目录.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -328,7 +419,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/macOS/%E4%BD%BF%E7%94%A8pandoc%E8%BD%AC%E6%8D%A2pdf%E5%8A%A0%E4%B8%8A%E4%B9%A6%E7%AD%BE%E7%9B%AE%E5%BD%95.html" class="post-title-link" itemprop="url">使用pandoc转换pdf加上书签目录</a>
+            <a href="/macOS/使用pandoc转换pdf加上书签目录.html" class="post-title-link" itemprop="url">使用pandoc转换pdf加上书签目录</a>
         </h1>
 
         <div class="post-meta">
@@ -361,7 +452,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/macOS/%E4%BD%BF%E7%94%A8pandoc%E8%BD%AC%E6%8D%A2pdf%E5%8A%A0%E4%B8%8A%E4%B9%A6%E7%AD%BE%E7%9B%AE%E5%BD%95.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/macOS/使用pandoc转换pdf加上书签目录.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="macOS/使用pandoc转换pdf加上书签目录.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -377,10 +468,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>在文章 <a href="/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html" title="几种绘图语法的比较">几种绘图语法的比较</a> 中，我说了我想要的一个 markdown 编辑器， typora 实际上非常优秀，但不开源。 Macdown 非常不错，开源。通过将其 mermaid 进行升级，viz.js 进行升级后，感觉非常不错了，唯一还有一点，就是导出 pdf 没有 Toc，而只能在页内设置 Toc，所以来研究一下用 pandoc 来进行转换看看效果如何。</p>
+          <p>在文章 <a href="/Graphviz/几种绘图语法的比较.html" title="几种绘图语法的比较">几种绘图语法的比较</a> 中，我说了我想要的一个 markdown 编辑器， typora 实际上非常优秀，但不开源。 Macdown 非常不错，开源。通过将其 mermaid 进行升级，viz.js 进行升级后，感觉非常不错了，唯一还有一点，就是导出 pdf 没有 Toc，而只能在页内设置 Toc，所以来研究一下用 pandoc 来进行转换看看效果如何。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/macOS/%E4%BD%BF%E7%94%A8pandoc%E8%BD%AC%E6%8D%A2pdf%E5%8A%A0%E4%B8%8A%E4%B9%A6%E7%AD%BE%E7%9B%AE%E5%BD%95.html#more" rel="contents">
+              <a class="btn" href="/macOS/使用pandoc转换pdf加上书签目录.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -404,7 +495,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/%E5%85%B3%E4%BA%8E%E5%BB%BA%E7%AB%8BGit%E6%9C%8D%E5%8A%A1%E5%99%A8.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/关于建立Git服务器.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -418,7 +509,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Git/%E5%85%B3%E4%BA%8E%E5%BB%BA%E7%AB%8BGit%E6%9C%8D%E5%8A%A1%E5%99%A8.html" class="post-title-link" itemprop="url">关于建立Git服务器</a>
+            <a href="/Git/关于建立Git服务器.html" class="post-title-link" itemprop="url">关于建立Git服务器</a>
         </h1>
 
         <div class="post-meta">
@@ -451,7 +542,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Git/%E5%85%B3%E4%BA%8E%E5%BB%BA%E7%AB%8BGit%E6%9C%8D%E5%8A%A1%E5%99%A8.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Git/关于建立Git服务器.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Git/关于建立Git服务器.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -470,7 +561,7 @@
           <p>简单的记录一下使用 ssh 作为协议来建立 git 服务器的过程，然后对其不足进行一下研究，然后再探究一下当前比较好的 git 服务器的方案。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Git/%E5%85%B3%E4%BA%8E%E5%BB%BA%E7%AB%8BGit%E6%9C%8D%E5%8A%A1%E5%99%A8.html#more" rel="contents">
+              <a class="btn" href="/Git/关于建立Git服务器.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -494,7 +585,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Graphviz/几种绘图语法的比较.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -508,7 +599,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html" class="post-title-link" itemprop="url">几种绘图语法的比较</a>
+            <a href="/Graphviz/几种绘图语法的比较.html" class="post-title-link" itemprop="url">几种绘图语法的比较</a>
         </h1>
 
         <div class="post-meta">
@@ -541,7 +632,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Graphviz/几种绘图语法的比较.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Graphviz/几种绘图语法的比较.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -560,7 +651,7 @@
           <p>自从用 Graphviz 来进行绘图后，感觉确实是非常强大的。同时呢，也看到了很多基于 Graphviz 来进行绘图的改进，如 PlantUML，Mermaid 等，我日常的笔记整理都是用的 markdown ，说实话，确实没有看到能很好的将这几者进行整合后的软件存在。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html#more" rel="contents">
+              <a class="btn" href="/Graphviz/几种绘图语法的比较.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -584,7 +675,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/%E4%BD%BF%E7%94%A8C4-PlantUML%E6%9D%A5%E5%BF%AB%E9%80%9F%E7%9A%84%E6%8F%8F%E8%BF%B0%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/软件架构/使用C4-PlantUML来快速的描述软件架构.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -598,7 +689,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/%E4%BD%BF%E7%94%A8C4-PlantUML%E6%9D%A5%E5%BF%AB%E9%80%9F%E7%9A%84%E6%8F%8F%E8%BF%B0%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84.html" class="post-title-link" itemprop="url">使用C4-PlantUML来快速的描述软件架构</a>
+            <a href="/软件架构/使用C4-PlantUML来快速的描述软件架构.html" class="post-title-link" itemprop="url">使用C4-PlantUML来快速的描述软件架构</a>
         </h1>
 
         <div class="post-meta">
@@ -616,7 +707,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index">
+                  <a href="/categories/软件架构/" itemprop="url" rel="index">
                     <span itemprop="name">软件架构</span>
                   </a>
                 </span>
@@ -631,7 +722,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/%E4%BD%BF%E7%94%A8C4-PlantUML%E6%9D%A5%E5%BF%AB%E9%80%9F%E7%9A%84%E6%8F%8F%E8%BF%B0%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/软件架构/使用C4-PlantUML来快速的描述软件架构.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="软件架构/使用C4-PlantUML来快速的描述软件架构.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -647,10 +738,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>我们在文章 <a href="/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/Graphviz%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8-%E7%94%BB%E5%9B%BE.html" title="Graphviz的简单使用-画图">Graphviz的简单使用-画图</a> 已经怎么知道用 dot 来描述图，然后用 graphviz 来进行绘制了。但是其实这样做非常的灵活，但是呢，灵活和方便是相互矛盾的。就有很多的人基于 graphviz 来构建了更方便的工具。</p>
+          <p>我们在文章 <a href="/软件架构/Graphviz的简单使用-画图.html" title="Graphviz的简单使用-画图">Graphviz的简单使用-画图</a> 已经怎么知道用 dot 来描述图，然后用 graphviz 来进行绘制了。但是其实这样做非常的灵活，但是呢，灵活和方便是相互矛盾的。就有很多的人基于 graphviz 来构建了更方便的工具。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/%E4%BD%BF%E7%94%A8C4-PlantUML%E6%9D%A5%E5%BF%AB%E9%80%9F%E7%9A%84%E6%8F%8F%E8%BF%B0%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84.html#more" rel="contents">
+              <a class="btn" href="/软件架构/使用C4-PlantUML来快速的描述软件架构.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -674,7 +765,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/Graphviz%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8-%E7%94%BB%E5%9B%BE.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/软件架构/Graphviz的简单使用-画图.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -688,7 +779,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/Graphviz%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8-%E7%94%BB%E5%9B%BE.html" class="post-title-link" itemprop="url">Graphviz的简单使用-画图</a>
+            <a href="/软件架构/Graphviz的简单使用-画图.html" class="post-title-link" itemprop="url">Graphviz的简单使用-画图</a>
         </h1>
 
         <div class="post-meta">
@@ -706,7 +797,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index">
+                  <a href="/categories/软件架构/" itemprop="url" rel="index">
                     <span itemprop="name">软件架构</span>
                   </a>
                 </span>
@@ -721,7 +812,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/Graphviz%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8-%E7%94%BB%E5%9B%BE.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/软件架构/Graphviz的简单使用-画图.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="软件架构/Graphviz的简单使用-画图.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -740,7 +831,7 @@
           <p>之前在 Windows 画图一般都是用的 Visio ，但是切换到了 macOS，说实话还没有找到能够与其匹敌的软件。之前虽然看过 EdrawMax ，画出来的效果也不错，但是感觉有的时候画一个流程图用这么庞大的软件有点过分了嗷。不知道是在哪天看到了了 Grapviz 这个东东。顿时觉得这就是我想要的。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/Graphviz%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8-%E7%94%BB%E5%9B%BE.html#more" rel="contents">
+              <a class="btn" href="/软件架构/Graphviz的简单使用-画图.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -764,7 +855,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android系统的启动过程.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -778,7 +869,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Android/Android%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html" class="post-title-link" itemprop="url">Android系统的启动过程</a>
+            <a href="/Android/Android系统的启动过程.html" class="post-title-link" itemprop="url">Android系统的启动过程</a>
         </h1>
 
         <div class="post-meta">
@@ -811,7 +902,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/Android%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/Android系统的启动过程.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Android系统的启动过程.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -827,10 +918,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>在文章    和 <a href="/Android/Android%E4%B8%ADAPP%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html" title="Android中APP的启动过程">Android中APP的启动过程</a> 我们大概看了一下一个 APP的启动过程。我们现在来从源码看系统的启动过程。</p>
+          <p>在文章    和 <a href="/Android/Android中APP的启动过程.html" title="Android中APP的启动过程">Android中APP的启动过程</a> 我们大概看了一下一个 APP的启动过程。我们现在来从源码看系统的启动过程。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Android/Android%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html#more" rel="contents">
+              <a class="btn" href="/Android/Android系统的启动过程.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -854,7 +945,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android%E7%9A%84Launcher%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E4%BB%A3%E7%A0%81.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android的Launcher启动流程代码.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -868,7 +959,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Android/Android%E7%9A%84Launcher%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E4%BB%A3%E7%A0%81.html" class="post-title-link" itemprop="url">Android的Launcher启动流程代码</a>
+            <a href="/Android/Android的Launcher启动流程代码.html" class="post-title-link" itemprop="url">Android的Launcher启动流程代码</a>
         </h1>
 
         <div class="post-meta">
@@ -901,7 +992,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/Android%E7%9A%84Launcher%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E4%BB%A3%E7%A0%81.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/Android的Launcher启动流程代码.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Android的Launcher启动流程代码.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -917,10 +1008,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>在 <a href="/Android/Android%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B.html" title="Android系统的启动过程">Android系统的启动过程</a> 中我们已经知道了 SystemServer 怎么启动的，其会启动很多的系统服务。包括 AMS WMS IMS 等。在启动这些服务过程中，其还会让 AMS 启动我们的主界面。</p>
+          <p>在 <a href="/Android/Android系统的启动过程.html" title="Android系统的启动过程">Android系统的启动过程</a> 中我们已经知道了 SystemServer 怎么启动的，其会启动很多的系统服务。包括 AMS WMS IMS 等。在启动这些服务过程中，其还会让 AMS 启动我们的主界面。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Android/Android%E7%9A%84Launcher%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E4%BB%A3%E7%A0%81.html#more" rel="contents">
+              <a class="btn" href="/Android/Android的Launcher启动流程代码.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -944,7 +1035,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android%E7%9A%84Service.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android的Service.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -958,7 +1049,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Android/Android%E7%9A%84Service.html" class="post-title-link" itemprop="url">Android的Service</a>
+            <a href="/Android/Android的Service.html" class="post-title-link" itemprop="url">Android的Service</a>
         </h1>
 
         <div class="post-meta">
@@ -991,7 +1082,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/Android%E7%9A%84Service.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/Android的Service.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Android的Service.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -1010,97 +1101,7 @@
           <p>Service 是安卓的四大组件之一，其官方的介绍  <a href="https://developer.android.com/guide/components/services" target="_blank" rel="noopener">https://developer.android.com/guide/components/services</a> 上有一个应用上的介绍。但是，我想要的是从代码层面来看一下一个服务，是如何启动，如何提供服务的呢。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Android/Android%E7%9A%84Service.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Android%E5%88%A9%E7%94%A8Input%E7%B1%BB%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Android/Android%E5%88%A9%E7%94%A8Input%E7%B1%BB%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5.html" class="post-title-link" itemprop="url">Android利用Input类实现模拟输入</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2019-12-02 15:11:18" itemprop="dateCreated datePublished" datetime="2019-12-02T15:11:18+08:00">2019-12-02</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Android/Android%E5%88%A9%E7%94%A8Input%E7%B1%BB%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Android利用Input类实现模拟输入.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在文章 <a href="/Android/Android%E4%B8%ADInput%E7%B1%BB%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E7%9A%84%E5%AE%9E%E7%8E%B0.html" title="Android中Input类模拟输入的实现">Android中Input类模拟输入的实现</a> 我们查看了官方提供的 <strong>com.android.commands.input.INPUT</strong> 类来进行模拟输入的实现过程。但是有一个很猥琐的地方就是，这个 Input 类我们是无法访问的，其被定义为非 SDK 类，我们用反射的方法来获取这个类的实现的时候，会收到警告。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Android/Android%E5%88%A9%E7%94%A8Input%E7%B1%BB%E5%AE%9E%E7%8E%B0%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5.html#more" rel="contents">
+              <a class="btn" href="/Android/Android的Service.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1168,20 +1169,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1193,10 +1194,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -1225,10 +1226,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         

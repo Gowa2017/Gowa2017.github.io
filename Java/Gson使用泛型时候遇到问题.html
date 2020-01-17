@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Java,Android,Gson">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gson使用泛型时候遇到问题">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;Gson%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98.html">
+<meta property="og:url" content="https://gowa.club/Java/Gson使用泛型时候遇到问题.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="今天在想统一使用 Gson 进行获取服务端数据后出现了一个头疼的问题。对于使用泛型的时候会出现 LinkTreeMap 不能 Cast To 对象的问题。通过谷歌，了解原因。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-03-20T13:02:51.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gson使用泛型时候遇到问题">
+<meta name="twitter:description" content="今天在想统一使用 Gson 进行获取服务端数据后出现了一个头疼的问题。对于使用泛型的时候会出现 LinkTreeMap 不能 Cast To 对象的问题。通过谷歌，了解原因。">
 
-<link rel="canonical" href="https://gowa.club/Java/Gson%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98.html">
+<link rel="canonical" href="https://gowa.club/Java/Gson使用泛型时候遇到问题.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Gson%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Gson使用泛型时候遇到问题.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/Gson%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/Gson使用泛型时候遇到问题.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Gson使用泛型时候遇到问题.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,23 +292,16 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>今天在想统一使用 Gson 进行获取服务端数据后出现了一个头疼的问题。对于使用泛型的时候会出现 LinkTreeMap 不能 Cast To 对象的问题。通过谷歌，了解原因。</p>
-<a id="more"></a>
-
+        <p>今天在想统一使用 Gson 进行获取服务端数据后出现了一个头疼的问题。对于使用泛型的时候会出现 LinkTreeMap 不能 Cast To 对象的问题。通过谷歌，了解原因。<br><a id="more"></a></p>
 <h1 id="返回格式"><a href="#返回格式" class="headerlink" title="返回格式"></a>返回格式</h1><p>我们的服务端返回的数据格式都是一致的。</p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"state"</span>: <span class="number">200</span>,</span><br><span class="line">    <span class="attr">"data"</span>: </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><em>data</em> 有的时候会是个对象，有的时候是个列表。很自然的就构造一个 Java 类：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerApiResult</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> state;</span><br><span class="line">    <span class="keyword">private</span> T data;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>我们统一处理网络请求的类：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onResponse</span><span class="params">(Call&lt;ServerApiResult&gt; call, Response&lt;ServerApiResult&gt; response)</span> </span>&#123;</span><br><span class="line">    Response&lt;ServerApiResult&gt; res = response;</span><br><span class="line">    ServerApiResult data = response.body();</span><br><span class="line">    <span class="comment">// 请求成功，http 协议返回代码 200-300</span></span><br><span class="line">    <span class="keyword">if</span> (res.isSuccessful()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (data.getState() != <span class="number">200</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (data.getData() == <span class="keyword">null</span> || TextUtils.isEmpty(data.getData().toString())) &#123;</span><br><span class="line">                <span class="keyword">if</span> (!TextUtils.isEmpty(CodeConfig.getCodeTip(data.getState()))) &#123;</span><br><span class="line">                    onFail(CodeConfig.getCodeTip(data.getState()));</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    onFail(<span class="string">"请求失败，请重试"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                onFail(data.getData().toString());</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Log.d(TAG, <span class="string">"onResponse: "</span> +  data.getData());</span><br><span class="line">        Log.d(TAG, <span class="string">"onResponse: "</span>+data.getClass());</span><br><span class="line">        Log.d(TAG, <span class="string">"onResponse: "</span>+data.getData().getClass());</span><br><span class="line">        onSuccessfull(data.getData());</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        onFail(res.message());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>结果就是会在下面的调用中抛出异常：</p>
 <p><em>UncaughtException detected: java.lang.ClassCastException: com.google.gson.internal.LinkedTreeMap cannot be cast to cn.nanming.smartcompany.ui.activity.comregister.requester.entity.ComRegisterBaseInfo</em></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Call&lt;ServerApiResult&gt; req = netClient.getBaseInfo(sn);</span><br><span class="line">req.enqueue(<span class="keyword">new</span> NetCallback&lt;ComRegisterBaseInfo&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onSuccessfull</span><span class="params">(ComRegisterBaseInfo data)</span> </span>&#123;</span><br><span class="line">        callback.success(data);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-
 <p>通过 Log.d 打印出的日志来看。 返回的数据本身，转换是成功的。而对于 data 字段，其属于泛型，Gson 没有进行转换，而是保存在了一个 LinkedTreeMap 中，直接使用是不行的。</p>
 <p>那怎么破？这是因为 JAVA 的类型擦除在做怪。</p>
 <h1 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h1><p>根据 <a href="https://docs.oracle.com/javase/tutorial/java/generics/erasure.html" target="_blank" rel="noopener">Java 官方文档</a>。</p>
@@ -317,32 +312,26 @@
 </ul>
 <p>具体点来个例子：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> T data;</span><br><span class="line">    <span class="keyword">private</span> Node&lt;T&gt; next;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(T data, Node&lt;T&gt; next)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getData</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> data; &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>将会擦除过程中，会替换为：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> T data;</span><br><span class="line">    <span class="keyword">private</span> Node&lt;T&gt; next;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(T data, Node&lt;T&gt; next)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getData</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> data; &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>但如果泛型有绑定类型：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">T</span> <span class="keyword">extends</span> <span class="title">Comparable</span>&lt;<span class="title">T</span>&gt;&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> T data;</span><br><span class="line">    <span class="keyword">private</span> Node&lt;T&gt; next;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(T data, Node&lt;T&gt; next)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> T <span class="title">getData</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> data; &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>则会替换成：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Comparable data;</span><br><span class="line">    <span class="keyword">private</span> Node next;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(Comparable data, Node next)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.data = data;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Comparable <span class="title">getData</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> data; &#125;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>所以，实际上我们的 ServerApiResult 并不知道我们的 data 类型。</p>
 <h1 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h1><p>查看<a href="https://github.com/google/gson/blob/master/UserGuide.md#TOC-Serializing-and-Deserializing-Generic-Types" target="_blank" rel="noopener">官方文档针对泛型一节</a>的说明：</p>
 <p>当我们调用 <code>toJson(obj)</code> 的时候，Gson 会调用  <code>obj.getClass()</code> 来获取字段信息来序列化。同样，我们调用 <code>fromJson(obj, MyClass.class)</code> 的时候根据传递了一个 Class 对象过去。这工作得很好，但是遇到泛型就悲剧了。当 <em>obj</em> 是泛型的时候，泛型的信息会被擦除<strong>Java 类型擦除</strong>。例如：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line">  T value;</span><br><span class="line">&#125;</span><br><span class="line">Gson gson = <span class="keyword">new</span> Gson();</span><br><span class="line">Foo&lt;Bar&gt; foo = <span class="keyword">new</span> Foo&lt;Bar&gt;();</span><br><span class="line">gson.toJson(foo); <span class="comment">// May not serialize foo.value correctly</span></span><br><span class="line"></span><br><span class="line">gson.fromJson(json, foo.getClass()); <span class="comment">// Fails to deserialize foo.value as Bar</span></span><br></pre></td></tr></table></figure>
-
-<p>上面的例子，并不会解析出类型 Bar 的值。因为 Gson 调用 foo.getClass() 来获取类信息，但这个方法返回的是一个 raw 类， Foo.class。也就说 Gson 并不知道这个对象的类型是 Foo<Bar>，同上，因为类型擦除，其是 Bar 被解释为 Object，存在 LinkedTreeMap 中。</p>
+<p>上面的例子，并不会解析出类型 Bar 的值。因为 Gson 调用 foo.getClass() 来获取类信息，但这个方法返回的是一个 raw 类， Foo.class。也就说 Gson 并不知道这个对象的类型是 Foo<bar>，同上，因为类型擦除，其是 Bar 被解释为 Object，存在 LinkedTreeMap 中。</bar></p>
 <p>提供的解决方法是使用 <em>TypeToken</em> 类：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Type fooType = <span class="keyword">new</span> TypeToken&lt;Foo&lt;Bar&gt;&gt;() &#123;&#125;.getType();</span><br><span class="line">gson.toJson(foo, fooType);</span><br><span class="line"></span><br><span class="line">gson.fromJson(json, fooType);</span><br></pre></td></tr></table></figure>
-
 <p><em>fooType</em>之所以能获取，是因为后面的代码是定义了一个匿名本地内部类，且有一个方法 getType() 返回了全部的参数类型。</p>
 <p><code>TypeToken&lt;T&gt;</code> 表示一个类型 T。Java 当前没有提供表示一个泛型的方法，这个类可以。强制建立这么一个类可以让我们在运行时获取类型信息。</p>
 <h1 id="Map-的解析"><a href="#Map-的解析" class="headerlink" title="Map 的解析"></a>Map 的解析</h1><p>在我们安卓进行解析的时候，有一个比较蛋疼的事情就是，我们的解析器无法解析属于 Map 类型的返回值。</p>
 <p>因此我准备用 Gson 来解决这个问题，用 Gson 就很简单了。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> Gson().fromJson(strBody, <span class="keyword">new</span> TypeToken&lt;Map&lt;String,List&lt;SrvRes&gt;&gt;&gt;()&#123;&#125;.getType());</span><br></pre></td></tr></table></figure>
-
 <p>这样也就 OK  了。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -361,7 +350,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/FragmentTabHost%E7%9A%84%E4%BD%BF%E7%94%A8.html" rel="next" title="FragmentTabHost的使用">
+                <a href="/Android/FragmentTabHost的使用.html" rel="next" title="FragmentTabHost的使用">
                   <i class="fa fa-chevron-left"></i> FragmentTabHost的使用
                 </a>
             </div>
@@ -369,7 +358,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/GTD/%E7%94%A8OminiFocus%E5%81%9A%E4%B8%80%E4%B8%AA%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F.html" rel="prev" title="用OminiFocus做一个自己的事务管理系统">
+                <a href="/GTD/用OminiFocus做一个自己的事务管理系统.html" rel="prev" title="用OminiFocus做一个自己的事务管理系统">
                   用OminiFocus做一个自己的事务管理系统 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -431,20 +420,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -456,10 +445,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -488,10 +477,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -566,7 +555,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/Gson%E4%BD%BF%E7%94%A8%E6%B3%9B%E5%9E%8B%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E9%97%AE%E9%A2%98.html",
+            url: "https://gowa.club/Java/Gson使用泛型时候遇到问题.html",
             identifier: "Java/Gson使用泛型时候遇到问题.html",
             title: "Gson使用泛型时候遇到问题"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JS中的变量基础">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;JavaScript&#x2F;JS%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E5%9F%BA%E7%A1%80.html">
+<meta property="og:url" content="https://gowa.club/JavaScript/JS中的变量基础.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="了解一下基础知识，虽然 JS 很简单，但是经常会造成误解。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-01-16T22:03:47.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JS中的变量基础">
+<meta name="twitter:description" content="了解一下基础知识，虽然 JS 很简单，但是经常会造成误解。">
 
-<link rel="canonical" href="https://gowa.club/JavaScript/JS%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E5%9F%BA%E7%A1%80.html">
+<link rel="canonical" href="https://gowa.club/JavaScript/JS中的变量基础.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/JS%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E5%9F%BA%E7%A1%80.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/JS中的变量基础.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/JavaScript/JS%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E5%9F%BA%E7%A1%80.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/JavaScript/JS中的变量基础.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/JS中的变量基础.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,7 +294,6 @@
       
         <p>了解一下基础知识，虽然 JS 很简单，但是经常会造成误解。</p>
 <a id="more"></a>
-
 <h1 id="变量声明"><a href="#变量声明" class="headerlink" title="变量声明"></a>变量声明</h1><p>有三种方式：</p>
 <ul>
 <li>var  </li>
@@ -303,14 +304,13 @@
 <h1 id="变量提升"><a href="#变量提升" class="headerlink" title="变量提升"></a>变量提升</h1><p>let/const 在 ECMA6 中不会提升到代码顶部。所以在声明前引用，将会出错。</p>
 <h1 id="值的传递"><a href="#值的传递" class="headerlink" title="值的传递"></a>值的传递</h1><p>JS 中的变量的引用是引用的形式传递的。一个比较典型的例子就是在闭包中引用全局变量。先看一下全局变量作为参数的例子：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> g = <span class="string">'GLOBAL'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">g</span>)</span>&#123;</span><br><span class="line"> <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; <span class="built_in">console</span>.log(g)&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> fun1 = test(g);</span><br><span class="line"></span><br><span class="line">g = <span class="string">'global'</span>;</span><br><span class="line">fun1();</span><br></pre></td></tr></table></figure>
-
 <p>输出会是什么？答案是 <strong>GLOBAL</strong>。</p>
 <p>再来看下一个例子：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> g = <span class="string">'GLOBAL'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test2</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line"> <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; <span class="built_in">console</span>.log(g)&#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> fun2 = test2();</span><br><span class="line"></span><br><span class="line">g = <span class="string">'global'</span>;</span><br><span class="line">fun2();</span><br></pre></td></tr></table></figure>
-
 <p>输出是什么？答案是什么 <strong>global</strong>。</p>
 <p>从后面一个例子看出，全局变量的变化其实会影响到所有其他引用它的地方。</p>
 <p>之所以第一个例子输出的是 GLOBAL 而不是 global 是因为：当把 <em>g</em> 作为参数传递给 test 的时候，test 的本地作用域内会建立一个本地的变量 <code>g</code>，这个时候，引用的就不是全局变量了。所以你改变全局变量的值不会影响它。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -327,7 +327,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/%E5%AE%89%E5%8D%939.0%E5%BA%94%E7%94%A8%E5%86%85%E5%8D%87%E7%BA%A7%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%B8%80%E7%A7%8D%E6%83%85%E5%86%B5%E8%A7%A3%E5%86%B3.html" rel="next" title="安卓9.0应用内升级失败的一种情况解决">
+                <a href="/Android/安卓9.0应用内升级失败的一种情况解决.html" rel="next" title="安卓9.0应用内升级失败的一种情况解决">
                   <i class="fa fa-chevron-left"></i> 安卓9.0应用内升级失败的一种情况解决
                 </a>
             </div>
@@ -335,7 +335,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/JavaScript/JS%E5%8E%9F%E5%9E%8B%E7%BB%A7%E6%89%BF%E7%9A%84%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3.html" rel="prev" title="JS原型继承的深入理解">
+                <a href="/JavaScript/JS原型继承的深入理解.html" rel="prev" title="JS原型继承的深入理解">
                   JS原型继承的深入理解 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -397,20 +397,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -422,10 +422,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -454,10 +454,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -532,7 +532,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/JavaScript/JS%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E5%9F%BA%E7%A1%80.html",
+            url: "https://gowa.club/JavaScript/JS中的变量基础.html",
             identifier: "JavaScript/JS中的变量基础.html",
             title: "JS中的变量基础"
           }

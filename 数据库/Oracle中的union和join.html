@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Oracle,数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Oracle中的union和join">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;Oracle%E4%B8%AD%E7%9A%84union%E5%92%8Cjoin.html">
+<meta property="og:url" content="https://gowa.club/数据库/Oracle中的union和join.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="有时候，我们需要把很多表的查询结果给合并在一起显示或者导出，有时候呢我们又需要几张表联合一些条件进行查询，所以我们常会用到join和union语句。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.270Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Oracle中的union和join">
+<meta name="twitter:description" content="有时候，我们需要把很多表的查询结果给合并在一起显示或者导出，有时候呢我们又需要几张表联合一些条件进行查询，所以我们常会用到join和union语句。">
 
-<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E4%B8%AD%E7%9A%84union%E5%92%8Cjoin.html">
+<link rel="canonical" href="https://gowa.club/数据库/Oracle中的union和join.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E4%B8%AD%E7%9A%84union%E5%92%8Cjoin.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/Oracle中的union和join.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -266,7 +268,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -281,7 +283,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E4%B8%AD%E7%9A%84union%E5%92%8Cjoin.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/Oracle中的union和join.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/Oracle中的union和join.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -297,8 +299,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>有时候，我们需要把很多表的查询结果给合并在一起显示或者导出，有时候呢我们又需要几张表联合一些条件进行查询，所以我们常会用到<strong>join</strong>和<strong>union</strong>语句。</p>
-<a id="more"></a>
+        <p>有时候，我们需要把很多表的查询结果给合并在一起显示或者导出，有时候呢我们又需要几张表联合一些条件进行查询，所以我们常会用到<strong>join</strong>和<strong>union</strong>语句。<br><a id="more"></a></p>
 <h1 id="UNION"><a href="#UNION" class="headerlink" title="UNION"></a>UNION</h1><p><a href="http://docs.oracle.com/cd/B19306_01/server.102/b14200/queries004.htm" target="_blank" rel="noopener">官方说明</a><br>包含<strong>UNION [ALL], INTERSECT, MINUS</strong>三个操作符，具有相同的优先级（可以用<code>(...)</code>进行改变优先级），含有多个的时候，自左至右进行计算。<br>在每个组成UNION查询的子查询中，其<strong>select list(选择列表)</strong>必须具有相同的数量和数据组类型。<br>如果子查询选择的是字符数据，其返回值的数据类型由下决定：</p>
 <ul>
 <li>所有的子查询选择的<code>char</code>值具有相同的<code>length</code>，返回值就是<code>char(length)</code>。如果查询的值类型分别是<code>char(length1), char(length2)...</code>，其返回值是<code>varchar2(max(length1,length2,...))</code></li>
@@ -307,12 +308,9 @@
 <li>任何一个查询选择的值是<code>binary_float</code>，其返回值就是<code>binary_float</code>。</li>
 <li>所有查询选择的值是<code>number</code>，其返回值才是<code>number</code>。</li>
 </ul>
-<p>使用这几个<code>集操作符</code>的时候，Oracle不会进行隐含的数据类型组之间的转换。所以，如果查询包含<code>number</code>和<code>char</code>类型的话，Oracle返回一个错误。<br>比如:</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="string">'3'</span> <span class="keyword">from</span> dual</span><br><span class="line">	<span class="keyword">intersect</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">3</span>f <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure>
-<p>会返回一个错误。但：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="number">3</span> <span class="keyword">from</span> dual</span><br><span class="line">	<span class="keyword">intersect</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">3</span>f <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure>
-<p>则会被在类型组内隐含进行转换成：</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> to_binary_float(<span class="number">3</span>) <span class="keyword">from</span> dual</span><br><span class="line">	<span class="keyword">intersect</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">3</span>f <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure>
+<p>使用这几个<code>集操作符</code>的时候，Oracle不会进行隐含的数据类型组之间的转换。所以，如果查询包含<code>number</code>和<code>char</code>类型的话，Oracle返回一个错误。<br>比如:<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="string">'3'</span> <span class="keyword">from</span> dual</span><br><span class="line">	<span class="keyword">intersect</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">3</span>f <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure></p>
+<p>会返回一个错误。但：<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="number">3</span> <span class="keyword">from</span> dual</span><br><span class="line">	<span class="keyword">intersect</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">3</span>f <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure></p>
+<p>则会被在类型组内隐含进行转换成：<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> to_binary_float(<span class="number">3</span>) <span class="keyword">from</span> dual</span><br><span class="line">	<span class="keyword">intersect</span></span><br><span class="line"><span class="keyword">select</span> <span class="number">3</span>f <span class="keyword">from</span> dual;</span><br></pre></td></tr></table></figure></p>
 <h2 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h2><p>集操作符服从以下限制：</p>
 <ul>
 <li>对列类型为<code>BLOB, CLOB, BFILE, VARRAY</code>或者<code>嵌套表</code>无效。</li>
@@ -321,16 +319,22 @@
 <li>不能用<code>for_update_clause</code>共用</li>
 <li>在这些操作符的子查询内不能使用<code>order_by_clause</code></li>
 <li>You cannot use these operators in SELECT statements containing TABLE collection expressions.<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2>查询中<code>to_char(null)</code>用在当表中没有某列的时候来匹配数据类型。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> location_id, department_name <span class="string">"Department"</span>, </span><br><span class="line">   TO_CHAR(<span class="literal">NULL</span>) <span class="string">"Warehouse"</span>  <span class="keyword">FROM</span> departments</span><br><span class="line">   <span class="keyword">UNION</span></span><br><span class="line">   <span class="keyword">SELECT</span> location_id, TO_CHAR(<span class="literal">NULL</span>) <span class="string">"Department"</span>, warehouse_name </span><br><span class="line">   <span class="keyword">FROM</span> warehouses;</span><br></pre></td></tr></table></figure>
-<code>union</code>操作符联合结果中不重复的结果，<code>union all</code>联合所有的结果。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> product_id <span class="keyword">FROM</span> order_items</span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"><span class="keyword">SELECT</span> product_id <span class="keyword">FROM</span> inventories;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> location_id  <span class="keyword">FROM</span> locations </span><br><span class="line"><span class="keyword">UNION</span> <span class="keyword">ALL</span> </span><br><span class="line"><span class="keyword">SELECT</span> location_id  <span class="keyword">FROM</span> departments;</span><br></pre></td></tr></table></figure>
-<code>INTERSECT</code>相交操作符联合子查询中都有的行。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> product_id <span class="keyword">FROM</span> inventories</span><br><span class="line"><span class="keyword">INTERSECT</span></span><br><span class="line"><span class="keyword">SELECT</span> product_id <span class="keyword">FROM</span> order_items;</span><br></pre></td></tr></table></figure>
-<code>MINUS</code>相减操作符联合第一个查询的行并且没有在第二个查询中出现的行（同时会去重）。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> product_id <span class="keyword">FROM</span> inventories</span><br><span class="line"><span class="keyword">MINUS</span></span><br><span class="line"><span class="keyword">SELECT</span> product_id <span class="keyword">FROM</span> order_items;</span><br></pre></td></tr></table></figure>
-<h1 id="JOIN"><a href="#JOIN" class="headerlink" title="JOIN"></a>JOIN</h1><a href="http://docs.oracle.com/cd/B19306_01/server.102/b14200/queries006.htm" target="_blank" rel="noopener">官方说明</a><br><code>JOIN</code>用来从两或多个表、视图、物化视图中结合数据。在<code>FROM</code>后面的表都会进行一个<code>JOIN</code>操作，这样我们就可以用<code>SELECT</code>语句查询这个<code>JOIN</code>中的任意列。当然，如果这些表中有相同名的列，就要用<code>tbl.col</code>这样的形式来来完整引用列了。<h2 id="Join-Conditions"><a href="#Join-Conditions" class="headerlink" title="Join Conditions"></a>Join Conditions</h2>大多数join查询有一个<strong>Join Condition</strong>，可能出现在<code>FROM</code>或<code>WHERE</code>语句中，其会比较从不同表中的两列。对<em>Join Contidion</em>为<em>TRUE</em>的行，就把两个表中那一行组合成一行。需要注意的是不能出现在<strong>select list</strong>中。<br>对与join三个或以上的表，Oracle首先Join根据<em>Join Condition</em>Join前两个表，然后再把表这个结果和新表根据<em>Join Conditon</em>进行Join，直到把所有表都Join完。Oracle的Optimizer了决定Join的顺序。<h2 id="Equijoins"><a href="#Equijoins" class="headerlink" title="Equijoins"></a>Equijoins</h2>一个<code>equijoin</code>就是<em>Join Condition</em>包含一个等号，对指定的列具有相等的值的行进行Join。<h2 id="Self-Joins"><a href="#Self-Joins" class="headerlink" title="Self Joins"></a>Self Joins</h2>表本身进行Join。在<code>FROM</code>后出现两次，并且跟随别名。<h2 id="Cartesian-Products（笛卡尔乘积）"><a href="#Cartesian-Products（笛卡尔乘积）" class="headerlink" title="Cartesian Products（笛卡尔乘积）"></a>Cartesian Products（笛卡尔乘积）</h2>如果一个Join查询不包含<em>Join Conditon</em>，那么Oracle返回的就是一个他们的<strong>Cartesian product</strong>。这个结果一般没有什么用，所以Join的时候最后都指定<em>Join Conditon</em>。<h2 id="Inner-Joins-simple-join"><a href="#Inner-Joins-simple-join" class="headerlink" title="Inner Joins(simple join)"></a>Inner Joins(simple join)</h2>只Join满足的行。<h2 id="Outer-Joins"><a href="#Outer-Joins" class="headerlink" title="Outer Joins"></a>Outer Joins</h2><code>Outer Join</code>扩展了<code>simple join</code>的结果。一个<code>outer join</code>返回所有满足<em>Join Conditon</em>的行，同时从一个不满足条件的表返回一些或所有行。<h3 id="LEFT-outer-JOIN"><a href="#LEFT-outer-JOIN" class="headerlink" title="LEFT [outer] JOIN"></a>LEFT [outer] JOIN</h3>想要Join表 A,B，同时返回A的所有行。在<code>FROM</code>后面使用<code>left [outer] join</code>语句，或者在<code>WHERE</code>语句中的<em>Join Conditon</em>对B的所有列使用<strong>outer join operator</strong>（+）。对A在B中没有匹配行，在B的列中就会返回NULL。<br>举个例子<br>有一个属地代码表md_area(areano, name)。<br>有一个用户表users(mdn,areano,….)。<br>我现在要统计users表中各属地的用户数，还要根据代码显示出属地名称，以便更加直观的进行统计。<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> area, areaname, ct <span class="keyword">from</span></span><br><span class="line">	(<span class="keyword">select</span> areano <span class="keyword">as</span> area, <span class="keyword">count</span>(*) <span class="keyword">as</span> ct <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">group</span> <span class="keyword">by</span> areano) t1</span><br><span class="line">	<span class="keyword">left</span> <span class="keyword">join</span> </span><br><span class="line">	(<span class="keyword">select</span> areano, <span class="keyword">name</span> <span class="keyword">as</span> areaname <span class="keyword">from</span> md_area t2) <span class="keyword">on</span> t2.areano = t1.area;</span><br></pre></td></tr></table></figure>
-<h3 id="Right-outer-Join"><a href="#Right-outer-Join" class="headerlink" title="Right [outer] Join"></a>Right [outer] Join</h3>接上例，其等于:<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> area, areaname, ct <span class="keyword">from</span></span><br><span class="line">	(<span class="keyword">select</span> areano, <span class="keyword">name</span> <span class="keyword">as</span> areaname <span class="keyword">from</span> md_area t2) </span><br><span class="line">	<span class="keyword">right</span> <span class="keyword">join</span> </span><br><span class="line">	(<span class="keyword">select</span> areano <span class="keyword">as</span> area, <span class="keyword">count</span>(*) <span class="keyword">as</span> ct <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">group</span> <span class="keyword">by</span> areano) t1</span><br><span class="line">	<span class="keyword">on</span> t2.areano = t1.area;</span><br></pre></td></tr></table></figure>
-
-
 </li>
 </ul>
-<h2 id="Antijoins-反连接）"><a href="#Antijoins-反连接）" class="headerlink" title="Antijoins (反连接）"></a>Antijoins (反连接）</h2><h2 id="Semijoins-（半连接）"><a href="#Semijoins-（半连接）" class="headerlink" title="Semijoins （半连接）"></a>Semijoins （半连接）</h2>
+<p><code>union</code>操作符联合结果中不重复的结果，<code>union all</code>联合所有的结果。<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> product_id <span class="keyword">FROM</span> order_items</span><br><span class="line"><span class="keyword">UNION</span></span><br><span class="line"><span class="keyword">SELECT</span> product_id <span class="keyword">FROM</span> inventories;</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> location_id  <span class="keyword">FROM</span> locations </span><br><span class="line"><span class="keyword">UNION</span> <span class="keyword">ALL</span> </span><br><span class="line"><span class="keyword">SELECT</span> location_id  <span class="keyword">FROM</span> departments;</span><br></pre></td></tr></table></figure></p>
+<p><code>INTERSECT</code>相交操作符联合子查询中都有的行。<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> product_id <span class="keyword">FROM</span> inventories</span><br><span class="line"><span class="keyword">INTERSECT</span></span><br><span class="line"><span class="keyword">SELECT</span> product_id <span class="keyword">FROM</span> order_items;</span><br></pre></td></tr></table></figure></p>
+<p><code>MINUS</code>相减操作符联合第一个查询的行并且没有在第二个查询中出现的行（同时会去重）。<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> product_id <span class="keyword">FROM</span> inventories</span><br><span class="line"><span class="keyword">MINUS</span></span><br><span class="line"><span class="keyword">SELECT</span> product_id <span class="keyword">FROM</span> order_items;</span><br></pre></td></tr></table></figure></p>
+<h1 id="JOIN"><a href="#JOIN" class="headerlink" title="JOIN"></a>JOIN</h1><p><a href="http://docs.oracle.com/cd/B19306_01/server.102/b14200/queries006.htm" target="_blank" rel="noopener">官方说明</a><br><code>JOIN</code>用来从两或多个表、视图、物化视图中结合数据。在<code>FROM</code>后面的表都会进行一个<code>JOIN</code>操作，这样我们就可以用<code>SELECT</code>语句查询这个<code>JOIN</code>中的任意列。当然，如果这些表中有相同名的列，就要用<code>tbl.col</code>这样的形式来来完整引用列了。</p>
+<h2 id="Join-Conditions"><a href="#Join-Conditions" class="headerlink" title="Join Conditions"></a>Join Conditions</h2><p>大多数join查询有一个<strong>Join Condition</strong>，可能出现在<code>FROM</code>或<code>WHERE</code>语句中，其会比较从不同表中的两列。对<em>Join Contidion</em>为<em>TRUE</em>的行，就把两个表中那一行组合成一行。需要注意的是不能出现在<strong>select list</strong>中。<br>对与join三个或以上的表，Oracle首先Join根据<em>Join Condition</em>Join前两个表，然后再把表这个结果和新表根据<em>Join Conditon</em>进行Join，直到把所有表都Join完。Oracle的Optimizer了决定Join的顺序。</p>
+<h2 id="Equijoins"><a href="#Equijoins" class="headerlink" title="Equijoins"></a>Equijoins</h2><p>一个<code>equijoin</code>就是<em>Join Condition</em>包含一个等号，对指定的列具有相等的值的行进行Join。</p>
+<h2 id="Self-Joins"><a href="#Self-Joins" class="headerlink" title="Self Joins"></a>Self Joins</h2><p>表本身进行Join。在<code>FROM</code>后出现两次，并且跟随别名。</p>
+<h2 id="Cartesian-Products（笛卡尔乘积）"><a href="#Cartesian-Products（笛卡尔乘积）" class="headerlink" title="Cartesian Products（笛卡尔乘积）"></a>Cartesian Products（笛卡尔乘积）</h2><p>如果一个Join查询不包含<em>Join Conditon</em>，那么Oracle返回的就是一个他们的<strong>Cartesian product</strong>。这个结果一般没有什么用，所以Join的时候最后都指定<em>Join Conditon</em>。</p>
+<h2 id="Inner-Joins-simple-join"><a href="#Inner-Joins-simple-join" class="headerlink" title="Inner Joins(simple join)"></a>Inner Joins(simple join)</h2><p>只Join满足的行。</p>
+<h2 id="Outer-Joins"><a href="#Outer-Joins" class="headerlink" title="Outer Joins"></a>Outer Joins</h2><p><code>Outer Join</code>扩展了<code>simple join</code>的结果。一个<code>outer join</code>返回所有满足<em>Join Conditon</em>的行，同时从一个不满足条件的表返回一些或所有行。</p>
+<h3 id="LEFT-outer-JOIN"><a href="#LEFT-outer-JOIN" class="headerlink" title="LEFT [outer] JOIN"></a>LEFT [outer] JOIN</h3><p>想要Join表 A,B，同时返回A的所有行。在<code>FROM</code>后面使用<code>left [outer] join</code>语句，或者在<code>WHERE</code>语句中的<em>Join Conditon</em>对B的所有列使用<strong>outer join operator</strong>（+）。对A在B中没有匹配行，在B的列中就会返回NULL。<br>举个例子<br>有一个属地代码表md_area(areano, name)。<br>有一个用户表users(mdn,areano,….)。<br>我现在要统计users表中各属地的用户数，还要根据代码显示出属地名称，以便更加直观的进行统计。<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> area, areaname, ct <span class="keyword">from</span></span><br><span class="line">	(<span class="keyword">select</span> areano <span class="keyword">as</span> area, <span class="keyword">count</span>(*) <span class="keyword">as</span> ct <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">group</span> <span class="keyword">by</span> areano) t1</span><br><span class="line">	<span class="keyword">left</span> <span class="keyword">join</span> </span><br><span class="line">	(<span class="keyword">select</span> areano, <span class="keyword">name</span> <span class="keyword">as</span> areaname <span class="keyword">from</span> md_area t2) <span class="keyword">on</span> t2.areano = t1.area;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Right-outer-Join"><a href="#Right-outer-Join" class="headerlink" title="Right [outer] Join"></a>Right [outer] Join</h3><p>接上例，其等于:<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> area, areaname, ct <span class="keyword">from</span></span><br><span class="line">	(<span class="keyword">select</span> areano, <span class="keyword">name</span> <span class="keyword">as</span> areaname <span class="keyword">from</span> md_area t2) </span><br><span class="line">	<span class="keyword">right</span> <span class="keyword">join</span> </span><br><span class="line">	(<span class="keyword">select</span> areano <span class="keyword">as</span> area, <span class="keyword">count</span>(*) <span class="keyword">as</span> ct <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">group</span> <span class="keyword">by</span> areano) t1</span><br><span class="line">	<span class="keyword">on</span> t2.areano = t1.area;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Antijoins-反连接）"><a href="#Antijoins-反连接）" class="headerlink" title="Antijoins (反连接）"></a>Antijoins (反连接）</h2><h2 id="Semijoins-（半连接）"><a href="#Semijoins-（半连接）" class="headerlink" title="Semijoins （半连接）"></a>Semijoins （半连接）</h2><p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
     </div>
 
     
@@ -340,14 +344,14 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Oracle/" rel="tag"># Oracle</a>
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
+              <a href="/tags/数据库/" rel="tag"># 数据库</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Misc/%E5%88%A9%E7%94%A8github-API%E5%AF%B9markdown%E8%BF%9B%E8%A1%8C%E6%B8%B2%E6%9F%93.html" rel="next" title="利用github API对markdown进行渲染">
+                <a href="/Misc/利用github-API对markdown进行渲染.html" rel="next" title="利用github API对markdown进行渲染">
                   <i class="fa fa-chevron-left"></i> 利用github API对markdown进行渲染
                 </a>
             </div>
@@ -417,20 +421,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -442,10 +446,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -474,10 +478,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -552,7 +556,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E4%B8%AD%E7%9A%84union%E5%92%8Cjoin.html",
+            url: "https://gowa.club/数据库/Oracle中的union和join.html",
             identifier: "数据库/Oracle中的union和join.html",
             title: "Oracle中的union和join"
           }

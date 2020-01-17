@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于接口与对象的一些思考">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;%E5%85%B3%E4%BA%8E%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83.html">
+<meta property="og:url" content="https://gowa.club/Java/关于接口与对象的一些思考.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="关于 Java 的接口与对象，很相似，但又有所不同，网络上的文章大多是介绍两者有什么地方不同。但很少有解释这两者产生的背景，及其真实的意义及作用到底是什么。我是最近忽然看到 ECS 的概念的时候产生的这种想法。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-01-15T12:49:08.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于接口与对象的一些思考">
+<meta name="twitter:description" content="关于 Java 的接口与对象，很相似，但又有所不同，网络上的文章大多是介绍两者有什么地方不同。但很少有解释这两者产生的背景，及其真实的意义及作用到底是什么。我是最近忽然看到 ECS 的概念的时候产生的这种想法。">
 
-<link rel="canonical" href="https://gowa.club/Java/%E5%85%B3%E4%BA%8E%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83.html">
+<link rel="canonical" href="https://gowa.club/Java/关于接口与对象的一些思考.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/%E5%85%B3%E4%BA%8E%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/关于接口与对象的一些思考.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/%E5%85%B3%E4%BA%8E%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/关于接口与对象的一些思考.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/关于接口与对象的一些思考.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,9 +292,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>关于 Java 的接口与对象，很相似，但又有所不同，网络上的文章大多是介绍两者有什么地方不同。但很少有解释这两者产生的背景，及其真实的意义及作用到底是什么。我是最近忽然看到 ECS 的概念的时候产生的这种想法。</p>
-<a id="more"></a>
-
+        <p>关于 Java 的接口与对象，很相似，但又有所不同，网络上的文章大多是介绍两者有什么地方不同。但很少有解释这两者产生的背景，及其真实的意义及作用到底是什么。我是最近忽然看到 ECS 的概念的时候产生的这种想法。<br><a id="more"></a></p>
 <h1 id="先说不同"><a href="#先说不同" class="headerlink" title="先说不同"></a>先说不同</h1><p><a href="https://docs.oracle.com/javase/tutorial/java/IandI/abstract.html" target="_blank" rel="noopener">官方的 Tutorial </a>上对两者的不同有介绍：</p>
 <blockquote>
 <p>抽象类与接口很相似。我们不能初始化它，他们可能会声明一些有实现也可能没有实现的方法。然而，使用抽象类，我们可以声明非 static, final 的字段，定义 public, protected, private 的方法。<br>使用接口，所有的字段自动变成 public, static, final，所有定义的方法都是 public的。<br>我们只能 extend 一个类，但是我们可以实现多个接口。</p>
@@ -312,6 +312,7 @@
 </ol>
 <h1 id="个人的理解"><a href="#个人的理解" class="headerlink" title="个人的理解"></a>个人的理解</h1><p>我更愿意用 ECS 中的观念去理解接口。用<strong>组合</strong>而非<strong>继承</strong>的方式去实现复杂的功能。 ECS 认为，总有抽象的类会复杂到不想用的地步，或者一开始这个类就抽象得不怎么样，你再怎么扩展都是很坑的。</p>
 <p>同时，类 是为某一对象创建定义的原型或者蓝图，或者说是对某些性质的抽象。而接口，是对行为的定义。这应该据两者根本的不同。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -328,7 +329,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/%E8%B0%B7%E6%AD%8C%E7%9A%84todo-mvp-dagger%E4%BE%8B%E5%AD%90%E6%8E%A2%E7%A9%B6.html" rel="next" title="谷歌的todo-mvp-dagger例子探究">
+                <a href="/Java/谷歌的todo-mvp-dagger例子探究.html" rel="next" title="谷歌的todo-mvp-dagger例子探究">
                   <i class="fa fa-chevron-left"></i> 谷歌的todo-mvp-dagger例子探究
                 </a>
             </div>
@@ -336,7 +337,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/Retrofit%E7%BB%9F%E4%B8%80%E8%BF%9B%E8%A1%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E7%9A%84%E5%AE%9E%E7%8E%B0.html" rel="prev" title="Retrofit统一进行错误处理的实现">
+                <a href="/Android/Retrofit统一进行错误处理的实现.html" rel="prev" title="Retrofit统一进行错误处理的实现">
                   Retrofit统一进行错误处理的实现 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -398,20 +399,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -423,10 +424,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -455,10 +456,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -533,7 +534,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/%E5%85%B3%E4%BA%8E%E6%8E%A5%E5%8F%A3%E4%B8%8E%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%9D%E8%80%83.html",
+            url: "https://gowa.club/Java/关于接口与对象的一些思考.html",
             identifier: "Java/关于接口与对象的一些思考.html",
             title: "关于接口与对象的一些思考"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Asm,逆向">
 <meta property="og:type" content="article">
 <meta property="og:title" content="8086系CPU的内存寻址">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Asm&#x2F;8086%E7%B3%BBCPU%E7%9A%84%E5%86%85%E5%AD%98%E5%AF%BB%E5%9D%80.html">
+<meta property="og:url" content="https://gowa.club/Asm/8086系CPU的内存寻址.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="大学时候，电子科学专业学过一门课程《微机技术原理与接口技术》，当时对里面的芯片介绍，汇编语言不甚明了，直至今日也不是很明白，恰好前几天看到Linux的内存分页机制的时候，回家把书捡起来看了一下，加深一下了解。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.266Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="8086系CPU的内存寻址">
+<meta name="twitter:description" content="大学时候，电子科学专业学过一门课程《微机技术原理与接口技术》，当时对里面的芯片介绍，汇编语言不甚明了，直至今日也不是很明白，恰好前几天看到Linux的内存分页机制的时候，回家把书捡起来看了一下，加深一下了解。">
 
-<link rel="canonical" href="https://gowa.club/Asm/8086%E7%B3%BBCPU%E7%9A%84%E5%86%85%E5%AD%98%E5%AF%BB%E5%9D%80.html">
+<link rel="canonical" href="https://gowa.club/Asm/8086系CPU的内存寻址.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Asm/8086%E7%B3%BBCPU%E7%9A%84%E5%86%85%E5%AD%98%E5%AF%BB%E5%9D%80.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Asm/8086系CPU的内存寻址.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -281,7 +283,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Asm/8086%E7%B3%BBCPU%E7%9A%84%E5%86%85%E5%AD%98%E5%AF%BB%E5%9D%80.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Asm/8086系CPU的内存寻址.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Asm/8086系CPU的内存寻址.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -297,18 +299,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>大学时候，电子科学专业学过一门课程《微机技术原理与接口技术》，当时对里面的芯片介绍，汇编语言不甚明了，直至今日也不是很明白，恰好前几天看到Linux的内存分页机制的时候，回家把书捡起来看了一下，加深一下了解。</p>
-<a id="more"></a>
+        <p>大学时候，电子科学专业学过一门课程《微机技术原理与接口技术》，当时对里面的芯片介绍，汇编语言不甚明了，直至今日也不是很明白，恰好前几天看到Linux的内存分页机制的时候，回家把书捡起来看了一下，加深一下了解。<br><a id="more"></a></p>
 <h1 id="CPU的工作流程"><a href="#CPU的工作流程" class="headerlink" title="CPU的工作流程"></a>CPU的工作流程</h1><p>大体上来说，CPU是计算机中的大脑，负责从<strong>总线（BUS）</strong>读取数据，然后执行，最后得出结果通过总线输出。而其中各个流程的处理，分由不同的单元进行处理。</p>
 <h2 id="CPU的工作组成"><a href="#CPU的工作组成" class="headerlink" title="CPU的工作组成"></a>CPU的工作组成</h2><ul>
 <li><strong>总线接口部件BIU（Bus Interface Unit)</strong><br>  负责地址形成（把逻辑地址转换为物理地址）、取指令、指令队列、读/写操作数和总线控制。<br>  其主要结构包含：16位的段寄存器（CS、DS、ES、SS）、指令指针寄存器（IP）、20位物理地址加法器、6字节指令队列、总线控制电路。</li>
 <li><strong>指令执行部件EU（Execution Unix)</strong><br>  负责将取指令队列中的指令进行译码后执行。<br>  主要结构包含：16位的通用寄存器（AX、BX、CX、DX）、算数逻辑单元（ALU）、标志寄存器（flags，存放ALU的结果特征）、EU控制电路。</li>
 </ul>
-<h1 id="内存结构（Random-Access-Memory）"><a href="#内存结构（Random-Access-Memory）" class="headerlink" title="内存结构（Random Access Memory）"></a>内存结构（Random Access Memory）</h1><p>我们常用的内存，不论是 <strong>静态存储器SRAM</strong>，还是 <strong>动态存储器DRAM</strong>，其结构都是一样的，由<strong>m<em>个</em>nbit</strong>的存储单元组成存储矩阵。<br>比如，我们常用的内存最小单位是<strong>Byte</strong>，也就是8bit，一个单元。每次地址总线访问某个内存地址（物理地址）内的内容，都是一次性将这8bit数据读出来（其实是8个单元点路的电平情况，每个电路是0/1），那么就需要8条数据总线才能实现这个目的。<br>而地址总线则限制了，CPU能进行物理寻址的范围是多大，8086是20位地址总线（其能寻址地址最大自然是2^20）、16位数据总线。<br>如果我们的用8bit的存储单元来满足我们需要4GRAM的需求，那我们需要多少个存储单元组织在一起呢？</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4G=4\*1024\*1024\*1024 bit=2^32 bit</span><br></pre></td></tr></table></figure>
+<h1 id="内存结构（Random-Access-Memory）"><a href="#内存结构（Random-Access-Memory）" class="headerlink" title="内存结构（Random Access Memory）"></a>内存结构（Random Access Memory）</h1><p>我们常用的内存，不论是 <strong>静态存储器SRAM</strong>，还是 <strong>动态存储器DRAM</strong>，其结构都是一样的，由<strong>m<em>个</em>nbit</strong>的存储单元组成存储矩阵。<br>比如，我们常用的内存最小单位是<strong>Byte</strong>，也就是8bit，一个单元。每次地址总线访问某个内存地址（物理地址）内的内容，都是一次性将这8bit数据读出来（其实是8个单元点路的电平情况，每个电路是0/1），那么就需要8条数据总线才能实现这个目的。<br>而地址总线则限制了，CPU能进行物理寻址的范围是多大，8086是20位地址总线（其能寻址地址最大自然是2^20）、16位数据总线。<br>如果我们的用8bit的存储单元来满足我们需要4GRAM的需求，那我们需要多少个存储单元组织在一起呢？<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">4G=4\*1024\*1024\*1024 bit=2^32 bit</span><br></pre></td></tr></table></figure></p>
 <p>所以需要2^29个存储单元。但很明显，20位地址总线并不能有效的利用这些内存，因为寻址范围不够。<br>那么有没有什么手段或者技术能把它利用起来呢？很明显是有的，比如你在x86架构的CPU在LINUX上启用<strong>PAE</strong>的时候，就能寻址超过64GB的内存。不过这暂不在我们讨论的范围。</p>
 <h2 id="高速缓存存储器（Cache"><a href="#高速缓存存储器（Cache" class="headerlink" title="高速缓存存储器（Cache)"></a>高速缓存存储器（Cache)</h2><p>CPU的时钟的周期是很短的，现在动不动就是<strong>GHz</strong>的频率。比如一个1GHz的CPU，其<strong>时钟周期（T状态）</strong>，也就是1ns。<br>CPU的工作过程就是执行指令的过程，每个指令周期（指令过程所需要的时钟周期数）是不同的，一般包含n（&gt;=1）个总线周期。<br>每个总线周期即是BIU完成一次访问存储器或者I/O所需要的时间，包含n（&gt;=1）个T状态。<br>而<strong>SRAM</strong>则快很多，当前已经有2ns的器件，但是其价格是非常昂贵的。其作用就是在CPU和RAM之间做一个缓存，每次CPU读取RAM数据的时候，就COPY一份到高速缓存（内存地址和内容）。下一次执行指令的时候就会看一下是不是地址在CACHE内有，有的话就直接读出而不访问RAM了。<br>而DRAM的读取时间（从总线给出的有效地址，到数据读出）远达不到1ns（MOS一般在50ns-500ms），所以每个总线周期才会需要很多个T状态，这对CPU来说这一种很大的浪费。</p>
 <h1 id="寻址"><a href="#寻址" class="headerlink" title="寻址"></a>寻址</h1><p>EU单元的内部寄存器都是16位，BIU的寄存器也是16位，其根本原因就是说，8086CPU的内部总线是16位的。其一次最多能传输2^16bit的数据，无论是地址，还是数据。因此其采用了段式内存管理。<br>其最多能寻址的空间是2^16（64KB），所以每段就设置为这么大（这个是操作系统完成内存的分段？）。当程序载入的时候，就为其分配CS、DS、SS、ES，将每个段的段地址分别保存在CS、DS、SS、ES段寄存器内，这样加上一定的偏移量（Offset）就得到了逻辑地址：段选择符（Segment Selector)+偏移量（Offset）。<br>然后BIU里面的物理地址加法器就会转将逻辑地址转换为物理地址：BaseAddr*16+Offset</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -319,14 +320,14 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Asm/" rel="tag"># Asm</a>
-              <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"># 逆向</a>
+              <a href="/tags/逆向/" rel="tag"># 逆向</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/Linux%E4%B8%8B%E7%9A%84%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E5%91%BD%E4%BB%A4sar.html" rel="next" title="Linux下的系统监控命令sar">
+                <a href="/Linux-Unix/Linux下的系统监控命令sar.html" rel="next" title="Linux下的系统监控命令sar">
                   <i class="fa fa-chevron-left"></i> Linux下的系统监控命令sar
                 </a>
             </div>
@@ -334,7 +335,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/Bash%E7%BC%96%E7%A8%8B%E5%8F%82%E8%80%83-%E6%9D%A1%E4%BB%B6%E4%B8%8E%E5%BE%AA%E7%8E%AF.html" rel="prev" title="Bash编程参考-条件与循环">
+                <a href="/Linux-Unix/Bash编程参考-条件与循环.html" rel="prev" title="Bash编程参考-条件与循环">
                   Bash编程参考-条件与循环 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -396,20 +397,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -421,10 +422,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -453,10 +454,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -531,7 +532,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Asm/8086%E7%B3%BBCPU%E7%9A%84%E5%86%85%E5%AD%98%E5%AF%BB%E5%9D%80.html",
+            url: "https://gowa.club/Asm/8086系CPU的内存寻址.html",
             identifier: "Asm/8086系CPU的内存寻址.html",
             title: "8086系CPU的内存寻址"
           }

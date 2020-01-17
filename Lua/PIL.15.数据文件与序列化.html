@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Lua,PIL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PIL.15.数据文件与序列化">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Lua&#x2F;PIL.15.%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E4%B8%8E%E5%BA%8F%E5%88%97%E5%8C%96.html">
+<meta property="og:url" content="https://gowa.club/Lua/PIL.15.数据文件与序列化.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="当我们在处理数据文件的时候，写入总是比读出更加的容易。因为我们在写入一个文件的时候，我们很清楚的知道我们会写入什么东西；但读文件的时候呢，我们就不能预知我们会读到什么内容了。一个健壮的程序不仅要考虑正确的文件中包含的数据，还要优雅的处理那些不好的文件数据。因此，写出健壮的输入函数是比较困难的。本章我们会介绍使用 Lua 来避免所有这些读取数据的代码，而只需要将这些数据以合适的形式写出就行了。确切点">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-10-31T12:53:52.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PIL.15.数据文件与序列化">
+<meta name="twitter:description" content="当我们在处理数据文件的时候，写入总是比读出更加的容易。因为我们在写入一个文件的时候，我们很清楚的知道我们会写入什么东西；但读文件的时候呢，我们就不能预知我们会读到什么内容了。一个健壮的程序不仅要考虑正确的文件中包含的数据，还要优雅的处理那些不好的文件数据。因此，写出健壮的输入函数是比较困难的。本章我们会介绍使用 Lua 来避免所有这些读取数据的代码，而只需要将这些数据以合适的形式写出就行了。确切点">
 
-<link rel="canonical" href="https://gowa.club/Lua/PIL.15.%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E4%B8%8E%E5%BA%8F%E5%88%97%E5%8C%96.html">
+<link rel="canonical" href="https://gowa.club/Lua/PIL.15.数据文件与序列化.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.15.%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E4%B8%8E%E5%BA%8F%E5%88%97%E5%8C%96.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.15.数据文件与序列化.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/PIL.15.%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E4%B8%8E%E5%BA%8F%E5%88%97%E5%8C%96.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/PIL.15.数据文件与序列化.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/PIL.15.数据文件与序列化.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,58 +294,42 @@
       
         <p>当我们在处理数据文件的时候，写入总是比读出更加的容易。因为我们在写入一个文件的时候，我们很清楚的知道我们会写入什么东西；但读文件的时候呢，我们就不能预知我们会读到什么内容了。一个健壮的程序不仅要考虑正确的文件中包含的数据，还要优雅的处理那些不好的文件数据。因此，写出健壮的输入函数是比较困难的。本章我们会介绍使用 Lua 来避免所有这些读取数据的代码，而只需要将这些数据以合适的形式写出就行了。确切点说，我们将数据写出成为 Lua 程序，在运行的时候重建数据。</p>
 <a id="more"></a>
-
 <p>使用一个完全的程序语言来进行数据描述虽然很灵活，但是会带来两个问题。一个是安全问题，”数据” 文件可能会在我们的程序中疯狂运行。我们可以通过将这些文件在沙盒中运行来避免。</p>
 <p>另外一个问题就是性能。Lua 不仅运行快，而且编译也很快。</p>
 <h1 id="数据文件"><a href="#数据文件" class="headerlink" title="数据文件"></a>数据文件</h1><p><strong>表构造器</strong> 提供了一个非常有趣的文件格式。在写出文件的时候做很少的额外工作，数据的读回变得非常简单。这个技巧就是将我们的数据文件写成 Lua 代码，然后在执行的时候进行数据的重建工作。使用 <strong>表构造器</strong> ，这些文件种的 chunks 看起来就和原始的数据文件一什么区别。</p>
 <p>我们来看一个例子。如果我们的数据文件存在于一种预定义的格式中，比如是 CSV 或者  XML，我们只有很少的选择。然而，如果我们将要做的事情是建立我们自己的文件，那么我们就可以使用 Lua 的表构造器作为我们的格式，我们将每个数据机构表示为一个 Lua 的构造器。我们不会向下面这样写文件：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Donald E. Knuth,Literate Programming,CSLI,1992</span><br><span class="line">Jon Bentley,More Programming Pearls,Addison-Wesley,1990</span><br></pre></td></tr></table></figure>
-
 <p>而是会这样写：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">Entry&#123;<span class="string">"Donald E. Knuth"</span>,</span><br><span class="line">      <span class="string">"Literate Programming"</span>,</span><br><span class="line">      <span class="string">"CSLI"</span>,</span><br><span class="line">      <span class="number">1992</span>&#125;</span><br><span class="line"></span><br><span class="line">Entry&#123;<span class="string">"Jon Bentley"</span>,</span><br><span class="line">      <span class="string">"More Programming Pearls"</span>,</span><br><span class="line">      <span class="string">"Addison-Wesley"</span>,</span><br><span class="line">      <span class="number">1990</span>&#125;</span><br></pre></td></tr></table></figure>
-
 <p>这里我们需要记住的是，<code>Entyr {}</code> 与 <code>Entry( {} )</code> 是一样的，都是调用一个以表作为单个参数的函数，事实上，当参数是字符串的时候我们也可以这样做。这样，当我们在定义好了一个适当的 <strong>Entry</strong> 函数后，我们就直接执行我们的数据文件了，简而言之，下面的例子会统计文件中记录的数量：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> count = <span class="number">0</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Entry</span><span class="params">()</span></span> count  = count + <span class="number">1</span> <span class="keyword">end</span></span><br><span class="line"><span class="built_in">dofile</span>(<span class="string">"data"</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">"number of etnries:"</span> .. count )</span><br></pre></td></tr></table></figure>
-
 <p>下面这个例子就会将作者的姓名放在一个集合中，并打印出来：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> authors = &#123;&#125;      <span class="comment">-- a set to collect authors</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Entry</span> <span class="params">(b)</span></span> authors[b[<span class="number">1</span>]] = <span class="literal">true</span> <span class="keyword">end</span></span><br><span class="line"><span class="built_in">dofile</span>(<span class="string">"data"</span>)</span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> <span class="built_in">pairs</span>(authors) <span class="keyword">do</span> <span class="built_in">print</span>(name) <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>在这个例子中，注意一下这中 <strong>事件驱动</strong> 的方式，Entry 函数表现得就像是一个回调函数，其在 dofile 的调用中，每个数据项都会调用一次。</p>
 <p>当文件的大小不在我们考虑范围内时，我们可以使用 key-value 对来进行表示：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">Entry&#123;</span><br><span class="line">  author = <span class="string">"Donald E. Knuth"</span>,</span><br><span class="line">  title = <span class="string">"Literate Programming"</span>,</span><br><span class="line">  publisher = <span class="string">"CSLI"</span>,</span><br><span class="line">  year = <span class="number">1992</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Entry&#123;</span><br><span class="line">  author = <span class="string">"Jon Bentley"</span>,</span><br><span class="line">  title = <span class="string">"More Programming Pearls"</span>,</span><br><span class="line">  year = <span class="number">1990</span>,</span><br><span class="line">  publisher = <span class="string">"Addison-Wesley"</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>我们将这种形式称为 <strong>自描述形式</strong> ，因为每个数据都已经有了一个简短的描述了。这种形式更加的易读；必要的时候编辑起来也很方便；还允许我们对形式做一些小的改变而不需要改变全部的数据文件。比如，当我们添加了一个新字段的时候，我们只需要在程序内做很小的改动就可以在这个字段不存在的时候给予一个默认值。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> authors = &#123;&#125;      <span class="comment">-- a set to collect authors</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Entry</span> <span class="params">(b)</span></span> authors[b.author] = <span class="literal">true</span> <span class="keyword">end</span></span><br><span class="line"><span class="built_in">dofile</span>(<span class="string">"data"</span>)</span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> <span class="built_in">pairs</span>(authors) <span class="keyword">do</span> <span class="built_in">print</span>(name) <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>当某些项没有 author 时，我们可以在程序中进行适配：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Entry</span> <span class="params">(b)</span></span></span><br><span class="line">  authors[b.author <span class="keyword">or</span> <span class="string">"unknown"</span>] = <span class="literal">true</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <h1 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h1><p>我们经常需要序列化数据，也就是说将它们转换为字节流或者是字符串，这样我们就可以将它存在一个文件中或者通过网络传输。我们可以用 Lua 代码的形式来表示序列化的数据，而在执行代码的时候，可以在程序中重建数据。</p>
 <p>通常，如果我需要恢复一个全局变量，我们的 chunk 看起来会是 <code>varname = exp</code> 的形式，这里，<code>exp</code> 是一个用来创建值的表达式。我们来看看怎么样写一个创建值的代码。对于数字类型的值：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">serialize</span> <span class="params">(o)</span></span></span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">type</span>(o) == <span class="string">"number"</span> <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="built_in">tostring</span>(o))</span><br><span class="line">  <span class="keyword">else</span> </span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>如果我们将一个浮点数以十进制的形式写出，我们会有丢失精度的危险。我们可以用16进制的形式来避免这个问题。使用 <code>%a%</code> 格式化符，读入的浮点值会和原始的数据一致。在 Lua 5.3 后，我们必须区分整型与浮点数，以便他们能正常的恢复：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> fmt = &#123;integer = <span class="string">"%d"</span>, float = <span class="string">"%a"</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">serialize</span> <span class="params">(o)</span></span></span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">type</span>(o) == <span class="string">"number"</span> <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="built_in">string</span>.<span class="built_in">format</span>(fmt[<span class="built_in">math</span>.<span class="built_in">type</span>(o)], o))</span><br><span class="line">  <span class="keyword">else</span> other cases</span><br></pre></td></tr></table></figure>
-
 <p>对于字符串就更简单了：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="built_in">type</span>(o) == <span class="string">"string"</span> <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="string">"'"</span>, o, <span class="string">"'"</span>)</span><br></pre></td></tr></table></figure>
-
 <p>但是，但字符串有特殊字符的时候（引号或者换行）那么写出的数据文件将不是一个有效的Lua 程序。<br>我们可能会尝试改变引用符号来解决这个问题：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="built_in">type</span>(o) == <span class="string">"string"</span> <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="string">"[["</span>, <span class="number">0</span>, <span class="string">"]]"</span>)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>请注意一下代码注入。如果一个恶意的用户想将你的程序重定向来保存一些如 <strong>“ ]]..os.execute(‘rm *‘)..[[ “</strong>（具体而言，他将这些字符串以地址的形式提供），你最终的 Lua 程序将会这样的：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">varname = <span class="string">[[ ]]</span>..<span class="built_in">os</span>.<span class="built_in">execute</span>(<span class="string">'rm *'</span>)..<span class="string">[[ ]]</span></span><br></pre></td></tr></table></figure>
-
 <p>你在加载数据文件的时候，将会有非常坏的结果。</p>
 <p>一个简单且安全的方式就是使用  <code>%q</code> 格式化符。这个选项被设计来让我们可以以一种 Lua 安全的读回的形式来保存字符串。其会用双引号将字符串包起来，加上合适反引特殊字符。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">a = <span class="string">'a "problematic" \\string'</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"%q"</span>, a))    <span class="comment">--&gt; "a \"problematic\" \\string"</span></span><br></pre></td></tr></table></figure>
-
 <p>使用这个特性，我们的序列化函数就会有变化了：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">serialize</span> <span class="params">(o)</span></span></span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">type</span>(o) == <span class="string">"number"</span> <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="built_in">string</span>.<span class="built_in">format</span>(fmt[<span class="built_in">math</span>.<span class="built_in">type</span>(o)], o))</span><br><span class="line">  <span class="keyword">elseif</span> <span class="built_in">type</span>(o) == <span class="string">"string"</span> <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"%q"</span>, o))</span><br><span class="line">  <span class="keyword">else</span> other cases</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>5.3.3 扩展了 <code>%q</code> 选项，以使其与数字型进行工作（包括 nil 和 Boolean）。现在我们的序列化函数更可以变化了：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">serialize</span> <span class="params">(o)</span></span></span><br><span class="line">  <span class="keyword">local</span> t = <span class="built_in">type</span>(o)</span><br><span class="line">  <span class="keyword">if</span> t == <span class="string">"number"</span> <span class="keyword">or</span> t == <span class="string">"string"</span> <span class="keyword">or</span> t == <span class="string">"boolean"</span> <span class="keyword">or</span></span><br><span class="line">     t == <span class="string">"nil"</span> <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"%q"</span>, o))</span><br><span class="line">  <span class="keyword">else</span> other cases</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>另外一种保存字符串的形式是对长字符串使用注释 <code>[=[...]=]</code>。然而，这个注释主要还是为了在我们不想要改变某些字符串的怎么值时，来进行代码的编写。在自动生成的代码中，想比 <code>%q</code> 其会更容易的反引有问题的字符</p>
 <p>如果想要对进行自动代码生成使用长字符串的注释，那么就需要注意一些细节了。</p>
 <ol>
@@ -361,35 +347,28 @@
 <p>（我们可能会想使用更简单的模式’] = *]’，该模式在第二个方括号中不使用前向引用模式，但是这里有一个微妙之处。假设字符串为“] =] ==]”。第一个匹配是“] =]”，其后，字符串中剩下的是“ ==]”，因此没有其他匹配；在循环的最后，n将是一个而不是两个。前向引用模式不会占用括号，因此在接下来的匹配中它将保留在字符串中。）</p>
 <h1 id="保存表-无循环"><a href="#保存表-无循环" class="headerlink" title="保存表 - 无循环"></a>保存表 - 无循环</h1><p>下一个任务是保存表。有几种方式来完成这个任务，这需要根据我们对这个表的结构的假设来。没有单一的算法能够满足所有的情况。简单的表可以使用简单的算法，同时其输出也更加的简洁。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">serialize</span> <span class="params">(o)</span></span></span><br><span class="line">  <span class="keyword">local</span> t = <span class="built_in">type</span>(o)</span><br><span class="line">  <span class="keyword">if</span> t == <span class="string">"number"</span> <span class="keyword">or</span> t == <span class="string">"string"</span> <span class="keyword">or</span> t == <span class="string">"boolean"</span> <span class="keyword">or</span></span><br><span class="line">     t == <span class="string">"nil"</span> <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"%q"</span>, o))</span><br><span class="line">  <span class="keyword">elseif</span> t == <span class="string">"table"</span> <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="string">"&#123;\n"</span>)</span><br><span class="line">    <span class="keyword">for</span> k,v <span class="keyword">in</span> <span class="built_in">pairs</span>(o) <span class="keyword">do</span></span><br><span class="line">      <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="string">"  "</span>, k, <span class="string">" = "</span>)</span><br><span class="line">      serialize(v)</span><br><span class="line">      <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="string">",\n"</span>)</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="string">"&#125;\n"</span>)</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="built_in">error</span>(<span class="string">"cannot serialize a "</span> .. <span class="built_in">type</span>(o))</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>虽然看起来简单，但是这个函数会做非常有合适的工作。其能处理嵌套的表（表中的字段是一个表），只要表的结构是一棵树（就是没有共享的子表也没有循环）。</p>
 <p>前面的函数中假设表中所有的键都是有效的标识符。当表中有整型键，或者非语法上有效的 Lua 标识符字符串作为键时，我们就会遇到麻烦。一个简单的方式是用下面的办法来写出键：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="built_in">io</span>.<span class="built_in">write</span>(<span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">" [%s] = "</span>, serialize(k)))</span><br></pre></td></tr></table></figure>
 <p>这样修改后，我们高了函数的健壮性</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">serialize&#123;a=<span class="number">12</span>, b=<span class="string">'Lua'</span>, key=<span class="string">'another "one"'</span>&#125;</span><br></pre></td></tr></table></figure>
-
 <p>这个表之前的输出是：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  a = <span class="number">12</span>,</span><br><span class="line">  b = <span class="string">"Lua"</span>,</span><br><span class="line">  key = <span class="string">"another \"one\""</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>而现在则变成这样了。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  [<span class="string">"a"</span>] = <span class="number">12</span>,</span><br><span class="line">  [<span class="string">"b"</span>] = <span class="string">"Lua"</span>,</span><br><span class="line">  [<span class="string">"key"</span>] = <span class="string">"another \"one\""</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>实际上我们也可以在写出键的时候测试一下其是否需要 方括号。</p>
 <h1 id="保存表-有循环"><a href="#保存表-有循环" class="headerlink" title="保存表 - 有循环"></a>保存表 - 有循环</h1><p>为了处理通用结构的表，（比如有共享表和循环）我们需要一种不同的方式。构造器无法创建这样的表，所以我们不会使用它。为了表示循环，我们需要名称，所以我们的下一个函数会将要保存的表及其名称作为参数进行处理。同时，我们必须跟踪我们已经保存的表的名字，在我们的遇到的循环的时候进行使用。我们会使用一个额外的表来进行跟踪，这个表会使用之前那些保存的表作为索引，而使用名称来作为其值。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">basicSerialize</span> <span class="params">(o)</span></span></span><br><span class="line">  <span class="comment">-- assume 'o' is a number or a string</span></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"%q"</span>, o)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">save</span> <span class="params">(name, value, saved)</span></span></span><br><span class="line">  saved = saved <span class="keyword">or</span> &#123;&#125;                 <span class="comment">-- initial value</span></span><br><span class="line">  <span class="built_in">io</span>.<span class="built_in">write</span>(name, <span class="string">" = "</span>)</span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">type</span>(value) == <span class="string">"number"</span> <span class="keyword">or</span> <span class="built_in">type</span>(value) == <span class="string">"string"</span> <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">io</span>.<span class="built_in">write</span>(basicSerialize(value), <span class="string">"\n"</span>)</span><br><span class="line">  <span class="keyword">elseif</span> <span class="built_in">type</span>(value) == <span class="string">"table"</span> <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">if</span> saved[value] <span class="keyword">then</span>              <span class="comment">-- value already saved?</span></span><br><span class="line">      <span class="built_in">io</span>.<span class="built_in">write</span>(saved[value], <span class="string">"\n"</span>)    <span class="comment">-- use its previous name</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      saved[value] = name             <span class="comment">-- save name for next time</span></span><br><span class="line">      <span class="built_in">io</span>.<span class="built_in">write</span>(<span class="string">"&#123;&#125;\n"</span>)                <span class="comment">-- create a new table</span></span><br><span class="line">      <span class="keyword">for</span> k,v <span class="keyword">in</span> <span class="built_in">pairs</span>(value) <span class="keyword">do</span>      <span class="comment">-- save its fields</span></span><br><span class="line">        k = basicSerialize(k)</span><br><span class="line">        <span class="keyword">local</span> fname = <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"%s[%s]"</span>, name, k)</span><br><span class="line">        save(fname, v, saved)</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    <span class="built_in">error</span>(<span class="string">"cannot save a "</span> .. <span class="built_in">type</span>(value))</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>这里我们限制我表内只有整型和字符串两种键。函数 <code>basicSerialize</code> 用来序列号这两种类型，返回结果。<code>save</code> 函数就干了比较难的活。<code>saved</code> 参数保存的是已经保存了的表。看我们下面的例子：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">a = &#123;x=<span class="number">1</span>, y=<span class="number">2</span>; &#123;<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>&#125;&#125;</span><br><span class="line">a[<span class="number">2</span>] = a    <span class="comment">-- cycle</span></span><br><span class="line">a.z = a[<span class="number">1</span>]  <span class="comment">-- shared subtable</span></span><br></pre></td></tr></table></figure>
-
 <p><code>save(&quot;a&quot;, a)</code> 将会有如下输出：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">a = &#123;&#125;</span><br><span class="line">a[<span class="number">1</span>] = &#123;&#125;</span><br><span class="line">a[<span class="number">1</span>][<span class="number">1</span>] = <span class="number">3</span></span><br><span class="line">a[<span class="number">1</span>][<span class="number">2</span>] = <span class="number">4</span></span><br><span class="line">a[<span class="number">1</span>][<span class="number">3</span>] = <span class="number">5</span></span><br><span class="line"></span><br><span class="line">a[<span class="number">2</span>] = a</span><br><span class="line">a[<span class="string">"y"</span>] = <span class="number">2</span></span><br><span class="line">a[<span class="string">"x"</span>] = <span class="number">1</span></span><br><span class="line">a[<span class="string">"z"</span>] = a[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
-
 <p>输出的顺序可能会不同，这依赖于遍历表的顺序。这个算法保证在新的定义中新的节点都是已定义的。</p>
 <p>如果我们想将有共享部分的几个字进行保存，我们可以用相同的 <code>saved</code> 参数来调用 <code>save()</code> 函数。如：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">a = &#123;&#123;<span class="string">"one"</span>, <span class="string">"two"</span>&#125;, <span class="number">3</span>&#125;</span><br><span class="line">b = &#123;k = a[<span class="number">1</span>]&#125;</span><br></pre></td></tr></table></figure>
-
 <p>如果我们想单独的保存他们，结果将不会有相同的部分。然而，如果我们使用相同的 saved 表，那么结果就会是有相同部分的：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> t = &#123;&#125;</span><br><span class="line">save(<span class="string">"a"</span>, a, t)</span><br><span class="line">save(<span class="string">"b"</span>, b, t)</span><br><span class="line"></span><br><span class="line">  <span class="comment">--&gt; a = &#123;&#125;</span></span><br><span class="line">  <span class="comment">--&gt; a[1] = &#123;&#125;</span></span><br><span class="line">  <span class="comment">--&gt; a[1][1] = "one"</span></span><br><span class="line">  <span class="comment">--&gt; a[1][2] = "two"</span></span><br><span class="line">  <span class="comment">--&gt; a[2] = 3</span></span><br><span class="line">  <span class="comment">--&gt; b = &#123;&#125;</span></span><br><span class="line">  <span class="comment">--&gt; b["k"] = a[1]</span></span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -407,7 +386,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/%E5%9C%A8%E5%AE%89%E5%8D%93%E4%B8%AD%E8%BF%9B%E8%A1%8C%E5%85%B1%E4%BA%AB%E5%BA%93%E7%9A%84%E6%B3%A8%E5%85%A5.html" rel="next" title="在安卓中进行共享库的注入">
+                <a href="/Android/在安卓中进行共享库的注入.html" rel="next" title="在安卓中进行共享库的注入">
                   <i class="fa fa-chevron-left"></i> 在安卓中进行共享库的注入
                 </a>
             </div>
@@ -415,7 +394,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/JNI%E6%8A%80%E6%9C%AF%E4%B8%8ENative%E4%BB%A3%E7%A0%81%E4%BA%A4%E4%BA%92.html" rel="prev" title="JNI技术与Native代码交互">
+                <a href="/Java/JNI技术与Native代码交互.html" rel="prev" title="JNI技术与Native代码交互">
                   JNI技术与Native代码交互 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -477,20 +456,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -502,10 +481,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -534,10 +513,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -612,7 +591,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Lua/PIL.15.%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E4%B8%8E%E5%BA%8F%E5%88%97%E5%8C%96.html",
+            url: "https://gowa.club/Lua/PIL.15.数据文件与序列化.html",
             identifier: "Lua/PIL.15.数据文件与序列化.html",
             title: "PIL.15.数据文件与序列化"
           }

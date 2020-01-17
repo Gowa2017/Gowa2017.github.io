@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Lua">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用协程实现多线程">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Lua&#x2F;%E5%88%A9%E7%94%A8%E5%8D%8F%E7%A8%8B%E5%AE%9E%E7%8E%B0%E5%A4%9A%E7%BA%BF%E7%A8%8B.html">
+<meta property="og:url" content="https://gowa.club/Lua/利用协程实现多线程.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Lua并没有真正的多线程，其是通过协程来实现的。这章我们就来看看通过协程来实现一个多线程系统。协程允许一种协作式的多线程。每个协程就等于一个线程。一对 yield-resume调用，会把控制从一个线程转交到另外一个。但是和常规的多线程不同，协程是非抢占式的。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-02-10T14:07:02.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用协程实现多线程">
+<meta name="twitter:description" content="Lua并没有真正的多线程，其是通过协程来实现的。这章我们就来看看通过协程来实现一个多线程系统。协程允许一种协作式的多线程。每个协程就等于一个线程。一对 yield-resume调用，会把控制从一个线程转交到另外一个。但是和常规的多线程不同，协程是非抢占式的。">
 
-<link rel="canonical" href="https://gowa.club/Lua/%E5%88%A9%E7%94%A8%E5%8D%8F%E7%A8%8B%E5%AE%9E%E7%8E%B0%E5%A4%9A%E7%BA%BF%E7%A8%8B.html">
+<link rel="canonical" href="https://gowa.club/Lua/利用协程实现多线程.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/%E5%88%A9%E7%94%A8%E5%8D%8F%E7%A8%8B%E5%AE%9E%E7%8E%B0%E5%A4%9A%E7%BA%BF%E7%A8%8B.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/利用协程实现多线程.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/%E5%88%A9%E7%94%A8%E5%8D%8F%E7%A8%8B%E5%AE%9E%E7%8E%B0%E5%A4%9A%E7%BA%BF%E7%A8%8B.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/利用协程实现多线程.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/利用协程实现多线程.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -296,49 +298,37 @@
 <p>然而，对于非抢占式的多线程，当一个线程调用阻塞式操作时，整个程序都会等待直到这个操作完成。对于很多应用，这个行为是不可接受的，所以很多程序员不认为协程是一个真正合适的多线程方式。但我们会看到，这个问题有一个非常有趣的（也非常明显，事后也显得非常聪明）解决办法。</p>
 <p>我们来假设一个非常典型的多线程场景：我们想通过 HTTP来下载几个远程文件。 为了下载多个远程文件首先我们要知道如何下载一个远程文件。 在这个例子中，我们使用了<em>LuaSocket</em>库。为了下载一个文件我们必须先打开一个到远程地址的连接，然后发送请求，接着接收文件（阻塞式），接收完毕就关闭连接。在Lua中，我们可以如下完成这个任务。首先，我们导入 LuaSocket 库：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> socket = <span class="built_in">require</span> <span class="string">"socket"</span></span><br></pre></td></tr></table></figure>
-
 <p>然后，我们定义主机及需要下载的文件。在这个例子中，我们会从 Lua 网站上下载 Lua 5.3的参考手册：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">host = <span class="string">"www.lua.org"</span></span><br><span class="line">file = <span class="string">"/manual/5.3/manual.html"</span></span><br></pre></td></tr></table></figure>
-
 <p>接着，打开一个 TCP:80 的连接：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">c = <span class="built_in">assert</span>(socket.connect(host, <span class="number">80</span>))</span><br></pre></td></tr></table></figure>
-
 <p>这将会返回一个连接对象，我们会用它来发送请求：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> request = <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"GET %s HTTP/1.0\r\nhost:%s\r\n\r\n"</span>, file, host)</span><br><span class="line">c:send(request)</span><br></pre></td></tr></table></figure>
-
 <p>下面我们就会以 1KB 一块的来读取文件，把每个读取到的块写到标准输出：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">repeat</span></span><br><span class="line">	<span class="keyword">local</span> s, <span class="built_in">status</span>, partial = c:receive(<span class="number">2</span>^<span class="number">10</span>)</span><br><span class="line">	<span class="built_in">io</span>.<span class="built_in">write</span>(s <span class="keyword">or</span> partial)</span><br><span class="line"><span class="keyword">until</span> <span class="built_in">status</span> == <span class="string">"closed"</span></span><br></pre></td></tr></table></figure>
-
 <p>方法<code>receive</code>会返回其读取到的字符或在发生错误时的 <em>nil</em>；在后面一种情况，其会返回一个错误代码（status），以及部分阅读到的内容（partial)。当主机关闭这个连接时，我们打印出剩余的输出，接着跳出了接收循环。</p>
 <p>在下载完这个文件后，我们关闭连接：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">c:<span class="built_in">close</span>()</span><br></pre></td></tr></table></figure>
-
-
 <p>现在我们知道了怎么下载一个文件，现在我们回到下载多个文件的问题上。比较低效的方式就是每次下载一个。然而，这种串行化的方式，我们只能在完成前一个下载后才可以阅读下一个文件，非常的慢。当阅读一个远程文件时，程序大多数时间都花在了等待数据到达上。更特别地，其多数时间都花在了<code>receive</code>上。所以，并发的进行下载会更加的快速。 </p>
 <p>而当一个连接没有数据到达的时候，程序可以从另外一个连接进行读取。很明白地，协程提供了一个非常方便的方式来组织安全这种同时的下载情况。我们为每个任务建立一个线程。当一个线程没有数据到达时，就让出时间片给另外一个分发器，其会调用 另外一个线程。</p>
 <p>我们来用协程重写程序，我们把先前的下载代码写成一个函数。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">download</span> <span class="params">(host, file)</span></span></span><br><span class="line">	<span class="keyword">local</span> c = <span class="built_in">assert</span>(socket.connect(host, <span class="number">80</span>))</span><br><span class="line">	<span class="keyword">local</span> count = <span class="number">0</span></span><br><span class="line">	<span class="keyword">local</span> request = <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"GET %s HTTP/1.0\r\nhost:%s\r\n\r\n"</span>, file, host)</span><br><span class="line">	c:send(request)</span><br><span class="line">	<span class="keyword">while</span> <span class="literal">true</span> <span class="keyword">do</span></span><br><span class="line">		<span class="keyword">local</span> s, <span class="built_in">status</span> = receive(c)</span><br><span class="line">		count = count + #s</span><br><span class="line">		<span class="keyword">if</span> <span class="built_in">status</span> == <span class="string">"closed"</span> <span class="keyword">then</span> <span class="keyword">break</span> <span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	c:<span class="built_in">close</span>()</span><br><span class="line">	<span class="built_in">print</span>(file, count)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>我们对远程文件的内容不关心，所以这个函数只是计算并打印出文件的大小，而不是写到标准输出。</p>
 <p>在新的代码中，我们使用了一个辅助函数<code>receive</code>来从连接接收数据。在串行化的方式中，代码可能会是这样的：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">receive</span> <span class="params">(connection)</span></span></span><br><span class="line">	<span class="keyword">local</span> s, <span class="built_in">status</span>, partial = connection:receive(<span class="number">2</span>^<span class="number">10</span>)</span><br><span class="line">	<span class="keyword">return</span> s <span class="keyword">or</span> partial, <span class="built_in">status</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>对于并发的实现，函数必须不阻塞的接收数据。如果没有足够的数据可用，就会让出时间片。新代码类似这样：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">receive</span> <span class="params">(connection)</span></span></span><br><span class="line">	connection:settimeout(<span class="number">0</span>)	<span class="comment">-- do not block</span></span><br><span class="line">	<span class="keyword">local</span> s, <span class="built_in">status</span>, partial = connection:receive(<span class="number">2</span>^<span class="number">10</span>)</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">status</span> == <span class="string">"timeout"</span> <span class="keyword">then</span></span><br><span class="line">		coroutine.<span class="built_in">yield</span>(connection)</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">return</span> s <span class="keyword">or</span> partial, <span class="built_in">status</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>调用 <code>settimeout(0)</code>会让对对连接上的所有操作都是非阻塞的。如果返回的状态是<em>timeout</em>，那就说明操作没有完成就返回了。 在这样的情况下，线程会让出时间片。 传递到 <code>yield</code>的非假参数告诉 分发处理器  线程还在进行它的任务。注意到这点，及时一超时， 这个连接也会返回其阅读到的内容，也就是说在 <code>partial</code>中保留的不完整的数据。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">tasks = &#123;&#125; <span class="comment">-- list of all live tasks</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">get</span> <span class="params">(host, file)</span></span></span><br><span class="line"><span class="comment">-- create coroutine for a task</span></span><br><span class="line"><span class="keyword">local</span> co = coroutine.<span class="built_in">wrap</span>(<span class="function"><span class="keyword">function</span> <span class="params">()</span></span> download(host, file) <span class="keyword">end</span>)</span><br><span class="line"><span class="comment">-- insert it in the list</span></span><br><span class="line"><span class="comment">-- co is not start, now</span></span><br><span class="line"><span class="built_in">table</span>.<span class="built_in">insert</span>(tasks, co)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dispatch</span> <span class="params">()</span></span></span><br><span class="line">	<span class="keyword">local</span> i = <span class="number">1</span></span><br><span class="line">	<span class="keyword">while</span> <span class="literal">true</span> <span class="keyword">do</span></span><br><span class="line">		<span class="keyword">if</span> tasks[i] == <span class="literal">nil</span> <span class="keyword">then</span> <span class="comment">-- no other tasks?</span></span><br><span class="line">			<span class="keyword">if</span> tasks[<span class="number">1</span>] == <span class="literal">nil</span> <span class="keyword">then</span> <span class="comment">-- list is empty?</span></span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			i = <span class="number">1</span> <span class="comment">-- else restart the loop</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">local</span> res = tasks[i]() <span class="comment">-- run a task</span></span><br><span class="line">		<span class="keyword">if</span> <span class="keyword">not</span> res <span class="keyword">then</span> <span class="comment">-- task finished?</span></span><br><span class="line">			<span class="built_in">table</span>.<span class="built_in">remove</span>(tasks, i)</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			i = i + <span class="number">1</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>表<code>tasks</code>保存了给予分发器活跃任务的列表。<code>get</code>保证了每个下载任务在独立的线程内运行。 分发器 就是一个遍历所有任务的循环，一个一个的恢复他们。其必须从列表我移除已经完成的任务。如果没有任务的时候，就要跳出循环。</p>
 <p>最后，主程序创建任务，然后调用分发器。为了从Lua上下载一些发行版，主程序如下类似：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">get(<span class="string">"www.lua.org"</span>, <span class="string">"/ftp/lua“5.3.2.tar.gz"</span>)</span><br><span class="line">  get(<span class="string">"www.lua.org"</span>, <span class="string">"/ftp/lua-5.3.1.tar.gz"</span>)</span><br><span class="line">  get(<span class="string">"www.lua.org"</span>, <span class="string">"/ftp/lua-5.3.0.tar.gz"</span>)</span><br><span class="line">  get(<span class="string">"www.lua.org"</span>, <span class="string">"/ftp/lua-5.2.4.tar.gz"</span>)</span><br><span class="line">  get(<span class="string">"www.lua.org"</span>, <span class="string">"/ftp/lua-5.2.3.tar.gz"</span>)”</span><br><span class="line"></span><br><span class="line">dispatch() <span class="comment">-- main loop</span></span><br></pre></td></tr></table></figure>
-
 <p>在我的机器上，串行化的实现花了15秒来下载这些文件。以协程来实现的速度快了三倍有余。</p>
 <p>不要看到速度有了提成，最后的实现依然不是最优的。在最少有应该线程有数据需要读时这工作得良好。然而，当所有线程都没有数据需要读的时候，分发器 就处于 忙-等状态，不停的检查是否存在有数据需要读任务。</p>
 <p>为了避免这样的行为，我们可以使用 LuaSocket 中的 <code>select</code>函数：其允许程序在等待一组套接字状态变更时进行等待。在我们实现中的变化是非常小的：我们只需要改变分发器：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">dispatch</span> <span class="params">()</span></span></span><br><span class="line">	<span class="keyword">local</span> i = <span class="number">1</span></span><br><span class="line">	<span class="keyword">local</span> timedout = &#123;&#125;</span><br><span class="line">	<span class="keyword">while</span> <span class="literal">true</span> <span class="keyword">do</span></span><br><span class="line">		<span class="keyword">if</span> tasks[i] == <span class="literal">nil</span> <span class="keyword">then</span> <span class="comment">-- no other tasks?</span></span><br><span class="line">			<span class="keyword">if</span> tasks[<span class="number">1</span>] == <span class="literal">nil</span> <span class="keyword">then</span> <span class="comment">-- list is empty?</span></span><br><span class="line">				<span class="keyword">break</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">			i = <span class="number">1</span> <span class="comment">-- else restart the loop</span></span><br><span class="line">			timedout = &#123;&#125;</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">local</span> res = tasks[i]() <span class="comment">-- run a task</span></span><br><span class="line">		<span class="keyword">if</span> <span class="keyword">not</span> res <span class="keyword">then</span> <span class="comment">-- task finished?</span></span><br><span class="line">			<span class="built_in">table</span>.<span class="built_in">remove</span>(tasks, i)</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			i = i + <span class="number">1</span></span><br><span class="line">			timedout[#timedout + <span class="number">1</span>] = res</span><br><span class="line">			<span class="keyword">if</span> #timedout == #tasks <span class="keyword">then</span> <span class="comment">-- all tasks blocked?</span></span><br><span class="line">				socket.<span class="built_in">select</span>(timedout) <span class="comment">-- wait</span></span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>在循环内，新的分发器搜集所有超时连接的到表<code>timedout</code>中。（记住，<code>receive</code>把这些连接传递给 <code>yield</code>，这样 <code>resume</code>也会返回他们）。如果所有的连接都是超市的，分发器调用<code>select</code>来等待所有这些连接改变状态。这个实现和先前用协程的实现一样快。更好的时，其不会处于忙等状态，其和串行化使用的CPU一样多。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -355,7 +345,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Cocos2d-X/%E5%85%B3%E4%BA%8Ecocos2dx%E5%9C%A8xcode9%E4%B9%8B%E4%B8%AD%E6%97%A0%E6%B3%95%E4%BD%BF%E7%94%A8system%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E7%9A%84%E9%97%AE%E9%A2%98.html" rel="next" title="关于Cocos2d-X在xcode9之中无法使用system系统调用的问题">
+                <a href="/Cocos2d-X/关于cocos2dx在xcode9之中无法使用system系统调用的问题.html" rel="next" title="关于Cocos2d-X在xcode9之中无法使用system系统调用的问题">
                   <i class="fa fa-chevron-left"></i> 关于Cocos2d-X在xcode9之中无法使用system系统调用的问题
                 </a>
             </div>
@@ -363,7 +353,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Cocos2d-X/cocos2dx-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5.html" rel="prev" title="Cocos2d-X-基本概念">
+                <a href="/Cocos2d-X/cocos2dx-基本概念.html" rel="prev" title="Cocos2d-X-基本概念">
                   Cocos2d-X-基本概念 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -424,20 +414,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -449,10 +439,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -481,10 +471,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -559,7 +549,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Lua/%E5%88%A9%E7%94%A8%E5%8D%8F%E7%A8%8B%E5%AE%9E%E7%8E%B0%E5%A4%9A%E7%BA%BF%E7%A8%8B.html",
+            url: "https://gowa.club/Lua/利用协程实现多线程.html",
             identifier: "Lua/利用协程实现多线程.html",
             title: "利用协程实现多线程"
           }

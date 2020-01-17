@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -49,10 +49,11 @@
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="退思园">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;page&#x2F;22&#x2F;index.html">
+<meta property="og:url" content="https://gowa.club/page/22/index.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="退思园">
 
 <link rel="canonical" href="https://gowa.club/page/22/">
 
@@ -224,7 +225,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/%E5%85%B3%E4%BA%8E%E5%AE%89%E5%8D%93%E6%9D%83%E9%99%90%E7%9A%84%E9%80%82%E9%85%8D.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/RxJava/RxJava2简介.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -238,7 +239,113 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Android/%E5%85%B3%E4%BA%8E%E5%AE%89%E5%8D%93%E6%9D%83%E9%99%90%E7%9A%84%E9%80%82%E9%85%8D.html" class="post-title-link" itemprop="url">关于安卓权限的适配</a>
+            <a href="/RxJava/RxJava2简介.html" class="post-title-link" itemprop="url">RxJava2简介</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-08 02:14:29" itemprop="dateCreated datePublished" datetime="2018-05-08T02:14:29+08:00">2018-05-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/RxJava/" itemprop="url" rel="index">
+                    <span itemprop="name">RxJava</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/RxJava/RxJava2简介.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="RxJava/RxJava2简介.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>RxJava是 <strong>响应式扩展</strong> 的Java VM实现：采用观察者序列来组成异步和事件驱动的程序的一个库。</p>
+<p>其扩展了 <strong>观察者模式</strong> 来支持 数据/事件的序列，并增加了操作符，这允许我们通过生命来组成序列，而不用担心底层的如 线程，同步，线程安全和并发数据结构等。</p>
+<h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h1><p>在 AS 中 加上</p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line"><span class="keyword">compile</span> <span class="string">"io.reactivex.rxjava2:rxjava:2.x.y"</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>把 x, y  换成最新的版本号。</p>
+</blockquote>
+<h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><p>例子程序：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> rxjava.examples;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io.reactivex.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Flowable.just(<span class="string">"Hello world"</span>).subscribe(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果我们使用的开发环境不支持  Java 8 的 lambdas，必须自己创建一个内部的 Consumer。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> io.reactivex.functions.Consumer;</span><br><span class="line"></span><br><span class="line">Flowable.just(<span class="string">"Hello world"</span>)</span><br><span class="line">  .subscribe(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line">      <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">          System.out.println(s);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<h1 id="基本类"><a href="#基本类" class="headerlink" title="基本类"></a>基本类</h1><ul>
+<li><strong>io.reactivex.Flowable</strong>: 0..N flows, supporting Reactive-Streams and backpressure</li>
+<li><strong>io.reactivex.Observable</strong>: 0..N flows, no backpressure,</li>
+<li><strong>io.reactivex.Single</strong>: a flow of exactly 1 item or an error,</li>
+<li><strong>io.reactivex.Completable</strong>: a flow without items but only a completion or error signal,</li>
+<li><strong>io.reactivex.Maybe</strong>: a flow with no items, exactly one item or an error.</li>
+</ul>
+<h1 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h1><h2 id="Upstream-downstream"><a href="#Upstream-downstream" class="headerlink" title="Upstream, downstream"></a>Upstream, downstream</h2><p>RxJava中的数据流由 <code>一个源，0个或多个中间步骤，随后是一个数据消费者或者结合步骤（这些步骤会通过某些方式来消费数据流）</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">source.operator1().operator2().operator3().subscribe(consumer);</span><br><span class="line"></span><br><span class="line">source.flatMap(value -&gt; source.operator1().operator2().operator3());</span><br></pre></td></tr></table></figure>
+<p>在这，如果我们把自己想象成 <code>operator2</code>，往左边看，直到source，这部分叫做 <strong>upstream</strong>。右边到 subscriber/consumer 之间的叫做 <strong>downstream</strong>。当每个元素写在单独一行的时候会更直观：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">source</span><br><span class="line">  .operator1()</span><br><span class="line">  .operator2()</span><br><span class="line">  .operator3()</span><br><span class="line">  .subscribe(consumer)</span><br></pre></td></tr></table></figure>
+<h2 id="动作中的对象"><a href="#动作中的对象" class="headerlink" title="动作中的对象"></a>动作中的对象</h2><p>在RxJAVA文档中，<strong>emission, emits, item, event, signal, data</strong></p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/关于安卓权限的适配.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Android/关于安卓权限的适配.html" class="post-title-link" itemprop="url">关于安卓权限的适配</a>
         </h1>
 
         <div class="post-meta">
@@ -271,7 +378,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/%E5%85%B3%E4%BA%8E%E5%AE%89%E5%8D%93%E6%9D%83%E9%99%90%E7%9A%84%E9%80%82%E9%85%8D.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/关于安卓权限的适配.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/关于安卓权限的适配.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -294,6 +401,7 @@
 <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>如果我们选择适配API等级在23以下，即 在build.gradle中指定 <code>targetSdkVersion level(leve &lt; 23)</code>。那么在高版本的，API上的话，会是什么结果呢？</p>
 <p>是这样的<br><strong>对于没有适平配API23以上的APP，而又运行在 6.0以上的系统时，其采用以前的授权方式，即在安装时进行授权。</strong></p>
 <h1 id="怎么适配？"><a href="#怎么适配？" class="headerlink" title="怎么适配？"></a>怎么适配？</h1><p>参考一下我上面提到的项目，是一个非常棒的项目哦。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -313,7 +421,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/java%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/java中的数据结构.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -327,7 +435,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Java/java%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.html" class="post-title-link" itemprop="url">java中的数据结构</a>
+            <a href="/Java/java中的数据结构.html" class="post-title-link" itemprop="url">java中的数据结构</a>
         </h1>
 
         <div class="post-meta">
@@ -360,7 +468,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/java%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/java中的数据结构.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/java中的数据结构.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -387,79 +495,51 @@
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;</span></span><br><span class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></span><br><span class="line"><span class="class">        </span></span><br><span class="line">            transient Object[] elementData; // non-private to simplify nested class access</span><br></pre></td></tr></table></figure>
 <p>在我们动态添加元素，而数组空间不够的时候，一样需要重新分配内存并进行复制。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">grow</span><span class="params">(<span class="keyword">int</span> minCapacity)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// overflow-conscious code</span></span><br><span class="line">    <span class="keyword">int</span> oldCapacity = elementData.length;</span><br><span class="line">    <span class="keyword">int</span> newCapacity = oldCapacity + (oldCapacity &gt;&gt; <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span> (newCapacity - minCapacity &lt; <span class="number">0</span>)</span><br><span class="line">        newCapacity = minCapacity;</span><br><span class="line">    <span class="keyword">if</span> (newCapacity - MAX_ARRAY_SIZE &gt; <span class="number">0</span>)</span><br><span class="line">        newCapacity = hugeCapacity(minCapacity);</span><br><span class="line">    <span class="comment">// minCapacity is usually close to size, so this is a win:</span></span><br><span class="line">    elementData = Arrays.copyOf(elementData, newCapacity);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>当我们访问这个对象元素的时候，其实也是也数组的形式访问内部的那个数据数组<code>elementData</code>。</p>
 <h1 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h1><p>上面的ArrayList 是使用 数组来保存内部数据，而LinkedList内部是使用双向链表来保存数据。只有这个区别而已。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</span><br><span class="line">    E item;</span><br><span class="line">    Node&lt;E&gt; next;</span><br><span class="line">    Node&lt;E&gt; prev;</span><br><span class="line"></span><br><span class="line">    Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</span><br><span class="line">        <span class="keyword">this</span>.item = element;</span><br><span class="line">        <span class="keyword">this</span>.next = next;</span><br><span class="line">        <span class="keyword">this</span>.prev = prev;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h1><p>Map是一个接口，其提供了对键值这样类型数组的存储与访问，以及其他一些附加的操作。平时我不是很在意这个东西，但是在很多时候用起来才知道方便。</p>
 <p>方法列表：</p>
 <ul>
-<li><p><code>boolean isEmpty();</code> 如果map内并无 键-值 对，返回 true。</p>
-</li>
-<li><p><code>int size();</code>  返回容量</p>
-</li>
-<li><p><code>boolean containsKey(Object);</code> 返回map是否含有 <em>Object</em> 这个键。</p>
-</li>
-<li><p><code>boolean containsValue(Object);</code> 返回map是否含有 <em>Object</em> 这个值。</p>
-</li>
-<li><p><code>V get(Object);</code> 返回  <em>Object</em> 键对应的值。</p>
-</li>
-<li><p><code>V put(K, V);</code> 把一个键值对 <code>K, V</code> 放进map。</p>
-</li>
-<li><p><code>V remove(Object);</code> 从 map 内移除 <em>Object</em> 指定的键所引用的键值对。</p>
-</li>
-<li><p><code>void putAll(Map&lt;? extends K, ? extends V&gt; m);</code> 把 <em>m</em> 内的所有键值对复制过来。</p>
-</li>
-<li><p><code>void clear();</code> 清空</p>
-</li>
-<li><p><code>Set&lt;K&gt; keySet();</code> 返回map 包含的所有  键 的Set。</p>
-</li>
-<li><p><code>Collection&lt;V&gt; values();</code> 返回 map 包含所有值的 Collection。</p>
-</li>
-<li><p><code>Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet();</code>  返回所有的键值对。</p>
-</li>
-<li><p><code>boolean equals(Object o);</code> 与此map想比较是否相等。</p>
-</li>
-<li><p><code>int hashCode();</code> map的 hask值。</p>
-</li>
-<li><p><code>default V getOrDefault(Object key, V defaultValue);</code> 返回键对应的值，如果map没有这个键，返回默认值。接口已实现的方法。</p>
-</li>
-<li><p><code>default void forEach(BiConsumer&lt;? super K, ? super V&gt; action);</code> 对map中的每项进行对应的动作，直到遍历完map，或抛出了一个违例。接口实现的方法。</p>
-</li>
-<li><p><code>default void replaceAll(BiFunction&lt;? super K, ? super V, ? extends V&gt; function);</code> 将map内所有项的值都替换为 该项，执行为指定的函数后的结果。接口实现的方法</p>
-</li>
-<li><p><code>default V putIfAbsent(K key, V value);</code> 如果  键 <em>key</em> 还未与一个 值相关联（或与null 关联），把我们给定的 <em>value</em> 与 其相关联。返回此键值对项中的值。接口实现的方法</p>
-</li>
-<li><p><code>default boolean remove(Object key, Object value);</code> 移除 已关联的 <em>key, value</em> 键值对。 接口实现的方法。</p>
-</li>
-<li><p><code>default boolean replace(K key, V oldValue, V newValue);</code> 当 已存在 <em>key, oldValue</em> 关联的时候，把 <em>oldValue</em> 替换为 <em>newValue</em>。接口实现的方法。</p>
-</li>
-<li><p><code>default V replace(K key, V value);</code> 当 <em>key</em> 与某些值关联时，将其值替换为 <em>value</em> 。</p>
-</li>
-<li><p><code>default V computeIfAbsent(K key,Function&lt;? super K, ? extends V&gt; mappingFunction)</code> 如果  <em>key</em> 没有与任何值关联（或与null关联），使用  <em>mappingFunction</em> 计算出其值，然后放到 map内。</p>
-</li>
-<li><p><code>default V computeIfPresent(K key,BiFunction&lt;? super K, ? super V, ? extends V&gt; remappingFunction)</code> 如果 <em>key</em> 当前的值不是 <em>null*，把 *key</em> 与 <em>BiFunction</em> 计算的值重新关联。</p>
-</li>
-<li><p><code>default V compute(K key,BiFunction&lt;? super K, ? super V, ? extends V&gt; remappingFunction)</code> 为 <em>key</em> 与其当前关联的值 (或 null）重新计算一个 键值对。</p>
-</li>
+<li><code>boolean isEmpty();</code> 如果map内并无 键-值 对，返回 true。</li>
+<li><code>int size();</code>  返回容量</li>
+<li><code>boolean containsKey(Object);</code> 返回map是否含有 <em>Object</em> 这个键。</li>
+<li><code>boolean containsValue(Object);</code> 返回map是否含有 <em>Object</em> 这个值。</li>
+<li><code>V get(Object);</code> 返回  <em>Object</em> 键对应的值。</li>
+<li><code>V put(K, V);</code> 把一个键值对 <code>K, V</code> 放进map。</li>
+<li><code>V remove(Object);</code> 从 map 内移除 <em>Object</em> 指定的键所引用的键值对。</li>
+<li><code>void putAll(Map&lt;? extends K, ? extends V&gt; m);</code> 把 <em>m</em> 内的所有键值对复制过来。</li>
+<li><code>void clear();</code> 清空</li>
+<li><code>Set&lt;K&gt; keySet();</code> 返回map 包含的所有  键 的Set。</li>
+<li><code>Collection&lt;V&gt; values();</code> 返回 map 包含所有值的 Collection。</li>
+<li><code>Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet();</code>  返回所有的键值对。</li>
+<li><code>boolean equals(Object o);</code> 与此map想比较是否相等。</li>
+<li><code>int hashCode();</code> map的 hask值。</li>
+<li><code>default V getOrDefault(Object key, V defaultValue);</code> 返回键对应的值，如果map没有这个键，返回默认值。接口已实现的方法。</li>
+<li><code>default void forEach(BiConsumer&lt;? super K, ? super V&gt; action);</code> 对map中的每项进行对应的动作，直到遍历完map，或抛出了一个违例。接口实现的方法。</li>
+<li><code>default void replaceAll(BiFunction&lt;? super K, ? super V, ? extends V&gt; function);</code> 将map内所有项的值都替换为 该项，执行为指定的函数后的结果。接口实现的方法</li>
+<li><code>default V putIfAbsent(K key, V value);</code> 如果  键 <em>key</em> 还未与一个 值相关联（或与null 关联），把我们给定的 <em>value</em> 与 其相关联。返回此键值对项中的值。接口实现的方法</li>
+<li><code>default boolean remove(Object key, Object value);</code> 移除 已关联的 <em>key, value</em> 键值对。 接口实现的方法。</li>
+<li><code>default boolean replace(K key, V oldValue, V newValue);</code> 当 已存在 <em>key, oldValue</em> 关联的时候，把 <em>oldValue</em> 替换为 <em>newValue</em>。接口实现的方法。</li>
+<li><code>default V replace(K key, V value);</code> 当 <em>key</em> 与某些值关联时，将其值替换为 <em>value</em> 。</li>
+<li><code>default V computeIfAbsent(K key,Function&lt;? super K, ? extends V&gt; mappingFunction)</code> 如果  <em>key</em> 没有与任何值关联（或与null关联），使用  <em>mappingFunction</em> 计算出其值，然后放到 map内。</li>
+<li><code>default V computeIfPresent(K key,BiFunction&lt;? super K, ? super V, ? extends V&gt; remappingFunction)</code> 如果 <em>key</em> 当前的值不是 <em>null</em>，把 <em>key</em> 与 <em>BiFunction</em> 计算的值重新关联。</li>
+<li><code>default V compute(K key,BiFunction&lt;? super K, ? super V, ? extends V&gt; remappingFunction)</code> 为 <em>key</em> 与其当前关联的值 (或 null）重新计算一个 键值对。</li>
 <li><p><code>default V merge(K key, V value,BiFunction&lt;? super V, ? super V, ? extends V&gt; remappingFunction)</code> 如果  <em>key</em> 没有与任何值关联（或null），把它与 <em>value</em> 相关联。否则，把它与 <em>BiFunction</em> 的结果相关联；如果 <em>BiFunction</em>的结果为null，移除这个键。</p>
 <p>​          </p>
 </li>
 </ul>
 <h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><p>HaspMap实现了Map接口：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HashMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractMap</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;</span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">Map</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt;, <span class="title">Cloneable</span>, <span class="title">Serializable</span> </span>&#123;</span><br></pre></td></tr></table></figure>
-
 <p>其真正保存数据的，也是一个 名为 table  的 Node 数组：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;</span><br></pre></td></tr></table></figure>
-
-<p>只不过，其数组中的元素是一个Node&lt;K, V&gt;，（单向）Hash链。</p>
+<p>只不过，其数组中的元素是一个Node<k, v>，（单向）Hash链。</k,></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> hash;</span><br><span class="line">    <span class="keyword">final</span> K key;</span><br><span class="line">    V value;</span><br><span class="line">    Node&lt;K,V&gt; next;</span><br></pre></td></tr></table></figure>
-
 <p>每个Node内，保存了键，值及下一个Node，加上自身的hash值。</p>
 <p>当我们访问HashMap中元素的时候：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt; e;</span><br><span class="line">    <span class="keyword">return</span> (e = getNode(hash(key), key)) == <span class="keyword">null</span> ? <span class="keyword">null</span> : e.value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">final</span> Node&lt;K,V&gt; <span class="title">getNode</span><span class="params">(<span class="keyword">int</span> hash, Object key)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; <span class="keyword">int</span> n; K k;</span><br><span class="line">    <span class="keyword">if</span> ((tab = table) != <span class="keyword">null</span> &amp;&amp; (n = tab.length) &gt; <span class="number">0</span> &amp;&amp;</span><br><span class="line">        (first = tab[(n - <span class="number">1</span>) &amp; hash]) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (first.hash == hash &amp;&amp; <span class="comment">// always check first node</span></span><br><span class="line">            ((k = first.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">            <span class="keyword">return</span> first;</span><br><span class="line">        <span class="keyword">if</span> ((e = first.next) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (first <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">                <span class="keyword">return</span> ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);</span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                    ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                    <span class="keyword">return</span> e;</span><br><span class="line">            &#125; <span class="keyword">while</span> ((e = e.next) != <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>其实先根据键 得出hash值，再得到hash链位置，然后通过遍历hash链来查找是否存在对应的键。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -479,7 +559,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Java%E4%B8%AD%E4%BD%BF%E7%94%A8JsonHelp%E6%9D%A5%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Java中使用JsonHelp来简化操作.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -493,7 +573,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Android/Java%E4%B8%AD%E4%BD%BF%E7%94%A8JsonHelp%E6%9D%A5%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C.html" class="post-title-link" itemprop="url">Java中使用JsonHelp来简化操作</a>
+            <a href="/Android/Java中使用JsonHelp来简化操作.html" class="post-title-link" itemprop="url">Java中使用JsonHelp来简化操作</a>
         </h1>
 
         <div class="post-meta">
@@ -526,7 +606,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/Java%E4%B8%AD%E4%BD%BF%E7%94%A8JsonHelp%E6%9D%A5%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/Java中使用JsonHelp来简化操作.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Java中使用JsonHelp来简化操作.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -542,10 +622,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Json为什么使用这个广我是不知道的，不过现在阶段公司在开发中大批量的都是使用Json来从服务端获取数据，也只有学习一下了。另外，值得一提的是以前，通过在Http地址中带上方法到接口去获取对应的信息，和在数据包内包含协议，究竟哪一个好，还真不知道</p>
+          <p>Json为什么使用这个广我是不知道的，不过现在阶段公司在开发中大批量的都是使用Json来从服务端获取数据，也只有学习一下了。另外，值得一提的是以前，通过在Http地址中带上方法到接口去获取对应的信息，和在数据包内包含协议，究竟哪一个好，还真不知道<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Android/Java%E4%B8%AD%E4%BD%BF%E7%94%A8JsonHelp%E6%9D%A5%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C.html#more" rel="contents">
+              <a class="btn" href="/Android/Java中使用JsonHelp来简化操作.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -569,7 +649,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%88%86%E7%B1%BB%E6%B1%87%E6%80%BB%EF%BC%8C%E6%9B%B4%E5%85%A8%E6%9B%B4%E6%96%B0%E5%8F%AF%E8%A7%81.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/开源项目分类汇总，更全更新可见.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -583,7 +663,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Android/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%88%86%E7%B1%BB%E6%B1%87%E6%80%BB%EF%BC%8C%E6%9B%B4%E5%85%A8%E6%9B%B4%E6%96%B0%E5%8F%AF%E8%A7%81.html" class="post-title-link" itemprop="url">开源项目分类汇总，更全更新可见</a>
+            <a href="/Android/开源项目分类汇总，更全更新可见.html" class="post-title-link" itemprop="url">开源项目分类汇总，更全更新可见</a>
         </h1>
 
         <div class="post-meta">
@@ -616,7 +696,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%88%86%E7%B1%BB%E6%B1%87%E6%80%BB%EF%BC%8C%E6%9B%B4%E5%85%A8%E6%9B%B4%E6%96%B0%E5%8F%AF%E8%A7%81.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/开源项目分类汇总，更全更新可见.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/开源项目分类汇总，更全更新可见.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -639,7 +719,7 @@
 </blockquote>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Android/%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE%E5%88%86%E7%B1%BB%E6%B1%87%E6%80%BB%EF%BC%8C%E6%9B%B4%E5%85%A8%E6%9B%B4%E6%96%B0%E5%8F%AF%E8%A7%81.html#more" rel="contents">
+              <a class="btn" href="/Android/开源项目分类汇总，更全更新可见.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -663,7 +743,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/svn%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E4%BD%BF%E7%94%A8.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/svn命令行的使用.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -677,7 +757,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Android/svn%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E4%BD%BF%E7%94%A8.html" class="post-title-link" itemprop="url">svn命令行的使用</a>
+            <a href="/Android/svn命令行的使用.html" class="post-title-link" itemprop="url">svn命令行的使用</a>
         </h1>
 
         <div class="post-meta">
@@ -710,7 +790,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/svn%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E4%BD%BF%E7%94%A8.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/svn命令行的使用.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/svn命令行的使用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -729,7 +809,7 @@
           <p>虽然我不喜欢这个工具，但是公司用的这是这个，只能去熟悉它了。所以这是很蛋疼的事情，熟悉了 git，一点都不太喜欢这种方式的样子。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Android/svn%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%9A%84%E4%BD%BF%E7%94%A8.html#more" rel="contents">
+              <a class="btn" href="/Android/svn命令行的使用.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -753,7 +833,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Java-%E5%9F%BA%E6%9C%AC%E8%A1%A8%E8%BE%BE%E5%BC%8F(Primary_Expressions).html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Java-基本表达式(Primary_Expressions).html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -767,7 +847,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Java/Java-%E5%9F%BA%E6%9C%AC%E8%A1%A8%E8%BE%BE%E5%BC%8F(Primary_Expressions).html" class="post-title-link" itemprop="url">Java-基本表达式(Primary_Expressions)</a>
+            <a href="/Java/Java-基本表达式(Primary_Expressions).html" class="post-title-link" itemprop="url">Java-基本表达式(Primary_Expressions)</a>
         </h1>
 
         <div class="post-meta">
@@ -800,7 +880,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/Java-%E5%9F%BA%E6%9C%AC%E8%A1%A8%E8%BE%BE%E5%BC%8F(Primary_Expressions).html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/Java-基本表达式(Primary_Expressions).html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Java-基本表达式(Primary_Expressions).html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -816,10 +896,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>基本表达式包含了最简单的类型的表达式，其他类似的表达式都由他们来构建：字面表达式，class字面表达式，字段访问，方法调用，数组访问。一个括号表达式语法上也被看成是一个基本表达式。</p>
+          <p>基本表达式包含了最简单的类型的表达式，其他类似的表达式都由他们来构建：字面表达式，class字面表达式，字段访问，方法调用，数组访问。一个括号表达式语法上也被看成是一个基本表达式。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Java/Java-%E5%9F%BA%E6%9C%AC%E8%A1%A8%E8%BE%BE%E5%BC%8F(Primary_Expressions).html#more" rel="contents">
+              <a class="btn" href="/Java/Java-基本表达式(Primary_Expressions).html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -843,7 +923,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android_studio%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97-%E9%85%8D%E7%BD%AE%E6%9E%84%E5%BB%BA%E6%A6%82%E8%A7%88.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android_studio用户指南-配置构建概览.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -857,7 +937,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Android/android_studio%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97-%E9%85%8D%E7%BD%AE%E6%9E%84%E5%BB%BA%E6%A6%82%E8%A7%88.html" class="post-title-link" itemprop="url">android_studio用户指南-配置构建概览</a>
+            <a href="/Android/android_studio用户指南-配置构建概览.html" class="post-title-link" itemprop="url">android_studio用户指南-配置构建概览</a>
         </h1>
 
         <div class="post-meta">
@@ -890,7 +970,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/android_studio%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97-%E9%85%8D%E7%BD%AE%E6%9E%84%E5%BB%BA%E6%A6%82%E8%A7%88.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/android_studio用户指南-配置构建概览.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/android_studio用户指南-配置构建概览.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -906,10 +986,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Android 构建系统编译应用资源和源代码，然后将它们打包成可供您测试、部署、签署和分发的 APK。Android Studio 使用 <a href="http://www.gradle.org/" target="_blank" rel="noopener">Gradle</a> 这一高级构建工具包来自动化执行和管理构建流程，同时也允许您定义灵活的自定义构建配置。每个构建配置均可自行定义一组代码和资源，同时对所有应用版本共有的部分加以重复利用。Android Plugin for Gradle 与这个构建工具包协作，共同提供专用于构建和测试 Android 应用的流程和可配置设置。</p>
+          <p>Android 构建系统编译应用资源和源代码，然后将它们打包成可供您测试、部署、签署和分发的 APK。Android Studio 使用 <a href="http://www.gradle.org/" target="_blank" rel="noopener">Gradle</a> 这一高级构建工具包来自动化执行和管理构建流程，同时也允许您定义灵活的自定义构建配置。每个构建配置均可自行定义一组代码和资源，同时对所有应用版本共有的部分加以重复利用。Android Plugin for Gradle 与这个构建工具包协作，共同提供专用于构建和测试 Android 应用的流程和可配置设置。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Android/android_studio%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97-%E9%85%8D%E7%BD%AE%E6%9E%84%E5%BB%BA%E6%A6%82%E8%A7%88.html#more" rel="contents">
+              <a class="btn" href="/Android/android_studio用户指南-配置构建概览.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -1001,7 +1081,7 @@
 <p>接着，检查 <a href="#user-guide">User Guide</a> 一节中 你所使用的语法补全器。 对于 C/C++/Objective C, 你  <em>must必须</em> 阅读<br><a href="#c-family-semantic-completion">这一节</a>.</p>
 <p>最好，检查 <a href="#faq">FAQ</a>.</p>
 <p>如果在阅读完安装说明和用户指南，并检查了FAQ，还是有问题，查看<a href="#contact">contacts</a> 一节来联系我们。</p>
-<p>Please do <strong>NOT</strong> go to #vim on freenode for support. Please contact the<br>YouCompleteMe maintainers directly using the <a href="#contact">contact details</a> below.</p>
+<p>Please do <strong>NOT</strong> go to #vim on freenode for support. Please contact the<br>YouCompleteMe maintainers directly using the <a href="#contact">contact details</a> below.<br>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/Vim/YouCompleteMe-readme_zh.html#more" rel="contents">
@@ -1028,7 +1108,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Vim/ultisnips%E7%9A%84readme%E6%96%87%E6%A1%A3%E4%B8%AD%E6%96%87.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Vim/ultisnips的readme文档中文.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1042,7 +1122,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Vim/ultisnips%E7%9A%84readme%E6%96%87%E6%A1%A3%E4%B8%AD%E6%96%87.html" class="post-title-link" itemprop="url">ultisnips的readme文档中文</a>
+            <a href="/Vim/ultisnips的readme文档中文.html" class="post-title-link" itemprop="url">ultisnips的readme文档中文</a>
         </h1>
 
         <div class="post-meta">
@@ -1075,7 +1155,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Vim/ultisnips%E7%9A%84readme%E6%96%87%E6%A1%A3%E4%B8%AD%E6%96%87.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Vim/ultisnips的readme文档中文.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Vim/ultisnips的readme文档中文.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -1095,120 +1175,12 @@
 <p><img src="https://raw.github.com/SirVer/ultisnips/master/doc/demo.gif" alt="GIF Demo"></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Vim/ultisnips%E7%9A%84readme%E6%96%87%E6%A1%A3%E4%B8%AD%E6%96%87.html#more" rel="contents">
+              <a class="btn" href="/Vim/ultisnips的readme文档中文.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/LVM%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Linux-Unix/LVM%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8.html" class="post-title-link" itemprop="url">LVM的介绍及使用</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-03-14 07:28:23" itemprop="dateCreated datePublished" datetime="2018-03-14T07:28:23+08:00">2018-03-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux/Unix</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Linux-Unix/LVM%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/LVM的介绍及使用.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>LVM是Linux内核中的一个 逻辑卷组管理工具；其管理磁盘驱动器或类似的块存储设备。其利用了内核的 <code>device-mapper</code> 特性来给系统提供独立于底层磁盘的分区。使用LVM，抽象了你的存储然后拥有的是<em>虚拟分区*，这使 *扩展/收缩</em> 更加容易。</p>
-<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><ul>
-<li><p>物理卷（PV/Physical volume）<br>可在其上建立卷组的分区或硬盘。每个PV都有一个特殊的头部，并且被分隔成PE。把PV想象成用来建立硬盘驱动的巨大块。</p>
-</li>
-<li><p>卷组（VG/Volume group）<br>一组用来当作存储卷的PV（像一个硬盘一样提供服务）。其包含LV。可以把vg想象成硬盘驱动器。</p>
-</li>
-<li><p>逻辑卷（LV、Logical volume）<br>存在于卷组内的<code>虚拟/逻辑 分区</code>，由PE组成。把PV想象成常规分区。</p>
-</li>
-<li><p>物理扩展（PE、Physical extend）<br>PV中的最小单位，可以被分配给LV（默认是 4MB）。PE是硬盘的一部分，然后可以被分配给任何分区。</p>
-</li>
-</ul>
-<p>例子<br><img src="/res/Lvm-1.svg" alt="Various elements of the LVM"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Physical disks</span><br><span class="line">                </span><br><span class="line">  Disk1 (/dev/sda):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Partition1 50 GiB (Physical volume) |Partition2 80 GiB (Physical volume)     |</span><br><span class="line">    |/dev/sda1                           |/dev/sda2                               |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |</span><br><span class="line">                                  </span><br><span class="line">  Disk2 (/dev/sdb):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Partition1 120 GiB (Physical volume)                 |</span><br><span class="line">    |/dev/sdb1                                            |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LVM logical volumes</span><br><span class="line"></span><br><span class="line">  Volume Group1 (/dev/MyStorage/ = /dev/sda1 + /dev/sda2 + /dev/sdb1):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Logical volume1 15 GiB  |Logical volume2 35 GiB      |Logical volume3 200 GiB              |</span><br><span class="line">    |/dev/MyStorage/rootvol  |/dev/MyStorage/homevol      |/dev/MyStorage/mediavol              |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|</span><br><span class="line">```   </span><br><span class="line"> </span><br><span class="line">![nner workings of the version 1 of LVM. In this diagram, PE stands for a Physical Extent.](/res/500px-LVM1.svg.png)</span><br><span class="line"></span><br><span class="line"># LV类型</span><br><span class="line">除了简单的LV外，LVM支持 *snapshots（快照）、LV缓存（logical volume caching）、预分配的LV、RAID*，</span><br><span class="line"></span><br><span class="line">## Snapshots（快照）</span><br><span class="line">LVM允许你对系统以一个更效率的方式做快照。其利用了一种叫做 **COW（copy-on-write）**技术。初始建立的快照只是简单的包含对真实数据inodes的 **硬链接**。因此，如果数据一直没有改变，快照几乎只是包含了Inode的指针，而不是数据本身。当修改一个快照指向的文件或者目录，LVM会自动克隆被快照引用老的数据。所以，可以使用35GB来快照一个系统，当预计修改少于2GB的时候，可以只留下2G的空闲空间（在原始和快照分区上都要）。想要创建快照，必须在 VG内有未分配的空间。快照也会像其他卷一样消耗VG的空间。因此，如果想要使用快照来备份 root 分区，那么不要把VG的空间全部分配给 root LV。</span><br><span class="line"></span><br><span class="line">### 配置</span><br><span class="line">如此简单的就可以建立一个 快照LV：</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line">lvcreate --size 100M --snapshot --name snap01 /dev/mapper/vg0-vg</span><br></pre></td></tr></table></figure>
-
-<p>上面建立这个快照，在快照卷充满以前我们只能修改100M的数据。</p>
-<p>当 <em>snap01</em> 建立后就可以把 <em>pv</em> 这个LV恢复到之前的状态：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lvconvert --merge /dev/mapper/vg0-snap01</span><br></pre></td></tr></table></figure>
-
-<p>如果原始的LV是活跃的，合并会在下一次重启时发生。</p>
-<p>合并后 快照不会继续存在。</p>
-<p>可以建立多个快照，然后每个都可以任意合并到原始的LV。</p>
-<p>快照可以挂载或以 <code>dd, tar</code> 命令备份。以 <code>dd</code> 备份的文件尺寸将会是 快照卷内存在的数据尺寸。想要恢复的时候，建立一个快照，挂载，接着把备份的文件解压过去。最后，和原始的LV合并。</p>
-<p>快照的主要用途是用来提供对文件系统的冷备份。</p>
-<h1 id="简单命令"><a href="#简单命令" class="headerlink" title="简单命令"></a>简单命令</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">lvmdiskscan  <span class="comment"># list all your devices capable of being used as a physical volume</span></span><br><span class="line">pvcreate DEVICE <span class="comment"># Create a physical volume on them</span></span><br><span class="line">pvcreate /dev/sda2 <span class="comment"># </span></span><br><span class="line">pvdisplay <span class="comment"># track created physical volumes</span></span><br><span class="line"></span><br><span class="line">vgcreate VolGroup00 /dev/sda2 <span class="comment"># create vg on pvs</span></span><br><span class="line">vgextend VolGroup00 /dev/sdb1 <span class="comment"># add vg /dev/sdb1 to vg VolGroup00</span></span><br><span class="line">vgdisplay <span class="comment"># track vg</span></span><br><span class="line"></span><br><span class="line">vgcreate VolGroup00 /</span><br></pre></td></tr></table></figure>
-
       
     </div>
 
@@ -1271,20 +1243,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1296,10 +1268,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -1328,10 +1300,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         

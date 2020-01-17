@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Java,Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="安卓9.0应用内升级失败的一种情况解决">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;%E5%AE%89%E5%8D%939.0%E5%BA%94%E7%94%A8%E5%86%85%E5%8D%87%E7%BA%A7%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%B8%80%E7%A7%8D%E6%83%85%E5%86%B5%E8%A7%A3%E5%86%B3.html">
+<meta property="og:url" content="https://gowa.club/Android/安卓9.0应用内升级失败的一种情况解决.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="本来应用内升级一切工作良好。但是在换了新设备，安卓9.0，华为机型后，突然就出现了死活更新不了的问题。首先的问题是总是提示更新失败请重试。通过调试代码发现问题所在。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-01-16T05:16:35.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安卓9.0应用内升级失败的一种情况解决">
+<meta name="twitter:description" content="本来应用内升级一切工作良好。但是在换了新设备，安卓9.0，华为机型后，突然就出现了死活更新不了的问题。首先的问题是总是提示更新失败请重试。通过调试代码发现问题所在。">
 
-<link rel="canonical" href="https://gowa.club/Android/%E5%AE%89%E5%8D%939.0%E5%BA%94%E7%94%A8%E5%86%85%E5%8D%87%E7%BA%A7%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%B8%80%E7%A7%8D%E6%83%85%E5%86%B5%E8%A7%A3%E5%86%B3.html">
+<link rel="canonical" href="https://gowa.club/Android/安卓9.0应用内升级失败的一种情况解决.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/%E5%AE%89%E5%8D%939.0%E5%BA%94%E7%94%A8%E5%86%85%E5%8D%87%E7%BA%A7%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%B8%80%E7%A7%8D%E6%83%85%E5%86%B5%E8%A7%A3%E5%86%B3.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/安卓9.0应用内升级失败的一种情况解决.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/%E5%AE%89%E5%8D%939.0%E5%BA%94%E7%94%A8%E5%86%85%E5%8D%87%E7%BA%A7%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%B8%80%E7%A7%8D%E6%83%85%E5%86%B5%E8%A7%A3%E5%86%B3.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/安卓9.0应用内升级失败的一种情况解决.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/安卓9.0应用内升级失败的一种情况解决.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,26 +294,20 @@
       
         <p>本来应用内升级一切工作良好。但是在换了新设备，安卓9.0，华为机型后，突然就出现了死活更新不了的问题。首先的问题是总是提示更新失败请重试。通过调试代码发现问题所在。</p>
 <a id="more"></a>
-
 <h1 id="错误代码"><a href="#错误代码" class="headerlink" title="错误代码"></a>错误代码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">onError: </span><br><span class="line">   android.util.AndroidRuntimeException: <span class="function">Calling <span class="title">startActivity</span><span class="params">()</span> from outside of an Activity  context <span class="keyword">requires</span> the FLAG_ACTIVITY_NEW_TASK flag. Is <span class="keyword">this</span> really what you want?</span></span><br></pre></td></tr></table></figure>
-
 <p>意思就是 如果是在 Activity 上下文中调用 startActivity() 方法的话，需要设置  <code>FLAG_ACTIVITY_NEW_TASK</code> 标志。</p>
 <p>追踪一下我们的代码，启动安装新 apk 包的地方。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">startInstallApk</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    myBinder.cancelDownload();</span><br><span class="line">    <span class="comment">//apk文件的本地路径</span></span><br><span class="line">    File apkfile = <span class="keyword">new</span> File(filePath);</span><br><span class="line">    <span class="comment">//会根据用户的数据类型打开android系统相应的Activity。</span></span><br><span class="line">    Intent intent = <span class="keyword">new</span> Intent(Intent.ACTION_VIEW);</span><br><span class="line">    <span class="comment">//设置intent的数据类型是应用程序application</span></span><br><span class="line">    <span class="comment">//判读版本是否在7.0以上</span></span><br><span class="line">    <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= <span class="number">24</span>) &#123;</span><br><span class="line">        Uri apkUri = FileProvider.getUriForFile(<span class="keyword">this</span>, getPackageName() + <span class="string">".fileprovider"</span>, apkfile);</span><br><span class="line">               intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);</span><br><span class="line">        intent.setDataAndType(apkUri, <span class="string">"application/vnd.android.package-archive"</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//为这个新apk开启一个新的activity栈</span></span><br><span class="line">        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</span><br><span class="line">        intent.setDataAndType(Uri.parse(<span class="string">"file://"</span> + apkfile.toString()), <span class="string">"application/vnd.android.package-archive"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//开始安装</span></span><br><span class="line">    startActivity(intent);</span><br><span class="line">    <span class="comment">//关闭旧版本的应用程序的进程</span></span><br><span class="line">    android.os.Process.killProcess(android.os.Process.myPid());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>代码中只有在  24 以下才添加了这个标志。OK，那么我们把这个标志加上。</p>
 <p><strong>为什么在我小米的 8.1 系统上正常？</strong></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);</span><br></pre></td></tr></table></figure>
-
 <p>继续编译看看是否能够更新了，此时我的 <strong>小米8.1 运行也正常</strong>，但是依然还不可以：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Writing exception to parcel</span><br><span class="line">   java.lang.SecurityException: Permission Denial: reading android.support.v4.content.FileProvider uri content:<span class="comment">//cn.nanming.smart.fileprovider/root_path/storage/emulated/0/Android/data/cn.nanming.smartenterprise/cache/smartEnterprise_4.4.114.apk from pid=27641, uid=10054 requires the provider be exported, or grantUriPermission()</span></span><br></pre></td></tr></table></figure>
-
 <p>这下读取我们下载包的请求又被拒绝了。这怎么破？</p>
 <p>根据 <a href="https://developer.android.com/reference/android/support/v4/content/FileProvider#Permissions" target="_blank" rel="noopener">官方文档</a>，我们需要临时进行授权，<a href="https://stackoverflow.com/questions/18249007/how-to-use-support-fileprovider-for-sharing-content-to-other-apps/18332000#18332000" target="_blank" rel="noopener">StackOverFlow 上也有这个问题的解答</a>：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">grantUriPermission(getPackageName(),apkUri,Intent.FLAG_GRANT_READ_URI_PERMISSION);</span><br></pre></td></tr></table></figure>
-
 <p><strong>最终：发觉我们的下载路径，并不是放在 provider 里面的，采用 Uri.fromFile 的形式能够正常执行升级了。</strong></p>
-<p>为什么后面又没有出现第二个问题了？这个问题很苦恼啊。</p>
+<p>为什么后面又没有出现第二个问题了？这个问题很苦恼啊。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -329,7 +325,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/Retrofit%E7%BB%9F%E4%B8%80%E8%BF%9B%E8%A1%8C%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E7%9A%84%E5%AE%9E%E7%8E%B0.html" rel="next" title="Retrofit统一进行错误处理的实现">
+                <a href="/Android/Retrofit统一进行错误处理的实现.html" rel="next" title="Retrofit统一进行错误处理的实现">
                   <i class="fa fa-chevron-left"></i> Retrofit统一进行错误处理的实现
                 </a>
             </div>
@@ -337,7 +333,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/JavaScript/JS%E4%B8%AD%E7%9A%84%E5%8F%98%E9%87%8F%E5%9F%BA%E7%A1%80.html" rel="prev" title="JS中的变量基础">
+                <a href="/JavaScript/JS中的变量基础.html" rel="prev" title="JS中的变量基础">
                   JS中的变量基础 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -399,20 +395,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -424,10 +420,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -456,10 +452,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -534,7 +530,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/%E5%AE%89%E5%8D%939.0%E5%BA%94%E7%94%A8%E5%86%85%E5%8D%87%E7%BA%A7%E5%A4%B1%E8%B4%A5%E7%9A%84%E4%B8%80%E7%A7%8D%E6%83%85%E5%86%B5%E8%A7%A3%E5%86%B3.html",
+            url: "https://gowa.club/Android/安卓9.0应用内升级失败的一种情况解决.html",
             identifier: "Android/安卓9.0应用内升级失败的一种情况解决.html",
             title: "安卓9.0应用内升级失败的一种情况解决"
           }

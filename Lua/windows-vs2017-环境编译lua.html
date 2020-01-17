@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Lua,Windows">
 <meta property="og:type" content="article">
 <meta property="og:title" content="windows-vs2017-环境编译lua">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Lua&#x2F;windows-vs2017-%E7%8E%AF%E5%A2%83%E7%BC%96%E8%AF%91lua.html">
+<meta property="og:url" content="https://gowa.club/Lua/windows-vs2017-环境编译lua.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="官方提供是一在 unix 环境下进行编译的方式，所以就琢磨了一下怎么样在 Windows 环境下进行编译出来。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-10-12T15:15:13.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="windows-vs2017-环境编译lua">
+<meta name="twitter:description" content="官方提供是一在 unix 环境下进行编译的方式，所以就琢磨了一下怎么样在 Windows 环境下进行编译出来。">
 
-<link rel="canonical" href="https://gowa.club/Lua/windows-vs2017-%E7%8E%AF%E5%A2%83%E7%BC%96%E8%AF%91lua.html">
+<link rel="canonical" href="https://gowa.club/Lua/windows-vs2017-环境编译lua.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/windows-vs2017-%E7%8E%AF%E5%A2%83%E7%BC%96%E8%AF%91lua.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/windows-vs2017-环境编译lua.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/windows-vs2017-%E7%8E%AF%E5%A2%83%E7%BC%96%E8%AF%91lua.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Lua/windows-vs2017-环境编译lua.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/windows-vs2017-环境编译lua.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,57 +294,36 @@
       
         <p>官方提供是一在 unix 环境下进行编译的方式，所以就琢磨了一下怎么样在 Windows 环境下进行编译出来。</p>
 <a id="more"></a>
-
 <p>前提：安装了 vs2017 （或者其他版本）</p>
 <h1 id="编译步骤"><a href="#编译步骤" class="headerlink" title="编译步骤"></a>编译步骤</h1><h2 id="下载源代码"><a href="#下载源代码" class="headerlink" title="下载源代码"></a>下载源代码</h2><p>可以在 <a href="https://www.lua.org/ftp/" target="_blank" rel="noopener">这个地址</a> 下载源代码，我下载的 5.3.5。</p>
 <p>皆有一下的目录结构如下：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">├── doc</span><br><span class="line">│   ├── contents.html</span><br><span class="line">│   ├── index.css</span><br><span class="line">│   ├── logo.gif</span><br><span class="line">│   ├── lua.1</span><br><span class="line">│   ├── lua.css</span><br><span class="line">│   ├── luac.1</span><br><span class="line">│   ├── manual.css</span><br><span class="line">│   ├── manual.html</span><br><span class="line">│   ├── osi-certified-72x60.png</span><br><span class="line">│   └── readme.html</span><br><span class="line">├── Makefile</span><br><span class="line">├── README</span><br><span class="line">└── src</span><br><span class="line">    ├── lapi.c</span><br><span class="line">    ├── lapi.h</span><br><span class="line">    ├── lauxlib.c</span><br><span class="line">    ├── lauxlib.h</span><br><span class="line">    ├── lbaselib.c</span><br><span class="line">    ├── lbitlib.c</span><br><span class="line">    ├── lcode.c</span><br><span class="line">    ├── lcode.h</span><br><span class="line">    ├── lcorolib.c</span><br><span class="line">    ├── lctype.c</span><br><span class="line">    ├── lctype.h</span><br><span class="line">    ├── ldblib.c</span><br><span class="line">    ├── ldebug.c</span><br><span class="line">    ├── ldebug.h</span><br><span class="line">    ├── ldo.c</span><br><span class="line">    ├── ldo.h</span><br><span class="line">    ├── ldump.c</span><br><span class="line">    ├── lfunc.c</span><br><span class="line">    ├── lfunc.h</span><br><span class="line">    ├── lgc.c</span><br><span class="line">    ├── lgc.h</span><br><span class="line">    ├── linit.c</span><br><span class="line">    ├── liolib.c</span><br><span class="line">    ├── llex.c</span><br><span class="line">    ├── llex.h</span><br><span class="line">    ├── llimits.h</span><br><span class="line">    ├── lmathlib.c</span><br><span class="line">    ├── lmem.c</span><br><span class="line">    ├── lmem.h</span><br><span class="line">    ├── loadlib.c</span><br><span class="line">    ├── lobject.c</span><br><span class="line">    ├── lobject.h</span><br><span class="line">    ├── lopcodes.c</span><br><span class="line">    ├── lopcodes.h</span><br><span class="line">    ├── loslib.c</span><br><span class="line">    ├── lparser.c</span><br><span class="line">    ├── lparser.h</span><br><span class="line">    ├── lprefix.h</span><br><span class="line">    ├── lstate.c</span><br><span class="line">    ├── lstate.h</span><br><span class="line">    ├── lstring.c</span><br><span class="line">    ├── lstring.h</span><br><span class="line">    ├── lstrlib.c</span><br><span class="line">    ├── ltable.c</span><br><span class="line">    ├── ltable.h</span><br><span class="line">    ├── ltablib.c</span><br><span class="line">    ├── ltm.c</span><br><span class="line">    ├── ltm.h</span><br><span class="line">    ├── lua.c</span><br><span class="line">    ├── lua.h</span><br><span class="line">    ├── lua.hpp</span><br><span class="line">    ├── lua.o</span><br><span class="line">    ├── luac.c</span><br><span class="line">    ├── luac.o</span><br><span class="line">    ├── luaconf.h</span><br><span class="line">    ├── lualib.h</span><br><span class="line">    ├── lundump.c</span><br><span class="line">    ├── lundump.h</span><br><span class="line">    ├── lutf8lib.c</span><br><span class="line">    ├── lvm.c</span><br><span class="line">    ├── lvm.h</span><br><span class="line">    ├── lzio.c</span><br><span class="line">    ├── lzio.h</span><br><span class="line">    └── Makefile</span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><h3 id="编译源文件"><a href="#编译源文件" class="headerlink" title="编译源文件"></a><strong>编译源文件</strong></h3><p>我们采用两步的方式，先将 所有的 .c 源文件编译成 obj 文件，然后再将 obj 文件按照需求 链接成静态库，或者动态库。</p>
 <figure class="highlight bat"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> src</span><br><span class="line">cl /<span class="built_in">MD</span> /O2 /c /DLUA_BUILD_AS_DLL *.c</span><br></pre></td></tr></table></figure>
 <p><strong>注意，在这个地方我们使用了 /MD 选项，这将会导致我们的链接至 msvcrt.lib 这个库， 这个很重要，因为现在程序都这样链接了。</strong></p>
 <h3 id="链接生成动态库。"><a href="#链接生成动态库。" class="headerlink" title="链接生成动态库。"></a><strong>链接生成动态库</strong>。</h3><p>因为 lua.c luac.c 这两个文件是有入口函数 main 对于库文件是不需要的，所以我们将其命名为其他名称，否则就会链接到我们的库内出错。</p>
 <figure class="highlight bat"><table><tr><td class="code"><pre><span class="line"><span class="built_in">ren</span> lua.obj lua.o</span><br><span class="line"><span class="built_in">ren</span> luac.obj lua.o</span><br><span class="line">link /DLL /out:lua.dll l*.obj</span><br></pre></td></tr></table></figure>
-
 <h3 id="生成Lua解释器"><a href="#生成Lua解释器" class="headerlink" title="生成Lua解释器"></a>生成Lua解释器</h3><p>事实上这一步其实就是将我们的 lua.c 编译后生成的 lua.obj (我们已经改明为 lua.o) 与我们的静态库链接起来</p>
 <figure class="highlight bat"><table><tr><td class="code"><pre><span class="line">link /OUT:lua.exe lua.o lua.lib</span><br></pre></td></tr></table></figure>
-
 <h3 id="生成静态库"><a href="#生成静态库" class="headerlink" title="生成静态库"></a><strong>生成静态库</strong></h3><p>这一步和第二步一样，不过使用的命令不同，同时不会生成 dll 文件。</p>
 <figure class="highlight bat"><table><tr><td class="code"><pre><span class="line">lib /OUT:lua.lib *.obj</span><br></pre></td></tr></table></figure>
-
 <h3 id="生成-Luac-编译器"><a href="#生成-Luac-编译器" class="headerlink" title="生成 Luac 编译器"></a>生成 Luac 编译器</h3><p>同上，</p>
 <figure class="highlight bat"><table><tr><td class="code"><pre><span class="line">link /OUT:luac.exe luac.o lua.lib</span><br></pre></td></tr></table></figure>
-
-
-
 <h3 id="完整文件"><a href="#完整文件" class="headerlink" title="完整文件"></a>完整文件</h3><figure class="highlight bat"><table><tr><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">cd</span> src</span><br><span class="line"><span class="built_in">echo</span> "<span class="number">1</span>. compile all .c source files"</span><br><span class="line">cl /O2 /W3 /c /DLUA_BUILD_AS_DLL l*.c</span><br><span class="line"><span class="built_in">ren</span> lua.obj lua.o</span><br><span class="line"><span class="built_in">ren</span> luac.obj luac.o</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> "<span class="number">2</span>. link to dynamic library .dll"</span><br><span class="line">link /DLL /IMPLIB:lua.lib /out:lua.dll l*.obj</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> "<span class="number">3</span>. generate lua.exe"</span><br><span class="line">link /OUT:lua.exe lua.o lua.lib</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> "<span class="number">4</span>. generate static library .lib"</span><br><span class="line">lib /OUT:lua.lib *.obj</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> "<span class="number">5</span>. generate luac.exe"</span><br><span class="line">link /OUT:luac.exe luac.o lua.lib</span><br><span class="line"><span class="built_in">cd</span> ..</span><br></pre></td></tr></table></figure>
-
 <h3 id="编译后的工作"><a href="#编译后的工作" class="headerlink" title="编译后的工作"></a>编译后的工作</h3><p>编译后我按照官方提供的在 unix 下编译后安装的目录结构进行了一下配置：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">├── install</span><br><span class="line">│   ├── bin</span><br><span class="line">│   │   ├── lua.exe</span><br><span class="line">│   │   └── luac.exe</span><br><span class="line">│   ├── include</span><br><span class="line">│   │   ├── lauxlib.h</span><br><span class="line">│   │   ├── lua.h</span><br><span class="line">│   │   ├── lua.hpp</span><br><span class="line">│   │   ├── luaconf.h</span><br><span class="line">│   │   └── lualib.h</span><br><span class="line">│   ├── lib</span><br><span class="line">│   │   ├── liblua.a</span><br><span class="line">│   │   ├── lua</span><br><span class="line">│   │   │   └── 5.3</span><br><span class="line">│   │   ├── lua.lib</span><br><span class="line">│   │   └── luac.lib</span><br><span class="line">│   ├── man</span><br><span class="line">│   │   └── man1</span><br><span class="line">│   │       ├── lua.1</span><br><span class="line">│   │       └── luac.1</span><br><span class="line">│   └── share</span><br><span class="line">│       └── lua</span><br><span class="line">│           └── 5.3</span><br><span class="line">├── Makefile</span><br><span class="line">├── README</span><br><span class="line">└── src</span><br><span class="line">    ├── lapi.c</span><br><span class="line">    ├── lapi.h</span><br><span class="line">	....</span><br><span class="line">	...</span><br></pre></td></tr></table></figure>
-
 <p>重点是在 install 目录下建立了  bin, lib, include  三个目录分别来放库，可执行文件，和头文件。</p>
 <h3 id="添加环境变量"><a href="#添加环境变量" class="headerlink" title="添加环境变量"></a>添加环境变量</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LUA_DIR=d:\Repo\lua-5.3.5\install\bin\</span><br></pre></td></tr></table></figure>
-
-
-
 <h1 id="VS项目设置"><a href="#VS项目设置" class="headerlink" title="VS项目设置"></a>VS项目设置</h1><ol>
 <li>项目属性——&gt; C/C++ ——&gt; General ——&gt; Additional Include Directories，添加  $(LUA_DIR)\include</li>
 <li>项目属性——&gt; Linker ——&gt; General——&gt;  Additional Library Dir 添加  $(LUA_DIR)\lib</li>
 <li>项目属性——&gt; Linker ——&gt; Input ——&gt;  Additional Dependencies. 添加 lua.lib</li>
 </ol>
 <h2 id="测试例子"><a href="#测试例子" class="headerlink" title="测试例子"></a>测试例子</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"pch.h"</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"lua.hpp"</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Hello World!\n"</span>;</span><br><span class="line">	lua_State* L = luaL_newstate();</span><br><span class="line">	luaL_openlibs(L);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (luaL_dofile(L,<span class="string">"test.lua"</span>))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">const</span> <span class="keyword">char</span>* err = lua_tostring(L,<span class="number">-1</span>);</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; err &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	lua_close(L);</span><br><span class="line">	getchar();</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- test.lua</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> k,v <span class="keyword">in</span> <span class="built_in">pairs</span>(<span class="built_in">_G</span>) <span class="keyword">do</span></span><br><span class="line">	<span class="built_in">print</span>(k,v)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-
-
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ol>
 <li>LINK : warning LNK4098: defaultlib ‘LIBCMT’ conflicts with use of other libs; use /NODEFAULTLIB:library<br>这个是我们的链接方式和宿主程序链接方式不一致造成的。</li>
-<li>X64 无法识别外部符号<br>需要用 cl 命令来生成 64 位的静态库</li>
+<li>X64 无法识别外部符号<br>需要用 cl 命令来生成 64 位的静态库<br><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></li>
 </ol>
 
     </div>
@@ -361,7 +342,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Lua/C++%E5%AF%BC%E5%87%BA%E7%B1%BB%E5%88%B0Lua%E7%9A%84%E6%8E%A2%E7%A9%B6.html" rel="next" title="C++导出类到Lua的探究">
+                <a href="/Lua/C++导出类到Lua的探究.html" rel="next" title="C++导出类到Lua的探究">
                   <i class="fa fa-chevron-left"></i> C++导出类到Lua的探究
                 </a>
             </div>
@@ -369,7 +350,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Lua/PIL.31.C%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E7%94%A8%E6%88%B7%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B.html" rel="prev" title="PIL.31.C中的自定义用户定义类型">
+                <a href="/Lua/PIL.31.C中的自定义用户定义类型.html" rel="prev" title="PIL.31.C中的自定义用户定义类型">
                   PIL.31.C中的自定义用户定义类型 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -431,20 +412,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -456,10 +437,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -488,10 +469,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -566,7 +547,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Lua/windows-vs2017-%E7%8E%AF%E5%A2%83%E7%BC%96%E8%AF%91lua.html",
+            url: "https://gowa.club/Lua/windows-vs2017-环境编译lua.html",
             identifier: "Lua/windows-vs2017-环境编译lua.html",
             title: "windows-vs2017-环境编译lua"
           }

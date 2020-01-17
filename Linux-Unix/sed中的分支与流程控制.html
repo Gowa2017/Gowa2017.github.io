@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Linux,SED,SHELL,运维">
 <meta property="og:type" content="article">
 <meta property="og:title" content="sed中的分支与流程控制">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;sed%E4%B8%AD%E7%9A%84%E5%88%86%E6%94%AF%E4%B8%8E%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/sed中的分支与流程控制.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="sed是一个非常强大的工具，对于文本编辑来说。然而，很多时候可能我们用不到这节介绍的分支跳转与流程控制，但是某些时候又是非常有用的。因为有些sed需要比较复杂来实现的功能，已经被用c来实现成了程序命令，所以不太实用了，不过对于想要专注于sed的同学们来说，学习这个是非常有必要的。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-19T03:32:22.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sed中的分支与流程控制">
+<meta name="twitter:description" content="sed是一个非常强大的工具，对于文本编辑来说。然而，很多时候可能我们用不到这节介绍的分支跳转与流程控制，但是某些时候又是非常有用的。因为有些sed需要比较复杂来实现的功能，已经被用c来实现成了程序命令，所以不太实用了，不过对于想要专注于sed的同学们来说，学习这个是非常有必要的。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/sed%E4%B8%AD%E7%9A%84%E5%88%86%E6%94%AF%E4%B8%8E%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/sed中的分支与流程控制.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/sed%E4%B8%AD%E7%9A%84%E5%88%86%E6%94%AF%E4%B8%8E%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/sed中的分支与流程控制.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/sed%E4%B8%AD%E7%9A%84%E5%88%86%E6%94%AF%E4%B8%8E%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/sed中的分支与流程控制.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/sed中的分支与流程控制.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,51 +292,49 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>sed是一个非常强大的工具，对于文本编辑来说。然而，很多时候可能我们用不到这节介绍的分支跳转与流程控制，但是某些时候又是非常有用的。因为有些sed需要比较复杂来实现的功能，已经被用c来实现成了程序命令，所以不太实用了，不过对于想要专注于sed的同学们来说，学习这个是非常有必要的。</p>
-<a id="more"></a>
-
+        <p>sed是一个非常强大的工具，对于文本编辑来说。然而，很多时候可能我们用不到这节介绍的分支跳转与流程控制，但是某些时候又是非常有用的。因为有些sed需要比较复杂来实现的功能，已经被用c来实现成了程序命令，所以不太实用了，不过对于想要专注于sed的同学们来说，学习这个是非常有必要的。<br><a id="more"></a></p>
 <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>分支命令:<code>b, t, T</code>可以用来改变sed的工作流程。 </p>
 <p>默认流程：读入一行到 <code>pattern space</code>，按序执行命令进行处理。没有地址指定的命令应用到所有行。</p>
 <p>sed并不支持 if/then/else 语句。其使用几个命令来进行条件检测或改变执行流程：</p>
 <ul>
 <li><code>d</code> 清理当前 模式空间， 忽略后面未执行命令，并不打印模式空间，重新开始循环处理。</li>
 <li><code>D</code> 删除模式空间的内容直到第一个换行符，不打印模式空间，忽略后面的命令，重新开始循环。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[addr]X</span><br><span class="line">[addr]&#123; X ; X ; X &#125;</span><br><span class="line">/regexp/X</span><br><span class="line">/regexp/&#123; X ; X ; X &#125;</span><br></pre></td></tr></table></figure>
-地址和正则式可以用来作为 <code>if/then</code> 的条件：如果 <code>[addr]</code> 匹配当前的模式空间，执行命令。比如：<code>/^#/d</code> 表示 ： 如果当前的模式空间匹配正则式<code>^#</code>（以 # 开头的行），然后就执行<code>d</code>命令：删除模式空间内的这行，不打印到标准输出，然后开始下一个循环。  </li>
+</li>
+</ul>
+<p>地址和正则式可以用来作为 <code>if/then</code> 的条件：如果 <code>[addr]</code> 匹配当前的模式空间，执行命令。比如：<code>/^#/d</code> 表示 ： 如果当前的模式空间匹配正则式<code>^#</code>（以 # 开头的行），然后就执行<code>d</code>命令：删除模式空间内的这行，不打印到标准输出，然后开始下一个循环。  </p>
+<ul>
 <li><code>b</code> 无条件分支（跳转到标签，跳过或重复其他命令，并不重新开始一个循环）。结合地址使用，这个分支动作可以在特定的行上使用。</li>
 <li><code>t</code> 条件分支。读入一行后，当一个<code>s///</code>命令成功执行或其他条件分支动作后为真。</li>
 <li><code>T</code> 条件分支。与<code>t</code>相似，但是正好相反，只有当读入一行，并且没有成功的 <code>s</code>命令执行为真。</li>
 </ul>
 <p>接下来的两个sed程序是等价的。第一个例子中，用<code>b</code>命令在包括<em>l</em>的行上跳过<code>s///</code>命令。第二个例子使用一个地址和<code>!</code>符号来在指定的行上进行替换。<code>y///</code>命令在所有行上执行。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ printf &apos;%s\n&apos; a1 a2 a3 | sed -E &apos;/1/bx ; s/a/z/ ; :x ; y/123/456/&apos;</span><br><span class="line">a4</span><br><span class="line">z5</span><br><span class="line">z6</span><br><span class="line"></span><br><span class="line">$ printf &apos;%s\n&apos; a1 a2 a3 | sed -E &apos;/1/!s/a/z/ ; y/123/456/&apos;</span><br><span class="line">a4</span><br><span class="line">z5</span><br><span class="line">z6</span><br></pre></td></tr></table></figure>
-
-
-<h1 id="分支与循环"><a href="#分支与循环" class="headerlink" title="分支与循环"></a>分支与循环</h1><p><code>b, t, T</code>后面可以跟随一个<em>标签*（一般是单个字母）。标签用一个冒号后跟一个或几个字母定义（比如，</em>:x*）。如果忽略了标签，那么会重新开始一个循环。要注意区别分支到标签和重新开始循环：当循环重新开始的时候，<code>sed</code>首先打印出当前的模式空间内容，然后读入下一行到模式空间。跳转到一个标签（即使是在程序开头）不会打印模式空间也不会读入下一行。   </p>
+<h1 id="分支与循环"><a href="#分支与循环" class="headerlink" title="分支与循环"></a>分支与循环</h1><p><code>b, t, T</code>后面可以跟随一个<em>标签</em>（一般是单个字母）。标签用一个冒号后跟一个或几个字母定义（比如，<em>:x</em>）。如果忽略了标签，那么会重新开始一个循环。要注意区别分支到标签和重新开始循环：当循环重新开始的时候，<code>sed</code>首先打印出当前的模式空间内容，然后读入下一行到模式空间。跳转到一个标签（即使是在程序开头）不会打印模式空间也不会读入下一行。   </p>
 <p>下面的程序是没有操作的。<code>b</code>命令（程序中唯一的命令）不带标签，所以其只是简单的重新开始一个循环。在每个循环中，模式空间内容被打印出来，并读取下一行：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ seq 3 | sed b</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
-
-<p>下面的例子是一个无限循环–不会终止也不会打印任何东西。<code>b</code>命令跳转到<em>x</em>标签，但一个新的循环却永远不会开始：</p>
+<p>下面的例子是一个无限循环—不会终止也不会打印任何东西。<code>b</code>命令跳转到<em>x</em>标签，但一个新的循环却永远不会开始：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ seq 3 | sed &apos;:x ; bx&apos;</span><br><span class="line"># The above command requires gnu sed (which supports additional</span><br><span class="line"># commands following a label, without a newline). A portable equivalent:</span><br><span class="line">#     sed -e &apos;:x&apos; -e bx</span><br></pre></td></tr></table></figure>
-
 <p>分支几乎 用<code>n, N</code>命令配合完成的：两个命令都会读入下一行到模式空间，也都不等待循环重启。 在读入下一行前，<code>n</code>打印当前模式空间内容并清空，<code>N</code>附加一个换行符和下一行到当前的模式空间。</p>
 <p>看看下面的两个例子：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ seq 3 | sed &apos;:x ; n ; bx&apos;</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line"></span><br><span class="line">$ seq 3 | sed &apos;:x ; N ; bx&apos;</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
-
 <ul>
 <li>两个例子都不是无限的，也不开始一个新的循环。</li>
 <li>第一个例子中，<code>n</code>先打印模式空间内容，清空模式空间，再读入下一行。</li>
 <li>第二个例子中，<code>N</code>把下一行附加到模式空间（前面添加一个换行符）。行被累计起来直到无新行可读，然后<code>N</code>结束sed。在sed终止的时候，循环结束动作被执行，打印出整个模式空间。</li>
 <li>第二个例子需要 <strong>GNU</strong> sed，因为其使用的是非 <em>POSIX-std</em> 行为的<code>N</code>命令。</li>
 <li>为了更多的测试这两个例子，看看下面的命令：<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">printf &apos;%s\n&apos; aa bb cc dd | sed &apos;:x ; n ; = ; bx&apos;</span><br><span class="line">printf &apos;%s\n&apos; aa bb cc dd | sed &apos;:x ; N ; = ; bx&apos;</span><br><span class="line">printf &apos;%s\n&apos; aa bb cc dd | sed &apos;:x ; n ; s/\n/***/ ; bx&apos;</span><br><span class="line">printf &apos;%s\n&apos; aa bb cc dd | sed &apos;:x ; N ; s/\n/***/ ; bx&apos;</span><br></pre></td></tr></table></figure>
-
 </li>
 </ul>
-<h1 id="分支例子：连接行"><a href="#分支例子：连接行" class="headerlink" title="分支例子：连接行"></a>分支例子：连接行</h1><p>作为现实世界中使用分支的一个例子，在以<em>=</em>进行分行的文件中：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cat jaques.txt</span><br><span class="line">All the wor=</span><br><span class="line">ld&apos;s a stag=</span><br><span class="line">e,</span><br><span class="line">And all the=</span><br><span class="line"> men and wo=</span><br><span class="line">men merely =</span><br><span class="line">players:</span><br><span class="line">They have t=</span><br><span class="line">heir exits =</span><br><span class="line">and their e=</span><br><span class="line">ntrances;</span><br><span class="line">And one man=</span><br><span class="line"> in his tim=</span><br><span class="line">e plays man=</span><br><span class="line">y parts.</span><br></pre></td></tr></table></figure>
-
+<h1 id="分支例子：连接行"><a href="#分支例子：连接行" class="headerlink" title="分支例子：连接行"></a>分支例子：连接行</h1><p>作为现实世界中使用分支的一个例子，在以<em>=</em>进行分行的文件中：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ cat jaques.txt</span><br><span class="line">All the wor=</span><br><span class="line">ld&apos;s a stag=</span><br><span class="line">e,</span><br><span class="line">And all the=</span><br><span class="line"> men and wo=</span><br><span class="line">men merely =</span><br><span class="line">players:</span><br><span class="line">They have t=</span><br><span class="line">heir exits =</span><br><span class="line">and their e=</span><br><span class="line">ntrances;</span><br><span class="line">And one man=</span><br><span class="line"> in his tim=</span><br><span class="line">e plays man=</span><br><span class="line">y parts.</span><br></pre></td></tr></table></figure></p>
 <p>下面的程序使用<code>/=$/</code>作为条件：如果当前模式空间以<em>=</em>结尾，就会用<code>N</code>读取下一行，替换所有的<em>=</em>和后面的换行符，接着无条件分支<code>b</code>到程序开头，这并不会开始一个新的循环处理。如果模式空间不是以<em>=</em>结尾，执行默认动作：打印模式空间，开始新的循环：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ sed &apos;:x ; /=$/ &#123; N ; s/=\n//g ; bx &#125;&apos; jaques.txt</span><br><span class="line">All the world&apos;s a stage,</span><br><span class="line">And all the men and women merely players:</span><br><span class="line">They have their exits and their entrances;</span><br><span class="line">And one man in his time plays many parts.</span><br></pre></td></tr></table></figure>
 <p>还有个不同的办法：在所有行上（除了最后一行），<code>N</code>附加行到模式空间。一个<code>s</code>命令移除<em>=</em>\n。如果<code>s</code>成功执行，<code>t</code>跳转到程序开头（不完成也不重启循环）。如果<code>s</code>失败，<code>t</code>就不会跳转。然后，<code>P</code>会打印模式空间中第一个换行符前的内容，<code>D</code>删除到第一个换行符。</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ sed &apos;:x ; $!N ; s/=\n// ; tx ; P ; D&apos; jaques.txt</span><br><span class="line">All the world&apos;s a stage,</span><br><span class="line">And all the men and women merely players:</span><br><span class="line">They have their exits and their entrances;</span><br><span class="line">And one man in his time plays many parts.</span><br></pre></td></tr></table></figure>
+<p><code>$ sed &#39;:x ; $!N ; s/=\n// ; tx ; P ; D&#39; jaques.txt
+All the world&#39;s a stage,
+And all the men and women merely players:
+They have their exits and their entrances;
+And one man in his time plays many parts.</code><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
     </div>
 
     
@@ -346,14 +346,14 @@
               <a href="/tags/Linux/" rel="tag"># Linux</a>
               <a href="/tags/SED/" rel="tag"># SED</a>
               <a href="/tags/SHELL/" rel="tag"># SHELL</a>
-              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
+              <a href="/tags/运维/" rel="tag"># 运维</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/java%E4%B8%AD%E7%9A%84%E5%8C%85.html" rel="next" title="java中的包">
+                <a href="/Java/java中的包.html" rel="next" title="java中的包">
                   <i class="fa fa-chevron-left"></i> java中的包
                 </a>
             </div>
@@ -361,7 +361,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/sed%E5%87%A0%E4%B8%AA%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E4%BE%8B%E5%AD%90.html" rel="prev" title="sed几个有意思的例子">
+                <a href="/Linux-Unix/sed几个有意思的例子.html" rel="prev" title="sed几个有意思的例子">
                   sed几个有意思的例子 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -423,20 +423,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -448,10 +448,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -480,10 +480,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -558,7 +558,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/sed%E4%B8%AD%E7%9A%84%E5%88%86%E6%94%AF%E4%B8%8E%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6.html",
+            url: "https://gowa.club/Linux-Unix/sed中的分支与流程控制.html",
             identifier: "Linux-Unix/sed中的分支与流程控制.html",
             title: "sed中的分支与流程控制"
           }

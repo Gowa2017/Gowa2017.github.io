@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git命令之-rebase">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Git&#x2F;git%E5%91%BD%E4%BB%A4%E4%B9%8B-rebase.html">
+<meta property="og:url" content="https://gowa.club/Git/git命令之-rebase.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="很遗憾，用了这么久的 git ，对于其分支模型实在是没有仔细了解的。因为公司用的是 svn，我只是自己在本地用 git 进行了代码管理。比较无奈的是，公司的 svn 版本库结构很坑，无法用 git-svn 来实现比较友善的管理，只徒呼奈何了。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-09-18T15:36:36.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="git命令之-rebase">
+<meta name="twitter:description" content="很遗憾，用了这么久的 git ，对于其分支模型实在是没有仔细了解的。因为公司用的是 svn，我只是自己在本地用 git 进行了代码管理。比较无奈的是，公司的 svn 版本库结构很坑，无法用 git-svn 来实现比较友善的管理，只徒呼奈何了。">
 
-<link rel="canonical" href="https://gowa.club/Git/git%E5%91%BD%E4%BB%A4%E4%B9%8B-rebase.html">
+<link rel="canonical" href="https://gowa.club/Git/git命令之-rebase.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/git%E5%91%BD%E4%BB%A4%E4%B9%8B-rebase.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/git命令之-rebase.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Git/git%E5%91%BD%E4%BB%A4%E4%B9%8B-rebase.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Git/git命令之-rebase.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Git/git命令之-rebase.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -296,82 +298,62 @@
 <p>更实际一点，为了避免需要解决很复杂的代码冲突问题。我在主分支 master 上同步 svn 上的代码，每次想要合并把 dev 代码合并过去的时候，都先用 svn 把别人更新的代码更新下来，再用 merge 命令进行合并。我想用实例来操作是最好的。</p>
 <h1 id="Rebase-命令"><a href="#Rebase-命令" class="headerlink" title="Rebase 命令"></a>Rebase 命令</h1><p>基本命令：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git rebase [-i | --interactive] [options] [--exec &lt;cmd&gt;] [--onto &lt;newbase&gt;]</span><br><span class="line">        [&lt;upstream&gt; [&lt;branch&gt;]]</span><br><span class="line">git rebase [-i | --interactive] [options] [--exec &lt;cmd&gt;] [--onto &lt;newbase&gt;]</span><br><span class="line">        --root [&lt;branch&gt;]</span><br><span class="line">git rebase --continue | --skip | --abort | --quit | --edit-todo | --show-current-patch</span><br></pre></td></tr></table></figure>
-
 <p>这里，我们来解释一下两个名字：</p>
 <ul>
 <li><strong>upstream</strong> 上游。这指的是我们想要将其变更拉取过来的分支。</li>
 <li><strong>branch</strong> 分支。表示的是我们想要将变更应用到的分支。</li>
 </ul>
-<p>如果指定了 *<branch>* 。<code>git rebase</code> 命令会首先做一个 <code>git checkout &lt;branch&gt;</code>（切换到我们指定的分支）。否则的话就停留当前分支上进行动作。</p>
-<p>如果 *<upstream>* 没有指定（表示需要拉取其变更的分支），那么在 <em>branch.<name>.remote</em> 和 <em>branch.<name>merge</em> 选项中配置的 <em>upstream</em> 会被使用，如果 <em>–fork–point</em> 选项被假设。 如果当前不在任何分支上或当前分支没有配置一个 <em>upstream</em>，那么 rebase 会失败。</p>
+<p>如果指定了 <em><branch></branch></em> 。<code>git rebase</code> 命令会首先做一个 <code>git checkout &lt;branch&gt;</code>（切换到我们指定的分支）。否则的话就停留当前分支上进行动作。</p>
+<p>如果 <em><upstream></upstream></em> 没有指定（表示需要拉取其变更的分支），那么在 <em>branch.<name>.remote</name></em> 和 <em>branch.<name>merge</name></em> 选项中配置的 <em>upstream</em> 会被使用，如果 <em>—fork—point</em> 选项被假设。 如果当前不在任何分支上或当前分支没有配置一个 <em>upstream</em>，那么 rebase 会失败。</p>
 <p>所有当前分支中的提交造成的变更，且不在 <em>upstream</em> 中的变更，会被存储到一个临时的区域。</p>
-<p>当前分支会被重置到 <em>upstream*，若指定了 *–onto</em> 选项，则会重置到 <em>newbase</em> 。这和 <code>git reset --hard &lt;upstream&gt;</code>有相同的影响。<em>ORGI_HEAD</em> 被设置为指向重置前的分支顶。</p>
+<p>当前分支会被重置到 <em>upstream</em>，若指定了 <em>—onto</em> 选项，则会重置到 <em>newbase</em> 。这和 <code>git reset --hard &lt;upstream&gt;</code>有相同的影响。<em>ORGI_HEAD</em> 被设置为指向重置前的分支顶。</p>
 <p>那么，之前存储在临时区域的提交就会在当前分支上按序重放。</p>
 <h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p>如果我们有以下分支：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">      A---B---C topic</span><br><span class="line">     /</span><br><span class="line">D---E---F---G master</span><br></pre></td></tr></table></figure>
-
 <p>执行下面两个命令都会有同样的结果：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git rebase master</span><br><span class="line">git rebase master topic</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">              A&apos;--B&apos;--C&apos; topic</span><br><span class="line">             /</span><br><span class="line">D---E---F---G master</span><br></pre></td></tr></table></figure>
-
 <p>事实上  <code>git rebase master topic</code> 与  </p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git checkout topic</span><br><span class="line">git rebase master</span><br></pre></td></tr></table></figure>
-
 <p>相同。</p>
 <h2 id="重复变更内容的处理"><a href="#重复变更内容的处理" class="headerlink" title="重复变更内容的处理"></a>重复变更内容的处理</h2><p>如果上游分支中存在了我们当前分支中已经有了的变更，那么当前分支上的这个变更会被忽略。就如下面的例子( A， A’ 代表了两个相同的变更，但只是 commit 信息不一样。)：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">      A---B---C topic</span><br><span class="line">     /</span><br><span class="line">D---E---A&apos;---F master</span><br></pre></td></tr></table></figure>
-
 <p>如果我们当前位于 topic 分支，我们执行 </p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git rebase master</span><br></pre></td></tr></table></figure>
-
 <p>的结果将会是下面这样的：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">               B&apos;---C&apos; topic</span><br><span class="line">              /</span><br><span class="line">D---E---A&apos;---F master</span><br></pre></td></tr></table></figure>
-
 <h2 id="基于多分支迁移"><a href="#基于多分支迁移" class="headerlink" title="基于多分支迁移"></a>基于多分支迁移</h2><p>我们来看一下，基于一个分支与另一个分支的差异来迁移变更到 topic 分支。</p>
 <p>这里，我们假设我们的 topic 分支是从 next 分支衍生的。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">o---o---o---o---o  master</span><br><span class="line">     \</span><br><span class="line">      o---o---o---o---o  next</span><br><span class="line">                       \</span><br><span class="line">                        o---o---o  topic</span><br></pre></td></tr></table></figure>
-
 <p>现在我们想让 topic 分支变成是基于 master 衍生的。我们可以执行下面这个命令：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git rebase --onto master next topic</span><br></pre></td></tr></table></figure>
-
 <p>最后的结果就是：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">o---o---o---o---o  master</span><br><span class="line">    |            \</span><br><span class="line">    |             o&apos;--o&apos;--o&apos;  topic</span><br><span class="line">     \</span><br><span class="line">      o---o---o---o---o  next</span><br></pre></td></tr></table></figure>
-
 <p>上面这个操作，也就真实的展示了一个比较让人难以理解的概念 <strong>变基</strong>。</p>
 <p><strong>变基</strong>：改变一个分支的基准位置(commit)。</p>
 <h2 id="对变基的直观解释。"><a href="#对变基的直观解释。" class="headerlink" title="对变基的直观解释。"></a>对变基的直观解释。</h2><h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><p>我们先初始化一个库。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git init temp </span><br><span class="line">cd test</span><br><span class="line">echo README &gt;&gt; README.md</span><br><span class="line">git add .</span><br><span class="line">git commit -m &apos;add readme file&apos;</span><br><span class="line"></span><br><span class="line">echo file1 &gt;&gt; file1</span><br><span class="line">git add .</span><br><span class="line">git commit -m &apos;add file1&apos;</span><br></pre></td></tr></table></figure>
-
 <p>再另外一个分支更新文件：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git co -b dev</span><br><span class="line">echo file2 &gt;&gt; file2</span><br><span class="line">git add .</span><br><span class="line">git commit -m &apos;add file2&apos;</span><br></pre></td></tr></table></figure>
-
 <p>切换回主分支，再添加个文件：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git co master</span><br><span class="line">echo file3 &gt;&gt; file3</span><br><span class="line">git add .</span><br><span class="line">git commit -m &apos;add file3&apos;</span><br></pre></td></tr></table></figure>
-
 <p>现在我打算把 dev 分支上的改动合并到 master 分支。一般来说，我们可以采用 merge 命令。</p>
 <p>如果 <em>upstream branch</em> 已经包含了一个你已经做了的改变，那么这个变化会被跳过。在下面的操作中（ A’ 与 A 做了相同的变化，但是 commit 信息不一样）</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">      A---B---C topic</span><br><span class="line">     /</span><br><span class="line">D---E---A&apos;---F master</span><br></pre></td></tr></table></figure>
-
 <p>其结果是：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">               B&apos;---C&apos; topic</span><br><span class="line">              /</span><br><span class="line">D---E---A&apos;---F master</span><br></pre></td></tr></table></figure>
-
-<h2 id="–onto"><a href="#–onto" class="headerlink" title="–onto"></a>–onto</h2><p>下面来看一下怎么样将一个 topic 分支移植到</p>
+<h2 id="—onto"><a href="#—onto" class="headerlink" title="—onto"></a>—onto</h2><p>下面来看一下怎么样将一个 topic 分支移植到</p>
 <h1 id="merge"><a href="#merge" class="headerlink" title="merge"></a>merge</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git co master</span><br><span class="line">git merge dev</span><br><span class="line"></span><br><span class="line">git log --pretty=oneline </span><br><span class="line"></span><br><span class="line">b67203a314ab47dde68016f4a2fc04b6ee056e28 (HEAD -&gt; master) Merge branch &apos;dev&apos;</span><br><span class="line">1d38148fa8a973e41f41e02b9554b06137896956 add file3</span><br><span class="line">bbad65a53a9f545c11f8db8678a63b47201dc433 (dev) add file2</span><br><span class="line">f0c5b7b7674cc7956f3d89e06ce041ccaa4cd545 add file1</span><br><span class="line">acd1ecdd9f88a1c936ca15946bc48c1104ef55f2 add readme file</span><br></pre></td></tr></table></figure>
-
 <p>我们的提交历史变更成这样。我们再看看 rebase 的区别。</p>
 <h1 id="rebase"><a href="#rebase" class="headerlink" title="rebase"></a>rebase</h1><p>先把我们的记录恢复到之前的 master 状态。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reset --hard head^</span><br><span class="line">git rebase dev</span><br><span class="line">git log --pretty=oneline </span><br><span class="line">e90bb2e9d5996d16c45682596dd4014c4981dd41 (HEAD -&gt; master) add file3</span><br><span class="line">bbad65a53a9f545c11f8db8678a63b47201dc433 (dev) add file2</span><br><span class="line">f0c5b7b7674cc7956f3d89e06ce041ccaa4cd545 add file1</span><br><span class="line">acd1ecdd9f88a1c936ca15946bc48c1104ef55f2 add readme file</span><br></pre></td></tr></table></figure>
-
 <p>操作结果有所不同。 merge 显示的历史顺序和我们进行的合并操作有关，而 rebase 显示顺序和我们实际动作发生的过程相关。同时，rebase 少了一个 join 操作。</p>
 <p>我们来换个办法，在 dev 分支上 rebase master 然后，再合并。可是这个时候我懵逼了，我们如何取消了已经 rebase 的操作呢？ 没有对应的 undo 操作。只能通过找到 ref-log 来操作。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reflog</span><br><span class="line"></span><br><span class="line">e90bb2e (HEAD -&gt; master) HEAD@&#123;0&#125;: rebase finished: returning to refs/heads/master</span><br><span class="line">e90bb2e (HEAD -&gt; master) HEAD@&#123;1&#125;: rebase: add file3</span><br><span class="line">bbad65a (dev) HEAD@&#123;2&#125;: rebase: checkout dev</span><br><span class="line">1d38148 HEAD@&#123;3&#125;: reset: moving to head^</span><br><span class="line">b67203a HEAD@&#123;4&#125;: merge dev: Merge made by the &apos;recursive&apos; strategy.</span><br><span class="line">1d38148 HEAD@&#123;5&#125;: checkout: moving from master to master</span><br><span class="line">1d38148 HEAD@&#123;6&#125;: checkout: moving from dev to master</span><br><span class="line">bbad65a (dev) HEAD@&#123;7&#125;: checkout: moving from master to dev</span><br><span class="line">1d38148 HEAD@&#123;8&#125;: commit: add file3</span><br><span class="line">f0c5b7b HEAD@&#123;9&#125;: checkout: moving from dev to master</span><br><span class="line">bbad65a (dev) HEAD@&#123;10&#125;: commit: add file2</span><br><span class="line">f0c5b7b HEAD@&#123;11&#125;: checkout: moving from master to dev</span><br><span class="line">f0c5b7b HEAD@&#123;12&#125;: commit: add file1</span><br><span class="line">acd1ecd HEAD@&#123;13&#125;: commit (initial): add readme file</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reset --hard 1d38148</span><br><span class="line">git co dev</span><br><span class="line">git rebase master</span><br><span class="line">git log --pretty=oneline </span><br><span class="line">0b5d862609228abb1255775ab9c2124f01fd7ed5 (HEAD -&gt; dev) add file2</span><br><span class="line">1d38148fa8a973e41f41e02b9554b06137896956 (master) add file3</span><br><span class="line">f0c5b7b7674cc7956f3d89e06ce041ccaa4cd545 add file1</span><br><span class="line">acd1ecdd9f88a1c936ca15946bc48c1104ef55f2 add readme file</span><br></pre></td></tr></table></figure>
 <p>似乎可以发现一个问题。当我们在 dev 分支上 rebase master 的时候，实际上是找到两者共同的祖先，然后先进行 master 的重放，再把 dev 自己的修改放在后面去。</p>
 <p>仔细观察一下我们的日志：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">0b5d862 (HEAD -&gt; dev) HEAD@&#123;4&#125;: merge dev: Fast-forward</span><br><span class="line">1d38148 (master) HEAD@&#123;5&#125;: checkout: moving from dev to master</span><br><span class="line">0b5d862 (HEAD -&gt; dev) HEAD@&#123;6&#125;: rebase finished: returning to refs/heads/dev</span><br><span class="line">0b5d862 (HEAD -&gt; dev) HEAD@&#123;7&#125;: rebase: add file2</span><br><span class="line">1d38148 (master) HEAD@&#123;8&#125;: rebase: checkout master</span><br><span class="line">bbad65a HEAD@&#123;9&#125;: checkout: moving from master to dev</span><br></pre></td></tr></table></figure>
-
 <ol>
 <li>先切换到 dev 分支</li>
 <li>rebase： 检出 master 上的更新</li>
@@ -385,6 +367,7 @@
 <li>合并到主分支</li>
 <li>git svn dcommit</li>
 </ul>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -401,7 +384,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Python/%E5%85%B3%E4%BA%8E%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5.html" rel="next" title="关于机器学习的基本概念">
+                <a href="/Python/关于机器学习的基本概念.html" rel="next" title="关于机器学习的基本概念">
                   <i class="fa fa-chevron-left"></i> 关于机器学习的基本概念
                 </a>
             </div>
@@ -409,7 +392,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Misc/%E5%85%B3%E4%BA%8E%E8%81%8C%E4%B8%9A%E4%B8%8E%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%90%91%E7%9A%84%E6%80%9D%E8%80%83.html" rel="prev" title="关于职业与工作方向的思考">
+                <a href="/Misc/关于职业与工作方向的思考.html" rel="prev" title="关于职业与工作方向的思考">
                   关于职业与工作方向的思考 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -457,7 +440,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Rebase-命令"><span class="nav-number">1.</span> <span class="nav-text">Rebase 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-number">1.1.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重复变更内容的处理"><span class="nav-number">1.2.</span> <span class="nav-text">重复变更内容的处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于多分支迁移"><span class="nav-number">1.3.</span> <span class="nav-text">基于多分支迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对变基的直观解释。"><span class="nav-number">1.4.</span> <span class="nav-text">对变基的直观解释。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实例"><span class="nav-number">2.</span> <span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#–onto"><span class="nav-number">2.1.</span> <span class="nav-text">–onto</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#merge"><span class="nav-number">3.</span> <span class="nav-text">merge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rebase"><span class="nav-number">4.</span> <span class="nav-text">rebase</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#我的工作流程"><span class="nav-number">5.</span> <span class="nav-text">我的工作流程</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Rebase-命令"><span class="nav-number">1.</span> <span class="nav-text">Rebase 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-number">1.1.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重复变更内容的处理"><span class="nav-number">1.2.</span> <span class="nav-text">重复变更内容的处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于多分支迁移"><span class="nav-number">1.3.</span> <span class="nav-text">基于多分支迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对变基的直观解释。"><span class="nav-number">1.4.</span> <span class="nav-text">对变基的直观解释。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实例"><span class="nav-number">2.</span> <span class="nav-text">实例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#—onto"><span class="nav-number">2.1.</span> <span class="nav-text">—onto</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#merge"><span class="nav-number">3.</span> <span class="nav-text">merge</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#rebase"><span class="nav-number">4.</span> <span class="nav-text">rebase</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#我的工作流程"><span class="nav-number">5.</span> <span class="nav-text">我的工作流程</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -471,20 +454,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -496,10 +479,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -528,10 +511,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -606,7 +589,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Git/git%E5%91%BD%E4%BB%A4%E4%B9%8B-rebase.html",
+            url: "https://gowa.club/Git/git命令之-rebase.html",
             identifier: "Git/git命令之-rebase.html",
             title: "git命令之-rebase"
           }

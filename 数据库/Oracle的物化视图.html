@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,16 +51,18 @@
 <meta name="keywords" content="Oracle,数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Oracle的物化视图">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;Oracle%E7%9A%84%E7%89%A9%E5%8C%96%E8%A7%86%E5%9B%BE.html">
+<meta property="og:url" content="https://gowa.club/数据库/Oracle的物化视图.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="视图是对一系列包含一个或多个表或其他视图的数据的特定描述，一个视图像一个表一样响应一个查询。一个视图可以被视为一个虚拟表，或者一系列的查询，大多数能用表的地方，你也可以视图代替。视图并不需要存储数据，只需要存储其定义。同时我们不能定义触发器到视图，只能在基表（base table）上进行定义。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;20161130-oracle-view-1.png">
+<meta property="og:image" content="https://gowa.club/res/20161130-oracle-view-1.png">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.270Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;20161130-oracle-view-1.png">
+<meta name="twitter:title" content="Oracle的物化视图">
+<meta name="twitter:description" content="视图是对一系列包含一个或多个表或其他视图的数据的特定描述，一个视图像一个表一样响应一个查询。一个视图可以被视为一个虚拟表，或者一系列的查询，大多数能用表的地方，你也可以视图代替。视图并不需要存储数据，只需要存储其定义。同时我们不能定义触发器到视图，只能在基表（base table）上进行定义。">
+<meta name="twitter:image" content="https://gowa.club/res/20161130-oracle-view-1.png">
 
-<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E7%9A%84%E7%89%A9%E5%8C%96%E8%A7%86%E5%9B%BE.html">
+<link rel="canonical" href="https://gowa.club/数据库/Oracle的物化视图.html">
 
 
 <script id="page-configurations">
@@ -230,7 +232,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E7%9A%84%E7%89%A9%E5%8C%96%E8%A7%86%E5%9B%BE.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/Oracle的物化视图.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -268,7 +270,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -283,7 +285,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E7%9A%84%E7%89%A9%E5%8C%96%E8%A7%86%E5%9B%BE.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/Oracle的物化视图.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/Oracle的物化视图.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -299,8 +301,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>视图是对一系列包含一个或多个表或其他视图的数据的特定描述，一个视图像一个表一样响应一个查询。一个视图可以被视为一个虚拟表，或者一系列的查询，大多数能用表的地方，你也可以视图代替。<br>视图并不需要存储数据，只需要存储其定义。同时我们不能定义触发器到视图，只能在基表（<strong>base table</strong>）上进行定义。</p>
-<a id="more"></a>
+        <p>视图是对一系列包含一个或多个表或其他视图的数据的特定描述，一个视图像一个表一样响应一个查询。一个视图可以被视为一个虚拟表，或者一系列的查询，大多数能用表的地方，你也可以视图代替。<br>视图并不需要存储数据，只需要存储其定义。同时我们不能定义触发器到视图，只能在基表（<strong>base table</strong>）上进行定义。<br><a id="more"></a></p>
 <h1 id="一个例子"><a href="#一个例子" class="headerlink" title="一个例子"></a>一个例子</h1><p><em>staff</em>视图从基表 <em>employees</em>而来，但是只包含了基表中的5列。<br><img src="/res/20161130-oracle-view-1.png" alt="An Example of View"></p>
 <h1 id="Materialized-Views"><a href="#Materialized-Views" class="headerlink" title="Materialized Views"></a>Materialized Views</h1><p>物化视图是一个可以用总结、结算、复制、分发数据的数据对象，用以存储<code>一个查询</code>的结果。这个查询在<code>FROM</code>语句后的可以是表、视图、或其他物化视图，我们把他们称做 <strong>主表(master tables，一个复制概念)</strong>或 <strong>detail tables（一个数据仓库概念）</strong>。为了一致，我们权且称之为 <strong>主表(master tables)</strong>，包含主表的数据库就叫 <strong>主库（master databases）</strong>。</p>
 <blockquote>
@@ -332,16 +333,20 @@ LCIMS80ZHU =
     )
     (CONNECT_DATA =
       (SERVICE_NAME = LCIMS80)
-    )</code></pre><h2 id="创建database-link"><a href="#创建database-link" class="headerlink" title="创建database link"></a>创建database link</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> <span class="keyword">link</span> LCIMS80_GZ_dblink</span><br><span class="line"><span class="keyword">connect</span> <span class="keyword">to</span> absadmin <span class="keyword">identified</span> <span class="keyword">by</span> imsadmin32</span><br><span class="line"><span class="keyword">USING</span> <span class="string">'LCIMS80ZHU'</span>;</span><br><span class="line"><span class="keyword">commit</span>;</span><br></pre></td></tr></table></figure>
+    )
+</code></pre><h2 id="创建database-link"><a href="#创建database-link" class="headerlink" title="创建database link"></a>创建database link</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> <span class="keyword">link</span> LCIMS80_GZ_dblink</span><br><span class="line"><span class="keyword">connect</span> <span class="keyword">to</span> absadmin <span class="keyword">identified</span> <span class="keyword">by</span> imsadmin32</span><br><span class="line"><span class="keyword">USING</span> <span class="string">'LCIMS80ZHU'</span>;</span><br><span class="line"><span class="keyword">commit</span>;</span><br></pre></td></tr></table></figure>
 <h2 id="创建物化视图"><a href="#创建物化视图" class="headerlink" title="创建物化视图"></a>创建物化视图</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">MATERIALIZED</span> <span class="keyword">VIEW</span> m_customer</span><br><span class="line"><span class="keyword">ON</span> <span class="keyword">PREBUILT</span> <span class="keyword">TABLE</span> </span><br><span class="line"><span class="keyword">REFRESH</span> <span class="keyword">FORCE</span> </span><br><span class="line"><span class="keyword">WITH</span> PRIMARY <span class="keyword">KEY</span> </span><br><span class="line"><span class="keyword">AS</span> <span class="keyword">SELECT</span> * </span><br><span class="line">	<span class="keyword">FROM</span> m_customer@LCIMS80_GZ_DBLINK;</span><br></pre></td></tr></table></figure>
 <h2 id="创建物化视图日志（LCIMS80ZHU）"><a href="#创建物化视图日志（LCIMS80ZHU）" class="headerlink" title="创建物化视图日志（LCIMS80ZHU）"></a>创建物化视图日志（LCIMS80ZHU）</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">MATERIALIZED</span> <span class="keyword">VIEW</span> <span class="keyword">LOG</span> <span class="keyword">ON</span> m_customer <span class="keyword">WITH</span>  <span class="keyword">ROWID</span>;</span><br></pre></td></tr></table></figure>
 <h2 id="进行完整刷新"><a href="#进行完整刷新" class="headerlink" title="进行完整刷新"></a>进行完整刷新</h2><pre><code>sqlplus absadmin/imsadmin61@LCIMS80BAK &lt;&lt;!
-    exec dbms_mview.refresh(&apos;M_CUSTOMER&apos;,&apos;C&apos;)
+    exec dbms_mview.refresh(&#39;M_CUSTOMER&#39;,&#39;C&#39;)
     quit
-！</code></pre><h2 id="定时任务进行增量刷新"><a href="#定时任务进行增量刷新" class="headerlink" title="定时任务进行增量刷新"></a>定时任务进行增量刷新</h2><pre><code>sqlplus absadmin/imsadmin61@LCIMS80BAK &lt;&lt;!
-    exec dbms_mview.refresh(&apos;M_CUSTOMER$,&apos;F&apos;)
+！
+</code></pre><h2 id="定时任务进行增量刷新"><a href="#定时任务进行增量刷新" class="headerlink" title="定时任务进行增量刷新"></a>定时任务进行增量刷新</h2><pre><code>sqlplus absadmin/imsadmin61@LCIMS80BAK &lt;&lt;!
+    exec dbms_mview.refresh(&#39;M_CUSTOMER$,&#39;F&#39;)
     quit
-！</code></pre><h1 id="补充使用"><a href="#补充使用" class="headerlink" title="补充使用"></a>补充使用</h1><h2 id="查看物化视图及日志"><a href="#查看物化视图及日志" class="headerlink" title="查看物化视图及日志"></a>查看物化视图及日志</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> DBA_MVIEWS;</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> DBA_MVIEW_LOGS;</span><br></pre></td></tr></table></figure>
+！
+</code></pre><h1 id="补充使用"><a href="#补充使用" class="headerlink" title="补充使用"></a>补充使用</h1><h2 id="查看物化视图及日志"><a href="#查看物化视图及日志" class="headerlink" title="查看物化视图及日志"></a>查看物化视图及日志</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> DBA_MVIEWS;</span><br><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> DBA_MVIEW_LOGS;</span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -352,14 +357,14 @@ LCIMS80ZHU =
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Oracle/" rel="tag"># Oracle</a>
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
+              <a href="/tags/数据库/" rel="tag"># 数据库</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%BD%93%E5%89%8DRedo-Log.html" rel="next" title="Oracle数据库的当前Redo Log">
+                <a href="/数据库/Oracle数据库的当前Redo-Log.html" rel="next" title="Oracle数据库的当前Redo Log">
                   <i class="fa fa-chevron-left"></i> Oracle数据库的当前Redo Log
                 </a>
             </div>
@@ -367,7 +372,7 @@ LCIMS80ZHU =
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E7%9A%84-exp-imp.html" rel="prev" title="Oracle的 exp/imp">
+                <a href="/数据库/Oracle的-exp-imp.html" rel="prev" title="Oracle的 exp/imp">
                   Oracle的 exp/imp <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -429,20 +434,20 @@ LCIMS80ZHU =
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -454,10 +459,10 @@ LCIMS80ZHU =
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -486,10 +491,10 @@ LCIMS80ZHU =
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -564,7 +569,7 @@ LCIMS80ZHU =
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E7%9A%84%E7%89%A9%E5%8C%96%E8%A7%86%E5%9B%BE.html",
+            url: "https://gowa.club/数据库/Oracle的物化视图.html",
             identifier: "数据库/Oracle的物化视图.html",
             title: "Oracle的物化视图"
           }

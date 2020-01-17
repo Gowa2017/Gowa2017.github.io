@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于建立Git服务器">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Git&#x2F;%E5%85%B3%E4%BA%8E%E5%BB%BA%E7%AB%8BGit%E6%9C%8D%E5%8A%A1%E5%99%A8.html">
+<meta property="og:url" content="https://gowa.club/Git/关于建立Git服务器.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="简单的记录一下使用 ssh 作为协议来建立 git 服务器的过程，然后对其不足进行一下研究，然后再探究一下当前比较好的 git 服务器的方案。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-12-19T15:15:54.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于建立Git服务器">
+<meta name="twitter:description" content="简单的记录一下使用 ssh 作为协议来建立 git 服务器的过程，然后对其不足进行一下研究，然后再探究一下当前比较好的 git 服务器的方案。">
 
-<link rel="canonical" href="https://gowa.club/Git/%E5%85%B3%E4%BA%8E%E5%BB%BA%E7%AB%8BGit%E6%9C%8D%E5%8A%A1%E5%99%A8.html">
+<link rel="canonical" href="https://gowa.club/Git/关于建立Git服务器.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/%E5%85%B3%E4%BA%8E%E5%BB%BA%E7%AB%8BGit%E6%9C%8D%E5%8A%A1%E5%99%A8.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/关于建立Git服务器.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Git/%E5%85%B3%E4%BA%8E%E5%BB%BA%E7%AB%8BGit%E6%9C%8D%E5%8A%A1%E5%99%A8.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Git/关于建立Git服务器.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Git/关于建立Git服务器.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,7 +294,6 @@
       
         <p>简单的记录一下使用 ssh 作为协议来建立 git 服务器的过程，然后对其不足进行一下研究，然后再探究一下当前比较好的 git 服务器的方案。</p>
 <a id="more"></a>
-
 <h1 id="SSH-作为协议来建立"><a href="#SSH-作为协议来建立" class="headerlink" title="SSH 作为协议来建立"></a>SSH 作为协议来建立</h1><p>大体分为几个步骤：</p>
 <ol>
 <li>git 初始化一个裸库。</li>
@@ -301,10 +302,8 @@
 </ol>
 <h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>一句命令即可</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git init --bare /opt/gitserver.git</span><br></pre></td></tr></table></figure>
-
 <h2 id="设置裸库权限"><a href="#设置裸库权限" class="headerlink" title="设置裸库权限"></a>设置裸库权限</h2><p>事实上这个是利用了操作系统的权限管理机制来进行的。我们将 gitserver.git 目录，给予用户 git，给予组 git ，然后将其他需要对此库进行操作的用户添加进组，就可以对此库进行操作了。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">chown git:git /opt/gitserver.git</span><br></pre></td></tr></table></figure>
-
 <p>默认情况下，系统文件的 umask 是 002 ，是组可写的，所以对其他用户加入 git 组就行了。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">useradd -G git -s /usr/bin/git-shell user1</span><br><span class="line">password user1</span><br></pre></td></tr></table></figure>
 <h2 id="使用私钥"><a href="#使用私钥" class="headerlink" title="使用私钥"></a>使用私钥</h2><p>我的做法是在 git 用户的 $HOME/.ssh/authorized_keys 里面放上用户的公钥即可</p>
@@ -316,13 +315,13 @@
 </ol>
 <p>第二个问题的解决办法是：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git init --bare --shared</span><br></pre></td></tr></table></figure>
-
 <p>或者：</p>
 <blockquote>
 <p>第二个办法是在主机上建立一个 git 账户，让每个需要写权限的人发送一个 SSH 公钥，然后将其加入 git 账户的 ~/.ssh/authorized_keys 文件。 这样一来，所有人都将通过 git 账户访问主机。 这一点也不会影响提交的数据——访问主机用的身份不会影响提交对象的提交者信息。</p>
 </blockquote>
 <h1 id="git-服务"><a href="#git-服务" class="headerlink" title="git 服务"></a>git 服务</h1><p>在 git-scm 网站上，推荐的是用 gitlab 进行本地的部署，比较灵活。</p>
 <p><a href="https://git-scm.com/book/zh/v2/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-GitLab" target="_blank" rel="noopener">https://git-scm.com/book/zh/v2/%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E7%9A%84-Git-GitLab</a></p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -339,7 +338,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Graphviz/%E5%87%A0%E7%A7%8D%E7%BB%98%E5%9B%BE%E8%AF%AD%E6%B3%95%E7%9A%84%E6%AF%94%E8%BE%83.html" rel="next" title="几种绘图语法的比较">
+                <a href="/Graphviz/几种绘图语法的比较.html" rel="next" title="几种绘图语法的比较">
                   <i class="fa fa-chevron-left"></i> 几种绘图语法的比较
                 </a>
             </div>
@@ -347,7 +346,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/macOS/%E4%BD%BF%E7%94%A8pandoc%E8%BD%AC%E6%8D%A2pdf%E5%8A%A0%E4%B8%8A%E4%B9%A6%E7%AD%BE%E7%9B%AE%E5%BD%95.html" rel="prev" title="使用pandoc转换pdf加上书签目录">
+                <a href="/macOS/使用pandoc转换pdf加上书签目录.html" rel="prev" title="使用pandoc转换pdf加上书签目录">
                   使用pandoc转换pdf加上书签目录 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -409,20 +408,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -434,10 +433,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -466,10 +465,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -544,7 +543,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Git/%E5%85%B3%E4%BA%8E%E5%BB%BA%E7%AB%8BGit%E6%9C%8D%E5%8A%A1%E5%99%A8.html",
+            url: "https://gowa.club/Git/关于建立Git服务器.html",
             identifier: "Git/关于建立Git服务器.html",
             title: "关于建立Git服务器"
           }

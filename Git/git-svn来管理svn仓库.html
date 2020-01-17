@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Svn,Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git-svn来管理svn仓库">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Git&#x2F;git-svn%E6%9D%A5%E7%AE%A1%E7%90%86svn%E4%BB%93%E5%BA%93.html">
+<meta property="og:url" content="https://gowa.club/Git/git-svn来管理svn仓库.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="个人是比较喜欢Git的，至于说svn与git熟优熟劣，这个见仁见智，不过对于代码管理而言，svn会省很多事情，但是对于分支开发来说，git确实要好用点。公司开始就使用svn，我也只能去习惯，所以我打算用git来管理svn代码。这不，看一下关于git-svn的文档来了解一下。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-08-03T04:44:57.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="git-svn来管理svn仓库">
+<meta name="twitter:description" content="个人是比较喜欢Git的，至于说svn与git熟优熟劣，这个见仁见智，不过对于代码管理而言，svn会省很多事情，但是对于分支开发来说，git确实要好用点。公司开始就使用svn，我也只能去习惯，所以我打算用git来管理svn代码。这不，看一下关于git-svn的文档来了解一下。">
 
-<link rel="canonical" href="https://gowa.club/Git/git-svn%E6%9D%A5%E7%AE%A1%E7%90%86svn%E4%BB%93%E5%BA%93.html">
+<link rel="canonical" href="https://gowa.club/Git/git-svn来管理svn仓库.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/git-svn%E6%9D%A5%E7%AE%A1%E7%90%86svn%E4%BB%93%E5%BA%93.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/git-svn来管理svn仓库.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Git/git-svn%E6%9D%A5%E7%AE%A1%E7%90%86svn%E4%BB%93%E5%BA%93.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Git/git-svn来管理svn仓库.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Git/git-svn来管理svn仓库.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,33 +294,32 @@
       
         <p>个人是比较喜欢Git的，至于说svn与git熟优熟劣，这个见仁见智，不过对于代码管理而言，svn会省很多事情，但是对于分支开发来说，git确实要好用点。公司开始就使用svn，我也只能去习惯，所以我打算用git来管理svn代码。这不，看一下关于git-svn的文档来了解一下。</p>
 <a id="more"></a>
-
 <p>本页面原文：<a href="https://git-scm.com/docs/git-svn#git-svn-svnuseSvmProps" target="_blank" rel="noopener">https://git-scm.com/docs/git-svn#git-svn-svnuseSvmProps</a></p>
 <h1 id="git-svn-命令描述"><a href="#git-svn-命令描述" class="headerlink" title="git svn 命令描述"></a>git svn 命令描述</h1><p><code>git svn</code>是 git 与 svn 之间的转换通道。其在git,svn之间提供了一个双向的通道。</p>
-<p><code>git svn</code> 可以跟踪一个标准的 遵循 <em>trunk/branches/tags</em> 布局结构的svn 版本库（通过 –stdlayout 选项指定）。其也可以跟踪其他以 <code>-T/-t/-b</code>指定的布局。在下面的<code>init</code>命令我们会看到。</p>
+<p><code>git svn</code> 可以跟踪一个标准的 遵循 <em>trunk/branches/tags</em> 布局结构的svn 版本库（通过 —stdlayout 选项指定）。其也可以跟踪其他以 <code>-T/-t/-b</code>指定的布局。在下面的<code>init</code>命令我们会看到。</p>
 <p>一旦 跟踪了一个版本库后，本地的Git版本库就可以 <code>fetch</code> 从svn 库拖代码下来，而svn版本库可以通过git命令 <code>dcommit</code> 命令进行更新。</p>
-<h1 id="使用参考"><a href="#使用参考" class="headerlink" title="使用参考"></a>使用参考</h1><h2 id="init"><a href="#init" class="headerlink" title="init"></a><strong>init</strong></h2><p>初始化一个空的Git版本库，但会有额外的 <code>git svn</code>需要的元数据。svn版本库的URL可以被当做一个命令行参数传递，或作为 <code>-T/-t/-b</code> 的参数。可选地，目标目录可以被指定为第二个命令行参数。通常，这个命令初始化当前目录。<br><strong>-T&lt;trunk_subdir&gt;<br>–trunk=&lt;trunk_subdir&gt;<br>-t&lt;tags_subdir&gt;<br>–tags=&lt;tags_subdir&gt;<br>-b&lt;branches_subdir&gt;<br>–branches=&lt;branches_subdir&gt;</strong><br><strong>-s, –stdlayout</strong><br>上面这些参数对于<code>init</code>来说都是可选的。这其中的每个参数都可指向相对于版本库内的相对路径（<em>–tags=project/tags*），或者一个完整地址（</em>–tags=<a href="https://foo.org/project/tags*）。" target="_blank" rel="noopener">https://foo.org/project/tags*）。</a> 当svn版本库将 tags 或 branches放到多个路径时，可以指定一个或多个 <code>--tags, --branchs</code>。<code>--stdlayout</code>是把 <code>tags,branches,trunk</code>设置为相对路径（svn默认方式）的简写。其他选项的优先级高于<code>--stdlayout</code>。  当<code>init</code>执行后，在<em>.git/config</em>文件内，会有一个 <code>svn-remote</code>的节点。</p>
+<h1 id="使用参考"><a href="#使用参考" class="headerlink" title="使用参考"></a>使用参考</h1><h2 id="init"><a href="#init" class="headerlink" title="init"></a><strong>init</strong></h2><p>初始化一个空的Git版本库，但会有额外的 <code>git svn</code>需要的元数据。svn版本库的URL可以被当做一个命令行参数传递，或作为 <code>-T/-t/-b</code> 的参数。可选地，目标目录可以被指定为第二个命令行参数。通常，这个命令初始化当前目录。<br><strong>-T\<trunk\_subdir><br>—trunk=\<trunk\_subdir><br>-t\<tags\_subdir><br>—tags=\<tags\_subdir><br>-b\<branches\_subdir><br>—branches=\<branches\_subdir></branches\_subdir></branches\_subdir></tags\_subdir></tags\_subdir></trunk\_subdir></trunk\_subdir></strong><br><strong>-s, —stdlayout</strong><br>上面这些参数对于<code>init</code>来说都是可选的。这其中的每个参数都可指向相对于版本库内的相对路径（<em>—tags=project/tags</em>），或者一个完整地址（<em>—tags=<a href="https://foo.org/project/tags" target="_blank" rel="noopener">https://foo.org/project/tags</a></em>）。 当svn版本库将 tags 或 branches放到多个路径时，可以指定一个或多个 <code>--tags, --branchs</code>。<code>--stdlayout</code>是把 <code>tags,branches,trunk</code>设置为相对路径（svn默认方式）的简写。其他选项的优先级高于<code>--stdlayout</code>。  当<code>init</code>执行后，在<em>.git/config</em>文件内，会有一个 <code>svn-remote</code>的节点。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[svn-remote &quot;svn&quot;]</span><br><span class="line">        url = svn://guan.isum.cn/smart/nanming/code/smartpeople/android/SmartConsumer</span><br><span class="line">        fetch = :refs/remotes/git-svn</span><br></pre></td></tr></table></figure>
-<p><strong>–no-metadata</strong> 在上面的节点内设置 <em>noMetadata</em> 选项。一个不推荐的设置。阅读本页面的 <code>svn.noMetadata</code> 一节的内容来查看更多细节。</p>
-<p><strong>–use-svm-props</strong><br>Set the useSvmProps option in the [svn-remote] config.</p>
-<p><strong>–use-svnsync-props</strong><br>Set the useSvnsyncProps option in the [svn-remote] config.</p>
-<p><strong>–rewrite-root=&lt;URL&gt;</strong><br>Set the rewriteRoot option in the [svn-remote] config.</p>
-<p><strong>–rewrite-uuid=&lt;UUID&gt;</strong><br>Set the rewriteUUID option in the [svn-remote] config.</p>
-<p><strong>–username=&lt;user&gt;</strong> 为传递需要svn处理的认证信息，指定用户名。对于其他传输（如 ssh+svn），必须在URL内包含用户名。</p>
-<p><strong>–prefix=&lt;prefix&gt;</strong>  如果指定了<em>trunk/branches/tags</em>，此选项允许指定一个放在远程地址前的前缀。这个前缀不会自动包含一个<code>/</code>，需要我们手动加上。如果<code>--branches/-b</code>已经指定，那么这个前缀必须包含一个拖尾的<code>/</code>。强烈建议在任何时候都使用带有<code>/</code>的前缀，这样SVN跟踪的引用会被定位到<code>refs/remotes/$prefix/</code>，这与git本身的对于远程跟踪引用的布局兼容<code>refs/remotes/$remote/</code>。对于在同一个共用的资源库内跟踪多个不同的项目时使用一个前缀也很有用。默认情况下， 前缀设置为 <code>origin/</code>。</p>
+<p><strong>—no-metadata</strong> 在上面的节点内设置 <em>noMetadata</em> 选项。一个不推荐的设置。阅读本页面的 <code>svn.noMetadata</code> 一节的内容来查看更多细节。</p>
+<p><strong>—use-svm-props</strong><br>Set the useSvmProps option in the [svn-remote] config.</p>
+<p><strong>—use-svnsync-props</strong><br>Set the useSvnsyncProps option in the [svn-remote] config.</p>
+<p><strong>—rewrite-root=\<url></url></strong><br>Set the rewriteRoot option in the [svn-remote] config.</p>
+<p><strong>—rewrite-uuid=\<uuid></uuid></strong><br>Set the rewriteUUID option in the [svn-remote] config.</p>
+<p><strong>—username=\<user></user></strong> 为传递需要svn处理的认证信息，指定用户名。对于其他传输（如 ssh+svn），必须在URL内包含用户名。</p>
+<p><strong>—prefix=\<prefix></prefix></strong>  如果指定了<em>trunk/branches/tags</em>，此选项允许指定一个放在远程地址前的前缀。这个前缀不会自动包含一个<code>/</code>，需要我们手动加上。如果<code>--branches/-b</code>已经指定，那么这个前缀必须包含一个拖尾的<code>/</code>。强烈建议在任何时候都使用带有<code>/</code>的前缀，这样SVN跟踪的引用会被定位到<code>refs/remotes/$prefix/</code>，这与git本身的对于远程跟踪引用的布局兼容<code>refs/remotes/$remote/</code>。对于在同一个共用的资源库内跟踪多个不同的项目时使用一个前缀也很有用。默认情况下， 前缀设置为 <code>origin/</code>。</p>
 <blockquote>
 <p>在git 2.0前，默认的前缀是 <code>&quot;&quot;</code>（无前缀）。这就意味着SVN跟踪的引用是放在<code>refs/remotes/*</code>，这与现在的git自身的跟踪布局并不兼容。如果为了与以前的模式相兼容的话，传递一个空的前缀<code>&quot;&quot;</code>。</p>
 </blockquote>
-<p><strong>–ignore-refs=&lt;regex&gt;</strong> 当把这个表达式传递给 <code>clone, init</code>时，这个表达式会被保留为一个配置使用的键。查看 <code>fetch</code> 一节中关于 <em>–ignore-refs</em>的描述。</p>
-<p><strong>–ignore-paths=&lt;regex&gt;</strong> 描述同上，具体作用查看后面的章节。</p>
-<p><strong>–include-paths=&lt;regex&gt;</strong> 描述同上，具体作用查看后面的章节。</p>
-<p><strong>–no-minimize-url</strong> 当跟踪多个目录时（通过 <code>--stdlayout, --branches, --tags选项</code>），<code>git svn</code>会尝试连接到svn库的根目录下。这种方式在整个库都被移动的时候对于跟踪历史信息很有用，但在读权限限制的时候这可能会出现些问题。<code>--no-minimize-url</code>可以取消这个默认的做法。默认情况下这个选项是关闭的。</p>
-<h2 id="fetch"><a href="#fetch" class="headerlink" title="fetch"></a><strong>fetch</strong></h2><p>从版本库拉取我们跟踪，但是本地没有的代码。这个操作会根据需要自动更新<em>rev_map<em>。（在后面的 File 一节查看 *$GIT_DIR/svn/</em>\</em>/.rev_map.**）</p>
-<p><strong>–localtime</strong> 以本地时区来存储 commint 时间，而不是以UTC时间。这会让 <code>git log</code>（即使没有 <code>date=local</code>）也会显示来与 <code>svn log</code>时间一致（svn log 使用的是本地时区时间）。</p>
-<p><strong>–parent</strong> 只从版本库获取当前 HEAD。<br><strong>–ignore-refs=&lt;regex&gt;</strong> 忽略匹配这个给定的表达式的tags或 branches。 <code>^refs/remotes/origin/(?!tags/wanted-tag|wanted-branch).*$</code> 可以用来允许指定的引用。</p>
+<p><strong>—ignore-refs=\<regex></regex></strong> 当把这个表达式传递给 <code>clone, init</code>时，这个表达式会被保留为一个配置使用的键。查看 <code>fetch</code> 一节中关于 <em>—ignore-refs</em>的描述。</p>
+<p><strong>—ignore-paths=\<regex\></regex\></strong> 描述同上，具体作用查看后面的章节。</p>
+<p><strong>—include-paths=\<regex></regex></strong> 描述同上，具体作用查看后面的章节。</p>
+<p><strong>—no-minimize-url</strong> 当跟踪多个目录时（通过 <code>--stdlayout, --branches, --tags选项</code>），<code>git svn</code>会尝试连接到svn库的根目录下。这种方式在整个库都被移动的时候对于跟踪历史信息很有用，但在读权限限制的时候这可能会出现些问题。<code>--no-minimize-url</code>可以取消这个默认的做法。默认情况下这个选项是关闭的。</p>
+<h2 id="fetch"><a href="#fetch" class="headerlink" title="fetch"></a><strong>fetch</strong></h2><p>从版本库拉取我们跟踪，但是本地没有的代码。这个操作会根据需要自动更新<em>rev_map</em>。（在后面的 File 一节查看 <em>$GIT_DIR/svn/</em>*/.rev_map.**）</p>
+<p><strong>—localtime</strong> 以本地时区来存储 commint 时间，而不是以UTC时间。这会让 <code>git log</code>（即使没有 <code>date=local</code>）也会显示来与 <code>svn log</code>时间一致（svn log 使用的是本地时区时间）。</p>
+<p><strong>—parent</strong> 只从版本库获取当前 HEAD。<br><strong>—ignore-refs=\<regex></regex></strong> 忽略匹配这个给定的表达式的tags或 branches。 <code>^refs/remotes/origin/(?!tags/wanted-tag|wanted-branch).*$</code> 可以用来允许指定的引用。</p>
 <p><code>config key: svn-remote.&lt;name&gt;.ignore-refs</code></p>
 <p>如果 忽略引用的键已经设置，同事命令行参数也有指定，那么两个地方的值都会被使用。</p>
-<p><strong>–ignore-paths=&lt;regex&gt;</strong> 每次都会忽略这个选项指定的路径。</p>
+<p><strong>—ignore-paths=\<regex></regex></strong> 每次都会忽略这个选项指定的路径。</p>
 <p><code>config key: svn-remote.&lt;name&gt;.ignore-paths</code></p>
 <p>这个选项在命令行和配置文件内指定都有。</p>
 <h2 id="clone"><a href="#clone" class="headerlink" title="clone"></a><strong>clone</strong></h2><p>相当于 <code>init</code> 后执行  <code>fetch</code>命令</p>
@@ -327,57 +328,56 @@
 <p>此命令接受所有 <code>git svn fetch， git rebase</code>接受的选项。然而，<code>--fetch-all</code>只会从当前的 [svn-remote]节点获取，而不是所有的 [svn-remote]节点。</p>
 <p>和 <code>git rebase</code>类似，这个操作要求工作树是干净的，同时没有任何为提交的变更。</p>
 <p>如果有必要的话，这个操作会自动的更新 <em>rev_map</em>。</p>
-<p><strong>-l, –local</strong> 不从远程获取；只是在之前从 SVN 库内获取的最新 提交上执行 <code>git rebase</code>。</p>
+<p><strong>-l, —local</strong> 不从远程获取；只是在之前从 SVN 库内获取的最新 提交上执行 <code>git rebase</code>。</p>
 <h2 id="dcommit"><a href="#dcommit" class="headerlink" title="dcommit"></a><strong>dcommit</strong></h2><p>把当前分支上的不同直接提交到 SVN 库内，接着会 rebase 或 reset（这依赖于SVN和head间是否有变更）。git中的每个commit都会在svn中创建一个 revision。</p>
 <p>当一个可选的 git 分支名称（或一个 git 提交对象名称）指定的时候，下面的子命令工作在对应的分支上，而不是工作在当前分支上。</p>
-<p><strong>–no-rebase</strong> 在提交后，不要 <code>rebase or reset</code>。</p>
-<p><strong>–commit-url &lt;URL&gt;</strong></p>
+<p><strong>—no-rebase</strong> 在提交后，不要 <code>rebase or reset</code>。</p>
+<p><strong>—commit-url \<url></url></strong></p>
 <h2 id="branch"><a href="#branch" class="headerlink" title="branch"></a><strong>branch</strong></h2><p>在SVN内创建一个分支。</p>
-<p><strong>-m, –message</strong> 提交一个描述信息。</p>
-<p><strong>-t, –tag</strong> 使用 <em>tags_subdir</em> 而不是 <em>branches_subdir</em>来建立一个tag（这两个dir都是在 init 命令中指定的）。</p>
-<p><strong>-d&lt;path&gt;,–destination=&lt;path&gt;</strong> 在<code>init, clone</code>的时候，如果指定了多于一个的 <em>–branches, –tags</em>，必须要指定要创建分支（标签）的位置。用以下命令可以查看所有引用的分支或标签：</p>
+<p><strong>-m, —message</strong> 提交一个描述信息。</p>
+<p><strong>-t, —tag</strong> 使用 <em>tags_subdir</em> 而不是 <em>branches_subdir</em>来建立一个tag（这两个dir都是在 init 命令中指定的）。</p>
+<p><strong>-d\<path>,—destination=\<path></path></path></strong> 在<code>init, clone</code>的时候，如果指定了多于一个的 <em>—branches, —tags</em>，必须要指定要创建分支（标签）的位置。用以下命令可以查看所有引用的分支或标签：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git config --get-all svn-remote.&lt;name&gt;.branches</span><br><span class="line">git config --get-all svn-remote.&lt;name&gt;.tags</span><br></pre></td></tr></table></figure>
-
-<p>其中 <em>&lt;name&gt;</em> 是 SVN 版本库的名称，在<code>init</code>的时候，由 <code>-R</code>指定（默认情况下是 <code>svn</code>）。</p>
-<p><strong>–username</strong> 指定本次提交的用户名。</p>
-<p><strong>–commit-url</strong><br>Use the specified URL to connect to the destination Subversion repository. This is useful in cases where the source SVN repository is read-only. This option overrides configuration property commiturl.</p>
+<p>其中 <em>\<name></name></em> 是 SVN 版本库的名称，在<code>init</code>的时候，由 <code>-R</code>指定（默认情况下是 <code>svn</code>）。</p>
+<p><strong>—username</strong> 指定本次提交的用户名。</p>
+<p><strong>—commit-url</strong><br>Use the specified URL to connect to the destination Subversion repository. This is useful in cases where the source SVN repository is read-only. This option overrides configuration property commiturl.</p>
 <p><code>git config --get-all svn-remote.&lt;name&gt;.commiturl</code></p>
-<p><strong>–parents</strong><br>Create parent folders. This parameter is equivalent to the parameter –parents on svn cp commands and is useful for non-standard repository layouts.</p>
+<p><strong>—parents</strong><br>Create parent folders. This parameter is equivalent to the parameter —parents on svn cp commands and is useful for non-standard repository layouts.</p>
 <h2 id="tag"><a href="#tag" class="headerlink" title="tag"></a><strong>tag</strong></h2><p>创建标签，这个等于 <code>branch -t</code></p>
 <h2 id="log"><a href="#log" class="headerlink" title="log"></a><strong>log</strong></h2><p>查看日志。对于 <code>svn log</code> 命令的特性被支持：</p>
-<p><strong>-r &lt;n&gt;[:&lt;n&gt;],–revision=&lt;n&gt;[:&lt;n&gt;]</strong> 还有些非数字的参数：<em>HEAD, NEXT, BASE, PREV</em>。</p>
-<p><strong>–limit=&lt;n&gt;</strong>  </p>
-<p><strong>–incremental</strong></p>
+<p><strong>-r \<n>[:\<n>],—revision=\<n>[:\<n>]</n></n></n></n></strong> 还有些非数字的参数：<em>HEAD, NEXT, BASE, PREV</em>。</p>
+<p><strong>—limit=\<n></n></strong>  </p>
+<p><strong>—incremental</strong></p>
 <p>新特性：</p>
-<p><strong>–show-commit</strong></p>
-<p><strong>–oneline</strong></p>
+<p><strong>—show-commit</strong></p>
+<p><strong>—oneline</strong></p>
 <h2 id="blame"><a href="#blame" class="headerlink" title="blame"></a><strong>blame</strong></h2><h2 id="find-rev"><a href="#find-rev" class="headerlink" title="find-rev"></a><strong>find-rev</strong></h2><h2 id="set-tree"><a href="#set-tree" class="headerlink" title="set-tree"></a><strong>set-tree</strong></h2><h2 id="create-ignore"><a href="#create-ignore" class="headerlink" title="create-ignore"></a><strong>create-ignore</strong></h2><h2 id="show-ignore"><a href="#show-ignore" class="headerlink" title="show-ignore"></a><strong>show-ignore</strong></h2><h2 id="mkdirs"><a href="#mkdirs" class="headerlink" title="mkdirs"></a><strong>mkdirs</strong></h2><h2 id="commit-diff"><a href="#commit-diff" class="headerlink" title="commit-diff"></a><strong>commit-diff</strong></h2><h2 id="info"><a href="#info" class="headerlink" title="info"></a><strong>info</strong></h2><h2 id="proplist"><a href="#proplist" class="headerlink" title="proplist"></a><strong>proplist</strong></h2><h2 id="propget"><a href="#propget" class="headerlink" title="propget"></a><strong>propget</strong></h2><h2 id="propset"><a href="#propset" class="headerlink" title="propset"></a><strong>propset</strong></h2><h2 id="show-externals"><a href="#show-externals" class="headerlink" title="show-externals"></a><strong>show-externals</strong></h2><h2 id="gc"><a href="#gc" class="headerlink" title="gc"></a><strong>gc</strong></h2><h2 id="reset"><a href="#reset" class="headerlink" title="reset"></a><strong>reset</strong></h2><h1 id="选项"><a href="#选项" class="headerlink" title="选项"></a>选项</h1><ul>
-<li><strong>–shared[=(false|true|umask|group|all|world|everybody)]</strong></li>
-<li><strong>–template=<template_directory></strong></li>
-<li><strong>-r <arg>, –revision <arg></strong></li>
+<li><strong>—shared[=(false|true|umask|group|all|world|everybody)]</strong></li>
+<li><strong>—template=<template_directory></template_directory></strong></li>
+<li><strong>-r <arg>, —revision <arg></arg></arg></strong></li>
 <li><strong>-stdin</strong></li>
-<li><strong>–rmdir</strong></li>
-<li><strong>-e, –edit</strong></li>
-<li><strong>-l num, –find-copies-harder</strong></li>
-<li><strong>-A <filename>, –authors-file=<filename></strong></li>
-<li><strong>–authors-prog=<filename></strong></li>
-<li><strong>-q, –quiet</strong></li>
-<li><strong>-m, –merge</strong></li>
-<li><strong>-s<strategy>, –strategy=<stragety></strong></li>
-<li><strong>-p, –preserve-merges</strong></li>
-<li><strong>-n, –dry-run</strong></li>
-<li><strong>–use-log-author</strong></li>
-<li><strong>–add-author-from</strong></li>
+<li><strong>—rmdir</strong></li>
+<li><strong>-e, —edit</strong></li>
+<li><strong>-l num, —find-copies-harder</strong></li>
+<li><strong>-A <filename>, —authors-file=<filename></filename></filename></strong></li>
+<li><strong>—authors-prog=<filename></filename></strong></li>
+<li><strong>-q, —quiet</strong></li>
+<li><strong>-m, —merge</strong></li>
+<li><strong>-s<strategy>, —strategy=<stragety></stragety></strategy></strong></li>
+<li><strong>-p, —preserve-merges</strong></li>
+<li><strong>-n, —dry-run</strong></li>
+<li><strong>—use-log-author</strong></li>
+<li><strong>—add-author-from</strong></li>
 </ul>
 <h1 id="高级选项"><a href="#高级选项" class="headerlink" title="高级选项"></a>高级选项</h1><ul>
-<li><strong>-i<GIT_SVN_ID>, –id <GIT_SVN_ID></strong></li>
-<li><strong>-R<remote name>, –svn-remote <remote name></strong></li>
-<li><strong>–follow-parent</strong></li>
+<li><strong>-i<git_svn_id>, —id <git_svn_id></git_svn_id></git_svn_id></strong></li>
+<li><strong>-R<remote name>, —svn-remote <remote name></remote></remote></strong></li>
+<li><strong>—follow-parent</strong></li>
 </ul>
 <h1 id="CONFIG-FILE-ONLY-OPTIONS"><a href="#CONFIG-FILE-ONLY-OPTIONS" class="headerlink" title="CONFIG FILE-ONLY OPTIONS"></a>CONFIG FILE-ONLY OPTIONS</h1><ul>
-<li><strong>svn.noMetadata, svn-remote.<name>.noMetadata</strong></li>
+<li><strong>svn.noMetadata, svn-remote.<name>.noMetadata</name></strong></li>
 </ul>
-<h1 id="BASIC-EXAMPLES"><a href="#BASIC-EXAMPLES" class="headerlink" title="BASIC EXAMPLES"></a>BASIC EXAMPLES</h1><h1 id="HANDLING-OF-SVN-BRANCHES"><a href="#HANDLING-OF-SVN-BRANCHES" class="headerlink" title="HANDLING OF SVN BRANCHES"></a>HANDLING OF SVN BRANCHES</h1><h1 id="CAVEATS"><a href="#CAVEATS" class="headerlink" title="CAVEATS"></a>CAVEATS</h1><h1 id="BUGS"><a href="#BUGS" class="headerlink" title="BUGS"></a>BUGS</h1><h1 id="CONFIGURATION"><a href="#CONFIGURATION" class="headerlink" title="CONFIGURATION"></a>CONFIGURATION</h1><h1 id="FILES"><a href="#FILES" class="headerlink" title="FILES"></a>FILES</h1>
+<h1 id="BASIC-EXAMPLES"><a href="#BASIC-EXAMPLES" class="headerlink" title="BASIC EXAMPLES"></a>BASIC EXAMPLES</h1><h1 id="HANDLING-OF-SVN-BRANCHES"><a href="#HANDLING-OF-SVN-BRANCHES" class="headerlink" title="HANDLING OF SVN BRANCHES"></a>HANDLING OF SVN BRANCHES</h1><h1 id="CAVEATS"><a href="#CAVEATS" class="headerlink" title="CAVEATS"></a>CAVEATS</h1><h1 id="BUGS"><a href="#BUGS" class="headerlink" title="BUGS"></a>BUGS</h1><h1 id="CONFIGURATION"><a href="#CONFIGURATION" class="headerlink" title="CONFIGURATION"></a>CONFIGURATION</h1><h1 id="FILES"><a href="#FILES" class="headerlink" title="FILES"></a>FILES<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></h1>
     </div>
 
     
@@ -394,7 +394,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/ssh%E4%BB%A3%E7%90%86%E9%9A%A7%E9%81%93.html" rel="next" title="ssh代理隧道">
+                <a href="/Linux-Unix/ssh代理隧道.html" rel="next" title="ssh代理隧道">
                   <i class="fa fa-chevron-left"></i> ssh代理隧道
                 </a>
             </div>
@@ -402,7 +402,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/android%E4%B8%AD%E7%9A%84canvas%E4%BD%BF%E7%94%A8.html" rel="prev" title="android中的canvas使用">
+                <a href="/Android/android中的canvas使用.html" rel="prev" title="android中的canvas使用">
                   android中的canvas使用 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -450,7 +450,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git-svn-命令描述"><span class="nav-number">1.</span> <span class="nav-text">git svn 命令描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用参考"><span class="nav-number">2.</span> <span class="nav-text">使用参考</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#init"><span class="nav-number">2.1.</span> <span class="nav-text">init</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fetch"><span class="nav-number">2.2.</span> <span class="nav-text">fetch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clone"><span class="nav-number">2.3.</span> <span class="nav-text">clone</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rebase"><span class="nav-number">2.4.</span> <span class="nav-text">rebase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dcommit"><span class="nav-number">2.5.</span> <span class="nav-text">dcommit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#branch"><span class="nav-number">2.6.</span> <span class="nav-text">branch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tag"><span class="nav-number">2.7.</span> <span class="nav-text">tag</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#log"><span class="nav-number">2.8.</span> <span class="nav-text">log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#blame"><span class="nav-number">2.9.</span> <span class="nav-text">blame</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#find-rev"><span class="nav-number">2.10.</span> <span class="nav-text">find-rev</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set-tree"><span class="nav-number">2.11.</span> <span class="nav-text">set-tree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#create-ignore"><span class="nav-number">2.12.</span> <span class="nav-text">create-ignore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#show-ignore"><span class="nav-number">2.13.</span> <span class="nav-text">show-ignore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mkdirs"><span class="nav-number">2.14.</span> <span class="nav-text">mkdirs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#commit-diff"><span class="nav-number">2.15.</span> <span class="nav-text">commit-diff</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#info"><span class="nav-number">2.16.</span> <span class="nav-text">info</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#proplist"><span class="nav-number">2.17.</span> <span class="nav-text">proplist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#propget"><span class="nav-number">2.18.</span> <span class="nav-text">propget</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#propset"><span class="nav-number">2.19.</span> <span class="nav-text">propset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#show-externals"><span class="nav-number">2.20.</span> <span class="nav-text">show-externals</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gc"><span class="nav-number">2.21.</span> <span class="nav-text">gc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reset"><span class="nav-number">2.22.</span> <span class="nav-text">reset</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#选项"><span class="nav-number">3.</span> <span class="nav-text">选项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高级选项"><span class="nav-number">4.</span> <span class="nav-text">高级选项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CONFIG-FILE-ONLY-OPTIONS"><span class="nav-number">5.</span> <span class="nav-text">CONFIG FILE-ONLY OPTIONS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BASIC-EXAMPLES"><span class="nav-number">6.</span> <span class="nav-text">BASIC EXAMPLES</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HANDLING-OF-SVN-BRANCHES"><span class="nav-number">7.</span> <span class="nav-text">HANDLING OF SVN BRANCHES</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CAVEATS"><span class="nav-number">8.</span> <span class="nav-text">CAVEATS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BUGS"><span class="nav-number">9.</span> <span class="nav-text">BUGS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CONFIGURATION"><span class="nav-number">10.</span> <span class="nav-text">CONFIGURATION</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FILES"><span class="nav-number">11.</span> <span class="nav-text">FILES</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git-svn-命令描述"><span class="nav-number">1.</span> <span class="nav-text">git svn 命令描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用参考"><span class="nav-number">2.</span> <span class="nav-text">使用参考</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#init"><span class="nav-number">2.1.</span> <span class="nav-text">init</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fetch"><span class="nav-number">2.2.</span> <span class="nav-text">fetch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clone"><span class="nav-number">2.3.</span> <span class="nav-text">clone</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rebase"><span class="nav-number">2.4.</span> <span class="nav-text">rebase</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dcommit"><span class="nav-number">2.5.</span> <span class="nav-text">dcommit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#branch"><span class="nav-number">2.6.</span> <span class="nav-text">branch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tag"><span class="nav-number">2.7.</span> <span class="nav-text">tag</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#log"><span class="nav-number">2.8.</span> <span class="nav-text">log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#blame"><span class="nav-number">2.9.</span> <span class="nav-text">blame</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#find-rev"><span class="nav-number">2.10.</span> <span class="nav-text">find-rev</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set-tree"><span class="nav-number">2.11.</span> <span class="nav-text">set-tree</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#create-ignore"><span class="nav-number">2.12.</span> <span class="nav-text">create-ignore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#show-ignore"><span class="nav-number">2.13.</span> <span class="nav-text">show-ignore</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mkdirs"><span class="nav-number">2.14.</span> <span class="nav-text">mkdirs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#commit-diff"><span class="nav-number">2.15.</span> <span class="nav-text">commit-diff</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#info"><span class="nav-number">2.16.</span> <span class="nav-text">info</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#proplist"><span class="nav-number">2.17.</span> <span class="nav-text">proplist</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#propget"><span class="nav-number">2.18.</span> <span class="nav-text">propget</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#propset"><span class="nav-number">2.19.</span> <span class="nav-text">propset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#show-externals"><span class="nav-number">2.20.</span> <span class="nav-text">show-externals</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gc"><span class="nav-number">2.21.</span> <span class="nav-text">gc</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reset"><span class="nav-number">2.22.</span> <span class="nav-text">reset</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#选项"><span class="nav-number">3.</span> <span class="nav-text">选项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#高级选项"><span class="nav-number">4.</span> <span class="nav-text">高级选项</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CONFIG-FILE-ONLY-OPTIONS"><span class="nav-number">5.</span> <span class="nav-text">CONFIG FILE-ONLY OPTIONS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BASIC-EXAMPLES"><span class="nav-number">6.</span> <span class="nav-text">BASIC EXAMPLES</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HANDLING-OF-SVN-BRANCHES"><span class="nav-number">7.</span> <span class="nav-text">HANDLING OF SVN BRANCHES</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CAVEATS"><span class="nav-number">8.</span> <span class="nav-text">CAVEATS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BUGS"><span class="nav-number">9.</span> <span class="nav-text">BUGS</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CONFIGURATION"><span class="nav-number">10.</span> <span class="nav-text">CONFIGURATION</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FILES"><span class="nav-number">11.</span> <span class="nav-text">FILESlet graphviz_engines = [&quot;circo&quot;,    &quot;dot&quot;,    &quot;fdp&quot;,    &quot;neato&quot;,    &quot;osage&quot;,    &quot;twopi&quot;];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);    for (let i = 0; i &lt; domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r =&gt; {            dom.innerHTML =&#39;&#39;;dom.append(r); });        } catch (e) {            console.error(&quot;Error when parsing node:&quot;, dom, e);        }    }}let init = function () {    for (let i = 0; i &lt; graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != &quot;undefined&quot;) {    window.addEventListener(&quot;load&quot;, init, false);} else {    window.attachEvent(&quot;onload&quot;, init);}</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -464,20 +464,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -489,10 +489,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -521,10 +521,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -599,7 +599,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Git/git-svn%E6%9D%A5%E7%AE%A1%E7%90%86svn%E4%BB%93%E5%BA%93.html",
+            url: "https://gowa.club/Git/git-svn来管理svn仓库.html",
             identifier: "Git/git-svn来管理svn仓库.html",
             title: "git-svn来管理svn仓库"
           }

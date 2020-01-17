@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mysql-Backup-and-Recovery 中文翻译">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;Mysql_backup_and_recovery-5.5.html">
+<meta property="og:url" content="https://gowa.club/数据库/Mysql_backup_and_recovery-5.5.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="本文来源于对Mysql 5.5官方手册的翻译版本，逐渐更新中。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-12-28T14:16:19.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mysql-Backup-and-Recovery 中文翻译">
+<meta name="twitter:description" content="本文来源于对Mysql 5.5官方手册的翻译版本，逐渐更新中。">
 
-<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql_backup_and_recovery-5.5.html">
+<link rel="canonical" href="https://gowa.club/数据库/Mysql_backup_and_recovery-5.5.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql_backup_and_recovery-5.5.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/Mysql_backup_and_recovery-5.5.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -259,7 +261,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql_backup_and_recovery-5.5.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/Mysql_backup_and_recovery-5.5.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/Mysql_backup_and_recovery-5.5.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,8 +292,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>本文来源于对Mysql 5.5官方手册的翻译版本，逐渐更新中。</p>
-<a id="more"></a>
+        <p>本文来源于对Mysql 5.5官方手册的翻译版本，逐渐更新中。<br><a id="more"></a></p>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>备份对于在出现系统崩溃、 硬件故障、错误删除数据等情况下进行数据恢复是非常重要的。同时，备份也可以作为升级的时候做一个数据保障，或者用来设置一个复制服务器。</p>
 <p>MySQL提供多种备份方式，你可以根据自己的需求来进行选择怎么备份。本章谈论几个你可能已经熟悉了的关于备份与恢复主题：</p>
 <ul>
@@ -348,8 +349,9 @@
 <p><strong>用mysqldump 或 mysqlhotcopy备份</strong></p>
 <p><strong>mysqldump</strong>可以备份任意类型的表，所以更为常用，而<strong>mysqlhotcopy</strong>只能备份某些存储引擎表。对于<code>InnoDB</code>表，通过<code>--single-transaction</code>选项可以实现在线无锁表的备份。</p>
 <p><strong>通过复制文件实现备份表</strong></p>
-<p>对于某些存储引擎类型的表，每个表使用其自己的数据文件，就可以使用复制文件的方式进行备份。<strong>MyISAM</strong>表就是以文件的形式进行存储的，所以很方便的就可以通过复制文件进行备份（<em>.frm, <em>.MYD, *.MYI文件）。为了获得一致性的备份，</em></em>停止服务器<strong>或者</strong>锁定办刷新要备份的表**：</p>
-<pre><code>FLUSH TABLES tbl_list WITH READ LOCK;</code></pre><p>只需要读锁；这样就允许其他客户端在你进行备份的时候继续查询数据库。<strong>刷新</strong>是必须的，这用来保证在备份之前所有活跃的索引页都被写入磁盘。</p>
+<p>对于某些存储引擎类型的表，每个表使用其自己的数据文件，就可以使用复制文件的方式进行备份。<strong>MyISAM</strong>表就是以文件的形式进行存储的，所以很方便的就可以通过复制文件进行备份（<em>.frm, </em>.MYD, <em>.MYI文件）。为了获得一致性的备份，<strong>停止服务器</strong>或者<em>*锁定办刷新要备份的表</em></em>：</p>
+<pre><code> FLUSH TABLES tbl_list WITH READ LOCK;
+</code></pre><p>只需要读锁；这样就允许其他客户端在你进行备份的时候继续查询数据库。<strong>刷新</strong>是必须的，这用来保证在备份之前所有活跃的索引页都被写入磁盘。</p>
 <p>我们也可以在服务器没有进行任何更新的时候复制所有的表文件来制造一个二进制备份。<strong>mysqlhotcopy</strong>就是这样做的。</p>
 <blockquote>
 <p>注意：在包含<strong>InnoDB</strong>表的时候，这样做是没有意义的。<strong>mysqlhotcopy</strong>无法在<code>InnoDB</code>表上工作，因为并不一定把数据存储在数据目录内。而且，尽管服务器没有更新数据，<code>InnoDB</code>依然可能有改变的数据在内存而还未写至磁盘。</p>
@@ -359,7 +361,7 @@
 <p>另外一个用来获得文本数据格式（包括<code>CREATE TABLE</code>语句）的方法是使用<strong>mysqldump</strong>加上<code>--tab</code>选项。</p>
 <p>为了重新载入一个文本格式的备份，使用<code>LOAD DATA INFILE</code>或者<strong>mysqlimport</strong>。</p>
 <p><strong>通过启用二进制日志获得增量备份</strong></p>
-<p>MySQL支持增量备份：必须为服务器开启<code>--log-bin</code>选项来启用二进制日志。二进制日志记录了所有的数据变化信息。在需要进行增量备份的时刻（包含所有自上次完整或增量备份以来的变化），我们可以用<code>FLUSH LOGS</code>来回转日志文件。这样，就可以把想要备份的文件复制到备份位置。这些二进制日志就是增量备份。至于在恢复的时候怎么使用，参考<strong>7.5 通过二进制日志进行时间点恢复</strong>。在下一次进行完整备份的时候，我们一样要回转日志，用<code>FLUSH LOGS</code>, <code>mysqldump --flush-logs</code>, <code>mysqlhotcopy --flushlog</code>。参考<strong>4.5.4 mysqldump–一个数据库备份程序</strong>， <strong>4.6.9 mysqlhotcopy– 一个数据库备份程序</strong>。</p>
+<p>MySQL支持增量备份：必须为服务器开启<code>--log-bin</code>选项来启用二进制日志。二进制日志记录了所有的数据变化信息。在需要进行增量备份的时刻（包含所有自上次完整或增量备份以来的变化），我们可以用<code>FLUSH LOGS</code>来回转日志文件。这样，就可以把想要备份的文件复制到备份位置。这些二进制日志就是增量备份。至于在恢复的时候怎么使用，参考<strong>7.5 通过二进制日志进行时间点恢复</strong>。在下一次进行完整备份的时候，我们一样要回转日志，用<code>FLUSH LOGS</code>, <code>mysqldump --flush-logs</code>, <code>mysqlhotcopy --flushlog</code>。参考<strong>4.5.4 mysqldump—一个数据库备份程序</strong>， <strong>4.6.9 mysqlhotcopy— 一个数据库备份程序</strong>。</p>
 <p><strong>通过复制进行备份</strong></p>
 <p>如果在进行主服务器备份的时候产生了性能问题，一个好的建议就是设置从服务器并且从服务器上进行备份操作。<strong>17.3.1 用复制来进行备份</strong>。</p>
 <p>在备份从服务器的时候，不管采用什么方式，也要备份<code>master.info</code>和<code>relay-log.info</code>文件。这些信息在你重新设置从服务器的时候总是需要的。如果在备份的时候，从服务器正在执行<code>LOAD DATA INFILE</code>语句，那就要备份所有的从服务器载入的文件，因为备份后从服务器需要用这些文件来重新进行载入以继续<code>LOAD DATA INFILE</code>操作。一般来说，这个文件的位置是在<code>tmpdir</code>系统变量中，或者由<code>--slave-load-tmpdir</code>选项在服务器启动时指定。</p>
@@ -386,11 +388,11 @@
 <p>假设，数据存储在<code>InnoDB</code>引擎，它支持事务和自动崩溃恢复。</p>
 <p>对于操作系统故障或者电源故障的情况，我们可以假设MySQL的磁盘数据在重启后是可用的。因为崩溃，<code>InnoDB</code>数据文件不一定包含一致的数据，但<code>InnoDB</code>会阅读其重做日志，并且找出那些没有并刷新到数据文件的挂起的提交事务和未提交的事务。<code>InnoDB</code>会自动回滚未提交的事务，刷新提交了的事务到数据文件。下面是一个可能的例子：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">InnoDB: Database was not shut down normally.</span><br><span class="line">InnoDB: Starting recovery from log files...</span><br><span class="line">InnoDB: Starting log scan based on checkpoint at</span><br><span class="line">InnoDB: log sequence number 0 13674004</span><br><span class="line">InnoDB: Doing recovery: scanned up to log sequence number 0 13739520</span><br><span class="line">InnoDB: Doing recovery: scanned up to log sequence number 0 13805056</span><br><span class="line">InnoDB: Doing recovery: scanned up to log sequence number 0 13870592</span><br><span class="line">InnoDB: Doing recovery: scanned up to log sequence number 0 13936128</span><br><span class="line">...</span><br><span class="line">InnoDB: Doing recovery: scanned up to log sequence number 0 20555264</span><br><span class="line">InnoDB: Doing recovery: scanned up to log sequence number 0 20620800</span><br><span class="line">InnoDB: Doing recovery: scanned up to log sequence number 0 20664692</span><br><span class="line">InnoDB: 1 uncommitted transaction(s) which must be rolled back</span><br><span class="line">InnoDB: Starting rollback of uncommitted transactions</span><br><span class="line">InnoDB: Rolling back trx no 16745</span><br><span class="line">InnoDB: Rolling back of trx no 16745 completed</span><br><span class="line">InnoDB: Rollback of uncommitted transactions completed</span><br><span class="line">InnoDB: Starting an apply batch of log records to the database...</span><br><span class="line">InnoDB: Apply batch completed</span><br><span class="line">InnoDB: Started</span><br><span class="line">mysqld: ready for connections</span><br></pre></td></tr></table></figure>
-
 <p>对于文件系统崩溃或者硬件问题，我们假设在服务器重启后，磁盘数据是不可用的。这就意味着MySQL会启动失败，因为部分磁盘块已经不可读。这样的情况下，只能重新格式化磁盘，或者解决硬件问题等。然后通过备份来进行恢复，这样就要求数据已经备份。那么，为了保证在这样的情况下不会丢失数据，设计和实现一个备份策略。</p>
 <h3 id="和备份策略通信"><a href="#和备份策略通信" class="headerlink" title="和备份策略通信"></a>和备份策略通信</h3><p>为了实用，备份必须是常规性的。一个完整备份（某一时间点的数据快照）可以用几个工具来做到。例如，MySQL Enterprise Backup可以对一个实例进行物理备份，然后进行优化以避免在备份<code>InnoDB</code>的时候出现中断；<strong>mysqldump</strong>提供在线的逻辑备份。这里我们用<code>mysqldump</code>进行讨论。</p>
 <p>假设我们要做一个对所有数据库的所有<code>InnoDB</code>表在星期1的下午1点进行一个完整备份：</p>
-<pre><code>shell&gt; mysqldump --single-transaction --all-databases &gt; backup_sunday_1_pm.sql</code></pre><p>生成的 *.sql 文件包含了一系列的<code>INSERT</code>语句可以在后面的时间内用来插入数据。</p>
+<pre><code>shell&gt; mysqldump --single-transaction --all-databases &gt; backup_sunday_1_pm.sql
+</code></pre><p>生成的 *.sql 文件包含了一系列的<code>INSERT</code>语句可以在后面的时间内用来插入数据。</p>
 <p>这个备份操作在开始之前需要一个全局的对所有表的读锁。（<code>FLUSH TABLES WITH READ LOCK</code>）。当这个锁获得后，这个二进制日志的坐标就会被记录，然后释放锁。如果在<code>FLUSH</code>语句执行期间正在执行一个耗时很长的更新语句，那么这个操作就只有到更新完毕才会进行。在此之后，这个过程就不再需要锁，同时也不会打扰其他客户端的读与写了。</p>
 <p>先前假设我们讨论的表是<code>InnoDB</code>表，所以<code>--single-transaction</code>使用一致性读并且保证被<code>mysqldump</code>看到的数据不会改变（其他客户端所做的变化mysqldump看不到）。如果备份中包括非事务表，那么必须保证在这过程中表不会改变。比如，在<code>mysql</code>库内的所有MyISAM表，必须没有对MySQL账号管理的改变。</p>
 <p>完整备份是必要的，但是很多时候其并不方便。它会产生很大的备份文件并且耗时不少。每一个完整备份都包含备份之间没有改变的数据，这是非常低效的。更高效的做法是先做一个初始的完整备份，再产生增量备份。增量备份更小，更快。但是相对的，在恢复的时候就不能只恢复完整备份，同样需要恢复增量备份。</p>
@@ -399,9 +401,11 @@
 <p>每当<code>mysqld</code>重启的时候就会创建一个新的二进制文件，序号会递增。在服务器运行中你也可以让服务器关闭当前的二进制日志而重新建立一个，使用<code>FLUSH LOGS</code>语句或<code>mysqladmin flush-logs</code>。<code>mysqldump</code>也有类似的选项。 <strong>.index</strong>文件记录了所有的二进制文件名列表。</p>
 <p>二进制文件组成了增量备份，所以是非常重要的。如果你确定要在完整备份的时候刷新日志，后面建立的二进制日志就包含了所有你完整备份后的数据变化信息。让我们来修改一下先前的代码，这次我们会刷新日志，这样转储后的文件就会包含下一个二进制的文件名：</p>
 <pre><code>shell&gt; mysqldump --single-transaction --flush-logs --master-date=2\
-       --all-databases &gt; backup_sunday_1_pm.sql</code></pre><p>在执行这个命令之后，数据目录下包含了一个新的二进制日志<code>gbichot2-bin.000007</code>，因为<code>--flush-logs</code>选项让服务器进行了刷新。<code>--master-data</code>选项让<code>mysqldump</code>将二进制日志信息写到输出，所以这次生成的 .sql 文件包含：</p>
+       --all-databases &gt; backup_sunday_1_pm.sql
+</code></pre><p>在执行这个命令之后，数据目录下包含了一个新的二进制日志<code>gbichot2-bin.000007</code>，因为<code>--flush-logs</code>选项让服务器进行了刷新。<code>--master-data</code>选项让<code>mysqldump</code>将二进制日志信息写到输出，所以这次生成的 .sql 文件包含：</p>
 <pre><code>-- Position to start replication or point-in-time recovery from
--- CHANGE MASTER TO MASTER_LOG_FILE=&apos;gbichot2-bin.000007&apos;,MASTER_LOG_POS=4;</code></pre><p>因为<code>mysqldump</code>做了一个完整备份，这两行意味着：</p>
+-- CHANGE MASTER TO MASTER_LOG_FILE=&#39;gbichot2-bin.000007&#39;,MASTER_LOG_POS=4;
+</code></pre><p>因为<code>mysqldump</code>做了一个完整备份，这两行意味着：</p>
 <ul>
 <li>转储文件包含在<code>gbichot2-bin.000007</code>前的所有数据及变化。</li>
 <li>所有在备份后产生的数据变化都写在<code>gbichot2-bin.000007</code>日志内。</li>
@@ -409,13 +413,17 @@
 <p>在周一下午1点，我们可以通过刷新日志产生一个新日志来进行增量备份。<code>mysqladin flush-logs</code>命令将会产生<code>gbichot28-bin.000008</code>。所有从周日下午一点到周一下午一点的数据变化都在<code>gbichot2-bin.000007</code>。增量备份是重要的，所以要把他复制到一个安全的地方。<br>周二下午一点，可以同样执行<code>mysqladmin flush-logs</code>来产生一个新的日志<code>gbichot2-bin.000009</code>，这样从周一下午一点到周二下午一点的所有数据变化都在<code>gbichot2-bin.000008</code>内了。</p>
 <p>二进制日志非常占磁盘空间。为了释放空间的话，就要及时删除不用的二进制日志文件，在做了一个完整备份后：</p>
 <pre><code>shell&gt; mysqldump --single-transactio --flush-logs --master-data=2 \
---all-databases --delete-master-logs &gt; backup_sunday_1_PM.sql</code></pre><blockquote>
+--all-databases --delete-master-logs &gt; backup_sunday_1_PM.sql
+</code></pre><blockquote>
 <p>注意：用<code>--delete-master-logs</code>选项在主服务器上是非常危险的，因为无法保证从服务器已经把所需要的二进制文件读取完毕。<code>PURGE BINARY LOG</code>语句解释了在删除二进制日志之前需要确认的事项。<strong>13.4.1.1 PURGE BINARY LOGS 语法</strong></p>
 </blockquote>
 <h3 id="用备份进行恢复"><a href="#用备份进行恢复" class="headerlink" title="用备份进行恢复"></a>用备份进行恢复</h3><p>现在，假设我们在周三早上8点发生了一个意外，此时需要进行用备份进行恢复。首先我们进行完整备份的恢复：</p>
-<pre><code>shell&gt; mysql &lt; backup_sunday_1_pm.sql</code></pre><p>这时，数据已经存储成为周一下午1点的状态。要恢复从这个时候开始的数据变化，必须使用增量备份；也就是<code>gbichot2-bin.000007</code>和<code>gbichot2-bin.000008</code>文件。</p>
-<pre><code>shell&gt; mysqlbinlog gbichot2-bin.000007 gbichot2-bin.000008 | mysql</code></pre><p>这样我们就已经把数据恢复到了周二的下午1点，但还缺少从这个时间点到崩溃点的数据。为了不丢掉这些数据，我们必须已经让mysql把二进制日志存储到了一个安全的地方（RAID，SAN …）反正不能和出现问题的硬盘放在一起。如果这样做了。我们现在应该是有一个<code>gbichot2-bin.000009</code>或者更大序号的文件，我们可以继续这样：</p>
-<pre><code>shell&gt; mysqlbinlog gbichot2-bin.000009  | mysql</code></pre><p>更多使用<code>mysqlbinlog</code>的信息，请参考<strong>7.5 用二进制进行时间点（增量）恢复</strong>。</p>
+<pre><code>shell&gt; mysql &lt; backup_sunday_1_pm.sql
+</code></pre><p>这时，数据已经存储成为周一下午1点的状态。要恢复从这个时候开始的数据变化，必须使用增量备份；也就是<code>gbichot2-bin.000007</code>和<code>gbichot2-bin.000008</code>文件。</p>
+<pre><code>shell&gt; mysqlbinlog gbichot2-bin.000007 gbichot2-bin.000008 | mysql
+</code></pre><p>这样我们就已经把数据恢复到了周二的下午1点，但还缺少从这个时间点到崩溃点的数据。为了不丢掉这些数据，我们必须已经让mysql把二进制日志存储到了一个安全的地方（RAID，SAN …）反正不能和出现问题的硬盘放在一起。如果这样做了。我们现在应该是有一个<code>gbichot2-bin.000009</code>或者更大序号的文件，我们可以继续这样：</p>
+<pre><code>shell&gt; mysqlbinlog gbichot2-bin.000009  | mysql
+</code></pre><p>更多使用<code>mysqlbinlog</code>的信息，请参考<strong>7.5 用二进制进行时间点（增量）恢复</strong>。</p>
 <h2 id="备份策略总结"><a href="#备份策略总结" class="headerlink" title="备份策略总结"></a>备份策略总结</h2><p>在操作系统或者电源故障，<code>InnoDB</code>会自己进行恢复工作。但是为了保证你自己睡得安逸，确认一下下面的事项：</p>
 <ul>
 <li>总是让<code>mysqld</code>以 <code>--log-bin</code>选项或者<code>--log-bin= _log_name_</code>运行，并且二进制要指定在与数据目录不一样的安全的磁盘上。如果这样做了，这也是一个非常不错的磁盘负载均衡。</li>
@@ -433,13 +441,17 @@
 <li>没有<code>--tab</code>选项。mysqldump把SQL语句写到标准输出这些输出由<code>CREATE</code>语句来创建转储对象（数据库，表，过程等等），<code>INSERT</code>语句来载入数据到表。这个输出可以存储到一个文件然后被用<code>mysql</code>用来重建数据对象。</li>
 <li>有<code>--tab</code>。将会为每个dump产生两个文件。一个个 .sql文件，包含<code>CREATE TABLE</code>语句；一个 .txt 文件，表的每个记录一行。</li>
 </ul>
-<h3 id="Dump-SQL格式数据"><a href="#Dump-SQL格式数据" class="headerlink" title="Dump SQL格式数据"></a>Dump SQL格式数据</h3><pre><code>shell&gt; mysqldump [ arguments ] &gt; file_name</code></pre><p>备份所有库：</p>
-<pre><code>shell&gt; mysqldump --all-databases &gt; dump.sql</code></pre><p>备份指定库：</p>
-<pre><code>shell&gt; mysqldump --databases db1 db2 db3 &gt; dump.sql</code></pre><p>在没有 –databases 的情况下，db1 被认为是库，而db2 db3会被看做是表。</p>
+<h3 id="Dump-SQL格式数据"><a href="#Dump-SQL格式数据" class="headerlink" title="Dump SQL格式数据"></a>Dump SQL格式数据</h3><pre><code>shell&gt; mysqldump [ arguments ] &gt; file_name
+</code></pre><p>备份所有库：</p>
+<pre><code>shell&gt; mysqldump --all-databases &gt; dump.sql
+</code></pre><p>备份指定库：</p>
+<pre><code>shell&gt; mysqldump --databases db1 db2 db3 &gt; dump.sql
+</code></pre><p>在没有 —databases 的情况下，db1 被认为是库，而db2 db3会被看做是表。</p>
 <p>在使用<code>--databases</code>或<code>--all-databases</code>的情况下，mysqldump会将 <code>CREATE DATABASE</code>和<code>USE</code>语句写在每个使用库前。这样就保证了在重新载入的时候，没有库就建立库，然后让这数据从哪里来的，就到哪个库去。如果想要在重建之前强制删除掉库，加上<code>--add-drop-databas</code>选项。</p>
 <p>备份某一个库：</p>
 <pre><code>shell&gt; mysqldump --databases test &gt; test.sql
-shell&gt; mysqldump  test &gt; test.sql</code></pre><p>这两个语句的不同是：后者将不会产生<code>CREATE DATABASE</code>语句和<code>USE</code>语句。那么：</p>
+shell&gt; mysqldump  test &gt; test.sql
+</code></pre><p>这两个语句的不同是：后者将不会产生<code>CREATE DATABASE</code>语句和<code>USE</code>语句。那么：</p>
 <ul>
 <li>在使用dump文件的时候，必须指定库名。</li>
 <li>可以指定与原来库名不一样的库。</li>
@@ -447,76 +459,98 @@ shell&gt; mysqldump  test &gt; test.sql</code></pre><p>这两个语句的不同�
 <li>因为不产生<code>CREATE DATABASE</code>语句，所以<code>--add-drop-database</code>是无效的。</li>
 </ul>
 <p>备份某库的某些表，在库名后指定表名即可：</p>
-<pre><code>shell&gt; mysqldump test t1 t3 t7 &gt; dump.sql</code></pre><h3 id="重载SQL格式的备份"><a href="#重载SQL格式的备份" class="headerlink" title="重载SQL格式的备份"></a>重载SQL格式的备份</h3><p>为了重载一个转存文件，将它作为<code>mysql</code>客户端的输入即可。如果，在生成转储文件的时候，指定了<code>--all-databases</code>或<code>--databases</code>选项，文件内会包含<code>CREATE DATABASE</code>和<code>USE</code>语句，这样就不用在使用的时候指定库名了。</p>
-<pre><code>shell&gt; mysql &lt; dump.sql</code></pre><p>或者可以在登录mysql后：</p>
-<pre><code>mysql&gt; source dump.sql</code></pre><p>如果要指定库名：</p>
-<pre><code>shell&gt; mysql db1 &lt; dump.sql</code></pre><p>如果生成的dump文件内不含有 <code>CREATE DATABASE</code>语句，那么首先我们就要建立好库，再使用dump文件。</p>
+<pre><code>     shell&gt; mysqldump test t1 t3 t7 &gt; dump.sql
+</code></pre><h3 id="重载SQL格式的备份"><a href="#重载SQL格式的备份" class="headerlink" title="重载SQL格式的备份"></a>重载SQL格式的备份</h3><p>为了重载一个转存文件，将它作为<code>mysql</code>客户端的输入即可。如果，在生成转储文件的时候，指定了<code>--all-databases</code>或<code>--databases</code>选项，文件内会包含<code>CREATE DATABASE</code>和<code>USE</code>语句，这样就不用在使用的时候指定库名了。</p>
+<pre><code>shell&gt; mysql &lt; dump.sql
+</code></pre><p>或者可以在登录mysql后：</p>
+<pre><code>mysql&gt; source dump.sql
+</code></pre><p>如果要指定库名：</p>
+<pre><code>shell&gt; mysql db1 &lt; dump.sql
+</code></pre><p>如果生成的dump文件内不含有 <code>CREATE DATABASE</code>语句，那么首先我们就要建立好库，再使用dump文件。</p>
 <pre><code>mysql&gt; create database db1;
 mysql&gt; use db1;
-mysql&gt; source dump.sql;</code></pre><h3 id="用mysqldump生成格式化文本转储"><a href="#用mysqldump生成格式化文本转储" class="headerlink" title="用mysqldump生成格式化文本转储"></a>用mysqldump生成格式化文本转储</h3><p>如果在使用<code>mysql</code>的时候指定<code>--tab=dir_name</code>选项，那么会把<code>dir_name</code>指定的目录作为输出目录，每个表会在这个目录下生成两个文件。对于一个表<code>t1</code>，会生成<code>t1.txt</code>和<code>t1.sql</code>两个文件，<code>t1.sql</code>包含<code>CREATE TABLE</code>语句，<code>t1.txt</code>包含数据，每个记录一行。</p>
+mysql&gt; source dump.sql;
+</code></pre><h3 id="用mysqldump生成格式化文本转储"><a href="#用mysqldump生成格式化文本转储" class="headerlink" title="用mysqldump生成格式化文本转储"></a>用mysqldump生成格式化文本转储</h3><p>如果在使用<code>mysql</code>的时候指定<code>--tab=dir_name</code>选项，那么会把<code>dir_name</code>指定的目录作为输出目录，每个表会在这个目录下生成两个文件。对于一个表<code>t1</code>，会生成<code>t1.txt</code>和<code>t1.sql</code>两个文件，<code>t1.sql</code>包含<code>CREATE TABLE</code>语句，<code>t1.txt</code>包含数据，每个记录一行。</p>
 <p>比如我们要转储 数据库 db1到 /tmp目录：</p>
-<pre><code>shell&gt; mysqldump --tab=/tmp db1</code></pre><p><code>.txt</code>文件是由mysqld进行写入的，所以其被运行<code>mysqld</code>的账户所有用。实际上<code>mysqld</code>是使用<code>SELECT ... INTO OUTFILE</code>语句进行写入文件的，所以必须对目录具有这个权限，而且，<code>t1.txt</code>必须是不存在的。<code>t1.sql</code>同样。</p>
+<pre><code>shell&gt; mysqldump --tab=/tmp db1
+</code></pre><p><code>.txt</code>文件是由mysqld进行写入的，所以其被运行<code>mysqld</code>的账户所有用。实际上<code>mysqld</code>是使用<code>SELECT ... INTO OUTFILE</code>语句进行写入文件的，所以必须对目录具有这个权限，而且，<code>t1.txt</code>必须是不存在的。<code>t1.sql</code>同样。</p>
 <p>最好只在本地使用<code>--tab</code>选项。如果在客户端指定远程服务器上的<code>--tab</code>选项，那么<code>--tab</code>后面的目录在客户端和服务端都必须存在。<code>.txt</code>文件只会写出到远程服务器，而<code>.sql</code>文件在本地和远程服务器都会生成。</p>
 <p>对于<code>mysqldump --tab</code>，默认情况下每个记录一行，字段间用<code>tab</code>键进行分割，<code>\n</code>被作为换成符，对值不会以引号进行引用。这和<code>SELECT ... INTO OUTFILE</code>类似。</p>
 <p>如果想以一种不同的格式来转储文件，有几个选项可以进行指定：</p>
 <ul>
-<li>–fields-terminated-by=str 指定分列字符 (default: tab).</li>
-<li>–fields-enclosed-by=char 指定列值被什么符号包围 (default: no character).  </li>
-<li>–fields-optionally-enclosed-by=char 指定非数值被什么所包围 (default: no character).  </li>
-<li>–fields-escaped-by=char 反引特殊字符的字符 (default: no escaping).  </li>
-<li>–lines-terminated-by=str 指定换行符 (default: newline).</li>
+<li>—fields-terminated-by=str 指定分列字符 (default: tab).</li>
+<li>—fields-enclosed-by=char 指定列值被什么符号包围 (default: no character).  </li>
+<li>—fields-optionally-enclosed-by=char 指定非数值被什么所包围 (default: no character).  </li>
+<li>—fields-escaped-by=char 反引特殊字符的字符 (default: no escaping).  </li>
+<li>—lines-terminated-by=str 指定换行符 (default: newline).</li>
 </ul>
 <p>有时候，我们指定的符号，可能会被<code>shell</code>当作特殊字符对待，这样我们就要对它进行引用。或者， 这几个选项我们可以用16进制代码来指定。现在假设我们想要这个列值被双引号<code>&quot;</code>所包围，但这个符号一般会被<code>shell</code>给特殊对待，所以我们必须对他进行引用。</p>
-<pre><code>--fields-enclosed-by=&apos;&quot;&apos;</code></pre><p>在任何平台上，我们可以用16进制值：</p>
-<pre><code>--fields-enclosed-by=0x22</code></pre><p>同时指定几个选项很正常。比如，要用逗号分割列，用<code>\r\n</code>进行换行，用<code>&quot;</code>包围值：</p>
+<pre><code>--fields-enclosed-by=&#39;&quot;&#39;
+</code></pre><p>在任何平台上，我们可以用16进制值：</p>
+<pre><code>--fields-enclosed-by=0x22
+</code></pre><p>同时指定几个选项很正常。比如，要用逗号分割列，用<code>\r\n</code>进行换行，用<code>&quot;</code>包围值：</p>
 <pre><code>shell&gt; mysqldump --tab=/tmp --fields-terminated-by=,\
-       --fields-enclosed-by=&apos;&quot;&apos; --lines-terminated-by=0x0d0a db1</code></pre><p>不过在使用这个文件的时候，我们需要对<code>mysql</code>指定同样的选项哦。</p>
+       --fields-enclosed-by=&#39;&quot;&#39; --lines-terminated-by=0x0d0a db1
+</code></pre><p>不过在使用这个文件的时候，我们需要对<code>mysql</code>指定同样的选项哦。</p>
 <h3 id="使用文本格式化转储"><a href="#使用文本格式化转储" class="headerlink" title="使用文本格式化转储"></a>使用文本格式化转储</h3><p>因为文本化转储使用的是两个文件分别存储了表结构和数据，所以我们也需要进行两步来使用他。</p>
 <pre><code>shell&gt; mysql db1 &lt; t1.sql
-shell&gt; mysqlimport db1 &lt; t1.txt</code></pre><p>也可以在<code>mysql</code>客户端内用<code>LOAD DATA INFILE</code>语句来使用：</p>
+shell&gt; mysqlimport db1 &lt; t1.txt
+</code></pre><p>也可以在<code>mysql</code>客户端内用<code>LOAD DATA INFILE</code>语句来使用：</p>
 <pre><code>mysql&gt; use db1;
-mysql&gt; LOAD DATA INFILE &apos;t1.txt&apos; INTO TABLE t1;</code></pre><p>如果在生成转储的时候指定了不一样的格式，那么我们这时候也要指定同样的格式：</p>
+mysql&gt; LOAD DATA INFILE &#39;t1.txt&#39; INTO TABLE t1;
+</code></pre><p>如果在生成转储的时候指定了不一样的格式，那么我们这时候也要指定同样的格式：</p>
 <pre><code>shell&gt; mysqlimport --fields-terminated-by=,\
-     --fields-enclosed-by=&apos;&quot;&apos; --lines-terminated-by=0x0d0a db1 t1.txt</code></pre><p>或者：</p>
+     --fields-enclosed-by=&#39;&quot;&#39; --lines-terminated-by=0x0d0a db1 t1.txt
+</code></pre><p>或者：</p>
 <pre><code>mysql&gt; USE db1;
-mysql&gt; LOAD DATA INFILE &apos;t1.txt&apos; INTO TABLE t1
-        -&gt; FIELDS TERMINATED BY &apos;,&apos; FIELDS ENCLOSED BY &apos;&quot;&apos;
-        -&gt; LINES TERMINATED BY &apos;\r\n&apos;;</code></pre><h3 id="mysqldump-建议"><a href="#mysqldump-建议" class="headerlink" title="mysqldump 建议"></a>mysqldump 建议</h3><p>这一节来解决一些使用<code>mysqldump</code>的问题：</p>
+mysql&gt; LOAD DATA INFILE &#39;t1.txt&#39; INTO TABLE t1
+        -&gt; FIELDS TERMINATED BY &#39;,&#39; FIELDS ENCLOSED BY &#39;&quot;&#39;
+        -&gt; LINES TERMINATED BY &#39;\r\n&#39;;
+</code></pre><h3 id="mysqldump-建议"><a href="#mysqldump-建议" class="headerlink" title="mysqldump 建议"></a>mysqldump 建议</h3><p>这一节来解决一些使用<code>mysqldump</code>的问题：</p>
 <ul>
 <li>如何复制一个数据库</li>
 <li>如何复制一个数据库到另一台服务器</li>
 <li>如何转储程序（触发器、过程、函数、事件）</li>
 <li>如何分别转储定义和数据</li>
 </ul>
-<p><strong>复制一个数据库管</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shell&gt; mysqldump db1 &gt; dump.sql</span><br><span class="line">shell&gt; mysqladmin create db2</span><br><span class="line">shell&gt; mysql db2 &lt; dump.sql</span><br></pre></td></tr></table></figure>
+<p><strong>复制一个数据库管</strong><br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">shell&gt; mysqldump db1 &gt; dump.sql</span><br><span class="line">shell&gt; mysqladmin create db2</span><br><span class="line">shell&gt; mysql db2 &lt; dump.sql</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>这里就不要使用<code>--databases</code>选项，这样的话转储文件内的<code>USE</code>语句会将包含<code>USE db1</code>语句，将不会把数据导入到<code>db2</code>。</p>
 </blockquote>
 <p><strong>复制数据库到另外一个服务器</strong><br>Server1:</p>
-<pre><code>shell&gt; mysqldump --databases db1 &gt; dump.sql</code></pre><p>把dump.sql复制到Server2，执行:</p>
-<pre><code>shell&gt; mysql &lt; dump.sql</code></pre><p><code>--databases</code>选项的使用会让<code>dump.sql</code>文件内包含<code>USE db1</code>语句和<code>CREATE DATABASE</code>语句，如果想把数据导入一个不同名字的库，那么，不要指定<code>--databases</code>选项。</p>
+<pre><code>shell&gt; mysqldump --databases db1 &gt; dump.sql
+</code></pre><p>把dump.sql复制到Server2，执行:</p>
+<pre><code>shell&gt; mysql &lt; dump.sql
+</code></pre><p><code>--databases</code>选项的使用会让<code>dump.sql</code>文件内包含<code>USE db1</code>语句和<code>CREATE DATABASE</code>语句，如果想把数据导入一个不同名字的库，那么，不要指定<code>--databases</code>选项。</p>
 <p>Server1:</p>
-<pre><code>shell&gt; mysqldump db1 &gt; dump.sql</code></pre><p>Server2:</p>
+<pre><code>shell&gt; mysqldump db1 &gt; dump.sql
+</code></pre><p>Server2:</p>
 <pre><code>shell&gt; mysqladmin create db2;
-shell&gt; mysql db2 &lt; dump.sql</code></pre><p><strong>转储存储程序</strong><br>几个选项来帮助<code>mysqldump</code>转储程序（过程、函数、事件、触发器等）。</p>
+shell&gt; mysql db2 &lt; dump.sql
+</code></pre><p><strong>转储存储程序</strong><br>几个选项来帮助<code>mysqldump</code>转储程序（过程、函数、事件、触发器等）。</p>
 <ul>
-<li>–events：事件</li>
-<li>–routines：过程和函数</li>
-<li>–triggers：触发器</li>
+<li>—events：事件</li>
+<li>—routines：过程和函数</li>
+<li>—triggers：触发器</li>
 </ul>
 <p><code>--triggers</code>选项是默认开启的，其他两个则不是，需要明确指定。如果不想使用这三个选项，那么<code>--skip-events, --skip-routines, --skip-triggers</code>可以帮助你。</p>
 <p><strong>分开存储定义好数据</strong><br><code>--no-data， -D</code>选项告诉<code>mysqldump</code>不要存储数据，所以其转储文件将只包含表的创建。对应的<code>--no-create-info</code>就会让<code>mysqldump</code>不要生成创建表语句，将只包含数据。</p>
 <p>下面我们假设想要将test库的表好数据单独导出：</p>
 <pre><code>shell&gt; mysqldump --no-data test &gt; dump-defs.sql
-shell&gt; mysqldump --no-create-info test &gt; dump-data.sql</code></pre><p>对于一个只有定义的导出，指定<code>--events, --routines</code>将会把过程、函数、事件一起导出：</p>
-<pre><code>shell&gt; mysqldump --no-data --routines --events test &gt; dump-defs.sql</code></pre><p><strong>用MySQLdump来测试升级兼容性</strong><br>在准备升级mysql版本的时候，在一个单独的测试服务器看上安装新版本的服务器，再把现在的库给导出过去进行测试是否正常。<br>在生产服务器上：</p>
-<pre><code>shell&gt; mysqldump --all-databases --no-data --routines --events &gt; dump-defs.sql</code></pre><p>在升级服务器上：</p>
-<pre><code>shell&gt; mysql &lt; dump-defs.sql</code></pre><p>因为dump文件只包含定义，不包含数据，所以这个过程是非常快速的。这样就可以在不等待长时间数据载入操作就能测试兼容性。在过程中仔细观察出现的错误或者警告。</p>
+shell&gt; mysqldump --no-create-info test &gt; dump-data.sql
+</code></pre><p>对于一个只有定义的导出，指定<code>--events, --routines</code>将会把过程、函数、事件一起导出：</p>
+<pre><code>shell&gt; mysqldump --no-data --routines --events test &gt; dump-defs.sql
+</code></pre><p><strong>用MySQLdump来测试升级兼容性</strong><br>在准备升级mysql版本的时候，在一个单独的测试服务器看上安装新版本的服务器，再把现在的库给导出过去进行测试是否正常。<br>在生产服务器上：</p>
+<pre><code>shell&gt; mysqldump --all-databases --no-data --routines --events &gt; dump-defs.sql
+</code></pre><p>在升级服务器上：</p>
+<pre><code>shell&gt; mysql &lt; dump-defs.sql
+</code></pre><p>因为dump文件只包含定义，不包含数据，所以这个过程是非常快速的。这样就可以在不等待长时间数据载入操作就能测试兼容性。在过程中仔细观察出现的错误或者警告。</p>
 <p>如果一切正常从，那么把数据给导出，然后导入新服务器：</p>
 <p>生产服务器上：</p>
-<pre><code>shell&gt; mysqldump --all-databases --no-create-info &gt; dump-data.sql</code></pre><p>升级服务器上：</p>
-<pre><code>shell&gt; mysql &lt; dump-data.sql</code></pre><p>然后检查一下表内容和一些其他测试就OK了。</p>
+<pre><code>shell&gt; mysqldump --all-databases --no-create-info &gt; dump-data.sql
+</code></pre><p>升级服务器上：</p>
+<pre><code>shell&gt; mysql &lt; dump-data.sql
+</code></pre><p>然后检查一下表内容和一些其他测试就OK了。</p>
 <h1 id="时间点（增量）恢复（使用二进制日志）"><a href="#时间点（增量）恢复（使用二进制日志）" class="headerlink" title="时间点（增量）恢复（使用二进制日志）"></a>时间点（增量）恢复（使用二进制日志）</h1><p>事件点恢复一般是在一个完整备份的恢复后，利用二进制日至来进行数据变化的重放。</p>
 <blockquote>
 <p>我们这里用<code>mysql</code>客户端来处理<code>mysqlbinlog</code>解析日志后的输出。但如果二进制日至包括 <code>\0</code>(null)字符，mysql只有在指定了<code>--binary-mode</code>选项是才能正常工作。</p>
@@ -528,9 +562,9 @@ shell&gt; mysqldump --no-create-info test &gt; dump-data.sql</code></pre><p>对�
 </li>
 </ul>
 <p>想知道当前使用的日志是哪个，用下面这个语句：</p>
-<pre><code>mysql&gt; SHOW MASTER STATUS;</code></pre><ul>
-<li><p><code>mysqlbinlog</code>程序将二进制日志内的事件变化解析为文本格式以方便识别和使用。同时其也含有一系列选项可以根据事件时间或者位置来进行范围选择。<strong>4.6.7节 mysqlbinlog - 处理二进制日志工具</strong></p>
-</li>
+<pre><code>mysql&gt; SHOW MASTER STATUS;
+</code></pre><ul>
+<li><code>mysqlbinlog</code>程序将二进制日志内的事件变化解析为文本格式以方便识别和使用。同时其也含有一系列选项可以根据事件时间或者位置来进行范围选择。<strong>4.6.7节 mysqlbinlog - 处理二进制日志工具</strong></li>
 <li><p>执行二进制日志内的事件变化相当于事件的重放。为了这样，将<code>mysqlbinlog</code>的输出传递给<code>mysql</code>客户端的输入 。</p>
 <p> shell&gt; mysqlbinlog binlog_files | mysql -u root -p </p>
 </li>
@@ -540,29 +574,38 @@ shell&gt; mysqldump --no-create-info test &gt; dump-data.sql</code></pre><p>对�
 </ul>
 <p>或者将输出重定向到一个文件：</p>
 <pre><code>shell&gt; mysqlbinlog binlog_files &gt; tmpfile
-shell&gt; ... edit tmpfile ...</code></pre><p>把输出重定向到一个文件，这时我们就可以在文件内删除特定的事件或者内容，然后再用<code>mysql</code>导入，这是非常有用的。</p>
-<pre><code>shell&gt; mysql -u root -p &lt; tmpfile</code></pre><p>如果不止一个二进制日志文件需要处理，安全的办法是在一个连接内进行处理，而不是分开处理。下面就是一个不怎么安全的方法：</p>
+shell&gt; ... edit tmpfile ...
+</code></pre><p>把输出重定向到一个文件，这时我们就可以在文件内删除特定的事件或者内容，然后再用<code>mysql</code>导入，这是非常有用的。</p>
+<pre><code>shell&gt; mysql -u root -p &lt; tmpfile
+</code></pre><p>如果不止一个二进制日志文件需要处理，安全的办法是在一个连接内进行处理，而不是分开处理。下面就是一个不怎么安全的方法：</p>
 <pre><code>shell&gt; mysqlbinlog binlog.000001 | mysql -u root -p # DANGER!!
-shell&gt; mysqlbinlog binlog.000002 | mysql -u root -p # DANGER!!`</code></pre><p>这所以这样在两个连接内处理不安全的原因，是因为第一个连接可能包含一个<code>CREATE TEMPORARY TABLE</code>语句，然后第二个连接可能会需要这个临时表。当第一个连接关闭的时候，mysql进程就会删除临时表。这样，第二个连接要使用这个临时表的时候就会出现<strong>unknown table</strong>。</p>
+shell&gt; mysqlbinlog binlog.000002 | mysql -u root -p # DANGER!!`
+</code></pre><p>这所以这样在两个连接内处理不安全的原因，是因为第一个连接可能包含一个<code>CREATE TEMPORARY TABLE</code>语句，然后第二个连接可能会需要这个临时表。当第一个连接关闭的时候，mysql进程就会删除临时表。这样，第二个连接要使用这个临时表的时候就会出现<strong>unknown table</strong>。</p>
 <p>下面这种方法才是推荐的:</p>
-<pre><code>shell&gt; mysqlbinlog binlog.000001 binlog.000002 | mysql -u root -p</code></pre><p>或者将所有的二进制日志解析输出到一个单独的文件：</p>
+<pre><code>shell&gt; mysqlbinlog binlog.000001 binlog.000002 | mysql -u root -p
+</code></pre><p>或者将所有的二进制日志解析输出到一个单独的文件：</p>
 <pre><code>shell&gt; mysqlbinlog binlog.000001 &gt;  /tmp/statements.sql
 shell&gt; mysqlbinlog binlog.000002 &gt;&gt; /tmp/statements.sql
-shell&gt; mysql -u root -p -e &quot;source /tmp/statements.sql&quot;</code></pre><h3 id="利用事件时间来进行恢复"><a href="#利用事件时间来进行恢复" class="headerlink" title="利用事件时间来进行恢复"></a>利用事件时间来进行恢复</h3><p>为了指定开始时间和结束时间，用<code>DATETIME</code>格式为<code>mysqlbinlog</code>指定<code>--start-time</code>和<code>--end-time</code>选项。假如我们在2005年4月20日的上午10点删除了一个大表。我们可以这样来进行恢复：</p>
+shell&gt; mysql -u root -p -e &quot;source /tmp/statements.sql&quot;
+</code></pre><h3 id="利用事件时间来进行恢复"><a href="#利用事件时间来进行恢复" class="headerlink" title="利用事件时间来进行恢复"></a>利用事件时间来进行恢复</h3><p>为了指定开始时间和结束时间，用<code>DATETIME</code>格式为<code>mysqlbinlog</code>指定<code>--start-time</code>和<code>--end-time</code>选项。假如我们在2005年4月20日的上午10点删除了一个大表。我们可以这样来进行恢复：</p>
 <pre><code>shell&gt; mysqlbinlog --stop-datetime=&quot;2005-04-20 9:59:59&quot; \
-         /var/log/mysql/bin.123456 | mysql -u root -p</code></pre><p>这会将数据恢复到<code>--stop-time</code>指定的时间，但如果我们是在之后某几个小时内进行恢复的话，之后的数据也需要进行恢复进来。</p>
+         /var/log/mysql/bin.123456 | mysql -u root -p
+</code></pre><p>这会将数据恢复到<code>--stop-time</code>指定的时间，但如果我们是在之后某几个小时内进行恢复的话，之后的数据也需要进行恢复进来。</p>
 <pre><code>shell&gt; mysqlbinlog --start-datetime=&quot;2005-04-20 10:01:00&quot; \
-         /var/log/mysql/bin.123456 | mysql -u root -p</code></pre><p>如此，就跳过了我们执行的那个删除表的语句了。</p>
+         /var/log/mysql/bin.123456 | mysql -u root -p
+</code></pre><p>如此，就跳过了我们执行的那个删除表的语句了。</p>
 <p>有的时候，我们忘记了在什么时间执行了错误的操作，我们可以把将二进制日志解析后进行观察。<br>通过跳过指定时间来排除要执行重放的语句并不一定工作得很好，因为有可能在那时间内执行了多个操作。</p>
 <h3 id="利用事件位置进行恢复"><a href="#利用事件位置进行恢复" class="headerlink" title="利用事件位置进行恢复"></a>利用事件位置进行恢复</h3><p><code>--start-position, --stop-position</code>选项可以指定开始和结束的位置。这样能更精确的控制想要执行和不执行的语句，这在对于相同时间内执行多个语句是非常有用的，因为位置是被串行化进行记录的。我们可以通过指定时间解析二进制日志后，查看那些错误操作的语句位置，然后跳过它：</p>
 <pre><code>shell&gt; mysqlbinlog --start-datetime=&quot;2005-04-20 9:55:00&quot; \
         --stop-datetime=&quot;2005-04-20 10:05:00&quot; \
-        /var/log/mysql/bin.123456 &gt; /tmp/mysql_restore.sql</code></pre><p>打开mysql_restory.sql文件，找到我们执行错误语句的位置，然后下面的两个例子将会跳过<code>368312</code>到<code>368315</code>位置之间的语句。</p>
+        /var/log/mysql/bin.123456 &gt; /tmp/mysql_restore.sql
+</code></pre><p>打开mysql_restory.sql文件，找到我们执行错误语句的位置，然后下面的两个例子将会跳过<code>368312</code>到<code>368315</code>位置之间的语句。</p>
 <pre><code>shell&gt; mysqlbinlog --stop-position=368312 /var/log/mysql/bin.123456 \
      | mysql -u root -p
 
 shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
-          | mysql -u root -p</code></pre><h1 id="MyISAM表的维护及崩溃恢复"><a href="#MyISAM表的维护及崩溃恢复" class="headerlink" title="MyISAM表的维护及崩溃恢复"></a>MyISAM表的维护及崩溃恢复</h1><p>这一节讨论用<code>myisamchk</code>程序来修复<code>MyISAM</code>表。对于基本知识的话，看一下<strong>4.6.3 myisamchk - MyISAM表维护工具</strong>。其他表修复信息可以查看<strong>2.11.4 重建或修复表或索引</strong>。</p>
+          | mysql -u root -p
+</code></pre><h1 id="MyISAM表的维护及崩溃恢复"><a href="#MyISAM表的维护及崩溃恢复" class="headerlink" title="MyISAM表的维护及崩溃恢复"></a>MyISAM表的维护及崩溃恢复</h1><p>这一节讨论用<code>myisamchk</code>程序来修复<code>MyISAM</code>表。对于基本知识的话，看一下<strong>4.6.3 myisamchk - MyISAM表维护工具</strong>。其他表修复信息可以查看<strong>2.11.4 重建或修复表或索引</strong>。</p>
 <p>可以用<code>myisamchk</code>来修复、检查、优化数据库表。接下来的章节讨论了这几个问题和怎么样设置一个表维护调度。关于怎么样使用<code>myisamchk</code>来获取表的信息，参考<strong>4.6.3.5 用myisamchk获取表信息</strong>。</p>
 <p>尽管<code>myisamchk</code>来修复表是安全的，但是做一个备份，也是非常必要的操作。在其他对表进行操作的时候一样这样考虑。</p>
 <p><code>myisamchk</code>操作影响索引的话，会导致用<code>full-text</code>参数来重建<code>FULLTEXT</code>索引，这与MYSQL使用的值不兼容。为了避免这个问题，参考<strong>4.6.3.1 myisamchk 一般建议</strong>。</p>
@@ -585,12 +628,9 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
 </ul>
 <h2 id="如何检查MyISAM表的错误"><a href="#如何检查MyISAM表的错误" class="headerlink" title="如何检查MyISAM表的错误"></a>如何检查MyISAM表的错误</h2><p>以下命令：</p>
 <ul>
-<li><p>myisamchk tbl_name<br>这会找出99.99%的错误。不能找出的一般就是只是<strong>.MYD</strong>文件的错误。一般来说，会不带任何选项，或者<code>-s</code>（slient）选项运行<code>myisamchk</code>。</p>
-</li>
-<li><p>myisamchk -m tbl_name<br>这会找出99.999%的错误。首先会检查所有的索引错误，然后再读取所有行。会对所有的键值计算一个校验和并与索引树内的进行对比。</p>
-</li>
-<li><p>myisamchk -e tbl_name<br>This does a complete and thorough check of all data (-e means “extended check”). It does a check-read of every key for each row to verify that they indeed point to the correct row. This may take a long time for a large table that has many indexes. Normally, myisamchk stops after the first error it finds. If you want to obtain more information, you can add the -v (verbose) option. This causes myisamchk to keep going, up through a maximum of 20 errors.</p>
-</li>
+<li>myisamchk tbl_name<br>这会找出99.99%的错误。不能找出的一般就是只是<strong>.MYD</strong>文件的错误。一般来说，会不带任何选项，或者<code>-s</code>（slient）选项运行<code>myisamchk</code>。</li>
+<li>myisamchk -m tbl_name<br>这会找出99.999%的错误。首先会检查所有的索引错误，然后再读取所有行。会对所有的键值计算一个校验和并与索引树内的进行对比。</li>
+<li>myisamchk -e tbl_name<br>This does a complete and thorough check of all data (-e means “extended check”). It does a check-read of every key for each row to verify that they indeed point to the correct row. This may take a long time for a large table that has many indexes. Normally, myisamchk stops after the first error it finds. If you want to obtain more information, you can add the -v (verbose) option. This causes myisamchk to keep going, up through a maximum of 20 errors.</li>
 <li><p>myisamchk -e -i tbl_name<br>与前面类似，不过<code>-i</code>选项会打印出附加的状态信息。</p>
 <p>多数情况下，简单的一个不带选项参数的命令就够了。</p>
 <h2 id="如何修复一个MyISAM表"><a href="#如何修复一个MyISAM表" class="headerlink" title="如何修复一个MyISAM表"></a>如何修复一个MyISAM表</h2><p>本节讨论如何在<code>MyISAM</code>表上使用<code>myisamchk</code>。我们依然可以使用SQL语句来<code>CHECK TABLE</code>和<code>REPAIR TABLE</code>来检查和修复表</p>
@@ -598,20 +638,17 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
 </ul>
 <p>故障一般会有类似的错误：</p>
 <ul>
-<li><p>tbl_name.frm 锁定无法改变</p>
-</li>
-<li><p>找不到tbl_name.MYI(错误码:nnn)</p>
-</li>
-<li><p>非期望的文件结尾</p>
-</li>
-<li><p>记录文件已经崩溃</p>
-</li>
+<li>tbl_name.frm 锁定无法改变</li>
+<li>找不到tbl_name.MYI(错误码:nnn)</li>
+<li>非期望的文件结尾</li>
+<li>记录文件已经崩溃</li>
 <li><p>从表控制处获得<code>nnn</code>错误。<br>为了获得关于错误更多的信息，执行<code>perror nnn</code>。下面的例子展示了大多数的错误：</p>
 <p> shell&gt; perror 126 127 132 134 135 136 141 144 145<br> MySQL error code 126 = Index file is crashed<br> MySQL error code 127 = Record-file is crashed<br> MySQL error code 132 = Old database file<br> MySQL error code 134 = Record was already deleted (or record file crashed)<br> MySQL error code 135 = No more room in record file<br> MySQL error code 136 = No more room in index file<br> MySQL error code 141 = Duplicate unique key or constraint on write or update<br> MySQL error code 144 = Table is crashed and last repair failed<br> MySQL error code 145 = Table was marked as crashed and should be repaired</p>
 </li>
 </ul>
 <p>135、136通过一个简单的修复就可以解决。这种情况下，必须用<code>ALTER TABLE</code>来增加<code>MAX_ROWS</code>和<code>AVG_ROW_LENGTH</code>表选项：</p>
-<pre><code>ALTER TABLE tbl_name MAX_ROWS=xxx AVG_ROW_LENGTH=yyy;</code></pre><p>如果你不知道当前表的选项值，使用<code>SHOW CREATE TABLE</code>语句。<br>对于其他错误，你必须修复你的表。<code>myisamchk</code>可以检查并修复大多数出现的错误。</p>
+<pre><code>ALTER TABLE tbl_name MAX_ROWS=xxx AVG_ROW_LENGTH=yyy;
+</code></pre><p>如果你不知道当前表的选项值，使用<code>SHOW CREATE TABLE</code>语句。<br>对于其他错误，你必须修复你的表。<code>myisamchk</code>可以检查并修复大多数出现的错误。</p>
 <p>修复过程有四步。在操作之前，先切换到数据目录，并检查对文件的权限。在UNIX必须保证运行<code>mysqld</code>的用户具有渡权限，如果要进行修改操作的话，还必须具有写权限。</p>
 <p>这节来讨论检查失败，或者想要使用一些<code>myisamchk</code>提供的扩展选项。</p>
 <p>如果想要开始修复一个表，首先要停止<code>mysqld</code>。</p>
@@ -621,10 +658,8 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
 <p>Stage 1: 检查表<br>用 <code>myisamchk *.MYI</code> 或 <code>myisamchk -e *.MYI</code>如果世界足够的话。用<code>-s</code>选项来避免不必要的信息。<br>如果<code>mysqld</code>说停止的，那么用<code>--update-state</code>来告诉<code>myisamchk</code>表明表已经检查过了。<br>只需要修复<code>myisamchk</code>报错的表，进入Stage 2。<br>如果遇到了未知的错误（如内存溢出问题），或者<code>myisamchk</code>崩溃，进入Stage 3。</p>
 <p>Stage 2:简单的安全修复<br>首先，尝试<code>myisamchk -r q tbl_name</code>（-r -q是快速恢复模式的意思）。这会尝试修复索引文件，不会创建数据文件。如果数据文件包含了其应该包含的所有数据以及在数据文件中当前未知的删除连接点？这将会工作，表就会被修复。否则的话按照以下过程处理：</p>
 <ol>
-<li><p>备份数据文件。（*.MYD）</p>
-</li>
-<li><p>用<code>myisamchk -r tbl_name</code>命令。这将会删除错误的行，并重建索引文件。</p>
-</li>
+<li>备份数据文件。（*.MYD）</li>
+<li>用<code>myisamchk -r tbl_name</code>命令。这将会删除错误的行，并重建索引文件。</li>
 <li><p>如果第二部失败了。使用<code>myisamchk --save-recover tbl_name</code>。安全恢复模式使用一种老的恢复方法来对付几种情况，常规恢复方法不会处理。（但是更慢）</p>
 <blockquote>
 <p>如果想要修复速度更快，设置<code>sort_buffer_size, key_buffer_size</code>分别为你内存的25%。<br>遇到一些意外的问题，进入Stage 3。</p>
@@ -635,7 +670,7 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
 <li>用表描述文件来创建新的（空的）数据文件好索引文件。</li>
 </ol>
 <p>shell&gt; mysql db_name<br>mysql&gt; SET autocommit=1;<br>mysql&gt; TRUNCATE TABLE tbl_name;<br>mysql&gt; quit</p>
-<ol start="3">
+<ol>
 <li>把备份的数据文件覆盖到现在新建的空的数据文件。<blockquote>
 <p>在使用复制服务器的时候，要首先停止复制服务器。因为这些属于文件系统的操作，mysql并不会记录到日志。</p>
 </blockquote>
@@ -650,20 +685,24 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
 </li>
 </ol>
 <h2 id="MyISAM表优化"><a href="#MyISAM表优化" class="headerlink" title="MyISAM表优化"></a>MyISAM表优化</h2><p>为了整理碎片行好避免磁盘空间的浪费，运行：</p>
-<pre><code>shell&gt; myisamchk -r tbl_name</code></pre><p>可以用<code>OPTIMIZE TABLE</code>语句达到相同的目的。<code>OPTIMIZE TABLE</code>进行一个表修复和键分析，同事排序索引树以便搜索更快。<br><code>myisamchk</code>提供很多选项用来提高表的性能：</p>
+<pre><code>shell&gt; myisamchk -r tbl_name
+</code></pre><p>可以用<code>OPTIMIZE TABLE</code>语句达到相同的目的。<code>OPTIMIZE TABLE</code>进行一个表修复和键分析，同事排序索引树以便搜索更快。<br><code>myisamchk</code>提供很多选项用来提高表的性能：</p>
 <ul>
-<li><p>–analyze or -a: Perform key distribution analysis. This improves join performance by enabling the join optimizer to better choose the order in which to join the tables and which indexes it should use.</p>
+<li><p>—analyze or -a: Perform key distribution analysis. This improves join performance by enabling the join optimizer to better choose the order in which to join the tables and which indexes it should use.</p>
 </li>
-<li><p>–sort-index or -S: Sort the index blocks. This optimizes seeks and makes table scans that use indexes faster.</p>
+<li><p>—sort-index or -S: Sort the index blocks. This optimizes seeks and makes table scans that use indexes faster.</p>
 </li>
-<li><p>–sort-records=index_num or -R index_num: Sort data rows according to a given index. This makes your data much more localized and may speed up range-based SELECT and ORDER BY operations that use this index.</p>
+<li><p>—sort-records=index_num or -R index_num: Sort data rows according to a given index. This makes your data much more localized and may speed up range-based SELECT and ORDER BY operations that use this index.</p>
 </li>
 </ul>
 <h2 id="设置一个MyISAM表维护调度计划"><a href="#设置一个MyISAM表维护调度计划" class="headerlink" title="设置一个MyISAM表维护调度计划"></a>设置一个MyISAM表维护调度计划</h2><p>进行常规的检查儿不是在出现问题的时候在检查是个非常好的主意。检查和修复表的一个办法是使用<code>REPAIR TABLE</code>好<code>CHECK TABLE</code>语句。</p>
 <p>另外一个方式就是使用<code>myisamchk</code>程序。为了维护的目的，可以用<code>myisamchk -s</code>，这会只在出现错误的时候打印出来信息。<br>进行自动的MyISAM表检查也是非常棒的。比如说，当一个服务器在更新时发生了重启，你必须要检查所有的表是不是收到了影响。如果要让服务器自动的检查<code>MyISAM</code>表，一<code>--myisam-recover-options</code>选项。</p>
 <p>也可以设置一个cron任务来定时的进行检查表：</p>
-<pre><code>35 0 * * 0 /path/to/myisamchk --fast --slient /pat/to/datadir/*/*.MYI</code></pre><p>通常情况下，MYSQL表需要更少的维护工作。如果对MyISAM表进行了许多动态行更新（具有varchar, BLOB, TEXT列的表）或者表已经进行了很多删除工作，你可能想要及时进行碎片整理或者释放空间。可以用<code>OPTIMIZE TABLE</code>来达成目的。当然，如果你能停止<code>mysqld</code>一会儿，切换到数据目录，然后执行下面的命令：</p>
-<pre><code>shell&gt; myisamchk -r -s --sort-index --myisam_sort_buffer_size=16M */*.MYI</code></pre>
+<pre><code>35 0 * * 0 /path/to/myisamchk --fast --slient /pat/to/datadir/*/*.MYI
+</code></pre><p>通常情况下，MYSQL表需要更少的维护工作。如果对MyISAM表进行了许多动态行更新（具有varchar, BLOB, TEXT列的表）或者表已经进行了很多删除工作，你可能想要及时进行碎片整理或者释放空间。可以用<code>OPTIMIZE TABLE</code>来达成目的。当然，如果你能停止<code>mysqld</code>一会儿，切换到数据目录，然后执行下面的命令：</p>
+<pre><code>shell&gt; myisamchk -r -s --sort-index --myisam_sort_buffer_size=16M */*.MYI
+</code></pre><p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
     </div>
 
     
@@ -679,7 +718,7 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/curl-%E4%BD%BF%E7%94%A8%E5%85%A5%E9%97%A8.html" rel="next" title="curl 使用入门">
+                <a href="/Linux-Unix/curl-使用入门.html" rel="next" title="curl 使用入门">
                   <i class="fa fa-chevron-left"></i> curl 使用入门
                 </a>
             </div>
@@ -687,7 +726,7 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql%E7%9A%84%E7%B4%A2%E5%BC%95%E4%B8%8EB-tree.html" rel="prev" title="Mysql的索引与B-tree">
+                <a href="/数据库/Mysql的索引与B-tree.html" rel="prev" title="Mysql的索引与B-tree">
                   Mysql的索引与B-tree <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -749,20 +788,20 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -774,10 +813,10 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -806,10 +845,10 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -884,7 +923,7 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql_backup_and_recovery-5.5.html",
+            url: "https://gowa.club/数据库/Mysql_backup_and_recovery-5.5.html",
             identifier: "数据库/Mysql_backup_and_recovery-5.5.html",
             title: "Mysql-Backup-and-Recovery 中文翻译"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Windows,Cpp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于Cpp的声明与定义">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Cpp&#x2F;%E5%85%B3%E4%BA%8ECpp%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%8E%E5%AE%9A%E4%B9%89.html">
+<meta property="og:url" content="https://gowa.club/Cpp/关于Cpp的声明与定义.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="一直以来没有细细探究，对于变量的作用域，当遇到 extern, const 等的时候到底会发生什么变化，有什么意义，全局变量到底是怎么样的，所以就会茫然不知所措，所以来细细的看一下一番。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-07-11T04:21:23.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Cpp的声明与定义">
+<meta name="twitter:description" content="一直以来没有细细探究，对于变量的作用域，当遇到 extern, const 等的时候到底会发生什么变化，有什么意义，全局变量到底是怎么样的，所以就会茫然不知所措，所以来细细的看一下一番。">
 
-<link rel="canonical" href="https://gowa.club/Cpp/%E5%85%B3%E4%BA%8ECpp%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%8E%E5%AE%9A%E4%B9%89.html">
+<link rel="canonical" href="https://gowa.club/Cpp/关于Cpp的声明与定义.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cpp/%E5%85%B3%E4%BA%8ECpp%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%8E%E5%AE%9A%E4%B9%89.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cpp/关于Cpp的声明与定义.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Cpp/%E5%85%B3%E4%BA%8ECpp%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%8E%E5%AE%9A%E4%B9%89.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Cpp/关于Cpp的声明与定义.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cpp/关于Cpp的声明与定义.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,7 +294,6 @@
       
         <p>一直以来没有细细探究，对于变量的作用域，当遇到 extern, const 等的时候到底会发生什么变化，有什么意义，全局变量到底是怎么样的，所以就会茫然不知所措，所以来细细的看一下一番。</p>
 <a id="more"></a>
-
 <p>我们知道，C/C++ 的源文件一般都包括 <em>.c, .cpp, .h</em> 文件，那么这是怎么样工作的呢？这两者有什么区别，在这些文件里面定义或者写的代码到底有什么不同呢？</p>
 <p>首先我们要大概的了解一个过程，就是从我们写的人可读的代码和机器可以执行的代码间还有两步工作需要做，这个是以编译器，和链接器来完成的。</p>
 <ul>
@@ -327,17 +328,15 @@
 </ol>
 <h2 id="非常量的全局变量应用-extern"><a href="#非常量的全局变量应用-extern" class="headerlink" title="非常量的全局变量应用 extern"></a>非常量的全局变量应用 extern</h2><p>当编译前在一个全局变量前发现 extern 时，它会在其他的翻译单元中查找全局变量的定义。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// fileA.cpp</span></span><br><span class="line"><span class="keyword">int</span> i = <span class="number">43</span>; <span class="comment">//声明和定义全局变量 i</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// fileB.cpp</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> i; <span class="comment">// 仅仅声明</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// fileC.cpp</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> i; <span class="comment">// 仅仅声明</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// fileD.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> i = <span class="number">43</span>; <span class="comment">// 报错， i 已经定义过了</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">int</span> i = <span class="number">43</span>; <span class="comment">// 报错， i 已经定义过了</span></span><br></pre></td></tr></table></figure>
-
 <h2 id="const-全局变量应用-extern"><a href="#const-全局变量应用-extern" class="headerlink" title="const 全局变量应用 extern"></a>const 全局变量应用 extern</h2><p>一个 const 全局变量默认情况下是内部链接的，我们可以使用 extern 来将其定义为外部链接的：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// fileA.cpp</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">int</span> i = <span class="number">42</span>;<span class="comment">// extern const 定义</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// fileB.cpp</span></span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">const</span> <span class="keyword">int</span>; <span class="comment">// extern const 声明</span></span><br></pre></td></tr></table></figure>
-
 <h1 id="static"><a href="#static" class="headerlink" title="static"></a>static</h1><p>static 可以用来全局作用域、命名空间作用域、类作用域声明变量和函数。 static 变量也可以在本地作用域进行声明。</p>
 <p>static 周期意味着此对象或者变量自程序开始运行时就会分配内存然后在程序终止时回收内存。默认情况下，一个在全局命名空间定义的变量或对象是静态的生命周期和外部的链接域。 <strong>static</strong> 可以在下面几种情况使用：</p>
 <ol>
 <li>当怎么在文件作用域（全局或命名空间作用域）声明变量或函数时，static 说明此变量或者函数是内部链接的，外部不可见。当我们声明一个变量，变量有静态生命周期的时候，编译器会将其初始化为0.</li>
 <li>当我们在函数内声明变量时，static 会在多次调用函数中保持此变量的状态。</li>
 <li>当我们在类声明内声明一个数据成员时，static 表明此成员被所有此类的实例所共享。static 数据成员必须在文件作用域进行定义。</li>
-<li>当我们在类声明中生命一个成员函数时，static 指明此方法为所有的此类实例所共享。静态成员方法不可以调用实例方法，因为其不含有 this 指针。想要达到这个目的，可以将实例作为一个参数传递给 static 方法。</li>
+<li>当我们在类声明中生命一个成员函数时，static 指明此方法为所有的此类实例所共享。静态成员方法不可以调用实例方法，因为其不含有 this 指针。想要达到这个目的，可以将实例作为一个参数传递给 static 方法。<br><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></li>
 </ol>
 
     </div>
@@ -356,7 +355,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Windows/MFC%E4%B8%AD%E7%9A%84%E5%A4%9A%E7%BA%BF%E7%A8%8B.html" rel="next" title="MFC中的多线程">
+                <a href="/Windows/MFC中的多线程.html" rel="next" title="MFC中的多线程">
                   <i class="fa fa-chevron-left"></i> MFC中的多线程
                 </a>
             </div>
@@ -364,7 +363,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Cpp/%E5%9C%A8C++%E4%B8%8EJava%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E4%B8%8D%E5%90%8C.html" rel="prev" title="在C++与Java中的一些不同">
+                <a href="/Cpp/在C++与Java中的一些不同.html" rel="prev" title="在C++与Java中的一些不同">
                   在C++与Java中的一些不同 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -426,20 +425,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -451,10 +450,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -483,10 +482,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -561,7 +560,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Cpp/%E5%85%B3%E4%BA%8ECpp%E7%9A%84%E5%A3%B0%E6%98%8E%E4%B8%8E%E5%AE%9A%E4%B9%89.html",
+            url: "https://gowa.club/Cpp/关于Cpp的声明与定义.html",
             identifier: "Cpp/关于Cpp的声明与定义.html",
             title: "关于Cpp的声明与定义"
           }

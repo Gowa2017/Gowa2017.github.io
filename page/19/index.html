@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -49,10 +49,11 @@
 
   <meta property="og:type" content="website">
 <meta property="og:title" content="退思园">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;page&#x2F;19&#x2F;index.html">
+<meta property="og:url" content="https://gowa.club/page/19/index.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="退思园">
 
 <link rel="canonical" href="https://gowa.club/page/19/">
 
@@ -224,7 +225,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%B8%80%E6%AC%A1%E6%83%A8%E7%97%9B%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E7%BB%8F%E5%8E%86.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/理解MySQL的查询执行计划.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -238,7 +239,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%B8%80%E6%AC%A1%E6%83%A8%E7%97%9B%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E7%BB%8F%E5%8E%86.html" class="post-title-link" itemprop="url">一次惨痛的数据库恢复经历</a>
+            <a href="/数据库/理解MySQL的查询执行计划.html" class="post-title-link" itemprop="url">理解MySQL的查询执行计划</a>
         </h1>
 
         <div class="post-meta">
@@ -248,7 +249,7 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2018-08-21 17:44:33" itemprop="dateCreated datePublished" datetime="2018-08-21T17:44:33+08:00">2018-08-21</time>
+              <time title="Created: 2018-08-22 13:09:25" itemprop="dateCreated datePublished" datetime="2018-08-22T13:09:25+08:00">2018-08-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -256,7 +257,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -271,8 +272,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%B8%80%E6%AC%A1%E6%83%A8%E7%97%9B%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E7%BB%8F%E5%8E%86.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/一次惨痛的数据库恢复经历.html" itemprop="commentCount"></span>
+    <a title="disqus" href="/数据库/理解MySQL的查询执行计划.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/理解MySQL的查询执行计划.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -287,10 +288,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>后台在测试的时候，不小心把数据库备份导入了原来的库。这别，用mysqldump导出的语句会一个个的把表给drop调，然后重新建表，再插入数据。而这个时候，服务是没有停机的，有的业务表依然在有数据的写入，这样很可能造成数据的不一致问题。
+          <p>根据表，列，索引和WHERE子句中的条件的详细信息，MySQL优化器会考虑许多技术来有效地执行SQ​​L查询中涉及的查找。可以在不读取所有行的情况下执行对巨大表的查询;可以在不比较每个行组合的情况下执行涉及多个表的连接。优化程序选择执行最有效查询的操作集称为“查询执行计划”，也称为EXPLAIN计划。您的目标是识别EXPLAIN计划中表明查询已经过优化的方面，并了解SQL语法和索引技术，以便在看到一些低效的操作时改进计划。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/%E4%B8%80%E6%AC%A1%E6%83%A8%E7%97%9B%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%81%A2%E5%A4%8D%E7%BB%8F%E5%8E%86.html#more" rel="contents">
+              <a class="btn" href="/数据库/理解MySQL的查询执行计划.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -314,7 +315,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%8F%AF%E6%8C%81%E7%BB%AD%E5%8F%91%E5%B1%95%E7%9A%84%E5%AE%89%E5%8D%93Client.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/一次惨痛的数据库恢复经历.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -328,7 +329,97 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Android/%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%8F%AF%E6%8C%81%E7%BB%AD%E5%8F%91%E5%B1%95%E7%9A%84%E5%AE%89%E5%8D%93Client.html" class="post-title-link" itemprop="url">建立一个可持续发展的安卓Client</a>
+            <a href="/数据库/一次惨痛的数据库恢复经历.html" class="post-title-link" itemprop="url">一次惨痛的数据库恢复经历</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-21 17:44:33" itemprop="dateCreated datePublished" datetime="2018-08-21T17:44:33+08:00">2018-08-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/数据库/一次惨痛的数据库恢复经历.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/一次惨痛的数据库恢复经历.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>后台在测试的时候，不小心把数据库备份导入了原来的库。这别，用mysqldump导出的语句会一个个的把表给drop调，然后重新建表，再插入数据。而这个时候，服务是没有停机的，有的业务表依然在有数据的写入，这样很可能造成数据的不一致问题。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/数据库/一次惨痛的数据库恢复经历.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/建立一个可持续发展的安卓Client.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Android/建立一个可持续发展的安卓Client.html" class="post-title-link" itemprop="url">建立一个可持续发展的安卓Client</a>
         </h1>
 
         <div class="post-meta">
@@ -361,7 +452,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%8F%AF%E6%8C%81%E7%BB%AD%E5%8F%91%E5%B1%95%E7%9A%84%E5%AE%89%E5%8D%93Client.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/建立一个可持续发展的安卓Client.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/建立一个可持续发展的安卓Client.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -377,10 +468,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>Retrofit提供了广泛的功能，并且有许多可能的配置。 许多较大的应用程序需要一些特定的设置，例如OAuth身份验证。 为了实现一个干净和稳定的项目，我们将向您介绍我们对可持续Android客户端的想法：ServiceGenerator。本文是译文：<a href="https://futurestud.io/tutorials/retrofit-2-creating-a-sustainable-android-client" target="_blank" rel="noopener">原文地址</a></p>
+          <p>Retrofit提供了广泛的功能，并且有许多可能的配置。 许多较大的应用程序需要一些特定的设置，例如OAuth身份验证。 为了实现一个干净和稳定的项目，我们将向您介绍我们对可持续Android客户端的想法：ServiceGenerator。本文是译文：<a href="https://futurestud.io/tutorials/retrofit-2-creating-a-sustainable-android-client" target="_blank" rel="noopener">原文地址</a><br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Android/%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E5%8F%AF%E6%8C%81%E7%BB%AD%E5%8F%91%E5%B1%95%E7%9A%84%E5%AE%89%E5%8D%93Client.html#more" rel="contents">
+              <a class="btn" href="/Android/建立一个可持续发展的安卓Client.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -404,7 +495,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android%E9%9B%86%E6%88%90%E8%85%BE%E8%AE%AFX5%E5%86%85%E6%A0%B8%E6%B5%8F%E8%A7%88office%E6%96%87%E4%BB%B6.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android集成腾讯X5内核浏览office文件.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -418,7 +509,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Android/android%E9%9B%86%E6%88%90%E8%85%BE%E8%AE%AFX5%E5%86%85%E6%A0%B8%E6%B5%8F%E8%A7%88office%E6%96%87%E4%BB%B6.html" class="post-title-link" itemprop="url">android集成腾讯X5内核浏览office文件</a>
+            <a href="/Android/android集成腾讯X5内核浏览office文件.html" class="post-title-link" itemprop="url">android集成腾讯X5内核浏览office文件</a>
         </h1>
 
         <div class="post-meta">
@@ -451,7 +542,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/android%E9%9B%86%E6%88%90%E8%85%BE%E8%AE%AFX5%E5%86%85%E6%A0%B8%E6%B5%8F%E8%A7%88office%E6%96%87%E4%BB%B6.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/android集成腾讯X5内核浏览office文件.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/android集成腾讯X5内核浏览office文件.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -470,7 +561,7 @@
           <p>最近的情况是安卓本身没有什么打开docx文档的能力，而项目实在是需要这么一个功能，所以研究良久，还是打算集成一下腾讯的X5内核来打开office文件。网站上所说的，共享微信或者QQ的内核，但是说实话我是果然没有看到有共享的，不知道什么缘故。疑问留在后面，先看如何集成再说。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Android/android%E9%9B%86%E6%88%90%E8%85%BE%E8%AE%AFX5%E5%86%85%E6%A0%B8%E6%B5%8F%E8%A7%88office%E6%96%87%E4%BB%B6.html#more" rel="contents">
+              <a class="btn" href="/Android/android集成腾讯X5内核浏览office文件.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -494,7 +585,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android%E4%B8%AD%E7%9A%84canvas%E4%BD%BF%E7%94%A8.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android中的canvas使用.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -508,7 +599,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Android/android%E4%B8%AD%E7%9A%84canvas%E4%BD%BF%E7%94%A8.html" class="post-title-link" itemprop="url">android中的canvas使用</a>
+            <a href="/Android/android中的canvas使用.html" class="post-title-link" itemprop="url">android中的canvas使用</a>
         </h1>
 
         <div class="post-meta">
@@ -541,7 +632,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/android%E4%B8%AD%E7%9A%84canvas%E4%BD%BF%E7%94%A8.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/android中的canvas使用.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/android中的canvas使用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -557,10 +648,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>canvas类中拥有 <code>draw</code> 调用。联系要绘制某些内容的话，需要四个组件：<strong>用来存储像素的bitmap，用来包含绘制调用的Canvas，绘制区域（如矩行，路径，文字，bitmap），以及一个画刷（用来定义绘制的颜色和风格）</strong>。</p>
+          <p>canvas类中拥有 <code>draw</code> 调用。联系要绘制某些内容的话，需要四个组件：<strong>用来存储像素的bitmap，用来包含绘制调用的Canvas，绘制区域（如矩行，路径，文字，bitmap），以及一个画刷（用来定义绘制的颜色和风格）</strong>。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Android/android%E4%B8%AD%E7%9A%84canvas%E4%BD%BF%E7%94%A8.html#more" rel="contents">
+              <a class="btn" href="/Android/android中的canvas使用.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -584,7 +675,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/git-svn%E6%9D%A5%E7%AE%A1%E7%90%86svn%E4%BB%93%E5%BA%93.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/git-svn来管理svn仓库.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -598,7 +689,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Git/git-svn%E6%9D%A5%E7%AE%A1%E7%90%86svn%E4%BB%93%E5%BA%93.html" class="post-title-link" itemprop="url">git-svn来管理svn仓库</a>
+            <a href="/Git/git-svn来管理svn仓库.html" class="post-title-link" itemprop="url">git-svn来管理svn仓库</a>
         </h1>
 
         <div class="post-meta">
@@ -631,7 +722,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Git/git-svn%E6%9D%A5%E7%AE%A1%E7%90%86svn%E4%BB%93%E5%BA%93.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Git/git-svn来管理svn仓库.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Git/git-svn来管理svn仓库.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -650,7 +741,7 @@
           <p>个人是比较喜欢Git的，至于说svn与git熟优熟劣，这个见仁见智，不过对于代码管理而言，svn会省很多事情，但是对于分支开发来说，git确实要好用点。公司开始就使用svn，我也只能去习惯，所以我打算用git来管理svn代码。这不，看一下关于git-svn的文档来了解一下。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Git/git-svn%E6%9D%A5%E7%AE%A1%E7%90%86svn%E4%BB%93%E5%BA%93.html#more" rel="contents">
+              <a class="btn" href="/Git/git-svn来管理svn仓库.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -674,7 +765,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/ssh%E4%BB%A3%E7%90%86%E9%9A%A7%E9%81%93.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/ssh代理隧道.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -688,7 +779,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Linux-Unix/ssh%E4%BB%A3%E7%90%86%E9%9A%A7%E9%81%93.html" class="post-title-link" itemprop="url">ssh代理隧道</a>
+            <a href="/Linux-Unix/ssh代理隧道.html" class="post-title-link" itemprop="url">ssh代理隧道</a>
         </h1>
 
         <div class="post-meta">
@@ -728,7 +819,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/ssh%E4%BB%A3%E7%90%86%E9%9A%A7%E9%81%93.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/ssh代理隧道.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/ssh代理隧道.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -747,7 +838,7 @@
           <p>内网穿透，隧道，这些个东西，听得也非常久了，但是会真的了解这到底是什么原理么？我是喜欢寻根究底的人，所以就只能是仔细了解一下了。之前就看过 TCP/IP 详解的第二版，第七章对防火墙与nat有一定的描述。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Linux-Unix/ssh%E4%BB%A3%E7%90%86%E9%9A%A7%E9%81%93.html#more" rel="contents">
+              <a class="btn" href="/Linux-Unix/ssh代理隧道.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -771,7 +862,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/%E5%88%A9%E7%94%A8poi%E5%AF%B9docx%E6%96%87%E6%A1%A3%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/利用poi对docx文档进行加密.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -785,7 +876,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Java/%E5%88%A9%E7%94%A8poi%E5%AF%B9docx%E6%96%87%E6%A1%A3%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86.html" class="post-title-link" itemprop="url">利用poi对docx文档进行加密</a>
+            <a href="/Java/利用poi对docx文档进行加密.html" class="post-title-link" itemprop="url">利用poi对docx文档进行加密</a>
         </h1>
 
         <div class="post-meta">
@@ -818,7 +909,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/%E5%88%A9%E7%94%A8poi%E5%AF%B9docx%E6%96%87%E6%A1%A3%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/利用poi对docx文档进行加密.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/利用poi对docx文档进行加密.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -834,10 +925,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>事情的起因是，公司业务上对于某一类型的文书是在客户端生成，然后上传到服务器，openoffice转换成pdf文书，然后展示给用户。以避免用户对文书进行的修改。而，docx模板替换后生成的文书，转换成pdf后会丢失格式。最为明显的是，对于图片进行旋转后，docx显示正常，而openoffice无效果的问题。</p>
+          <p>事情的起因是，公司业务上对于某一类型的文书是在客户端生成，然后上传到服务器，openoffice转换成pdf文书，然后展示给用户。以避免用户对文书进行的修改。而，docx模板替换后生成的文书，转换成pdf后会丢失格式。最为明显的是，对于图片进行旋转后，docx显示正常，而openoffice无效果的问题。<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Java/%E5%88%A9%E7%94%A8poi%E5%AF%B9docx%E6%96%87%E6%A1%A3%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86.html#more" rel="contents">
+              <a class="btn" href="/Java/利用poi对docx文档进行加密.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
@@ -861,7 +952,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/openoffice-XML-%E7%94%9F%E6%88%90word%E4%B8%AD%E7%9A%84%E5%9B%BE%E7%89%87.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/openoffice-XML-生成word中的图片.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -875,7 +966,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Java/openoffice-XML-%E7%94%9F%E6%88%90word%E4%B8%AD%E7%9A%84%E5%9B%BE%E7%89%87.html" class="post-title-link" itemprop="url">openoffice-XML-生成word中的图片</a>
+            <a href="/Java/openoffice-XML-生成word中的图片.html" class="post-title-link" itemprop="url">openoffice-XML-生成word中的图片</a>
         </h1>
 
         <div class="post-meta">
@@ -908,7 +999,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/openoffice-XML-%E7%94%9F%E6%88%90word%E4%B8%AD%E7%9A%84%E5%9B%BE%E7%89%87.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/openoffice-XML-生成word中的图片.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/openoffice-XML-生成word中的图片.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -936,7 +1027,6 @@
 <p>WordprocessingML Drawing 命令空间实现了这些能力，包含了所有用来锚定和显示 DrawingML 对象的信息。</p>
 <h1 id="anchor"><a href="#anchor" class="headerlink" title="anchor"></a>anchor</h1><p>下面的例子显示了一个居中显示的图片的xml代码：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">w:r</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">w:drawing</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:anchor</span> <span class="attr">relativeHeight</span>=<span class="string">"10"</span> <span class="attr">allowOverlap</span>=<span class="string">"true"</span>&gt;</span> <span class="tag">&lt;<span class="name">wp:positionH</span> <span class="attr">relativeFrom</span>=<span class="string">"margin"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:align</span>&gt;</span>center<span class="tag">&lt;/<span class="name">wp:align</span>&gt;</span> <span class="tag">&lt;/<span class="name">wp:positionH</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:positionV</span> <span class="attr">relativeFrom</span>=<span class="string">"margin"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:align</span>&gt;</span>center<span class="tag">&lt;/<span class="name">wp:align</span>&gt;</span> <span class="tag">&lt;/<span class="name">wp:positionV</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:extent</span> <span class="attr">cx</span>=<span class="string">"2441542"</span> <span class="attr">cy</span>=<span class="string">"1828800"</span>/&gt;</span> <span class="tag">&lt;<span class="name">wp:wrapSquare</span> <span class="attr">wrapText</span>=<span class="string">"bothSides"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:graphic</span>&gt;</span></span><br><span class="line">          ...</span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:graphic</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">wp:anchor</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">w:drawing</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">w:r</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p><code>anchor</code> 元素，说明，这个对象不会放在文本行内，而<code>anchor</code>的子元素则说明，这个对象居会垂直居中和水平居中，且文本可以以方形环绕它。</p>
 <p><code>anchor</code> 包含了下面这些子元素</p>
 <h2 id="positionH-Horizontal-Positioning"><a href="#positionH-Horizontal-Positioning" class="headerlink" title="positionH (Horizontal Positioning)"></a>positionH (Horizontal Positioning)</h2><p>指定浮动绘制对象在文档中的水平位置。位置有两部分来指定</p>
@@ -948,7 +1038,6 @@
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">complexType</span> <span class="attr">name</span>=<span class="string">"CT_PosH"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">sequence</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">choice</span> <span class="attr">minOccurs</span>=<span class="string">"1"</span> <span class="attr">maxOccurs</span>=<span class="string">"1"</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">element</span> <span class="attr">name</span>=<span class="string">"align"</span> <span class="attr">type</span>=<span class="string">"ST_AlignH"</span> <span class="attr">minOccurs</span>=<span class="string">"1"</span> <span class="attr">maxOccurs</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">element</span> <span class="attr">name</span>=<span class="string">"posOffset"</span> <span class="attr">type</span>=<span class="string">"ST_PositionOffset"</span> <span class="attr">minOccurs</span>=<span class="string">"1"</span> <span class="attr">maxOccurs</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">choice</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">sequence</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"relativeFrom"</span> <span class="attr">type</span>=<span class="string">"ST_RelFromH"</span> <span class="attr">use</span>=<span class="string">"required"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">complexType</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>下面的代码指定了一个位于页面中的元素：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">wp:anchor</span> <span class="attr">...</span> &gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:positionH</span> <span class="attr">relativeFrom</span>=<span class="string">"margin"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:align</span>&gt;</span>center<span class="tag">&lt;/<span class="name">wp:align</span>&gt;</span> <span class="tag">&lt;/<span class="name">wp:positionH</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:positionV</span> <span class="attr">relativeFrom</span>=<span class="string">"margin"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:align</span>&gt;</span>center<span class="tag">&lt;/<span class="name">wp:align</span>&gt;</span> <span class="tag">&lt;/<span class="name">wp:positionV</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">wp:anchor</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><h4 id="relativeFrom-Horizontal-Position-Relative-Base"><a href="#relativeFrom-Horizontal-Position-Relative-Base" class="headerlink" title="relativeFrom(Horizontal Position Relative Base)"></a>relativeFrom(Horizontal Position Relative Base)</h4><p>这个指定基准位置，可能的值由 <code>ST_RelFromH</code>简单类型定义。</p>
 <h4 id="ST-RelFromH-Horizontal-Relative-Positioning"><a href="#ST-RelFromH-Horizontal-Relative-Positioning" class="headerlink" title="ST_RelFromH (Horizontal Relative Positioning)"></a>ST_RelFromH (Horizontal Relative Positioning)</h4><ol>
 <li>character (Character) </li>
@@ -962,12 +1051,9 @@
 </ol>
 <p>xml定义如下:</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">simpleType</span> <span class="attr">name</span>=<span class="string">"ST_RelFromH"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">restriction</span> <span class="attr">base</span>=<span class="string">"xsd:token"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"margin"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"page"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"column"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"character"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"leftMargin"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"rightMargin"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"insideMargin"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">enumeration</span> <span class="attr">value</span>=<span class="string">"outsideMargin"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">restriction</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">simpleType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-
 <h3 id="子元素"><a href="#子元素" class="headerlink" title="子元素"></a>子元素</h3><h4 id="align-Relative-Horizontal-Alignment"><a href="#align-Relative-Horizontal-Alignment" class="headerlink" title="align (Relative Horizontal Alignment)"></a>align (Relative Horizontal Alignment)</h4><p>指定水平对齐。</p>
 <p>下面这个例子，表明这个对象会对齐在页面的左，上。</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">wp:anchor</span> <span class="attr">...</span> &gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">wp:positionH</span> <span class="attr">relativeFrom</span>=<span class="string">"page"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">wp:align</span>&gt;</span>left<span class="tag">&lt;/<span class="name">wp:align</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">wp:positionH</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line">  <span class="tag">&lt;/<span class="name">wp:anchor</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>可用值：</p>
 <ul>
 <li>left    Left Alignment</li>
@@ -978,7 +1064,6 @@
 </ul>
 <h4 id="posOffset-Absolute-Position-Offset"><a href="#posOffset-Absolute-Position-Offset" class="headerlink" title="posOffset (Absolute Position Offset)"></a>posOffset (Absolute Position Offset)</h4><h2 id="positionV-Vertical-Positioning"><a href="#positionV-Vertical-Positioning" class="headerlink" title="positionV (Vertical Positioning)"></a>positionV (Vertical Positioning)</h2><p>和 positionH 一样要指定计算基准位置，偏移参数。</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">complexType</span> <span class="attr">name</span>=<span class="string">"CT_PosV"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">sequence</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">choice</span> <span class="attr">minOccurs</span>=<span class="string">"1"</span> <span class="attr">maxOccurs</span>=<span class="string">"1"</span>&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">element</span> <span class="attr">name</span>=<span class="string">"align"</span> <span class="attr">type</span>=<span class="string">"ST_AlignV"</span> <span class="attr">minOccurs</span>=<span class="string">"1"</span> <span class="attr">maxOccurs</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">           <span class="tag">&lt;<span class="name">element</span> <span class="attr">name</span>=<span class="string">"posOffset"</span> <span class="attr">type</span>=<span class="string">"ST_PositionOffset"</span> <span class="attr">minOccurs</span>=<span class="string">"1"</span> <span class="attr">maxOccurs</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">       <span class="tag">&lt;/<span class="name">choice</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">sequence</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">attribute</span> <span class="attr">name</span>=<span class="string">"relativeFrom"</span> <span class="attr">type</span>=<span class="string">"ST_RelFromV"</span> <span class="attr">use</span>=<span class="string">"required"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">complexType</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <h3 id="ST-RelFromH"><a href="#ST-RelFromH" class="headerlink" title="ST_RelFromH"></a>ST_RelFromH</h3><ul>
 <li>margin    Page Margin</li>
 <li>page    Page Edge</li>
@@ -994,7 +1079,7 @@
 <li>bottom    Bottom</li>
 <li>center    Center Alignment</li>
 <li>inside    Inside</li>
-<li>outside    Outside</li>
+<li>outside    Outside<br><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></li>
 </ul>
 
       
@@ -1015,7 +1100,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/android%E4%BD%BF%E7%94%A8poi%E7%94%9F%E6%88%90%E6%96%87%E4%B9%A6%E5%87%BA%E9%94%99%E8%A7%A3%E5%86%B3.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/android使用poi生成文书出错解决.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -1029,7 +1114,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Java/android%E4%BD%BF%E7%94%A8poi%E7%94%9F%E6%88%90%E6%96%87%E4%B9%A6%E5%87%BA%E9%94%99%E8%A7%A3%E5%86%B3.html" class="post-title-link" itemprop="url">android使用poi生成文书出错解决</a>
+            <a href="/Java/android使用poi生成文书出错解决.html" class="post-title-link" itemprop="url">android使用poi生成文书出错解决</a>
         </h1>
 
         <div class="post-meta">
@@ -1062,7 +1147,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/android%E4%BD%BF%E7%94%A8poi%E7%94%9F%E6%88%90%E6%96%87%E4%B9%A6%E5%87%BA%E9%94%99%E8%A7%A3%E5%86%B3.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/android使用poi生成文书出错解决.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/android使用poi生成文书出错解决.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -1078,125 +1163,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>本来事情一切正常，使用的是poi来生成docx的文档。但是偶然间不知道在什么版本的时候，生成的时候会报错。提示是某个类没有实现List接口，但是非常明显的，之前都正常，并没有做什么特别的操作为什么会出现这样的问题呢？</p>
+          <p>本来事情一切正常，使用的是poi来生成docx的文档。但是偶然间不知道在什么版本的时候，生成的时候会报错。提示是某个类没有实现List接口，但是非常明显的，之前都正常，并没有做什么特别的操作为什么会出现这样的问题呢？<br>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Java/android%E4%BD%BF%E7%94%A8poi%E7%94%9F%E6%88%90%E6%96%87%E4%B9%A6%E5%87%BA%E9%94%99%E8%A7%A3%E5%86%B3.html#more" rel="contents">
+              <a class="btn" href="/Java/android使用poi生成文书出错解决.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/vnc%E5%9C%A8CentOS%E7%9A%84%E5%BC%80%E5%90%AF%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Linux-Unix/vnc%E5%9C%A8CentOS%E7%9A%84%E5%BC%80%E5%90%AF%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86.html" class="post-title-link" itemprop="url">vnc在CentOS的开启相关知识</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-07-18 10:02:22" itemprop="dateCreated datePublished" datetime="2018-07-18T10:02:22+08:00">2018-07-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux/Unix</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Linux-Unix/vnc%E5%9C%A8CentOS%E7%9A%84%E5%BC%80%E5%90%AF%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/vnc在CentOS的开启相关知识.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>自己用才MAC，但是公司用的VPN是网御星云的，必须在windows下用，但是服务器配置还可以，单独用的话有点浪费。于是装了CentOS，KVM布置了一个虚拟机，然后准备开启VNC来支持。另外，所使用的idea也需要在图形化的界面下进行调试，也需要开启VNC。</p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>简单来说，就是我们在服务器上启动一个 vnc服务器，CentOS的叫做 <strong>Xvnc</strong>，此服务器会接受我们 我们的连接，然后监控窗口系统的信息发送给我们，再把我们的操作反馈到服务器的窗口信息。 所以，使用 vnc 的前提是，我们开启了窗口系统，怎么开启，这里不赘述，自行谷歌。</p>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>先安装 gnome 桌面环境:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum groupinstall &quot;GNOME Desktop&quot;</span><br></pre></td></tr></table></figure>
-
-
-<p>CentOS上的安装，非常简单：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install vncserver</span><br></pre></td></tr></table></figure>
-
-<p>就OK了，然后，直接在当前用户下执行命令：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vncserver</span><br></pre></td></tr></table></figure>
-<p>就OK了，但是这里有很多细节其实我们还不知道的。</p>
-<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>执行 <code>vncserver</code> 命令的时候，我们可以指定很多选项，如果不指定任何选项的话，会默认使用第一个可用的 显示ID，通常是 1。用这个显示ID启动  Xvnc，在Xvnc会话里启动窗口管理器。我们可以以 <code>vncserver :13</code>这样的形式指定显示ID。</p>
-<ol>
-<li><code>$HOME/.vnc/xstartup</code> 一个shell脚本，指定当VNC桌面开始时执行的 X 程序。如果这文件不存在，vncserver会建立一个默认的 xstartup 脚本，此脚本尝试 启动你选择的窗口管理器。</li>
-<li><code>/etc/tigervnc/vncserver-config-defaults</code> 这是一个可选的，系统层面的文件与<code>$HOME/.vnc/config</code>相等。如果此文件存在并定义了传递给Xvnc的选项，所有用户都会默认使用这些选项。<code>$HOME/.vnc/config</code>会重写这个文件内设置。文件的加载顺序是：<code>/etc/tigervnc/vncserver-config-defaults, $HOME/.vnc/config,  /etc/tigervnc/vncserver-config-mandatory</code>所有文件都不一定要求必须存在。</li>
-<li><code>/etc/tigervnc/vncserver-config-mandatory</code>系统层面与<code>$HOME/.vnc/config</code>想等的配置文件。如果这个文件定义了参数，那么就其会覆盖 <code>$HOME/.vnc/config</code>内定义的对应参数。</li>
-<li><code>$HOME/.vnc/config</code> 用户的配置文件</li>
-<li><code>$HOME/.vnc/passwd</code> 密码文件</li>
-<li><code>$HOME/.vnc/host:display#.log</code> 日志文件</li>
-<li><code>$HOME/.vnc/host:display#.pid</code> pid文件</li>
-</ol>
-<h1 id="以服务的形式启动CentOS-7"><a href="#以服务的形式启动CentOS-7" class="headerlink" title="以服务的形式启动CentOS 7"></a>以服务的形式启动CentOS 7</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@.service</span><br></pre></td></tr></table></figure>
-
-<p>把此文件中的 <USER> 一用户名替代 。</p>
-<p>执行 <code>systemctl daemon-reload</code></p>
-<p>执行 <code>systemctl enable vncserver@&lt;display&gt;.service</code></p>
-<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>以服务的形式启动失败了，最后是以命令的形式进行启动的。</p>
-
       
     </div>
 
@@ -1259,20 +1234,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1284,10 +1259,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -1316,10 +1291,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         

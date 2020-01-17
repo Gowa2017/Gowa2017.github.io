@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Lua,Cocos2d-X">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Cocos2d-X-lua中关于类的实现及使用">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Cocos2d-X&#x2F;cocos2dx-lua%E4%B8%AD%E5%85%B3%E4%BA%8E%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8F%8A%E4%BD%BF%E7%94%A8.html">
+<meta property="og:url" content="https://gowa.club/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Lua中，没有什么其他的数据对象，只有表。但是其提供的元表和元方法，让我们的程序有了更多的可能。另外，我们必须明白一点的就是，cocos2dx框架中，开启了一个Lua State，我们所有的脚本，逻辑都是在这里面执行，然后这个里面会调用一些 cocos2dx 导出给 lua 使用的接口，最终还是通过 c 代码来完成工作的。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-02-26T06:53:59.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cocos2d-X-lua中关于类的实现及使用">
+<meta name="twitter:description" content="Lua中，没有什么其他的数据对象，只有表。但是其提供的元表和元方法，让我们的程序有了更多的可能。另外，我们必须明白一点的就是，cocos2dx框架中，开启了一个Lua State，我们所有的脚本，逻辑都是在这里面执行，然后这个里面会调用一些 cocos2dx 导出给 lua 使用的接口，最终还是通过 c 代码来完成工作的。">
 
-<link rel="canonical" href="https://gowa.club/Cocos2d-X/cocos2dx-lua%E4%B8%AD%E5%85%B3%E4%BA%8E%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8F%8A%E4%BD%BF%E7%94%A8.html">
+<link rel="canonical" href="https://gowa.club/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos2d-X/cocos2dx-lua%E4%B8%AD%E5%85%B3%E4%BA%8E%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8F%8A%E4%BD%BF%E7%94%A8.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Cocos2d-X/cocos2dx-lua%E4%B8%AD%E5%85%B3%E4%BA%8E%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8F%8A%E4%BD%BF%E7%94%A8.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,46 +294,37 @@
       
         <p>Lua中，没有什么其他的数据对象，只有表。但是其提供的元表和元方法，让我们的程序有了更多的可能。另外，我们必须明白一点的就是，cocos2dx框架中，开启了一个Lua State，我们所有的脚本，逻辑都是在这里面执行，然后这个里面会调用一些 cocos2dx 导出给 lua 使用的接口，最终还是通过 c 代码来完成工作的。</p>
 <a id="more"></a>
-
 <h1 id="main-lua中解析"><a href="#main-lua中解析" class="headerlink" title="main.lua中解析"></a>main.lua中解析</h1><p>在框架启动完毕后，会执行 <code>engine-&gt;executeScriptFile(&quot;src/main.lua&quot;);</code> lua入口文件。根据版本的不同，可能是 <strong>src/main.lua</strong>，也有可能直接是 <strong>main.lua</strong> 但这没有什么影响。</p>
 <p>具体的代码请查看 <code>framework/runtime-src/Classes/AppDelegate.cpp</code>。</p>
 <p>一开始，cocos2dx就已经把其提供的接口函数注册到了Lua State中，我们已经可以直接使用一些了，当然，我们也可以把它提供的接口，再次用Lua进行封装，Quick干的就是这样的事情。</p>
 <p>我们关注的其实，只是<strong>main.lua</strong>中的一行：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">"app.MyApp"</span>).new():run()</span><br></pre></td></tr></table></figure>
-
 <p>其只是加载了 <strong>app.MyApp</strong> 文件，然后执行其中的 <code>new()</code> 方法后返回一个新 <strong>AppBase</strong> 对象，再执行对象中的 <code>run()</code> 方法。</p>
 <p><strong>MyApp.lua</strong> 是 <strong>AppBase.lua</strong>的一个实例，从其文件中我们可以看得出来：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- app/MyApp.lua</span></span><br><span class="line"><span class="keyword">local</span> AppBase = <span class="built_in">require</span>(<span class="string">"framework.AppBase"</span>)</span><br><span class="line"><span class="keyword">local</span> MyApp = class(<span class="string">"MyApp"</span>, AppBase)</span><br></pre></td></tr></table></figure>
-
 <p>其以 AppBase作为基类（父类），建立了一个对象<strong>MyApp</strong>。我们可以以如下代码来打印出 <strong>MyApp</strong>的内容及其元表的内容。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> m = <span class="built_in">require</span>(<span class="string">"app.Myapp"</span>)</span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> <span class="built_in">pairs</span>(m) <span class="keyword">do</span></span><br><span class="line">        <span class="built_in">print</span>(k, v)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">"-------------"</span>)</span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> <span class="built_in">pairs</span>(<span class="built_in">getmetatable</span>(m)) <span class="keyword">do</span></span><br><span class="line">        <span class="built_in">print</span>(k, v)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>输出结果是：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[LUA-print] run	function: 0x07c45220</span><br><span class="line">[LUA-print] __ctype	2</span><br><span class="line">[LUA-print] new	function: 0x07c44360</span><br><span class="line">[LUA-print] __cname	MyApp</span><br><span class="line">[LUA-print] super	table: 0x07c44cf8</span><br><span class="line">[LUA-print] ctor	function: 0x07c451e0</span><br><span class="line">[LUA-print] __index	table: 0x07c44650</span><br><span class="line">[LUA-print] -------------</span><br><span class="line">[LUA-print] __index	table: 0x07c44cf8</span><br></pre></td></tr></table></figure>
-
 <p>其中  <strong>spuer</strong> 表明其父类是一个表，<strong>__cname</strong> 表示其类名 <em>MyApp</em> ，<strong>__index</strong>  是一个表，这里暂时不讨论这个，放在这里，其表示它也可以作为其他类的元表（父类）而已。</p>
 <p>最后一行是其 元表的 输出，其元表中只有一个 <strong>__index</strong> 方法，那么所有 <em>MyApp</em> 内不存在的方法都会从 <strong>__index</strong> 对应的表中获取。</p>
 <p>这里，我们加载了 <strong>app.MyApp.lua</strong> 模块，返回了类 <strong>AppBase.lua</strong> 的一个子类 <strong>MyApp</strong>。</p>
 <h1 id="new-及-class的实现"><a href="#new-及-class的实现" class="headerlink" title="new()及 class的实现"></a>new()及 class的实现</h1><p>在 <strong>app.MyApp.lua</strong>中，我们发现，其实并没有定义 <strong>new, super, ctype, __index</strong> 这几个字段。其实由 <em>class()</em> 函数进行设置的。</p>
 <p>在 文件 <code>src/framework/functions.lua</code>，定义了 <code>class()</code> 函数：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">class</span><span class="params">(classname, super)</span></span></span><br><span class="line">    <span class="keyword">local</span> superType = <span class="built_in">type</span>(super)</span><br><span class="line">    <span class="keyword">local</span> cls</span><br><span class="line"></span><br><span class="line">	<span class="comment">-- 父类 只能是一个函数 或者 一个表</span></span><br><span class="line">    <span class="keyword">if</span> superType ~= <span class="string">"function"</span> <span class="keyword">and</span> superType ~= <span class="string">"table"</span> <span class="keyword">then</span></span><br><span class="line">        superType = <span class="literal">nil</span></span><br><span class="line">        super = <span class="literal">nil</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> superType == <span class="string">"function"</span> <span class="keyword">or</span> (super <span class="keyword">and</span> super.__ctype == <span class="number">1</span>) <span class="keyword">then</span></span><br><span class="line">        <span class="comment">-- inherited from native C++ Object</span></span><br><span class="line">        cls = &#123;&#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> superType == <span class="string">"table"</span> <span class="keyword">then</span></span><br><span class="line">            <span class="comment">-- copy fields from super</span></span><br><span class="line">            <span class="keyword">for</span> k,v <span class="keyword">in</span> <span class="built_in">pairs</span>(super) <span class="keyword">do</span> cls[k] = v <span class="keyword">end</span></span><br><span class="line">            cls.__create = super.__create</span><br><span class="line">            cls.super    = super</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            cls.__create = super</span><br><span class="line">            cls.ctor = <span class="function"><span class="keyword">function</span><span class="params">()</span></span> <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">        cls.__cname = classname</span><br><span class="line">        cls.__ctype = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">cls.new</span><span class="params">(...)</span></span></span><br><span class="line">            <span class="keyword">local</span> instance = cls.__create(...)</span><br><span class="line">            <span class="comment">-- copy fields from class to native object</span></span><br><span class="line">            <span class="keyword">for</span> k,v <span class="keyword">in</span> <span class="built_in">pairs</span>(cls) <span class="keyword">do</span> instance[k] = v <span class="keyword">end</span></span><br><span class="line">            instance.class = cls</span><br><span class="line">            instance:ctor(...)</span><br><span class="line">            <span class="keyword">return</span> instance</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="comment">-- inherited from Lua Object</span></span><br><span class="line">        <span class="keyword">if</span> super <span class="keyword">then</span></span><br><span class="line">            cls = &#123;&#125;</span><br><span class="line">            <span class="built_in">setmetatable</span>(cls, &#123;<span class="built_in">__index</span> = super&#125;)</span><br><span class="line">            cls.super = super</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            cls = &#123;ctor = <span class="function"><span class="keyword">function</span><span class="params">()</span></span> <span class="keyword">end</span>&#125;</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">        cls.__cname = classname</span><br><span class="line">        cls.__ctype = <span class="number">2</span> <span class="comment">-- lua</span></span><br><span class="line">        cls.<span class="built_in">__index</span> = cls</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">cls.new</span><span class="params">(...)</span></span></span><br><span class="line">            <span class="keyword">local</span> instance = <span class="built_in">setmetatable</span>(&#123;&#125;, cls)</span><br><span class="line">            instance.class = cls</span><br><span class="line">            instance:ctor(...)</span><br><span class="line">            <span class="keyword">return</span> instance</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span> cls</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>其通过一个 <em>类名，父类</em> 作为参数，然后返回一个新的类。  </p>
 <p>这里，我们首先假设都已经知道，对于元表中的<strong>__index</strong>，其值（元方法）可以是一个函数（当找不到对应的键值是会以 <em>表，键</em> 为参数进行调用后返回），或一个表（找不到对应键值时以 <em>t[k]</em> 进行返回）。</p>
 <p>父类可能有两种情况，我们先来看简单的一种。</p>
 <h2 id="super是lua表"><a href="#super是lua表" class="headerlink" title="super是lua表"></a>super是lua表</h2><p>这是比较简单的一种情况，代码体现在：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">    <span class="comment">-- inherited from Lua Object</span></span><br><span class="line">    <span class="keyword">if</span> super <span class="keyword">then</span></span><br><span class="line">        cls = &#123;&#125;</span><br><span class="line">        <span class="built_in">setmetatable</span>(cls, &#123;<span class="built_in">__index</span> = super&#125;)</span><br><span class="line">        cls.super = super</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        cls = &#123;ctor = <span class="function"><span class="keyword">function</span><span class="params">()</span></span> <span class="keyword">end</span>&#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    cls.__cname = classname</span><br><span class="line">    cls.__ctype = <span class="number">2</span> <span class="comment">-- lua</span></span><br><span class="line">    cls.<span class="built_in">__index</span> = cls</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">cls.new</span><span class="params">(...)</span></span></span><br><span class="line">        <span class="keyword">local</span> instance = <span class="built_in">setmetatable</span>(&#123;&#125;, cls)</span><br><span class="line">        instance.class = cls</span><br><span class="line">        instance:ctor(...)</span><br><span class="line">        <span class="keyword">return</span> instance</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>我们需要关注的是，<code>class()</code> 自动为每个类建立了一个 <code>new()</code> 方法：其会返回以接收消息类的实例，并将 对应参数传递给  <code>ctor()</code> 方法。</p>
 <h2 id="super是一个函数"><a href="#super是一个函数" class="headerlink" title="super是一个函数"></a>super是一个函数</h2><p>当 <em>spuer</em> 是一个函数，或者 super类型是 C 类的时候，会麻烦一些：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> superType == <span class="string">"function"</span> <span class="keyword">or</span> (super <span class="keyword">and</span> super.__ctype == <span class="number">1</span>) <span class="keyword">then</span></span><br><span class="line">    <span class="comment">-- inherited from native C++ Object</span></span><br><span class="line">    cls = &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> superType == <span class="string">"table"</span> <span class="keyword">then</span></span><br><span class="line">        <span class="comment">-- copy fields from super</span></span><br><span class="line">        <span class="keyword">for</span> k,v <span class="keyword">in</span> <span class="built_in">pairs</span>(super) <span class="keyword">do</span> cls[k] = v <span class="keyword">end</span></span><br><span class="line">        cls.__create = super.__create</span><br><span class="line">        cls.super    = super</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        cls.__create = super</span><br><span class="line">        cls.ctor = <span class="function"><span class="keyword">function</span><span class="params">()</span></span> <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">    cls.__cname = classname</span><br><span class="line">    cls.__ctype = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">cls.new</span><span class="params">(...)</span></span></span><br><span class="line">        <span class="keyword">local</span> instance = cls.__create(...)</span><br><span class="line">        <span class="comment">-- copy fields from class to native object</span></span><br><span class="line">        <span class="keyword">for</span> k,v <span class="keyword">in</span> <span class="built_in">pairs</span>(cls) <span class="keyword">do</span> instance[k] = v <span class="keyword">end</span></span><br><span class="line">        instance.class = cls</span><br><span class="line">        instance:ctor(...)</span><br><span class="line">        <span class="keyword">return</span> instance</span><br><span class="line">    <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
 <p>如果 super是一个lua 函数，其会设置类的 <em>__create</em>字段为 super函数，构造的 <code>new()</code>方法就会调用这个函数。而当 super是一个是C类时，会调用这个C类构造函数来返回实例。</p>
 <h2 id="lua中的C类"><a href="#lua中的C类" class="headerlink" title="lua中的C类"></a>lua中的C类</h2><p>前面提到，当一个类的父类是一个表，但表中的<strong>__ctype</strong> 是 1时，这个类是一个C类。其本质，也是Lua中的一张表。</p>
 <p>关于在Lua进行模块的注册流程，请关注一下另外一篇文章<a href="https://gowa2017.github.io/cocos/cocos2dx-lua%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B.lua.html#lua-module-register-L" target="_blank" rel="noopener">cocos2dx-lua的启动流程.lua</a>。</p>
 <p>现在，我们来关注一下类的导出吧，以Scene为例：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// cocos/scripting/lua-bindings/auto/lua_cocos2dx_auto.cpp</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lua_register_cocos2dx_Scene</span><span class="params">(lua_State* tolua_S)</span></span></span><br><span class="line"><span class="function"></span>&#123;	 <span class="comment">// 注册一个用户数据类型 cc.Scene 到State中</span></span><br><span class="line">    tolua_usertype(tolua_S,<span class="string">"cc.Scene"</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 映射C类 cc.Scene 到Lua 类 Scene ，父类为 cc.NodeSceneLuatolua_cclass(tolua_S,"Scene","cc.Scene","cc.Node",nullptr);</span></span><br><span class="line">	<span class="comment">// 注册模块 Scene</span></span><br><span class="line">    tolua_beginmodule(tolua_S,<span class="string">"Scene"</span>);</span><br><span class="line">    <span class="comment">// 注册模块（类）的函数    tolua_function(tolua_S,"render",lua_cocos2dx_Scene_render);</span></span><br><span class="line">        tolua_function(tolua_S,<span class="string">"createWithSize"</span>, lua_cocos2dx_Scene_createWithSize);</span><br><span class="line">        tolua_function(tolua_S,<span class="string">"create"</span>, lua_cocos2dx_Scene_create);</span><br><span class="line">    tolua_endmodule(tolua_S);</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> typeName = <span class="keyword">typeid</span>(cocos2d::Scene).name();</span><br><span class="line">    g_luaType[typeName] = <span class="string">"cc.Scene"</span>;</span><br><span class="line">    g_typeCast[<span class="string">"Scene"</span>] = <span class="string">"cc.Scene"</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>我们来简要的说一下这个过程：</p>
 <ul>
 <li><code>tolua_usertype(L, &quot;cc.Scene&quot;)</code> 这个调用，会在Lua State的<em>LUA_REGISTRYINDEX</em> 索引处的注册表  <em>registry</em> 中建立两项：</li>
@@ -342,6 +335,7 @@
 <li>注册<em>Scene</em>模块的方法。</li>
 </ul>
 <p>因此，调用 <code>.new()</code> 方法会创建一个 MyApp 类（AppBase类的子类）的实例，之后，再调用 实例 的<code>run()</code>方法，进入了主场景。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -359,7 +353,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Cocos2d-X/cocos2dx-lua%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B.lua.html" rel="next" title="Cocos2d-X-lua的启动流程.lua">
+                <a href="/Cocos2d-X/cocos2dx-lua的启动流程.lua.html" rel="next" title="Cocos2d-X-lua的启动流程.lua">
                   <i class="fa fa-chevron-left"></i> Cocos2d-X-lua的启动流程.lua
                 </a>
             </div>
@@ -367,7 +361,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%97%A5%E5%BF%97%E6%A0%BC%E5%BC%8F.html" rel="prev" title="MySQL二进制日志格式">
+                <a href="/数据库/MySQL二进制日志格式.html" rel="prev" title="MySQL二进制日志格式">
                   MySQL二进制日志格式 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -429,20 +423,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -454,10 +448,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -486,10 +480,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -564,7 +558,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Cocos2d-X/cocos2dx-lua%E4%B8%AD%E5%85%B3%E4%BA%8E%E7%B1%BB%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8F%8A%E4%BD%BF%E7%94%A8.html",
+            url: "https://gowa.club/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html",
             identifier: "Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html",
             title: "Cocos2d-X-lua中关于类的实现及使用"
           }

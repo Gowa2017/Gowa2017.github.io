@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="我们知道，进程在打开的时候，就默认已经打开了三个文件描述符 0, 1, 2 方便大不了 标准输入，标准输出，标准错误。而我们要进行重定向的时候，比如到一个文件的时候，实际上进程不会关心他到底是被重定向到什么地方了，他只需要依然向这三个描述符进行相关的 IO 操作就行了。所以，我们需要来了解一下文件描述符背后的一些内容。">
+<meta name="keywords" content="Linux-Unix,Bash">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bash中的IO与重定向">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/Bash中的IO与重定向.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="我们知道，进程在打开的时候，就默认已经打开了三个文件描述符 0, 1, 2 方便大不了 标准输入，标准输出，标准错误。而我们要进行重定向的时候，比如到一个文件的时候，实际上进程不会关心他到底是被重定向到什么地方了，他只需要依然向这三个描述符进行相关的 IO 操作就行了。所以，我们需要来了解一下文件描述符背后的一些内容。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-17T04:04:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bash中的IO与重定向">
+<meta name="twitter:description" content="我们知道，进程在打开的时候，就默认已经打开了三个文件描述符 0, 1, 2 方便大不了 标准输入，标准输出，标准错误。而我们要进行重定向的时候，比如到一个文件的时候，实际上进程不会关心他到底是被重定向到什么地方了，他只需要依然向这三个描述符进行相关的 IO 操作就行了。所以，我们需要来了解一下文件描述符背后的一些内容。">
+
+<link rel="canonical" href="https://gowa.club/Linux-Unix/Bash中的IO与重定向.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Bash中的IO与重定向 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Bash中的IO与重定向.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Bash中的IO与重定向
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-01-17 12:04:35" itemprop="dateCreated datePublished" datetime="2020-01-17T12:04:35+08:00">2020-01-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux-Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/Bash中的IO与重定向.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/Bash中的IO与重定向.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>我们知道，进程在打开的时候，就默认已经打开了三个文件描述符 <strong>0, 1, 2</strong> 方便大不了 标准输入，标准输出，标准错误。而我们要进行重定向的时候，比如到一个文件的时候，实际上进程不会关心他到底是被重定向到什么地方了，他只需要依然向这三个描述符进行相关的 IO 操作就行了。所以，我们需要来了解一下文件描述符背后的一些内容。</p>
+<a id="more"></a>
+<h1 id="File-Descriptor"><a href="#File-Descriptor" class="headerlink" title="File Descriptor"></a>File Descriptor</h1><p>从 <strong>APUE</strong> 中我们可以看到，对于打开的文件其实上有三个数据结构：</p>
+<p><div class="language-dot"><br>digraph {<br>rankdir = LR<br>subgraph cluster_process_table{<br>label=”process table entry”<br>T[shape=record,label=”{fd flags | file pointers}|{<fd0> fd0 | <p0> p0}|{<fd1> fd1 | <p1> p1}|{<fd2> fd2 | <p2> p2}”]<br>}</p2></fd2></p1></fd1></p0></fd0></div></p>
+<p>subgraph cluster_open_file_table{<br>label=”file table entry\n maintain by kernel”<br>F1[shape=record,label=”<flag> flag | <offset> offset|  <vp> v-node pointer”]<br>F2[shape=record,label=”<flag> flag | <offset> offset|  <vp> v-node pointer”]<br>}</vp></offset></flag></vp></offset></flag></p>
+<p>subgraph cluster_v_node_table{<br>label=”v-node table entry\n”<br>V1[shape=record, label=”<v> v-node infomation 1  | <data> v_data”]<br>V2[shape=record, label=”<v> v-node infomation 2 | <data> v_data”]<br>I1[shape=record, label=”<i> i-node infomation 1 | <v> i_vnode”]<br>I2[shape=record, label=”<i> i-node infomation 2 | <v> i_vnode”]<br>}<br>T:p0-&gt; F1:flag<br>T:p1 -&gt; F2:flag<br>F1:vp -&gt; V1:v<br>F2:vp -&gt; V2:v<br>V1:data -&gt; I1:i<br>V2:data -&gt;I2:i<br>I1:v -&gt; V1:v<br>I2:v -&gt;V2:v<br>}<br>&lt;/div&gt;<br>对于上面这个图做简单的解释：</v></i></v></i></data></v></data></v></p>
+<ul>
+<li><strong>Process table entry 进程表项</strong>。在 <strong>进程表中</strong>，每个进程都会有一个记录项。每个进程表中的记录都会有已经打开的文件描述符表。每个文件描述符都于一个指向打开的文件表项指针。</li>
+<li><strong>File table entry 文件表项</strong> 对于所有打开的文件，内核将其维护在一个表内。每个表项都有一个指向 v-node 信息的指针。</li>
+<li><strong>V-node V 节点信息</strong> 包含了此类型文件的信息，以及在此文件上进行操作的函数指针。<ul>
+<li>V-node 信息由打开文件的时候从磁盘读入</li>
+<li>V-node 也包含了此文件的 i-node 节点信息</li>
+<li>Linux 没有 v-node，而是用了一个通用的 i-node 结构。其使用了一个文件系统无关的 i-node和一个文件系统相关的 i-node</li>
+</ul>
+</li>
+</ul>
+<p>所以呢，对于一个文件，是否是同一个文件，要看 v-node/i-node 是一样的，才能说明打开的是同一个文件。<br>而如果同一个文件被不同的进程打开两次，那么在内核维护的打开文件表中就会有两项。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">digraph &#123;</span><br><span class="line">rankdir = LR</span><br><span class="line">subgraph cluster_process_table_A&#123;</span><br><span class="line">label=&quot;process table entry&quot;</span><br><span class="line">T1[shape=record,label=&quot;&#123;fd flags | file pointers&#125;|&#123;&lt;fd0&gt; fd0 | &lt;p0&gt; p0&#125;|&#123;&lt;fd1&gt; fd1 | &lt;p1&gt; p1&#125;|&#123;&lt;fd2&gt; fd2 | &lt;p2&gt; p2&#125;&quot;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">subgraph cluster_process_table_B&#123;</span><br><span class="line">label=&quot;process table entry&quot;</span><br><span class="line">T2[shape=record,label=&quot;&#123;fd flags | file pointers&#125;|&#123;&lt;fd0&gt; fd0 | &lt;p0&gt; p0&#125;|&#123;&lt;fd1&gt; fd1 | &lt;p1&gt; p1&#125;|&#123;&lt;fd2&gt; fd2 | &lt;p2&gt; p2&#125;&quot;]</span><br><span class="line">&#125;</span><br><span class="line">subgraph cluster_open_file_table&#123;</span><br><span class="line">label=&quot;file table entry\n maintain by kernel&quot;</span><br><span class="line">F1[shape=record,label=&quot;&lt;flag&gt; flag | &lt;offset&gt; offset|  &lt;vp&gt; v-node pointer&quot;]</span><br><span class="line">F2[shape=record,label=&quot;&lt;flag&gt; flag | &lt;offset&gt; offset|  &lt;vp&gt; v-node pointer&quot;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">subgraph cluster_v_node_table&#123;</span><br><span class="line">label=&quot;v-node table entry\n&quot;</span><br><span class="line">V1[shape=record, label=&quot;&lt;v&gt; v-node infomation 1  | &lt;data&gt; v_data&quot;]</span><br><span class="line">I1[shape=record, label=&quot;&lt;i&gt; i-node infomation 1 | &lt;v&gt; i_vnode&quot;]</span><br><span class="line">&#125;</span><br><span class="line">T1:p0-&gt; F1:flag</span><br><span class="line">T2:p1 -&gt; F2:flag</span><br><span class="line">F1:vp -&gt; V1:v</span><br><span class="line">F2:vp -&gt; V1:v</span><br><span class="line">V1:data -&gt; I1:i</span><br><span class="line">I1:v -&gt; V1:v</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h1><p>bash 中的重定向操作符有两类三个：</p>
+<ul>
+<li>输入重定向 <code>&lt;, &lt;&lt;, &lt;&lt;&lt;</code></li>
+<li>输出重定向 <code>&gt;, &gt;&gt;, &gt;&gt;&gt;</code></li>
+</ul>
+<p>其本质上是对文件描述符的复制。</p>
+<h2 id="文件描述符复制"><a href="#文件描述符复制" class="headerlink" title="文件描述符复制"></a>文件描述符复制</h2><p>在一个进程中，所谓的文件描述符的复制，说的是，为一个 <strong>文件表项</strong> 在 <strong>在进程表项</strong> 中添加一个指针。<br>当我们进行重定向的时候，需要重定向的那个文件描述符 S，将成为定向到的文件描述符 D 的副本，也即是说，将文件描述符 D 复制到了 文件描述符 S。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">digraph &#123;</span><br><span class="line">rankdir = LR</span><br><span class="line">subgraph cluster_process_table_A&#123;</span><br><span class="line">label=&quot;process table entry&quot;</span><br><span class="line">T1[shape=record,label=&quot;&#123;fd flags | file pointers&#125;|&#123;&lt;fd0&gt; fd0 | &lt;p0&gt; p0&#125;|&#123;&lt;fd1&gt; fd1 | &lt;p1&gt; p1&#125;|&#123;&lt;fd2&gt; fd2 | &lt;p2&gt; p2&#125; |&#123;&lt;fdS&gt; fdS|&lt;pS&gt; pS&#125;|&#123;&lt;fdD&gt; fdD|&lt;pD&gt; pD&#125;&quot;]</span><br><span class="line">&#125;</span><br><span class="line">F1[shape=record,label=&quot;&lt;flag&gt; flag | &lt;offset&gt; offset|  &lt;vp&gt; v-node pointer&quot;]</span><br><span class="line"></span><br><span class="line">T1:pS -&gt; F1:flag</span><br><span class="line">T1:pD -&gt; F1:flag</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>就是感官上有点怪异，我需要的是重定向是S，结果却是将要定向到的 D 复制给了 S。</p>
+<h2 id="dup-系统调用"><a href="#dup-系统调用" class="headerlink" title="dup 系统调用"></a>dup 系统调用</h2><p>有两个底层函数来完成文件描述符的复制：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">dup(<span class="keyword">int</span> fildes);</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">dup2(<span class="keyword">int</span> fildes, <span class="keyword">int</span> fildes2);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>dup() 会返回文件描述符表中最小的那个整数，让此整数代表指向 <em>fildes</em> 的文件表项。</li>
+<li>dup2() 就有所不同，当 <em>fildes2</em> 在使用的话，那么就会先关闭 <em>fildes2</em>，然后再进行复制。</li>
+</ul>
+<p>所以我猜想，对于输入输出的重定向，要么是利用：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">close</span>(<span class="number">1</span>);</span><br><span class="line">dup()</span><br></pre></td></tr></table></figure>
+<p>或者是</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">dup2(fd, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>这样的形式来实现的。</p>
+<h2 id="重定向的顺序"><a href="#重定向的顺序" class="headerlink" title="重定向的顺序"></a>重定向的顺序</h2><p>经常这谈到的一个区别就是：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ls  &gt; dirlist  2&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">digraph &#123;</span><br><span class="line">fd1</span><br><span class="line">fd2</span><br><span class="line">ft1</span><br><span class="line">ftdirlist[shape=record]</span><br><span class="line"></span><br><span class="line">fd1 -&gt; ftdirlist</span><br><span class="line">fd2 -&gt; ftdirlist</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与 </p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ls 2&gt;&amp;1 &gt; dirlist</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">digraph &#123;</span><br><span class="line">fd1</span><br><span class="line">fd2</span><br><span class="line">ft1</span><br><span class="line">ftdirlist[shape=record]</span><br><span class="line"></span><br><span class="line">fd2 -&gt; ft1</span><br><span class="line">fd1 -&gt; ftdirlist</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>的区别。</p>
+<p>这是再于，对于第二种情况，标准错误只是使用了标准输出的文件表项，而标准输出使用了 dirlist 的文件表项。</p>
+<h2 id="gt-gt-amp"><a href="#gt-gt-amp" class="headerlink" title="[&gt;]&gt;&amp;"></a>[&gt;]&gt;&amp;</h2><p>这个操作符实际上是用来进行表示复制文件描述符的意思的，我们可以用 <code>&gt;</code> 重定向到文件，但是如果是要重定向描述符的时候就只能用这个。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n]&lt;&amp;word</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当 Word 不是数字就会出错。</li>
+<li>如果 word 是 <code>-</code>，那么会关闭描述符 <code>n</code></li>
+<li>如果 <code>n</code> 未指定，那么就会使用  <em>0</em></li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n]&gt;&amp;word</span><br></pre></td></tr></table></figure>
+<ul>
+<li>当 Word 不是数字就会出错。</li>
+<li>如果 word 是 <code>-</code>，那么会关闭描述符 <code>n</code></li>
+<li>如果 <code>n</code> 未指定，那么就会使用  <em>1</em></li>
+<li><strong>特殊情况</strong>：如果 <code>n</code> 未指定，<em>word</em> 不是数字，也不是 <code>-</code>（它是个文件名），那么标准输出，标准错误都会被重定向到 <em>word</em> 代表的文件。</li>
+</ul>
+<h3 id="lt-lt-here-document"><a href="#lt-lt-here-document" class="headerlink" title="&lt;&lt; here-document"></a>&lt;&lt; here-document</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n] &lt;&lt;[-] word</span><br><span class="line">    here-document</span><br><span class="line">delimiter</span><br></pre></td></tr></table></figure>
+<p>在这个命令中， <code>&lt;&lt;</code> 表示跟随其后的是一个文档，而 <em>word</em> 表示文档的结束符，<em>delimiter</em> 表征结束。如：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">wc &lt;&lt; EOF</span><br><span class="line">a b c </span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>使用这个的时候需要注意：</p>
+<p><strong>在 word 上 不会进行 参数和变量展开，命令替换，算数展开，或文件名展开</strong></p>
+<p><strong>如果 <em>word</em> 有部分是加了引用的，那么这个 <em>delimiter</em> 应该是 <em>word</em> 去除引号后的结果。并且 her-document 中的所有内容不会进行展开。</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> VVVV=<span class="string">"vvvvvv"</span></span><br><span class="line">cat &lt;&lt; <span class="string">"F"</span>F</span><br><span class="line"><span class="variable">$VVVV</span></span><br><span class="line">`expr 1 + 2`</span><br><span class="line">FF</span><br><span class="line"><span class="variable">$VVVV</span></span><br><span class="line">`expr 1 + 2`</span><br></pre></td></tr></table></figure>
+<p><strong>如果未引用word，则对本文的所有行进行参数扩展，命令替换和算术扩展，字符序列\ newline将被忽略，并且必须使用’\’来引用字符’\’，’$ ‘和’`’。</strong></p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> VVVV=<span class="string">"vvvvvv"</span></span><br><span class="line">cat &lt;&lt; FF</span><br><span class="line"><span class="variable">$VVVV</span></span><br><span class="line">`expr 1 + 2`</span><br><span class="line">FF</span><br><span class="line">vvvvvv</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<p><code>&lt;&lt;-</code> 是一种特殊情况，所有开头的  tab 会被去掉，同时会将 <em>delimiter</em> 包含进来。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> VVVV=<span class="string">"vvvvvv"</span></span><br><span class="line">cat &lt;&lt;- FF</span><br><span class="line">    <span class="variable">$VVVV</span></span><br><span class="line">`expr 1 + 2`</span><br><span class="line">FF</span><br><span class="line">vvvvvv</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+<h3 id="lt-lt-lt"><a href="#lt-lt-lt" class="headerlink" title="&lt;&lt;&lt;"></a>&lt;&lt;&lt;</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n] &lt;&lt;&lt; word</span><br></pre></td></tr></table></figure>
+<p>直接就是长串文本的搞法了：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cat &lt;&lt;&lt; <span class="string">"FF</span></span><br><span class="line"><span class="string">    <span class="variable">$VVVV</span></span></span><br><span class="line"><span class="string">`expr 1 + 2`</span></span><br><span class="line"><span class="string">FF"</span></span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Linux-Unix/" rel="tag"># Linux-Unix</a>
+              <a href="/tags/Bash/" rel="tag"># Bash</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/JavaScript/关于mermaid.cli渲染成图片文件的过程.html" rel="next" title="关于mermaid.cli渲染成图片文件的过程">
+                  <i class="fa fa-chevron-left"></i> 关于mermaid.cli渲染成图片文件的过程
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#File-Descriptor"><span class="nav-number">1.</span> <span class="nav-text">File Descriptor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重定向"><span class="nav-number">2.</span> <span class="nav-text">重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件描述符复制"><span class="nav-number">2.1.</span> <span class="nav-text">文件描述符复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dup-系统调用"><span class="nav-number">2.2.</span> <span class="nav-text">dup 系统调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重定向的顺序"><span class="nav-number">2.3.</span> <span class="nav-text">重定向的顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gt-gt-amp"><span class="nav-number">2.4.</span> <span class="nav-text">[&gt;]&gt;&amp;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-lt-here-document"><span class="nav-number">2.4.1.</span> <span class="nav-text">&lt;&lt; here-document</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-lt-lt"><span class="nav-number">2.4.2.</span> <span class="nav-text">&lt;&lt;&lt;</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">304</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">125</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Linux-Unix/Bash中的IO与重定向.html",
+            identifier: "Linux-Unix/Bash中的IO与重定向.html",
+            title: "Bash中的IO与重定向"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>

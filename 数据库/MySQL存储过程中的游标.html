@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL存储过程中的游标">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;MySQL%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%B8%B8%E6%A0%87.html">
+<meta property="og:url" content="https://gowa.club/数据库/MySQL存储过程中的游标.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="好久没有写 MySQL 相关的东西了，今天遇到一个棘手的问题。需要计算，两个时间之间所经历过的工作日及工作时。非常的头疼，想到的实现方式，要么直接刷 SQL，比较麻烦；要么把表都导出来，然后 Python 获取处理后进行更新。想到其实这个任务也不是非常重，最终决定用存储过程来解决。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-03-07T14:34:52.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL存储过程中的游标">
+<meta name="twitter:description" content="好久没有写 MySQL 相关的东西了，今天遇到一个棘手的问题。需要计算，两个时间之间所经历过的工作日及工作时。非常的头疼，想到的实现方式，要么直接刷 SQL，比较麻烦；要么把表都导出来，然后 Python 获取处理后进行更新。想到其实这个任务也不是非常重，最终决定用存储过程来解决。">
 
-<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%B8%B8%E6%A0%87.html">
+<link rel="canonical" href="https://gowa.club/数据库/MySQL存储过程中的游标.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%B8%B8%E6%A0%87.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/MySQL存储过程中的游标.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -259,7 +261,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%B8%B8%E6%A0%87.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/MySQL存储过程中的游标.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/MySQL存储过程中的游标.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,63 +294,46 @@
       
         <p>好久没有写 MySQL 相关的东西了，今天遇到一个棘手的问题。需要计算，两个时间之间所经历过的工作日及工作时。非常的头疼，想到的实现方式，要么直接刷 SQL，比较麻烦；要么把表都导出来，然后 Python 获取处理后进行更新。想到其实这个任务也不是非常重，最终决定用存储过程来解决。</p>
 <a id="more"></a>
-
 <h1 id="CREATE-PROCEDURE-FUNCTION"><a href="#CREATE-PROCEDURE-FUNCTION" class="headerlink" title="CREATE PROCEDURE | FUNCTION"></a>CREATE PROCEDURE | FUNCTION</h1><p>从语法上来看，我发现，MySQL 中，过程与函数的区别就是：过程没有定义值，而函数定义了返回值。</p>
 <p>但实际上过程可以通过参数来进行值的返回的，同时，也只有过程能把参数指定为 <code>IN,OUT</code>。</p>
 <p>而函数必须包含 RETURN 语句。</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> sp_name ([proc_parameter[,...]])</span><br><span class="line">    [characteristic ...] routine_body</span><br><span class="line"> </span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">FUNCTION</span> sp_name ([func_parameter[,...]])</span><br><span class="line">    <span class="keyword">RETURNS</span> <span class="keyword">type</span></span><br><span class="line">    [characteristic ...] routine_body</span><br><span class="line">    </span><br><span class="line">    proc_parameter:</span><br><span class="line">    [ <span class="keyword">IN</span> | <span class="keyword">OUT</span> | INOUT ] param_name <span class="keyword">type</span></span><br><span class="line">    </span><br><span class="line">    func_parameter:</span><br><span class="line">    param_name <span class="keyword">type</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">type</span>:</span><br><span class="line">    <span class="keyword">Any</span> valid MySQL <span class="keyword">data</span> <span class="keyword">type</span></span><br><span class="line"> </span><br><span class="line">characteristic:</span><br><span class="line">    <span class="keyword">LANGUAGE</span> <span class="keyword">SQL</span></span><br><span class="line">  | [<span class="keyword">NOT</span>] <span class="keyword">DETERMINISTIC</span></span><br><span class="line">  | &#123; CONTAINS <span class="keyword">SQL</span> | <span class="keyword">NO</span> <span class="keyword">SQL</span> | <span class="keyword">READS</span> <span class="keyword">SQL</span> <span class="keyword">DATA</span> | MODIFIES <span class="keyword">SQL</span> <span class="keyword">DATA</span> &#125;</span><br><span class="line">  | <span class="keyword">SQL</span> <span class="keyword">SECURITY</span> &#123; DEFINER | INVOKER &#125;</span><br><span class="line">  | <span class="keyword">COMMENT</span> <span class="string">'string'</span></span><br><span class="line"> </span><br><span class="line">routine_body:</span><br><span class="line">    Valid <span class="keyword">SQL</span> <span class="keyword">procedure</span> <span class="keyword">statement</span> <span class="keyword">or</span> statements</span><br></pre></td></tr></table></figure>
-
 <h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">DELIMITER //</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> curdemo()</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  <span class="keyword">DECLARE</span> done <span class="built_in">INT</span> <span class="keyword">DEFAULT</span> <span class="literal">FALSE</span>;</span><br><span class="line">  <span class="keyword">DECLARE</span> a <span class="built_in">CHAR</span>(<span class="number">16</span>);</span><br><span class="line">  <span class="keyword">DECLARE</span> b, c <span class="built_in">INT</span>;</span><br><span class="line">  <span class="keyword">DECLARE</span> cur1 <span class="keyword">CURSOR</span> <span class="keyword">FOR</span> <span class="keyword">SELECT</span> <span class="keyword">id</span>,<span class="keyword">data</span> <span class="keyword">FROM</span> test.t1;</span><br><span class="line">  <span class="keyword">DECLARE</span> cur2 <span class="keyword">CURSOR</span> <span class="keyword">FOR</span> <span class="keyword">SELECT</span> i <span class="keyword">FROM</span> test.t2;</span><br><span class="line">  <span class="keyword">DECLARE</span> CONTINUE <span class="keyword">HANDLER</span> <span class="keyword">FOR</span> <span class="keyword">NOT</span> <span class="keyword">FOUND</span> <span class="keyword">SET</span> done = <span class="literal">TRUE</span>;</span><br><span class="line"></span><br><span class="line">  OPEN cur1;</span><br><span class="line">  OPEN cur2;</span><br><span class="line"></span><br><span class="line">  read_loop: LOOP</span><br><span class="line">    FETCH cur1 INTO a, b;</span><br><span class="line">    FETCH cur2 INTO c;</span><br><span class="line">    IF done THEN</span><br><span class="line">      LEAVE read_loop;</span><br><span class="line">    <span class="keyword">END</span> <span class="keyword">IF</span>;</span><br><span class="line">    IF b &lt; c THEN</span><br><span class="line">      <span class="keyword">INSERT</span> <span class="keyword">INTO</span> test.t3 <span class="keyword">VALUES</span> (a,b);</span><br><span class="line">    ELSE</span><br><span class="line">      <span class="keyword">INSERT</span> <span class="keyword">INTO</span> test.t3 <span class="keyword">VALUES</span> (a,c);</span><br><span class="line">    <span class="keyword">END</span> <span class="keyword">IF</span>;</span><br><span class="line">  <span class="keyword">END</span> <span class="keyword">LOOP</span>;</span><br><span class="line"></span><br><span class="line">  CLOSE cur1;</span><br><span class="line">  CLOSE cur2;</span><br><span class="line"><span class="keyword">END</span>//</span><br><span class="line"></span><br><span class="line">DELIMITER ;</span><br></pre></td></tr></table></figure>
-
 <h1 id="相关语法"><a href="#相关语法" class="headerlink" title="相关语法"></a>相关语法</h1><h2 id="BEGIN-…-END"><a href="#BEGIN-…-END" class="headerlink" title="BEGIN … END"></a>BEGIN … END</h2><p>一般来说，我们把复合语句都用 <code>BEGIN ... END</code> 包裹起来。  </p>
 <h2 id="DECLARE"><a href="#DECLARE" class="headerlink" title="DECLARE"></a>DECLARE</h2><p><strong>SQL变量名不能和列名一样。如果SELECT … INTO这样的SQL语句包含一个对列的参考，并包含一个与列相同名字的 局部变量，MySQL当前把参考解释为一个变量的名字。例如，在下面的语句中，xname 被解释为到xname variable 的参考而不是到xname column的：</strong></p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DECLARE</span> var_name[,...] <span class="keyword">type</span> [<span class="keyword">DEFAULT</span> <span class="keyword">value</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 声明条件，它将一个名字和指定的错误条件关联起来。这个名字可以随后被用在DECLARE HANDLER语句中</span></span><br><span class="line"><span class="keyword">DECLARE</span> condition_name CONDITION <span class="keyword">FOR</span> condition_value</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 这个语句指定每个可以处理一个或多个条件的处理程序。如果产生一个或多个条件，指定的语句被执行。</span></span><br><span class="line"><span class="keyword">DECLARE</span> handler_type <span class="keyword">HANDLER</span> <span class="keyword">FOR</span> condition_value[,...] sp_statement</span><br><span class="line"></span><br><span class="line">condition_value:</span><br><span class="line">    <span class="keyword">SQLSTATE</span> [<span class="keyword">VALUE</span>] sqlstate_value</span><br><span class="line">  | mysql_error_code</span><br><span class="line"><span class="keyword">DECLARE</span> handler_type <span class="keyword">HANDLER</span> <span class="keyword">FOR</span> condition_value[,...] sp_statement</span><br><span class="line"></span><br><span class="line">handler_type:</span><br><span class="line">    CONTINUE</span><br><span class="line">  | <span class="keyword">EXIT</span></span><br><span class="line">  | <span class="keyword">UNDO</span></span><br><span class="line"> </span><br><span class="line">condition_value:</span><br><span class="line">    <span class="keyword">SQLSTATE</span> [<span class="keyword">VALUE</span>] sqlstate_value</span><br><span class="line">  | condition_name</span><br><span class="line">  | SQLWARNING</span><br><span class="line">  | <span class="keyword">NOT</span> <span class="keyword">FOUND</span></span><br><span class="line">  | SQLEXCEPTION</span><br><span class="line">  | mysql_error_code</span><br></pre></td></tr></table></figure>
 <p>DECLARE　只能在 <code>BEGIN ... END</code> 内声明变量，条件处理程序等。</p>
 <h1 id="游标"><a href="#游标" class="headerlink" title="游标"></a>游标</h1><h2 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h2><p>光标必须在声明处理程序之前被声明，并且变量和条件必须在声明光标或处理程序之前被声明。 </p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">DECLARE</span> cursor_name <span class="keyword">CURSOR</span> <span class="keyword">FOR</span> select_statement</span><br></pre></td></tr></table></figure>
-
 <p>这个语句声明一个光标。也可以在子程序中定义多个光标，但是一个块中的每一个光标必须有唯一的名字。</p>
 <p>SELECT语句不能有INTO子句。</p>
 <h2 id="打开"><a href="#打开" class="headerlink" title="打开"></a>打开</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">OPEN cursor_name</span><br></pre></td></tr></table></figure>
-
 <p>这个语句打开先前声明的光标。</p>
-<h2 id="获取"><a href="#获取" class="headerlink" title="获取"></a>获取</h2><p>这个语句用指定的打开光标读取下一行（如果有下一行的话），并且前进光标指针。变量要先进行声明。</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">FETCH cursor_name INTO var_name [, var_name] ...</span><br></pre></td></tr></table></figure>
+<h2 id="获取"><a href="#获取" class="headerlink" title="获取"></a>获取</h2><p>这个语句用指定的打开光标读取下一行（如果有下一行的话），并且前进光标指针。变量要先进行声明。<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">FETCH cursor_name INTO var_name [, var_name] ...</span><br></pre></td></tr></table></figure></p>
 <h2 id="关闭"><a href="#关闭" class="headerlink" title="关闭"></a>关闭</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">CLOSE cursor_name</span><br></pre></td></tr></table></figure>
 <p>这个语句关闭先前打开的光标。</p>
 <p>如果未被明确地关闭，光标在它被声明的复合语句的末尾被关闭。</p>
 <h1 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h1><h2 id="IF"><a href="#IF" class="headerlink" title="IF"></a>IF</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">IF search_condition THEN statement_list</span><br><span class="line">    [ELSEIF search_condition THEN statement_list] ...</span><br><span class="line">    [ELSE statement_list]</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">IF</span></span><br></pre></td></tr></table></figure>
 <h2 id="CASE"><a href="#CASE" class="headerlink" title="CASE"></a>CASE</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">CASE case_value</span><br><span class="line">    WHEN when_value THEN statement_list</span><br><span class="line">    [WHEN when_value THEN statement_list] ...</span><br><span class="line">    [ELSE statement_list]</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">CASE</span></span><br><span class="line"><span class="keyword">Or</span>:</span><br><span class="line"></span><br><span class="line"><span class="keyword">CASE</span></span><br><span class="line">    <span class="keyword">WHEN</span> search_condition <span class="keyword">THEN</span> statement_list</span><br><span class="line">    [<span class="keyword">WHEN</span> search_condition <span class="keyword">THEN</span> statement_list] ...</span><br><span class="line">    [<span class="keyword">ELSE</span> statement_list]</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">CASE</span></span><br></pre></td></tr></table></figure>
-
 <p><strong>这里介绍的用在 存储程序里的CASE语句与12.2节，“控制流程函数”里描述的SQL CASE表达式的CASE语句有轻微不同。这里的CASE语句不能有ELSE NULL子句，并且用END CASE替代END来终止。</strong></p>
 <h2 id="LOOP"><a href="#LOOP" class="headerlink" title="LOOP"></a>LOOP</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">[begin_label:] LOOP</span><br><span class="line">    statement_list</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">LOOP</span> [end_label]</span><br></pre></td></tr></table></figure>
-
 <h2 id="LEAVE"><a href="#LEAVE" class="headerlink" title="LEAVE"></a>LEAVE</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">LEAVE label</span><br></pre></td></tr></table></figure>
-
 <h2 id="ITERATE"><a href="#ITERATE" class="headerlink" title="ITERATE"></a>ITERATE</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">ITERATE label</span><br></pre></td></tr></table></figure>
-
 <p>ITERATE只可以出现在LOOP, REPEAT, 和WHILE语句内。ITERATE意思为：“再次循环。”</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">PROCEDURE</span> doiterate(p1 <span class="built_in">INT</span>)</span><br><span class="line"><span class="keyword">BEGIN</span></span><br><span class="line">  label1: <span class="keyword">LOOP</span></span><br><span class="line">    <span class="keyword">SET</span> p1 = p1 + <span class="number">1</span>;</span><br><span class="line">    IF p1 &lt; 10 THEN ITERATE label1; END IF;</span><br><span class="line">    LEAVE label1;</span><br><span class="line">  <span class="keyword">END</span> <span class="keyword">LOOP</span> label1;</span><br><span class="line">  <span class="keyword">SET</span> @x = p1;</span><br><span class="line"><span class="keyword">END</span></span><br></pre></td></tr></table></figure>
-
-<p>##　REPEAT</p>
-<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">[begin_label:] REPEAT</span><br><span class="line">    statement_list</span><br><span class="line">UNTIL search_condition</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">REPEAT</span> [end_label]</span><br></pre></td></tr></table></figure>
-
+<h2 id="REPEAT"><a href="#REPEAT" class="headerlink" title="　REPEAT"></a>　REPEAT</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">[begin_label:] REPEAT</span><br><span class="line">    statement_list</span><br><span class="line">UNTIL search_condition</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">REPEAT</span> [end_label]</span><br></pre></td></tr></table></figure>
 <p>REPEAT语句内的语句或语句群被重复，直至search_condition 为真。</p>
 <p>REPEAT 语句可以被标注。 除非begin_label也存在，end_label才能被用，如果两者都存在，它们必须是一样的。</p>
 <h2 id="WHILE"><a href="#WHILE" class="headerlink" title="WHILE"></a>WHILE</h2><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">[begin_label:] WHILE search_condition <span class="keyword">DO</span></span><br><span class="line">    statement_list</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">WHILE</span> [end_label]</span><br></pre></td></tr></table></figure>
-
 <p>WHILE语句内的语句或语句群被重复，直至search_condition 为真。</p>
 <p>WHILE语句可以被标注。 除非begin_label也存在，end_label才能被用，如果两者都存在，它们必须是一样的。</p>
 <h1 id="用户变量"><a href="#用户变量" class="headerlink" title="用户变量"></a>用户变量</h1><p>形如 <code>@a</code> 这样的变量。用户变量与连接有关。也就是说，一个客户端定义的变量不能被其它客户端看到或使用。当客户端退出时，该客户端连接的所有变量将自动释放。</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SET</span> @var_name = expr [, @var_name = expr] ...</span><br></pre></td></tr></table></figure>
-
 <p>或者用 <code>SELECT</code> ：</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> @t1:=(@t2:=<span class="number">1</span>)+@t3:=<span class="number">4</span>,@t1,@t2,@t3;</span><br></pre></td></tr></table></figure>
-
 <p><strong>在SELECT语句中，表达式发送到客户端后才进行计算。这说明在HAVING、GROUP BY或者ORDER BY子句中，不能使用包含SELECT列表中所设的变量的表达式。例如，下面的语句不能按期望工作：</strong></p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> (@aa:=<span class="keyword">id</span>) <span class="keyword">AS</span> a，(@aa+<span class="number">3</span>) <span class="keyword">AS</span> b <span class="keyword">from</span> tbl_name <span class="keyword">HAVING</span> b=<span class="number">5</span>；</span><br></pre></td></tr></table></figure>
-
-<p>当你用SELECT @@var_name搜索一个变量时(也就是说，不指定global.、session.或者local.)，MySQL返回SESSION值（如果存在），否则返回GLOBAL值。</p>
+<p>当你用SELECT @@var_name搜索一个变量时(也就是说，不指定global.、session.或者local.)，MySQL返回SESSION值（如果存在），否则返回GLOBAL值。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -365,7 +350,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/JavaScript/Vue%E5%BC%80%E5%8F%91%E4%BD%BF%E7%94%A8ESLint-Vuter-Prettier%E6%9D%A5%E8%BF%9B%E8%A1%8C%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%8C%96%E4%B8%8E%E6%A3%80%E6%9F%A5.html" rel="next" title="Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查">
+                <a href="/JavaScript/Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查.html" rel="next" title="Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查">
                   <i class="fa fa-chevron-left"></i> Vue开发使用ESLint-Vuter-Prettier来进行代码格式化与检查
                 </a>
             </div>
@@ -373,7 +358,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/%E4%BD%BF%E7%94%A8ThreadPool%E8%BF%9B%E8%A1%8C%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86.html" rel="prev" title="使用ThreadPool进行线程管理">
+                <a href="/Java/使用ThreadPool进行线程管理.html" rel="prev" title="使用ThreadPool进行线程管理">
                   使用ThreadPool进行线程管理 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -421,7 +406,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CREATE-PROCEDURE-FUNCTION"><span class="nav-number">1.</span> <span class="nav-text">CREATE PROCEDURE | FUNCTION</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#例子"><span class="nav-number">2.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关语法"><span class="nav-number">3.</span> <span class="nav-text">相关语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BEGIN-…-END"><span class="nav-number">3.1.</span> <span class="nav-text">BEGIN … END</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DECLARE"><span class="nav-number">3.2.</span> <span class="nav-text">DECLARE</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游标"><span class="nav-number">4.</span> <span class="nav-text">游标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#声明"><span class="nav-number">4.1.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打开"><span class="nav-number">4.2.</span> <span class="nav-text">打开</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取"><span class="nav-number">4.3.</span> <span class="nav-text">获取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭"><span class="nav-number">4.4.</span> <span class="nav-text">关闭</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#流程控制"><span class="nav-number">5.</span> <span class="nav-text">流程控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IF"><span class="nav-number">5.1.</span> <span class="nav-text">IF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CASE"><span class="nav-number">5.2.</span> <span class="nav-text">CASE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LOOP"><span class="nav-number">5.3.</span> <span class="nav-text">LOOP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LEAVE"><span class="nav-number">5.4.</span> <span class="nav-text">LEAVE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ITERATE"><span class="nav-number">5.5.</span> <span class="nav-text">ITERATE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WHILE"><span class="nav-number">5.6.</span> <span class="nav-text">WHILE</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用户变量"><span class="nav-number">6.</span> <span class="nav-text">用户变量</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CREATE-PROCEDURE-FUNCTION"><span class="nav-number">1.</span> <span class="nav-text">CREATE PROCEDURE | FUNCTION</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#例子"><span class="nav-number">2.</span> <span class="nav-text">例子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相关语法"><span class="nav-number">3.</span> <span class="nav-text">相关语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BEGIN-…-END"><span class="nav-number">3.1.</span> <span class="nav-text">BEGIN … END</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DECLARE"><span class="nav-number">3.2.</span> <span class="nav-text">DECLARE</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#游标"><span class="nav-number">4.</span> <span class="nav-text">游标</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#声明"><span class="nav-number">4.1.</span> <span class="nav-text">声明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打开"><span class="nav-number">4.2.</span> <span class="nav-text">打开</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#获取"><span class="nav-number">4.3.</span> <span class="nav-text">获取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭"><span class="nav-number">4.4.</span> <span class="nav-text">关闭</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#流程控制"><span class="nav-number">5.</span> <span class="nav-text">流程控制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IF"><span class="nav-number">5.1.</span> <span class="nav-text">IF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CASE"><span class="nav-number">5.2.</span> <span class="nav-text">CASE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LOOP"><span class="nav-number">5.3.</span> <span class="nav-text">LOOP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LEAVE"><span class="nav-number">5.4.</span> <span class="nav-text">LEAVE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ITERATE"><span class="nav-number">5.5.</span> <span class="nav-text">ITERATE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#REPEAT"><span class="nav-number">5.6.</span> <span class="nav-text">　REPEAT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WHILE"><span class="nav-number">5.7.</span> <span class="nav-text">WHILE</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用户变量"><span class="nav-number">6.</span> <span class="nav-text">用户变量</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -435,20 +420,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -460,10 +445,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -492,10 +477,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -570,7 +555,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E4%B8%AD%E7%9A%84%E6%B8%B8%E6%A0%87.html",
+            url: "https://gowa.club/数据库/MySQL存储过程中的游标.html",
             identifier: "数据库/MySQL存储过程中的游标.html",
             title: "MySQL存储过程中的游标"
           }

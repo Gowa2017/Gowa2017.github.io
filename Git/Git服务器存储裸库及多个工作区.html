@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git服务器存储裸库及多个工作区">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Git&#x2F;Git%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AD%98%E5%82%A8%E8%A3%B8%E5%BA%93%E5%8F%8A%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E5%8C%BA.html">
+<meta property="og:url" content="https://gowa.club/Git/Git服务器存储裸库及多个工作区.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="在用 gitbook 部署的时候才发现的一个很不错的操作，此操作将版本库与工作区分开，实在是非常不错的东西。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-08-26T05:59:32.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git服务器存储裸库及多个工作区">
+<meta name="twitter:description" content="在用 gitbook 部署的时候才发现的一个很不错的操作，此操作将版本库与工作区分开，实在是非常不错的东西。">
 
-<link rel="canonical" href="https://gowa.club/Git/Git%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AD%98%E5%82%A8%E8%A3%B8%E5%BA%93%E5%8F%8A%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E5%8C%BA.html">
+<link rel="canonical" href="https://gowa.club/Git/Git服务器存储裸库及多个工作区.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/Git%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AD%98%E5%82%A8%E8%A3%B8%E5%BA%93%E5%8F%8A%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E5%8C%BA.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/Git服务器存储裸库及多个工作区.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Git/Git%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AD%98%E5%82%A8%E8%A3%B8%E5%BA%93%E5%8F%8A%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E5%8C%BA.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Git/Git服务器存储裸库及多个工作区.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Git/Git服务器存储裸库及多个工作区.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,32 +294,21 @@
       
         <p>在用 gitbook 部署的时候才发现的一个很不错的操作，此操作将版本库与工作区分开，实在是非常不错的东西。</p>
 <a id="more"></a>
-
-
-
 <h1 id="初始化裸库"><a href="#初始化裸库" class="headerlink" title="初始化裸库"></a>初始化裸库</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git init myrepo.git --bare</span><br></pre></td></tr></table></figure>
-
 <p>查看 myrepo 目录，我们可以看到，和我们不加 <code>--bare</code> 的不同，其直接存储的就是通常目录下的 <strong>.git</strong> 下的内容。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ls -1 myrepo.git</span><br><span class="line">HEAD</span><br><span class="line">branches</span><br><span class="line">config</span><br><span class="line">description</span><br><span class="line">hooks</span><br><span class="line">info</span><br><span class="line">objects</span><br><span class="line">refs</span><br></pre></td></tr></table></figure>
-
 <p>不过在裸仓库内我们是无法进行任何变更操作，执行任何 git 命令的，实际上其就是单纯的做一个存储作用而已了。下面我们来看看怎么样提交内容。</p>
 <p>一般远程服务器上只需要存储这个就行了，而不用担心会有任何改动和提交。</p>
 <h1 id="检出版本库"><a href="#检出版本库" class="headerlink" title="检出版本库"></a>检出版本库</h1><p>现在我们需要将此版本库检出到一个工作区。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone myrepo.git myrepo</span><br><span class="line">ll myrepo/.git</span><br></pre></td></tr></table></figure>
-
 <p>我们会看到，myrepo 目录下的 .git 目录中的内容应该是和 myrepo.git 下面的是一致的。</p>
 <p>现在就可以和通常的情况下来进行提交修改了。</p>
 <h1 id="hooks"><a href="#hooks" class="headerlink" title="hooks"></a>hooks</h1><p>每个 .git 版本库下面都会有很多钩子，用来在某些事件的时候执行。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ls -1 myrepo.git/hooks</span><br><span class="line">applypatch-msg.sample</span><br><span class="line">commit-msg.sample</span><br><span class="line">fsmonitor-watchman.sample</span><br><span class="line">post-update.sample</span><br><span class="line">pre-applypatch.sample</span><br><span class="line">pre-commit.sample</span><br><span class="line">pre-push.sample</span><br><span class="line">pre-rebase.sample</span><br><span class="line">pre-receive.sample</span><br><span class="line">prepare-commit-msg.sample</span><br><span class="line">update.sample</span><br></pre></td></tr></table></figure>
-
 <p>在 gitbook 的部署中，我需要在我的版本内容有提交的时候，就将其更新到我的 nginx 下面，可以设置一个 <code>post-receive</code> 钩子：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vim post-receive</span><br></pre></td></tr></table></figure>
-
-
-
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">git --work-tree=/usr/share/nginx/html checkout -f</span><br></pre></td></tr></table></figure>
-
-<p>这样当收到提交后，就会将这个裸库检出到对应的 <strong>/usr/share/nginx/html</strong> 目录下面了。</p>
+<p>这样当收到提交后，就会将这个裸库检出到对应的 <strong>/usr/share/nginx/html</strong> 目录下面了。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -334,7 +325,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Windows/Windows%E4%B8%AD%E7%9A%84%E7%BA%BF%E7%A8%8B.html" rel="next" title="Windows中的线程">
+                <a href="/Windows/Windows中的线程.html" rel="next" title="Windows中的线程">
                   <i class="fa fa-chevron-left"></i> Windows中的线程
                 </a>
             </div>
@@ -342,7 +333,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Windows/%E4%BD%BF%E7%94%A8%E8%BF%9C%E7%A8%8B%E7%BA%BF%E7%A8%8B%E8%BF%9B%E8%A1%8CDLL%E7%9A%84%E6%B3%A8%E5%85%A5.html" rel="prev" title="使用远程线程进行DLL的注入">
+                <a href="/Windows/使用远程线程进行DLL的注入.html" rel="prev" title="使用远程线程进行DLL的注入">
                   使用远程线程进行DLL的注入 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -404,20 +395,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -429,10 +420,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -461,10 +452,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -539,7 +530,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Git/Git%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AD%98%E5%82%A8%E8%A3%B8%E5%BA%93%E5%8F%8A%E5%A4%9A%E4%B8%AA%E5%B7%A5%E4%BD%9C%E5%8C%BA.html",
+            url: "https://gowa.club/Git/Git服务器存储裸库及多个工作区.html",
             identifier: "Git/Git服务器存储裸库及多个工作区.html",
             title: "Git服务器存储裸库及多个工作区"
           }

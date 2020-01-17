@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java的Lambda-方法引用及Stream">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;Java%E7%9A%84Lambda-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8%E5%8F%8AStream.html">
+<meta property="og:url" content="https://gowa.club/Java/Java的Lambda-方法引用及Stream.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="Lambda, Stream, Method Reference 是 Java 迈向函数式编程，操作符式的操作重要的一步。能让我们的代码更精简，更紧凑，手也更轻松些。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-09T14:30:31.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java的Lambda-方法引用及Stream">
+<meta name="twitter:description" content="Lambda, Stream, Method Reference 是 Java 迈向函数式编程，操作符式的操作重要的一步。能让我们的代码更精简，更紧凑，手也更轻松些。">
 
-<link rel="canonical" href="https://gowa.club/Java/Java%E7%9A%84Lambda-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8%E5%8F%8AStream.html">
+<link rel="canonical" href="https://gowa.club/Java/Java的Lambda-方法引用及Stream.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Java%E7%9A%84Lambda-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8%E5%8F%8AStream.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Java的Lambda-方法引用及Stream.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/Java%E7%9A%84Lambda-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8%E5%8F%8AStream.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/Java的Lambda-方法引用及Stream.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Java的Lambda-方法引用及Stream.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,7 +294,6 @@
       
         <p>Lambda, Stream, Method Reference 是 Java 迈向函数式编程，操作符式的操作重要的一步。能让我们的代码更精简，更紧凑，手也更轻松些。</p>
 <a id="more"></a>
-
 <h1 id="Lambda"><a href="#Lambda" class="headerlink" title="Lambda"></a>Lambda</h1><p>在我们实现一个匿名类的时候，只需要悄悄的 new 一下就行了。但是实际上我不得不写一长串代码，即使这个类只或接口只包含了一个方法。同时了，语法看起来也是不太友好的。</p>
 <p>经常，我们会把函数做一个参数传递给另外一个方法，比如在安卓中我们对 View 设置事件监听函数的时候。</p>
 <h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><p>一个 lambda 表示式由以下几部分组成：</p>
@@ -312,16 +313,12 @@
 <h1 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h1><p>我们会用 集合 Collections 来干什么？不仅仅是存储数据，我们还经常要从里面获取数据。</p>
 <p>比如：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (Person p : roster) &#123;</span><br><span class="line">    System.out.println(p.getName());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>可以转换为:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">roster</span><br><span class="line">    .stream()</span><br><span class="line">    .forEach(e -&gt; System.out.println(e.getName());</span><br></pre></td></tr></table></figure>
-
 <h2 id="管道与流"><a href="#管道与流" class="headerlink" title="管道与流"></a>管道与流</h2><p>一个 <strong>管道</strong> 是有序的聚合操作序列。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">roster</span><br><span class="line">    .stream()</span><br><span class="line">    .filter(e -&gt; e.getGender() == Person.Sex.MALE)</span><br><span class="line">    .forEach(e -&gt; System.out.println(e.getName()));</span><br></pre></td></tr></table></figure>
-
 <p>用 for-loop 的话就是这种形式：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (Person p : roster) &#123;</span><br><span class="line">    <span class="keyword">if</span> (p.getGender() == Person.Sex.MALE) &#123;</span><br><span class="line">        System.out.println(p.getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>管道包含：</p>
 <ul>
 <li>一个源。可以是一个集合，一个数组，一个生成函数，一个 I/O 通道。</li>
@@ -329,7 +326,6 @@
 <li>一个 中止操作。如 forEach 会产生一个非流的结果，比如一个基础类型，一个集合，也可能什么都不产生。</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">double</span> average = roster</span><br><span class="line">    .stream()</span><br><span class="line">    .filter(p -&gt; p.getGender() == Person.Sex.MALE)</span><br><span class="line">    .mapToInt(Person::getAge)</span><br><span class="line">    .average()</span><br><span class="line">    .getAsDouble();</span><br></pre></td></tr></table></figure>
-
 <h2 id="聚合操作与迭代的不同"><a href="#聚合操作与迭代的不同" class="headerlink" title="聚合操作与迭代的不同"></a>聚合操作与迭代的不同</h2><p>聚合操作，如 forEach，与迭代器看起来很像。但有一些根本的不同：</p>
 <ul>
 <li><strong>使用内部迭代</strong> 聚合操作没有像 <code>next()</code> 这样的方法来指示处理集合中的下一个元素。</li>
@@ -383,20 +379,21 @@
 </ul>
 <h1 id="关于-Collector-的一些方法"><a href="#关于-Collector-的一些方法" class="headerlink" title="关于 Collector 的一些方法"></a>关于 Collector 的一些方法</h1><p>Collector 是一个接口，你定义用一些用来对 Stream 进行减少操作的方法。</p>
 <p>所以的 <strong>减少操作（reduction operation）</strong> 将多个元素整合在一个结果中。</p>
-<p>其有三个泛型参数： Collector&lt;T, A, R&gt;</p>
+<p>其有三个泛型参数： Collector<t, a, r></t,></p>
 <ul>
 <li>T 进行减少操作的元素类型</li>
 <li>A 减少操作的可变的方法，可由我们定义</li>
 <li>R 返回的结果类型</li>
 </ul>
 <h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><ul>
-<li>BiConsumer&lt;A,T&gt; accumulator() 将一个值当到一个结果容器中的函数</li>
-<li>Set&lt;Collector.Characteristics&gt; characteristics() 返回特征集合</li>
+<li>BiConsumer<a,t> accumulator() 将一个值当到一个结果容器中的函数</a,t></li>
+<li>Set<collector.characteristics> characteristics() 返回特征集合</collector.characteristics></li>
 <li>BinaryOperator&lt; A &gt; combiner() 将两个结果合并</li>
-<li>Function&lt;A,R&gt; finisher()</li>
+<li>Function<a,r> finisher()</a,r></li>
 </ul>
 <h2 id="Collectors"><a href="#Collectors" class="headerlink" title="Collectors"></a>Collectors</h2><p>实现了接口 Collector，提供一系列非常实用的方法。</p>
-<h1 id="安卓上使用-Stream"><a href="#安卓上使用-Stream" class="headerlink" title="安卓上使用 Stream"></a>安卓上使用 Stream</h1>
+<h1 id="安卓上使用-Stream"><a href="#安卓上使用-Stream" class="headerlink" title="安卓上使用 Stream"></a>安卓上使用 Stream</h1><p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
     </div>
 
     
@@ -412,7 +409,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/%E4%BA%86%E8%A7%A3locale%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F.html" rel="next" title="了解locale环境变量">
+                <a href="/Linux-Unix/了解locale环境变量.html" rel="next" title="了解locale环境变量">
                   <i class="fa fa-chevron-left"></i> 了解locale环境变量
                 </a>
             </div>
@@ -420,7 +417,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/%E5%85%B3%E4%BA%8EType%E6%8E%A5%E5%8F%A3%E4%B8%8EClass%E7%B1%BB%E7%9A%84%E4%B8%80%E4%BA%9B.html" rel="prev" title="关于Type接口与Class类的一些">
+                <a href="/Java/关于Type接口与Class类的一些.html" rel="prev" title="关于Type接口与Class类的一些">
                   关于Type接口与Class类的一些 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -482,20 +479,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -507,10 +504,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -539,10 +536,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -617,7 +614,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/Java%E7%9A%84Lambda-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8%E5%8F%8AStream.html",
+            url: "https://gowa.club/Java/Java的Lambda-方法引用及Stream.html",
             identifier: "Java/Java的Lambda-方法引用及Stream.html",
             title: "Java的Lambda-方法引用及Stream"
           }

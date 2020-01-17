@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,24 +41,26 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
 </script>
 
-  <meta name="description" content="SSH，运维人员都不会陌生，可以说天天都与之打交道。但是时不时爆出的漏洞也让人感到很无语，对于大批量的服务器的要让我做安全加固的时候，内心其实是崩溃的。如果不是非常必要的话，还是用iptables&#x2F;ipsec等方式来进行包过滤吧，这升级，实在是太折腾人了，本文并不保证在你的机器上能没有毛病的升级。">
+  <meta name="description" content="SSH，运维人员都不会陌生，可以说天天都与之打交道。但是时不时爆出的漏洞也让人感到很无语，对于大批量的服务器的要让我做安全加固的时候，内心其实是崩溃的。如果不是非常必要的话，还是用iptables/ipsec等方式来进行包过滤吧，这升级，实在是太折腾人了，本文并不保证在你的机器上能没有毛病的升级。">
 <meta name="keywords" content="Linux,运维,SSH">
 <meta property="og:type" content="article">
 <meta property="og:title" content="OpenSSH升级">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;OpenSSH%E5%8D%87%E7%BA%A7.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/OpenSSH升级.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="SSH，运维人员都不会陌生，可以说天天都与之打交道。但是时不时爆出的漏洞也让人感到很无语，对于大批量的服务器的要让我做安全加固的时候，内心其实是崩溃的。如果不是非常必要的话，还是用iptables&#x2F;ipsec等方式来进行包过滤吧，这升级，实在是太折腾人了，本文并不保证在你的机器上能没有毛病的升级。">
+<meta property="og:description" content="SSH，运维人员都不会陌生，可以说天天都与之打交道。但是时不时爆出的漏洞也让人感到很无语，对于大批量的服务器的要让我做安全加固的时候，内心其实是崩溃的。如果不是非常必要的话，还是用iptables/ipsec等方式来进行包过滤吧，这升级，实在是太折腾人了，本文并不保证在你的机器上能没有毛病的升级。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.270Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenSSH升级">
+<meta name="twitter:description" content="SSH，运维人员都不会陌生，可以说天天都与之打交道。但是时不时爆出的漏洞也让人感到很无语，对于大批量的服务器的要让我做安全加固的时候，内心其实是崩溃的。如果不是非常必要的话，还是用iptables/ipsec等方式来进行包过滤吧，这升级，实在是太折腾人了，本文并不保证在你的机器上能没有毛病的升级。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/OpenSSH%E5%8D%87%E7%BA%A7.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/OpenSSH升级.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/OpenSSH%E5%8D%87%E7%BA%A7.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/OpenSSH升级.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -281,7 +283,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/OpenSSH%E5%8D%87%E7%BA%A7.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/OpenSSH升级.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/OpenSSH升级.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -297,33 +299,38 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>SSH，运维人员都不会陌生，可以说天天都与之打交道。但是时不时爆出的漏洞也让人感到很无语，对于大批量的服务器的要让我做安全加固的时候，内心其实是崩溃的。如果不是非常必要的话，还是用iptables/ipsec等方式来进行包过滤吧，这升级，实在是太折腾人了，本文并不保证在你的机器上能没有毛病的升级。</p>
-<a id="more"></a>
-<p>[OpenSSH官方安装文档][1]<br>[1]:<a href="http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/INSTALL" target="_blank" rel="noopener">http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/INSTALL</a></p>
+        <p>SSH，运维人员都不会陌生，可以说天天都与之打交道。但是时不时爆出的漏洞也让人感到很无语，对于大批量的服务器的要让我做安全加固的时候，内心其实是崩溃的。如果不是非常必要的话，还是用iptables/ipsec等方式来进行包过滤吧，这升级，实在是太折腾人了，本文并不保证在你的机器上能没有毛病的升级。<br><a id="more"></a><br><a href="http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/INSTALL" target="_blank" rel="noopener">OpenSSH官方安装文档</a></p>
 <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><ul>
 <li>OS: CentOS 6.8 x64</li>
 <li>zlib: 1.1.4 or 1.2.1.2 版本上</li>
 <li>libcrypto: OpenSSL &gt;=0.9.8f &lt; 1.1.0<blockquote>
-<p>LibreSSL/OpenSSL should be compiled as a <strong>position-independent</strong> library<br>(i.e. with -fPIC) otherwise OpenSSH will not be able to link with it.<br>If you must use a non-position-independent libcrypto, then you may need<br>to configure OpenSSH –without-pie.  Note that because of API changes,<br>OpenSSL 1.1.x is not currently supported.</p>
+<p>LibreSSL/OpenSSL should be compiled as a <strong>position-independent</strong> library<br>(i.e. with -fPIC) otherwise OpenSSH will not be able to link with it.<br>If you must use a non-position-independent libcrypto, then you may need<br>to configure OpenSSH —without-pie.  Note that because of API changes,<br>OpenSSL 1.1.x is not currently supported.</p>
 </blockquote>
 </li>
 </ul>
 <h1 id="1、开启-telnet-服务"><a href="#1、开启-telnet-服务" class="headerlink" title="1、开启 telnet 服务"></a>1、开启 telnet 服务</h1><h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><pre><code>yum install -y telnet-server telnet
 /etc/xinet.d/telnet 中的yes 修改为no
-service xinetd restart</code></pre><h2 id="AIX"><a href="#AIX" class="headerlink" title="AIX"></a>AIX</h2><pre><code>lssrc -s inetd
+service xinetd restart
+</code></pre><h2 id="AIX"><a href="#AIX" class="headerlink" title="AIX"></a>AIX</h2><pre><code>lssrc -s inetd
 startsrc -t telnet
-stopsrc -t telnet</code></pre><h1 id="2、下载相关文件"><a href="#2、下载相关文件" class="headerlink" title="2、下载相关文件"></a>2、下载相关文件</h1><pre><code>wget http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-7.4p1.tar.gz
+stopsrc -t telnet
+</code></pre><h1 id="2、下载相关文件"><a href="#2、下载相关文件" class="headerlink" title="2、下载相关文件"></a>2、下载相关文件</h1><pre><code>wget http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-7.4p1.tar.gz
 wget https://www.openssl.org/source/openssl-1.0.1u.tar.gz
-wget https://sourceforge.net/projects/libpng/files/zlib/1.2.8/zlib-1.2.8.tar.gz --no-check-certificate</code></pre><h1 id="3、编译安装"><a href="#3、编译安装" class="headerlink" title="3、编译安装"></a>3、编译安装</h1><h2 id="安装zlib"><a href="#安装zlib" class="headerlink" title="安装zlib"></a>安装zlib</h2><pre><code>tar zxvf zlib-1.2.8.tar.gz
+wget https://sourceforge.net/projects/libpng/files/zlib/1.2.8/zlib-1.2.8.tar.gz --no-check-certificate
+</code></pre><h1 id="3、编译安装"><a href="#3、编译安装" class="headerlink" title="3、编译安装"></a>3、编译安装</h1><h2 id="安装zlib"><a href="#安装zlib" class="headerlink" title="安装zlib"></a>安装zlib</h2><pre><code>tar zxvf zlib-1.2.8.tar.gz
 cd zlib-1.2.8
 ./configure
-make &amp;&amp; make install</code></pre><h2 id="安装openssl"><a href="#安装openssl" class="headerlink" title="安装openssl"></a>安装openssl</h2><p><strong>解压</strong></p>
+make &amp;&amp; make install
+</code></pre><h2 id="安装openssl"><a href="#安装openssl" class="headerlink" title="安装openssl"></a>安装openssl</h2><p><strong>解压</strong></p>
 <pre><code>tar zxvf openssl-1.0.1u.tar.gz
-cd openssl-1.0.1u</code></pre><p><strong>快速开始</strong></p>
+cd openssl-1.0.1u
+</code></pre><p><strong>快速开始</strong></p>
 <pre><code>./config -fPIC shared zlib
 make
-make install</code></pre><p>这将会把OpenSSL安装在默认位置（因为历史原因）<code>/usr/local/ssl</code>。<br>我们可以验证一下:</p>
-<pre><code>ls -1 /usr/local/ssl</code></pre><blockquote>
+make install
+</code></pre><p>这将会把OpenSSL安装在默认位置（因为历史原因）<code>/usr/local/ssl</code>。<br>我们可以验证一下:</p>
+<pre><code>ls -1 /usr/local/ssl
+</code></pre><blockquote>
 <p>bin<br>certs<br>include<br>lib<br>man<br>misc<br>openssl.cnf<br>private</p>
 </blockquote>
 <p><strong>安装在自定义位置</strong><br>如果想安装在一个自己想要的地方，可以像下面一样指定：</p>
@@ -331,23 +338,22 @@ make install</code></pre><p>这将会把OpenSSL安装在默认位置（因为历
 make
 make depend # if prompted then you must do so
 make test
-make install</code></pre><p><strong>安装前后的不同</strong><br>正常情况下（Linux）系统本身的openssl位于<code>/usr/{bin,lib[64],include/openssl}</code>，为了我们使用到的是新安装的，我们还需要做一下动作</p>
+make install
+</code></pre><p><strong>安装前后的不同</strong><br>正常情况下（Linux）系统本身的openssl位于<code>/usr/{bin,lib[64],include/openssl}</code>，为了我们使用到的是新安装的，我们还需要做一下动作</p>
 <pre><code>mv /usr/bin/openssl /usr/bin/openssl.bak
 mv /usr/include/openssl /usr/include/openssl.bak
 ln -s /usr/local/ssl/bin/openssl /usr/bin/openssl
 ln -s /usr/local/ssl/include/openssl /usr/include/openssl
 echo &quot;/usr/local/ssl/lib&quot; &gt;&gt; /etc/ld.so.conf
-ldconfig -v</code></pre><p><strong>关于安装后的目录</strong></p>
+ldconfig -v
+</code></pre><p><strong>关于安装后的目录</strong></p>
 <ul>
 <li>bin openssl二进制文件和一些其他程序</li>
 <li>include/openssl 在协同<code>libcrypto或libssl</code>编译程序的时候需要的头文件</li>
-<li>lib OpenSSL库文件</li>
-</ul>
-<p><strong>关于编译的选项</strong></p>
-<ul>
-<li>–prefix=DIR 安装在<strong>DIR/{bin,lib,include/openssl}</strong>，配置文件会在<strong>DIR/ssl</strong>或者 <code>--openssldir</code>指定的目录。</li>
-<li>–openssldir=DIR OpenSSL文件的目录。如果<strong>没有指定–prefix</strong>，那么二进制文件也会安装在这个地方。<blockquote>
-<p>–prefix –openssldir 1.0.2及以下版本，可以不用指定，默认是/usr/local/ssl。1.1.0以上则必须指定。请避免使用–prefix=/usr</p>
+<li>lib OpenSSL库文件<br><strong>关于编译的选项</strong></li>
+<li>—prefix=DIR 安装在<strong>DIR/{bin,lib,include/openssl}</strong>，配置文件会在<strong>DIR/ssl</strong>或者 <code>--openssldir</code>指定的目录。</li>
+<li>—openssldir=DIR OpenSSL文件的目录。如果<strong>没有指定—prefix</strong>，那么二进制文件也会安装在这个地方。<blockquote>
+<p>—prefix —openssldir 1.0.2及以下版本，可以不用指定，默认是/usr/local/ssl。1.1.0以上则必须指定。请避免使用—prefix=/usr</p>
 </blockquote>
 </li>
 <li>no-threads 编译的时候不使用多进程。</li>
@@ -356,27 +362,34 @@ ldconfig -v</code></pre><p><strong>关于安装后的目录</strong></p>
 <li>zlib 编译支持zlib压缩、解压缩</li>
 <li>zlib-dynamic 类似<code>zlib</code>，只在需要的时候载入zlib库，只在允许共享库的操作系统。默认选择</li>
 <li>no-shared 不创建共享库文件</li>
-<li>shared 对静态库的补充，还会创建共享库文件。</li>
+<li><p>shared 对静态库的补充，还会创建共享库文件。<br><strong>安装过程中遇到的问题</strong><br>编译的时候出现 <code>Bad Value</code>类似的错误，需要</p>
+<p>  make clean<br>一下。<br>然后重新<code>./config shared zlib</code>，再进行编译就OK。</p>
+<h2 id="安装OpenSSH"><a href="#安装OpenSSH" class="headerlink" title="安装OpenSSH"></a>安装OpenSSH</h2></li>
 </ul>
-<p><strong>安装过程中遇到的问题</strong><br>编译的时候出现 <code>Bad Value</code>类似的错误，需要</p>
-<pre><code>make clean</code></pre><p>一下。<br>然后重新<code>./config shared zlib</code>，再进行编译就OK。</p>
-<h2 id="安装OpenSSH"><a href="#安装OpenSSH" class="headerlink" title="安装OpenSSH"></a>安装OpenSSH</h2><p><strong>解压</strong>       </p>
+<p><strong>解压</strong>       </p>
 <pre><code>tar zxvf openssh-7.4p1.tar.gz
-cd openssh-7.4p1</code></pre><p><strong>安装</strong>   </p>
+cd openssh-7.4p1
+</code></pre><p><strong>安装</strong>   </p>
 <pre><code>./configure --sysconfdir=/etc/ssh --with-pam
 make
 make install
-sed -i &apos;s/^GSSAPI/#&amp;/&apos; /etc/ssh/sshd_config</code></pre><p>这样会将OpenSSH二进制文件安装到<code>/usr/local/bin</code>，配置文件在<code>/usr/local/etc</code>，服务在<code>/usr/local/sbin</code>。<br><strong>安装在不同位置</strong><br>如果想安装在不同的位置，可以指定<code>--prefix</code>。</p>
+sed -i &#39;s/^GSSAPI/#&amp;/&#39; /etc/ssh/sshd_config
+</code></pre><p>这样会将OpenSSH二进制文件安装到<code>/usr/local/bin</code>，配置文件在<code>/usr/local/etc</code>，服务在<code>/usr/local/sbin</code>。<br><strong>安装在不同位置</strong><br>如果想安装在不同的位置，可以指定<code>--prefix</code>。</p>
 <pre><code>./configure --prefix=/usr/opt \ # Will install OpenSSH in /usr/opt/{bin,etc,lib,sbin}
 --sysconfdir=/etc/ssh \ # will place the configuration files in /etc/ssh.
 make
-make install</code></pre><h1 id="4、修改启动文件并重启"><a href="#4、修改启动文件并重启" class="headerlink" title="4、修改启动文件并重启"></a>4、修改启动文件并重启</h1><p>vi /etc/init.d/sshd ，修改<br>SSHD=/usr/sbin/sshd 为 SSHD=/usr/local/sbin/sshd</p>
-<pre><code>sed -i &apos;s#sbin/sshd#local/&amp;#&apos; /etc/init.d/sshd
-/etc/init.d/sshd restart</code></pre><h1 id="5、-验证安装"><a href="#5、-验证安装" class="headerlink" title="5、 验证安装"></a>5、 验证安装</h1><pre><code>telnet 127.0.0.1 22</code></pre><blockquote>
+make install
+</code></pre><h1 id="4、修改启动文件并重启"><a href="#4、修改启动文件并重启" class="headerlink" title="4、修改启动文件并重启"></a>4、修改启动文件并重启</h1><p>vi /etc/init.d/sshd ，修改<br>SSHD=/usr/sbin/sshd 为 SSHD=/usr/local/sbin/sshd</p>
+<pre><code>sed -i &#39;s#sbin/sshd#local/&amp;#&#39; /etc/init.d/sshd
+/etc/init.d/sshd restart
+</code></pre><h1 id="5、-验证安装"><a href="#5、-验证安装" class="headerlink" title="5、 验证安装"></a>5、 验证安装</h1><pre><code>telnet 127.0.0.1 22
+</code></pre><blockquote>
 <p>验证 根据回显看是否成功</p>
 </blockquote>
 <h1 id="6、替换客户端"><a href="#6、替换客户端" class="headerlink" title="6、替换客户端"></a>6、替换客户端</h1><pre><code>mv /usr/bin/ssh   /usr/bin/ssh_bak
-ln -s /usr/local/bin/ssh /usr/bin/ssh</code></pre>
+ln -s /usr/local/bin/ssh /usr/bin/ssh
+</code></pre><p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
     </div>
 
     
@@ -386,7 +399,7 @@ ln -s /usr/local/bin/ssh /usr/bin/ssh</code></pre>
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/%E8%BF%90%E7%BB%B4/" rel="tag"># 运维</a>
+              <a href="/tags/运维/" rel="tag"># 运维</a>
               <a href="/tags/SSH/" rel="tag"># SSH</a>
           </div>
 
@@ -394,7 +407,7 @@ ln -s /usr/local/bin/ssh /usr/bin/ssh</code></pre>
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/AIX%E7%94%A8IPSec%E8%BF%9B%E8%A1%8C%E5%8C%85%E8%BF%87%E6%BB%A4.html" rel="next" title="AIX用IPSec进行包过滤">
+                <a href="/Linux-Unix/AIX用IPSec进行包过滤.html" rel="next" title="AIX用IPSec进行包过滤">
                   <i class="fa fa-chevron-left"></i> AIX用IPSec进行包过滤
                 </a>
             </div>
@@ -402,7 +415,7 @@ ln -s /usr/local/bin/ssh /usr/bin/ssh</code></pre>
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/TCP-IP/PPPoe-%E4%BB%A5%E5%A4%AA%E7%BD%91%E4%B8%8A%E7%9A%84%E7%82%B9%E5%AF%B9%E7%82%B9%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE.html" rel="prev" title="PPPoe-以太网上的点对点传输协议">
+                <a href="/TCP-IP/PPPoe-以太网上的点对点传输协议.html" rel="prev" title="PPPoe-以太网上的点对点传输协议">
                   PPPoe-以太网上的点对点传输协议 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -464,20 +477,20 @@ ln -s /usr/local/bin/ssh /usr/bin/ssh</code></pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -489,10 +502,10 @@ ln -s /usr/local/bin/ssh /usr/bin/ssh</code></pre>
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -521,10 +534,10 @@ ln -s /usr/local/bin/ssh /usr/bin/ssh</code></pre>
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -599,7 +612,7 @@ ln -s /usr/local/bin/ssh /usr/bin/ssh</code></pre>
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/OpenSSH%E5%8D%87%E7%BA%A7.html",
+            url: "https://gowa.club/Linux-Unix/OpenSSH升级.html",
             identifier: "Linux-Unix/OpenSSH升级.html",
             title: "OpenSSH升级"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Java,Spring">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring中的IoC与DI">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;Spring%E4%B8%AD%E7%9A%84IoC%E4%B8%8EDI.html">
+<meta property="og:url" content="https://gowa.club/Java/Spring中的IoC与DI.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="通过 Spring 的实现来了解一下 IoC （控制反转） 与 DI （依赖注入）。当然，之前看过的 Dagger 2 也是一个依赖注入的框架。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-06-16T13:29:37.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring中的IoC与DI">
+<meta name="twitter:description" content="通过 Spring 的实现来了解一下 IoC （控制反转） 与 DI （依赖注入）。当然，之前看过的 Dagger 2 也是一个依赖注入的框架。">
 
-<link rel="canonical" href="https://gowa.club/Java/Spring%E4%B8%AD%E7%9A%84IoC%E4%B8%8EDI.html">
+<link rel="canonical" href="https://gowa.club/Java/Spring中的IoC与DI.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Spring%E4%B8%AD%E7%9A%84IoC%E4%B8%8EDI.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Spring中的IoC与DI.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/Spring%E4%B8%AD%E7%9A%84IoC%E4%B8%8EDI.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/Spring中的IoC与DI.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Spring中的IoC与DI.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,7 +294,6 @@
       
         <p>通过 Spring 的实现来了解一下 IoC （控制反转） 与 DI （依赖注入）。当然，之前看过的 Dagger 2 也是一个依赖注入的框架。</p>
 <a id="more"></a>
-
 <h1 id="IoC"><a href="#IoC" class="headerlink" title="IoC"></a>IoC</h1><p>IoC (Inversion of Control) 控制反转，指的是对象的控制或程序的一部分被转移到了容器或者框架。经常这个概念是在面向对象的编程领域内讨论。</p>
 <p>与传统编程相比，我们自己的代码会调用一些库情况下，IoC使框架能够控制程序的流程并调用我们的自定义代码。为了达到这个目的，框架使用了一些内建额外行为的抽象。<strong>如果我们要自己的行为，我们就必须继承框架的类或以插件的形式提供。</strong></p>
 <p>这样做的优点是：</p>
@@ -306,11 +307,9 @@
 <h1 id="DI"><a href="#DI" class="headerlink" title="DI"></a>DI</h1><p>DI 是我们用来实现 IoC 的一种模式，在这里将控制进行反转的控制是：<strong>设置对象的依赖</strong>。<br>这就是说，将对象与其他对象相连接，或将对象“注入”到其他对象，这是由一个组装器而不是由对象本身来完成的。</p>
 <p>比如有个例子，<em>Store</em> 依赖于一个接口 <em>Item</em> 。我们传统的形式是下面实现：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Store</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Item item;</span><br><span class="line">  </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Store</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        item = <span class="keyword">new</span> ItemImpl1();    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>上面的例子中，我们需要手动初始化和实现 <em>Item</em> 接口。</p>
 <p>如果使用 DI 的话，我们就可以如下这样例子，而不用指定 <em>Item</em> 的实现。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Store</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Item item;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Store</span><span class="params">(Item item)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.item = item;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>在下面的章节中，我们会展示怎么样通过元数据来指定 <em>Item</em> 的实现。</p>
 <h1 id="Spring-IoC-容器"><a href="#Spring-IoC-容器" class="headerlink" title="Spring IoC 容器"></a>Spring IoC 容器</h1><p>IoC 容器指的是框架中一个实现了 IoC 的普通角色。</p>
 <p>在 Spring 框架中，IoC 容器由接口 <em>ApplicationContext</em> 表示。Spring 容器的责任是实例化，配置，组装对象（Beans）及管理他们的生命周期。</p>
@@ -318,31 +317,25 @@
 <p>为了组装 Beans，容器使用了配置元数据（XML形式或者注解形式）。</p>
 <p>我们可以这样手动实例化一个容器：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ApplicationContext context</span><br><span class="line">  = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"applicationContext.xml"</span>);</span><br></pre></td></tr></table></figure>
-
 <p>在最开始的例子中，如果我们要设置 <em>item</em> 属性，我们也可以使用元数据。然后，容器就会读取这个元数据，在运行时用它们来组装 Beans。</p>
 <p><strong>Spring 中的依赖注入（DI） 可以通过 构造器、setters、字段来实现</strong></p>
 <h1 id="基于构造器的-DI"><a href="#基于构造器的-DI" class="headerlink" title="基于构造器的 DI"></a>基于构造器的 DI</h1><p>如果使用基于构造器的 DI，容器会将我们要实例化的对象的依赖以参数的形式来调用其构造器。</p>
 <p>Spring 主要是根据类型来解析参数，后面跟着属性的名称和没有歧义的索引。下面我们来看看一个 Bean 的配置和其使用了注解的依赖：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AppConfig</span> </span>&#123;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Item <span class="title">item1</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ItemImpl1();</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Store <span class="title">store</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Store(item1());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p><em>@Configuration</em> 注解表明这个类是一个 Bean 定义源。我们可以将其用到多个类上。</p>
 <p><em>@Bean</em> 注解用在方法上来定义了一个 Bean。如果我们不指定一个自定义的名字，那么 Bean 的 Id 默认就和方法名称相同。</p>
 <p>对于一个默认是 <strong>单例范围</strong> 的 Bean，Spring 要先检查一下这个 Bean 是不是已经有一个缓存的实例存在，如果没有才会创建一个新的。如果我们使用 <strong>原型作用域</strong>，那么每次都会建立一个新的 Bean 实例。</p>
 <p>与上面同样方式，不过是用 XML 来定义 Bean 如下：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"item1"</span> <span class="attr">class</span>=<span class="string">"org.baeldung.store.ItemImpl1"</span> /&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"store"</span> <span class="attr">class</span>=<span class="string">"org.baeldung.store.Store"</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">type</span>=<span class="string">"ItemImpl1"</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">name</span>=<span class="string">"item"</span> <span class="attr">ref</span>=<span class="string">"item1"</span> /&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <h1 id="Setter-DI"><a href="#Setter-DI" class="headerlink" title="Setter DI"></a>Setter DI</h1><p>对于基于 Setter 的 DI，容器会在在调用了一个无参数的构造器后，调用我们类的 setter 方法。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Store <span class="title">store</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Store store = <span class="keyword">new</span> Store();</span><br><span class="line">    store.setItem(item1());</span><br><span class="line">    <span class="keyword">return</span> store;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"store"</span> <span class="attr">class</span>=<span class="string">"org.baeldung.store.Store"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"item"</span> <span class="attr">ref</span>=<span class="string">"item1"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>对于同样的 Bean，可以结合使用基于构造器的和 Setter 的 DI。Spring 文档推荐使用基于构造器的注入来处理强制的依赖，使用基于 Setter 来处理可选的依赖。</p>
 <h1 id="基于字段的-DI"><a href="#基于字段的-DI" class="headerlink" title="基于字段的 DI"></a>基于字段的 DI</h1><p>可以通过 <em>@Autowired</em> 来进行字段注入。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Store</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> Item item; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>在构建 <em>Store</em> 的时候，如果没有构造器或者setter 方法来注入 <em>Item</em> Bean，容器会使用反射来将 <em>Item</em> 注入到 <em>Store</em>。</p>
 <p>当然我们也可以用 XML 来实现：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
 <p>这个方式可能看起来更简单和清楚，但并不是推荐的用法：</p>
 <ul>
 <li>使用反射来注入依赖，会更耗性能一些。</li>
@@ -358,30 +351,23 @@
 </ul>
 <p>现在，我们在上面的例子中，来自动将 <em>item1</em> 注入到 <em>Store</em> Bean 内：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Bean</span>(autowire = Autowire.BY_TYPE)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Store</span> </span>&#123;</span><br><span class="line">     </span><br><span class="line">    <span class="keyword">private</span> Item item;</span><br><span class="line"> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">setItem</span><span class="params">(Item item)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.item = item;    </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>或者直接在属性上指定自动注入：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Store</span> </span>&#123;</span><br><span class="line">     </span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> Item item;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>如果有多个 Bean 有相同的类型，那么我们需要加上 <em>@Qualifier</em> 注解来通过名字引用 bean：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="meta">@Qualifier</span>(<span class="string">"item1"</span>)</span><br><span class="line"><span class="keyword">private</span> Item item;</span><br></pre></td></tr></table></figure>
-
 <p>通过 XML 文件来实现：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"store"</span> <span class="attr">class</span>=<span class="string">"org.baeldung.store.Store"</span> <span class="attr">autowire</span>=<span class="string">"byType"</span>&gt;</span> <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"item"</span> <span class="attr">class</span>=<span class="string">"org.baeldung.store.ItemImpl1"</span> /&gt;</span></span><br><span class="line"> </span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"store"</span> <span class="attr">class</span>=<span class="string">"org.baeldung.store.Store"</span> <span class="attr">autowire</span>=<span class="string">"byName"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <h1 id="Autowired-Resource-Inject"><a href="#Autowired-Resource-Inject" class="headerlink" title="@Autowired, @Resource, @Inject"></a>@Autowired, @Resource, @Inject</h1><p>这几个注解可以让类以声明的形式来解析依赖：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line">ArbitraryClass arbObject;</span><br></pre></td></tr></table></figure>
-
 <p>而不用直接的实例化它：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">ArbitraryClass arbObject = <span class="keyword">new</span> ArbitraryClass();</span><br></pre></td></tr></table></figure>
-
-<p>三个注解中有两个是属于包 <em>javax.annotation.Resource, javax.inject.Inject*。而 *@Autowired</em> 是属于包 <em>org.springframework.beans.factory.annotation</em>。</p>
+<p>三个注解中有两个是属于包 <em>javax.annotation.Resource, javax.inject.Inject</em>。而 <em>@Autowired</em> 是属于包 <em>org.springframework.beans.factory.annotation</em>。</p>
 <p>这三个注解都可以通过字段注入或者 Setter 注入来解析依赖。下面会有区分一下这三者的不同。</p>
 <h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>@Autowired和@Inject基本是一样的，因为两者都是使用AutowiredAnnotationBeanPostProcessor来处理依赖注入。但是@Resource是个例外，它使用的是CommonAnnotationBeanPostProcessor来处理依赖注入。当然，两者都是BeanPostProcessor。</p>
 <p>@Autowired和@Inject<br>默认 autowired by type<br>可以 通过@Qualifier 显式指定 autowired by qualifier name。</p>
 <p>@Resource<br>默认 autowired by field name<br>如果 autowired by field name失败，会退化为 autowired by type<br>可以 通过@Qualifier 显式指定 autowired by qualifier name<br>如果 autowired by qualifier name失败，会退化为 autowired by field name。但是这时候如果 autowired by field name失败，就不会再退化为autowired by type了。</p>
-<p>建议多用 @Inject，这是 JSR 330 的规范。@Autowired 是 Spring 的实现，比如 Dagger 就用不了。@Resource 是 JSR 250 是比较老的规范。</p>
+<p>建议多用 @Inject，这是 JSR 330 的规范。@Autowired 是 Spring 的实现，比如 Dagger 就用不了。@Resource 是 JSR 250 是比较老的规范。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -399,7 +385,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/%E5%85%B3%E4%BA%8ESprintMVC%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%8F%8A%E5%88%9D%E5%A7%8B%E5%8C%96.html" rel="next" title="关于SprintMVC配置文件的加载及初始化">
+                <a href="/Java/关于SprintMVC配置文件的加载及初始化.html" rel="next" title="关于SprintMVC配置文件的加载及初始化">
                   <i class="fa fa-chevron-left"></i> 关于SprintMVC配置文件的加载及初始化
                 </a>
             </div>
@@ -407,7 +393,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Windows/Windows-SDK-API%E7%BC%96%E7%A8%8B%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D.html" rel="prev" title="Windows-SDK-API编程基本介绍">
+                <a href="/Windows/Windows-SDK-API编程基本介绍.html" rel="prev" title="Windows-SDK-API编程基本介绍">
                   Windows-SDK-API编程基本介绍 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -469,20 +455,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -494,10 +480,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -526,10 +512,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -604,7 +590,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/Spring%E4%B8%AD%E7%9A%84IoC%E4%B8%8EDI.html",
+            url: "https://gowa.club/Java/Spring中的IoC与DI.html",
             identifier: "Java/Spring中的IoC与DI.html",
             title: "Spring中的IoC与DI"
           }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,24 +41,26 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
 </script>
 
-  <meta name="description" content="对于大多数的编程场景来多，很多时候的任务都是在处理I&#x2F;O，因为读写设备的不同，所以需要花很多的心思来整。从POSIX的标准来看，其提供了 select, poll来实现多个描述符的监控读写。而Linux自身还实现了一个更高效的  epoll。">
+  <meta name="description" content="对于大多数的编程场景来多，很多时候的任务都是在处理I/O，因为读写设备的不同，所以需要花很多的心思来整。从POSIX的标准来看，其提供了 select, poll来实现多个描述符的监控读写。而Linux自身还实现了一个更高效的  epoll。">
 <meta name="keywords" content="Linux,Apue">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IO的阻塞与多路复用">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Linux-Unix&#x2F;IO%E7%9A%84%E9%98%BB%E5%A1%9E%E4%B8%8E%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.html">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/IO的阻塞与多路复用.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="对于大多数的编程场景来多，很多时候的任务都是在处理I&#x2F;O，因为读写设备的不同，所以需要花很多的心思来整。从POSIX的标准来看，其提供了 select, poll来实现多个描述符的监控读写。而Linux自身还实现了一个更高效的  epoll。">
+<meta property="og:description" content="对于大多数的编程场景来多，很多时候的任务都是在处理I/O，因为读写设备的不同，所以需要花很多的心思来整。从POSIX的标准来看，其提供了 select, poll来实现多个描述符的监控读写。而Linux自身还实现了一个更高效的  epoll。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-02-15T07:25:20.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IO的阻塞与多路复用">
+<meta name="twitter:description" content="对于大多数的编程场景来多，很多时候的任务都是在处理I/O，因为读写设备的不同，所以需要花很多的心思来整。从POSIX的标准来看，其提供了 select, poll来实现多个描述符的监控读写。而Linux自身还实现了一个更高效的  epoll。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/IO%E7%9A%84%E9%98%BB%E5%A1%9E%E4%B8%8E%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/IO的阻塞与多路复用.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/IO%E7%9A%84%E9%98%BB%E5%A1%9E%E4%B8%8E%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/IO的阻塞与多路复用.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/IO%E7%9A%84%E9%98%BB%E5%A1%9E%E4%B8%8E%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Linux-Unix/IO的阻塞与多路复用.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/IO的阻塞与多路复用.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,9 +292,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>对于大多数的编程场景来多，很多时候的任务都是在处理I/O，因为读写设备的不同，所以需要花很多的心思来整。从POSIX的标准来看，其提供了 select, poll来实现多个描述符的监控读写。而Linux自身还实现了一个更高效的  epoll。</p>
-<a id="more"></a>
-
+        <p>对于大多数的编程场景来多，很多时候的任务都是在处理I/O，因为读写设备的不同，所以需要花很多的心思来整。从POSIX的标准来看，其提供了 select, poll来实现多个描述符的监控读写。而Linux自身还实现了一个更高效的  epoll。<br><a id="more"></a></p>
 <h1 id="POSIX中的I-O"><a href="#POSIX中的I-O" class="headerlink" title="POSIX中的I/O"></a>POSIX中的I/O</h1><p>在类Unix中，我们运用 <code>open, read, write, lseek, close</code>就能实现对文件的读写，而其哲学就是，所有的设备对象都是文件。所以实现了统一的读写处理。在多数的系统实现中，在设备-内核-应用之间都会有缓存。当我们对一个由<code>open</code>返回的文件描述符 <em>fd</em> 调用 <code>read(fd, buffer, len)</code>是，内核会从 fd 读取对应的数据，放到内核缓冲区，然后再返回到 应用程序的缓冲区 <em>buffer</em>。而在如果无法及时获得请求数据的时候，就会出现阻塞状态，整个程序流程将无法执行其他任务工作。调用 <code>write</code>时候一样。</p>
 <p>对于这种问题的解决方法，就出现了两种不同的思路。一个是随着多线程支持而来的并发读写，已经内核实现的一种多描述符的检查机制。</p>
 <h1 id="select"><a href="#select" class="headerlink" title="select"></a>select</h1><p><code>select</code>在大多数系统上都有了实现。其基本原理就是把想要监控的描述符放到一个描述符集合中，然后内核会对特定的事件进行监控，一旦对应描述集上有事件发生，则返回。接下来我们就必须通过轮询描述符集来检查，是哪个描述符发生了事件。</p>
@@ -301,8 +301,7 @@
 <p>我们可以让程序 阻塞在 <code>select</code>上，而一旦有描述符准备好读写，则会开始继续运行。</p>
 <p>在返回的时候，select会修改描述符集，其中有事件产生的被置位，其返回值是发生了准备好事件的描述符数量，而如果一个描述符在读写都进行了测试的话，如果即可读也可写就会计算为两次。</p>
 <p>这其中就会产生一个很头疼的问题，如果我们要监控1000个描述符，而其中只有一个描述符 999 准备好了的话，我们将不得不逐个的测试返回描述符集的结果才能知道是谁准备好了读写。这是一个巨大的浪费。因此我们有了另外一个方法。</p>
-<h1 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;poll.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span> &#123;</span></span><br><span class="line">      <span class="keyword">int</span>    fd;       <span class="comment">/* file descriptor */</span></span><br><span class="line">      <span class="keyword">short</span>  events;   <span class="comment">/* events to look for */</span></span><br><span class="line">      <span class="keyword">short</span>  revents;  <span class="comment">/* events returned */</span></span><br><span class="line">  &#125;;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">int</span></span><br><span class="line">  poll(struct pollfd fds[], <span class="keyword">nfds_t</span> nfds, <span class="keyword">int</span> timeout);</span><br></pre></td></tr></table></figure>
-
+<h1 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h1><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;poll.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span> &#123;</span></span><br><span class="line">      <span class="keyword">int</span>    fd;       <span class="comment">/* file descriptor */</span></span><br><span class="line">      short  events;   <span class="comment">/* events to look for */</span></span><br><span class="line">      short  revents;  <span class="comment">/* events returned */</span></span><br><span class="line">  &#125;;</span><br><span class="line">  </span><br><span class="line">  <span class="keyword">int</span></span><br><span class="line">  poll(struct pollfd fds[], <span class="keyword">nfds_t</span> nfds, <span class="keyword">int</span> timeout);</span><br></pre></td></tr></table></figure>
 <p> poll中，我们只需要把我们关心的描述符和事件放到一个结构中，然后把这些结构组成一个数组传递给 poll，在返回的时候，我们就不用去测试那些没有发生事件的描述了。但我们却也不得不检查每个传递过去的结构是不是发生了对应的事件。</p>
 <p> 还有没有更好的办法呢？如果我们能在返回的时候知道，其返回的描述符确实发生了特定的事件而直接进行操作的话，那不是就完美了么。</p>
 <h1 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h1><p>epoll所做的工作和 poll类似，但其可以进行水平触发或者边缘触发，主要是利用三个函数来进行的。</p>
@@ -330,8 +329,8 @@
 <p>在使用 <strong>ET</strong> 触发的时候，在接收到大块的数据时可能会产生多个事件，有一个选项可以让我们来设置在 <strong>epoll</strong> 在接收到一个事件后忽略其他事件。<strong>EPOLLONESHOT</strong>设置后，要想再继续接收其他事件的话，必须用 <code>epoll_ctl</code>的<strong>EPOLL_CTL_MOD</strong>来重设文件描述符。</p>
 <h2 id="建立的使用方式"><a href="#建立的使用方式" class="headerlink" title="建立的使用方式"></a>建立的使用方式</h2><p>水平触发没有什么好说的，和 poll的用法差不多，而<strong>ET</strong> 触发就需要多说一些了。例子中，<em>listener</em> 是一个非阻塞的套接字。函数<code>do_use_fd()</code>使用就绪的描述符，直到 read/write 返回一个 <strong>EAGAIN</strong> 错误。在接收到 <strong>EAGAIN</strong>后，一个事件驱动的状态机程序应该记录其当前的状态，以便下次调用 <code>do_use_fd()</code>时能从其停止的地方继续。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_EVENTS 10</span></span><br><span class="line"><span class="keyword">int</span> listen_sock, conn_sock, nfds, epollfd;</span><br><span class="line"></span><br><span class="line"><span class="comment">/* Code to set up listening socket, 'listen_sock',</span></span><br><span class="line"><span class="comment">   (socket(), bind(), listen()) omitted */</span></span><br><span class="line">   </span><br><span class="line">epollfd = epoll_create1(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span> (epollfd == <span class="number">-1</span>) &#123;</span><br><span class="line">	perror(<span class="string">"epoll_create1"</span>);</span><br><span class="line">	<span class="built_in">exit</span>(EXIT_FAILTURE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ev.events = EPOLLIN;</span><br><span class="line">ev.data.fd = listen_sock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (epoll_ctl(epollfd, EPOLL_CTL_ADD, listen_sock, &amp;ev) == <span class="number">-1</span>) &#123;</span><br><span class="line">	perror(<span class="string">"epoll_ctl: listen_sock"</span>):</span><br><span class="line">	<span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> ( ;; ) &#123;</span><br><span class="line">	nfds = epoll_wait(epollfd, events, MAX_EVENTS, <span class="number">-1</span>);</span><br><span class="line">	<span class="keyword">if</span> (nfds == <span class="number">-1</span>) &#123;</span><br><span class="line">		perror(<span class="string">"epoll_wait"</span>);</span><br><span class="line">		<span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span> (n = <span class="number">0</span>; n &lt; nfds; n++) &#123;</span><br><span class="line">		<span class="keyword">if</span> (events[n].data.fd == listen_sock) &#123;</span><br><span class="line">			conn_sock = accept(listen_sock, (struct sockaddr *) &amp;addr, &amp;addrlen);</span><br><span class="line">			<span class="keyword">if</span> (conn_sock == <span class="number">-1</span>) &#123;</span><br><span class="line">				perror(<span class="string">"accept"</span>);</span><br><span class="line">				<span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">			&#125;</span><br><span class="line">		</span><br><span class="line">			setnonblocking(conn_sock);</span><br><span class="line">		</span><br><span class="line">			ev.events = EPOLLIN | EPOLLET;</span><br><span class="line">			ev.data.fd = conn_sock;</span><br><span class="line">			<span class="keyword">if</span> (epoll_ctl(epollfd, EPOLL_CTL_ADD, conn_sock, &amp;ev) == <span class="number">-1</span>) &#123;</span><br><span class="line">				perror(<span class="string">"epoll_ctl: conn_sock"</span>);</span><br><span class="line">				<span class="built_in">exit</span>(EXIT_FAILURE);</span><br><span class="line">			&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			do_use_fd(events[n].data.fd);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>当配置 <strong>ET</strong>时，为了性能上的考虑，可以在 调用 <code>epoll_ctl</code>进行增加时（<strong>EPOLL_CTL_ADD</strong>）同时指定<em>EPOLLIN | EPOLLOUT</em>。这样就可以避免需要不停的调用 <code>epoll_ctl</code>的 <strong>EPOLL_CTL_MOD</strong>来不同的在两个标志间切换。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -349,7 +348,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Lua/skynet%E4%B8%AD%E7%9A%84%E7%BD%91%E7%BB%9C%E6%9C%8D%E5%8A%A1%E4%B8%8E%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86.html" rel="next" title="skynet中的网络服务与消息处理">
+                <a href="/Lua/skynet中的网络服务与消息处理.html" rel="next" title="skynet中的网络服务与消息处理">
                   <i class="fa fa-chevron-left"></i> skynet中的网络服务与消息处理
                 </a>
             </div>
@@ -357,7 +356,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Lua/skynet%E4%B8%ADsproto%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B.html" rel="prev" title="skynet中sproto使用示例">
+                <a href="/Lua/skynet中sproto使用示例.html" rel="prev" title="skynet中sproto使用示例">
                   skynet中sproto使用示例 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -419,20 +418,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -444,10 +443,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -476,10 +475,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -554,7 +553,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/IO%E7%9A%84%E9%98%BB%E5%A1%9E%E4%B8%8E%E5%A4%9A%E8%B7%AF%E5%A4%8D%E7%94%A8.html",
+            url: "https://gowa.club/Linux-Unix/IO的阻塞与多路复用.html",
             identifier: "Linux-Unix/IO的阻塞与多路复用.html",
             title: "IO的阻塞与多路复用"
           }

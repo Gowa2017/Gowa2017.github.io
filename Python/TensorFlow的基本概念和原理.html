@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,17 +51,19 @@
 <meta name="keywords" content="TensorFlow,Python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TensorFlow的基本概念和原理">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Python&#x2F;TensorFlow%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8E%9F%E7%90%86.html">
+<meta property="og:url" content="https://gowa.club/Python/TensorFlow的基本概念和原理.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="听起来很是高深的机器学习，但是我一点不懂。说实话这个框架不知道怎么拿来即用。但本着一直一来学习都是要了解原理的这种习惯，还是来看一下官方文档上的一些指导。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;tensors_flowing.gif">
-<meta property="og:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;mnist_deep.png">
+<meta property="og:image" content="https://gowa.club/res/tensors_flowing.gif">
+<meta property="og:image" content="https://gowa.club/res/mnist_deep.png">
 <meta property="og:updated_time" content="2018-10-31T14:31:19.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;gowa.club&#x2F;res&#x2F;tensors_flowing.gif">
+<meta name="twitter:title" content="TensorFlow的基本概念和原理">
+<meta name="twitter:description" content="听起来很是高深的机器学习，但是我一点不懂。说实话这个框架不知道怎么拿来即用。但本着一直一来学习都是要了解原理的这种习惯，还是来看一下官方文档上的一些指导。">
+<meta name="twitter:image" content="https://gowa.club/res/tensors_flowing.gif">
 
-<link rel="canonical" href="https://gowa.club/Python/TensorFlow%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8E%9F%E7%90%86.html">
+<link rel="canonical" href="https://gowa.club/Python/TensorFlow的基本概念和原理.html">
 
 
 <script id="page-configurations">
@@ -231,7 +233,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8E%9F%E7%90%86.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow的基本概念和原理.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -277,7 +279,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Python/TensorFlow%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8E%9F%E7%90%86.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Python/TensorFlow的基本概念和原理.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/TensorFlow的基本概念和原理.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -295,9 +297,8 @@
       
         <p>听起来很是高深的机器学习，但是我一点不懂。说实话这个框架不知道怎么拿来即用。但本着一直一来学习都是要了解原理的这种习惯，还是来看一下官方文档上的一些指导。</p>
 <a id="more"></a>
-
 <h1 id="数据流图"><a href="#数据流图" class="headerlink" title="数据流图"></a>数据流图</h1><p>TensorFlow 使用<strong>数据流图</strong>将计算表示为独立的指令之间的依赖关系。这可生成低级别的编程模型，在该模型中，您首先定义数据流图，然后创建 TensorFlow <strong>会话</strong>，以便在一组本地和远程设备上运行图的各个部分。</p>
-<p><img src="../res/tensors_flowing.gif" alt=""></p>
+<p><img src="../res/tensors_flowing.gif" alt></p>
 <p>初看这个图的时候是懵的，大概能模糊的知道一种数据流向的概念，但更多的就不清楚了。</p>
 <p><strong>数据流</strong>是一种用于并行计算的常用编程模型。在<strong>数据流图</strong>中，节点表示计算单元，边缘表示计算使用或产生的数据。例如，在 TensorFlow 图中，tf.matmul 操作对应单个节点，该节点具有两个传入边缘（要相乘的矩阵）和一个传出边缘（乘法结果）。</p>
 <p><strong>数据流图</strong>实际上是一个模板？一个数据流的描述？ 描述了操作对于数据流的依赖关系。</p>
@@ -345,7 +346,6 @@
 <h1 id="在以下会话中执行图：tf-Session"><a href="#在以下会话中执行图：tf-Session" class="headerlink" title="在以下会话中执行图：tf.Session"></a>在以下会话中执行图：tf.Session</h1><p>TensorFlow 使用 tf.Session 类来表示客户端程序（通常为 Python 程序，但也提供了其他语言的类似接口）与 C++ 运行时之间的连接。tf.Session 对象使我们能够访问本地机器中的设备和使用分布式 TensorFlow 运行时的远程设备。它还可缓存关于 tf.Graph 的信息，使您能够多次高效地运行同一计算。</p>
 <h2 id="创建-tf-Session"><a href="#创建-tf-Session" class="headerlink" title="创建 tf.Session"></a>创建 tf.Session</h2><p>如果您使用的是低阶 TensorFlow API，您可以为当前默认图创建一个 tf.Session，如下所示：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Create a default in-process session.</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">  <span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Create a remote session.</span></span><br><span class="line"><span class="keyword">with</span> tf.Session(<span class="string">"grpc://example.org:2222"</span>):</span><br><span class="line">  <span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
-
 <p>由于 tf.Session 拥有物理资源（例如 GPU 和网络连接），因此通常（在 with 代码块中）用作上下文管理器，并在您退出代码块时自动关闭会话。您也可以在不使用 with 代码块的情况下创建会话，但应在完成会话时明确调用 <code>tf.Session.close</code> 以便释放资源。</p>
 <p>tf.Session.init 接受三个可选参数：</p>
 <ul>
@@ -367,18 +367,14 @@
 <h2 id="使用-tf-Session-run-执行操作"><a href="#使用-tf-Session-run-执行操作" class="headerlink" title="使用 tf.Session.run 执行操作"></a>使用 tf.Session.run 执行操作</h2><p>tf.Session.run 方法是运行 tf.Operation 或评估 tf.Tensor 的主要机制。您可以将一个或多个 tf.Operation 或 tf.Tensor 对象传递到 tf.Session.run，TensorFlow 将执行计算结果所需的操作。</p>
 <p>tf.Session.run 要求您指定一组 fetch，这些 fetch 可确定返回值，并且可能是 tf.Operation、tf.Tensor 或类张量类型，例如 tf.Variable。这些 fetch 决定了必须执行整体 tf.Graph 的哪些子图以生成结果：该子图包含 fetch 列表中指定的所有操作，以及其输出用于计算 fetch 值的所有操作。例如，以下代码段说明了 tf.Session.run 的不同参数如何导致执行不同的子图：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">x = tf.constant([[<span class="number">37.0</span>, <span class="number">-23.0</span>], [<span class="number">1.0</span>, <span class="number">4.0</span>]])</span><br><span class="line">w = tf.Variable(tf.random_uniform([<span class="number">2</span>, <span class="number">2</span>]))</span><br><span class="line">y = tf.matmul(x, w)</span><br><span class="line">output = tf.nn.softmax(y)</span><br><span class="line">init_op = w.initializer</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">  <span class="comment"># Run the initializer on `w`.</span></span><br><span class="line">  sess.run(init_op)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Evaluate `output`. `sess.run(output)` will return a NumPy array containing</span></span><br><span class="line">  <span class="comment"># the result of the computation.</span></span><br><span class="line">  print(sess.run(output))</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Evaluate `y` and `output`. Note that `y` will only be computed once, and its</span></span><br><span class="line">  <span class="comment"># result used both to return `y_val` and as an input to the `tf.nn.softmax()`</span></span><br><span class="line">  <span class="comment"># op. Both `y_val` and `output_val` will be NumPy arrays.</span></span><br><span class="line">  y_val, output_val = sess.run([y, output])</span><br></pre></td></tr></table></figure>
-
 <p>tf.Session.run 也可以选择接受 <strong>Feed</strong> 字典，该字典是从 tf.Tensor 对象（通常是 tf.placeholder 张量）到在执行时会被替换为这些张量的值（通常是 Python 标量、列表或 NumPy 数组）的映射。例如：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Define a placeholder that expects a vector of three floating-point values,</span></span><br><span class="line"><span class="comment"># and a computation that depends on it.</span></span><br><span class="line">x = tf.placeholder(tf.float32, shape=[<span class="number">3</span>])</span><br><span class="line">y = tf.square(x)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">  <span class="comment"># Feeding a value changes the result that is returned when you evaluate `y`.</span></span><br><span class="line">  print(sess.run(y, &#123;x: [<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>]&#125;))  <span class="comment"># =&gt; "[1.0, 4.0, 9.0]"</span></span><br><span class="line">  print(sess.run(y, &#123;x: [<span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">5.0</span>]&#125;))  <span class="comment"># =&gt; "[0.0, 0.0, 25.0]"</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># Raises &lt;a href="../api_docs/python/tf/errors/InvalidArgumentError"&gt;&lt;code&gt;tf.errors.InvalidArgumentError&lt;/code&gt;&lt;/a&gt;, because you must feed a value for</span></span><br><span class="line">  <span class="comment"># a `tf.placeholder()` when evaluating a tensor that depends on it.</span></span><br><span class="line">  sess.run(y)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Raises `ValueError`, because the shape of `37.0` does not match the shape</span></span><br><span class="line">  <span class="comment"># of placeholder `x`.</span></span><br><span class="line">  sess.run(y, &#123;x: <span class="number">37.0</span>&#125;)</span><br></pre></td></tr></table></figure>
-
 <p>tf.Session.run 也接受可选的 options 参数（允许您指定与调用有关的选项）和可选的 run_metadata 参数（允许您收集与执行有关的元数据）。例如，您可以同时使用这些选项来收集与执行有关的跟踪信息：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line">y = tf.matmul([[<span class="number">37.0</span>, <span class="number">-23.0</span>], [<span class="number">1.0</span>, <span class="number">4.0</span>]], tf.random_uniform([<span class="number">2</span>, <span class="number">2</span>]))</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">  <span class="comment"># Define options for the `sess.run()` call.</span></span><br><span class="line">  options = tf.RunOptions()</span><br><span class="line">  options.output_partition_graphs = <span class="literal">True</span></span><br><span class="line">  options.trace_level = tf.RunOptions.FULL_TRACE</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Define a container for the returned metadata.</span></span><br><span class="line">  metadata = tf.RunMetadata()</span><br><span class="line"></span><br><span class="line">  sess.run(y, options=options, run_metadata=metadata)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Print the subgraphs that executed on each device.</span></span><br><span class="line">  print(metadata.partition_graphs)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Print the timings of each operation that executed.</span></span><br><span class="line">  print(metadata.step_stats)</span><br></pre></td></tr></table></figure>
-
 <h1 id="直观展示您的图"><a href="#直观展示您的图" class="headerlink" title="直观展示您的图"></a>直观展示您的图</h1><p>TensorFlow 包含可帮助您理解图中的代码的工具。图可视化工具是 TensorBoard 的一个组件，可在浏览器中可视化图的结构。要创建可视化图表，最简单的方法是传递 tf.Graph（在创建 tf.summary.FileWriter 时）：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Build your graph.</span></span><br><span class="line">x = tf.constant([[<span class="number">37.0</span>, <span class="number">-23.0</span>], [<span class="number">1.0</span>, <span class="number">4.0</span>]])</span><br><span class="line">w = tf.Variable(tf.random_uniform([<span class="number">2</span>, <span class="number">2</span>]))</span><br><span class="line">y = tf.matmul(x, w)</span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line">loss = ...</span><br><span class="line">train_op = tf.train.AdagradOptimizer(<span class="number">0.01</span>).minimize(loss)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">  <span class="comment"># `sess.graph` provides access to the graph used in a &lt;a href="../api_docs/python/tf/Session"&gt;&lt;code&gt;tf.Session&lt;/code&gt;&lt;/a&gt;.</span></span><br><span class="line">  writer = tf.summary.FileWriter(<span class="string">"/tmp/log/..."</span>, sess.graph)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Perform your computation...</span></span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">    sess.run(train_op)</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line">  writer.close()</span><br></pre></td></tr></table></figure>
-
 <p>随后，您可以在 tensorboard 中打开日志并转到“图”标签，查看图结构的概要可视化图表。请注意，典型的 TensorFlow 图（尤其是具有自动计算的梯度的训练图）包含的节点太多，无法一次性完成直观展示。图可视化工具使用名称范围来将相关指令分组到“超级”节点中。您可以点击任意超级节点上的橙色“+”按钮以展开内部的子图。</p>
-<p><img src="../res/mnist_deep.png" alt=""></p>
+<p><img src="../res/mnist_deep.png" alt><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -396,7 +392,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Python/%E5%A6%82%E4%BD%95%E5%9C%A8TensorFlow%E4%B8%AD%E5%BB%BA%E7%AB%8B%E4%B8%80%E4%B8%AA%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C-01.html" rel="next" title="如何在TensorFlow中建立一个神经网络-01">
+                <a href="/Python/如何在TensorFlow中建立一个神经网络-01.html" rel="next" title="如何在TensorFlow中建立一个神经网络-01">
                   <i class="fa fa-chevron-left"></i> 如何在TensorFlow中建立一个神经网络-01
                 </a>
             </div>
@@ -404,7 +400,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL%E8%87%AA%E5%B7%B1%E7%9A%84%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E4%BD%BF%E7%94%A8.html" rel="prev" title="MySQL自己的定时任务使用">
+                <a href="/数据库/MySQL自己的定时任务使用.html" rel="prev" title="MySQL自己的定时任务使用">
                   MySQL自己的定时任务使用 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -466,20 +462,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -491,10 +487,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -523,10 +519,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -601,7 +597,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Python/TensorFlow%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5%E5%92%8C%E5%8E%9F%E7%90%86.html",
+            url: "https://gowa.club/Python/TensorFlow的基本概念和原理.html",
             identifier: "Python/TensorFlow的基本概念和原理.html",
             title: "TensorFlow的基本概念和原理"
           }

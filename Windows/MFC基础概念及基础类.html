@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Windows,MFC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MFC基础概念及基本类">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Windows&#x2F;MFC%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E5%8F%8A%E5%9F%BA%E7%A1%80%E7%B1%BB.html">
+<meta property="og:url" content="https://gowa.club/Windows/MFC基础概念及基础类.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="在 Windows-程序工作过程 一问中我们介绍了 Windows 程序的基本工作过程，那么在 MFC 中其又是怎么样工作的呢。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-06-21T15:07:39.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MFC基础概念及基本类">
+<meta name="twitter:description" content="在 Windows-程序工作过程 一问中我们介绍了 Windows 程序的基本工作过程，那么在 MFC 中其又是怎么样工作的呢。">
 
-<link rel="canonical" href="https://gowa.club/Windows/MFC%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E5%8F%8A%E5%9F%BA%E7%A1%80%E7%B1%BB.html">
+<link rel="canonical" href="https://gowa.club/Windows/MFC基础概念及基础类.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/MFC%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E5%8F%8A%E5%9F%BA%E7%A1%80%E7%B1%BB.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/MFC基础概念及基础类.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Windows/MFC%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E5%8F%8A%E5%9F%BA%E7%A1%80%E7%B1%BB.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Windows/MFC基础概念及基础类.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Windows/MFC基础概念及基础类.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,9 +292,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在 <a href="/Windows/Windows-%E7%A8%8B%E5%BA%8F%E5%B7%A5%E4%BD%9C%E8%BF%87%E7%A8%8B.html" title="Windows-程序工作过程">Windows-程序工作过程</a> 一问中我们介绍了 Windows 程序的基本工作过程，那么在 MFC 中其又是怎么样工作的呢。</p>
+        <p>在 <a href="/Windows/Windows-程序工作过程.html" title="Windows-程序工作过程">Windows-程序工作过程</a> 一问中我们介绍了 Windows 程序的基本工作过程，那么在 MFC 中其又是怎么样工作的呢。</p>
 <a id="more"></a>
-
 <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>MFC 是微软基础类库，是对 windows SDK API 以面向对象的形式进行了封装。将一些模板化的，常规化的代码进行了封装后，我们就可以省却很多事情了。我们从一个最简单的基于对话框的程序来看。</p>
 <p>对于使用了 winapi 来的程序来说，其本来是过程式的，但是使用 MFC 将一些功能，模块用对象的形式进行封装，简化了过程，也更加容易写出代码。</p>
 <h1 id="模块、进程、线程"><a href="#模块、进程、线程" class="headerlink" title="模块、进程、线程"></a>模块、进程、线程</h1><p>首先我们来先了解一下这三个概念。</p>
@@ -310,7 +311,6 @@
 </blockquote>
 <h2 id="CWinThread"><a href="#CWinThread" class="headerlink" title="CWinThread"></a>CWinThread</h2><p>这个我代表了一个应用内的执行线程。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CWinThread</span> :</span> <span class="keyword">public</span> CCmdTarget</span><br></pre></td></tr></table></figure>
-
 <p>应用的主线程通常由一个继承自 CWinApp 的类来提供；而 CWinApp 是继承自 CWinThread 的。同时  CWinThread 允许在一个应用内有多个线程。</p>
 <p>CWinThread 支持两种类型的线程：工作线程与 UI 线线程。工作线程不会处理消息，UI 线程线程处理来自系统的各种消息。</p>
 <p>CWinApp 及其衍生类是 UI 线程的实例。</p>
@@ -319,7 +319,6 @@
 <p>要建立一个 MFC 线程，使用 <code>AfxBeginThread</code>。它有两种形式，具体是那种依赖于你到底想要的是一个工作线程还是UI线程。如果想要的是一个 UI 线程，那么需要传递给它一个指向 继承自 CWinThread 的类作为参数；如果只是需要一个工作线程，那么将工作函数及工作参数传递过去就行了。<code>AfxBeginThread</code> 会返回一个指向 CWinThread 对象的指针。</p>
 <p>当然，我们可以 先构建一个 CWinThread 对象，然后使用 <code>CreateThread</code> 来建立线程。 这样的两步操作在我们重用 CWinThread 的时候就很实用了。</p>
 <h2 id="CWinApp"><a href="#CWinApp" class="headerlink" title="CWinApp"></a>CWinApp</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CWinApp</span> :</span> <span class="keyword">public</span> CWinThread</span><br></pre></td></tr></table></figure>
-
 <p>MFC 中的主应用程序类将封装 Windows 操作系统的应用程序的初始化、运行和终止。 基于框架的应用程序都必须<strong>有且只有一个对象的类派生自CWinApp</strong>。 <strong>创建窗口之前将构造此对象。</strong></p>
 <p>CWinApp 是一个应用对象，其提供了成员函数来初始化我们的应用及开始运行应用。</p>
 <p>这个对象是在其他 C++ 全局对象构建的时候构建的，当 Windows 调用 <code>WinMain</code> 函数的时候它已经是可用的了。必须将我们的 CWinApp 对象声明为全局的。</p>
@@ -334,7 +333,6 @@
 <p>如果我们想要判断是否已经有一个当前应用的实例在运行，使用一个名称互斥量。如果打开这个互斥量失败，就表示当前没有此应用的实例在运行。</p>
 <h2 id="CWnd"><a href="#CWnd" class="headerlink" title="CWnd"></a>CWnd</h2><p>MFC 所有窗口的基类。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CWnd</span> :</span> <span class="keyword">public</span> CCmdTarget</span><br></pre></td></tr></table></figure>
-
 <p>CWnd 对象与 Windows 的窗口是不一样的，但两者之间有关联。Cwnd 对象的建立和销毁是由其构造器（析构器）完成的。而 Windows 窗口，是 Windows 操作系统的一个数据结构，其由 <code>Create</code> 成员方法来建立，由 Cwnd 的虚 析构器来销毁。<code>DestroyWindow</code> 函数会销毁 Windows 的窗口，但不会销毁 Cwnd 对象本身。</p>
 <p>也就是说 Cwnd 对象实际上是持一个 Windows 窗口对象的。</p>
 <p>CWnd 类和消息映射机制隐藏了我们的窗口处理函数 <em>WndProc</em> 这么一个事实。由 Windows 发来的消息和通知都由消息映射机制路由到 CWnd 的 <code>On[Message]</code> 函数。我们通过重写 On 方法来处理消息。</p>
@@ -348,7 +346,6 @@
 <p>当用户要销毁窗口的时候，我们可以销毁 CWnd 对象，或者调用其 DestroyWindow 函数来销毁子窗口。</p>
 <p>CFrameWnd，CDialog，CView都继承自这个类。而 UI 控制的类如  CButton 可以直接使用。</p>
 <h2 id="CDialog"><a href="#CDialog" class="headerlink" title="CDialog"></a>CDialog</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CDialog</span> :</span> <span class="keyword">public</span> CWnd</span><br></pre></td></tr></table></figure>
-
 <p>用来在屏幕上显示一个对话框。</p>
 <p>有两种类型的对话框：抢占式或非抢占式的。一个抢占式的对话框在应用要继续之前必须关闭；而非强制式的话可以在没关闭的时候让用户依然去看其他事情。</p>
 <p>一个 CDialog 对象是一个对话框模板和一个继承自 CDialog 类的结合。使用对话框编辑器来编辑模板并保存到资源内，然后使用类生成向导来建立一个继承自 CDialog 的类。</p>
@@ -357,12 +354,11 @@
 <p>数据交换和有效性验证映射是在 <code>CWnd::DoDataExchange()</code> 方法内完成的，系统和用户都会不直接的调用 <code>CWnd::UpdateData()</code> 来间接的调用这个方法。</p>
 <h2 id="CFile"><a href="#CFile" class="headerlink" title="CFile"></a>CFile</h2><p>提供二进制的，不带缓冲的输入输入服务。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">TCHAR	szBuffer[<span class="number">256</span>]; </span><br><span class="line">UINT    nActual = <span class="number">0</span>; </span><br><span class="line">CFile	myFile;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( myFile.Open( _T(<span class="string">"c:\\test\\myfile.dat"</span>), CFile::modeCreate |   </span><br><span class="line">   CFile::modeReadWrite ) )</span><br><span class="line">&#123;</span><br><span class="line">   myFile.Write( szBuffer, <span class="keyword">sizeof</span>( szBuffer ) ); </span><br><span class="line">   myFile.Flush();</span><br><span class="line">   myFile.Seek( <span class="number">0</span>, CFile::begin );</span><br><span class="line">   nActual = myFile.Read( szBuffer, <span class="keyword">sizeof</span>( szBuffer ) ); </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">## CStdioFile</span><br><span class="line"></span><br><span class="line">流式缓冲文件类</span><br></pre></td></tr></table></figure>
-
 <h2 id="CString"><a href="#CString" class="headerlink" title="CString"></a>CString</h2><p>CString, CStringA, CStringW 是 CStringT 模板类的特定实现。 CStringT 会根据其支持的字符类型来实现。</p>
 <p>CStringW 支持 <code>wchar_t</code> 类型和 Unicode 字符串； CStringA 支持 <em>char</em> 类型，支持多字节或者单字节字符串。<br>CString 支持 <em>wchar_t,char</em>，这依赖与编译的设置。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;atlstr.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    CString aCString = CString(_T(<span class="string">"A string"</span>));</span><br><span class="line">    _tprintf(_T(<span class="string">"%s"</span>), (LPCTSTR) aCString);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
-<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1>
     </div>
 
     
@@ -379,7 +375,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Windows/COM%E5%9C%A8%E7%A8%8B%E5%BA%8F%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8.html" rel="next" title="COM在程序中的使用">
+                <a href="/Windows/COM在程序中的使用.html" rel="next" title="COM在程序中的使用">
                   <i class="fa fa-chevron-left"></i> COM在程序中的使用
                 </a>
             </div>
@@ -387,7 +383,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Windows/MFC%E6%89%8B%E5%8A%A8%E5%BB%BA%E7%AB%8B%E8%BF%9B%E7%A8%8B.html" rel="prev" title="MFC手动建立进程">
+                <a href="/Windows/MFC手动建立进程.html" rel="prev" title="MFC手动建立进程">
                   MFC手动建立进程 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -449,20 +445,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -474,10 +470,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -506,10 +502,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -584,7 +580,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Windows/MFC%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E5%8F%8A%E5%9F%BA%E7%A1%80%E7%B1%BB.html",
+            url: "https://gowa.club/Windows/MFC基础概念及基础类.html",
             identifier: "Windows/MFC基础概念及基础类.html",
             title: "MFC基础概念及基本类"
           }

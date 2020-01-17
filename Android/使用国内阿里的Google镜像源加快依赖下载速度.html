@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Android">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用国内阿里的Google镜像源加快依赖下载速度">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85%E9%98%BF%E9%87%8C%E7%9A%84Google%E9%95%9C%E5%83%8F%E6%BA%90%E5%8A%A0%E5%BF%AB%E4%BE%9D%E8%B5%96%E4%B8%8B%E8%BD%BD%E9%80%9F%E5%BA%A6.html">
+<meta property="og:url" content="https://gowa.club/Android/使用国内阿里的Google镜像源加快依赖下载速度.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="现在官方新建的项目默认会使用  google() 和  jcenter() 两个仓库，但是速度都不是很快，所以需要更换为阿里的镜像。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-02-07T13:49:33.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用国内阿里的Google镜像源加快依赖下载速度">
+<meta name="twitter:description" content="现在官方新建的项目默认会使用  google() 和  jcenter() 两个仓库，但是速度都不是很快，所以需要更换为阿里的镜像。">
 
-<link rel="canonical" href="https://gowa.club/Android/%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85%E9%98%BF%E9%87%8C%E7%9A%84Google%E9%95%9C%E5%83%8F%E6%BA%90%E5%8A%A0%E5%BF%AB%E4%BE%9D%E8%B5%96%E4%B8%8B%E8%BD%BD%E9%80%9F%E5%BA%A6.html">
+<link rel="canonical" href="https://gowa.club/Android/使用国内阿里的Google镜像源加快依赖下载速度.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85%E9%98%BF%E9%87%8C%E7%9A%84Google%E9%95%9C%E5%83%8F%E6%BA%90%E5%8A%A0%E5%BF%AB%E4%BE%9D%E8%B5%96%E4%B8%8B%E8%BD%BD%E9%80%9F%E5%BA%A6.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/使用国内阿里的Google镜像源加快依赖下载速度.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85%E9%98%BF%E9%87%8C%E7%9A%84Google%E9%95%9C%E5%83%8F%E6%BA%90%E5%8A%A0%E5%BF%AB%E4%BE%9D%E8%B5%96%E4%B8%8B%E8%BD%BD%E9%80%9F%E5%BA%A6.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/使用国内阿里的Google镜像源加快依赖下载速度.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/使用国内阿里的Google镜像源加快依赖下载速度.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,12 +294,10 @@
       
         <p>现在官方新建的项目默认会使用  google() 和  jcenter() 两个仓库，但是速度都不是很快，所以需要更换为阿里的镜像。</p>
 <a id="more"></a>
-
 <h1 id="官方设置"><a href="#官方设置" class="headerlink" title="官方设置"></a>官方设置</h1><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        google()</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath <span class="string">'com.android.tools.build:gradle:3.1.3'</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// <span class="doctag">NOTE:</span> Do not place your application dependencies here; they belong</span></span><br><span class="line">        <span class="comment">// in the individual module build.gradle files</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        jcenter()</span><br><span class="line">        google()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h1 id="修改后"><a href="#修改后" class="headerlink" title="修改后"></a>修改后</h1><figure class="highlight groovy"><table><tr><td class="code"><pre><span class="line">buildscript &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line"><span class="comment">//        mavenCentral()</span></span><br><span class="line"><span class="comment">//        jcenter()</span></span><br><span class="line"><span class="comment">//        google()</span></span><br><span class="line">        maven &#123; url <span class="string">'https://plugins.gradle.org/m2/'</span> &#125;</span><br><span class="line">        maven &#123; url <span class="string">'http://maven.aliyun.com/nexus/content/repositories/google'</span> &#125;</span><br><span class="line">        maven &#123; url <span class="string">'http://maven.aliyun.com/nexus/content/groups/public/'</span> &#125;</span><br><span class="line">        maven &#123; url <span class="string">'http://maven.aliyun.com/nexus/content/repositories/jcenter'</span>&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath <span class="string">'com.android.tools.build:gradle:3.0.1'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line"><span class="comment">//        mavenCentral()</span></span><br><span class="line"><span class="comment">//        jcenter()</span></span><br><span class="line"><span class="comment">//        google()</span></span><br><span class="line">        maven &#123; url <span class="string">'https://plugins.gradle.org/m2/'</span> &#125;</span><br><span class="line">        maven &#123; url <span class="string">'http://maven.aliyun.com/nexus/content/repositories/google'</span> &#125;</span><br><span class="line">        maven &#123; url <span class="string">'http://maven.aliyun.com/nexus/content/groups/public/'</span> &#125;</span><br><span class="line">        maven &#123; url <span class="string">'http://maven.aliyun.com/nexus/content/repositories/jcenter'</span>&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h1 id="阿里镜像仓库地址"><a href="#阿里镜像仓库地址" class="headerlink" title="阿里镜像仓库地址"></a>阿里镜像仓库地址</h1><p><a href="https://maven.aliyun.com/mvn/view" target="_blank" rel="noopener"> 阿里镜像仓库地址</a></p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -314,7 +314,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Cocos2d-X/%E5%85%B3%E4%BA%8E%E4%BD%BF%E7%94%A8PureMVC-LUA%E8%BF%9B%E8%A1%8C%E5%BC%80%E5%8F%91%E7%9A%84%E4%B8%80%E4%B8%AA%E8%BF%87%E7%A8%8B.html" rel="next" title="关于使用PureMVC-LUA进行开发的一个过程">
+                <a href="/Cocos2d-X/关于使用PureMVC-LUA进行开发的一个过程.html" rel="next" title="关于使用PureMVC-LUA进行开发的一个过程">
                   <i class="fa fa-chevron-left"></i> 关于使用PureMVC-LUA进行开发的一个过程
                 </a>
             </div>
@@ -322,7 +322,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Cocos2d-X/%E5%85%B3%E4%BA%8ECocos2d-Lua%E4%BD%BF%E7%94%A8NDK%E7%BC%96%E8%AF%91%E8%BF%87%E7%A8%8B%E7%9A%84%E8%A7%A3%E6%9E%90.html" rel="prev" title="关于Cocos2d-Lua使用NDK编译过程的解析">
+                <a href="/Cocos2d-X/关于Cocos2d-Lua使用NDK编译过程的解析.html" rel="prev" title="关于Cocos2d-Lua使用NDK编译过程的解析">
                   关于Cocos2d-Lua使用NDK编译过程的解析 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -384,20 +384,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -409,10 +409,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -441,10 +441,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -519,7 +519,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%86%85%E9%98%BF%E9%87%8C%E7%9A%84Google%E9%95%9C%E5%83%8F%E6%BA%90%E5%8A%A0%E5%BF%AB%E4%BE%9D%E8%B5%96%E4%B8%8B%E8%BD%BD%E9%80%9F%E5%BA%A6.html",
+            url: "https://gowa.club/Android/使用国内阿里的Google镜像源加快依赖下载速度.html",
             identifier: "Android/使用国内阿里的Google镜像源加快依赖下载速度.html",
             title: "使用国内阿里的Google镜像源加快依赖下载速度"
           }

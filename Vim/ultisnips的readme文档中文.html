@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,16 +51,18 @@
 <meta name="keywords" content="Vim">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ultisnips的readme文档中文">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Vim&#x2F;ultisnips%E7%9A%84readme%E6%96%87%E6%A1%A3%E4%B8%AD%E6%96%87.html">
+<meta property="og:url" content="https://gowa.club/Vim/ultisnips的readme文档中文.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="UltiSnips 是VIM中代码片段（snippets）的最终解决办法。它拥有很多的特性，而且非常快。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https:&#x2F;&#x2F;raw.github.com&#x2F;SirVer&#x2F;ultisnips&#x2F;master&#x2F;doc&#x2F;demo.gif">
+<meta property="og:image" content="https://raw.github.com/SirVer/ultisnips/master/doc/demo.gif">
 <meta property="og:updated_time" content="2018-03-14T14:19:57.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;raw.github.com&#x2F;SirVer&#x2F;ultisnips&#x2F;master&#x2F;doc&#x2F;demo.gif">
+<meta name="twitter:title" content="ultisnips的readme文档中文">
+<meta name="twitter:description" content="UltiSnips 是VIM中代码片段（snippets）的最终解决办法。它拥有很多的特性，而且非常快。">
+<meta name="twitter:image" content="https://raw.github.com/SirVer/ultisnips/master/doc/demo.gif">
 
-<link rel="canonical" href="https://gowa.club/Vim/ultisnips%E7%9A%84readme%E6%96%87%E6%A1%A3%E4%B8%AD%E6%96%87.html">
+<link rel="canonical" href="https://gowa.club/Vim/ultisnips的readme文档中文.html">
 
 
 <script id="page-configurations">
@@ -230,7 +232,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Vim/ultisnips%E7%9A%84readme%E6%96%87%E6%A1%A3%E4%B8%AD%E6%96%87.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Vim/ultisnips的readme文档中文.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -276,7 +278,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Vim/ultisnips%E7%9A%84readme%E6%96%87%E6%A1%A3%E4%B8%AD%E6%96%87.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Vim/ultisnips的readme文档中文.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Vim/ultisnips的readme文档中文.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -309,10 +311,10 @@
 </ol>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><p>假设使用的是<a href="https://github.com/gmarik/Vundle.vim" target="_blank" rel="noopener">Vundle</a>来管理VIM插件。 在 <code>.vimrc</code>中加入下面的代码：</p>
 <pre><code>&quot; Track the engine.
-Plugin &apos;SirVer/ultisnips&apos;
+Plugin &#39;SirVer/ultisnips&#39;
 
 &quot; Snippets are separated from the engine. Add this if you want them:
-Plugin &apos;honza/vim-snippets&apos;
+Plugin &#39;honza/vim-snippets&#39;
 
 &quot; Trigger configuration. Do not use &lt;tab&gt; if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger=&quot;&lt;tab&gt;&quot;
@@ -320,7 +322,8 @@ let g:UltiSnipsJumpForwardTrigger=&quot;&lt;c-b&gt;&quot;
 let g:UltiSnipsJumpBackwardTrigger=&quot;&lt;c-z&gt;&quot;
 
 &quot; If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit=&quot;vertical&quot;</code></pre><p>UltiSnips有非常详细的文档<br><a href="https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt" target="_blank" rel="noopener">documentation</a>。这里有很多选项和特性我建议你最少看一下。</p>
+let g:UltiSnipsEditSplit=&quot;vertical&quot;
+</code></pre><p>UltiSnips有非常详细的文档<br><a href="https://github.com/SirVer/ultisnips/blob/master/doc/UltiSnips.txt" target="_blank" rel="noopener">documentation</a>。这里有很多选项和特性我建议你最少看一下。</p>
 <h2 id="Screencasts"><a href="#Screencasts" class="headerlink" title="Screencasts"></a>Screencasts</h2><p>From a gentle introduction to really advanced in a few minutes: The blog posts<br>of the screencasts contain more advanced examples of the things discussed in the<br>videos.</p>
 <ul>
 <li><a href="http://www.sirver.net/blog/2011/12/30/first-episode-of-ultisnips-screencast/" target="_blank" rel="noopener">Episode 1: What are snippets and do I need them?</a></li>
@@ -332,7 +335,7 @@ let g:UltiSnipsEditSplit=&quot;vertical&quot;</code></pre><p>UltiSnips有非常�
 <ul>
 <li><a href="http://vimcasts.org/episodes/meet-ultisnips/" target="_blank" rel="noopener">Meet UltiSnips</a></li>
 <li><a href="http://vimcasts.org/episodes/ultisnips-python-interpolation/" target="_blank" rel="noopener">Using Python interpolation in UltiSnips snippets</a></li>
-<li><a href="http://vimcasts.org/episodes/ultisnips-visual-placeholder/" target="_blank" rel="noopener">Using selected text in UltiSnips snippets</a></li>
+<li><a href="http://vimcasts.org/episodes/ultisnips-visual-placeholder/" target="_blank" rel="noopener">Using selected text in UltiSnips snippets</a><br><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></li>
 </ul>
 
     </div>
@@ -350,7 +353,7 @@ let g:UltiSnipsEditSplit=&quot;vertical&quot;</code></pre><p>UltiSnips有非常�
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/LVM%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%8F%8A%E4%BD%BF%E7%94%A8.html" rel="next" title="LVM的介绍及使用">
+                <a href="/Linux-Unix/LVM的介绍及使用.html" rel="next" title="LVM的介绍及使用">
                   <i class="fa fa-chevron-left"></i> LVM的介绍及使用
                 </a>
             </div>
@@ -420,20 +423,20 @@ let g:UltiSnipsEditSplit=&quot;vertical&quot;</code></pre><p>UltiSnips有非常�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -445,10 +448,10 @@ let g:UltiSnipsEditSplit=&quot;vertical&quot;</code></pre><p>UltiSnips有非常�
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -477,10 +480,10 @@ let g:UltiSnipsEditSplit=&quot;vertical&quot;</code></pre><p>UltiSnips有非常�
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -555,7 +558,7 @@ let g:UltiSnipsEditSplit=&quot;vertical&quot;</code></pre><p>UltiSnips有非常�
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Vim/ultisnips%E7%9A%84readme%E6%96%87%E6%A1%A3%E4%B8%AD%E6%96%87.html",
+            url: "https://gowa.club/Vim/ultisnips的readme文档中文.html",
             identifier: "Vim/ultisnips的readme文档中文.html",
             title: "ultisnips的readme文档中文"
           }

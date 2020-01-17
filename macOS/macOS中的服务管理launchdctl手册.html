@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="macOS,launchd">
 <meta property="og:type" content="article">
 <meta property="og:title" content="macOS中的服务管理launchdctl手册">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;macOS&#x2F;macOS%E4%B8%AD%E7%9A%84%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86launchdctl%E6%89%8B%E5%86%8C.html">
+<meta property="og:url" content="https://gowa.club/macOS/macOS中的服务管理launchdctl手册.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="对于CentOS中用systemctl来进行服务管理，又或者Solaris用的是SMF，但是对于macOS呢，其用的就是launchd来进行服务管理的，而用launchctl命令来进行服务的设置。本文是对launchctl手册的一个翻译。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-01-16T15:09:43.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="macOS中的服务管理launchdctl手册">
+<meta name="twitter:description" content="对于CentOS中用systemctl来进行服务管理，又或者Solaris用的是SMF，但是对于macOS呢，其用的就是launchd来进行服务管理的，而用launchctl命令来进行服务的设置。本文是对launchctl手册的一个翻译。">
 
-<link rel="canonical" href="https://gowa.club/macOS/macOS%E4%B8%AD%E7%9A%84%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86launchdctl%E6%89%8B%E5%86%8C.html">
+<link rel="canonical" href="https://gowa.club/macOS/macOS中的服务管理launchdctl手册.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/macOS/macOS%E4%B8%AD%E7%9A%84%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86launchdctl%E6%89%8B%E5%86%8C.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/macOS/macOS中的服务管理launchdctl手册.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/macOS/macOS%E4%B8%AD%E7%9A%84%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86launchdctl%E6%89%8B%E5%86%8C.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/macOS/macOS中的服务管理launchdctl手册.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="macOS/macOS中的服务管理launchdctl手册.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,51 +292,28 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>对于CentOS中用systemctl来进行服务管理，又或者Solaris用的是SMF，但是对于macOS呢，其用的就是launchd来进行服务管理的，而用launchctl命令来进行服务的设置。本文是对<code>launchctl</code>手册的一个翻译。</p>
-<a id="more"></a>
-
-<h1 id="NAME"><a href="#NAME" class="headerlink" title="NAME"></a>NAME</h1><p><code>launch</code> – <code>launchd</code>的接口</p>
-<h1 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h1><pre><code>launchctl *subcommand* *[arguments ...]*</code></pre><h1 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h1><p><code>launchctl</code>接口通过<code>launchd</code>服务来管理和检查守护进程，代理服务和XPC服务。</p>
+        <p>对于CentOS中用systemctl来进行服务管理，又或者Solaris用的是SMF，但是对于macOS呢，其用的就是launchd来进行服务管理的，而用launchctl命令来进行服务的设置。本文是对<code>launchctl</code>手册的一个翻译。<br><a id="more"></a></p>
+<h1 id="NAME"><a href="#NAME" class="headerlink" title="NAME"></a>NAME</h1><p><code>launch</code> — <code>launchd</code>的接口</p>
+<h1 id="命令格式"><a href="#命令格式" class="headerlink" title="命令格式"></a>命令格式</h1><pre><code>launchctl *subcommand* *[arguments ...]*
+</code></pre><h1 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h1><p><code>launchctl</code>接口通过<code>launchd</code>服务来管理和检查守护进程，代理服务和XPC服务。</p>
 <h1 id="SUBCOMMANDS"><a href="#SUBCOMMANDS" class="headerlink" title="SUBCOMMANDS"></a>SUBCOMMANDS</h1><p>launchctl 允许对 launchd 端口的详细测试。 一个<code>domain（域）</code>管理了一系列服务的执行策略。 一个服务可能会考虑称为一个虚拟进程以便其总能对请求进行响应。 每个服务有一系列端点，对这些端点发送消息会让服务启动。 主机建议这些端点在一个共享的命名空间内，并作为 <code>Mach bootstrap</code>子集同义。  </p>
 <p>很多子命令都用一个指示符来表明目标<strong>域</strong>或<strong>服务</strong>。指示符可能是以下形式： </p>
-<p><em>system/[service-name]</em> 指定<strong>域</strong>或<strong>域</strong>中的服务。<code>system</code>域管理<code>Mach 根启动器</code>，其被认为是一个特权上下文。任何用户都可以读取或查询<code>system</code>域，但是修改的话就需要特权。<br><em>user/&lt;uid&gt;/[service-name]</em>   目标域为<code>UID</code>指定的<code>user</code>域，或为域中服务。每个登录的用户都有一个用户域独立存在。<code>User</code>域在iOS内不存在。<br><em>login/&lt;asid&gt;/[service-name]</em>  指定一个<code>user-login</code>域或此域中某一服务。当一个用户在GUI登录，并被与此次登录相关联的审计会话标识符所区别的时候进行创建一个<code>user-login</code>域。如果一个<code>user</code>域与一个<code>login</code>域相关联，<code>print</code>子命令会显示这个<code>login</code>域的<strong>ASID</strong>。<code>user-login</code>在iOS内不存在。<br><em>gui/&lt;uid&gt;/[service-name]</em>  <code>login</code>标识符的另外一种形式。这个标识符基于用户来指定目标<strong>域</strong>，而不是通过<code>ASID</code>来指定<code>user-login</code>，这会更加的方便。  </p>
+<p><em>system/[service-name]</em> 指定<strong>域</strong>或<strong>域</strong>中的服务。<code>system</code>域管理<code>Mach 根启动器</code>，其被认为是一个特权上下文。任何用户都可以读取或查询<code>system</code>域，但是修改的话就需要特权。<br><em>user/\<uid\>/[service-name]</uid\></em>   目标域为<code>UID</code>指定的<code>user</code>域，或为域中服务。每个登录的用户都有一个用户域独立存在。<code>User</code>域在iOS内不存在。<br><em>login/\<asid\>/[service-name]</asid\></em>  指定一个<code>user-login</code>域或此域中某一服务。当一个用户在GUI登录，并被与此次登录相关联的审计会话标识符所区别的时候进行创建一个<code>user-login</code>域。如果一个<code>user</code>域与一个<code>login</code>域相关联，<code>print</code>子命令会显示这个<code>login</code>域的<strong>ASID</strong>。<code>user-login</code>在iOS内不存在。<br><em>gui/\<uid\>/[service-name]</uid\></em>  <code>login</code>标识符的另外一种形式。这个标识符基于用户来指定目标<strong>域</strong>，而不是通过<code>ASID</code>来指定<code>user-login</code>，这会更加的方便。  </p>
 <blockquote>
 <p><code>GUI</code>域和<code>user</code>域共享很多资源。为了对<code>Mach bootstrap</code>名字进行寻找，他们共享同样注册名字的集合。但他们依然有不同的服务。所以呢，当打印<code>user</code>域的内容时，可能会看到很多在那个用户<code>gui</code>域中存在的<code>Mach bootstrap</code>名字注册，但是却看不到服务本身。  </p>
 </blockquote>
-<p><em>session/&lt;asid&gt;/[service-name]</em>  指定目标域为给定的审计会话ID或者此域中的一个服务。对于更多关于审计会话的信息，参考<code>auditon(2)</code>和<code>libbsm(3)</code>.<br><em>pid/&lt;pid&gt;/[service-name]</em>  指定目标域为指定的PID或者是此域中某一服务。系统中每个进程都有一个PID域与其关联，这由<code>xpc_connection_create(3)函数</code>能到达的进程可见的XPC服务组成。  </p>
+<p><em>session/\<asid\>/[service-name]</asid\></em>  指定目标域为给定的审计会话ID或者此域中的一个服务。对于更多关于审计会话的信息，参考<code>auditon(2)</code>和<code>libbsm(3)</code>.<br><em>pid/\<pid\>/[service-name]</pid\></em>  指定目标域为指定的PID或者是此域中某一服务。系统中每个进程都有一个PID域与其关联，这由<code>xpc_connection_create(3)函数</code>能到达的进程可见的XPC服务组成。  </p>
 <ul>
-<li><p><code>bootstrap | bootout domain-target [service-path service-path2 ...] | service-target</code><br>引导或移除域和服务。服务可能被一系列的路径或服务标识符区分。路径可能会指向XPC服务集（<code>launchd.plist(5)</code>），或者一个包含两者集合目录。如果在启动或者移除服务的时候出现错误，出现错误的路径将会与其发生的错误一起被打印出来。若没有指定路径或目标服务，这些命令可以启动或者移除域。某些域会隐式的启动一些预定义的路径，这作为域创建的一部分。    </p>
-</li>
-<li><p><code>enable | disable service-target</code><br>在请求的域内启用/停用服务。一个服务被禁止后将不能在特定的域内载入，比如在重新启动后才能载入。这个状态持久存在，即使设备重启。这个子命令只能指定<em>system, user, user-login</em>域中的服务。    </p>
-</li>
-<li><p><code>uncache service-name</code><br>让 launchd 绕过服务缓存，直接从磁盘读取服务的配置文件。launchd 维护一个 XCP服务配置文件的缓存区来减少磁盘I/O。这个命令删除一个缓存对象，开发者可以快速的观察服务的配置文件。在生产环境中不要使用。  </p>
-</li>
-<li><p><code>kickstart [-kp] service-target</code><br>立即启动指定的服务。  </p>
-</li>
-<li><p><em>-k*</em>  服务在运行，kill 了后重启服务。  </p>
-</li>
-<li><p><em>-p*</em>  成功时打印新进程的PID，或者打印已运行的PID到标准输出  </p>
-</li>
-<li><p><code>attach [-ksx] service-target</code><br>将系统调试器附在指定服务的进程上。默认情况下，如果服务未运行，这个子命令会睡眠直到服务启动。   </p>
-</li>
-<li><p><em>-k*</em>  服务运行的话，杀死后重启。  </p>
-</li>
-<li><p><em>-s*</em>  强制服务启动。  </p>
-</li>
-<li><p><em>-x*</em>  在执行和成为服务进程前先附到<code>xpcproxy(3)</code>。这个标志一般没有，只对 launchd 维护者有意义。  </p>
-</li>
-<li><p><code>debug service-target [--program &lt;program path&gt;] [--guard-malloc] [--malloc-stack-logging] [--debug-libraries] [--introspection-libraries] [--NSZombie] [--32] [--stdin] [--stdout] [--stderr] [--environment] [--] [argv0 argv1 argv2 ...]</code><br>配置下一个服务的调试。这个子命令允许将服务的可执行程序用另外一个路径进行替换，启动<code>libgmalloc(3)</code>，设置环境变量，设置参数向亮等等。这是对编辑<code>launchd.plist(5)</code>并进行重载的另外一个方便选择，附加的调试属性在服务运行一次后就进行清楚。  </p>
-</li>
-<li><p><em>–program <program-path>*</em>  <code>launchd(8)</code>使用 <em>program-path</em>作为服务的可执行程序。  </p>
-</li>
-<li><p><em>–guard-malloc*</em>  为服务启用<code>libgmalloc(3)</code>。  </p>
-</li>
-<li><p><em>–malloc-stack-logging*</em>  对服务开启<code>malloc(3)</code>的栈记录。  </p>
+<li><code>bootstrap | bootout domain-target [service-path service-path2 ...] | service-target</code><br>引导或移除域和服务。服务可能被一系列的路径或服务标识符区分。路径可能会指向XPC服务集（<code>launchd.plist(5)</code>），或者一个包含两者集合目录。如果在启动或者移除服务的时候出现错误，出现错误的路径将会与其发生的错误一起被打印出来。若没有指定路径或目标服务，这些命令可以启动或者移除域。某些域会隐式的启动一些预定义的路径，这作为域创建的一部分。    </li>
+<li><code>enable | disable service-target</code><br>在请求的域内启用/停用服务。一个服务被禁止后将不能在特定的域内载入，比如在重新启动后才能载入。这个状态持久存在，即使设备重启。这个子命令只能指定<em>system, user, user-login</em>域中的服务。    </li>
+<li><code>uncache service-name</code><br>让 launchd 绕过服务缓存，直接从磁盘读取服务的配置文件。launchd 维护一个 XCP服务配置文件的缓存区来减少磁盘I/O。这个命令删除一个缓存对象，开发者可以快速的观察服务的配置文件。在生产环境中不要使用。  </li>
+<li><code>kickstart [-kp] service-target</code><br>立即启动指定的服务。<br><strong>-k</strong>  服务在运行，kill 了后重启服务。<br><strong>-p</strong>  成功时打印新进程的PID，或者打印已运行的PID到标准输出  </li>
+<li><code>attach [-ksx] service-target</code><br>将系统调试器附在指定服务的进程上。默认情况下，如果服务未运行，这个子命令会睡眠直到服务启动。<br><strong>-k</strong>  服务运行的话，杀死后重启。<br><strong>-s</strong>  强制服务启动。<br><strong>-x</strong>  在执行和成为服务进程前先附到<code>xpcproxy(3)</code>。这个标志一般没有，只对 launchd 维护者有意义。  </li>
+<li><p><code>debug service-target [--program &lt;program path&gt;] [--guard-malloc] [--malloc-stack-logging] [--debug-libraries] [--introspection-libraries] [--NSZombie] [--32] [--stdin] [--stdout] [--stderr] [--environment] [--] [argv0 argv1 argv2 ...]</code><br>配置下一个服务的调试。这个子命令允许将服务的可执行程序用另外一个路径进行替换，启动<code>libgmalloc(3)</code>，设置环境变量，设置参数向亮等等。这是对编辑<code>launchd.plist(5)</code>并进行重载的另外一个方便选择，附加的调试属性在服务运行一次后就进行清楚。<br><strong>—program <program-path></program-path></strong>  <code>launchd(8)</code>使用 <em>program-path</em>作为服务的可执行程序。<br><strong>—guard-malloc</strong>  为服务启用<code>libgmalloc(3)</code>。<br><strong>—malloc-stack-logging</strong>  对服务开启<code>malloc(3)</code>的栈记录。  </p>
 </li>
 <li><p><code>kill signal-name | signal-number service-target</code><br>发送指定信号到服务。  </p>
 </li>
-<li><p><code>blame service-target</code><br>如果服务运行，以人类可读的形式打印出为什么 launchd 会运行这个服务。服务可能会因为多种原因而运行；这个命令只会打印最近的那个。如果一个服务是因为定时器超时，这个子命令就会打印此原因，而不会考虑此服务是否在多个端点上有信息。生产环境中不应该依赖这个命令的输出。  </p>
-</li>
+<li><code>blame service-target</code><br>如果服务运行，以人类可读的形式打印出为什么 launchd 会运行这个服务。服务可能会因为多种原因而运行；这个命令只会打印最近的那个。如果一个服务是因为定时器超时，这个子命令就会打印此原因，而不会考虑此服务是否在多个端点上有信息。生产环境中不应该依赖这个命令的输出。  </li>
 <li><p><code>print domain-target | service-target</code><br>打印<strong>域</strong>或<strong>服务</strong>的信息。<strong>域</strong>输出包括很多关于域的属性和服务列表与到达每个服务端点。<strong>服务</strong>输出包含很多属性，在磁盘上的原始信息，当前状态，执行上下文，最后退出状态。  </p>
 <blockquote>
 <p>IMPORTANT: 这些输出不是 <strong>API</strong>。<strong>不要</strong>依赖输出的结构。因为这可能在版本间变化而不会进行警告。  </p>
@@ -342,26 +321,14 @@
 </li>
 <li><p><code>print-cache</code><br>打印 launchd 服务的缓存内容。 </p>
 </li>
-<li><p><code>print-disabled domain-target</code><br>打印指定域中禁用的服务列表。  </p>
-</li>
-<li><p><code>plist [segment, section] Mach-0</code><br>打印嵌入到Mach-0目标中<code>__TEXT, __info_plist</code>段/节中的属性列表。   </p>
-</li>
-<li><p><code>proinfo pid</code><br>打印指定PID的执行上下文，需要特权。    </p>
-</li>
-<li><p><code>hostinfo</code><br>主机信息。需要特权。  </p>
-</li>
-<li><p><code>resolveport owner-pid port-name</code><br>需要特权。通过PID和<code>属性port</code>来获得端点。  </p>
-</li>
-<li><p><code>examine [tool arg0 arg1 @PID ...]</code>  </p>
-</li>
-<li><p><code>config system | user parameter value</code><br>对<code>launchd(8)</code>域设置持久的配置信息。只能配置<code>system, user</code>域。持久存储的位置因实现而不同，对存储的改动只能通过 子命令进行。 要让变动生效，需要进行 reboot。<br>支持的配置参数是：  </p>
-</li>
-<li><p><em>umask*</em>  将目标域中服务的<code>umask(2)</code>设置为<em>value</em>。  </p>
-</li>
-<li><p><em>path*</em>  将目标域内的所有服务的<code>PATH</code>环境变量设置为<em>value</em>。格式的话和<code>environ(7)</code>保持一致。如果某个服务设置了自己的<code>PATH</code>，其优先级将高于这个设置。  </p>
-</li>
-<li><p><code>reboot [system | userspace | halt | logout | apps]</code><br>卸载用户空间。无参数或者提供的是<code>system</code>参数，launchd会在用户空间卸载后调用<code>reboot(2)</code>。指定<code>halt</code>参数，会在用户空间卸载后调用<code>reboot(2)</code>系统调用和传递<code>RB_HALT</code>标志，挂起系统而不初始化一次重启。  </p>
-</li>
+<li><code>print-disabled domain-target</code><br>打印指定域中禁用的服务列表。  </li>
+<li><code>plist [segment, section] Mach-0</code><br>打印嵌入到Mach-0目标中<code>__TEXT, __info_plist</code>段/节中的属性列表。   </li>
+<li><code>proinfo pid</code><br>打印指定PID的执行上下文，需要特权。    </li>
+<li><code>hostinfo</code><br>主机信息。需要特权。  </li>
+<li><code>resolveport owner-pid port-name</code><br>需要特权。通过PID和<code>属性port</code>来获得端点。  </li>
+<li><code>examine [tool arg0 arg1 @PID ...]</code>  </li>
+<li><code>config system | user parameter value</code><br>对<code>launchd(8)</code>域设置持久的配置信息。只能配置<code>system, user</code>域。持久存储的位置因实现而不同，对存储的改动只能通过 子命令进行。 要让变动生效，需要进行 reboot。<br>支持的配置参数是：<br><strong>umask</strong>  将目标域中服务的<code>umask(2)</code>设置为<em>value</em>。<br><strong>path</strong>  将目标域内的所有服务的<code>PATH</code>环境变量设置为<em>value</em>。格式的话和<code>environ(7)</code>保持一致。如果某个服务设置了自己的<code>PATH</code>，其优先级将高于这个设置。  </li>
+<li><code>reboot [system | userspace | halt | logout | apps]</code><br>卸载用户空间。无参数或者提供的是<code>system</code>参数，launchd会在用户空间卸载后调用<code>reboot(2)</code>。指定<code>halt</code>参数，会在用户空间卸载后调用<code>reboot(2)</code>系统调用和传递<code>RB_HALT</code>标志，挂起系统而不初始化一次重启。  </li>
 </ul>
 <p>指定<code>userspace</code>参数，launchd在用户空间卸载重新执行其自身，然后再唤醒用户空间。这在内核数据和硬件不需要重新初始化的时候进行快速启动非常有效。  </p>
 <p>指定<code>logout</code>参数，launchd 会关闭调用者的GUI登录会话，就跟从Apple菜单按钮上注销一样。不同的是，这会比点菜单快，也不会给应用展示一些其他信息的机会，这有可能造成一切数据冲突的可能。当你在确定没有未存储数据的时候再使用这个命令。  </p>
@@ -384,24 +351,13 @@
 <p>卸载指定的配置文件或者目录。这会停止正在运行的任务。  </p>
 <p><strong>-w</strong>  覆盖<code>Disabled key</code>并设置其为<code>true</code>。早些版本中，这个选项会修改配置文件。现在<code>Disabled key</code>的状态存储在磁盘的其他地方。<br><strong>-S sessiontype</strong>  某些工作只对特定上下文敏感。这个标志会让<code>launchctl</code>在加上<code>-D</code>标志的时候在不同的位置去寻找工作，并允许<code>launchctl</code>来限制工作会再入哪种会话类型。当前已知的会话类型有：<em>Aqua, LoginWindow, Background, StandardIO, System</em><br><strong>-D domain</strong>  在给定的主机上寻找以 <code>*.plist</code>结尾的 <code>plist(5)</code>文件。有效的主机包括<em>system, local, network, all</em>。 在指定一个会话类型的时候，一个额外的主机<em>user</em>可以被使用。举个例子，在没有指定会话类型的时候，<code>-D system</code>会在<code>/System/Library/LaunchDaemons</code>这个目录中的 属性列表文件（plists, property list files）载入文件。如果指定了会话类型的话，这会载入<code>/System/Library/LaunchAgents</code>下的plist文件。  </p>
 <ul>
-<li><p><code>submit -l *label* [-p executable] [-o path] [-e path] -- command [args]</code><br>一个不在配置文件内进行设置而使某个程序运行的简单方式。这会告诉<code>launchd</code>在出现失败事件时保持程序存活。  </p>
-</li>
-<li><p><em>-l label*</em>  为这个任务指定的唯一标签（传递给<code>launchd</code>）。  </p>
-</li>
-<li><p><em>-p program*</em>  要执行的程序。无论在submit子命令中 – 后面的任何参数。  </p>
-</li>
-<li><p><em>-o path*</em>  指定程序输出位置。  </p>
-</li>
-<li><p><em>-e path*</em>  指定程序的错误输出位置。  </p>
+<li><p><code>submit -l *label* [-p executable] [-o path] [-e path] -- command [args]</code><br>一个不在配置文件内进行设置而使某个程序运行的简单方式。这会告诉<code>launchd</code>在出现失败事件时保持程序存活。<br><strong>-l label</strong>  为这个任务指定的唯一标签（传递给<code>launchd</code>）。<br><strong>-p program</strong>  要执行的程序。无论在submit子命令中 — 后面的任何参数。<br><strong>-o path</strong>  指定程序输出位置。<br><strong>-e path</strong>  指定程序的错误输出位置。  </p>
 </li>
 <li><p><code>remove job_label</code> 移除一个任务（通过标签）。</p>
 </li>
-<li><p><code>start job_label</code> 通过标签启动特定任务。这个命令主要是用来调试和测试以便用户能手动启动某个被需要的服务。  </p>
-</li>
-<li><p><code>stop job_label</code> 通过标签来停止指定服务。如果这个任务是有需求的，<code>launchd</code>会在这个任务满足条件的时候立即重新启动。不是立即需求的基本工作总是会被重启。这个命令不推荐使用。任务自己会超时停止。</p>
-</li>
-<li><p><code>list [-x] [label]</code>  没有参数的时候，用三列（PID, Status, Label）列出所有 launchd 载入的任务。PID会在运行的时候显示，否则就是一个<code>-</code>号。第二列指出任务上次的退出状态，如果是负值，则指定的是杀死任务的信号。比如，<code>-15</code>代表任务是被<code>SIGTERM</code>信号终止。第二列指的是任务标签。  </p>
-</li>
+<li><code>start job_label</code> 通过标签启动特定任务。这个命令主要是用来调试和测试以便用户能手动启动某个被需要的服务。  </li>
+<li><code>stop job_label</code> 通过标签来停止指定服务。如果这个任务是有需求的，<code>launchd</code>会在这个任务满足条件的时候立即重新启动。不是立即需求的基本工作总是会被重启。这个命令不推荐使用。任务自己会超时停止。</li>
+<li><code>list [-x] [label]</code>  没有参数的时候，用三列（PID, Status, Label）列出所有 launchd 载入的任务。PID会在运行的时候显示，否则就是一个<code>-</code>号。第二列指出任务上次的退出状态，如果是负值，则指定的是杀死任务的信号。比如，<code>-15</code>代表任务是被<code>SIGTERM</code>信号终止。第二列指的是任务标签。  </li>
 </ul>
 <p>可能某些任务的风格是<code>0xdeadbeef.anony-mous.program</code>。这些是没有被 launchd 管理的任务但在某些时候对其发生了请求。 launchd 对这些任务没有权限也不保证什么。这些任务单纯只是做了一个记录。  </p>
 <p>某些标签是<code>0xdeadbeef.mach_init.program</code>的任务是在<code>mach_init</code>模拟器下运行的任务。这个特性会在将来版本移除，所有的<code>mach_init</code>任务都会转换到launchd。  </p>
@@ -426,11 +382,12 @@
 <h1 id="反对和移除的功能"><a href="#反对和移除的功能" class="headerlink" title="反对和移除的功能"></a>反对和移除的功能</h1><p>launchctl 不再有交互模式，也不从标准输出接受命令。<code>/etc/launchd.conf</code>文件不再查询子命令执行；这是因为安全原因而移除。  </p>
 <p>launchd不再使用 Unix domain sockets来进行通信。 </p>
 <p>launchd 不再从网络载入配置文件。  </p>
-<h1 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h1><pre><code>~/Library/LaunchAgents         Per-user agents provided by the user.
-/Library/LaunchAgents          Per-user agents provided by the administrator.
-/Library/LaunchDaemons         System wide daemons provided by the administrator.
-/System/Library/LaunchAgents   OS X Per-user agents.
-/System/Library/LaunchDaemons  OS X System wide daemons.</code></pre><h1 id="退出状态"><a href="#退出状态" class="headerlink" title="退出状态"></a>退出状态</h1><p>成功返回0，如果失败的话，返回的错误码可以给 <code>error</code>子命令进行解析。</p>
+<h1 id="文件"><a href="#文件" class="headerlink" title="文件"></a>文件</h1><pre><code> ~/Library/LaunchAgents         Per-user agents provided by the user.
+ /Library/LaunchAgents          Per-user agents provided by the administrator.
+ /Library/LaunchDaemons         System wide daemons provided by the administrator.
+ /System/Library/LaunchAgents   OS X Per-user agents.
+ /System/Library/LaunchDaemons  OS X System wide daemons.
+</code></pre><h1 id="退出状态"><a href="#退出状态" class="headerlink" title="退出状态"></a>退出状态</h1><p>成功返回0，如果失败的话，返回的错误码可以给 <code>error</code>子命令进行解析。</p>
 <h1 id="相关阅读"><a href="#相关阅读" class="headerlink" title="相关阅读"></a>相关阅读</h1><p><em>launchd.plist(5), launchd(8), audit(8), setaudit_addr(2)</em></p>
 <h1 id="配置文件-launchd-plist-5"><a href="#配置文件-launchd-plist-5" class="headerlink" title="配置文件(launchd.plist(5))"></a>配置文件(launchd.plist(5))</h1><p>一个被launchd管理的守护进程或代理期望以特定的方式表现。</p>
 <p>我们在这把 守护进程或代理 称为<strong>服务</strong>。  </p>
@@ -463,40 +420,30 @@
 <p>属性列表文件的名字应该用<code>.plist</code>结尾。如果服务的标签是<em>com.apple.sshd</em>，那么plist文件应该是<em>com.apple.sshd.plist</em>。 </p>
 </blockquote>
 <ul>
-<li><p>Lable <string>  唯一的标识 launchd 中的一个任务。</p>
-</li>
-<li><p>Disable <boolean> 设置默认是否载入。可以用 <code>launchctl(3) enable Lable</code>进行重新配置，但不会写入配置文件。</p>
-</li>
-<li><p>UserName <string> 指定运行服务的用户。只有对载入到特权的系统域中的服务有效。</p>
-</li>
-<li><p>GroupName <string> 指定运行组。特权系统域中有效。如果指定<em>UserName</em>而不指定<em>GroupName</em>，那么其会被设置为<em>UserName</em>的组。</p>
-</li>
-<li><p>inetdCompatibility <dictionary>  用来表明是不是要从 inetd 启动那样运行服务。新的项目应该避免使用这个键。</p>
-<blockquote>
-<p>Wait <boolean> 对应 inetd中的<em>wait, nowait</em>。</p>
+<li>Lable <string>  唯一的标识 launchd 中的一个任务。</string></li>
+<li>Disable <boolean> 设置默认是否载入。可以用 <code>launchctl(3) enable Lable</code>进行重新配置，但不会写入配置文件。</boolean></li>
+<li>UserName <string> 指定运行服务的用户。只有对载入到特权的系统域中的服务有效。</string></li>
+<li>GroupName <string> 指定运行组。特权系统域中有效。如果指定<em>UserName</em>而不指定<em>GroupName</em>，那么其会被设置为<em>UserName</em>的组。</string></li>
+<li>inetdCompatibility <dictionary>  用来表明是不是要从 inetd 启动那样运行服务。新的项目应该避免使用这个键。<blockquote>
+<p>Wait <boolean> 对应 inetd中的<em>wait, nowait</em>。</boolean></p>
 </blockquote>
-</li>
-<li><p>LimitLoadToHost <array of strings>  不再支持</p>
-</li>
-<li><p>LimitLoadFromHost <array of strings>  不再支持</p>
-</li>
-<li><p>LimitLoadToSessionType <string or array or strings>  此配置文件只对指定会话类型应用。这一般只对代理程序应用。在特权的系统上下文中没有区别会话。</p>
-</li>
-<li><p>LimitLoadToHardware <dictionary of arrays>  配置文件只应用到指定的硬件上。在字典内的每个键定义了<code>sysctl(3) hw域</code>中的一个子域。例如，键<em>machine</em>的值是<em>MacBookPro4,2</em>只会在机器的<em>hw.machine</em>值为<em>MacBookPro4，2</em>时应用。</p>
-</li>
-<li><p>Program <string>  可执行程序绝对路径。<code>execv(3)</code>的第一个参数。如果这个键不存在，那么提供给<em>ProgramArguments</em>键的第一个元素就会被作为程序使用。如果没有<em>ProgramArguments</em>键，这个值是必须的。</p>
-</li>
-<li><p>ProgramArguments <array of strings> <code>execvp(3)</code>的第二个参数，指定了参数向量。没有<em>Program</em>键时是需要的。</p>
+</dictionary></li>
+<li>LimitLoadToHost <array of strings>  不再支持</array></li>
+<li>LimitLoadFromHost <array of strings>  不再支持</array></li>
+<li>LimitLoadToSessionType <string or array strings>  此配置文件只对指定会话类型应用。这一般只对代理程序应用。在特权的系统上下文中没有区别会话。</string></li>
+<li>LimitLoadToHardware <dictionary of arrays>  配置文件只应用到指定的硬件上。在字典内的每个键定义了<code>sysctl(3) hw域</code>中的一个子域。例如，键<em>machine</em>的值是<em>MacBookPro4,2</em>只会在机器的<em>hw.machine</em>值为<em>MacBookPro4，2</em>时应用。</dictionary></li>
+<li>Program <string>  可执行程序绝对路径。<code>execv(3)</code>的第一个参数。如果这个键不存在，那么提供给<em>ProgramArguments</em>键的第一个元素就会被作为程序使用。如果没有<em>ProgramArguments</em>键，这个值是必须的。</string></li>
+<li><p>ProgramArguments <array of strings> <code>execvp(3)</code>的第二个参数，指定了参数向量。没有<em>Program</em>键时是需要的。</array></p>
 <blockquote>
 <p>如果有些迷惑的话，仔细阅读<code>execvp(3)</code>。<br><em>Program</em>必须是绝对路径。</p>
 </blockquote>
 </li>
-<li><p>EnableGlobbing <boolean>  使用<code>glob(3)</code>来更新程序参数后再执行。</p>
+<li><p>EnableGlobbing <boolean>  使用<code>glob(3)</code>来更新程序参数后再执行。</boolean></p>
 </li>
-<li><p>EnableTransactions <boolean>  </p>
-</li>
+<li>EnableTransactions <boolean>  </boolean></li>
 </ul>
-<h1 id="搞不动了，自己参考-man-文档吧。"><a href="#搞不动了，自己参考-man-文档吧。" class="headerlink" title="搞不动了，自己参考 man 文档吧。"></a>搞不动了，自己参考 man 文档吧。</h1>
+<h1 id="搞不动了，自己参考-man-文档吧。"><a href="#搞不动了，自己参考-man-文档吧。" class="headerlink" title="搞不动了，自己参考 man 文档吧。"></a>搞不动了，自己参考 man 文档吧。</h1><p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
     </div>
 
     
@@ -513,7 +460,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Misc/Word2007%E5%88%A9%E7%94%A8%E6%A8%A1%E6%9D%BF%E5%92%8C%E5%BF%AB%E9%80%9F%E6%A0%B7%E5%BC%8F%E8%BF%9B%E8%A1%8C%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%96%87%E6%A1%A3.html" rel="next" title="Word2007利用模板和快速样式进行格式化文档">
+                <a href="/Misc/Word2007利用模板和快速样式进行格式化文档.html" rel="next" title="Word2007利用模板和快速样式进行格式化文档">
                   <i class="fa fa-chevron-left"></i> Word2007利用模板和快速样式进行格式化文档
                 </a>
             </div>
@@ -521,7 +468,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/java%E4%B8%AD%E7%9A%84%E5%8C%85.html" rel="prev" title="java中的包">
+                <a href="/Java/java中的包.html" rel="prev" title="java中的包">
                   java中的包 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -583,20 +530,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -608,10 +555,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -640,10 +587,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -718,7 +665,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/macOS/macOS%E4%B8%AD%E7%9A%84%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86launchdctl%E6%89%8B%E5%86%8C.html",
+            url: "https://gowa.club/macOS/macOS中的服务管理launchdctl手册.html",
             identifier: "macOS/macOS中的服务管理launchdctl手册.html",
             title: "macOS中的服务管理launchdctl手册"
           }

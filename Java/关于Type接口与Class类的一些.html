@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于Type接口与Class类的一些">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;%E5%85%B3%E4%BA%8EType%E6%8E%A5%E5%8F%A3%E4%B8%8EClass%E7%B1%BB%E7%9A%84%E4%B8%80%E4%BA%9B.html">
+<meta property="og:url" content="https://gowa.club/Java/关于Type接口与Class类的一些.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="主要的问题是在于 Gson 在解析泛型化的类型的时候，因为泛型擦除的问题，无法解析出我想要的类型。所以得想个办法解决不是。？">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-04-14T14:01:21.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Type接口与Class类的一些">
+<meta name="twitter:description" content="主要的问题是在于 Gson 在解析泛型化的类型的时候，因为泛型擦除的问题，无法解析出我想要的类型。所以得想个办法解决不是。？">
 
-<link rel="canonical" href="https://gowa.club/Java/%E5%85%B3%E4%BA%8EType%E6%8E%A5%E5%8F%A3%E4%B8%8EClass%E7%B1%BB%E7%9A%84%E4%B8%80%E4%BA%9B.html">
+<link rel="canonical" href="https://gowa.club/Java/关于Type接口与Class类的一些.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/%E5%85%B3%E4%BA%8EType%E6%8E%A5%E5%8F%A3%E4%B8%8EClass%E7%B1%BB%E7%9A%84%E4%B8%80%E4%BA%9B.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/关于Type接口与Class类的一些.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/%E5%85%B3%E4%BA%8EType%E6%8E%A5%E5%8F%A3%E4%B8%8EClass%E7%B1%BB%E7%9A%84%E4%B8%80%E4%BA%9B.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/关于Type接口与Class类的一些.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/关于Type接口与Class类的一些.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,7 +294,6 @@
       
         <p>主要的问题是在于 Gson 在解析泛型化的类型的时候，因为泛型擦除的问题，无法解析出我想要的类型。所以得想个办法解决不是。？</p>
 <a id="more"></a>
-
 <h1 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h1><p>根据官方文档 <a href="https://docs.oracle.com/javase/tutorial/java/generics/erasure.html" target="_blank" rel="noopener">泛型擦除</a>。</p>
 <p>泛型的引入是为了提供更严格的<strong>编译时类型检测</strong>及支持泛型编程。为了实现泛型，Java 的编译器会对下面的情况进行类型擦除：</p>
 <ul>
@@ -303,50 +304,43 @@
 <p>类型擦除保证参数化的类型不会产生新的类，因此泛型不会导致运行时的负载问题。</p>
 <p>也就是说，如果我们传递一个泛型化的类型给 Gson 在运行的时候，其是不知道具体的类型是什么的。比如我们的服务端返回的结构是这样的：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SrvRes</span>&lt;<span class="title">T</span>&gt; </span>&#123;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> state;</span><br><span class="line"><span class="keyword">private</span> T data;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>在 Gson 解析的时候实际上是按:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SrvRes</span>&lt;<span class="title">Object</span>&gt;</span>&#123;</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> state;</span><br><span class="line"><span class="keyword">private</span> Object data;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>其结果就是会报错，得出一个 LinkTreeMap 无法转换为 Object 的错误。</p>
 <p>我们要做的就是在运行时获取这个类的类型。</p>
 <p><strong>也就是说，接受泛型参数的类实例，是不包括类型参数信息的</strong>。</p>
 <p>只用通过泛型化参数继承而来的类，才能从其父类获得泛型信息。</p>
 <h1 id="Type-接口"><a href="#Type-接口" class="headerlink" title="Type 接口"></a>Type 接口</h1><p>接口位于 <em>java.lang.reflect</em> 包内，只定义了一个方法 <code>getTypeName()</code></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Type</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">default</span> String <span class="title">getTypeName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>其有四个子接口。</p>
-<h2 id="ParameterizedType-接口"><a href="#ParameterizedType-接口" class="headerlink" title="ParameterizedType 接口"></a>ParameterizedType 接口</h2><p>对于这个接口的解释，应该说这是是一个以参数类型与父类结合后形成的类。比如一个泛型类 SrvRes<T> ，这个不是一个 ParameterizedType 的实现。必须通过 T 实际的值后形成的类才是，比如：</p>
+<h2 id="ParameterizedType-接口"><a href="#ParameterizedType-接口" class="headerlink" title="ParameterizedType 接口"></a>ParameterizedType 接口</h2><p>对于这个接口的解释，应该说这是是一个以参数类型与父类结合后形成的类。比如一个泛型类 SrvRes<t> ，这个不是一个 ParameterizedType 的实现。必须通过 T 实际的值后形成的类才是，比如：</t></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Res</span> <span class="keyword">extends</span> <span class="title">SrvRes</span>&lt;<span class="title">Res</span>&gt;</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>我们以 SrvRes<String> t = new SrvRes<String>() 的形式，实际上不是一个参数化类型，t 在这里只是一个对象，运行时，怎么也无法获取到泛型信息。</p>
+<p>我们以 SrvRes<string> t = new SrvRes<string>() 的形式，实际上不是一个参数化类型，t 在这里只是一个对象，运行时，怎么也无法获取到泛型信息。</string></string></p>
 <p>而对于 Res 在构造的时候就会保存其泛型信息。</p>
-<p>此接口继承自 Type。其代表了一个参数化的类型，如 <em>Collection<String>*。当一个反射方法调用时如果需要这个类型，那么其会被创建。当一个参数化的类型 *p</em> 建立后，p 初始化的泛型声明被解析，所有 p 需要的类型参数都会被递归创建。</p>
+<p>此接口继承自 Type。其代表了一个参数化的类型，如 <em>Collection<string></string></em>。当一个反射方法调用时如果需要这个类型，那么其会被创建。当一个参数化的类型 <em>p</em> 建立后，p 初始化的泛型声明被解析，所有 p 需要的类型参数都会被递归创建。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ParameterizedType</span> <span class="keyword">extends</span> <span class="title">Type</span> </span>&#123;</span><br><span class="line">    Type[] getActualTypeArguments();</span><br><span class="line">    <span class="function">Type <span class="title">getRawType</span><span class="params">()</span></span>; <span class="comment">//　获取用来表示声明了此接口或Class的对象</span></span><br><span class="line">    <span class="function">Type <span class="title">getOwnerType</span><span class="params">()</span></span>;<span class="comment">// 获取包含此类型属于哪个外部类。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>当我看到这的时候我很困惑，我如何能通过这个接口获得我构造的 SrvRes 类的类型参数。实际上我是无法获取到的，因为这个类我们没有实现 ParameterizedType 接口；也没有指定任何父类，所以说其直接的父类是 Object，Object 并没有实现 ParameterizedType 接口。</p>
 <p>可是查明就网络上的很多文章，都能通过  getClass().getGenericSuperclass() 来获取泛型父类，以此来获取  ParameterizedType 接口。这是为何？</p>
-<p>仔细想想也就明白了。因为 <strong>类型擦除</strong>的原因， SrvRes<T> 实际上运行时是 SrvRes<Object> 当然无法获取其泛型信息。</p>
-<p>而对于 Res extends SrvRes<String> 其并没有泛型参数，当然可以获取其类型了。</p>
+<p>仔细想想也就明白了。因为 <strong>类型擦除</strong>的原因， SrvRes<t> 实际上运行时是 SrvRes<object> 当然无法获取其泛型信息。</object></t></p>
+<p>而对于 Res extends SrvRes<string> 其并没有泛型参数，当然可以获取其类型了。</string></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Res</span> <span class="keyword">extends</span> <span class="title">SrvRes</span>&lt;<span class="title">Res</span>&gt; </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Res t = <span class="keyword">new</span> Res();</span><br><span class="line">ParameterizedType pt = (ParameterizedType) t.getClass().getGenericSuperclass();</span><br><span class="line">System.out.println(pt.getActualTypeArguments()[<span class="number">0</span>]);</span><br><span class="line">System.out.println(pt.getOwnerType());</span><br><span class="line">System.out.println(pt.getRawType());</span><br></pre></td></tr></table></figure>
-
 <p>输出：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Res</span></span></span><br><span class="line"><span class="class"><span class="title">null</span></span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">SrvRes</span></span></span><br></pre></td></tr></table></figure>
-
 <h2 id="TypeVariable"><a href="#TypeVariable" class="headerlink" title="TypeVariable"></a>TypeVariable</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TypeVariable</span>&lt;<span class="title">D</span> <span class="keyword">extends</span> <span class="title">GenericDeclaration</span>&gt; <span class="keyword">extends</span> <span class="title">Type</span>, <span class="title">AnnotatedElement</span> </span>&#123;</span><br><span class="line">    Type[] getBounds();</span><br><span class="line">    <span class="function">D <span class="title">getGenericDeclaration</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">String <span class="title">getName</span><span class="params">()</span></span>;</span><br><span class="line">     AnnotatedType[] getAnnotatedBounds();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="WildcardType"><a href="#WildcardType" class="headerlink" title="WildcardType"></a>WildcardType</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">WildcardType</span> <span class="keyword">extends</span> <span class="title">Type</span> </span>&#123;</span><br><span class="line">    Type[] getUpperBounds();</span><br><span class="line">    Type[] getLowerBounds();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="GenericArrayType"><a href="#GenericArrayType" class="headerlink" title="GenericArrayType"></a>GenericArrayType</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">GenericArrayType</span> <span class="keyword">extends</span> <span class="title">Type</span> </span>&#123;</span><br><span class="line">    <span class="function">Type <span class="title">getGenericComponentType</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="GenericDeclaration-接口"><a href="#GenericDeclaration-接口" class="headerlink" title="GenericDeclaration 接口"></a>GenericDeclaration 接口</h1><p>位于 <em>java.lang.reflect;</em> 包中。所有定义了类型变量的类都会实现这个接口。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">GenericDeclaration</span> <span class="keyword">extends</span> <span class="title">AnnotatedElement</span> </span>&#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Returns an array of &#123;<span class="doctag">@code</span> TypeVariable&#125; objects that</span></span><br><span class="line"><span class="comment">     * represent the type variables declared by the generic</span></span><br><span class="line"><span class="comment">     * declaration represented by this &#123;<span class="doctag">@code</span> GenericDeclaration&#125;</span></span><br><span class="line"><span class="comment">     * object, in declaration order.  Returns an array of length 0 if</span></span><br><span class="line"><span class="comment">     * the underlying generic declaration declares no type variables.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> an array of &#123;<span class="doctag">@code</span> TypeVariable&#125; objects that represent</span></span><br><span class="line"><span class="comment">     *     the type variables declared by this generic declaration</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> GenericSignatureFormatError if the generic</span></span><br><span class="line"><span class="comment">     *     signature of this generic declaration does not conform to</span></span><br><span class="line"><span class="comment">     *     the format specified in</span></span><br><span class="line"><span class="comment">     *     &lt;cite&gt;The Java&amp;trade; Virtual Machine Specification&lt;/cite&gt;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> TypeVariable&lt;?&gt;[] getTypeParameters();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="Class-类"><a href="#Class-类" class="headerlink" title="Class 类"></a>Class 类</h1><p>Class 类位于 <em>java.lang</em> 包中，其实现了 Type 接口:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Class</span>&lt;<span class="title">T</span>&gt; <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span>,</span></span><br><span class="line"><span class="class">                              <span class="title">GenericDeclaration</span>,</span></span><br><span class="line"><span class="class">                              <span class="title">Type</span>,</span></span><br><span class="line"><span class="class">                              <span class="title">AnnotatedElement</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getTypeName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (isArray()) &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Class&lt;?&gt; cl = <span class="keyword">this</span>;</span><br><span class="line">                <span class="keyword">int</span> dimensions = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">while</span> (cl.isArray()) &#123;</span><br><span class="line">                    dimensions++;</span><br><span class="line">                    cl = cl.getComponentType();</span><br><span class="line">                &#125;</span><br><span class="line">                StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">                sb.append(cl.getName());</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; dimensions; i++) &#123;</span><br><span class="line">                    sb.append(<span class="string">"[]"</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> sb.toString();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable e) &#123; <span class="comment">/*FALLTHRU*/</span> &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> getName();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>演示一下方法的使用：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(Gson<span class="class">.<span class="keyword">class</span>.<span class="title">getTypeName</span>())</span>;</span><br><span class="line">List&lt;String&gt; ls = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">System.out.println(ls.getClass().getTypeName());</span><br><span class="line">Map&lt;String,String&gt; ms = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">System.out.println(ms.getClass().getTypeName());</span><br><span class="line">Map&lt;String,List&lt;String&gt;&gt; mls = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">System.out.println(mls.getClass().getTypeName());</span><br></pre></td></tr></table></figure>
-
 <p>输出是：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">com.google.gson.Gson</span><br><span class="line">java.util.ArrayList</span><br><span class="line">java.util.HashMap</span><br><span class="line">java.util.HashMap</span><br></pre></td></tr></table></figure>
+<p><code>com.google.gson.Gson
+java.util.ArrayList
+java.util.HashMap
+java.util.HashMap</code><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
     </div>
 
     
@@ -362,7 +356,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/Java%E7%9A%84Lambda-%E6%96%B9%E6%B3%95%E5%BC%95%E7%94%A8%E5%8F%8AStream.html" rel="next" title="Java的Lambda-方法引用及Stream">
+                <a href="/Java/Java的Lambda-方法引用及Stream.html" rel="next" title="Java的Lambda-方法引用及Stream">
                   <i class="fa fa-chevron-left"></i> Java的Lambda-方法引用及Stream
                 </a>
             </div>
@@ -370,7 +364,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/Android-View%E7%9A%84%E7%BB%98%E5%88%B6%E8%BF%87%E7%A8%8B.html" rel="prev" title="Android-View的绘制过程">
+                <a href="/Android/Android-View的绘制过程.html" rel="prev" title="Android-View的绘制过程">
                   Android-View的绘制过程 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -432,20 +426,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -457,10 +451,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -489,10 +483,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -567,7 +561,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/%E5%85%B3%E4%BA%8EType%E6%8E%A5%E5%8F%A3%E4%B8%8EClass%E7%B1%BB%E7%9A%84%E4%B8%80%E4%BA%9B.html",
+            url: "https://gowa.club/Java/关于Type接口与Class类的一些.html",
             identifier: "Java/关于Type接口与Class类的一些.html",
             title: "关于Type接口与Class类的一些"
           }

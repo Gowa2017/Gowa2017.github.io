@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Android,RxJava,Retrofit">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Retrofit-RxJava上传文件">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Android&#x2F;Retrofit-RxJava%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6.html">
+<meta property="og:url" content="https://gowa.club/Android/Retrofit-RxJava上传文件.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="在 利用RxJava-Retrofit来下载文件遇到的坑 我们已经可以在下载文件，将整个流程弄成链式的了，但是在上传文件就不会这么容易，有不少地方需要注意。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-29T08:53:03.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Retrofit-RxJava上传文件">
+<meta name="twitter:description" content="在 利用RxJava-Retrofit来下载文件遇到的坑 我们已经可以在下载文件，将整个流程弄成链式的了，但是在上传文件就不会这么容易，有不少地方需要注意。">
 
-<link rel="canonical" href="https://gowa.club/Android/Retrofit-RxJava%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6.html">
+<link rel="canonical" href="https://gowa.club/Android/Retrofit-RxJava上传文件.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Retrofit-RxJava%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Retrofit-RxJava上传文件.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Android/Retrofit-RxJava%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Android/Retrofit-RxJava上传文件.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Retrofit-RxJava上传文件.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,10 +292,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>在 <a href="/RxJava/%E5%88%A9%E7%94%A8RxJava-Retrofit%E6%9D%A5%E4%B8%8B%E8%BD%BD%E6%96%87%E4%BB%B6%E9%81%87%E5%88%B0%E7%9A%84%E5%9D%91.html" title="利用RxJava-Retrofit来下载文件遇到的坑">利用RxJava-Retrofit来下载文件遇到的坑</a> 我们已经可以在下载文件，将整个流程弄成链式的了，但是在上传文件就不会这么容易，有不少地方需要注意。</p>
+        <p>在 <a href="/RxJava/利用RxJava-Retrofit来下载文件遇到的坑.html" title="利用RxJava-Retrofit来下载文件遇到的坑">利用RxJava-Retrofit来下载文件遇到的坑</a> 我们已经可以在下载文件，将整个流程弄成链式的了，但是在上传文件就不会这么容易，有不少地方需要注意。</p>
 <a id="more"></a>
-
-<p>这和我们的 Retrofit 与 OkHttp 的接驳有关。在 <a href="/RxJava/Retrofit-OkHttp%E8%AF%B7%E6%B1%82%E8%BF%87%E7%A8%8B-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BBmd.html" title="Retrofit-OkHttp请求过程-源码阅读md">Retrofit-OkHttp请求过程-源码阅读md</a> 中我们看到，Retrofit 会</p>
+<p>这和我们的 Retrofit 与 OkHttp 的接驳有关。在 <a href="/RxJava/Retrofit-OkHttp请求过程-源码阅读md.html" title="Retrofit-OkHttp请求过程-源码阅读md">Retrofit-OkHttp请求过程-源码阅读md</a> 中我们看到，Retrofit 会</p>
 <ol>
 <li>根据  API 接口生成一个代理实现，这个代理实现的所有接口中的方法都是 HttpServiceMethod（更确切一点，是HttpServiceMethod 的子类 CallAdapted 其持有一个建立的 CallAdapter ）。</li>
 <li>调用这个代理实现的方法，就会通过反射调用 HttpServiceMethod（CallAdapted），将一个 OkHttpCall 调用 callAdapter.adapt(call) 进行适配后返回。</li>
@@ -302,13 +303,11 @@
 <p>OkHttpCall -&gt; CallEnqueueObservable(CallExecuteObservable) -&gt; BodyObservable。</p>
 <p>我们的 subscribe 就是对 BodyObservable 进行订阅的。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> Object <span class="title">adapt</span><span class="params">(Call&lt;R&gt; call)</span> </span>&#123;</span><br><span class="line">  Observable&lt;Response&lt;R&gt;&gt; responseObservable = isAsync</span><br><span class="line">      ? <span class="keyword">new</span> CallEnqueueObservable&lt;&gt;(call)</span><br><span class="line">      : <span class="keyword">new</span> CallExecuteObservable&lt;&gt;(call);</span><br><span class="line"></span><br><span class="line">  Observable&lt;?&gt; observable;</span><br><span class="line">  <span class="keyword">if</span> (isResult) &#123;</span><br><span class="line">    observable = <span class="keyword">new</span> ResultObservable&lt;&gt;(responseObservable);</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (isBody) &#123;</span><br><span class="line">    observable = <span class="keyword">new</span> BodyObservable&lt;&gt;(responseObservable);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    observable = responseObservable;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (scheduler != <span class="keyword">null</span>) &#123;</span><br><span class="line">    observable = observable.subscribeOn(scheduler);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (isFlowable) &#123;</span><br><span class="line">    <span class="keyword">return</span> observable.toFlowable(BackpressureStrategy.LATEST);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (isSingle) &#123;</span><br><span class="line">    <span class="keyword">return</span> observable.singleOrError();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (isMaybe) &#123;</span><br><span class="line">    <span class="keyword">return</span> observable.singleElement();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (isCompletable) &#123;</span><br><span class="line">    <span class="keyword">return</span> observable.ignoreElements();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> RxJavaPlugins.onAssembly(observable);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h1 id="OkHttpCall"><a href="#OkHttpCall" class="headerlink" title="OkHttpCall"></a>OkHttpCall</h1><p>当我们对这个 call 调用 <code>execute(), enqueue()</code> 方法的时候，最终，它都会建立一个 OkHttp3 的 RealCall，然后开发发送请求。</p>
 <p>在 RealCall 中会添加多个拦截器，最先返回的那个是 CallServerInterceptor 在这里面，其会将请求的头，请求的 Body 写到套接字上面去（从 Java 这来看是写到 Http1CodeC 建立的 RequestBody 去）</p>
 <p>这个读取，是从我们最上层建立的 RequestBody 处进行读取，然后写入。网络上大多数的思路，都是通过将 RequestBody 的 writeTo 方法进行重写。</p>
 <h1 id="RequestBody"><a href="#RequestBody" class="headerlink" title="RequestBody"></a>RequestBody</h1><p>对于一个文件，其构建的 RequestBody 是这样的：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/** Returns a new request body that transmits the content of &#123;<span class="doctag">@code</span> file&#125;. */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RequestBody <span class="title">create</span><span class="params">(<span class="keyword">final</span> @Nullable MediaType contentType, <span class="keyword">final</span> File file)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (file == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"file == null"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> RequestBody() &#123;</span><br><span class="line">    <span class="meta">@Override</span> <span class="keyword">public</span> <span class="meta">@Nullable</span> <span class="function">MediaType <span class="title">contentType</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> contentType;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">contentLength</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">return</span> file.length();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeTo</span><span class="params">(BufferedSink sink)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">      Source source = <span class="keyword">null</span>;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        source = Okio.source(file);</span><br><span class="line">        sink.writeAll(source);</span><br><span class="line">      &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">        Util.closeQuietly(source);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>如果我们重写 WriteTo 方法，每次按一定的量进行读取，然后嘟嘟后就把消息给一个回调函数，这是可以的，但是有没有更好的办法呢？</p>
 <p>想了很久感觉是没有的，因为我们是无法侵入到 CallServerInterceptor 里面去进行操作的。</p>
 <p>对于订阅的 BodyObservable 来说，我们是想知道的这次调用网络接口是成功还是失败。而不是想知道其上传了多少，毕竟这不是单独为了我们的上传文件而设计的东西。</p>
@@ -324,13 +323,11 @@
 <p>对于 content-type  是 multipart 其会拥有多个子类型。<a href="https://tools.ietf.org/html/rfc2046#section-5.1" target="_blank" rel="noopener">rfc2046 5.1 节</a> 对其进行了描述。</p>
 <p>对于类型是 multipart 的，在 content-type 字段还需要设置一个参数 <strong>boundary</strong>，然后会定义一个定界分隔符：完全由两个 <code>-</code> 符号组成的线，加上 <strong>boundary</strong>。对于里面的每个part 我们都可以指定其类型，及相关参数如：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST /foo HTTP/1.1</span><br><span class="line">Content-Length: 68137</span><br><span class="line">Content-Type: multipart/form-data; boundary=---------------------------974767299852498929531610575</span><br><span class="line"></span><br><span class="line">-----------------------------974767299852498929531610575</span><br><span class="line">Content-Disposition: form-data; name=&quot;description&quot; </span><br><span class="line"></span><br><span class="line">some text</span><br><span class="line">-----------------------------974767299852498929531610575</span><br><span class="line">Content-Disposition: form-data; name=&quot;myFile&quot;; filename=&quot;foo.txt&quot; </span><br><span class="line">Content-Type: text/plain </span><br><span class="line"></span><br><span class="line">(content of the uploaded file foo.txt)</span><br><span class="line">-----------------------------974767299852498929531610575--</span><br></pre></td></tr></table></figure>
-
 <p>实际上有两种类型的 multipart ， formdata 和 byterange 不过后一种我们用得少，所以先不管它。</p>
 <h1 id="MultipartBody"><a href="#MultipartBody" class="headerlink" title="MultipartBody"></a>MultipartBody</h1><p>MultipartBody 是 RequestBody 的子类，因为其有多个 Part 所以其还有一个内部类 Part，每个 Part 都是一个 RequestBody 加上此 Part 对应的信息如：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Content-Disposition: form-data; name=&quot;myFile&quot;; filename=&quot;foo.txt&quot;  这是 PartHeader </span><br><span class="line">Content-Type: text/plain  </span><br><span class="line"></span><br><span class="line">(content of the uploaded file foo.txt)  Part 中的 RequestBody</span><br></pre></td></tr></table></figure>
-
 <p>我们现在要做的就是在一个 RequestBody 上封装一个 CountingRequestBody ，重写且在写出数据的方法，回调进行通知。事实本质上还是进行了回调。</p>
-<p>这样做，依然还有 个问题，就是当我们从文件内读取数据，然后写入到 套接字的时候，如果IO快的话，会很快就返回到100%，但这个时候，网络的传输并没有完成，就会出现进度100%，然后却等几秒才有反应的问题。</p>
+<p>这样做，依然还有 个问题，就是当我们从文件内读取数据，然后写入到 套接字的时候，如果IO快的话，会很快就返回到100%，但这个时候，网络的传输并没有完成，就会出现进度100%，然后却等几秒才有反应的问题。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -349,7 +346,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Python/Python%E8%A7%A3%E6%9E%90%E7%BD%91%E9%A1%B5%E5%86%85%E5%AE%B9.html" rel="next" title="Python解析网页内容">
+                <a href="/Python/Python解析网页内容.html" rel="next" title="Python解析网页内容">
                   <i class="fa fa-chevron-left"></i> Python解析网页内容
                 </a>
             </div>
@@ -357,7 +354,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Android/%E5%AE%89%E8%A3%85Genymotion%E5%85%8D%E8%B4%B9%E7%89%88%E6%A8%A1%E6%8B%9F%E5%99%A8%E8%BF%9B%E8%A1%8C%E8%B0%83%E8%AF%95.html" rel="prev" title="安装Genymotion免费版模拟器进行调试">
+                <a href="/Android/安装Genymotion免费版模拟器进行调试.html" rel="prev" title="安装Genymotion免费版模拟器进行调试">
                   安装Genymotion免费版模拟器进行调试 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -419,20 +416,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -444,10 +441,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -476,10 +473,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -554,7 +551,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Android/Retrofit-RxJava%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6.html",
+            url: "https://gowa.club/Android/Retrofit-RxJava上传文件.html",
             identifier: "Android/Retrofit-RxJava上传文件.html",
             title: "Retrofit-RxJava上传文件"
           }

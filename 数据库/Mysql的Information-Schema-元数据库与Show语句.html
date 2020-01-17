@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mysql的Information_Schema 元数据库与Show语句">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;Mysql%E7%9A%84Information-Schema-%E5%85%83%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EShow%E8%AF%AD%E5%8F%A5.html">
+<meta property="og:url" content="https://gowa.club/数据库/Mysql的Information-Schema-元数据库与Show语句.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="仔细阅读了MySQL的官方参考文档，才会仔细的查看MySQL的这些元数据保存在什么地方。其实全都在INFORMATION_SCHEMA数据库内。我们可以从这里看到所有的信息。事实上我们用show {database | table} ... 语句展示的就是这里面的内容。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-12-07T07:16:19.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mysql的Information_Schema 元数据库与Show语句">
+<meta name="twitter:description" content="仔细阅读了MySQL的官方参考文档，才会仔细的查看MySQL的这些元数据保存在什么地方。其实全都在INFORMATION_SCHEMA数据库内。我们可以从这里看到所有的信息。事实上我们用show {database | table} ... 语句展示的就是这里面的内容。">
 
-<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql%E7%9A%84Information-Schema-%E5%85%83%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EShow%E8%AF%AD%E5%8F%A5.html">
+<link rel="canonical" href="https://gowa.club/数据库/Mysql的Information-Schema-元数据库与Show语句.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql%E7%9A%84Information-Schema-%E5%85%83%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EShow%E8%AF%AD%E5%8F%A5.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/Mysql的Information-Schema-元数据库与Show语句.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -259,7 +261,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql%E7%9A%84Information-Schema-%E5%85%83%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EShow%E8%AF%AD%E5%8F%A5.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/Mysql的Information-Schema-元数据库与Show语句.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/Mysql的Information-Schema-元数据库与Show语句.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,20 +292,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>仔细阅读了MySQL的官方参考文档，才会仔细的查看MySQL的这些元数据保存在什么地方。其实全都在<strong>INFORMATION_SCHEMA</strong>数据库内。我们可以从这里看到所有的信息。事实上我们用<code>show {database | table} ...</code> 语句展示的就是这里面的内容。</p>
-<a id="more"></a>
+        <p>仔细阅读了MySQL的官方参考文档，才会仔细的查看MySQL的这些元数据保存在什么地方。其实全都在<strong>INFORMATION_SCHEMA</strong>数据库内。我们可以从这里看到所有的信息。事实上我们用<code>show {database | table} ...</code> 语句展示的就是这里面的内容。<br><a id="more"></a></p>
 <h1 id="各个表"><a href="#各个表" class="headerlink" title="各个表"></a>各个表</h1><p>先看看里面保存的是什么东西。</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">mysql&gt; use information_schema;</span><br><span class="line">mysql&gt; show tables;</span><br><span class="line">+<span class="comment">---------------------------------------+</span></span><br><span class="line">| Tables_in_information_schema          |</span><br><span class="line">+<span class="comment">---------------------------------------+</span></span><br><span class="line">| CHARACTER_SETS                        |</span><br><span class="line">| COLLATIONS                            |</span><br><span class="line">| COLLATION_CHARACTER_SET_APPLICABILITY |</span><br><span class="line">| COLUMNS                               |</span><br><span class="line">| COLUMN_PRIVILEGES                     |</span><br><span class="line">| ENGINES                               |</span><br><span class="line">| EVENTS                                |</span><br><span class="line">| FILES                                 |</span><br><span class="line">| GLOBAL_STATUS                         |</span><br><span class="line">| GLOBAL_VARIABLES                      |</span><br><span class="line">| KEY_COLUMN_USAGE                      |</span><br><span class="line">| PARTITIONS                            |</span><br><span class="line">| PLUGINS                               |</span><br><span class="line">| PROCESSLIST                           |</span><br><span class="line">| PROFILING                             |</span><br><span class="line">| REFERENTIAL_CONSTRAINTS               |</span><br><span class="line">| ROUTINES                              |</span><br><span class="line">| SCHEMATA                              |</span><br><span class="line">| SCHEMA_PRIVILEGES                     |</span><br><span class="line">| SESSION_STATUS                        |</span><br><span class="line">| SESSION_VARIABLES                     |</span><br><span class="line">| STATISTICS                            |</span><br><span class="line">| TABLES                                |</span><br><span class="line">| TABLE_CONSTRAINTS                     |</span><br><span class="line">| TABLE_PRIVILEGES                      |</span><br><span class="line">| TRIGGERS                              |</span><br><span class="line">| USER_PRIVILEGES                       |</span><br><span class="line">| VIEWS                                 |</span><br><span class="line">+<span class="comment">---------------------------------------+</span></span><br></pre></td></tr></table></figure>
 <p>包含了这些内容：<strong>字符集、排序、各字符集使用的排序、列、列权限、引擎、正在执行的事件、打开的文件、全局状态、全局变量、分区、插件、进程信息、PROFILING(不知道什么)、外键约束、过程、数据库信息、数据库权限、会话状态、会话变量、表索引信息、表、表约束、表权限、触发器、用户权限、视图</strong>。<br>对于某些表，不用什么讲的，你可以用:</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> 表名\G;</span><br></pre></td></tr></table></figure>
 <p>自己观察一下就知道了。</p>
 <h1 id="show-语句"><a href="#show-语句" class="headerlink" title="show 语句"></a>show 语句</h1><p>SHOW有多种形式，可以提供有关数据库、表、列或服务器状态的信息。本节叙述以下内容：</p>
-<pre><code>SHOW CHARACTER SET [LIKE &apos;pattern&apos;]
-SHOW COLLATION [LIKE &apos;pattern&apos;]
-SHOW [FULL] COLUMNS FROM tbl_name [FROM db_name] [LIKE &apos;pattern&apos;]
+<pre><code>SHOW CHARACTER SET [LIKE &#39;pattern&#39;]
+SHOW COLLATION [LIKE &#39;pattern&#39;]
+SHOW [FULL] COLUMNS FROM tbl_name [FROM db_name] [LIKE &#39;pattern&#39;]
 SHOW CREATE DATABASE db_name
 SHOW CREATE TABLE tbl_name
-SHOW DATABASES [LIKE &apos;pattern&apos;]
+SHOW DATABASES [LIKE &#39;pattern&#39;]
 SHOW ENGINE engine_name {LOGS | STATUS }
 SHOW [STORAGE] ENGINES
 SHOW ERRORS [LIMIT [offset,] row_count]
@@ -313,17 +314,20 @@ SHOW INNODB STATUS
 SHOW [BDB] LOGS
 SHOW PRIVILEGES
 SHOW [FULL] PROCESSLIST
-SHOW [GLOBAL | SESSION] STATUS [LIKE &apos;pattern&apos;]
-SHOW TABLE STATUS [FROM db_name] [LIKE &apos;pattern&apos;]
-SHOW [OPEN] TABLES [FROM db_name] [LIKE &apos;pattern&apos;]
+SHOW [GLOBAL | SESSION] STATUS [LIKE &#39;pattern&#39;]
+SHOW TABLE STATUS [FROM db_name] [LIKE &#39;pattern&#39;]
+SHOW [OPEN] TABLES [FROM db_name] [LIKE &#39;pattern&#39;]
 SHOW TRIGGERS
-SHOW [GLOBAL | SESSION] VARIABLES [LIKE &apos;pattern&apos;]
-SHOW WARNINGS [LIMIT [offset,] row_count]</code></pre><p>还有主从控制的语句：</p>
+SHOW [GLOBAL | SESSION] VARIABLES [LIKE &#39;pattern&#39;]
+SHOW WARNINGS [LIMIT [offset,] row_count]
+</code></pre><p>还有主从控制的语句：</p>
 <pre><code>SHOW BINLOG EVENTS
 SHOW MASTER LOGS
 SHOW MASTER STATUS
 SHOW SLAVE HOSTS
-SHOW SLAVE STATUS</code></pre>
+SHOW SLAVE STATUS
+</code></pre><p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
     </div>
 
     
@@ -339,7 +343,7 @@ SHOW SLAVE STATUS</code></pre>
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL-backup.html" rel="next" title="MySQL备份介绍及实施">
+                <a href="/数据库/MySQL-backup.html" rel="next" title="MySQL备份介绍及实施">
                   <i class="fa fa-chevron-left"></i> MySQL备份介绍及实施
                 </a>
             </div>
@@ -347,7 +351,7 @@ SHOW SLAVE STATUS</code></pre>
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/curl-http%E8%84%9A%E6%9C%AC.html" rel="prev" title="curl-http脚本">
+                <a href="/Linux-Unix/curl-http脚本.html" rel="prev" title="curl-http脚本">
                   curl-http脚本 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -409,20 +413,20 @@ SHOW SLAVE STATUS</code></pre>
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -434,10 +438,10 @@ SHOW SLAVE STATUS</code></pre>
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -466,10 +470,10 @@ SHOW SLAVE STATUS</code></pre>
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -544,7 +548,7 @@ SHOW SLAVE STATUS</code></pre>
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Mysql%E7%9A%84Information-Schema-%E5%85%83%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8EShow%E8%AF%AD%E5%8F%A5.html",
+            url: "https://gowa.club/数据库/Mysql的Information-Schema-元数据库与Show语句.html",
             identifier: "数据库/Mysql的Information-Schema-元数据库与Show语句.html",
             title: "Mysql的Information_Schema 元数据库与Show语句"
           }

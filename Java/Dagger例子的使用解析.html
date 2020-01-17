@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Java,Android,Dagger">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Dagger例子的使用解析">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;Dagger%E4%BE%8B%E5%AD%90%E7%9A%84%E4%BD%BF%E7%94%A8%E8%A7%A3%E6%9E%90.html">
+<meta property="og:url" content="https://gowa.club/Java/Dagger例子的使用解析.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="关于 Dagger 的例子，看起来非常的迷糊，看了一下用户文档也不怎么的。还是来看一下例子具体的解析比较好。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-01-08T13:06:23.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dagger例子的使用解析">
+<meta name="twitter:description" content="关于 Dagger 的例子，看起来非常的迷糊，看了一下用户文档也不怎么的。还是来看一下例子具体的解析比较好。">
 
-<link rel="canonical" href="https://gowa.club/Java/Dagger%E4%BE%8B%E5%AD%90%E7%9A%84%E4%BD%BF%E7%94%A8%E8%A7%A3%E6%9E%90.html">
+<link rel="canonical" href="https://gowa.club/Java/Dagger例子的使用解析.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Dagger%E4%BE%8B%E5%AD%90%E7%9A%84%E4%BD%BF%E7%94%A8%E8%A7%A3%E6%9E%90.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Dagger例子的使用解析.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/Dagger%E4%BE%8B%E5%AD%90%E7%9A%84%E4%BD%BF%E7%94%A8%E8%A7%A3%E6%9E%90.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/Dagger例子的使用解析.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Dagger例子的使用解析.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,7 +294,6 @@
       
         <p>关于 Dagger 的例子，看起来非常的迷糊，看了一下用户文档也不怎么的。还是来看一下例子具体的解析比较好。</p>
 <a id="more"></a>
-
 <p>开始比较迷糊的地方应该是，这个例子是面向接口的，只通过接口进行调用，而不与具体的类相关联。</p>
 <p>其首先虚拟了几个过程：</p>
 <ul>
@@ -304,38 +305,29 @@
 <p>我们要做的就是在咖啡店中，让咖啡机给我们弄一杯咖啡。</p>
 <p>几个接口的定义都是非常简单的：</p>
 <h1 id="接口定义"><a href="#接口定义" class="headerlink" title="接口定义"></a>接口定义</h1><h2 id="CoffeeShop"><a href="#CoffeeShop" class="headerlink" title="CoffeeShop"></a>CoffeeShop</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> coffee;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">CoffeeShop</span> </span>&#123;</span><br><span class="line">    <span class="function">CoffeeMaker <span class="title">maker</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h2 id="CoffeeMaker"><a href="#CoffeeMaker" class="headerlink" title="CoffeeMaker"></a>CoffeeMaker</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoffeeMaker</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Lazy&lt;Heater&gt; heater;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Pump pump;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">CoffeeMaker</span><span class="params">(Lazy&lt;Heater&gt; heater, Pump pump)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.heater = heater;</span><br><span class="line">        <span class="keyword">this</span>.pump = pump;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">brew</span><span class="params">()</span></span>&#123;</span><br><span class="line">        heater.get().on();</span><br><span class="line">        pump.pump();</span><br><span class="line">        System.out.println(<span class="string">" [_]P coffee! [_]P "</span>);</span><br><span class="line">        heater.get().off();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Lazy&lt;Heater&gt; <span class="title">getHeater</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> heater;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Pump <span class="title">getPump</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> pump;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>在这里， CoffeeMaker 依赖 Heater, Pump 两个对象来进行操作。</p>
 <h2 id="Heater"><a href="#Heater" class="headerlink" title="Heater"></a>Heater</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> coffee;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Heater</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">on</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">off</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isHot</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="Pump"><a href="#Pump" class="headerlink" title="Pump"></a>Pump</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> coffee;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Pump</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">pump</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <h1 id="调用例子"><a href="#调用例子" class="headerlink" title="调用例子"></a>调用例子</h1><p>最终，我们要实现的是这样的调用：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CoffeeApp</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        CoffeeShop coffeeShop = DaggerCoffeeShop.builder().build();</span><br><span class="line">        coffeeShop.maker().brew();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>但是，我们发现，CoffeeShop 其实是没有实现的，只是定义了一个接口，这个实现是由 Dagger 来完成。通过对我们的 CoffeeShop 接口加上 <code>@Component</code> 注解，Dagger 会自动生成此接口的一个实现。</p>
 <h1 id="Component"><a href="#Component" class="headerlink" title="Component"></a>Component</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Singleton</span></span><br><span class="line"><span class="meta">@Component</span>(modules = &#123;DripCoffeeModule<span class="class">.<span class="keyword">class</span>&#125;)</span></span><br><span class="line"><span class="class"><span class="title">public</span> <span class="title">interface</span> <span class="title">CoffeeShop</span> </span>&#123;</span><br><span class="line">    <span class="function">CoffeeMaker <span class="title">maker</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>不过，在我们查看生成的 DaggerCoffeeShop 类的时候，却发现一些不一样的地方。</p>
 <h1 id="DaggerCoffeeShop"><a href="#DaggerCoffeeShop" class="headerlink" title="DaggerCoffeeShop"></a>DaggerCoffeeShop</h1><p>But, 为什么会有这么多东西？从哪里来的？</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// implements 说明，确实是一个 CoffeeShop 的实现。</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">DaggerCoffeeShop</span> <span class="keyword">implements</span> <span class="title">CoffeeShop</span> </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> Provider&lt;Heater&gt; provideHeaterProvider;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 构造器</span></span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="title">DaggerCoffeeShop</span><span class="params">(Builder builder)</span> </span>&#123;</span><br><span class="line">    initialize(builder);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 采用 Builder 模式</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Builder <span class="title">builder</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Builder();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 默认的一个方法</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CoffeeShop <span class="title">create</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Builder().build();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">//这个暂且不提</span></span><br><span class="line">  <span class="function"><span class="keyword">private</span> Thermosiphon <span class="title">getThermosiphon</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Thermosiphon(provideHeaterProvider.get());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">//初始化</span></span><br><span class="line">  <span class="meta">@SuppressWarnings</span>(<span class="string">"unchecked"</span>)</span><br><span class="line">  <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initialize</span><span class="params">(<span class="keyword">final</span> Builder builder)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.provideHeaterProvider =</span><br><span class="line">        DoubleCheck.provider(</span><br><span class="line">            DripCoffeeModule_ProvideHeaterFactory.create(builder.dripCoffeeModule));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> CoffeeMaker <span class="title">maker</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> CoffeeMaker(DoubleCheck.lazy(provideHeaterProvider), getThermosiphon());</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Builder</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> DripCoffeeModule dripCoffeeModule;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Builder</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> CoffeeShop <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">      <span class="keyword">if</span> (dripCoffeeModule == <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">this</span>.dripCoffeeModule = <span class="keyword">new</span> DripCoffeeModule();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">new</span> DaggerCoffeeShop(<span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Builder <span class="title">dripCoffeeModule</span><span class="params">(DripCoffeeModule dripCoffeeModule)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.dripCoffeeModule = Preconditions.checkNotNull(dripCoffeeModule);</span><br><span class="line">      <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>我们可以来看看，我们执行  builder().build()的时候都发生了什么。</p>
 <p>builder() 会返回一个内部的 Builder对象，当此对象执行 build()的时候，纠结做了些什么呢。</p>
 <h2 id="build"><a href="#build" class="headerlink" title=".build()"></a>.build()</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> DripCoffeeModule dripCoffeeModule;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="title">Builder</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> CoffeeShop <span class="title">build</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (dripCoffeeModule == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">this</span>.dripCoffeeModule = <span class="keyword">new</span> DripCoffeeModule();</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> DaggerCoffeeShop(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>初始化了一个 module，然后将 Builder 自身传递给 DaggerCoffeeShop进行构建 CoffeeShop 实例。</p>
 <p>这实际上执行的是 CoffeeShop 的  <code>initialize()</code> 方法.</p>
 <h2 id="initialize（）"><a href="#initialize（）" class="headerlink" title="initialize（）"></a>initialize（）</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initialize</span><span class="params">(<span class="keyword">final</span> Builder builder)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.provideHeaterProvider =</span><br><span class="line">      DoubleCheck.provider(</span><br><span class="line">          DripCoffeeModule_ProvideHeaterFactory.create(builder.dripCoffeeModule));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>initialize 也只是把所需要的 provider 进行了初始化。</p>
 <p>其中  <code>DripCoffeeModule_ProvideHeaterFactory.create(builder.dripCoffeeModule));</code> 根据模块，建立一个工厂类。</p>
 <p><code>DoubleCheck.provider()</code> 使用工厂类来实现一个 provider。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;P extends Provider&lt;T&gt;, T&gt; <span class="function">Provider&lt;T&gt; <span class="title">provider</span><span class="params">(P delegate)</span> </span>&#123;</span><br><span class="line">    Preconditions.checkNotNull(delegate);</span><br><span class="line">    <span class="keyword">return</span> (Provider)(delegate <span class="keyword">instanceof</span> DoubleCheck ? delegate : <span class="keyword">new</span> DoubleCheck(delegate));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>事实上可以这么理解，就是对于每个 provider 都会生成了一个工厂类。</p>
 <h2 id="maker"><a href="#maker" class="headerlink" title="maker()"></a>maker()</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> CoffeeMaker <span class="title">maker</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> CoffeeMaker(provideHeaterProvider.get(), getThermosiphon());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>这个就比较常规了，就是 new 一个对象出来，其依赖的话，是通过 provider 来获取的。我们在上面说道， provider 其实就工厂类。</p>
 <p>我们调用其 <code>get()</code> 方法。</p>
 <h2 id="ProviderFactory-工厂类"><a href="#ProviderFactory-工厂类" class="headerlink" title="ProviderFactory 工厂类"></a>ProviderFactory 工厂类</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">DripCoffeeModule_ProvideHeaterFactory</span> <span class="keyword">implements</span> <span class="title">Factory</span>&lt;<span class="title">Heater</span>&gt; </span>&#123;</span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> DripCoffeeModule <span class="keyword">module</span>;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">DripCoffeeModule_ProvideHeaterFactory</span><span class="params">(DripCoffeeModule <span class="keyword">module</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.<span class="keyword">module</span> = <span class="keyword">module</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> Heater <span class="title">get</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> provideInstance(<span class="keyword">module</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Heater <span class="title">provideInstance</span><span class="params">(DripCoffeeModule <span class="keyword">module</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> proxyProvideHeater(<span class="keyword">module</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> DripCoffeeModule_ProvideHeaterFactory <span class="title">create</span><span class="params">(DripCoffeeModule <span class="keyword">module</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> DripCoffeeModule_ProvideHeaterFactory(<span class="keyword">module</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Heater <span class="title">proxyProvideHeater</span><span class="params">(DripCoffeeModule instance)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Preconditions.checkNotNull(</span><br><span class="line">        instance.provideHeater(), <span class="string">"Cannot return null from a non-@Nullable @Provides method"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -349,10 +341,8 @@
 </ol>
 <h1 id="有什么不同？"><a href="#有什么不同？" class="headerlink" title="有什么不同？"></a>有什么不同？</h1><p>先前我们就注意到，为什么 Pump 与 Heater 在生成类中似乎并不一样，其好像并没有 provider 字段。而是一个 getter 函数。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Thermosiphon <span class="title">getThermosiphon</span><span class="params">()</span> </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Thermosiphon(provideHeaterProvider.get());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>而且也不是以接口的形式定义 module ，而是以抽象类的形式：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">PumpModule</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Binds</span></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> Pump <span class="title">providerPump</span><span class="params">(Thermosiphon pump)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>这就是 @Provides 与 @Binds 的区别了。</p>
 <ol>
 <li>@Provides 是实例方法，需要实例化 module 后进行使用。</li>
@@ -372,8 +362,7 @@
 <h2 id="替代方法"><a href="#替代方法" class="headerlink" title="替代方法"></a>替代方法</h2><p>最简单的方法就是让 @Provides  方法声明为 <em>static</em> 。除了兼容 @Binds，性能会更好些。</p>
 <p>如果方法 <strong>必须</strong> 是一个实例方法（例如，从一个字段返回值），最简单的方法就是将两种方法进行分开，然后从其中一个 module 包括另外一个。下面就是一个例子：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Module</span>(includes = Declarations<span class="class">.<span class="keyword">class</span>)</span></span><br><span class="line"><span class="class"><span class="title">final</span> <span class="title">class</span> <span class="title">HttpServletRequestModule</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Module</span></span><br><span class="line">  <span class="class"><span class="keyword">interface</span> <span class="title">Declarations</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Binds</span> <span class="function">ServletRequest <span class="title">bindServletRequest</span><span class="params">(HttpServletRequest httpRequest)</span></span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> HttpServletRequest httpRequest;</span><br><span class="line"></span><br><span class="line">  HttpServletRequestModule(HttpServletRequest httpRequest) &#123;</span><br><span class="line">    <span class="keyword">this</span>.httpRequest = httpRequest;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -392,7 +381,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Cocos-Creator/Cocos%20Creator%E7%83%AD%E6%9B%B4%E6%96%B0%E4%BE%8B%E5%AD%90%E7%9A%84%E7%A0%94%E7%A9%B6.html" rel="next" title="Cocos Creator热更新例子的研究">
+                <a href="/Cocos-Creator/Cocos Creator热更新例子的研究.html" rel="next" title="Cocos Creator热更新例子的研究">
                   <i class="fa fa-chevron-left"></i> Cocos Creator热更新例子的研究
                 </a>
             </div>
@@ -400,7 +389,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/Dagger%E6%B3%A8%E8%A7%A3%E8%AF%B4%E6%98%8E.html" rel="prev" title="Dagger注解说明">
+                <a href="/Java/Dagger注解说明.html" rel="prev" title="Dagger注解说明">
                   Dagger注解说明 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -462,20 +451,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -487,10 +476,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -519,10 +508,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -597,7 +586,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/Dagger%E4%BE%8B%E5%AD%90%E7%9A%84%E4%BD%BF%E7%94%A8%E8%A7%A3%E6%9E%90.html",
+            url: "https://gowa.club/Java/Dagger例子的使用解析.html",
             identifier: "Java/Dagger例子的使用解析.html",
             title: "Dagger例子的使用解析"
           }

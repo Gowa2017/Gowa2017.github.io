@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,24 +41,26 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
 </script>
 
-  <meta name="description" content="做文书的时候，需要把印章放在相关的文字上面。事实上这个问题拖了很久了都没有去处理。因为 POI 对于这种要把图片盖在文字上面的做法很蛋疼，其提供的API并不好用。使用了底层的，直接写 xml 的方式来插入进去的。 参考了 stackoverflow.com&#x2F; 的做法后完成">
+  <meta name="description" content="做文书的时候，需要把印章放在相关的文字上面。事实上这个问题拖了很久了都没有去处理。因为 POI 对于这种要把图片盖在文字上面的做法很蛋疼，其提供的API并不好用。使用了底层的，直接写 xml 的方式来插入进去的。 参考了 stackoverflow.com/ 的做法后完成">
 <meta name="keywords" content="Java,Docx,Poi">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Poi中添加Anchor图片到Docx文档">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;Poi%E4%B8%AD%E6%B7%BB%E5%8A%A0Anchor%E5%9B%BE%E7%89%87%E5%88%B0Docx%E6%96%87%E6%A1%A3.html">
+<meta property="og:url" content="https://gowa.club/Java/Poi中添加Anchor图片到Docx文档.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="做文书的时候，需要把印章放在相关的文字上面。事实上这个问题拖了很久了都没有去处理。因为 POI 对于这种要把图片盖在文字上面的做法很蛋疼，其提供的API并不好用。使用了底层的，直接写 xml 的方式来插入进去的。 参考了 stackoverflow.com&#x2F; 的做法后完成">
+<meta property="og:description" content="做文书的时候，需要把印章放在相关的文字上面。事实上这个问题拖了很久了都没有去处理。因为 POI 对于这种要把图片盖在文字上面的做法很蛋疼，其提供的API并不好用。使用了底层的，直接写 xml 的方式来插入进去的。 参考了 stackoverflow.com/ 的做法后完成">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-11-28T05:54:11.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Poi中添加Anchor图片到Docx文档">
+<meta name="twitter:description" content="做文书的时候，需要把印章放在相关的文字上面。事实上这个问题拖了很久了都没有去处理。因为 POI 对于这种要把图片盖在文字上面的做法很蛋疼，其提供的API并不好用。使用了底层的，直接写 xml 的方式来插入进去的。 参考了 stackoverflow.com/ 的做法后完成">
 
-<link rel="canonical" href="https://gowa.club/Java/Poi%E4%B8%AD%E6%B7%BB%E5%8A%A0Anchor%E5%9B%BE%E7%89%87%E5%88%B0Docx%E6%96%87%E6%A1%A3.html">
+<link rel="canonical" href="https://gowa.club/Java/Poi中添加Anchor图片到Docx文档.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Poi%E4%B8%AD%E6%B7%BB%E5%8A%A0Anchor%E5%9B%BE%E7%89%87%E5%88%B0Docx%E6%96%87%E6%A1%A3.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Poi中添加Anchor图片到Docx文档.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/Poi%E4%B8%AD%E6%B7%BB%E5%8A%A0Anchor%E5%9B%BE%E7%89%87%E5%88%B0Docx%E6%96%87%E6%A1%A3.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/Poi中添加Anchor图片到Docx文档.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Poi中添加Anchor图片到Docx文档.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -293,30 +295,52 @@
         <p>做文书的时候，需要把印章放在相关的文字上面。事实上这个问题拖了很久了都没有去处理。因为 POI 对于这种要把图片盖在文字上面的做法很蛋疼，其提供的API并不好用。使用了底层的，直接写 xml 的方式来插入进去的。</p>
 <p>参考了 <a href="https://stackoverflow.com/questions/47673133/change-image-layout-or-wrap-in-docx-with-apache-poi" target="_blank" rel="noopener">stackoverflow.com/</a> 的做法后完成</p>
 <a id="more"></a>
-
 <h1 id="Inline"><a href="#Inline" class="headerlink" title="Inline"></a>Inline</h1><p>这种方式添加图片是非常的简单。只需要一句代码就可以了。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">run.addPicture(java.io.InputStream pictureData,</span><br><span class="line">                              <span class="keyword">int</span> pictureType,</span><br><span class="line">                              java.lang.String filename,</span><br><span class="line">                              <span class="keyword">int</span> width,</span><br><span class="line">                              <span class="keyword">int</span> height)</span><br></pre></td></tr></table></figure>
-
 <p>指定 输入流，图片类型，文件名，宽，高即可。注意这里的宽高是 EMU 为单位的。</p>
 <p>关于这个方法的API解释，地址在这里：<a href="http://poi.apache.org/apidocs/dev/index.html" target="_blank" rel="noopener">http://poi.apache.org/apidocs/dev/index.html</a></p>
 <p>添加之后我们可以查看我们 run 的 xml 代码是什么：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">System.out.println(run.getCTR());</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">xml-fragment</span> <span class="attr">w:rsidRPr</span>=<span class="string">"00924CAC"</span> <span class="attr">xmlns:cx</span>=<span class="string">"http://schemas.microsoft.com/office/drawing/2014/chartex"</span> <span class="attr">xmlns:cx1</span>=<span class="string">"http://schemas.microsoft.com/office/drawing/2015/9/8/chartex"</span> <span class="attr">xmlns:m</span>=<span class="string">"http://schemas.openxmlformats.org/officeDocument/2006/math"</span> <span class="attr">xmlns:mc</span>=<span class="string">"http://schemas.openxmlformats.org/markup-compatibility/2006"</span> <span class="attr">xmlns:o</span>=<span class="string">"urn:schemas-microsoft-com:office:office"</span> <span class="attr">xmlns:r</span>=<span class="string">"http://schemas.openxmlformats.org/officeDocument/2006/relationships"</span> <span class="attr">xmlns:v</span>=<span class="string">"urn:schemas-microsoft-com:vml"</span> <span class="attr">xmlns:w</span>=<span class="string">"http://schemas.openxmlformats.org/wordprocessingml/2006/main"</span> <span class="attr">xmlns:w10</span>=<span class="string">"urn:schemas-microsoft-com:office:word"</span> <span class="attr">xmlns:w14</span>=<span class="string">"http://schemas.microsoft.com/office/word/2010/wordml"</span> <span class="attr">xmlns:w15</span>=<span class="string">"http://schemas.microsoft.com/office/word/2012/wordml"</span> <span class="attr">xmlns:w16se</span>=<span class="string">"http://schemas.microsoft.com/office/word/2015/wordml/symex"</span> <span class="attr">xmlns:wne</span>=<span class="string">"http://schemas.microsoft.com/office/word/2006/wordml"</span> <span class="attr">xmlns:wp</span>=<span class="string">"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"</span> <span class="attr">xmlns:wp14</span>=<span class="string">"http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"</span> <span class="attr">xmlns:wpc</span>=<span class="string">"http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"</span> <span class="attr">xmlns:wpg</span>=<span class="string">"http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"</span> <span class="attr">xmlns:wpi</span>=<span class="string">"http://schemas.microsoft.com/office/word/2010/wordprocessingInk"</span> <span class="attr">xmlns:wps</span>=<span class="string">"http://schemas.microsoft.com/office/word/2010/wordprocessingShape"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">w:rPr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">w:rFonts</span> <span class="attr">w:ascii</span>=<span class="string">"仿宋_GB2312"</span> <span class="attr">w:eastAsia</span>=<span class="string">"仿宋_GB2312"</span> <span class="attr">w:hAnsi</span>=<span class="string">"Times New Roman"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">w:kern</span> <span class="attr">w:val</span>=<span class="string">"2"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">w:sz</span> <span class="attr">w:val</span>=<span class="string">"32"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">w:szCs</span> <span class="attr">w:val</span>=<span class="string">"32"</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">w:rPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">w:t</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">w:drawing</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">wp:inline</span> <span class="attr">distT</span>=<span class="string">"0"</span> <span class="attr">distR</span>=<span class="string">"0"</span> <span class="attr">distB</span>=<span class="string">"0"</span> <span class="attr">distL</span>=<span class="string">"0"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">wp:extent</span> <span class="attr">cx</span>=<span class="string">"1440000"</span> <span class="attr">cy</span>=<span class="string">"1440000"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">wp:docPr</span> <span class="attr">id</span>=<span class="string">"0"</span> <span class="attr">name</span>=<span class="string">"Drawing 0"</span> <span class="attr">descr</span>=<span class="string">"stamp"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:graphic</span> <span class="attr">xmlns:a</span>=<span class="string">"http://schemas.openxmlformats.org/drawingml/2006/main"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:graphicData</span> <span class="attr">uri</span>=<span class="string">"http://schemas.openxmlformats.org/drawingml/2006/picture"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">pic:pic</span> <span class="attr">xmlns:pic</span>=<span class="string">"http://schemas.openxmlformats.org/drawingml/2006/picture"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pic:nvPicPr</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">pic:cNvPr</span> <span class="attr">id</span>=<span class="string">"0"</span> <span class="attr">name</span>=<span class="string">"Picture 0"</span> <span class="attr">descr</span>=<span class="string">"stamp"</span>/&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">pic:cNvPicPr</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">pic:cNvPicPr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">pic:nvPicPr</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pic:blipFill</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId6"</span>/&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">pic:blipFill</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">pic:spPr</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"0"</span> <span class="attr">y</span>=<span class="string">"0"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1440000"</span> <span class="attr">cy</span>=<span class="string">"1440000"</span>/&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">pic:spPr</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">pic:pic</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:graphicData</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:graphic</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">wp:inline</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">w:drawing</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">xml-fragment</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
 <p>很一目了然，在 run -&gt; drawing -&gt; inline -&gt; graphic -&gt; ….</p>
 <p>由于图片的代码是一样的，其实我们只需要把 inline 元素这里进行变更就好了。</p>
 <p>但是，事实上，POI 上并没有提供 Anchor 的 API，所以只能用比较底层的方式来进行了。</p>
 <h1 id="Anchor"><a href="#Anchor" class="headerlink" title="Anchor"></a>Anchor</h1><p>我们先定义一个 Anchor 节点。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">String anchorXML =</span><br><span class="line">                <span class="string">"&lt;wp:anchor xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" "</span></span><br><span class="line">                        + <span class="string">"simplePos=\"0\" relativeHeight=\"0\" behindDoc=\"0\" locked=\"0\" layoutInCell=\"1\" allowOverlap=\"1\"&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:simplePos x=\"0\" y=\"0\"/&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:positionH relativeFrom=\""</span> + relativeFrom +<span class="string">"\"&gt;"</span></span><br><span class="line"><span class="comment">//                        + "&lt;wp:align&gt;" + relativeFrom + "&lt;/wp:align&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:posOffset&gt;"</span> + hOffset + <span class="string">"&lt;/wp:posOffset&gt;"</span></span><br><span class="line">                        +<span class="string">"&lt;/wp:positionH&gt;"</span></span><br><span class="line"><span class="comment">//                        + "&lt;wp:positionH relativeFrom=\"column\"&gt;&lt;wp:align&gt;left&lt;/wp:align&gt;&lt;/wp:positionH&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:positionV relativeFrom=\"paragraph\"&gt;&lt;wp:align&gt;center&lt;/wp:align&gt;&lt;/wp:positionV&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:extent cx=\""</span> + width + <span class="string">"\" cy=\""</span> + height + <span class="string">"\"/&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:effectExtent l=\"0\" t=\"0\" r=\"0\" b=\"0\"/&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:wrapNone/&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:docPr id=\"1\" name=\"Drawing 0\" descr=\""</span> + drawingDescr + <span class="string">"\"/&gt;&lt;wp:cNvGraphicFramePr/&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;/wp:anchor&gt;"</span>;</span><br></pre></td></tr></table></figure>
-
 <p>确定图片在哪里的元素就在 positionH、positionV 上。这两者都有一个属性 relativeFrom 决定相对与哪个地方来计算位置，这个属性的取值可参考文章：<a href="/Java/openoffice-XML-生成word中的图片.html#anchor">Java/openoffice-XML-生成word中的图片.html#anchor</a>。我一般选用 margin 就行了。主要原因就是，很多取值 我需要用 openoffice 转的时候，不支持。</p>
 <p>但是  positionH、positionV  的子元素中  align 与 posOffset 只能有一个，两者共存文档就会损坏。</p>
 <p>现在我们用代码来进行操作，根据我们的输入参数来返回 Anchor：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> graphicalobject 图片数据</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> drawingDescr 图片描述</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> width 宽</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> height 高</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> hOffset 水平偏移</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> vOffset 垂直偏移</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> relativeFrom 相对位置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> Exception</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> CTAnchor <span class="title">getAnchorWithGraphic</span><span class="params">(CTGraphicalObject graphicalobject,</span></span></span><br><span class="line"><span class="function"><span class="params">                                                 String drawingDescr, <span class="keyword">int</span> width, <span class="keyword">int</span> height,</span></span></span><br><span class="line"><span class="function"><span class="params">                                                 <span class="keyword">int</span> hOffset, <span class="keyword">int</span> vOffset, String relativeFrom)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        String anchorXML =</span><br><span class="line">                <span class="string">"&lt;wp:anchor xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" "</span></span><br><span class="line">                        + <span class="string">"simplePos=\"0\" relativeHeight=\"0\" behindDoc=\"0\" locked=\"0\" layoutInCell=\"1\" allowOverlap=\"1\"&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:simplePos x=\"0\" y=\"0\"/&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:positionH relativeFrom=\""</span> + relativeFrom +<span class="string">"\"&gt;"</span></span><br><span class="line"><span class="comment">//                        + "&lt;wp:align&gt;" + relativeFrom + "&lt;/wp:align&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:posOffset&gt;"</span> + hOffset + <span class="string">"&lt;/wp:posOffset&gt;"</span></span><br><span class="line">                        +<span class="string">"&lt;/wp:positionH&gt;"</span></span><br><span class="line"><span class="comment">//                        + "&lt;wp:positionH relativeFrom=\"column\"&gt;&lt;wp:align&gt;left&lt;/wp:align&gt;&lt;/wp:positionH&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:positionV relativeFrom=\"paragraph\"&gt;&lt;wp:align&gt;center&lt;/wp:align&gt;&lt;/wp:positionV&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:extent cx=\""</span> + width + <span class="string">"\" cy=\""</span> + height + <span class="string">"\"/&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:effectExtent l=\"0\" t=\"0\" r=\"0\" b=\"0\"/&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:wrapNone/&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;wp:docPr id=\"1\" name=\"Drawing 0\" descr=\""</span> + drawingDescr + <span class="string">"\"/&gt;&lt;wp:cNvGraphicFramePr/&gt;"</span></span><br><span class="line">                        + <span class="string">"&lt;/wp:anchor&gt;"</span>;</span><br><span class="line"></span><br><span class="line">        CTDrawing drawing = CTDrawing.Factory.parse(anchorXML);</span><br><span class="line">        CTAnchor anchor = drawing.getAnchorArray(<span class="number">0</span>);</span><br><span class="line">        anchor.setGraphic(graphicalobject);</span><br><span class="line">        <span class="keyword">return</span> anchor;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
 <p>graphicalobject 从哪里来？我们为了简单，不要手动添加。我们通过  我们刚开始就介绍的添加到 inline 里面的方法来添加。然后获取了以后，我们就把 inline 给删除就OK。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">     XWPFDocument document = <span class="keyword">new</span> XWPFDocument();</span><br><span class="line">     XWPFParagraph paragraph = document.createParagraph();</span><br><span class="line">     XWPFRun run = paragraph.createRun();</span><br><span class="line">     </span><br><span class="line">     <span class="comment">// 添加 inline 图片 这里有个问题，就是openOffice识别的时候，必须要图片数据的宽高和后面我们设置的宽高一致</span></span><br><span class="line">run.setText(<span class="string">"行内图片: "</span>);</span><br><span class="line">     InputStream in = <span class="keyword">new</span> FileInputStream(<span class="string">"/Users/wodediannao/sample.png"</span>);</span><br><span class="line">     run.addPicture(in, Document.PICTURE_TYPE_JPEG, <span class="string">"/Users/wodediannao/sample.png"</span>, Units.toEMU(<span class="number">100</span>), Units.toEMU(<span class="number">30</span>));</span><br><span class="line">     in.close();</span><br><span class="line">     </span><br><span class="line">     <span class="comment">// 添加浮动图片</span></span><br><span class="line">     <span class="comment">// 1. 先添加一个行内图片</span></span><br><span class="line">     run = paragraph.createRun();</span><br><span class="line">     in = <span class="keyword">new</span> FileInputStream(<span class="string">"/Users/wodediannao/sample.png"</span>);</span><br><span class="line">     run.addPicture(in, Document.PICTURE_TYPE_JPEG, <span class="string">"/Users/wodediannao/sample.png"</span>, Units.toEMU(<span class="number">100</span>), Units.toEMU(<span class="number">30</span>));</span><br><span class="line">     in.close();</span><br><span class="line">     </span><br><span class="line">     <span class="comment">// 2. 获取到图片数据</span></span><br><span class="line">     CTDrawing drawing = run.getCTR().getDrawingArray(<span class="number">0</span>);</span><br><span class="line">     CTGraphicalObject graphicalobject = drawing.getInlineArray(<span class="number">0</span>).getGraphic();</span><br><span class="line">     </span><br><span class="line">     <span class="comment">// 3. 加入 Anchor 并删除  Inline 的图片</span></span><br><span class="line">     CTAnchor anchor = getAnchorWithGraphic(graphicalobject, <span class="string">"/Users/wodediannao/sample.png"</span>,</span><br><span class="line">             Units.toEMU(<span class="number">100</span>), Units.toEMU(<span class="number">30</span>),</span><br><span class="line">             Units.toEMU(<span class="number">0</span>), Units.toEMU(<span class="number">0</span>),<span class="string">""</span>);</span><br><span class="line">     drawing.setAnchorArray(<span class="keyword">new</span> CTAnchor[]&#123;anchor&#125;);</span><br><span class="line">     drawing.removeInline(<span class="number">0</span>);</span><br><span class="line">     <span class="comment">// 4. 写出文件</span></span><br><span class="line">     document.write(<span class="keyword">new</span> FileOutputStream(<span class="string">"WordInsertPictures.docx"</span>));</span><br><span class="line">     document.close();</span><br></pre></td></tr></table></figure>
+<p>```java<br>        XWPFDocument document = new XWPFDocument();<br>        XWPFParagraph paragraph = document.createParagraph();<br>        XWPFRun run = paragraph.createRun();</p>
+<pre><code>    // 添加 inline 图片 这里有个问题，就是openOffice识别的时候，必须要图片数据的宽高和后面我们设置的宽高一致
+     run.setText(&quot;行内图片: &quot;);
+    InputStream in = new FileInputStream(&quot;/Users/wodediannao/sample.png&quot;);
+    run.addPicture(in, Document.PICTURE_TYPE_JPEG, &quot;/Users/wodediannao/sample.png&quot;, Units.toEMU(100), Units.toEMU(30));
+    in.close();
+
+    // 添加浮动图片
+    // 1. 先添加一个行内图片
+    run = paragraph.createRun();
+    in = new FileInputStream(&quot;/Users/wodediannao/sample.png&quot;);
+    run.addPicture(in, Document.PICTURE_TYPE_JPEG, &quot;/Users/wodediannao/sample.png&quot;, Units.toEMU(100), Units.toEMU(30));
+    in.close();
+
+    // 2. 获取到图片数据
+    CTDrawing drawing = run.getCTR().getDrawingArray(0);
+    CTGraphicalObject graphicalobject = drawing.getInlineArray(0).getGraphic();
+
+    // 3. 加入 Anchor 并删除  Inline 的图片
+    CTAnchor anchor = getAnchorWithGraphic(graphicalobject, &quot;/Users/wodediannao/sample.png&quot;,
+            Units.toEMU(100), Units.toEMU(30),
+            Units.toEMU(0), Units.toEMU(0),&quot;&quot;);
+    drawing.setAnchorArray(new CTAnchor[]{anchor});
+    drawing.removeInline(0);
+    // 4. 写出文件
+    document.write(new FileOutputStream(&quot;WordInsertPictures.docx&quot;));
+    document.close();
+</code></pre><p>```<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
     </div>
 
     
@@ -334,7 +358,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Python/TensorFlow%E4%B8%AD%E7%9A%84LSTM%E4%BA%86%E8%A7%A3.html" rel="next" title="TensorFlow中的LSTM了解">
+                <a href="/Python/TensorFlow中的LSTM了解.html" rel="next" title="TensorFlow中的LSTM了解">
                   <i class="fa fa-chevron-left"></i> TensorFlow中的LSTM了解
                 </a>
             </div>
@@ -342,7 +366,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Misc/adblockplus%E7%9A%84%E5%8C%B9%E9%85%8D%E8%A7%84%E5%88%99-PAC%E7%94%A8%E5%88%B0.html" rel="prev" title="adblockplus的匹配规则-PAC用到">
+                <a href="/Misc/adblockplus的匹配规则-PAC用到.html" rel="prev" title="adblockplus的匹配规则-PAC用到">
                   adblockplus的匹配规则-PAC用到 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -404,20 +428,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -429,10 +453,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -461,10 +485,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -539,7 +563,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/Poi%E4%B8%AD%E6%B7%BB%E5%8A%A0Anchor%E5%9B%BE%E7%89%87%E5%88%B0Docx%E6%96%87%E6%A1%A3.html",
+            url: "https://gowa.club/Java/Poi中添加Anchor图片到Docx文档.html",
             identifier: "Java/Poi中添加Anchor图片到Docx文档.html",
             title: "Poi中添加Anchor图片到Docx文档"
           }

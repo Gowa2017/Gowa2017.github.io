@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Oracle,数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Oracle数据字典检查">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;%E6%95%B0%E6%8D%AE%E5%BA%93&#x2F;Oracle%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8%E6%A3%80%E6%9F%A5.html">
+<meta property="og:url" content="https://gowa.club/数据库/Oracle数据字典检查.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="作为一个Oracle菜鸟想要管理数据库，怎么能不看一下官方的文档呢，日常所用的检查也能了解得差不多了。表空间、数据文件、控制文件段等等都可以得到很好的解答。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-11-16T14:47:48.270Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Oracle数据字典检查">
+<meta name="twitter:description" content="作为一个Oracle菜鸟想要管理数据库，怎么能不看一下官方的文档呢，日常所用的检查也能了解得差不多了。表空间、数据文件、控制文件段等等都可以得到很好的解答。">
 
-<link rel="canonical" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8%E6%A3%80%E6%9F%A5.html">
+<link rel="canonical" href="https://gowa.club/数据库/Oracle数据字典检查.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8%E6%A3%80%E6%9F%A5.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/Oracle数据字典检查.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -266,7 +268,7 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
                     <span itemprop="name">数据库</span>
                   </a>
                 </span>
@@ -281,7 +283,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8%E6%A3%80%E6%9F%A5.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/数据库/Oracle数据字典检查.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/Oracle数据字典检查.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -297,19 +299,27 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>作为一个Oracle菜鸟想要管理数据库，怎么能不看一下官方的文档呢，日常所用的检查也能了解得差不多了。表空间、数据文件、控制文件段等等都可以得到很好的解答。</p>
-<a id="more"></a>
-<p>那么下面，我们开始了。</p>
+        <p>作为一个Oracle菜鸟想要管理数据库，怎么能不看一下官方的文档呢，日常所用的检查也能了解得差不多了。表空间、数据文件、控制文件段等等都可以得到很好的解答。<br><a id="more"></a><br>那么下面，我们开始了。</p>
 <h1 id="查看数据库及链接库"><a href="#查看数据库及链接库" class="headerlink" title="查看数据库及链接库"></a>查看数据库及链接库</h1><pre><code>SELECT * from v$database;
-SELECT * from dba_db_links;</code></pre><h1 id="查看控制文件"><a href="#查看控制文件" class="headerlink" title="查看控制文件"></a>查看控制文件</h1><pre><code>SELECT * FROM V$CONTROLFILE;</code></pre><h1 id="查看数据在线重做日志文件"><a href="#查看数据在线重做日志文件" class="headerlink" title="查看数据在线重做日志文件"></a>查看数据在线重做日志文件</h1><pre><code>SELECT * FROM V$LOG;
-SELECT * FROM V$LOGFILE;</code></pre><h1 id="查看回滚表空间"><a href="#查看回滚表空间" class="headerlink" title="查看回滚表空间"></a>查看回滚表空间</h1><pre><code>SELECT OWNER,SUM(BYTES)/1024/1024 AS &quot;I_SIZE/MB&quot; 
-FROM DBA_UNDO_EXTENTS GROUP BY OWNER;</code></pre><h1 id="查看数据文件与表空间关联"><a href="#查看数据文件与表空间关联" class="headerlink" title="查看数据文件与表空间关联"></a>查看数据文件与表空间关联</h1><pre><code>SELECT * FROM DBA_DATA_FILES;</code></pre><h1 id="查询某一表空间的数据文件"><a href="#查询某一表空间的数据文件" class="headerlink" title="查询某一表空间的数据文件"></a>查询某一表空间的数据文件</h1><pre><code>SELECT file_name,bytes/1024/1024 as &quot;size&quot;,online_status 
-FROM dba_data_files WHERE tablespace_name=&apos;OTHER_DATA&apos;;</code></pre><h1 id="查看表空间大小"><a href="#查看表空间大小" class="headerlink" title="查看表空间大小"></a>查看表空间大小</h1><pre><code>SELECT TABLESPACE_NAME,SUM(BYTES)/1024/1024 AS &quot;TOTAL/MB&quot; 
+SELECT * from dba_db_links;
+</code></pre><h1 id="查看控制文件"><a href="#查看控制文件" class="headerlink" title="查看控制文件"></a>查看控制文件</h1><pre><code>SELECT * FROM V$CONTROLFILE;
+</code></pre><h1 id="查看数据在线重做日志文件"><a href="#查看数据在线重做日志文件" class="headerlink" title="查看数据在线重做日志文件"></a>查看数据在线重做日志文件</h1><pre><code>SELECT * FROM V$LOG;
+SELECT * FROM V$LOGFILE;
+</code></pre><h1 id="查看回滚表空间"><a href="#查看回滚表空间" class="headerlink" title="查看回滚表空间"></a>查看回滚表空间</h1><pre><code>SELECT OWNER,SUM(BYTES)/1024/1024 AS &quot;I_SIZE/MB&quot; 
+FROM DBA_UNDO_EXTENTS GROUP BY OWNER;
+</code></pre><h1 id="查看数据文件与表空间关联"><a href="#查看数据文件与表空间关联" class="headerlink" title="查看数据文件与表空间关联"></a>查看数据文件与表空间关联</h1><pre><code>SELECT * FROM DBA_DATA_FILES;
+</code></pre><h1 id="查询某一表空间的数据文件"><a href="#查询某一表空间的数据文件" class="headerlink" title="查询某一表空间的数据文件"></a>查询某一表空间的数据文件</h1><pre><code>SELECT file_name,bytes/1024/1024 as &quot;size&quot;,online_status 
+FROM dba_data_files WHERE tablespace_name=&#39;OTHER_DATA&#39;;
+</code></pre><h1 id="查看表空间大小"><a href="#查看表空间大小" class="headerlink" title="查看表空间大小"></a>查看表空间大小</h1><pre><code>SELECT TABLESPACE_NAME,SUM(BYTES)/1024/1024 AS &quot;TOTAL/MB&quot; 
 FROM DBA_DATA_FILES GROUP BY TABLESPACE_NAME 
-ORDER BY TABLESPACE_NAME;</code></pre><h1 id="查看空闲表空间"><a href="#查看空闲表空间" class="headerlink" title="查看空闲表空间"></a>查看空闲表空间</h1><pre><code>SELECT TABLESPACE_NAME,SUM(BYTES)/1024/1024 AS &quot;FREE / MB&quot; 
-FROM DBA_FREE_SPACE GROUP BY TABLESPACE_NAME;</code></pre><h1 id="查看某一表空间内使用最多的表"><a href="#查看某一表空间内使用最多的表" class="headerlink" title="查看某一表空间内使用最多的表"></a>查看某一表空间内使用最多的表</h1><pre><code>SELECT SEGMENT_NAME,SUM(BYTES)/1024/1024 AS USED 
-FROM DBA_SEGMENTS T WHERE TABLESPACE_NAME=&apos;OTHER_INDEX&apos; 
-GROUP BY SEGMENT_NAME ORDER BY USED DESC;</code></pre><h1 id="查看所有表与表空间关联"><a href="#查看所有表与表空间关联" class="headerlink" title="查看所有表与表空间关联"></a>查看所有表与表空间关联</h1><pre><code>SELECT * FROM USER_TABLES;</code></pre><h1 id="查看表空间使用情况"><a href="#查看表空间使用情况" class="headerlink" title="查看表空间使用情况"></a>查看表空间使用情况</h1><pre><code>SELECT tbs tablespace_name, sum(totalM), sum(usedM), sum(remainedM), 
+ORDER BY TABLESPACE_NAME;
+</code></pre><h1 id="查看空闲表空间"><a href="#查看空闲表空间" class="headerlink" title="查看空闲表空间"></a>查看空闲表空间</h1><pre><code>SELECT TABLESPACE_NAME,SUM(BYTES)/1024/1024 AS &quot;FREE / MB&quot; 
+FROM DBA_FREE_SPACE GROUP BY TABLESPACE_NAME;
+</code></pre><h1 id="查看某一表空间内使用最多的表"><a href="#查看某一表空间内使用最多的表" class="headerlink" title="查看某一表空间内使用最多的表"></a>查看某一表空间内使用最多的表</h1><pre><code>SELECT SEGMENT_NAME,SUM(BYTES)/1024/1024 AS USED 
+FROM DBA_SEGMENTS T WHERE TABLESPACE_NAME=&#39;OTHER_INDEX&#39; 
+GROUP BY SEGMENT_NAME ORDER BY USED DESC;
+</code></pre><h1 id="查看所有表与表空间关联"><a href="#查看所有表与表空间关联" class="headerlink" title="查看所有表与表空间关联"></a>查看所有表与表空间关联</h1><pre><code>SELECT * FROM USER_TABLES;
+</code></pre><h1 id="查看表空间使用情况"><a href="#查看表空间使用情况" class="headerlink" title="查看表空间使用情况"></a>查看表空间使用情况</h1><pre><code>SELECT tbs tablespace_name, sum(totalM), sum(usedM), sum(remainedM), 
     round(sum(usedM)/sum(totalM)*100,2) as &quot;use%&quot;, round(sum(remainedM)/sum(totalM)*100,2) as &quot;free%&quot; 
 FROM(SELECT b.file_id ID,  b.tablespace_name tbs,  b.file_name name,  b.bytes/1024/1024 totalM,  
     (b.bytes-sum(nvl(a.bytes,0)))/1024/1024 usedM,  sum(nvl(a.bytes,0)/1024/1024) remainedM,  
@@ -317,7 +327,12 @@ FROM(SELECT b.file_id ID,  b.tablespace_name tbs,  b.file_name name,  b.bytes/10
     FROM dba_free_space a,dba_data_files b WHERE a.file_id = b.file_id  
     GROUP BY b.tablespace_name,b.file_name,b.file_id,b.bytes 
     ORDER BY b.tablespace_name)
-GROUP BY tbs;</code></pre><h1 id="为表空间增加一个数据文件"><a href="#为表空间增加一个数据文件" class="headerlink" title="为表空间增加一个数据文件"></a>为表空间增加一个数据文件</h1><pre><code>ALTER tablespace_name ADD DATAFILE &apos;data2.ora&apos;;</code></pre><h1 id="表空间数据文件设置为自增"><a href="#表空间数据文件设置为自增" class="headerlink" title="表空间数据文件设置为自增"></a>表空间数据文件设置为自增</h1><pre><code>ALTER DATABASE DATAFILE &apos;data3.ora&apos; AUTOEXTEND ON NEXT 50M MAXSIZE 1000M;</code></pre><h1 id="新建一个表空间"><a href="#新建一个表空间" class="headerlink" title="新建一个表空间"></a>新建一个表空间</h1><pre><code>CREATE tablespace_name DATAFILE &apos;data4.ora&apos; SIZE 2G;</code></pre>
+GROUP BY tbs;
+</code></pre><h1 id="为表空间增加一个数据文件"><a href="#为表空间增加一个数据文件" class="headerlink" title="为表空间增加一个数据文件"></a>为表空间增加一个数据文件</h1><pre><code>ALTER tablespace_name ADD DATAFILE &#39;data2.ora&#39;;
+</code></pre><h1 id="表空间数据文件设置为自增"><a href="#表空间数据文件设置为自增" class="headerlink" title="表空间数据文件设置为自增"></a>表空间数据文件设置为自增</h1><pre><code>ALTER DATABASE DATAFILE &#39;data3.ora&#39; AUTOEXTEND ON NEXT 50M MAXSIZE 1000M;
+</code></pre><h1 id="新建一个表空间"><a href="#新建一个表空间" class="headerlink" title="新建一个表空间"></a>新建一个表空间</h1><pre><code>CREATE tablespace_name DATAFILE &#39;data4.ora&#39; SIZE 2G;
+</code></pre><p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
     </div>
 
     
@@ -327,14 +342,14 @@ GROUP BY tbs;</code></pre><h1 id="为表空间增加一个数据文件"><a href=
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/Oracle/" rel="tag"># Oracle</a>
-              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
+              <a href="/tags/数据库/" rel="tag"># 数据库</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/TCP-IP/PPPoe-%E4%BB%A5%E5%A4%AA%E7%BD%91%E4%B8%8A%E7%9A%84%E7%82%B9%E5%AF%B9%E7%82%B9%E4%BC%A0%E8%BE%93%E5%8D%8F%E8%AE%AE.html" rel="next" title="PPPoe-以太网上的点对点传输协议">
+                <a href="/TCP-IP/PPPoe-以太网上的点对点传输协议.html" rel="next" title="PPPoe-以太网上的点对点传输协议">
                   <i class="fa fa-chevron-left"></i> PPPoe-以太网上的点对点传输协议
                 </a>
             </div>
@@ -342,7 +357,7 @@ GROUP BY tbs;</code></pre><h1 id="为表空间增加一个数据文件"><a href=
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%9E%B6%E6%9E%84.html" rel="prev" title="Oracle数据库基本架构">
+                <a href="/数据库/Oracle数据库基本架构.html" rel="prev" title="Oracle数据库基本架构">
                   Oracle数据库基本架构 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -404,20 +419,20 @@ GROUP BY tbs;</code></pre><h1 id="为表空间增加一个数据文件"><a href=
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -429,10 +444,10 @@ GROUP BY tbs;</code></pre><h1 id="为表空间增加一个数据文件"><a href=
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -461,10 +476,10 @@ GROUP BY tbs;</code></pre><h1 id="为表空间增加一个数据文件"><a href=
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -539,7 +554,7 @@ GROUP BY tbs;</code></pre><h1 id="为表空间增加一个数据文件"><a href=
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/%E6%95%B0%E6%8D%AE%E5%BA%93/Oracle%E6%95%B0%E6%8D%AE%E5%AD%97%E5%85%B8%E6%A3%80%E6%9F%A5.html",
+            url: "https://gowa.club/数据库/Oracle数据字典检查.html",
             identifier: "数据库/Oracle数据字典检查.html",
             title: "Oracle数据字典检查"
           }

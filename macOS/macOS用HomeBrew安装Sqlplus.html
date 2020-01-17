@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="brew,Oracle,Sqlplus">
 <meta property="og:type" content="article">
 <meta property="og:title" content="macOS用HomeBrew安装Sqlplus">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;macOS&#x2F;macOS%E7%94%A8HomeBrew%E5%AE%89%E8%A3%85Sqlplus.html">
+<meta property="og:url" content="https://gowa.club/macOS/macOS用HomeBrew安装Sqlplus.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="远程设备上用起来始终不太爽，调试起来麻烦，所以本地安装一个吧。原文">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-10-26T05:17:43.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="macOS用HomeBrew安装Sqlplus">
+<meta name="twitter:description" content="远程设备上用起来始终不太爽，调试起来麻烦，所以本地安装一个吧。原文">
 
-<link rel="canonical" href="https://gowa.club/macOS/macOS%E7%94%A8HomeBrew%E5%AE%89%E8%A3%85Sqlplus.html">
+<link rel="canonical" href="https://gowa.club/macOS/macOS用HomeBrew安装Sqlplus.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/macOS/macOS%E7%94%A8HomeBrew%E5%AE%89%E8%A3%85Sqlplus.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/macOS/macOS用HomeBrew安装Sqlplus.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/macOS/macOS%E7%94%A8HomeBrew%E5%AE%89%E8%A3%85Sqlplus.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/macOS/macOS用HomeBrew安装Sqlplus.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="macOS/macOS用HomeBrew安装Sqlplus.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -290,9 +292,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>远程设备上用起来始终不太爽，调试起来麻烦，所以本地安装一个吧。<a href="https://vanwollingen.nl/install-oracle-instant-client-and-sqlplus-using-homebrew-a233ce224bf" target="_blank" rel="noopener">原文</a></p>
-<a id="more"></a>
-
+        <p>远程设备上用起来始终不太爽，调试起来麻烦，所以本地安装一个吧。<a href="https://vanwollingen.nl/install-oracle-instant-client-and-sqlplus-using-homebrew-a233ce224bf" target="_blank" rel="noopener">原文</a><br><a id="more"></a></p>
 <h1 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h1><p><a href="http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html" target="_blank" rel="noopener">http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html. </a>从这网站下载两个文件这是必须的。因为甲骨文的授权问题。</p>
 <ol>
 <li>instantclient-basic-macos.x64–11.2.0.4.0.zip</li>
@@ -300,19 +300,16 @@
 </ol>
 <p>把这两个文件放到 <em>~/Library/Caches/Homebrew</em> 下</p>
 <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brew tap InstantClientTap/instantclient</span><br><span class="line">brew install instantclient-basic</span><br><span class="line">brew install instantclient-sqlplus</span><br></pre></td></tr></table></figure>
-
 <p>执行过程出了错照着改就是了：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Error: The package file can not be downloaded automatically. Please sign in</span><br><span class="line">and accept the licence agreement on the Instant Client downloads page:</span><br><span class="line"></span><br><span class="line">  http://www.oracle.com/technetwork/topics/intel-macsoft-096467.html</span><br><span class="line"></span><br><span class="line">Then manually download this file:</span><br><span class="line"></span><br><span class="line">  http://download.oracle.com/otn/mac/instantclient/122010/instantclient-basic-macos.x64-12.2.0.1.0-2.zip</span><br><span class="line"></span><br><span class="line">To this location (a specific filename in homebrew cache directory):</span><br><span class="line"></span><br><span class="line">  /Users/wodediannao/Library/Caches/Homebrew/downloads/665aa2952dd4fcdbbe25f6a02ee3cc8cf5b39ab36c8001447b303fe567cc8354--instantclient-basic-macos.x64-12.2.0.1.0-2.zip</span><br><span class="line"></span><br><span class="line">An example command to rename and move the file into the homebrew cache:</span><br><span class="line"></span><br><span class="line"><span class="meta">  $</span><span class="bash"> <span class="built_in">cd</span> /path/to/downloads &amp;&amp; mv instantclient-basic-macos.x64-12.2.0.1.0-2.zip /Users/wodediannao/Library/Caches/Homebrew/downloads/665aa2952dd4fcdbbe25f6a02ee3cc8cf5b39ab36c8001447b303fe567cc8354--instantclient-basic-macos.x64-12.2.0.1.0-2.zip</span></span><br><span class="line"></span><br><span class="line">Instead of renaming and moving you can create a symlink:</span><br><span class="line"></span><br><span class="line"><span class="meta">  $</span><span class="bash"> <span class="built_in">cd</span> /path/to/downloads &amp;&amp; ln -sf $(PWD)/instantclient-basic-macos.x64-12.2.0.1.0-2.zip /Users/wodediannao/Library/Caches/Homebrew/downloads/665aa2952dd4fcdbbe25f6a02ee3cc8cf5b39ab36c8001447b303fe567cc8354--instantclient-basic-macos.x64-12.2.0.1.0-2.zip</span></span><br></pre></td></tr></table></figure>
-
 <p> 基本的原因就是必须要改成那种代码形式的文件名，放在download里面去。</p>
 <h1 id="brew-tap"><a href="#brew-tap" class="headerlink" title="brew tap"></a>brew tap</h1><p>这个命令经常在自定义下载的内容的时候用到。</p>
 <p>选项参数：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew tap [--full] [--force-auto-update] user/repo [URL]</span><br></pre></td></tr></table></figure>
-
 <p>实际上就是指定一个我们要下载的项的源的意思。</p>
 <p>如果我们没有指定 <em>URL</em> 参数，那么会使用 HTTPS 从 github 来获取。因为 github 上托管了很多的 tap，这其实是命令 <code>brew   tap  user/repo https://github.com/user/homebrew-repo</code> 的一个简写。</p>
 <p>如果指定了 <em>URL</em> 的话，那么我们就可以从任何地方来获取资源了，使用只要 git 能处理的传输协议。我们可以诸如 <em>SSH, GIT, HTTP, FTP(S), RSYNC</em> 这些协议来获取资源。</p>
-<p>默认情况下，资源会作为  shadow copy( depth = 1) 来克隆，但如果我们指定 <em>-full</em> 参数的话，就会进行完整克隆。想要将一个 shadow copy 转换为 full copy ，指定 <em>-full</em> 参数 重新获取资源。</p>
+<p>默认情况下，资源会作为  shadow copy( depth = 1) 来克隆，但如果我们指定 <em>-full</em> 参数的话，就会进行完整克隆。想要将一个 shadow copy 转换为 full copy ，指定 <em>-full</em> 参数 重新获取资源。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -331,7 +328,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Java/Activiti%E6%95%B0%E6%8D%AE%E5%BA%93%E8%A1%A8%E7%BB%93%E6%9E%84.html" rel="next" title="Activiti数据库表结构">
+                <a href="/Java/Activiti数据库表结构.html" rel="next" title="Activiti数据库表结构">
                   <i class="fa fa-chevron-left"></i> Activiti数据库表结构
                 </a>
             </div>
@@ -339,7 +336,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/%E5%8E%BB%E6%8E%89%E6%96%87%E4%BB%B6%E7%BC%96%E7%A0%81%E4%B8%AD%E7%9A%84BOM%E6%A0%87%E8%AE%B0.html" rel="prev" title="去掉文件编码中的BOM标记">
+                <a href="/Linux-Unix/去掉文件编码中的BOM标记.html" rel="prev" title="去掉文件编码中的BOM标记">
                   去掉文件编码中的BOM标记 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -401,20 +398,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -426,10 +423,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -458,10 +455,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -536,7 +533,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/macOS/macOS%E7%94%A8HomeBrew%E5%AE%89%E8%A3%85Sqlplus.html",
+            url: "https://gowa.club/macOS/macOS用HomeBrew安装Sqlplus.html",
             identifier: "macOS/macOS用HomeBrew安装Sqlplus.html",
             title: "macOS用HomeBrew安装Sqlplus"
           }

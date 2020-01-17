@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Java,Android,RxJava">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RxJava之retryWhen操作符">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;RxJava&#x2F;RxJava%E4%B9%8BretryWhen%E6%93%8D%E4%BD%9C%E7%AC%A6.html">
+<meta property="og:url" content="https://gowa.club/RxJava/RxJava之retryWhen操作符.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="如何用来进行重复的尝试请求，需要进行探究了一下。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-09-23T06:55:20.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RxJava之retryWhen操作符">
+<meta name="twitter:description" content="如何用来进行重复的尝试请求，需要进行探究了一下。">
 
-<link rel="canonical" href="https://gowa.club/RxJava/RxJava%E4%B9%8BretryWhen%E6%93%8D%E4%BD%9C%E7%AC%A6.html">
+<link rel="canonical" href="https://gowa.club/RxJava/RxJava之retryWhen操作符.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/RxJava/RxJava%E4%B9%8BretryWhen%E6%93%8D%E4%BD%9C%E7%AC%A6.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/RxJava/RxJava之retryWhen操作符.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/RxJava/RxJava%E4%B9%8BretryWhen%E6%93%8D%E4%BD%9C%E7%AC%A6.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/RxJava/RxJava之retryWhen操作符.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="RxJava/RxJava之retryWhen操作符.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,38 +294,26 @@
       
         <p>如何用来进行重复的尝试请求，需要进行探究了一下。</p>
 <a id="more"></a>
-
 <p>首先，对于每个 Observable 其都会与一个源 (source)，一个 observer （下游） 想关联。我们的 retryWhen 操作符建立的  <strong>ObservableRetryWhen</strong> 也不例外：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ObservableRetryWhen</span><span class="params">(ObservableSource&lt;T&gt; source, Function&lt;? <span class="keyword">super</span> Observable&lt;Throwable&gt;, ? extends ObservableSource&lt;?&gt;&gt; handler)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>(source);</span><br><span class="line">    <span class="keyword">this</span>.handler = handler;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>当我们对 <strong>ObservableRetryWhen</strong> 进行 subscribe 的时候，逻辑就开始进行了：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">subscribeActual</span><span class="params">(Observer&lt;? <span class="keyword">super</span> T&gt; observer)</span> </span>&#123;</span><br><span class="line">    Subject&lt;Throwable&gt; signaller = PublishSubject.&lt;Throwable&gt;create().toSerialized();</span><br><span class="line"></span><br><span class="line">    ObservableSource&lt;?&gt; other;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        other = ObjectHelper.requireNonNull(handler.apply(signaller), <span class="string">"The handler returned a null ObservableSource"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable ex) &#123;</span><br><span class="line">        Exceptions.throwIfFatal(ex);</span><br><span class="line">        EmptyDisposable.error(ex, observer);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    RepeatWhenObserver&lt;T&gt; parent = <span class="keyword">new</span> RepeatWhenObserver&lt;T&gt;(observer, signaller, source);</span><br><span class="line">    observer.onSubscribe(parent);</span><br><span class="line"></span><br><span class="line">    other.subscribe(parent.inner);</span><br><span class="line"></span><br><span class="line">    parent.subscribeNext();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>可以看到，在内部其建立了一个即是 Observable 也是 Observer 的 signaller，还用 handler 来建立一个 other 的 Observable。</p>
 <p><strong>RepeatWhenObserver</strong> 是用来将 source, observer及 other 关联起来的关键。</p>
 <h1 id="signaller"><a href="#signaller" class="headerlink" title="signaller"></a>signaller</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">Subject&lt;Throwable&gt; signaller = PublishSubject.&lt;Throwable&gt;create().toSerialized();</span><br></pre></td></tr></table></figure>
-
 <p>当我们的 RepeatWhenObserver 对 source 的订阅，收到一个 onError 事件的时候，会将此事件丢给  handler 进行逻辑判断，然后进行返回。</p>
 <h1 id="handler-call"><a href="#handler-call" class="headerlink" title="handler.call()"></a>handler.call()</h1><p>控制器的应用会返回一个 <strong>ObservableSource&lt;?&gt; other;</strong>，其观察者是 RepeatWhenObserver.InnerRepeatObserver。</p>
 <p>这个 handler 的本质，是对 signaller 进行变换，判断，是丢出一个 onNext事件，还是丢出一个 onError 事件。</p>
 <h1 id="RepeatWhenObserver-subscribeNext"><a href="#RepeatWhenObserver-subscribeNext" class="headerlink" title="RepeatWhenObserver.subscribeNext();"></a>RepeatWhenObserver.subscribeNext();</h1><p>我们的关键再于 RepeatWhenObserver，其首先会对source 进行订阅：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">subscribeNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (wip.getAndIncrement() == <span class="number">0</span>) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (isDisposed()) &#123;</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!active) &#123;</span><br><span class="line">                active = <span class="keyword">true</span>;</span><br><span class="line">                source.subscribe(<span class="keyword">this</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">while</span> (wip.decrementAndGet() != <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <p>当其收到一个 onError 事件时，就会让 signaller 发射 onNext 事件，进行条件判断。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onError</span><span class="params">(Throwable e)</span> </span>&#123;</span><br><span class="line">    DisposableHelper.replace(upstream, <span class="keyword">null</span>);</span><br><span class="line">    active = <span class="keyword">false</span>;</span><br><span class="line">    signaller.onNext(e);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>最终，其发射的事件由 hanlder 进行变换后，交给 RepeatWhenObserver.InnerRepeatObserver。如果变换后满足条件，那么 RepeatWhenObserver.InnerRepeatObserver 会最到 onNext 事件：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onNext</span><span class="params">(Object t)</span> </span>&#123;</span><br><span class="line">    innerNext();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>最终会让 RepeatWhenObserver 再次订阅：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">innerNext</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    subscribeNext();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>对于 RepeatWhenObserver. 其订阅 source 后，就不再进行任何的操作了。如果一切正常，没有问题，那么就把 onNext 收到的数据丢给 obsever 就行了。</p>
-<p>如果其收到 onError 事件，就会调用 signaller ，由 handler 进行判断是否要重新进行订阅，判断结果发送到 RepeatWhenObserver 内部的 InnerRepeatObserver，其在收到 onNext 事件使会重新订阅 source，否则的话就把原来的 error 直接丢给下游了</p>
+<p>如果其收到 onError 事件，就会调用 signaller ，由 handler 进行判断是否要重新进行订阅，判断结果发送到 RepeatWhenObserver 内部的 InnerRepeatObserver，其在收到 onNext 事件使会重新订阅 source，否则的话就把原来的 error 直接丢给下游了<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -342,7 +332,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Asm/X86%E6%B1%87%E7%BC%96%E6%93%8D%E4%BD%9C%E6%95%B0%E5%AF%BB%E5%9D%80.html" rel="next" title="X86汇编操作数寻址">
+                <a href="/Asm/X86汇编操作数寻址.html" rel="next" title="X86汇编操作数寻址">
                   <i class="fa fa-chevron-left"></i> X86汇编操作数寻址
                 </a>
             </div>
@@ -350,8 +340,8 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Cpp/C++%E4%B8%AD%E7%9A%84const%E4%B8%80%E4%BA%9B%E8%AF%AF%E8%A7%A3.html" rel="prev" title="C++中的const一些误解">
-                  C++中的const一些误解 <i class="fa fa-chevron-right"></i>
+                <a href="/Windows/Windows读写配置文件.html" rel="prev" title="Windows读写配置文件">
+                  Windows读写配置文件 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -412,20 +402,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -437,10 +427,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -469,10 +459,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -547,7 +537,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/RxJava/RxJava%E4%B9%8BretryWhen%E6%93%8D%E4%BD%9C%E7%AC%A6.html",
+            url: "https://gowa.club/RxJava/RxJava之retryWhen操作符.html",
             identifier: "RxJava/RxJava之retryWhen操作符.html",
             title: "RxJava之retryWhen操作符"
           }

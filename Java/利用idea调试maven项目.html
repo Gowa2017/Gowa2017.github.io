@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Java,Maven">
 <meta property="og:type" content="article">
 <meta property="og:title" content="利用idea调试maven项目">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Java&#x2F;%E5%88%A9%E7%94%A8idea%E8%B0%83%E8%AF%95maven%E9%A1%B9%E7%9B%AE.html">
+<meta property="og:url" content="https://gowa.club/Java/利用idea调试maven项目.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="事情是这样的，之前曾经idea上调试过项目，但是出现一个很头疼的问题是，后面再调用哪个API都会直接跳转到到了登录界面。而如果将环境部署以后，则正常，谷歌良久，终于找到了解决办法，但是，之前的疑问依然没有解决。为什么开始的时候同样的操作是可以的，而后就不行了呢。 环境 OS: CentOS 7.5 x86_64 IDE: ideaU 开发语言: Java 框架：jeeplus 编译：maven-&amp;">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-07-17T08:37:41.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="利用idea调试maven项目">
+<meta name="twitter:description" content="事情是这样的，之前曾经idea上调试过项目，但是出现一个很头疼的问题是，后面再调用哪个API都会直接跳转到到了登录界面。而如果将环境部署以后，则正常，谷歌良久，终于找到了解决办法，但是，之前的疑问依然没有解决。为什么开始的时候同样的操作是可以的，而后就不行了呢。 环境 OS: CentOS 7.5 x86_64 IDE: ideaU 开发语言: Java 框架：jeeplus 编译：maven-&amp;">
 
-<link rel="canonical" href="https://gowa.club/Java/%E5%88%A9%E7%94%A8idea%E8%B0%83%E8%AF%95maven%E9%A1%B9%E7%9B%AE.html">
+<link rel="canonical" href="https://gowa.club/Java/利用idea调试maven项目.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/%E5%88%A9%E7%94%A8idea%E8%B0%83%E8%AF%95maven%E9%A1%B9%E7%9B%AE.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/利用idea调试maven项目.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Java/%E5%88%A9%E7%94%A8idea%E8%B0%83%E8%AF%95maven%E9%A1%B9%E7%9B%AE.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Java/利用idea调试maven项目.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/利用idea调试maven项目.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -311,6 +313,7 @@
 <li>在 Deployment 标签下，点 + 号添加我们的 smart.war exploded 。</li>
 <li>运行即可</li>
 </ol>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -328,7 +331,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/CentOS%E4%B8%AD%E7%9A%84ip%E5%91%BD%E4%BB%A4.html" rel="next" title="CentOS中的ip命令">
+                <a href="/Linux-Unix/CentOS中的ip命令.html" rel="next" title="CentOS中的ip命令">
                   <i class="fa fa-chevron-left"></i> CentOS中的ip命令
                 </a>
             </div>
@@ -336,7 +339,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Linux-Unix/vnc%E5%9C%A8CentOS%E7%9A%84%E5%BC%80%E5%90%AF%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86.html" rel="prev" title="vnc在CentOS的开启相关知识">
+                <a href="/Linux-Unix/vnc在CentOS的开启相关知识.html" rel="prev" title="vnc在CentOS的开启相关知识">
                   vnc在CentOS的开启相关知识 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -398,20 +401,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -423,10 +426,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -455,10 +458,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -533,7 +536,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Java/%E5%88%A9%E7%94%A8idea%E8%B0%83%E8%AF%95maven%E9%A1%B9%E7%9B%AE.html",
+            url: "https://gowa.club/Java/利用idea调试maven项目.html",
             identifier: "Java/利用idea调试maven项目.html",
             title: "利用idea调试maven项目"
           }

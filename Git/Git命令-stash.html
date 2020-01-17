@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git命令-stash">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Git&#x2F;Git%E5%91%BD%E4%BB%A4-stash.html">
+<meta property="og:url" content="https://gowa.club/Git/Git命令-stash.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="事情是这样的，用git在版本管理，经常是切换到其他分支去开发新功能。但是，经常有些BUG需要修补，而新功能某些文件没有进行跟踪就 stash了。等到我过几天回去再修改了些文件。又stash了。反正，问题就是，我用stash把我修改过的东西，覆盖回来了。产生冲突，很恶心。所以不能不仔细看一下这个到底是个什么原因，有什么办法来解决没有？">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-05-15T03:18:14.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git命令-stash">
+<meta name="twitter:description" content="事情是这样的，用git在版本管理，经常是切换到其他分支去开发新功能。但是，经常有些BUG需要修补，而新功能某些文件没有进行跟踪就 stash了。等到我过几天回去再修改了些文件。又stash了。反正，问题就是，我用stash把我修改过的东西，覆盖回来了。产生冲突，很恶心。所以不能不仔细看一下这个到底是个什么原因，有什么办法来解决没有？">
 
-<link rel="canonical" href="https://gowa.club/Git/Git%E5%91%BD%E4%BB%A4-stash.html">
+<link rel="canonical" href="https://gowa.club/Git/Git命令-stash.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/Git%E5%91%BD%E4%BB%A4-stash.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/Git命令-stash.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Git/Git%E5%91%BD%E4%BB%A4-stash.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Git/Git命令-stash.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Git/Git命令-stash.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,72 +294,51 @@
       
         <p>事情是这样的，用git在版本管理，经常是切换到其他分支去开发新功能。但是，经常有些BUG需要修补，而新功能某些文件没有进行跟踪就 stash了。等到我过几天回去再修改了些文件。又stash了。反正，问题就是，我用stash把我修改过的东西，覆盖回来了。产生冲突，很恶心。所以不能不仔细看一下这个到底是个什么原因，有什么办法来解决没有？</p>
 <a id="more"></a>
-
 <h1 id="储藏与清理"><a href="#储藏与清理" class="headerlink" title="储藏与清理"></a>储藏与清理</h1><p>有时，当你在项目的一部分上已经工作一段时间后，所有东西都进入了混乱的状态，而这时你想要切换到另一个分支做一点别的事情。 问题是，你不想仅仅因为过会儿回到这一点而为做了一半的工作创建一次提交。 针对这个问题的答案是 git stash 命令。</p>
 <p>储藏会处理工作目录的脏的状态 - 即，修改的跟踪文件与暂存改动 - 然后将未完成的修改保存到一个栈上，而你可以在任何时候重新应用这些改动。</p>
 <h2 id="储藏工作"><a href="#储藏工作" class="headerlink" title="储藏工作"></a>储藏工作</h2><p>为了演示，进入项目并改动几个文件，然后可能暂存其中的一个改动。 如果运行 git status，可以看到有改动的状态：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git status</span><br><span class="line">Changes to be committed:</span><br><span class="line">  (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)</span><br><span class="line"></span><br><span class="line">	modified:   index.html</span><br><span class="line"></span><br><span class="line">Changes not staged for commit:</span><br><span class="line">  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">  (use &quot;git checkout -- &lt;file&gt;...&quot; to discard changes in working directory)</span><br><span class="line"></span><br><span class="line">	modified:   lib/simplegit.rb</span><br></pre></td></tr></table></figure>
-
 <p>现在想要切换分支，但是还不想要提交之前的工作；所以储藏修改。 将新的储藏推送到栈上，运行 <code>git stash</code>或 <code>git stash save</code>：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git stash</span><br><span class="line">Saved working directory and index state \</span><br><span class="line">  &quot;WIP on master: 049d078 added the index file&quot;</span><br><span class="line">HEAD is now at 049d078 added the index file</span><br><span class="line">(To restore them type &quot;git stash apply&quot;)</span><br></pre></td></tr></table></figure>
-
 <p>工作目录是干净的了：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git status</span><br><span class="line"># On branch master</span><br><span class="line">nothing to commit, working directory clean</span><br></pre></td></tr></table></figure>
-
 <p>在这时，你能够轻易地切换分支并在其他地方工作；你的修改被存储在栈上。 要查看储藏的东西，可以使用 <code>git stash list</code>：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git stash list</span><br><span class="line">stash@&#123;0&#125;: WIP on master: 049d078 added the index file</span><br><span class="line">stash@&#123;1&#125;: WIP on master: c264051 Revert &quot;added file_size&quot;</span><br><span class="line">stash@&#123;2&#125;: WIP on master: 21d80a5 added number to log</span><br></pre></td></tr></table></figure>
-
 <p>在本例中，有两个之前做的储藏，所以你接触到了三个不同的储藏工作。 可以通过原来 stash 命令的帮助提示中的命令将你刚刚储藏的工作重新应用：git stash apply。 如果想要应用其中一个更旧的储藏，可以通过名字指定它，像这样：git stash apply stash@{2}。 如果不指定一个储藏，Git 认为指定的是最近的储藏：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git stash apply</span><br><span class="line"># On branch master</span><br><span class="line"># Changed but not updated:</span><br><span class="line">#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">#</span><br><span class="line">#      modified:   index.html</span><br><span class="line">#      modified:   lib/simplegit.rb</span><br><span class="line">#</span><br></pre></td></tr></table></figure>
-
 <p>可以看到 Git 重新修改了当你保存储藏时撤消的文件。 在本例中，当尝试应用储藏时有一个干净的工作目录，并且尝试将它应用在保存它时所在的分支；但是有一个干净的工作目录与应用在同一分支并不是成功应用储藏的充分必要条件。 可以在一个分支上保存一个储藏，切换到另一个分支，然后尝试重新应用这些修改。 当应用储藏时工作目录中也可以有修改与未提交的文件 - 如果有任何东西不能干净地应用，Git 会产生合并冲突。</p>
-<p>文件的改动被重新应用了，但是之前暂存的文件却没有重新暂存。 想要那样的话，必须使用 –index 选项来运行 git stash apply 命令，来尝试重新应用暂存的修改。 如果已经那样做了，那么你将回到原来的位置：</p>
+<p>文件的改动被重新应用了，但是之前暂存的文件却没有重新暂存。 想要那样的话，必须使用 —index 选项来运行 git stash apply 命令，来尝试重新应用暂存的修改。 如果已经那样做了，那么你将回到原来的位置：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git stash apply --index</span><br><span class="line"># On branch master</span><br><span class="line"># Changes to be committed:</span><br><span class="line">#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)</span><br><span class="line">#</span><br><span class="line">#      modified:   index.html</span><br><span class="line">#</span><br><span class="line"># Changed but not updated:</span><br><span class="line">#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">#</span><br><span class="line">#      modified:   lib/simplegit.rb</span><br><span class="line">#</span><br></pre></td></tr></table></figure>
-
-
 <p>应用选项只会尝试应用暂存的工作 - 在堆栈上还有它。 可以运行 <code>git stash drop</code>加上将要移除的储藏的名字来移除它：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git stash list</span><br><span class="line">stash@&#123;0&#125;: WIP on master: 049d078 added the index file</span><br><span class="line">stash@&#123;1&#125;: WIP on master: c264051 Revert &quot;added file_size&quot;</span><br><span class="line">stash@&#123;2&#125;: WIP on master: 21d80a5 added number to log</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git stash drop stash@&#123;0&#125;</span><br><span class="line">Dropped stash@&#123;0&#125; (364e91f3f268f0900bc3ee613f9f733e82aaed43)</span><br></pre></td></tr></table></figure>
-
-
 <p>也可以运行 <code>git stash pop</code>来应用储藏然后立即从栈上扔掉它。</p>
-<h2 id="创造性的储藏"><a href="#创造性的储藏" class="headerlink" title="创造性的储藏"></a>创造性的储藏</h2><p>有几个储藏的变种可能也很有用。 第一个非常流行的选项是 stash save 命令的 –keep-index 选项。 它告诉 Git 不要储藏任何你通过 git add 命令已暂存的东西。</p>
+<h2 id="创造性的储藏"><a href="#创造性的储藏" class="headerlink" title="创造性的储藏"></a>创造性的储藏</h2><p>有几个储藏的变种可能也很有用。 第一个非常流行的选项是 stash save 命令的 —keep-index 选项。 它告诉 Git 不要储藏任何你通过 git add 命令已暂存的东西。</p>
 <p>当你做了几个改动并只想提交其中的一部分，过一会儿再回来处理剩余改动时，这个功能会很有用。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git status -s</span><br><span class="line">M  index.html</span><br><span class="line"> M lib/simplegit.rb</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git stash --keep-index</span><br><span class="line">Saved working directory and index state WIP on master: 1b65b17 added the index file</span><br><span class="line">HEAD is now at 1b65b17 added the index file</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git status -s</span><br><span class="line">M  index.html</span><br></pre></td></tr></table></figure>
-
-
-<p>另一个经常使用储藏来做的事情是像储藏跟踪文件一样储藏未跟踪文件。 默认情况下，g<code>it stash</code>只会储藏已经在索引中的文件。 如果指定 –include-untracked 或 -u 标记，Git 也会储藏任何创建的未跟踪文件。</p>
+<p>另一个经常使用储藏来做的事情是像储藏跟踪文件一样储藏未跟踪文件。 默认情况下，g<code>it stash</code>只会储藏已经在索引中的文件。 如果指定 —include-untracked 或 -u 标记，Git 也会储藏任何创建的未跟踪文件。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git status -s</span><br><span class="line">M  index.html</span><br><span class="line"> M lib/simplegit.rb</span><br><span class="line">?? new-file.txt</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git stash -u</span><br><span class="line">Saved working directory and index state WIP on master: 1b65b17 added the index file</span><br><span class="line">HEAD is now at 1b65b17 added the index file</span><br></pre></td></tr></table></figure>
-
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git status -s</span><br><span class="line">$</span><br></pre></td></tr></table></figure>
-
-<p>最终，如果指定了 –patch 标记，Git 不会储藏所有修改过的任何东西，但是会交互式地提示哪些改动想要储藏、哪些改动需要保存在工作目录中。</p>
+<p>最终，如果指定了 —patch 标记，Git 不会储藏所有修改过的任何东西，但是会交互式地提示哪些改动想要储藏、哪些改动需要保存在工作目录中。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git stash --patch</span><br><span class="line">diff --git a/lib/simplegit.rb b/lib/simplegit.rb</span><br><span class="line">index 66d332e..8bb5674 100644</span><br><span class="line">--- a/lib/simplegit.rb</span><br><span class="line">+++ b/lib/simplegit.rb</span><br><span class="line">@@ -16,6 +16,10 @@ class SimpleGit</span><br><span class="line">         return `#&#123;git_cmd&#125; 2&gt;&amp;1`.chomp</span><br><span class="line">       end</span><br><span class="line">     end</span><br><span class="line">+</span><br><span class="line">+    def show(treeish = &apos;master&apos;)</span><br><span class="line">+      command(&quot;git show #&#123;treeish&#125;&quot;)</span><br><span class="line">+    end</span><br><span class="line"></span><br><span class="line"> end</span><br><span class="line"> test</span><br><span class="line">Stash this hunk [y,n,q,a,d,/,e,?]? y</span><br><span class="line"></span><br><span class="line">Saved working directory and index state WIP on master: 1b65b17 added the index file</span><br></pre></td></tr></table></figure>
-
 <h2 id="从储藏创建一个分支"><a href="#从储藏创建一个分支" class="headerlink" title="从储藏创建一个分支"></a>从储藏创建一个分支</h2><p>如果储藏了一些工作，将它留在那儿了一会儿，然后继续在储藏的分支上工作，在重新应用工作时可能会有问题。 如果应用尝试修改刚刚修改的文件，你会得到一个合并冲突并不得不解决它。 如果想要一个轻松的方式来再次测试储藏的改动，可以运行 git stash branch 创建一个新分支，检出储藏工作时所在的提交，重新在那应用工作，然后在应用成功后扔掉储藏：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git stash branch testchanges</span><br><span class="line">Switched to a new branch &quot;testchanges&quot;</span><br><span class="line"># On branch testchanges</span><br><span class="line"># Changes to be committed:</span><br><span class="line">#   (use &quot;git reset HEAD &lt;file&gt;...&quot; to unstage)</span><br><span class="line">#</span><br><span class="line">#      modified:   index.html</span><br><span class="line">#</span><br><span class="line"># Changed but not updated:</span><br><span class="line">#   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)</span><br><span class="line">#</span><br><span class="line">#      modified:   lib/simplegit.rb</span><br><span class="line">#</span><br><span class="line">Dropped refs/stash@&#123;0&#125; (f0dfc4d5dc332d1cee34a634182e168c4efc3359)</span><br></pre></td></tr></table></figure>
-
 <p>这是在新分支轻松恢复储藏工作并继续工作的一个很不错的途径。</p>
 <h2 id="清理工作目录"><a href="#清理工作目录" class="headerlink" title="清理工作目录"></a>清理工作目录</h2><p>对于工作目录中一些工作或文件，你想做的也许不是储藏而是移除。 git clean 命令会帮你做这些事。</p>
 <p>有一些通用的原因比如说为了移除由合并或外部工具生成的东西，或是为了运行一个干净的构建而移除之前构建的残留。</p>
-<p>你需要谨慎地使用这个命令，因为它被设计为从工作目录中移除未被追踪的文件。 如果你改变主意了，你也不一定能找回来那些文件的内容。 一个更安全的选项是运行 git stash –all 来移除每一样东西并存放在栈中。</p>
+<p>你需要谨慎地使用这个命令，因为它被设计为从工作目录中移除未被追踪的文件。 如果你改变主意了，你也不一定能找回来那些文件的内容。 一个更安全的选项是运行 git stash —all 来移除每一样东西并存放在栈中。</p>
 <p>你可以使用<code>git clean</code>命令去除冗余文件或者清理工作目录。 使用<code>git clean -f -d</code>命令来移除工作目录中所有未追踪的文件以及空的子目录。 -f 意味着 强制 或 “确定移除”。</p>
 <p>如果只是想要看看它会做什么，可以使用 -n 选项来运行命令，这意味着 “做一次演习然后告诉你 将要 移除什么”。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git clean -d -n</span><br><span class="line">Would remove test.o</span><br><span class="line">Would remove tmp/</span><br></pre></td></tr></table></figure>
-
 <p>默认情况下，git clean 命令只会移除没有忽略的未跟踪文件。 任何与 .gitiignore 或其他忽略文件中的模式匹配的文件都不会被移除。 如果你也想要移除那些文件，例如为了做一次完全干净的构建而移除所有由构建生成的 .o 文件，可以给 clean 命令增加一个 -x 选项。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git status -s</span><br><span class="line"> M lib/simplegit.rb</span><br><span class="line">?? build.TMP</span><br><span class="line">?? tmp/</span><br><span class="line"></span><br><span class="line">$ git clean -n -d</span><br><span class="line">Would remove build.TMP</span><br><span class="line">Would remove tmp/</span><br><span class="line"></span><br><span class="line">$ git clean -n -d -x</span><br><span class="line">Would remove build.TMP</span><br><span class="line">Would remove test.o</span><br><span class="line">Would remove tmp/</span><br></pre></td></tr></table></figure>
-
 <p>如果不知道 git clean 命令将会做什么，在将 -n 改为 -f 来真正做之前总是先用 -n 来运行它做双重检查。 另一个小心处理过程的方式是使用 -i 或 “interactive” 标记来运行它。</p>
 <p>这将会以交互模式运行 clean 命令。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git clean -x -i</span><br><span class="line">Would remove the following items:</span><br><span class="line">  build.TMP  test.o</span><br><span class="line">*** Commands ***</span><br><span class="line">    1: clean                2: filter by pattern    3: select by numbers    4: ask each             5: quit</span><br><span class="line">    6: help</span><br><span class="line">What now&gt;</span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -374,7 +355,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B%E6%A6%82%E5%BF%B5%E8%A7%88.html" rel="next" title="进程和线程概念览">
+                <a href="/Android/进程和线程概念览.html" rel="next" title="进程和线程概念览">
                   <i class="fa fa-chevron-left"></i> 进程和线程概念览
                 </a>
             </div>
@@ -382,7 +363,7 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/word2007%E6%96%87%E6%A1%A3%E6%A0%BC%E5%BC%8F.html" rel="prev" title="word2007文档格式">
+                <a href="/Java/word2007文档格式.html" rel="prev" title="word2007文档格式">
                   word2007文档格式 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -444,20 +425,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -469,10 +450,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -501,10 +482,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -579,7 +560,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Git/Git%E5%91%BD%E4%BB%A4-stash.html",
+            url: "https://gowa.club/Git/Git命令-stash.html",
             identifier: "Git/Git命令-stash.html",
             title: "Git命令-stash"
           }

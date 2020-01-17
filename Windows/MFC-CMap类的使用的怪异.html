@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.0.0">
+<meta name="generator" content="Hexo 3.9.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -41,7 +41,7 @@
       labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     },
     localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
-    path: '',
+    path: 'search.xml',
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
     sidebarPadding: 40
   };
@@ -51,14 +51,16 @@
 <meta name="keywords" content="Windows,MFC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MFC-CMap类的使用的怪异">
-<meta property="og:url" content="https:&#x2F;&#x2F;gowa.club&#x2F;Windows&#x2F;MFC-CMap%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8%E7%9A%84%E6%80%AA%E5%BC%82.html">
+<meta property="og:url" content="https://gowa.club/Windows/MFC-CMap类的使用的怪异.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="之前用Java 感觉 Map 就很好用，但是到用 MFC 的 CMap 类的时候就感觉很茫然，感觉非常的不好用，具体表现在对于键值的类型指定居然需要四个参数，这是为什么呢？">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-09-28T02:39:13.000Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MFC-CMap类的使用的怪异">
+<meta name="twitter:description" content="之前用Java 感觉 Map 就很好用，但是到用 MFC 的 CMap 类的时候就感觉很茫然，感觉非常的不好用，具体表现在对于键值的类型指定居然需要四个参数，这是为什么呢？">
 
-<link rel="canonical" href="https://gowa.club/Windows/MFC-CMap%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8%E7%9A%84%E6%80%AA%E5%BC%82.html">
+<link rel="canonical" href="https://gowa.club/Windows/MFC-CMap类的使用的怪异.html">
 
 
 <script id="page-configurations">
@@ -228,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/MFC-CMap%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8%E7%9A%84%E6%80%AA%E5%BC%82.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Windows/MFC-CMap类的使用的怪异.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -274,7 +276,7 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Windows/MFC-CMap%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8%E7%9A%84%E6%80%AA%E5%BC%82.html#comments" itemprop="discussionUrl">
+    <a title="disqus" href="/Windows/MFC-CMap类的使用的怪异.html#comments" itemprop="discussionUrl">
       <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Windows/MFC-CMap类的使用的怪异.html" itemprop="commentCount"></span>
     </a>
   </span>
@@ -292,19 +294,15 @@
       
         <p>之前用Java 感觉 Map 就很好用，但是到用 MFC 的 CMap 类的时候就感觉很茫然，感觉非常的不好用，具体表现在对于键值的类型指定居然需要四个参数，这是为什么呢？</p>
 <a id="more"></a>
-
 <p>从我们的感官上而言，也是从 Java 中的使用经历来说，一个 Map 其实上是一个 Hash 表，每个 Hash 表有多个 Hash 链组成。对于一个键，根据一定的方法得到其 Hash 值，然后相同 Hash 值的元素就会放到一个 Hash 链上。</p>
 <p>那么  CMap 是不是这样的呢，我们知道 CMap 其实是一个模板类。</p>
 <h1 id="CMap"><a href="#CMap" class="headerlink" title="CMap"></a>CMap</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">KEY</span>, <span class="title">class</span> <span class="title">ARG_KEY</span>, <span class="title">class</span> <span class="title">VALUE</span>, <span class="title">class</span> <span class="title">ARG_VALUE</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">class</span> <span class="title">CMap</span> :</span> <span class="keyword">public</span> CObject</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">// CPair</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">CPair</span></span></span><br><span class="line"><span class="class">	&#123;</span></span><br><span class="line">		<span class="keyword">const</span> KEY key;</span><br><span class="line">		VALUE value;</span><br><span class="line">	<span class="keyword">protected</span>:</span><br><span class="line">		CPair( ARG_KEY keyval ) : key( keyval )	&#123;&#125;</span><br><span class="line">	&#125;;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"><span class="comment">// Construction</span></span><br><span class="line">	<span class="function"><span class="keyword">explicit</span> <span class="title">CMap</span><span class="params">(INT_PTR nBlockSize = <span class="number">10</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Attributes</span></span><br><span class="line">	<span class="comment">// number of elements</span></span><br><span class="line">	<span class="function">INT_PTR <span class="title">GetCount</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="function">INT_PTR <span class="title">GetSize</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="function">BOOL <span class="title">IsEmpty</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Lookup</span></span><br><span class="line">	<span class="function">BOOL <span class="title">Lookup</span><span class="params">(ARG_KEY key, VALUE&amp; rValue)</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">const</span> CPair *<span class="title">PLookup</span><span class="params">(ARG_KEY key)</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="function">CPair *<span class="title">PLookup</span><span class="params">(ARG_KEY key)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Operations</span></span><br><span class="line">	<span class="comment">// Lookup and add if not there</span></span><br><span class="line">	VALUE&amp; <span class="keyword">operator</span>[](ARG_KEY key);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// add a new (key, value) pair</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">SetAt</span><span class="params">(ARG_KEY key, ARG_VALUE newValue)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// removing existing (key, ?) pair</span></span><br><span class="line">	<span class="function">BOOL <span class="title">RemoveKey</span><span class="params">(ARG_KEY key)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">RemoveAll</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// iterating all (key, value) pairs</span></span><br><span class="line">	<span class="function">POSITION <span class="title">GetStartPosition</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">const</span> CPair *<span class="title">PGetFirstAssoc</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="function">CPair *<span class="title">PGetFirstAssoc</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">GetNextAssoc</span><span class="params">(POSITION&amp; rNextPosition, KEY&amp; rKey, VALUE&amp; rValue)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">const</span> CPair *<span class="title">PGetNextAssoc</span><span class="params">(<span class="keyword">const</span> CPair *pAssocRet)</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="function">CPair *<span class="title">PGetNextAssoc</span><span class="params">(<span class="keyword">const</span> CPair *pAssocRet)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// advanced features for derived classes</span></span><br><span class="line">	<span class="function">UINT <span class="title">GetHashTableSize</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">InitHashTable</span><span class="params">(UINT hashSize, BOOL bAllocNow = TRUE)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Implementation</span></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">	CAssoc** m_pHashTable;</span><br><span class="line">	UINT m_nHashTableSize;</span><br><span class="line">	INT_PTR m_nCount;</span><br><span class="line">	CAssoc* m_pFreeList;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">CPlex</span>* <span class="title">m_pBlocks</span>;</span></span><br><span class="line">	INT_PTR m_nBlockSize;</span><br><span class="line"></span><br><span class="line">	<span class="function">CAssoc* <span class="title">NewAssoc</span><span class="params">(ARG_KEY key)</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">FreeAssoc</span><span class="params">(CAssoc*)</span></span>;</span><br><span class="line">	<span class="function">CAssoc* <span class="title">GetAssocAt</span><span class="params">(ARG_KEY, UINT&amp;, UINT&amp;)</span> <span class="keyword">const</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	~CMap();</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Serialize</span><span class="params">(CArchive&amp;)</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _DEBUG</span></span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Dump</span><span class="params">(CDumpContext&amp;)</span> <span class="keyword">const</span></span>;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">AssertValid</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
 <p>其需要四个泛型参数 <code>KEY, ARG_KEY, VALUE, ARG_VALUE</code>，但是这四个参数到底有什么用呢？事实上从上面的定义中我们就可以发现，其用来进行计算的，都是 <strong>ARG_KEY</strong>，而不是 <strong>KEY</strong>，在 CPair 内才会存储 <strong>KEY</strong>。</p>
 <p>对于其实现来说，其内部是用结构体 <code>CPair</code> 来存储每个元素的，存储的就是我们的 <strong>key, value</strong>。<code>CAssoc</code> 继承自 <code>CPair</code>，增加了一个 Hash 值字段，已经指向下一个个元素的指针。</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Association</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CAssoc</span> :</span> <span class="keyword">public</span> CPair</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">friend</span> <span class="class"><span class="keyword">class</span> <span class="title">CMap</span>&lt;KEY,ARG_KEY,VALUE,ARG_VALUE&gt;;</span></span><br><span class="line">	CAssoc* pNext;</span><br><span class="line">	UINT nHashValue;  <span class="comment">// needed for efficient iteration</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	CAssoc( ARG_KEY key ) : CPair( key ) &#123;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
 <p>也就是说， Hash 链中存储的是一个个  CAssoc 元素。</p>
 <p>当我们调用 <code>[]</code> 向 CMap 类存入元素的时候经过了什么过程呢。</p>
 <h1 id="操作符"><a href="#操作符" class="headerlink" title="[] 操作符"></a>[] 操作符</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">KEY</span>, <span class="title">class</span> <span class="title">ARG_KEY</span>, <span class="title">class</span> <span class="title">VALUE</span>, <span class="title">class</span> <span class="title">ARG_VALUE</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">VALUE</span>&amp; <span class="title">CMap</span>&lt;KEY, ARG_KEY, VALUE, ARG_VALUE&gt;:</span>:<span class="keyword">operator</span>[](ARG_KEY key)</span><br><span class="line">&#123;</span><br><span class="line">	ASSERT_VALID(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">	UINT nHashBucket, nHashValue;</span><br><span class="line">	CAssoc* pAssoc;</span><br><span class="line">	<span class="keyword">if</span> ((pAssoc = GetAssocAt(key, nHashBucket, nHashValue)) == <span class="literal">NULL</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (m_pHashTable == <span class="literal">NULL</span>)</span><br><span class="line">			InitHashTable(m_nHashTableSize);</span><br><span class="line"></span><br><span class="line">		ENSURE(m_pHashTable);</span><br><span class="line">		<span class="comment">// it doesn't exist, add a new Association</span></span><br><span class="line">		pAssoc = NewAssoc(key);</span><br><span class="line">		pAssoc-&gt;nHashValue = nHashValue;</span><br><span class="line">		<span class="comment">//'pAssoc-&gt;value' is a constructed object, nothing more</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">// put into hash table</span></span><br><span class="line">		pAssoc-&gt;pNext = m_pHashTable[nHashBucket];</span><br><span class="line">		m_pHashTable[nHashBucket] = pAssoc;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> pAssoc-&gt;value;  <span class="comment">// return new reference</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>其直接了解的在通过 ARG_KEY 在 Hash 表中进行查找出对应的元素，返回 VALUE。</p>
 <h1 id="GetAssocAt"><a href="#GetAssocAt" class="headerlink" title="GetAssocAt()"></a>GetAssocAt()</h1><ol>
 <li>首先会根据 ARG_KEY 计算出 Hash 值。</li>
@@ -312,19 +310,14 @@
 <li>然后在 Hash 链中遍历比较 key 的地址是否一致。</li>
 </ol>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">KEY</span>, <span class="title">class</span> <span class="title">ARG_KEY</span>, <span class="title">class</span> <span class="title">VALUE</span>, <span class="title">class</span> <span class="title">ARG_VALUE</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">typename</span> <span class="title">CMap</span>&lt;KEY, ARG_KEY, VALUE, ARG_VALUE&gt;:</span>:CAssoc*</span><br><span class="line">CMap&lt;KEY, ARG_KEY, VALUE, ARG_VALUE&gt;::GetAssocAt(ARG_KEY key, UINT&amp; nHashBucket, UINT&amp; nHashValue) <span class="keyword">const</span></span><br><span class="line"><span class="comment">// find association (or return NULL)</span></span><br><span class="line">&#123;</span><br><span class="line">	nHashValue = HashKey&lt;ARG_KEY&gt;(key);</span><br><span class="line">	nHashBucket = nHashValue % m_nHashTableSize;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (m_pHashTable == <span class="literal">NULL</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// see if it exists</span></span><br><span class="line">	CAssoc* pAssoc;</span><br><span class="line">	<span class="keyword">for</span> (pAssoc = m_pHashTable[nHashBucket]; pAssoc != <span class="literal">NULL</span>; pAssoc = pAssoc-&gt;pNext)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (pAssoc-&gt;nHashValue == nHashValue &amp;&amp; CompareElements(&amp;pAssoc-&gt;key, &amp;key))</span><br><span class="line">			<span class="keyword">return</span> pAssoc;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
 <h1 id="HashKey"><a href="#HashKey" class="headerlink" title="HashKey()"></a>HashKey()</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> <span class="title">ARG_KEY</span>&gt;</span></span><br><span class="line"><span class="class"><span class="title">AFX_INLINE</span> <span class="title">UINT</span> <span class="title">AFXAPI</span> <span class="title">HashKey</span>(<span class="title">ARG_KEY</span> <span class="title">key</span>)</span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="comment">// (algorithm copied from STL hash in xfunctional)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> <span class="meta-keyword">warning</span>(suppress: 4302) <span class="comment">// 'type cast' : truncation</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> <span class="meta-keyword">warning</span>(suppress: 4311) <span class="comment">// pointer truncation</span></span></span><br><span class="line">	<span class="keyword">ldiv_t</span> HashVal = ldiv((<span class="keyword">long</span>)(ARG_KEY)key, <span class="number">127773</span>);</span><br><span class="line">	HashVal.rem = <span class="number">16807</span> * HashVal.rem - <span class="number">2836</span> * HashVal.quot;</span><br><span class="line">	<span class="keyword">if</span> (HashVal.rem &lt; <span class="number">0</span>)</span><br><span class="line">		HashVal.rem += <span class="number">2147483647</span>;</span><br><span class="line">	<span class="keyword">return</span> ((UINT)HashVal.rem);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
 <p>我们可以到，这个 Hash 值都是 UINT 类型的。可以看到，实现上会强制将 ARG_KEY 转换为一个</p>
 <p>其默认有几个实现：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;&gt; AFX_INLINE UINT AFXAPI HashKey&lt;__int64&gt;(__int64 key)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">// (algorithm copied from STL hash in xfunctional)</span></span><br><span class="line">	<span class="keyword">return</span> (HashKey&lt;DWORD&gt;((DWORD)(key &amp; <span class="number">0xffffffff</span>UL)) ^ HashKey&lt;DWORD&gt;((DWORD)(key &gt;&gt; <span class="number">32</span>)));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;&gt; UINT AFXAPI HashKey&lt;LPCWSTR&gt; (LPCWSTR key);</span><br><span class="line"><span class="keyword">template</span>&lt;&gt; UINT AFXAPI HashKey&lt;LPCSTR&gt; (LPCSTR key);</span><br><span class="line"><span class="keyword">template</span>&lt;&gt; UINT AFXAPI HashKey&lt;CComBSTR&gt; (CComBSTR key);</span><br><span class="line"><span class="keyword">template</span>&lt;&gt; UINT AFXAPI HashKey&lt;<span class="keyword">const</span> <span class="class"><span class="keyword">struct</span> <span class="title">tagVARIANT</span>&amp;&gt; (<span class="title">const</span> <span class="title">struct</span> <span class="title">tagVARIANT</span>&amp; <span class="title">var</span>);</span></span><br></pre></td></tr></table></figure>
-
 <p>所以说，当我们用要 CMap 的时候，如果不指定的类型不是上面的几种，那么就会找不到对于的 HaskKey 方法，自然就会出错了。</p>
 <p>同时由于我们需要用 ARG_KEY进行计算，但存储的是KEY，这个 KEY 与 ARG_KEY 应该是有关系的，比如说就是将 KEY 的一部分作为 ARG_KEY 来进行。因此，当我们用 CString 作为，KEY，而我们只能将  LPCWSTR, LPCSTR 作为ARG_KEY了，当我们进行调用的时候，会自动转换为 ARG_KEY了。</p>
 <h1 id="CString-实例"><a href="#CString-实例" class="headerlink" title="CString 实例"></a>CString 实例</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">CMap&lt;CString, LPCTSTR, CString, CString&gt; <span class="built_in">map</span>;</span><br><span class="line"><span class="built_in">map</span>[_T(<span class="string">"a"</span>)] = _T(<span class="string">"A"</span>);</span><br><span class="line"><span class="built_in">map</span>[_T(<span class="string">"b"</span>)] = _T(<span class="string">"B"</span>);</span><br><span class="line">POSITION pos = <span class="built_in">map</span>.GetStartPosition();</span><br><span class="line"><span class="keyword">while</span> (pos != <span class="literal">NULL</span>)</span><br><span class="line">&#123;</span><br><span class="line">	CString key, value;</span><br><span class="line">	<span class="built_in">map</span>.GetNextAssoc(pos, key, value);</span><br><span class="line">	_tprintf_s(_T(<span class="string">"%s %s\n"</span>), key, value);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -342,15 +335,15 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Windows/Windows%E8%AF%BB%E5%86%99%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6.html" rel="next" title="Windows读写配置文件">
-                  <i class="fa fa-chevron-left"></i> Windows读写配置文件
+                <a href="/Cpp/C++中的const一些误解.html" rel="next" title="C++中的const一些误解">
+                  <i class="fa fa-chevron-left"></i> C++中的const一些误解
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Lua/C++%E5%AF%BC%E5%87%BA%E7%B1%BB%E5%88%B0Lua%E7%9A%84%E6%8E%A2%E7%A9%B6.html" rel="prev" title="C++导出类到Lua的探究">
+                <a href="/Lua/C++导出类到Lua的探究.html" rel="prev" title="C++导出类到Lua的探究">
                   C++导出类到Lua的探究 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -412,20 +405,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">303</span>
+          <span class="site-state-item-count">304</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">123</span>
+        <span class="site-state-item-count">125</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -437,10 +430,10 @@
   </div>
   <div class="links-of-author motion-element">
       <span class="links-of-author-item">
-        <a href="https://github.com/gowa2017" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
       </span>
       <span class="links-of-author-item">
-        <a href="/mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
       </span>
   </div>
 
@@ -469,10 +462,10 @@
   </span>
   <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
 </div>
-  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> v4.0.0
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
   </div>
   <span class="post-meta-divider">|</span>
-  <div class="theme-info">Theme – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
   </div>
 
         
@@ -547,7 +540,7 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Windows/MFC-CMap%E7%B1%BB%E7%9A%84%E4%BD%BF%E7%94%A8%E7%9A%84%E6%80%AA%E5%BC%82.html",
+            url: "https://gowa.club/Windows/MFC-CMap类的使用的怪异.html",
             identifier: "Windows/MFC-CMap类的使用的怪异.html",
             title: "MFC-CMap类的使用的怪异"
           }
