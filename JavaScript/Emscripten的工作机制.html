@@ -47,20 +47,20 @@
   };
 </script>
 
-  <meta name="description" content="sed一般经常用做比较小的操作但是有时候也会遇到需要进行一些比较头疼的操作的时候，比如，反转行，反转文件等等。本节就对这些例子进行一个演示。">
-<meta name="keywords" content="Linux,SED,SHELL,运维">
+  <meta name="description" content="常听人说的 WebAssembly，还有  asm.js 其实我是不擅长这些的，不过是在使用  viz.js 的时候，看到就是用了这个玩意来将 graphviz 编译为 js 实现，所以来看一下具体是个什么意思。">
+<meta name="keywords" content="JavaScript">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sed几个有意思的例子">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/sed几个有意思的例子.html">
+<meta property="og:title" content="Emscripten的工作机制">
+<meta property="og:url" content="https://gowa.club/JavaScript/Emscripten的工作机制.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="sed一般经常用做比较小的操作但是有时候也会遇到需要进行一些比较头疼的操作的时候，比如，反转行，反转文件等等。本节就对这些例子进行一个演示。">
+<meta property="og:description" content="常听人说的 WebAssembly，还有  asm.js 其实我是不擅长这些的，不过是在使用  viz.js 的时候，看到就是用了这个玩意来将 graphviz 编译为 js 实现，所以来看一下具体是个什么意思。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-19T04:20:35.000Z">
+<meta property="og:updated_time" content="2020-01-28T15:47:51.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sed几个有意思的例子">
-<meta name="twitter:description" content="sed一般经常用做比较小的操作但是有时候也会遇到需要进行一些比较头疼的操作的时候，比如，反转行，反转文件等等。本节就对这些例子进行一个演示。">
+<meta name="twitter:title" content="Emscripten的工作机制">
+<meta name="twitter:description" content="常听人说的 WebAssembly，还有  asm.js 其实我是不擅长这些的，不过是在使用  viz.js 的时候，看到就是用了这个玩意来将 graphviz 编译为 js 实现，所以来看一下具体是个什么意思。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/sed几个有意思的例子.html">
+<link rel="canonical" href="https://gowa.club/JavaScript/Emscripten的工作机制.html">
 
 
 <script id="page-configurations">
@@ -74,7 +74,7 @@
   };
 </script>
 
-  <title>sed几个有意思的例子 | 退思园</title>
+  <title>Emscripten的工作机制 | 退思园</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
     <script>
@@ -230,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/sed几个有意思的例子.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Emscripten的工作机制.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -243,7 +243,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          sed几个有意思的例子
+          Emscripten的工作机制
         </h1>
 
         <div class="post-meta">
@@ -253,7 +253,7 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2018-01-19 12:20:35" itemprop="dateCreated datePublished" datetime="2018-01-19T12:20:35+08:00">2018-01-19</time>
+              <time title="Created: 2020-01-28 23:47:51" itemprop="dateCreated datePublished" datetime="2020-01-28T23:47:51+08:00">2020-01-28</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -261,8 +261,8 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux/Unix</span>
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
                   </a>
                 </span>
             </span>
@@ -276,8 +276,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/sed几个有意思的例子.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/sed几个有意思的例子.html" itemprop="commentCount"></span>
+    <a title="disqus" href="/JavaScript/Emscripten的工作机制.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/Emscripten的工作机制.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -292,51 +292,146 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>sed一般经常用做比较小的操作但是有时候也会遇到需要进行一些比较头疼的操作的时候，比如，反转行，反转文件等等。本节就对这些例子进行一个演示。<br><a id="more"></a></p>
-<h1 id="反转行"><a href="#反转行" class="headerlink" title="反转行"></a>反转行</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/usr/bin/sed -f</span><br><span class="line"></span><br><span class="line"># 空行无条件跳转，也就是直接开始下一个循环。</span><br><span class="line">/../! b</span><br><span class="line"></span><br><span class="line"># 在行的前后加上换行符</span><br><span class="line">s/^.*$/\</span><br><span class="line">&amp;\</span><br><span class="line">/</span><br><span class="line"></span><br><span class="line"># 跳转到标签 x，这里没有成功执行 s 命令，所以不会跳转过去。在 标签定义之前使用 t 命令，是为了重置条件</span><br><span class="line">tx</span><br><span class="line"># 标签定义及循环</span><br><span class="line">:x</span><br><span class="line">s/\(\n.\)\(.*\)\(.\n\)/\3\2\1/</span><br><span class="line">tx</span><br><span class="line"></span><br><span class="line"># 删除加到行内的换行符</span><br><span class="line">s/\n//g</span><br></pre></td></tr></table></figure>
-<p>把上面这个程序存为 reverse.sed<br>我们以以下代码来进行说明:</p>
-<pre><code>$ cat tmp.txt
-123456789
-</code></pre><p>执行命令：</p>
-<pre><code>./reverse.sed tmp.txt
-987654321
-</code></pre><p>确实跟我们想象的一样。</p>
-<p>为了更清楚的展示一下这个过程，我们在 <code>s</code>命令中加上一个<code>p</code>命令，也就是:</p>
-<pre><code>s/\(\n.\)\(.*\)\(.\n\)/\3\2\1/p
-</code></pre><p>然后再执行命令：</p>
-<pre><code>./reverse.sed tmp.txt
-9
-2345678
-1
-
-98
-34567
-21
-
-987
-456
-321
-
-9876
-5
-4321
-
-987654321
-</code></pre><p>可以看到，要反转的内容，永远都是被包含在 \n … \n 中的，通过对调 前一个 \n和其后的字符 及后一个\n和其后的字符 来保证永远在 \n … \n内。</p>
-<h1 id="反转文件内的行"><a href="#反转文件内的行" class="headerlink" title="反转文件内的行"></a>反转文件内的行</h1><blockquote>
-<p>注意，这个程序在非 <strong>GNU</strong> 的sed可能会溢出。</p>
+        <p>常听人说的 WebAssembly，还有  asm.js 其实我是不擅长这些的，不过是在使用  <a href="https://github.com/mdaines/viz.js" target="_blank" rel="noopener">viz.js</a> 的时候，看到就是用了这个玩意来将 graphviz 编译为 js 实现，所以来看一下具体是个什么意思。</p>
+<a id="more"></a>
+<h1 id="Emscripten"><a href="#Emscripten" class="headerlink" title="Emscripten"></a>Emscripten</h1><p><a href="https://emscripten.org/index.html" target="_blank" rel="noopener">emscripten</a>  的网站上就空宗明义的说了 <strong>emscripten</strong> 是做什么的：</p>
+<blockquote>
+<p>Emscripten is a toolchain for compiling to asm.js and WebAssembly, built using LLVM, that lets you run C and C++ on the web at near-native speed without plugins.<br>Emscripten 是一个用来编译出 asm.js 和 WebAssembly 的工具链，其使用 LLVM 来构建，这样就使我们可以在 web 上以接近原生的速度来运行 C/C++ 代码，且不需要任何插件。</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#!/usr/bin/sed -nf</span><br><span class="line"></span><br><span class="line"># 第二行开始，把 hold buffer中的内容附到 模式空间</span><br><span class="line">1! G</span><br><span class="line"></span><br><span class="line">#在最后一行打印模式空间</span><br><span class="line">$ p</span><br><span class="line"></span><br><span class="line"># 把所有内容存到 hold buffer内去</span><br><span class="line">h</span><br></pre></td></tr></table></figure>
-<p>流程是：</p>
+<p>也就是说，我们使用 Emscripten 可以将 C/C++ 代码编译成可以在 Web 上跑的 JS （Asm.js） 代码。这是如何实现的呢？</p>
+<p>所以有几个关键的概念需要先明白一下：</p>
 <ul>
-<li>读入第一行，然后放到 buffer</li>
-<li>读入第二行，然后把 buffer 附到 模式空间</li>
-<li>把模式空间存储到buffer</li>
-<li>清空模式空间，读入第三行，再把buffer的内容附到模式空间</li>
-<li>…….</li>
-<li>最后一行，附加buffer内容</li>
-<li>打印出来<br><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></li>
+<li>WebAssembly</li>
+<li>Asm.js</li>
+<li>LLVM</li>
 </ul>
+<h1 id="LLVM"><a href="#LLVM" class="headerlink" title="LLVM"></a>LLVM</h1><p><a href="https://llvm.org/" target="_blank" rel="noopener">LLVM</a> 是一个编译器架构，其包含的东西是比较多的，一言半语，一时半会也解释不清楚。</p>
+<blockquote>
+<p>The LLVM Project is a collection of modular and reusable compiler and toolchain technologies<br>LLVM 项目一个模块化和可复用的编译器和工具链技术集合。</p>
+</blockquote>
+<p>LLVM 的核心库 <strong>LLVM Core</strong> 提供了一个 源代码和目标代码无关的 <strong>优化器</strong>，加上一下平对流行CPU的代码生成支持。这些库围绕一个良好定义的代码表达（常被程我 <strong>LLVM IR</strong>）来构建。有了这个库，我们就能很容易的将 LLVM 作为优化器和代码生成器。 </p>
+<p>想要了解一下这个 LLVM就得先了解一下传统的编译器是怎么样设计的。</p>
+<h2 id="传统编译器设计"><a href="#传统编译器设计" class="headerlink" title="传统编译器设计"></a>传统编译器设计</h2><p>传统的编译器设计都是三步式的（如大多数 C 编译器）：Front end(前端)，Optimizer（优化器），Back end(后端)。</p>
+<div class="language-dot">
+digraph {
+rankdir=LR
+node[shape=box]
+compound=true
+S[label="Source Code"]
+F[label="Frontend"]
+O[label=Optimizer]
+B[label=Backend]
+M[label="Machine Code"]
+subgraph cluster_compiler{
+label="Compiler"
+F->O->B
+}
+S -> F[lhead=cluster_compiler]
+B -> M[ltail=cluster_compiler]
+}
+</div>
+
+<ul>
+<li><strong>Frontend</strong> ：源代码解析，错误检查，然后构建一个语言相关的抽象语法树(AST)来表示输入的代码。这个 AST 也有可能被转换一个新的表示来进行优化。</li>
+<li><strong>Optimizer</strong>：优化器会做很多的转换来减少代码的运行时间，比如说减少冗余的计算，其多少都会与语言和目标代码无关。</li>
+<li><strong>Backend（也被叫做代码生成器）</strong>：将优化后的代码映射到目标的指令集。</li>
+</ul>
+<p>对于我们常知的 <a href="http://clang.llvm.org/" target="_blank" rel="noopener">Clang</a> 其实其只是一个 Frontend，其主要的目的是为了提高编译速度，更实用的错误和警告信息及为构建出色的源代码级工具提供平台。</p>
+<h2 id="LLVM-编译器实现"><a href="#LLVM-编译器实现" class="headerlink" title="LLVM 编译器实现"></a>LLVM 编译器实现</h2><p>在一个基于 LLVM 的编译器中，一个 Frontend  的责任是对源代码进行 <strong>代码解析、错误诊断</strong>，然后将解析后的的代码转换为 <strong>LLVM IR(通常，是通过构建一个 AST ，然后将 AST 进行转换成 LLVM IR)</strong>。然后 IR 会经过一系列的（可选）分析和优化以便提高代码，然后将这些代码传递给 <strong>代码生成器</strong> 来生成相应的机器代码</p>
+<div class="language-dot">
+digraph {
+rankdir =LR
+node[shape=box]
+C[label="Clang C/C++/ObjC\nFrontend"]
+F[label="llvm-gcc Frontend"]
+H[label="GHC Frontend"]
+O[label="LLVM\nOptimizer"]
+X[label="LLVM\nX86 Backend"]
+P[label="LLVM\nPowerPC Backend"]
+A[label="LLVM\nARM Backend"]
+{rank=same; C F H}
+{node[shape=none]; c Fortran Haskell}
+{C F H} -> O[label="LLVM IR"]
+O ->{ X P A}[label="LLVM IR"]
+c-> C
+Fortran -> F
+Haskell -> H
+X-> X86
+P-> PowerPC
+A-> ARM
+}
+</div>
+
+<p>因此，在这里，我们的 Emscripten 也只是一个前端而已了。</p>
+<h1 id="Emscripten-工具链"><a href="#Emscripten-工具链" class="headerlink" title="Emscripten 工具链"></a>Emscripten 工具链</h1><p><a href="https://emscripten.org/docs/introducing_emscripten/about_emscripten.html" target="_blank" rel="noopener">Emscripten About</a> 一文中介绍了其工具链：</p>
+<div class="language-dot">
+digraph{
+rankdir =LR
+node[shape=box]
+emcc[label="Emscripten Compiler Frontend\n(emcc)"]
+clang[label="Clang/LLVM\n(fastcomp)"]
+settings[label="Compiler Settings\n(.emscripten)"]
+sdk[label="Emscripten SDK\nManager\n(emsdk)"]
+c[label=".c"]
+cpp[label=".cpp"]
+js[label=".js"]
+html[label=".html"]
+nodejs[label="Node.js"]
+web[label="Web\nBrowser"]
+{c cpp} -> emcc
+emcc:n-> clang:s
+emcc -> settings[style=dotted]
+settings -> sdk[dir=both,style=dotted]
+emcc -> {js html}
+js -> nodejs
+html -> web
+{rank=same; emcc clang settings}
+}
+</div>
+
+<p>emcc 是整个工具链中最主要的工具。其使用 Clang 和 LLVM 来编译到 wasm 和 asm.js。<br>emsdk 用来管理整个sdk中的工具，同时会对配置文件进行写入和修改。</p>
+<p>到第 Emscripten 的工作过程就是很明确的了。先转换成 IR ，然后再由 LLVM 编译成 Javascript。</p>
+<h1 id="WebAssembly"><a href="#WebAssembly" class="headerlink" title="WebAssembly"></a>WebAssembly</h1><p><a href="https://webassembly.org/" target="_blank" rel="noopener">WebAssembly</a> （Wasm）是一个二进制指令格式，其在基于栈的虚拟机上运行。其能在 web 的客户端或者服务端运行。</p>
+<h1 id="Asm-js"><a href="#Asm-js" class="headerlink" title="Asm.js"></a>Asm.js</h1><p><a href="http://asmjs.org/" target="_blank" rel="noopener">Asm.js</a> 是一个极端优化过的，JavaScript的低级子集。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>            
+            <script>
+            // graphviz init
+            let graphviz_engines = ["circo",
+                "dot",
+                "fdp",
+                "neato",
+                "osage",
+                "twopi"];
+
+            function doGraphviz(engine) {
+                let domAllDot = document.querySelectorAll('.language-' + engine);
+                for (let i = 0; i < domAllDot.length; i++) {
+                    let dom = domAllDot[i];
+                    let graphSource = dom.innerText || dom.textContent;
+
+                    try {
+                       let viz = new Viz();
+                         viz.renderSVGElement(graphSource, {engine: engine})
+                             .then(r => {
+                        dom.innerHTML ='';dom.append(r); });
+                    } catch (e) {
+                        console.error("Error when parsing node:", dom, e);
+                    } 
+                }
+            } 
+
+            let init = function () {
+                for (let i = 0; i < graphviz_engines.length; i++) {
+                    doGraphviz(graphviz_engines[i]);
+                }
+            };
+            if (typeof window.addEventListener != "undefined") {
+                window.addEventListener("load", init, false);
+            } else {
+                window.attachEvent("onload", init);
+            }
+            </script>
+            </p>
 
     </div>
 
@@ -346,27 +441,21 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/SED/" rel="tag"># SED</a>
-              <a href="/tags/SHELL/" rel="tag"># SHELL</a>
-              <a href="/tags/运维/" rel="tag"># 运维</a>
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/sed中的分支与流程控制.html" rel="next" title="sed中的分支与流程控制">
-                  <i class="fa fa-chevron-left"></i> sed中的分支与流程控制
+                <a href="/Linux-Unix/细说iptables的那些事.html" rel="next" title="细说iptables的那些事">
+                  <i class="fa fa-chevron-left"></i> 细说iptables的那些事
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/java中的基本IO.html" rel="prev" title="java中的基本IO">
-                  java中的基本IO <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -412,7 +501,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#反转行"><span class="nav-number">1.</span> <span class="nav-text">反转行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#反转文件内的行"><span class="nav-number">2.</span> <span class="nav-text">反转文件内的行</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Emscripten"><span class="nav-number">1.</span> <span class="nav-text">Emscripten</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LLVM"><span class="nav-number">2.</span> <span class="nav-text">LLVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#传统编译器设计"><span class="nav-number">2.1.</span> <span class="nav-text">传统编译器设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LLVM-编译器实现"><span class="nav-number">2.2.</span> <span class="nav-text">LLVM 编译器实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Emscripten-工具链"><span class="nav-number">3.</span> <span class="nav-text">Emscripten 工具链</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#WebAssembly"><span class="nav-number">4.</span> <span class="nav-text">WebAssembly</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Asm-js"><span class="nav-number">5.</span> <span class="nav-text">Asm.js</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -561,9 +650,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/sed几个有意思的例子.html",
-            identifier: "Linux-Unix/sed几个有意思的例子.html",
-            title: "sed几个有意思的例子"
+            url: "https://gowa.club/JavaScript/Emscripten的工作机制.html",
+            identifier: "JavaScript/Emscripten的工作机制.html",
+            title: "Emscripten的工作机制"
           }
         }
       });
