@@ -225,6 +225,107 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/CentOS7中的KVM共享网络设置.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Linux-Unix/CentOS7中的KVM共享网络设置.html" class="post-title-link" itemprop="url">CentOS7中的KVM共享网络设置</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-10-18 22:01:00" itemprop="dateCreated datePublished" datetime="2018-10-18T22:01:00+08:00">2018-10-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/CentOS7中的KVM共享网络设置.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/CentOS7中的KVM共享网络设置.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>最近网络拓扑变更，本来能访问外网的 kvm 虚拟机都可以的，但是突然就不行，很奇怪为什么会这样，只能来研究一下了。</p>
+<h1 id="基本情况"><a href="#基本情况" class="headerlink" title="基本情况"></a>基本情况</h1><p>宿主机 H ，部署了两个IP，一个是访问外网的 192.168.50.201/24，内网IP 172.28.20.231/24，上连路由器 192.168.50.1。然后路由器可访问 172.0.0.0/16 这个网段。</p>
+<p>KVM IP是 192.168.122.2 通过 网桥的形式与 <strong>H</strong> 通信。</p>
+<h1 id="宿主机路由"><a href="#宿主机路由" class="headerlink" title="宿主机路由"></a>宿主机路由</h1><p>默认路由走的是 192.168.50.201 外网，内网添加了一条静态路由：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">route add -net 172.230.0.0 netmask 255.255.0.0 gw 172.28.20.1</span><br></pre></td></tr></table></figure>
+<p>这样下来，H 是能正常访问内外网的。</p>
+<p>同样，KVM 访问宿主机也没有什么问题。无论是 172.28.20.231 还是 192.168.50.201 都没问题。</p>
+<p>但是访问 外网 和 172.网段就不行。</p>
+<h1 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h1><p>实际上，默认使用的是 nat 模式来共享网络，但是由于我把转发数据给关了，导致了从外部回来的数据包只能到达我们的宿主机而无法到达虚拟机。</p>
+<h1 id="网络分析"><a href="#网络分析" class="headerlink" title="网络分析"></a>网络分析</h1><p>通过查看宿主机的网络设备情况：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ip addr</span><br><span class="line">4: virbr0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000</span><br><span class="line">    link/ether 52:54:00:c3:68:e6 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 192.168.122.1/24 brd 192.168.122.255 scope global virbr0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">5: virbr0-nic: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc pfifo_fast master virbr0 state DOWN group default qlen 1000</span><br><span class="line">    link/ether 52:54:00:c3:68:e6 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">9: vnet0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast master virbr0 state UNKNOWN group default qlen 1000</span><br><span class="line">    link/ether fe:54:00:dc:a4:d5 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet6 fe80::fc54:ff:fedc:a4d5/64 scope link</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+<p><strong>virbr0</strong> 是一个网络设备， <strong>virbr0-nic</strong>，则是为其虚拟的一个接口卡， <strong>vnet0</strong> 则是我们 H 机的设备，不过是在链路层相连的。两个接口都只有链路层地址，没有网络层地址。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">brctl show</span><br><span class="line">bridge name	bridge id		STP enabled	interfaces</span><br><span class="line">virbr0		8000.525400c368e6	yes		virbr0-nic</span><br><span class="line">							vnet0</span><br></pre></td></tr></table></figure>
+<p>两个接口都加入了这个网桥。</p>
+<p>通过 NAT 共享的时候，KVM 会把数据包发送给 virbr0 。通过它的路由可以看出这点：</p>
+<figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">route <span class="built_in">print</span></span><br><span class="line"><span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>  <span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>	<span class="number">192</span>.<span class="number">168</span>.<span class="number">122</span>.<span class="number">1</span>	 <span class="number">192</span>.<span class="number">168</span>.<span class="number">122</span>.<span class="number">2</span> <span class="number">20</span></span><br></pre></td></tr></table></figure>
+<p>关键在于主机的转发（利用iptables）：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-A FORWARD -d 192.168.122.0/24 -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT</span><br><span class="line">-A FORWARD -s 192.168.122.0/24 -i virbr0 -j ACCEPT</span><br><span class="line">-A FORWARD -i virbr0 -o virbr0 -j ACCEPT</span><br><span class="line">-A FORWARD -o virbr0 -j REJECT --reject-with icmp-port-unreachable</span><br><span class="line">-A FORWARD -i virbr0 -j REJECT --reject-with icmp-port-unreachable</span><br><span class="line"></span><br><span class="line">-A POSTROUTING -s 192.168.122.0/24 -d 224.0.0.0/24 -j RETURN</span><br><span class="line">-A POSTROUTING -s 192.168.122.0/24 -d 255.255.255.255/32 -j RETURN</span><br><span class="line">-A POSTROUTING -s 192.168.122.0/24 ! -d 192.168.122.0/24 -p tcp -j MASQUERADE --to-ports 1024-65535</span><br><span class="line">-A POSTROUTING -s 192.168.122.0/24 ! -d 192.168.122.0/24 -p udp -j MASQUERADE --to-ports 1024-65535</span><br><span class="line">-A POSTROUTING -s 192.168.122.0/24 ! -d 192.168.122.0/24 -j MASQUERADE</span><br></pre></td></tr></table></figure>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/python中的正则表达式.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1902,96 +2003,6 @@ y' = b + w_1x_1</script><p><em>b, w1</em> 我们可以随便选一个初值。�
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/TensorFlow的环境安装.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Python/TensorFlow的环境安装.html" class="post-title-link" itemprop="url">TensorFlow的环境安装</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-09-06 14:36:51" itemprop="dateCreated datePublished" datetime="2018-09-06T14:36:51+08:00">2018-09-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Python/" itemprop="url" rel="index">
-                    <span itemprop="name">Python</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Python/TensorFlow的环境安装.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/TensorFlow的环境安装.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>也来学习一下机器学习的 TensorFlow 是什么。第一步当然是搭建环境了。据说大多数用的都是 Python 来使用这个库。所以我也这样想了。安装官方的教程，在 Mac 上进行安装。<a href="https://www.tensorflow.org/install/install_mac" target="_blank" rel="noopener">官方教程</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Python/TensorFlow的环境安装.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -2040,14 +2051,14 @@ y' = b + w_1x_1</script><p><em>b, w1</em> 我们可以随便选一个初值。�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">309</span>
+          <span class="site-state-item-count">310</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">

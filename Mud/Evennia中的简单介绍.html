@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Evennia 是一个用来进行在线多人文字游戏的库，我就是要用他来玩一些小东西所以我想要了解其架构是怎么样的。其实用 Django 来进行数据库访问和 Web 集成。">
+<meta name="keywords" content="Mud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evennia中的简单介绍">
+<meta property="og:url" content="https://gowa.club/Mud/Evennia中的简单介绍.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="Evennia 是一个用来进行在线多人文字游戏的库，我就是要用他来玩一些小东西所以我想要了解其架构是怎么样的。其实用 Django 来进行数据库访问和 Web 集成。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-06T14:49:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evennia中的简单介绍">
+<meta name="twitter:description" content="Evennia 是一个用来进行在线多人文字游戏的库，我就是要用他来玩一些小东西所以我想要了解其架构是怎么样的。其实用 Django 来进行数据库访问和 Web 集成。">
+
+<link rel="canonical" href="https://gowa.club/Mud/Evennia中的简单介绍.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Evennia中的简单介绍 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Mud/Evennia中的简单介绍.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Evennia中的简单介绍
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-06 22:49:15" itemprop="dateCreated datePublished" datetime="2020-02-06T22:49:15+08:00">2020-02-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mud/" itemprop="url" rel="index">
+                    <span itemprop="name">Mud</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Mud/Evennia中的简单介绍.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Mud/Evennia中的简单介绍.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a href="https://github.com/Evennia/evennia" target="_blank" rel="noopener">Evennia</a> 是一个用来进行在线多人文字游戏的库，我就是要用他来玩一些小东西所以我想要了解其架构是怎么样的。其实用 Django 来进行数据库访问和 Web 集成。</p>
+<a id="more"></a>
+<h1 id="关键的组件与术语"><a href="#关键的组件与术语" class="headerlink" title="关键的组件与术语"></a>关键的组件与术语</h1><h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><ul>
+<li><a href="https://github.com/evennia/evennia/wiki/Glossary#twisted" target="_blank" rel="noopener">twisted</a> - 网络引擎，负责 Evennia 中的事件循环和通信</li>
+<li><a href="https://github.com/evennia/evennia/wiki/Glossary#django" target="_blank" rel="noopener">django</a> - Evennia 使用的网络框架，用来进行数据库访问和Web 集成。</li>
+</ul>
+<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><ul>
+<li>account -玩家的账号</li>
+<li>admin-site - 用来操作数据库的 Django 网页。</li>
+<li>attribute - 持久化的，存储在 typeclasses 上的自定义数据。</li>
+<li>channel - 游戏的通信通道。</li>
+<li>character - 玩家的头像，受 account 控制。</li>
+<li>core -用于附带Evennia固有代码的术语</li>
+<li>field - 用来表示一个数据库列的 typeclass 属性</li>
+<li>migrate - 更新数据库元信息</li>
+<li>multisession mode` - 用来用户如何连接到 Evennia 的设置</li>
+<li><strong>object - Python实例，通用术语或游戏中的 typeclass</strong></li>
+<li>player - 用客户端连接到游戏的人</li>
+<li>puppet - 木偶，当一个账号控制一个游戏内的对象时</li>
+<li>property - 一个python 属性</li>
+<li>script - 一段代码，用来进行自定义存储，系统和时间保持 </li>
+<li>session - 代表一个客户端连接</li>
+<li>ticker - 允许以稳定的“tick”运行事件</li>
+<li><strong><a href="https://github.com/evennia/evennia/wiki/Glossary#typeclass" target="_blank" rel="noopener">typeclass</a> - Evennia 中连接数据库的 Python 类 </strong></li>
+<li><strong><a href="https://github.com/evennia/evennia/wiki/Objects" target="_blank" rel="noopener">Object</a> - 注意是大写的，代表了游戏中的一个 typeclass，包括 Characters，Room, trees, 武器等</strong></li>
+</ul>
+<h2 id="TypeClass"><a href="#TypeClass" class="headerlink" title="TypeClass"></a>TypeClass</h2><p><strong>typeclass</strong> 是一个 Evennia 特有的术语。typeclass 使开发人员可以像对待普通的Python对象一样使用数据库持久对象。它利用特定的Django功能将Python类链接到数据库表。有时我们将此类代码实体叫做 <strong>being typeclassed</strong>。</p>
+<p>Evennia 中的主要 typeclass 是 <strong>Account, Object, Script, Channel</strong>。这些基类的子类（如 Character）会和它的父类使用同样的数据库表，但却能通过 <strong>Attributes, Tags</strong> 拥有更多不同的 Python 功能 持久性功能。可以对 typeclass 进行编码和处理，就像对待其他任何Python类一样，不同的是它必须继承（不论继承的层级）基本 typeclass 中的一个。同样，创建 Typeclass 的新实例会将新行添加到链接到它的数据库表中。</p>
+<p>Evennia 的核心 typeclass 全部被命名为 <strong>DefaultAccount, DefaultObject</strong> 等等。当您初始化您的[游戏目录]时，您会自动获得其中的空子类，称为Account，Object等，您可以开始使用这些子类。</p>
+<p>可以看到，事实上都是围绕 typeclass 来进行工作。</p>
+<h2 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h2><p><strong>Object</strong> 有三个特殊的子类：<em>Characters, Rooms and Exits.</em> 之所以他们比较特殊是因为这几个是基础。</p>
+<ul>
+<li>Characters 由 Accounts 控制的对象当一个新  Account 登录游戏的时候，就会建立一个新的 <code>Character</code> 对象，然后此新对象的 account 属性就会被设置为 Account 对象。一个 <code>Character</code> 在创建的时候必须有默认的命令集，否则的话这个账号将不能执行任何命令。如果您只是从evennia.DefaultCharacter继承了自己的类，并确保使用super（）调用父方法，那应该没问题。在game / typeclasses / characters.py中，有一个空的Character类可供您修改。</li>
+<li>Rooms 所有其他对象的根容器。真正将 Room 与其他任何对象分隔开的唯一事情是它们没有自己的位置，并且@dig之类的默认命令会创建此类的对象。因此，如果您想扩展房间以提供更多功能，只需继承ev.DefaultRoom。</li>
+<li><a href="https://github.com/evennia/evennia/wiki/Objects#exits" target="_blank" rel="noopener">Exits</a> Exits是将其他对象（通常是 Room）连接在一起的对象。Exits 具有将它们与其他对象分开的两个地方。首先，其 <strong>destination</strong> 属性已设置并指向有效对象，这个事实使得在数据库中定位 Exits 变得容易和快速。其次，Exits 在创建时会在其自身上定义特殊的“<a href="https://github.com/evennia/evennia/wiki/Commands" target="_blank" rel="noopener">Transit Command</a>”。此命令的名称与 Exits 对象的名称相同，并且在调用时将处理将角色移至出口的目的地的实际操作，允许您仅输入 Exit 的名称即可四处走动。</li>
+</ul>
+<h1 id="示例与使用-MySQL"><a href="#示例与使用-MySQL" class="headerlink" title="示例与使用 MySQL"></a>示例与使用 MySQL</h1><p>简单的安装非常的简单了：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mkdir muddev &amp;&amp; <span class="built_in">cd</span> muddev</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/evennia/evennia.git</span><br><span class="line">pip install -e evennia</span><br><span class="line">evennia --init game</span><br><span class="line"><span class="built_in">cd</span> game</span><br></pre></td></tr></table></figure>
+<p>就这么简单就安装好了，且初始化完毕一个 game 项目，现在我们已经在 game 项目中了。</p>
+<p>在<a href="https://github.com/evennia/evennia/wiki/Choosing-An-SQL-Server#mysql--mariadb" target="_blank" rel="noopener">选择一个数据库中</a>，我们可以看到是如何设置使用 MySQL 的.</p>
+<p>先在Mysql内建立库：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mysql -uroot -p</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">'evennia'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'somepassword'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> evennia;</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">DATABASE</span> <span class="string">`evennia`</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8;      <span class="comment"># note that it's `evennia` not 'evennia'!</span></span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> evennia.* <span class="keyword">TO</span> <span class="string">'evennia'</span>@<span class="string">'localhost'</span>;</span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
+<p>接着我们可以编辑我们项目下的 <em>server/conf/settings.py</em> 或者 <em>server/conf/secret_settings.py</em>（这个文件不会出现在 git 项目中）</p>
+<blockquote>
+<p>Note: The Django documentation suggests using an external db.cnf or other external conf-formatted file. Evennia users have however found that this leads to problems (see e.g. issue #1184). To avoid trouble we recommend you simply put the configuration in your settings as below.</p>
+</blockquote>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># MySQL Database Configuration</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line">DATABASES = &#123;</span><br><span class="line">   <span class="string">'default'</span>: &#123;</span><br><span class="line">       <span class="string">'ENGINE'</span>: <span class="string">'django.db.backends.mysql'</span>,</span><br><span class="line">       <span class="string">'NAME'</span>: <span class="string">'evennia'</span>, </span><br><span class="line">       <span class="string">'USER'</span>: <span class="string">'evennia'</span>, </span><br><span class="line">       <span class="string">'PASSWORD'</span>: <span class="string">'somepassword'</span>, </span><br><span class="line">       <span class="string">'HOST'</span>: <span class="string">'localhost'</span>,  <span class="comment"># or an IP Address that your DB is hosted on</span></span><br><span class="line">       <span class="string">'PORT'</span>: <span class="string">''</span>, <span class="comment"># use default port</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接着我们安装  MySQL 的 Python 驱动：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install mysqlclient</span><br></pre></td></tr></table></figure>
+<p>接着执行：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">evennia migrate</span><br><span class="line">perations to perform:</span><br><span class="line">  Apply all migrations: accounts, admin, auth, comms, contenttypes, flatpages, <span class="built_in">help</span>, objects, scripts, server, sessions, sites, typeclasses</span><br><span class="line">Running migrations:</span><br><span class="line">  Applying typeclasses.0001_initial... OK</span><br><span class="line">  Applying contenttypes.0001_initial... OK</span><br><span class="line">  Applying auth.0001_initial... OK</span><br><span class="line">  Applying accounts.0001_initial... OK</span><br><span class="line">  Applying accounts.0002_move_defaults... OK</span><br><span class="line">  Applying accounts.0003_auto_20150209_2234... OK</span><br><span class="line">  Applying accounts.0004_auto_20150403_2339... OK</span><br><span class="line">  Applying accounts.0005_auto_20160905_0902... OK</span><br><span class="line">  Applying accounts.0006_auto_20170606_1731... OK</span><br><span class="line">  Applying accounts.0007_copy_player_to_account... OK</span><br><span class="line">  Applying accounts.0008_auto_20190128_1820... OK</span><br><span class="line">  Applying accounts.0009_auto_20191025_0831... OK</span><br><span class="line">  Applying admin.0001_initial... OK</span><br><span class="line">  Applying admin.0002_logentry_remove_auto_add... OK</span><br><span class="line">  Applying admin.0003_logentry_add_action_flag_choices... OK</span><br><span class="line">  Applying contenttypes.0002_remove_content_type_name... OK</span><br><span class="line">  Applying auth.0002_alter_permission_name_max_length... OK</span><br><span class="line">  Applying auth.0003_alter_user_email_max_length... OK</span><br><span class="line">  Applying auth.0004_alter_user_username_opts... OK</span><br><span class="line">  Applying auth.0005_alter_user_last_login_null... OK</span><br><span class="line">  Applying auth.0006_require_contenttypes_0002... OK</span><br><span class="line">  Applying auth.0007_alter_validators_add_error_messages... OK</span><br><span class="line">  Applying auth.0008_alter_user_username_max_length... OK</span><br><span class="line">  Applying auth.0009_alter_user_last_name_max_length... OK</span><br><span class="line">  Applying auth.0010_alter_group_name_max_length... OK</span><br><span class="line">  Applying auth.0011_update_proxy_permissions... OK</span><br><span class="line">  Applying typeclasses.0002_auto_20150109_0913... OK</span><br><span class="line">  Applying objects.0001_initial... OK</span><br><span class="line">  Applying scripts.0001_initial... OK</span><br><span class="line">  Applying scripts.0002_auto_20150118_1625... OK</span><br><span class="line">  Applying scripts.0003_checksessions_defaultscript_donothing_scriptbase_store_validatechannelhandler_validateidmappercache_... OK</span><br><span class="line">  Applying scripts.0004_auto_20150306_1354... OK</span><br><span class="line">  Applying scripts.0005_auto_20150306_1441... OK</span><br><span class="line">  Applying scripts.0006_auto_20150310_2249... OK</span><br><span class="line">  Applying scripts.0007_auto_20150403_2339... OK</span><br><span class="line">  Applying objects.0002_auto_20140917_0756... OK</span><br><span class="line">  Applying objects.0003_defaultcharacter_defaultexit_defaultobject_defaultroom... OK</span><br><span class="line">  Applying objects.0004_auto_20150118_1622... OK</span><br><span class="line">  Applying objects.0005_auto_20150403_2339... OK</span><br><span class="line">  Applying typeclasses.0003_defaultcharacter_defaultexit_defaultguest_defaultobject_defaultplayer_defaultroom_defaultscript_dono... OK</span><br><span class="line">  Applying typeclasses.0004_auto_20151101_1759... OK</span><br><span class="line">  Applying comms.0001_initial... OK</span><br><span class="line">  Applying comms.0002_msg_db_hide_from_objects... OK</span><br><span class="line">  Applying comms.0003_auto_20140917_0756... OK</span><br><span class="line">  Applying comms.0004_auto_20150118_1631... OK</span><br><span class="line">  Applying comms.0005_auto_20150223_1517... OK</span><br><span class="line">  Applying comms.0006_channeldb_db_object_subscriptions... OK</span><br><span class="line">  Applying comms.0007_msg_db_tags... OK</span><br><span class="line">  Applying comms.0008_auto_20160905_0902... OK</span><br><span class="line">  Applying comms.0009_auto_20160921_1731... OK</span><br><span class="line">  Applying comms.0010_auto_20161206_1912... OK</span><br><span class="line">  Applying comms.0011_auto_20170606_1731... OK</span><br><span class="line">  Applying comms.0011_auto_20170217_2039... OK</span><br><span class="line">  Applying comms.0012_merge_20170617_2017... OK</span><br><span class="line">  Applying comms.0013_auto_20170705_1726... OK</span><br><span class="line">  Applying comms.0014_auto_20170705_1736... OK</span><br><span class="line">  Applying comms.0015_auto_20170706_2041... OK</span><br><span class="line">  Applying comms.0016_auto_20180925_1735... OK</span><br><span class="line">  Applying comms.0017_auto_20190128_1820... OK</span><br><span class="line">  Applying comms.0018_auto_20191025_0831... OK</span><br><span class="line">  Applying sites.0001_initial... OK</span><br><span class="line">  Applying flatpages.0001_initial... OK</span><br><span class="line">  Applying help.0001_initial... OK</span><br><span class="line">  Applying help.0002_auto_20170606_1731... OK</span><br><span class="line">  Applying help.0003_auto_20190128_1820... OK</span><br><span class="line">  Applying objects.0006_auto_20170606_1731... OK</span><br><span class="line">  Applying objects.0007_objectdb_db_account... OK</span><br><span class="line">  Applying objects.0008_auto_20170705_1736... OK</span><br><span class="line">  Applying objects.0009_remove_objectdb_db_player... OK</span><br><span class="line">  Applying objects.0010_auto_20190128_1820... OK</span><br><span class="line">  Applying objects.0011_auto_20191025_0831... OK</span><br><span class="line">  Applying scripts.0008_auto_20170606_1731... OK</span><br><span class="line">  Applying scripts.0009_scriptdb_db_account... OK</span><br><span class="line">  Applying scripts.0010_auto_20170705_1736... OK</span><br><span class="line">  Applying scripts.0011_remove_scriptdb_db_player... OK</span><br><span class="line">  Applying scripts.0012_auto_20190128_1820... OK</span><br><span class="line">  Applying scripts.0013_auto_20191025_0831... OK</span><br><span class="line">  Applying server.0001_initial... OK</span><br><span class="line">  Applying server.0002_auto_20190128_2311... OK</span><br><span class="line">  Applying sessions.0001_initial... OK</span><br><span class="line">  Applying sites.0002_alter_domain_unique... OK</span><br><span class="line">  Applying typeclasses.0005_auto_20160625_1812... OK</span><br><span class="line">  Applying typeclasses.0006_auto_add_dbmodel_value_for_tags_attributes... OK</span><br><span class="line">  Applying typeclasses.0007_tag_migrations_may_be_slow... OK</span><br><span class="line">  Applying typeclasses.0008_lock_and_perm_rename... OK</span><br><span class="line">  Applying typeclasses.0009_rename_player_cmdsets_typeclasses... OK</span><br><span class="line">  Applying typeclasses.0010_delete_old_player_tables... OK</span><br><span class="line">  Applying typeclasses.0011_auto_20190128_1820... OK</span><br><span class="line">  Applying typeclasses.0012_attrs_to_picklev4_may_be_slow... OK</span><br><span class="line">  Applying typeclasses.0013_auto_20191015_1922... OK</span><br></pre></td></tr></table></figure>
+<p>实际上他是利用了<a href="/Python/Django中的Models.html" title="Django 的 Model 模型">Django 的 Model 模型</a> ，然后建立了 <strong>accounts, admin, auth, comms, contenttypes, flatpages, help, objects, scripts, server, sessions, sites, typeclasses</strong> 这几个模型的表。</p>
+<p>因此我们可以看到， Evennia 中的对象是依赖于 Django 来完成与数据库的映射的。</p>
+<h1 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h1><p>在 <a href="https://github.com/evennia/evennia/wiki/Directory-Overview#the-game-directory" target="_blank" rel="noopener">这里</a> 有对目录的介绍</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ls -1 game</span><br><span class="line">README.md</span><br><span class="line">__init__.py</span><br><span class="line">commands</span><br><span class="line">server</span><br><span class="line">typeclasses</span><br><span class="line">web</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
+<ul>
+<li>commands/ - 在此处重载默认的命令或者添加我们自己的命令集。</li>
+<li>server/ - 这个目录咋不应该被改变，因为 Evennia 期望其结构如此。</li>
+<li>conf/ - 所有的配置文件。最重要的是 <strong>settings.py</strong>A</li>
+<li>logs/ - Portal log 存在在此 (Server 默认输出到 terminal）</li>
+<li>typeclasses/ - 包含了空的模板来进行重载默认的游戏实体。Evennia 会自动的使用这个模板变化，创建不同的实体。</li>
+<li>web/ - 网页功能。</li>
+<li>world/ - 一个杂项目录，用来放和 世界相关的任何东西，比如不能放到其他目录的脚本和规则模块。</li>
+</ul>
+<h1 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h1><p>我们知道，相当重要的两个概念就是：<code>TypeClass, Object</code>，同时对于不同的东西，又是如何区分 的呢？对于一个基本类的子类与其父类使用的同一个表，那么又是如何实现不同的功能的呢？</p>
+<p>查看我们的数据库表，来看一下数据：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">evennia dbshell</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; show tables;</span><br><span class="line">+------------------------------------------+</span><br><span class="line">| Tables_in_evennia                        |</span><br><span class="line">+------------------------------------------+</span><br><span class="line">| accounts_accountdb                       |</span><br><span class="line">| accounts_accountdb_db_attributes         |</span><br><span class="line">| accounts_accountdb_db_tags               |</span><br><span class="line">| accounts_accountdb_groups                |</span><br><span class="line">| accounts_accountdb_user_permissions      |</span><br><span class="line">| auth_group                               |</span><br><span class="line">| auth_group_permissions                   |</span><br><span class="line">| auth_permission                          |</span><br><span class="line">| comms_channeldb                          |</span><br><span class="line">| comms_channeldb_db_account_subscriptions |</span><br><span class="line">| comms_channeldb_db_attributes            |</span><br><span class="line">| comms_channeldb_db_object_subscriptions  |</span><br><span class="line">| comms_channeldb_db_tags                  |</span><br><span class="line">| comms_msg                                |</span><br><span class="line">| comms_msg_db_hide_from_accounts          |</span><br><span class="line">| comms_msg_db_hide_from_channels          |</span><br><span class="line">| comms_msg_db_hide_from_objects           |</span><br><span class="line">| comms_msg_db_receivers_accounts          |</span><br><span class="line">| comms_msg_db_receivers_channels          |</span><br><span class="line">| comms_msg_db_receivers_objects           |</span><br><span class="line">| comms_msg_db_receivers_scripts           |</span><br><span class="line">| comms_msg_db_sender_accounts             |</span><br><span class="line">| comms_msg_db_sender_objects              |</span><br><span class="line">| comms_msg_db_sender_scripts              |</span><br><span class="line">| comms_msg_db_tags                        |</span><br><span class="line">| django_admin_log                         |</span><br><span class="line">| django_content_type                      |</span><br><span class="line">| django_flatpage                          |</span><br><span class="line">| django_flatpage_sites                    |</span><br><span class="line">| django_migrations                        |</span><br><span class="line">| django_session                           |</span><br><span class="line">| django_site                              |</span><br><span class="line">| help_helpentry                           |</span><br><span class="line">| help_helpentry_db_tags                   |</span><br><span class="line">| objects_objectdb                         |</span><br><span class="line">| objects_objectdb_db_attributes           |</span><br><span class="line">| objects_objectdb_db_tags                 |</span><br><span class="line">| scripts_scriptdb                         |</span><br><span class="line">| scripts_scriptdb_db_attributes           |</span><br><span class="line">| scripts_scriptdb_db_tags                 |</span><br><span class="line">| server_serverconfig                      |</span><br><span class="line">| typeclasses_attribute                    |</span><br><span class="line">| typeclasses_tag                          |</span><br><span class="line">+------------------------------------------+</span><br><span class="line">43 rows in set (0.02 sec)</span><br></pre></td></tr></table></figure>
+<p>有 43 个表，与 typeclass 和 Object 相关的就 5 个：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">| objects_objectdb                         |</span><br><span class="line">| objects_objectdb_db_attributes           |</span><br><span class="line">| objects_objectdb_db_tags                 |</span><br><span class="line">| typeclasses_attribute                    |</span><br><span class="line">| typeclasses_tag                          |</span><br></pre></td></tr></table></figure>
+<p>在根据  tutorial 建立一个基本的世界后，我们的表内会出现很多的数据，然后建立了第一个账号（管理员账号），其实能看到一些端倪的：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT id,db_key,a.`db_typeclass_path` FROM objects_objectdb a LIMIT 5;</span><br><span class="line">+----+------------------+------------------------------------------------+</span><br><span class="line">| id | db_key           | db_typeclass_path                              |</span><br><span class="line">+----+------------------+------------------------------------------------+</span><br><span class="line">|  1 | gowa             | typeclasses.characters.Character               |</span><br><span class="line">|  2 | Limbo            | typeclasses.rooms.Room                         |</span><br><span class="line">|  3 | Intro            | evennia.contrib.tutorial_world.rooms.IntroRoom |</span><br><span class="line">|  4 | tutorial         | typeclasses.exits.Exit                         |</span><br><span class="line">|  5 | Leaving Tutorial | evennia.contrib.tutorial_world.rooms.OutroRoom |</span><br><span class="line">+----+------------------+------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>所有对象都在这个表内，但是呢，就用了 <code>db_typeclass_path</code> 来区别对象的不同。<strong>我猜测， Evennia 在启动的时候从数据库读取数据，然后根据其 typeclass 来构造 object，并根据数据库字段来设置属性</strong>。</p>
+<p>所以基本的概念就能明白了。</p>
+<h1 id="引擎内部"><a href="#引擎内部" class="headerlink" title="引擎内部"></a>引擎内部</h1><h2 id="twisted"><a href="#twisted" class="headerlink" title="twisted"></a>twisted</h2><p><a href="https://github.com/twisted/twisted" target="_blank" rel="noopener">twisted</a> 是一个异步网络引擎，其负责控制  Evennia 的事件循环。Twisted还具有构建网络协议和与外界通信所需的构建块。例如我们的MUD自定义版本的Telnet，Telnet + SSL，SSH，webclient-websockets等。Twisted还运行我们的集成Web服务器，为您的游戏提供基于Django的网站。</p>
+<p>Evennia 使用到了几个模块：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> twisted.protocols <span class="keyword">import</span> amp</span><br><span class="line"><span class="keyword">from</span> twisted.internet <span class="keyword">import</span> reactor, endpoints</span><br></pre></td></tr></table></figure>
+<ul>
+<li>AMP:Asynchronous Messaging Protocol 异步消息协议</li>
+<li>reactor： twisted 的事件循环，这个循环会使用  Twisted 来驱动应用。 reactor 提供了网络，线程，分发事件等的 API。</li>
+<li>enpoint: L{IStreamServerEndpoint} and L{IStreamClientEndpoint}  的实现，这两个包装了 L{IReactorTCP}, L{IReactorSSL}, and L{IReactorUNIX} 接口。</li>
+</ul>
+<h1 id="命令的执行"><a href="#命令的执行" class="headerlink" title="命令的执行"></a>命令的执行</h1><p>当我们启动的时候，会启动几个服务：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">evennia start</span><br><span class="line"></span><br><span class="line">Portal starting ...</span><br><span class="line">... Portal started.</span><br><span class="line">Server starting  ...</span><br><span class="line">... Server started.</span><br><span class="line">Evennia running.</span><br><span class="line">---------------------- Evennia ---</span><br><span class="line">game Portal 0.9.0 (rev ec415eaf)</span><br><span class="line">    external ports:</span><br><span class="line">        telnet: 4000</span><br><span class="line">        webserver-proxy: 4001</span><br><span class="line">        webclient-websocket: 4002</span><br><span class="line">    internal_ports (to Server):</span><br><span class="line">        webserver: 4005</span><br><span class="line">        amp: 4006</span><br><span class="line"></span><br><span class="line">game Server 0.9.0 (rev ec415eaf)</span><br><span class="line">    internal ports (to Portal):</span><br><span class="line">        webserver: 4005</span><br><span class="line">        amp : 4006</span><br><span class="line">----------------------------------</span><br></pre></td></tr></table></figure>
+<p>这个服务中，其实核心的是那个叫做 AMP的服务。为什么呢？</p>
+<h2 id="启动命令"><a href="#启动命令" class="headerlink" title="启动命令"></a>启动命令</h2><p>当我们执行 <code>evennia start</code> 的时候，实际上代码会执行过程是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">participant s as start</span><br><span class="line">participant l as evennia_launcher</span><br><span class="line">participant amp as PortalAMPServer</span><br><span class="line">participant p as Portal</span><br><span class="line">participant g as Game Server</span><br><span class="line"></span><br><span class="line">s -&gt;&gt; l: main()</span><br><span class="line">note over l: start_evennia</span><br><span class="line">l -&gt;&gt; l: collectstatic()</span><br><span class="line">l -&gt;&gt; amp: connect</span><br><span class="line">amp --&gt; l: failed</span><br><span class="line">l -&gt;&gt; amp: PSTATUS</span><br><span class="line">amp --&gt; l: _portal_not_running</span><br><span class="line">l -&gt;&gt; p: Popen(portal_cmd...)</span><br><span class="line">p --&gt;amp : start</span><br><span class="line">p -&gt;&gt; p: start EvenniaTelnet</span><br><span class="line">p -&gt;&gt; p: start EvenniaSSL</span><br><span class="line">p -&gt;&gt; p: start EvenniaSSH</span><br><span class="line">p -&gt;&gt; p: start EvenniaWebSocket</span><br><span class="line">p -&gt;&gt; p: start EvenniaWebProxy</span><br><span class="line">p --&gt; l: _portal_started</span><br><span class="line">l -&gt;&gt; amp: SSTART server_cmd</span><br><span class="line">amp -&gt;&gt; g : start</span><br><span class="line">g -&gt;&gt; amp : connect</span><br><span class="line">amp --&gt; g: ServerAMPClient</span><br><span class="line">amp --&gt; l: _server_started</span><br><span class="line">g -&gt;&gt; g: start EvenniaWebServer</span><br></pre></td></tr></table></figure>
+<p>当用 telnet 传输数据的时候流动过程：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">participant c as client</span><br><span class="line">participant t as EvenniaTelnetServer</span><br><span class="line">participant sh as PortalSessionHandler</span><br><span class="line">participant amp as AMPServer</span><br><span class="line">participant g as GameServer</span><br><span class="line">participant ssh as ServerSessionHandler</span><br><span class="line"></span><br><span class="line">c -&gt;&gt; t : data</span><br><span class="line">t  -&gt;&gt; sh : data_in()-&gt; essionhandler.data_in()</span><br><span class="line">sh  -&gt;&gt; amp: data_in()-&gt; amp_protocol.send_MsgPortal2Server()</span><br><span class="line">amp  -&gt;&gt; amp: data_to_server()</span><br><span class="line">amp  -&gt;&gt; g: server_connection.callRemote</span><br><span class="line">g  -&gt;&gt; ssh: data_in()</span><br><span class="line">ssh -&gt;&gt; ssh: call_inputfuncs()</span><br></pre></td></tr></table></figure>
+<p>命令则在 server/inputfuncs 里面。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Mud/" rel="tag"># Mud</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Python/Django中的Models.html" rel="next" title="Django中的Models">
+                  <i class="fa fa-chevron-left"></i> Django中的Models
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关键的组件与术语"><span class="nav-number">1.</span> <span class="nav-text">关键的组件与术语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组件"><span class="nav-number">1.1.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#术语"><span class="nav-number">1.2.</span> <span class="nav-text">术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TypeClass"><span class="nav-number">1.3.</span> <span class="nav-text">TypeClass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object"><span class="nav-number">1.4.</span> <span class="nav-text">Object</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例与使用-MySQL"><span class="nav-number">2.</span> <span class="nav-text">示例与使用 MySQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录结构"><span class="nav-number">3.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库"><span class="nav-number">4.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引擎内部"><span class="nav-number">5.</span> <span class="nav-text">引擎内部</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#twisted"><span class="nav-number">5.1.</span> <span class="nav-text">twisted</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令的执行"><span class="nav-number">6.</span> <span class="nav-text">命令的执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动命令"><span class="nav-number">6.1.</span> <span class="nav-text">启动命令</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">310</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">131</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Mud/Evennia中的简单介绍.html",
+            identifier: "Mud/Evennia中的简单介绍.html",
+            title: "Evennia中的简单介绍"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
