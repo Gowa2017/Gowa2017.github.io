@@ -379,11 +379,103 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">evennia start</span><br><span class="line"></span><br><span class="line">Portal starting ...</span><br><span class="line">... Portal started.</span><br><span class="line">Server starting  ...</span><br><span class="line">... Server started.</span><br><span class="line">Evennia running.</span><br><span class="line">---------------------- Evennia ---</span><br><span class="line">game Portal 0.9.0 (rev ec415eaf)</span><br><span class="line">    external ports:</span><br><span class="line">        telnet: 4000</span><br><span class="line">        webserver-proxy: 4001</span><br><span class="line">        webclient-websocket: 4002</span><br><span class="line">    internal_ports (to Server):</span><br><span class="line">        webserver: 4005</span><br><span class="line">        amp: 4006</span><br><span class="line"></span><br><span class="line">game Server 0.9.0 (rev ec415eaf)</span><br><span class="line">    internal ports (to Portal):</span><br><span class="line">        webserver: 4005</span><br><span class="line">        amp : 4006</span><br><span class="line">----------------------------------</span><br></pre></td></tr></table></figure>
 <p>这个服务中，其实核心的是那个叫做 AMP的服务。为什么呢？</p>
 <h2 id="启动命令"><a href="#启动命令" class="headerlink" title="启动命令"></a>启动命令</h2><p>当我们执行 <code>evennia start</code> 的时候，实际上代码会执行过程是：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">participant s as start</span><br><span class="line">participant l as evennia_launcher</span><br><span class="line">participant amp as PortalAMPServer</span><br><span class="line">participant p as Portal</span><br><span class="line">participant g as Game Server</span><br><span class="line"></span><br><span class="line">s -&gt;&gt; l: main()</span><br><span class="line">note over l: start_evennia</span><br><span class="line">l -&gt;&gt; l: collectstatic()</span><br><span class="line">l -&gt;&gt; amp: connect</span><br><span class="line">amp --&gt; l: failed</span><br><span class="line">l -&gt;&gt; amp: PSTATUS</span><br><span class="line">amp --&gt; l: _portal_not_running</span><br><span class="line">l -&gt;&gt; p: Popen(portal_cmd...)</span><br><span class="line">p --&gt;amp : start</span><br><span class="line">p -&gt;&gt; p: start EvenniaTelnet</span><br><span class="line">p -&gt;&gt; p: start EvenniaSSL</span><br><span class="line">p -&gt;&gt; p: start EvenniaSSH</span><br><span class="line">p -&gt;&gt; p: start EvenniaWebSocket</span><br><span class="line">p -&gt;&gt; p: start EvenniaWebProxy</span><br><span class="line">p --&gt; l: _portal_started</span><br><span class="line">l -&gt;&gt; amp: SSTART server_cmd</span><br><span class="line">amp -&gt;&gt; g : start</span><br><span class="line">g -&gt;&gt; amp : connect</span><br><span class="line">amp --&gt; g: ServerAMPClient</span><br><span class="line">amp --&gt; l: _server_started</span><br><span class="line">g -&gt;&gt; g: start EvenniaWebServer</span><br></pre></td></tr></table></figure>
-<p>当用 telnet 传输数据的时候流动过程：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">participant c as client</span><br><span class="line">participant t as EvenniaTelnetServer</span><br><span class="line">participant sh as PortalSessionHandler</span><br><span class="line">participant amp as AMPServer</span><br><span class="line">participant g as GameServer</span><br><span class="line">participant ssh as ServerSessionHandler</span><br><span class="line"></span><br><span class="line">c -&gt;&gt; t : data</span><br><span class="line">t  -&gt;&gt; sh : data_in()-&gt; essionhandler.data_in()</span><br><span class="line">sh  -&gt;&gt; amp: data_in()-&gt; amp_protocol.send_MsgPortal2Server()</span><br><span class="line">amp  -&gt;&gt; amp: data_to_server()</span><br><span class="line">amp  -&gt;&gt; g: server_connection.callRemote</span><br><span class="line">g  -&gt;&gt; ssh: data_in()</span><br><span class="line">ssh -&gt;&gt; ssh: call_inputfuncs()</span><br></pre></td></tr></table></figure>
-<p>命令则在 server/inputfuncs 里面。</p>
+<div class="mermaid">
+sequenceDiagram
+participant s as start
+participant l as evennia_launcher
+participant amp as PortalAMPServer
+participant p as Portal
+participant g as Game Server
 
+s ->> l: main()
+note over l: start_evennia
+l ->> l: collectstatic()
+l ->> amp: connect
+amp --> l: failed
+l ->> amp: PSTATUS
+amp --> l: _portal_not_running
+l ->> p: Popen(portal_cmd...)
+p -->amp : start
+p ->> p: start EvenniaTelnet
+p ->> p: start EvenniaSSL
+p ->> p: start EvenniaSSH
+p ->> p: start EvenniaWebSocket
+p ->> p: start EvenniaWebProxy
+p --> l: _portal_started
+l ->> amp: SSTART server_cmd
+amp ->> g : start
+g ->> amp : connect
+amp --> g: ServerAMPClient
+amp --> l: _server_started
+g ->> g: start EvenniaWebServer
+</div>
+
+<p>当用 telnet 传输数据的时候流动过程：</p>
+<div class="mermaid">
+sequenceDiagram
+participant c as client
+participant t as EvenniaTelnetServer
+participant sh as PortalSessionHandler
+participant amp as AMPServer
+participant g as GameServer
+participant ssh as ServerSessionHandler
+
+c ->> t : data
+t  ->> sh : data_in()-> essionhandler.data_in()
+sh  ->> amp: data_in()-> amp_protocol.send_MsgPortal2Server()
+amp  ->> amp: data_to_server()
+amp  ->> g: server_connection.callRemote
+g  ->> ssh: data_in()
+ssh ->> ssh: call_inputfuncs()
+</div>
+
+<p>命令则在 server/inputfuncs 里面。</p>
+<h1 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h1><p><div class="language-dot"><br>digraph {<br>rankdir =TB<br>center=true<br>W[label=”WEB”]<br>DB[label=DataBase]</div></p>
+<p>{rank=min; CLI APP W}<br>subgraph cluster_game{<br>label=”Game Server(twisted)”<br>node[shape=box]<br>AmpClient[label=”ServerAMPClient”]<br>WebServer[label=”EvenniaWebServer(WSGIWebServer)”]<br>EGI[label=”EvenniaGameIndexService”]<br>SSH[label=ServerSessionHandler]</p>
+<p>}<br>subgraph cluster_portal{<br>label=”Portal(twisted)”<br>node[shape=box]<br>AMP[label=AMPServer]<br>Telnet[label=EvenniaTelnetServer]<br>WebSocket[label=EvenniaWebSocketServer]<br>WebProxy[label=EvenniaWebProxy]<br>PSH[label=PortalSessionHandler]<br>}</p>
+<p>W -&gt; WebProxy[label=HTTP,color=red]<br>CLI -&gt; Telnet[label=telnet,color=red]</p>
+<p>Telnet -&gt; PSH -&gt; AMP -&gt; AmpClient[color=red]<br>AmpClient -&gt; SSH -&gt; DB[color=red]</p>
+<p>APP -&gt; WebSocket [label=websocket, color=red]<br>WebSocket -&gt; PSH [color=red]</p>
+<p>WebServer -&gt; WebProxy[label=EvenniaReverseProxyResource]<br>WebProxy -&gt; WebSocket[color=red]<br>}<br>&lt;/div&gt;</p>
+<script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js">
+ mermaid.initialize({startOnLoad:true}); 
+</script><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
+
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
+
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
+                }
+                </script>
     </div>
 
     
@@ -455,7 +547,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关键的组件与术语"><span class="nav-number">1.</span> <span class="nav-text">关键的组件与术语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组件"><span class="nav-number">1.1.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#术语"><span class="nav-number">1.2.</span> <span class="nav-text">术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TypeClass"><span class="nav-number">1.3.</span> <span class="nav-text">TypeClass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object"><span class="nav-number">1.4.</span> <span class="nav-text">Object</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例与使用-MySQL"><span class="nav-number">2.</span> <span class="nav-text">示例与使用 MySQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录结构"><span class="nav-number">3.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库"><span class="nav-number">4.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引擎内部"><span class="nav-number">5.</span> <span class="nav-text">引擎内部</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#twisted"><span class="nav-number">5.1.</span> <span class="nav-text">twisted</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令的执行"><span class="nav-number">6.</span> <span class="nav-text">命令的执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动命令"><span class="nav-number">6.1.</span> <span class="nav-text">启动命令</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关键的组件与术语"><span class="nav-number">1.</span> <span class="nav-text">关键的组件与术语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组件"><span class="nav-number">1.1.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#术语"><span class="nav-number">1.2.</span> <span class="nav-text">术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TypeClass"><span class="nav-number">1.3.</span> <span class="nav-text">TypeClass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object"><span class="nav-number">1.4.</span> <span class="nav-text">Object</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例与使用-MySQL"><span class="nav-number">2.</span> <span class="nav-text">示例与使用 MySQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录结构"><span class="nav-number">3.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库"><span class="nav-number">4.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引擎内部"><span class="nav-number">5.</span> <span class="nav-text">引擎内部</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#twisted"><span class="nav-number">5.1.</span> <span class="nav-text">twisted</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令的执行"><span class="nav-number">6.</span> <span class="nav-text">命令的执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动命令"><span class="nav-number">6.1.</span> <span class="nav-text">启动命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构图"><span class="nav-number">7.</span> <span class="nav-text">架构图</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
