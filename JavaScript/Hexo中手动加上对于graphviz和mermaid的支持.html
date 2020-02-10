@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="由于我是一个重度的 Graphviz 和 mermaid 用户，在我所使用的 markdown 编辑器，pandoc 转换成 pdf 及 gitbook 中都会经常用到，同时要得到一致的体验效果的话，就必须都加上支持。对于 graphviz 而言，博客上的 hexo 使用了一个过滤器的形式来进行实现。同时我使用的主题，我搜索了一下，据说是对于 mermaid 是默认有支持的，只需要开启两个变量就行">
+<meta name="keywords" content="JavaScript,Graphviz,Hexo,Mermaid">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo中手动加上对于graphviz和mermaid的支持">
+<meta property="og:url" content="https://gowa.club/JavaScript/Hexo中手动加上对于graphviz和mermaid的支持.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="由于我是一个重度的 Graphviz 和 mermaid 用户，在我所使用的 markdown 编辑器，pandoc 转换成 pdf 及 gitbook 中都会经常用到，同时要得到一致的体验效果的话，就必须都加上支持。对于 graphviz 而言，博客上的 hexo 使用了一个过滤器的形式来进行实现。同时我使用的主题，我搜索了一下，据说是对于 mermaid 是默认有支持的，只需要开启两个变量就行">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-10T14:34:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo中手动加上对于graphviz和mermaid的支持">
+<meta name="twitter:description" content="由于我是一个重度的 Graphviz 和 mermaid 用户，在我所使用的 markdown 编辑器，pandoc 转换成 pdf 及 gitbook 中都会经常用到，同时要得到一致的体验效果的话，就必须都加上支持。对于 graphviz 而言，博客上的 hexo 使用了一个过滤器的形式来进行实现。同时我使用的主题，我搜索了一下，据说是对于 mermaid 是默认有支持的，只需要开启两个变量就行">
+
+<link rel="canonical" href="https://gowa.club/JavaScript/Hexo中手动加上对于graphviz和mermaid的支持.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Hexo中手动加上对于graphviz和mermaid的支持 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Hexo中手动加上对于graphviz和mermaid的支持.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hexo中手动加上对于graphviz和mermaid的支持
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-10 22:34:27" itemprop="dateCreated datePublished" datetime="2020-02-10T22:34:27+08:00">2020-02-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/JavaScript/Hexo中手动加上对于graphviz和mermaid的支持.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/Hexo中手动加上对于graphviz和mermaid的支持.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>由于我是一个重度的 Graphviz 和 mermaid 用户，在我所使用的 markdown 编辑器，pandoc 转换成 pdf 及 gitbook 中都会经常用到，同时要得到一致的体验效果的话，就必须都加上支持。对于 graphviz 而言，博客上的 hexo 使用了一个过滤器的形式来进行实现。同时我使用的主题，我搜索了一下，据说是对于 mermaid 是默认有支持的，只需要开启两个变量就行了。</p>
+<a id="more"></a>
+<h1 id="next-对-mermaid-的支持"><a href="#next-对-mermaid-的支持" class="headerlink" title="next 对 mermaid 的支持"></a>next 对 mermaid 的支持</h1><p>在 <a href="https://theme-next.org/docs/tag-plugins/mermaid" target="_blank" rel="noopener">next 官方文档中</a> 确实有对支持的说明，但是我研究了一下，其使用的形式有点不对头。</p>
+<p>他要求我们以 <code>{ % memriad type % }</code> 的形式来定义一个 mermaid 图形，但我在 markdown 呢是不会这样做的，这样的结果，就导致我不会得到一致性，同时在写作的时候也会增加更多的事情，因此，还是自己来手动进行一下才行。</p>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>当我以简单的 <code>&#39;&#39;&#39;mermaid</code>  的形式来指定的时候，hexo 不会将这段代码渲染成我想要的东西，而是分隔开来的，我必须要告诉 hexo 这段代码，渲染成我们 mermaid.js 能使用的形式，事实上 viz.js 对 graphviz 的支持也是如此，是添加了一个过滤器的形式，来对这段代码添加一个 <code></code> tag，这样就不会进行渲染了。</p>
+<h1 id="hexo-filter-viz-的实现"><a href="#hexo-filter-viz-的实现" class="headerlink" title="hexo-filter-viz 的实现"></a>hexo-filter-viz 的实现</h1><p>参考对于 <a href="https://github.com/Gowa2017/hexo-filter-viz" target="_blank" rel="noopener">graphviz 的 viz.js实现</a>，就是使用了过滤器的形式。在此处我们又不得不来介绍一下 hexo  相关的渲染过程了。</p>
+<h1 id="Hexo-的渲染过程"><a href="#Hexo-的渲染过程" class="headerlink" title="Hexo 的渲染过程"></a>Hexo 的渲染过程</h1><p>根据 <a href="https://hexo.io/zh-cn/api/" target="_blank" rel="noopener">hexo官方文档</a>，页面生成分成三个步骤：</p>
+<ol>
+<li>Hexo 实例初始化</li>
+<li>加载源文件（<code>load,watch</code>）。这两个方法实际上所做的，就是载入文件列表，并把文件传给相对应的处理器（Processor），当文件全部处理完毕后，就执行生成器（Generator）来建立路由。</li>
+<li>执行各种指令，如 generator</li>
+</ol>
+<p>生成器 Generator 就会调用相应的引擎进行渲染了。</p>
+<h2 id="Filter"><a href="#Filter" class="headerlink" title="Filter"></a>Filter</h2><p>我们可以在 Hexo 生成的过程中插入各种<a href="https://hexo.io/zh-cn/api/filter" target="_blank" rel="noopener">过滤器</a>，在进行渲染的过程中涉及到两个：</p>
+<ul>
+<li>执行 <code>before_post_render</code> 过滤器</li>
+<li>使用 Markdown 或其他渲染器渲染（根据扩展名而定）</li>
+<li>使用 Nunjucks 渲染</li>
+<li>执行 <code>after_post_render</code> 过滤器</li>
+</ul>
+<p>所以，我们可以考虑在这两个过滤器，或者一个过滤器上动点手脚。</p>
+<div class="mermaid">
+graph TB
+a --> b
+</div>
+
+
+<p>于是最终的版本，就放在 hexo-filter-viz 中完成了</p>
+<script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js">
+ mermaid.initialize({startOnLoad:true}); 
+</script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Graphviz/" rel="tag"># Graphviz</a>
+              <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+              <a href="/tags/Mermaid/" rel="tag"># Mermaid</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Mud/Evennia中的简单介绍.html" rel="next" title="Evennia中的简单介绍">
+                  <i class="fa fa-chevron-left"></i> Evennia中的简单介绍
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#next-对-mermaid-的支持"><span class="nav-number">1.</span> <span class="nav-text">next 对 mermaid 的支持</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hexo-filter-viz-的实现"><span class="nav-number">3.</span> <span class="nav-text">hexo-filter-viz 的实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hexo-的渲染过程"><span class="nav-number">4.</span> <span class="nav-text">Hexo 的渲染过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Filter"><span class="nav-number">4.1.</span> <span class="nav-text">Filter</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">311</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/JavaScript/Hexo中手动加上对于graphviz和mermaid的支持.html",
+            identifier: "JavaScript/Hexo中手动加上对于graphviz和mermaid的支持.html",
+            title: "Hexo中手动加上对于graphviz和mermaid的支持"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
