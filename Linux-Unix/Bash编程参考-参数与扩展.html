@@ -370,7 +370,6 @@
 <li><strong>?</strong> 匹配单个字符。</li>
 <li><strong>[…]</strong> 匹配方括号中的任一字符。还可以用[:type:]的POSIX形式来匹配。<br>alnum 字母跟数字<br>alpha 字母<br>acsii 所有ASCII字符<br>blank    所有空白字符<br>cntrl    所有控制字符（ASCII中的20个字符）<br>digit    数字<br>graph    可显示字符（可打印，空格、退格无法显示）<br>lower 小写字母<br>print 可打印字符（非控制字符）<br>punct 标点符号<br>space 空格<br>uperr    大写字母<br>word    匹配单词里的字符（大小写字母、数字、下划线）<br>xdigit 10进制字符（0-9 A-F）</li>
 </ul>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -465,13 +464,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

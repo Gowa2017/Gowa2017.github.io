@@ -307,7 +307,6 @@
 <p>Linux中，<code>SED</code>(通过<code>-r/-E</code>支持<code>ERE</code>)、<code>VIM</code>、<code>GREP</code>（通过<code>-E</code>选项支持<code>ERE</code>)使用的是<code>BRE</code>，<code>GAWK</code>使用的是<code>ERE</code>。</p>
 <h1 id="BRE"><a href="#BRE" class="headerlink" title="BRE"></a>BRE</h1><p><code>CHAR</code>    匹配指定字符。<br><code>.</code>    匹配任意一个字符。<br><code>^</code>    匹配行首非空字符。<br><code>$</code>    匹配行尾非空字符。<br><code>[LIST] [^LIST]</code>    匹配/不匹配指定字符。<br><code>(REGEXP1 | REGEXP2)</code>    匹配REGEXP1或REGEXP2。 <strong>GNU扩展</strong><br><code>REGEXP1REGEXP2</code>    匹配两个连续的RegEx。<br><code>\n</code>    换行符<br><code>\CHAR</code>    转义字符。<code>$, *, ., \, ^</code><br><code>*</code>    匹配任意次数。<br><code>\+</code>    匹配&gt;=1次。<br><code>\?</code>    匹配0或1次。<br><code>\{I\}</code>    匹配I次。<br><code>\{I,J\}</code>    匹配I&lt;=N&lt;=J次。<br><code>\{I,\}</code>    匹配I &lt;= N次。<br><code>\(REGEXP\)</code>    分组，用[1-9]引用。<br><code>\DIGIT</code>    匹配上面的分组  </p>
 <h1 id="ERE"><a href="#ERE" class="headerlink" title="ERE"></a>ERE</h1><p><code>.</code>    匹配任意一个字符。<br><code>CHAR</code>    匹配指定字符。<br><code>^</code>    匹配行首非空字符。<br><code>$</code>    匹配行尾非空字符。<br><code>[LIST] [^LIST]</code>    匹配/不匹配指定字符。<br><code>(REGEXP1 | REGEXP2)</code>    匹配REGEXP1或REGEXP2。 <strong>GNU扩展</strong><br><code>REGEXP1REGEXP2</code>    匹配两个连续的RegEx。<br><code>\n</code>    换行符<br><code>\CHAR</code>    转义字符。<code>$, *, ., \, ^</code><br><code>*</code>    匹配任意次数。<br><strong><code>+</code>    匹配&gt;=1次。</strong><br><strong><code>?</code>    匹配0或1次。</strong><br><strong><code>{I}</code>    匹配I次。</strong><br><strong><code>{I,J}</code>    匹配I&lt;=N&lt;=J次。</strong><br><strong><code>{I,}</code>    匹配I &lt;= N次。</strong><br><strong><code>{,J}</code>    匹配N &lt;= J次。 GNU特性</strong><br><code>\(REGEXP\)</code>    分组，用[1-9]引用。<br><code>\DIGIT</code>    匹配上面的分组  </p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -402,13 +401,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

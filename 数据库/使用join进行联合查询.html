@@ -393,7 +393,6 @@
 <h1 id="UPDATE"><a href="#UPDATE" class="headerlink" title="UPDATE"></a>UPDATE</h1><p>update 也支持 table_reference 这样的形式来指定关联表。</p>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> [<span class="keyword">LOW_PRIORITY</span>] [<span class="keyword">IGNORE</span>] table_reference</span><br><span class="line">    <span class="keyword">SET</span> assignment_list</span><br><span class="line">    [<span class="keyword">WHERE</span> where_condition]</span><br><span class="line">    [<span class="keyword">ORDER</span> <span class="keyword">BY</span> ...]</span><br><span class="line">    [<span class="keyword">LIMIT</span> <span class="keyword">row_count</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">value</span>:</span><br><span class="line">    &#123;expr | <span class="keyword">DEFAULT</span>&#125;</span><br><span class="line"></span><br><span class="line">assignment:</span><br><span class="line">    col_name = <span class="keyword">value</span></span><br><span class="line"></span><br><span class="line">assignment_list:</span><br><span class="line">    assignment [, assignment] ...</span><br></pre></td></tr></table></figure>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">update</span> sm_com_register_applicationstatus a <span class="keyword">join</span> <span class="string">`v_sm_company`</span> b <span class="keyword">on</span> a.com_name = b.qymc <span class="keyword">set</span> a.status=<span class="string">'5'</span>, a.<span class="string">`is_auto_enter`</span> =<span class="string">'1'</span> <span class="keyword">where</span> a.status=<span class="string">'14'</span>;</span><br></pre></td></tr></table></figure>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -487,13 +486,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

@@ -393,46 +393,43 @@ html -> web
 <p>到第 Emscripten 的工作过程就是很明确的了。先转换成 IR ，然后再由 LLVM 编译成 Javascript。</p>
 <h1 id="WebAssembly"><a href="#WebAssembly" class="headerlink" title="WebAssembly"></a>WebAssembly</h1><p><a href="https://webassembly.org/" target="_blank" rel="noopener">WebAssembly</a> （Wasm）是一个二进制指令格式，其在基于栈的虚拟机上运行。其能在 web 的客户端或者服务端运行。</p>
 <h1 id="Asm-js"><a href="#Asm-js" class="headerlink" title="Asm.js"></a>Asm.js</h1><p><a href="http://asmjs.org/" target="_blank" rel="noopener">Asm.js</a> 是一个极端优化过的，JavaScript的低级子集。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>            
-            <script>
-            // graphviz init
-            let graphviz_engines = ["circo",
-                "dot",
-                "fdp",
-                "neato",
-                "osage",
-                "twopi"];
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
 
-            function doGraphviz(engine) {
-                let domAllDot = document.querySelectorAll('.language-' + engine);
-                for (let i = 0; i < domAllDot.length; i++) {
-                    let dom = domAllDot[i];
-                    let graphSource = dom.innerText || dom.textContent;
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
 
-                    try {
-                       let viz = new Viz();
-                         viz.renderSVGElement(graphSource, {engine: engine})
-                             .then(r => {
-                        dom.innerHTML ='';dom.append(r); });
-                    } catch (e) {
-                        console.error("Error when parsing node:", dom, e);
-                    } 
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
                 }
-            } 
-
-            let init = function () {
-                for (let i = 0; i < graphviz_engines.length; i++) {
-                    doGraphviz(graphviz_engines[i]);
-                }
-            };
-            if (typeof window.addEventListener != "undefined") {
-                window.addEventListener("load", init, false);
-            } else {
-                window.attachEvent("onload", init);
-            }
-            </script>
-            </p>
-
+                </script>
     </div>
 
     
@@ -525,13 +522,13 @@ html -> web
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

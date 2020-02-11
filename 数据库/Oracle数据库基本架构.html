@@ -305,7 +305,6 @@
 <h2 id="在线重做日志文件-online-redo-log-file"><a href="#在线重做日志文件-online-redo-log-file" class="headerlink" title="在线重做日志文件(online redo log file)"></a>在线重做日志文件(online redo log file)</h2><p>每一个 Oracle 数据库都有在线重做日志（online redo log），包含两个或多个在线重做日志文件（online redo log files）的集合。在线重做日志（redo log）由重做条目（或者称作重做记录（redo records）） 构 成 ， 其 中记录了所有数据的改变。 在数据恢复操作中，在线重做日志是最重要的。<br>相关视图：<code>v$log v$logfile</code></p>
 <h2 id="存档重做日志文件-archived-Redo-Log"><a href="#存档重做日志文件-archived-Redo-Log" class="headerlink" title="存档重做日志文件(archived Redo Log)"></a>存档重做日志文件(archived Redo Log)</h2><p>对比Online，这是将一个或多个充满了的Online Log进行离线存储，数据库运行在ARCHIVELOG  mode下由archiving进程处理</p>
 <h1 id="2、数据库的逻辑存储结构"><a href="#2、数据库的逻辑存储结构" class="headerlink" title="2、数据库的逻辑存储结构"></a>2、数据库的逻辑存储结构</h1><p>数据库的逻辑存储结构从大到小依次可为：表空间-&gt;段-&gt;区-&gt;数据块。<br>每个数据库都会分配一个表空间。<br>表空间至少包含一个数据文件(data file)。表空间是段逻辑上的容器。<br>段则是区的集合，用来分配给用户的对象、撤销数据(undo data)、临时数据。<br>数据库在表空间中使用数据段(data segment)来保存表中数据。一个段包含由数据块(data blocks)组成的扩展区(extents)。<br>可以通过如下表或视图来查看信息。<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">v$tablespace</span><br><span class="line">v$datafile</span><br><span class="line">v$tmpfile</span><br><span class="line">dba_tablespaces, user_tablespaces</span><br><span class="line">dba_free_space, user_free_space</span><br><span class="line">dba_segments, user_segments</span><br></pre></td></tr></table></figure></p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -400,13 +399,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

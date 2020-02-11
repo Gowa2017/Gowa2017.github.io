@@ -421,7 +421,7 @@
 <p>实际上，在构造了一个 userdata 对象后，会利用我们类本身在 注册表内的键索引，然后将类在 Lua 的表，作为其元表，那么就能调用到成员方法了。这和文首所说的利用了一致。</p>
 <p>可以为 C++ 的一个指针设置元表，这真是非常骚的操作，看一下 userdata 的结构：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">Udata</span> &#123;</span></span><br><span class="line">  CommonHeader;</span><br><span class="line">  lu_byte ttuv_;  <span class="comment">/* user value's tag */</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">Table</span> *<span class="title">metatable</span>;</span></span><br><span class="line">  <span class="keyword">size_t</span> len;  <span class="comment">/* number of bytes */</span></span><br><span class="line">  <span class="keyword">union</span> Value user_;  <span class="comment">/* user value */</span></span><br><span class="line">&#125; Udata;</span><br></pre></td></tr></table></figure>
-<p>其结构是确实是设置了一个元表的。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+<p>其结构是确实是设置了一个元表的。</p>
 
     </div>
 
@@ -515,13 +515,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

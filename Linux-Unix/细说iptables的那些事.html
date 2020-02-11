@@ -295,13 +295,93 @@
         <p>很早以前就用过了，不过再细一点不是更好嘛。如果能和 TCP/IP 的协议栈来统一起来，那就更加的直观明白了。</p>
 <a id="more"></a>
 <p>都说 iptables 的核心是 <strong>三表，五链</strong>，但是数据是如何在这几个表链中进行流动的，匹配的规则又是如何的呢。我们先来看一下 TCP 协议栈。</p>
-<h1 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP/IP"></a>TCP/IP</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">digraph &#123;</span><br><span class="line">node[shape=record,width=5]</span><br><span class="line">rankdir=BT</span><br><span class="line">LINK[label=&quot;&lt;t&gt;LINK|&lt;h&gt;Frame header | &lt;d&gt; Frame Data |&lt;e&gt; Frame footer&quot;]</span><br><span class="line">IP[label=&quot;&lt;t&gt;INTERNET|&lt;h&gt; IP header |&lt;d&gt;IP data&quot;]</span><br><span class="line">TCP[label=&quot;&lt;t&gt;TRANSPORT|&lt;h&gt;TCP header | &lt;d&gt;TCP data&quot;]</span><br><span class="line">HTTP[label=&quot;&lt;t&gt;APPLICATION|&lt;d&gt;data&quot;]</span><br><span class="line"></span><br><span class="line">LINK:t -&gt; IP:t</span><br><span class="line">IP:t -&gt; TCP:t</span><br><span class="line">TCP:t -&gt; HTTP:t</span><br><span class="line"></span><br><span class="line">LINK:d:nw -&gt; IP:h:sw[style=dashed]</span><br><span class="line">LINK:d:ne -&gt; IP:d:se[style=dashed]</span><br><span class="line"></span><br><span class="line">IP:d:nw -&gt; TCP:h:sw[style=dashed]</span><br><span class="line">IP:d:ne -&gt; TCP:d:se[style=dashed]</span><br><span class="line"></span><br><span class="line">TCP:d:nw -&gt; HTTP:d:sw[style=dashed]</span><br><span class="line">TCP:d:ne -&gt; HTTP:d:se[style=dashed]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP/IP"></a>TCP/IP</h1><div class="language-dot">
+digraph {
+node[shape=record,width=5]
+rankdir=BT
+LINK[label="<t>LINK|<h>Frame header | <d> Frame Data |<e> Frame footer"]
+IP[label="<t>INTERNET|<h> IP header |<d>IP data"]
+TCP[label="<t>TRANSPORT|<h>TCP header | <d>TCP data"]
+HTTP[label="<t>APPLICATION|<d>data"]
+
+LINK:t -> IP:t
+IP:t -> TCP:t
+TCP:t -> HTTP:t
+
+LINK:d:nw -> IP:h:sw[style=dashed]
+LINK:d:ne -> IP:d:se[style=dashed]
+
+IP:d:nw -> TCP:h:sw[style=dashed]
+IP:d:ne -> TCP:d:se[style=dashed]
+
+TCP:d:nw -> HTTP:d:sw[style=dashed]
+TCP:d:ne -> HTTP:d:se[style=dashed]
+}
+</d></t></d></h></t></d></h></t></e></d></h></t></div>
+
 <p>从上至下，将应用层数据，层层加上自己层的头部，传递到链路上去。</p>
 <h1 id="Iptables"><a href="#Iptables" class="headerlink" title="Iptables"></a>Iptables</h1><ul>
 <li>Chain 由一系列的规则有序组成。</li>
 <li>Table 由 Chain 组成<br>先看流程图：</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">digraph &#123;</span><br><span class="line">compound=false</span><br><span class="line">&#123;node[style=filled,color=gray]; in[label=netin] out[label=netout]&#125;</span><br><span class="line"></span><br><span class="line">subgraph cluster_prerouting&#123;</span><br><span class="line">label=PREROUTING</span><br><span class="line">pr[label=raw]</span><br><span class="line">pm[label=mangle]</span><br><span class="line">pn[label=nat]</span><br><span class="line">pr -&gt; pm -&gt; pn</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">subgraph cluster_input&#123;</span><br><span class="line">label=INPUT</span><br><span class="line">if[label=filter]</span><br><span class="line">im[label=mangle]</span><br><span class="line">im -&gt; if</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">subgraph cluster_forward&#123;</span><br><span class="line">label=FORWARD</span><br><span class="line">ff[label=filter]</span><br><span class="line">fm[label=mangle]</span><br><span class="line">fm -&gt; ff</span><br><span class="line">&#125;</span><br><span class="line">subgraph cluster_output&#123;</span><br><span class="line">label=OUTPUT</span><br><span class="line">or[label=raw]</span><br><span class="line">om[label=mangle]</span><br><span class="line">on[label=nat]</span><br><span class="line">of[label=filter]</span><br><span class="line">or -&gt; om -&gt; on -&gt; of</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">subgraph cluster_postrouting&#123;</span><br><span class="line">label=POSTROUTING</span><br><span class="line">pom[label=mangle]</span><br><span class="line">pon[label=nat]</span><br><span class="line">pom -&gt; pon</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">in -&gt; pr[lhead=cluster_prerouting]</span><br><span class="line">r1[label=&quot;Routing Decision 1 &quot;,]</span><br><span class="line">r2[label=&quot;Routing Decision 2 &quot;,]</span><br><span class="line">r3[label=&quot;Routing Decision 3&quot;,]</span><br><span class="line">pn -&gt; r1[ltail= cluster_prerouting]</span><br><span class="line">r1:w -&gt; im[lhead=cluster_input]</span><br><span class="line">r1:e -&gt; fm[lhead=cluster_forward]</span><br><span class="line">if -&gt; r2:n[ltail=cluster_input]</span><br><span class="line">r2 -&gt; or[lhead=cluster_output]</span><br><span class="line">of -&gt; r3:n</span><br><span class="line">ff -&gt; r3:n</span><br><span class="line">r3 -&gt; pom[lhead=cluster_postrouting]</span><br><span class="line">pon -&gt; out</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="language-dot">
+digraph {
+compound=false
+{node[style=filled,color=gray]; in[label=netin] out[label=netout]}
+
+subgraph cluster_prerouting{
+label=PREROUTING
+pr[label=raw]
+pm[label=mangle]
+pn[label=nat]
+pr -> pm -> pn
+}
+
+subgraph cluster_input{
+label=INPUT
+if[label=filter]
+im[label=mangle]
+im -> if
+
+}
+subgraph cluster_forward{
+label=FORWARD
+ff[label=filter]
+fm[label=mangle]
+fm -> ff
+}
+subgraph cluster_output{
+label=OUTPUT
+or[label=raw]
+om[label=mangle]
+on[label=nat]
+of[label=filter]
+or -> om -> on -> of
+
+}
+subgraph cluster_postrouting{
+label=POSTROUTING
+pom[label=mangle]
+pon[label=nat]
+pom -> pon
+}
+
+in -> pr[lhead=cluster_prerouting]
+r1[label="Routing Decision 1 ",]
+r2[label="Routing Decision 2 ",]
+r3[label="Routing Decision 3",]
+pn -> r1[ltail= cluster_prerouting]
+r1:w -> im[lhead=cluster_input]
+r1:e -> fm[lhead=cluster_forward]
+if -> r2:n[ltail=cluster_input]
+r2 -> or[lhead=cluster_output]
+of -> r3:n
+ff -> r3:n
+r3 -> pom[lhead=cluster_postrouting]
+pon -> out
+}
+</div>
+
 <p>iptables 有五个表</p>
 <ul>
 <li>raw 只是为了用来设置包是否不需要跟踪</li>
@@ -312,7 +392,57 @@
 </ul>
 <p>一般我们常用到的就是 <strong>filter, nat</strong> 其他的用得少。当然实际上 raw 表也会用到，<a href="/Linux-Unix/Iptables在大流量的情况下启动导致服务拒绝.html" title="Iptables在大流量的情况下启动导致服务拒绝">Iptables在大流量的情况下启动导致服务拒绝</a></p>
 <p>那么把我们的流程图简化一下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">digraph &#123;</span><br><span class="line">compound=false</span><br><span class="line">&#123;node[style=filled,color=gray]; in[label=netin] out[label=netout]&#125;</span><br><span class="line"></span><br><span class="line">subgraph cluster_prerouting&#123;</span><br><span class="line">label=PREROUTING</span><br><span class="line">pn[label=nat]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">subgraph cluster_input&#123;</span><br><span class="line">label=INPUT</span><br><span class="line">if[label=filter]</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">subgraph cluster_forward&#123;</span><br><span class="line">label=FORWARD</span><br><span class="line">ff[label=filter]</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">subgraph cluster_output&#123;</span><br><span class="line">label=OUTPUT</span><br><span class="line">on[label=nat]</span><br><span class="line">of[label=filter]</span><br><span class="line">on -&gt; of</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">subgraph cluster_postrouting&#123;</span><br><span class="line">label=POSTROUTING</span><br><span class="line">pon[label=nat]</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">r1[label=&quot;Routing Decision 1 &quot;,]</span><br><span class="line">r2[label=&quot;Routing Decision 2 &quot;,]</span><br><span class="line">r3[label=&quot;Routing Decision 3&quot;,]</span><br><span class="line"></span><br><span class="line">in -&gt; pn[lhead=cluster_prerouting]</span><br><span class="line"></span><br><span class="line">r1:e -&gt; ff[lhead=cluster_forward,color=red,style=bold]</span><br><span class="line">ff -&gt; r3:n[color=red,style=bold]</span><br><span class="line"></span><br><span class="line">pn -&gt; r1[ltail= cluster_prerouting]</span><br><span class="line">r1:w -&gt; if[lhead=cluster_input]</span><br><span class="line">if -&gt; r2:n[ltail=cluster_input]</span><br><span class="line">r2 -&gt; on[lhead=cluster_output]</span><br><span class="line">of -&gt; r3:n</span><br><span class="line">r3 -&gt; pon[lhead=cluster_postrouting]</span><br><span class="line">pon -&gt; out</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="language-dot">
+digraph {
+compound=false
+{node[style=filled,color=gray]; in[label=netin] out[label=netout]}
+
+subgraph cluster_prerouting{
+label=PREROUTING
+pn[label=nat]
+}
+
+subgraph cluster_input{
+label=INPUT
+if[label=filter]
+
+}
+subgraph cluster_forward{
+label=FORWARD
+ff[label=filter]
+
+}
+subgraph cluster_output{
+label=OUTPUT
+on[label=nat]
+of[label=filter]
+on -> of
+
+}
+subgraph cluster_postrouting{
+label=POSTROUTING
+pon[label=nat]
+
+}
+r1[label="Routing Decision 1 ",]
+r2[label="Routing Decision 2 ",]
+r3[label="Routing Decision 3",]
+
+in -> pn[lhead=cluster_prerouting]
+
+r1:e -> ff[lhead=cluster_forward,color=red,style=bold]
+ff -> r3:n[color=red,style=bold]
+
+pn -> r1[ltail= cluster_prerouting]
+r1:w -> if[lhead=cluster_input]
+if -> r2:n[ltail=cluster_input]
+r2 -> on[lhead=cluster_output]
+of -> r3:n
+r3 -> pon[lhead=cluster_postrouting]
+pon -> out
+}
+</div>
+
 <p>所以我们现在就可以很明确的知道这个转发过程了：</p>
 <ol>
 <li><strong>PREROUTING</strong> 协议栈收到包后，路由前，查看一下 nat 表，看是否有需要做 nat 操作的。</li>
@@ -335,7 +465,43 @@
 <h1 id="规则的定义"><a href="#规则的定义" class="headerlink" title="规则的定义"></a>规则的定义</h1><p>所以我们的定义 iptable 规则的时候，需要明确我们是要在哪个阶段进行定义规则，进行什么操作（filter or nat）。</p>
 <p>或者更好想一些，我们先要进行什么操作，是在什么时候进行执行。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">iptables -t nat -I POSTROUTING -s  -p</span><br></pre></td></tr></table></figure>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
 
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
+
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
+                }
+                </script>
     </div>
 
     
@@ -428,13 +594,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

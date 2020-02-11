@@ -457,7 +457,7 @@
 <p><code>?(PATTERN-LIST)</code> 匹配0或1次给定模式<br><code>*(PATTERN-LIST</code>  匹配0或多次给定模式<br><code>+(PATTERN-LIST)</code> 匹配一次或多次给定模式<br><code>@(PATTERN-LIST)</code> 匹配一次给定模式<br><code>!(PATTERN-LIST)</code> 匹配给定模式之外的内容。</p>
 <h1 id="ERE"><a href="#ERE" class="headerlink" title="ERE"></a>ERE</h1><p>shell默认使用的是ERE，比如我的博客的文件名是用日期加上标题命名的，我想要匹配的话，就可以这样写：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> `ls`; <span class="keyword">do</span></span><br><span class="line">	<span class="keyword">if</span> [[ <span class="variable">$f</span> =~ [0-9]&#123;4&#125;(-[0-9]&#123;2&#125;)&#123;2&#125;-* ]]; <span class="keyword">then</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="variable">$f</span></span><br><span class="line">	<span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
-<p><strong>另外，在[[ ]] 中，已经不用把表达式进行 “” 引用了</strong><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+<p><strong>另外，在[[ ]] 中，已经不用把表达式进行 “” 引用了</strong></p>
 
     </div>
 
@@ -553,13 +553,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

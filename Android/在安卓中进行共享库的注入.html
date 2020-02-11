@@ -51,7 +51,7 @@
 <meta name="keywords" content="逆向">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在安卓中进行共享库的注入">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/在安卓中进行共享库的注入.html">
+<meta property="og:url" content="https://gowa.club/Android/在安卓中进行共享库的注入.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="所谓的代码注入就是让远程进程能够执行我们自己的代码，而本身远程进程中不存在或者不能执行这些代码。同时，我们会将我们的代码编译成一个共享的 so 库，然后让远程进行进行加载到内存空间内。所以能可以把这种操作叫做 共享库注入。">
 <meta property="og:locale" content="zh-Hans">
@@ -60,7 +60,7 @@
 <meta name="twitter:title" content="在安卓中进行共享库的注入">
 <meta name="twitter:description" content="所谓的代码注入就是让远程进程能够执行我们自己的代码，而本身远程进程中不存在或者不能执行这些代码。同时，我们会将我们的代码编译成一个共享的 so 库，然后让远程进行进行加载到内存空间内。所以能可以把这种操作叫做 共享库注入。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/在安卓中进行共享库的注入.html">
+<link rel="canonical" href="https://gowa.club/Android/在安卓中进行共享库的注入.html">
 
 
 <script id="page-configurations">
@@ -230,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/在安卓中进行共享库的注入.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/在安卓中进行共享库的注入.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -261,14 +261,14 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
                   </a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux/Unix</span>
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
                   </a>
                 </span>
             </span>
@@ -282,8 +282,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/在安卓中进行共享库的注入.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/在安卓中进行共享库的注入.html" itemprop="commentCount"></span>
+    <a title="disqus" href="/Android/在安卓中进行共享库的注入.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/在安卓中进行共享库的注入.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -360,7 +360,7 @@
 <h1 id="Code"><a href="#Code" class="headerlink" title="Code"></a>Code</h1><p><a href="https://github.com/Gowa2017/TinyInjector" target="_blank" rel="noopener">https://github.com/Gowa2017/TinyInjector</a></p>
 <h1 id="几个系统调用"><a href="#几个系统调用" class="headerlink" title="几个系统调用"></a>几个系统调用</h1><ul>
 <li>waitpid <a href="http://man7.org/linux/man-pages/man3/waitpid.3p.html" target="_blank" rel="noopener">http://man7.org/linux/man-pages/man3/waitpid.3p.html</a></li>
-<li>perror <a href="http://man7.org/linux/man-pages/man3/perror.3.html" target="_blank" rel="noopener">http://man7.org/linux/man-pages/man3/perror.3.html</a><br><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></li>
+<li>perror <a href="http://man7.org/linux/man-pages/man3/perror.3.html" target="_blank" rel="noopener">http://man7.org/linux/man-pages/man3/perror.3.html</a></li>
 </ul>
 
     </div>
@@ -455,13 +455,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -583,8 +583,8 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/在安卓中进行共享库的注入.html",
-            identifier: "Linux-Unix/在安卓中进行共享库的注入.html",
+            url: "https://gowa.club/Android/在安卓中进行共享库的注入.html",
+            identifier: "Android/在安卓中进行共享库的注入.html",
             title: "在安卓中进行共享库的注入"
           }
         }

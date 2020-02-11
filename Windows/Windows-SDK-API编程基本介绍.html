@@ -323,7 +323,7 @@
 <h1 id="Strings"><a href="#Strings" class="headerlink" title="Strings"></a>Strings</h1><p>Windows 在UI元素，文件名等中原生支持 Unicode 字符串。 Windows 用 UTF-16 编码来表示 Unicode 字符，意思就是每个字符都是一个 16bit 的值。UTF-16字符，也被叫做 <strong>宽字符</strong>，用以和 8-bit 的 ANSI 字符区别。 VC++ 编译器支持内建的 <strong>wchar_t</strong> 类型，<strong>WinNT.h</strong> 文件也定义了：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">wchar_t</span> WCHAR;</span><br></pre></td></tr></table></figure>
 <p>这两者我们可能都会遇到。如果要声明一个字面意义的宽字符，在字面字符前加上 <strong>L</strong>。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">wchar_t</span> a = L'a';</span><br><span class="line"><span class="keyword">wchar_t</span> *str = <span class="string">L"hello"</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">wchar_t</span> a = <span class="string">L'a'</span>;</span><br><span class="line"><span class="keyword">wchar_t</span> *str = <span class="string">L"hello"</span>;</span><br></pre></td></tr></table></figure>
 <h2 id="Unicode-与-ANSI-函数"><a href="#Unicode-与-ANSI-函数" class="headerlink" title="Unicode 与 ANSI 函数"></a>Unicode 与 ANSI 函数</h2><p>在 Windows 引入  Unicode 的时候，其提供了一过渡的方式，也就是提供了两套 API，一套接受的是 ANSI 字符，一套接受的是 Unicode 字符。</p>
 <ul>
 <li><strong>SetWindowTextA</strong> takes an ANSI string.</li>
@@ -368,7 +368,6 @@
 <p>编译器是如何知道该去调用 <code>wWinMain</code> 而不是 <code>main()</code> 呢？ 微软的C运行时库（CRT）提供了一个 <code>main()</code> 的实现会调用 <code>wWinMain 或者 WinMain</code>。</p>
 <p>下面是一个空的 <code>WinMain</code> 函数：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">INT <span class="title">WinMain</span><span class="params">(HINSTANCE hInstance, HINSTANCE hPrevInstance,</span></span></span><br><span class="line"><span class="function"><span class="params">    PSTR lpCmdLine, INT nCmdShow)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -462,13 +461,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

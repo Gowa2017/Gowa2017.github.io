@@ -310,7 +310,6 @@
 <figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">route <span class="built_in">print</span></span><br><span class="line"><span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>  <span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>.<span class="number">0</span>	<span class="number">192</span>.<span class="number">168</span>.<span class="number">122</span>.<span class="number">1</span>	 <span class="number">192</span>.<span class="number">168</span>.<span class="number">122</span>.<span class="number">2</span> <span class="number">20</span></span><br></pre></td></tr></table></figure>
 <p>关键在于主机的转发（利用iptables）：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-A FORWARD -d 192.168.122.0/24 -o virbr0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT</span><br><span class="line">-A FORWARD -s 192.168.122.0/24 -i virbr0 -j ACCEPT</span><br><span class="line">-A FORWARD -i virbr0 -o virbr0 -j ACCEPT</span><br><span class="line">-A FORWARD -o virbr0 -j REJECT --reject-with icmp-port-unreachable</span><br><span class="line">-A FORWARD -i virbr0 -j REJECT --reject-with icmp-port-unreachable</span><br><span class="line"></span><br><span class="line">-A POSTROUTING -s 192.168.122.0/24 -d 224.0.0.0/24 -j RETURN</span><br><span class="line">-A POSTROUTING -s 192.168.122.0/24 -d 255.255.255.255/32 -j RETURN</span><br><span class="line">-A POSTROUTING -s 192.168.122.0/24 ! -d 192.168.122.0/24 -p tcp -j MASQUERADE --to-ports 1024-65535</span><br><span class="line">-A POSTROUTING -s 192.168.122.0/24 ! -d 192.168.122.0/24 -p udp -j MASQUERADE --to-ports 1024-65535</span><br><span class="line">-A POSTROUTING -s 192.168.122.0/24 ! -d 192.168.122.0/24 -j MASQUERADE</span><br></pre></td></tr></table></figure>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -406,13 +405,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

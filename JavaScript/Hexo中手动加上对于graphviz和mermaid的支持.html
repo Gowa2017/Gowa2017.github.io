@@ -296,7 +296,7 @@
 <a id="more"></a>
 <h1 id="next-对-mermaid-的支持"><a href="#next-对-mermaid-的支持" class="headerlink" title="next 对 mermaid 的支持"></a>next 对 mermaid 的支持</h1><p>在 <a href="https://theme-next.org/docs/tag-plugins/mermaid" target="_blank" rel="noopener">next 官方文档中</a> 确实有对支持的说明，但是我研究了一下，其使用的形式有点不对头。</p>
 <p>他要求我们以 <code>{ % memriad type % }</code> 的形式来定义一个 mermaid 图形，但我在 markdown 呢是不会这样做的，这样的结果，就导致我不会得到一致性，同时在写作的时候也会增加更多的事情，因此，还是自己来手动进行一下才行。</p>
-<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>当我以简单的 <code>&#39;&#39;&#39;mermaid</code>  的形式来指定的时候，hexo 不会将这段代码渲染成我想要的东西，而是分隔开来的，我必须要告诉 hexo 这段代码，渲染成我们 mermaid.js 能使用的形式，事实上 viz.js 对 graphviz 的支持也是如此，是添加了一个过滤器的形式，来对这段代码添加一个 <code></code> tag，这样就不会进行渲染了。</p>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>当我以简单的 <code>&#39;&#39;&#39;mermaid</code>  的形式来指定的时候，hexo 不会将这段代码渲染成我想要的东西，而是分隔开来的，我必须要告诉 hexo 这段代码，渲染成我们 mermaid.js 能使用的形式，事实上 viz.js 对 graphviz 的支持也是如此，是添加了一个过滤器的形式，来对这段代码添加一个 <code>{ % raw % }</code> tag，这样就不会进行渲染了。</p>
 <h1 id="hexo-filter-viz-的实现"><a href="#hexo-filter-viz-的实现" class="headerlink" title="hexo-filter-viz 的实现"></a>hexo-filter-viz 的实现</h1><p>参考对于 <a href="https://github.com/Gowa2017/hexo-filter-viz" target="_blank" rel="noopener">graphviz 的 viz.js实现</a>，就是使用了过滤器的形式。在此处我们又不得不来介绍一下 hexo  相关的渲染过程了。</p>
 <h1 id="Hexo-的渲染过程"><a href="#Hexo-的渲染过程" class="headerlink" title="Hexo 的渲染过程"></a>Hexo 的渲染过程</h1><p>根据 <a href="https://hexo.io/zh-cn/api/" target="_blank" rel="noopener">hexo官方文档</a>，页面生成分成三个步骤：</p>
 <ol>
@@ -415,13 +415,13 @@ a --> b
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

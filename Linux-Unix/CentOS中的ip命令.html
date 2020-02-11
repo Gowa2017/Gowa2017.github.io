@@ -304,7 +304,6 @@
 <h3 id="add"><a href="#add" class="headerlink" title="add"></a>add</h3><p><code>ip addr add 192.168.1.2/24 dev lo</code></p>
 <h3 id="del"><a href="#del" class="headerlink" title="del"></a>del</h3><p><code>ip addr del 192.168.1.2/24 dev lo</code></p>
 <h2 id="route-路由"><a href="#route-路由" class="headerlink" title="route 路由"></a>route 路由</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ip route help</span><br><span class="line">Usage: ip route &#123; list | flush &#125; SELECTOR</span><br><span class="line">       ip route save SELECTOR</span><br><span class="line">       ip route restore</span><br><span class="line">       ip route showdump</span><br><span class="line">       ip route get ADDRESS [ from ADDRESS iif STRING ]</span><br><span class="line">                            [ oif STRING ]  [ tos TOS ]</span><br><span class="line">                            [ mark NUMBER ]</span><br><span class="line">       ip route &#123; add | del | change | append | replace &#125; ROUTE</span><br><span class="line">SELECTOR := [ root PREFIX ] [ match PREFIX ] [ exact PREFIX ]</span><br><span class="line">            [ table TABLE_ID ] [ proto RTPROTO ]</span><br><span class="line">            [ type TYPE ] [ scope SCOPE ]</span><br><span class="line">ROUTE := NODE_SPEC [ INFO_SPEC ]</span><br><span class="line">NODE_SPEC := [ TYPE ] PREFIX [ tos TOS ]</span><br><span class="line">             [ table TABLE_ID ] [ proto RTPROTO ]</span><br><span class="line">             [ scope SCOPE ] [ metric METRIC ]</span><br><span class="line">INFO_SPEC := NH OPTIONS FLAGS [ nexthop NH ]...</span><br><span class="line">NH := [ via ADDRESS ] [ dev STRING ] [ weight NUMBER ] NHFLAGS</span><br><span class="line">OPTIONS := FLAGS [ mtu NUMBER ] [ advmss NUMBER ]</span><br><span class="line">           [ rtt TIME ] [ rttvar TIME ] [reordering NUMBER ]</span><br><span class="line">           [ window NUMBER ] [ cwnd NUMBER ] [ initcwnd NUMBER ]</span><br><span class="line">           [ ssthresh NUMBER ] [ realms REALM ] [ src ADDRESS ]</span><br><span class="line">           [ rto_min TIME ] [ hoplimit NUMBER ] [ initrwnd NUMBER ]</span><br><span class="line">           [ features FEATURES ] [ quickack BOOL ] [ congctl NAME ]</span><br><span class="line">           [ expires TIME ]</span><br><span class="line">TYPE := &#123; unicast | local | broadcast | multicast | throw |</span><br><span class="line">          unreachable | prohibit | blackhole | nat &#125;</span><br><span class="line">TABLE_ID := [ local | main | default | all | NUMBER ]</span><br><span class="line">SCOPE := [ host | link | global | NUMBER ]</span><br><span class="line">NHFLAGS := [ onlink | pervasive ]</span><br><span class="line">RTPROTO := [ kernel | boot | static | NUMBER ]</span><br><span class="line">TIME := NUMBER[s|ms]</span><br><span class="line">BOOL := [1|0]</span><br><span class="line">FEATURES := ecn</span><br></pre></td></tr></table></figure>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -399,13 +398,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

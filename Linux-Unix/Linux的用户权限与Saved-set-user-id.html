@@ -314,7 +314,6 @@
 <h1 id="user-id-更改规则"><a href="#user-id-更改规则" class="headerlink" title="user id 更改规则"></a>user id 更改规则</h1><p>1、只有root进程可以更改 <code>real user id , saved set-user-id</code>。<br>2、当root进程调用setuid函数时 <code>real user id , effective user id , saved-user-id</code>都被设置为newuid;<br>3、如果一个不具有root权限的进程试图调用此函数，会出现什么呢？</p>
 <p>如果 newuid == real user id or newuid == saved set-user-id<br>那么进程的 uid = newuid。<br>不然，出错。<br>同时，任何时候，进程都可以用setuid函数将，进程UID设置为：<code>real user id</code> 或者 <code>saved set-user-id</code>;</p>
 <p>我们可以用 getuid() geteuid() 函数获取 <code>real user id</code> 和 <code>effective user id</code>,但我们无法用函数获得 <code>saved set-user-id</code>;</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -409,13 +408,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

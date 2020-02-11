@@ -310,7 +310,6 @@
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mkdir -p /data/interface/hgypt</span><br><span class="line">chmod 711 -R /data <span class="comment"># 所有目录所有者都是root ，同时全部取消写权限，只有执行权限</span></span><br><span class="line">chmod 755 /data/interface/hgypt</span><br><span class="line"><span class="comment"># 设置一个 sftp 用户拥有的目录</span></span><br><span class="line">mkdir -p /data/interface/hgypt/upload</span><br><span class="line">chown hgypt:hgypt /data/interface/hgypt/upload</span><br><span class="line">chmod 600 /data/interface/hgypt/upload <span class="comment"># 只允许sftp 用户进行读</span></span><br></pre></td></tr></table></figure>
 <h1 id="ssh-配置"><a href="#ssh-配置" class="headerlink" title="ssh 配置"></a>ssh 配置</h1><p>针对特定的用户组，执行 chroot 设置：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Match Group sftpusers</span><br><span class="line">ChrootDirectory /data/interface/%u</span><br><span class="line">ForceCommand internal-sftp</span><br></pre></td></tr></table></figure>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -405,13 +404,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

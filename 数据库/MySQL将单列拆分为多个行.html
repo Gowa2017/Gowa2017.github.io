@@ -315,7 +315,7 @@
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> a.uuid,</span><br><span class="line">       substring_index(a.itemlist, <span class="string">','</span>, b.n+<span class="number">1</span>)</span><br><span class="line"><span class="keyword">FROM</span> t1 a</span><br><span class="line"><span class="keyword">JOIN</span> generator_256 b <span class="keyword">ON</span> b.n &lt; (<span class="keyword">length</span>(a.itemlist) - <span class="keyword">length</span>(<span class="keyword">replace</span>(a.itemlist, <span class="string">','</span>, <span class="string">''</span>))+<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2,*1.3,*2.1,*2.2,*3.2,*3.3,*3.4,*3.5</span><br></pre></td></tr></table></figure>
 <p>这不是我们想要的，我们还需要把顺序在后面的记录中的值给挑选出来。是不是就是从右往左的第一个。</p>
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> a.uuid,</span><br><span class="line">       substring_index(substring_index(a.itemlist, <span class="string">','</span>, b.n+<span class="number">1</span>), <span class="string">','</span>, <span class="number">-1</span>)</span><br><span class="line"><span class="keyword">FROM</span> t1 a</span><br><span class="line"><span class="keyword">JOIN</span> generator_256 b <span class="keyword">ON</span> b.n &lt; (<span class="keyword">length</span>(a.itemlist) - <span class="keyword">length</span>(<span class="keyword">replace</span>(a.itemlist, <span class="string">','</span>, <span class="string">''</span>))+<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*1.3</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*2.1</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*2.2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*3.2</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*3.3</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*3.4</span><br><span class="line">c9e5cdc8f77a11e88966525400aa5cdc	*3.5</span><br></pre></td></tr></table></figure>
-<p>OK，大功告成。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+<p>OK，大功告成。</p>
 
     </div>
 
@@ -409,13 +409,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

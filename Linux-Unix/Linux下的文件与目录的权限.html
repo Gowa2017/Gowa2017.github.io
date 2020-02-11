@@ -308,7 +308,6 @@
 <h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><p>听起来有不知所云，多看两次可能也觉得迷糊，我们通过一个例子来说明一下。<br>我们可以通过 ls -il 命令来查看文件的i节点号。通过 -ldi来显示目录的i节点<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[www@iZ23fz9kp5sZ data]$ ll -di / /etc /etc/passwd</span><br><span class="line">     2 drwxr-xr-x 23 root root  4096 11-15 12:24 /</span><br><span class="line">2064385 drwxr-xr-x 96 root root 12288 11-18 12:24 /etc</span><br><span class="line">2066133 -rw-r--r--  1 root root  1914 11-18 11:45 /etc/passwd</span><br></pre></td></tr></table></figure></p>
 <p>通过挂载点信息找到 / 的i-node号为2。<br>读取i-node 2指向的 directory blocks，此blocks中会存放类似  2064385 etc/ 的目录项<br>读取 2064385 i-node的信息，根据type field字段知道这指向一个 directoryblocks。<br>读取2064385指向的 directory blocks，找到类似 2066133 passwd 的目录项<br>读取 2066133 i-node的信息，前往对应blocks读取数据。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p><strong>参考APUE 4.5节</strong><br>对于权限位 rwx大家都知道是 读写执行，但对于目录来说，可能不太清楚，咱们举例说明。<br>对一个目录例如 /etc/ 如果我们想在其目录下创建文件，其实是对 etc/ 存放目录项的增加，所以，我们需要 w写权限<br>i-node中的r权限信息决定了我们是否能够对此node指向的directory blocks进行读操作。<br>x权限决定了我们是否能够通过这个目录。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -403,13 +402,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

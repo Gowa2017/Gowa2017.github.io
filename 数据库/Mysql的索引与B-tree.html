@@ -321,7 +321,6 @@
 <p>当新记录被插入到InnoDB聚簇索引的时候，InnoDB会尝试把当前页的1/16保留以便将来的插入或者更新。如果索引记录是按序插入的，那么插入页将会15/16充满。如果是随机的顺序插入的，其可能是在[1/2, 15,16]。如果索引页的充满比例不及1/2，InnoDB会试图压缩索引树来释放这一页。</p>
 <p>改变InnoDB索引页大小是不支持的，也无法保证与非16KB索引页大小正常工作。编译和运行时InnoDB可能会出问题。实际上，被称为<code>Barracuda</code>新行格式<code>ROW_FORMART=COMPRESSED</code>假设索引页大小最大16KB，并且使用14-bit的指针。</p>
 <p>g用不同索引页大小的数据文件和日志文件无法在实例之间无法移植。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -415,13 +414,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

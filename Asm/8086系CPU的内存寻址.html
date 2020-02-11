@@ -309,7 +309,6 @@
 <p>所以需要2^29个存储单元。但很明显，20位地址总线并不能有效的利用这些内存，因为寻址范围不够。<br>那么有没有什么手段或者技术能把它利用起来呢？很明显是有的，比如你在x86架构的CPU在LINUX上启用<strong>PAE</strong>的时候，就能寻址超过64GB的内存。不过这暂不在我们讨论的范围。</p>
 <h2 id="高速缓存存储器（Cache"><a href="#高速缓存存储器（Cache" class="headerlink" title="高速缓存存储器（Cache)"></a>高速缓存存储器（Cache)</h2><p>CPU的时钟的周期是很短的，现在动不动就是<strong>GHz</strong>的频率。比如一个1GHz的CPU，其<strong>时钟周期（T状态）</strong>，也就是1ns。<br>CPU的工作过程就是执行指令的过程，每个指令周期（指令过程所需要的时钟周期数）是不同的，一般包含n（&gt;=1）个总线周期。<br>每个总线周期即是BIU完成一次访问存储器或者I/O所需要的时间，包含n（&gt;=1）个T状态。<br>而<strong>SRAM</strong>则快很多，当前已经有2ns的器件，但是其价格是非常昂贵的。其作用就是在CPU和RAM之间做一个缓存，每次CPU读取RAM数据的时候，就COPY一份到高速缓存（内存地址和内容）。下一次执行指令的时候就会看一下是不是地址在CACHE内有，有的话就直接读出而不访问RAM了。<br>而DRAM的读取时间（从总线给出的有效地址，到数据读出）远达不到1ns（MOS一般在50ns-500ms），所以每个总线周期才会需要很多个T状态，这对CPU来说这一种很大的浪费。</p>
 <h1 id="寻址"><a href="#寻址" class="headerlink" title="寻址"></a>寻址</h1><p>EU单元的内部寄存器都是16位，BIU的寄存器也是16位，其根本原因就是说，8086CPU的内部总线是16位的。其一次最多能传输2^16bit的数据，无论是地址，还是数据。因此其采用了段式内存管理。<br>其最多能寻址的空间是2^16（64KB），所以每段就设置为这么大（这个是操作系统完成内存的分段？）。当程序载入的时候，就为其分配CS、DS、SS、ES，将每个段的段地址分别保存在CS、DS、SS、ES段寄存器内，这样加上一定的偏移量（Offset）就得到了逻辑地址：段选择符（Segment Selector)+偏移量（Offset）。<br>然后BIU里面的物理地址加法器就会转将逻辑地址转换为物理地址：BaseAddr*16+Offset</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -404,13 +403,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

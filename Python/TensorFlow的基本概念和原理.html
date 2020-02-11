@@ -374,7 +374,7 @@
 <h1 id="直观展示您的图"><a href="#直观展示您的图" class="headerlink" title="直观展示您的图"></a>直观展示您的图</h1><p>TensorFlow 包含可帮助您理解图中的代码的工具。图可视化工具是 TensorBoard 的一个组件，可在浏览器中可视化图的结构。要创建可视化图表，最简单的方法是传递 tf.Graph（在创建 tf.summary.FileWriter 时）：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Build your graph.</span></span><br><span class="line">x = tf.constant([[<span class="number">37.0</span>, <span class="number">-23.0</span>], [<span class="number">1.0</span>, <span class="number">4.0</span>]])</span><br><span class="line">w = tf.Variable(tf.random_uniform([<span class="number">2</span>, <span class="number">2</span>]))</span><br><span class="line">y = tf.matmul(x, w)</span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line">loss = ...</span><br><span class="line">train_op = tf.train.AdagradOptimizer(<span class="number">0.01</span>).minimize(loss)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">  <span class="comment"># `sess.graph` provides access to the graph used in a &lt;a href="../api_docs/python/tf/Session"&gt;&lt;code&gt;tf.Session&lt;/code&gt;&lt;/a&gt;.</span></span><br><span class="line">  writer = tf.summary.FileWriter(<span class="string">"/tmp/log/..."</span>, sess.graph)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Perform your computation...</span></span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">    sess.run(train_op)</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line"></span><br><span class="line">  writer.close()</span><br></pre></td></tr></table></figure>
 <p>随后，您可以在 tensorboard 中打开日志并转到“图”标签，查看图结构的概要可视化图表。请注意，典型的 TensorFlow 图（尤其是具有自动计算的梯度的训练图）包含的节点太多，无法一次性完成直观展示。图可视化工具使用名称范围来将相关指令分组到“超级”节点中。您可以点击任意超级节点上的橙色“+”按钮以展开内部的子图。</p>
-<p><img src="../res/mnist_deep.png" alt><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+<p><img src="../res/mnist_deep.png" alt></p>
 
     </div>
 
@@ -469,13 +469,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

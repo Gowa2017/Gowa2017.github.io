@@ -361,7 +361,6 @@
 <p>那么，我们可以通过把一个 表　<em>ａ</em>　作为表　<em>ｂ</em>　的<code>＿＿index</code>元方法表，这样，<em>b</em>就能 继承到 <em>a</em> 的所有元素。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">a = &#123; remain = <span class="number">0</span> &#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a:new</span><span class="params">(o)</span></span></span><br><span class="line">	o = o <span class="keyword">or</span> &#123;&#125;</span><br><span class="line">	<span class="built_in">setmetatable</span>(o, self)</span><br><span class="line">	self.<span class="built_in">__index</span> = self</span><br><span class="line">	<span class="keyword">return</span> o</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a:withdraw</span><span class="params">(v)</span></span></span><br><span class="line">	self.remain = self.remain + v</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">a:pay</span><span class="params">(v)</span></span></span><br><span class="line">	self.remain = self.remain - v</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <p>这里，我们可以把<em>ａ</em>　看成一个类，其方法　<code>new()</code> 创建表<em>o</em>，并把表 <em>a</em> 作为其 元表，同时把 元表 <code>__index</code>事件的值设置为 <em>a</em>，就可以让 <em>o</em>从 <em>a</em> 取得任何其不具有的元素。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -455,13 +454,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

@@ -308,7 +308,6 @@
 <h1 id="处理"><a href="#处理" class="headerlink" title="处理"></a>处理</h1><p>先看一下转换书籍的内容目录项。对于目录的定义其是使用<strong>Xpath</strong>进行定义的。具体的意义我不是很明白，但是照着做就好了，抽空在学习一下。<strong>Xpath</strong>是针对html代码和文件的，所以我们要用html的方式来进行标签我们要处理的内容。<br>比如我下载了一本小说的txt文件，ypjs.txt，修改一下扩展名为<strong>ypjs.html</strong>。<br>里面分为两级架构，卷-章模式。我就用<code>sed</code>进行了批量的操作。<br><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">sed -i bak <span class="string">'s/\(^第[一二三四五六七八九十百零]*卷.*$\)/# \1/'</span> ypjs.txt</span><br><span class="line">sed -i bak <span class="string">'s/\(^第[一二三四五六七八九十百零]*章.*$\)/## \1/'</span> ypjs.txt</span><br><span class="line">sed -i bak <span class="string">'/^ *$/d'</span> ypjs</span><br></pre></td></tr></table></figure></p>
 <p>处理后的文本如下：<br><img src="/res/20171106-Calibre-make-toc2.png" alt><br>Calibre设置如下：<br><img src="/res/20171106-Calibre-make-toc.png" alt><br>然后开转换吧</p>
 <h1 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h1><p><img src="/res/20171106-Calibre-make-toc3.png" alt><br>大功告成</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -402,13 +401,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

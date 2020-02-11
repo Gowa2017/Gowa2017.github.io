@@ -311,7 +311,6 @@
 <h2 id="readAll"><a href="#readAll" class="headerlink" title="readAll()"></a>readAll()</h2><p>BufferedSource 的 readAll 方法提供了这点：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">readAll</span><span class="params">(Sink sink)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (sink == <span class="keyword">null</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"sink == null"</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">long</span> totalBytesWritten = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">while</span> (source.read(buffer, Segment.SIZE) != -<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">long</span> emitByteCount = buffer.completeSegmentByteCount();</span><br><span class="line">    <span class="keyword">if</span> (emitByteCount &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      totalBytesWritten += emitByteCount;</span><br><span class="line">      sink.write(buffer, emitByteCount);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (buffer.size() &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    totalBytesWritten += buffer.size();</span><br><span class="line">    sink.write(buffer, buffer.size());</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> totalBytesWritten;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>可以看到，都是通过每 Segment.SIZE 一次进行读取，然后再写出的。对于 BufferedSink 也是一样，也是通过缓冲区进行逐次写入。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -406,13 +405,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

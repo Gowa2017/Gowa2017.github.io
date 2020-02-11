@@ -300,7 +300,7 @@
 <p>启动的 Activity 是一个叫做 AppActivity 的东西，在其 <code>onCreate()</code> 函数内进行了 SDK 的初始化：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate(savedInstanceState);</span><br><span class="line">    <span class="comment">// Workaround in https://stackoverflow.com/questions/16283079/re-launch-of-activity-on-home-button-but-only-the-first-time/16447508</span></span><br><span class="line">    <span class="keyword">if</span> (!isTaskRoot()) &#123;</span><br><span class="line">        <span class="comment">// Android launched another instance of the root activity into an existing task</span></span><br><span class="line">        <span class="comment">//  so just quietly finish and go away, dropping the user back into the activity</span></span><br><span class="line">        <span class="comment">//  at the top of the stack (ie: the last state of this task)</span></span><br><span class="line">        <span class="comment">// Don't need to finish it again since it's finished in super.onCreate .</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// DO OTHER INITIALIZATION BELOW</span></span><br><span class="line">    </span><br><span class="line">    SDKWrapper.getInstance().init(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>SDKWrapper 也是由项目自动生成的类，我们可以看一下其内调用到的函数：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (PACKAGE_AS) &#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			mClass.getMethod(<span class="string">"init"</span>, Context.class).invoke(mClass, context);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		SDKWrapper.nativeLoadAllPlugins();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">nativeLoadAllPlugins</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (PACKAGE_AS) &#123;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			mClass.getMethod(<span class="string">"init"</span>, Context<span class="class">.<span class="keyword">class</span>).<span class="title">invoke</span>(<span class="title">mClass</span>, <span class="title">context</span>)</span>;</span><br><span class="line">		&#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		&#125;</span><br><span class="line">		SDKWrapper.nativeLoadAllPlugins();</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title">nativeLoadAllPlugins</span><span class="params">()</span></span>;</span><br></pre></td></tr></table></figure>
 <p>对于 Jni 技术不是很了解，但是我只想看一下其主要过程就行了。最终都会执行到引擎的 C++ 类： <code>AppDelegate.cpp</code>。</p>
 <p>在其中的一个方法内就能看到，加载初始化的代码：</p>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">bool</span> AppDelegate::applicationDidFinishLaunching()</span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> CC_TARGET_PLATFORM == CC_PLATFORM_IOS &amp;&amp; PACKAGE_AS</span></span><br><span class="line">    SDKManager::getInstance()-&gt;loadAllPlugins();</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">    <span class="comment">// initialize director</span></span><br><span class="line">    <span class="keyword">auto</span> director = Director::getInstance();</span><br><span class="line">    <span class="keyword">auto</span> glview = director-&gt;getOpenGLView();</span><br><span class="line">    <span class="keyword">if</span>(!glview) &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span>(CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)</span></span><br><span class="line">        glview = GLViewImpl::create(<span class="string">"SCMJ"</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">        glview = GLViewImpl::createWithRect(<span class="string">"SCMJ"</span>, cocos2d::Rect(<span class="number">0</span>,<span class="number">0</span>,<span class="number">900</span>,<span class="number">640</span>));</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">        director-&gt;setOpenGLView(glview);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// set FPS. the default value is 1.0/60 if you don't call this</span></span><br><span class="line">    director-&gt;setAnimationInterval(<span class="number">1.0</span> / <span class="number">60</span>);</span><br><span class="line"></span><br><span class="line">    ScriptingCore* sc = ScriptingCore::getInstance();</span><br><span class="line">    ScriptEngineManager::getInstance()-&gt;setScriptEngine(sc);</span><br><span class="line"></span><br><span class="line">    se::ScriptEngine* se = se::ScriptEngine::getInstance();</span><br><span class="line"></span><br><span class="line">    jsb_set_xxtea_key(<span class="string">"0d948dcc-c014-46"</span>);</span><br><span class="line">    jsb_init_file_operation_delegate();</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> defined(COCOS2D_DEBUG) &amp;&amp; (COCOS2D_DEBUG &gt; 0)</span></span><br><span class="line">    <span class="comment">// Enable debugger here</span></span><br><span class="line">    jsb_enable_debugger(<span class="string">"0.0.0.0"</span>, <span class="number">5086</span>);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    se-&gt;setExceptionCallback([](<span class="keyword">const</span> <span class="keyword">char</span>* location, <span class="keyword">const</span> <span class="keyword">char</span>* message, <span class="keyword">const</span> <span class="keyword">char</span>* <span class="built_in">stack</span>)&#123;</span><br><span class="line">        <span class="comment">// Send exception information to server like Tencent Bugly.</span></span><br><span class="line"></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    jsb_register_all_modules();</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS) &amp;&amp; PACKAGE_AS</span></span><br><span class="line">    se-&gt;addRegisterCallback(register_all_anysdk_framework);</span><br><span class="line">    se-&gt;addRegisterCallback(register_all_anysdk_manual);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line">    se-&gt;start();</span><br><span class="line"></span><br><span class="line">    jsb_run_script(<span class="string">"main.js"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -319,7 +319,7 @@
 <p>这 boot() 函数，我们可以看到，进入初始场景（ settings 设置），加载项目相关的 js 然后启动游戏的代码：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line">            <span class="comment">// load scene</span></span><br><span class="line">            cc.director.loadScene(launchScene, <span class="literal">null</span>,</span><br><span class="line">                <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> (cc.sys.isBrowser) &#123;</span><br><span class="line">                        <span class="comment">// show canvas</span></span><br><span class="line">                        canvas.style.visibility = <span class="string">''</span>;</span><br><span class="line">                        <span class="keyword">var</span> div = <span class="built_in">document</span>.getElementById(<span class="string">'GameDiv'</span>);</span><br><span class="line">                        <span class="keyword">if</span> (div) &#123;</span><br><span class="line">                            div.style.backgroundImage = <span class="string">''</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    cc.loader.onProgress = <span class="literal">null</span>;</span><br><span class="line">                    <span class="built_in">console</span>.log(<span class="string">'Success to load scene: '</span> + launchScene);</span><br><span class="line">                &#125;</span><br><span class="line">            );</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// jsList</span></span><br><span class="line">        <span class="keyword">var</span> jsList = settings.jsList;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!<span class="literal">false</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> bundledScript = settings.debug ? <span class="string">'src/project.dev.js'</span> : <span class="string">'src/project.js'</span>;</span><br><span class="line">            <span class="keyword">if</span> (jsList) &#123;</span><br><span class="line">                jsList = jsList.map(<span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="string">'src/'</span> + x;</span><br><span class="line">                &#125;);</span><br><span class="line">                jsList.push(bundledScript);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                jsList = [bundledScript];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// anysdk scripts</span></span><br><span class="line">        <span class="keyword">if</span> (cc.sys.isNative &amp;&amp; cc.sys.isMobile) &#123;</span><br><span class="line"><span class="comment">//            jsList = jsList.concat(['src/anysdk/jsb_anysdk.js', 'src/anysdk/jsb_anysdk_constants.js']);</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> option = &#123;</span><br><span class="line">            <span class="comment">//width: width,</span></span><br><span class="line">            <span class="comment">//height: height,</span></span><br><span class="line">            id: <span class="string">'GameCanvas'</span>,</span><br><span class="line">            scenes: settings.scenes,</span><br><span class="line">            debugMode: settings.debug ? cc.DebugMode.INFO : cc.DebugMode.ERROR,</span><br><span class="line">            showFPS: (!<span class="literal">false</span> &amp;&amp; !<span class="literal">false</span>) &amp;&amp; settings.debug,</span><br><span class="line">            frameRate: <span class="number">60</span>,</span><br><span class="line">            jsList: jsList,</span><br><span class="line">            groupList: settings.groupList,</span><br><span class="line">            collisionMatrix: settings.collisionMatrix,</span><br><span class="line">            renderMode: <span class="number">0</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        cc.game.run(option, onStart);</span><br></pre></td></tr></table></figure>
 <p>当加载完我们项目相关的 js 后，就会把这些参数，传递给给 引擎的 game 对象 run 方法。启动游戏了</p>
-<h1 id="jsb-register-all-modules-将相关的底层接口注册到js引擎"><a href="#jsb-register-all-modules-将相关的底层接口注册到js引擎" class="headerlink" title="jsb_register_all_modules 将相关的底层接口注册到js引擎"></a>jsb_register_all_modules 将相关的底层接口注册到js引擎</h1><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">jsb_register_all_modules</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    se::ScriptEngine* se = se::ScriptEngine::getInstance();</span><br><span class="line"></span><br><span class="line">    se-&gt;addBeforeInitHook([]()&#123;</span><br><span class="line">        JSBClassType::init();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    se-&gt;addBeforeCleanupHook([se]()&#123;</span><br><span class="line">        se-&gt;garbageCollect();</span><br><span class="line">        PoolManager::getInstance()-&gt;getCurrentPool()-&gt;clear();</span><br><span class="line">        se-&gt;garbageCollect();</span><br><span class="line">        PoolManager::getInstance()-&gt;getCurrentPool()-&gt;clear();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    se-&gt;addRegisterCallback(jsb_register_global_variables);</span><br><span class="line"></span><br><span class="line">    se-&gt;addRegisterCallback(run_prepare_script);</span><br><span class="line"></span><br><span class="line">    se-&gt;addRegisterCallback(register_all_cocos2dx);</span><br><span class="line">    se-&gt;addRegisterCallback(jsb_register_Node_manual);</span><br><span class="line">    se-&gt;addRegisterCallback(register_all_cocos2dx_manual);</span><br><span class="line">    se-&gt;addRegisterCallback(JSB_register_opengl);</span><br><span class="line"></span><br><span class="line">...&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="jsb-register-all-modules-将相关的底层接口注册到js引擎"><a href="#jsb-register-all-modules-将相关的底层接口注册到js引擎" class="headerlink" title="jsb_register_all_modules 将相关的底层接口注册到js引擎"></a>jsb_register_all_modules 将相关的底层接口注册到js引擎</h1><figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">jsb_register_all_modules</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    se::ScriptEngine* se = se::ScriptEngine::getInstance();</span><br><span class="line"></span><br><span class="line">    se-&gt;addBeforeInitHook([]()&#123;</span><br><span class="line">        JSBClassType::init();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    se-&gt;addBeforeCleanupHook([se]()&#123;</span><br><span class="line">        se-&gt;garbageCollect();</span><br><span class="line">        PoolManager::getInstance()-&gt;getCurrentPool()-&gt;<span class="built_in">clear</span>();</span><br><span class="line">        se-&gt;garbageCollect();</span><br><span class="line">        PoolManager::getInstance()-&gt;getCurrentPool()-&gt;<span class="built_in">clear</span>();</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    se-&gt;addRegisterCallback(jsb_register_global_variables);</span><br><span class="line"></span><br><span class="line">    se-&gt;addRegisterCallback(run_prepare_script);</span><br><span class="line"></span><br><span class="line">    se-&gt;addRegisterCallback(register_all_cocos2dx);</span><br><span class="line">    se-&gt;addRegisterCallback(jsb_register_Node_manual);</span><br><span class="line">    se-&gt;addRegisterCallback(register_all_cocos2dx_manual);</span><br><span class="line">    se-&gt;addRegisterCallback(JSB_register_opengl);</span><br><span class="line"></span><br><span class="line">...&#125;</span><br></pre></td></tr></table></figure>
 <p>在这个函数中，首先获取一个 ScriptEngine(se) 的实例，然后就会进行一系列的加载操作。暂时我们不用关心一些与我们可能会使用到的东西无关的内容。我们关注一下，对于导出的 js 接口是怎么样导入的。</p>
 <h2 id="se-gt-addRegisterCallback-run-prepare-script"><a href="#se-gt-addRegisterCallback-run-prepare-script" class="headerlink" title="se-&gt;addRegisterCallback(run_prepare_script);"></a>se-&gt;addRegisterCallback(run_prepare_script);</h2><p>在引擎启动前，会预先的准备一个 jsb 环境，这个环境的建立，是使用 js 脚本编写的，存在于 <em>jsb_prepare.js</em> 中。</p>
 <p>在脚本  <em>jsb_prepare.js</em> 中，定义了命名空间 <strong>cc, jsb</strong> 定义了 cc 中的一些方法，如 <code>cc.clone()</code>；定义了 <em>cc.Class</em> ，一个用来构造类的基类及其相关方法。以及更多内容。更详细的内容可以查看源码。</p>
@@ -356,194 +356,7 @@
 <h1 id="main-js-1"><a href="#main-js-1" class="headerlink" title="main.js"></a>main.js</h1><p>我们生成项目的 <strong>main.js</strong> 会先加载配置文件，加载 <em>jsb_polyfill.js</em> 文件：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="built_in">window</span>.jsb) &#123;</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'src/settings.js'</span>);</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'src/jsb_polyfill.js'</span>);</span><br><span class="line">    boot();</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后启动 boot 函数：</p>
-<p>```js<br>    function boot () {<br>            // 这个settings 在 settings.js 里面获取<br>        var settings = window._CCSettings;<br>        window._CCSettings = undefined;</p>
-<pre><code>        //  在非debug的时候执行
-    if ( !settings.debug ) {
-        var uuids = settings.uuids;
-
-        var rawAssets = settings.rawAssets;
-        var assetTypes = settings.assetTypes;
-        var realRawAssets = settings.rawAssets = {};
-        for (var mount in rawAssets) {
-            var entries = rawAssets[mount];
-            var realEntries = realRawAssets[mount] = {};
-            for (var id in entries) {
-                var entry = entries[id];
-                var type = entry[1];
-                // retrieve minified raw asset
-                if (typeof type === &#39;number&#39;) {
-                    entry[1] = assetTypes[type];
-                }
-                // retrieve uuid
-                realEntries[uuids[id] || id] = entry;
-            }
-        }
-
-        var scenes = settings.scenes;
-        for (var i = 0; i &lt; scenes.length; ++i) {
-            var scene = scenes[i];
-            if (typeof scene.uuid === &#39;number&#39;) {
-                scene.uuid = uuids[scene.uuid];
-            }
-        }
-
-        var packedAssets = settings.packedAssets;
-        for (var packId in packedAssets) {
-            var packedIds = packedAssets[packId];
-            for (var j = 0; j &lt; packedIds.length; ++j) {
-                if (typeof packedIds[j] === &#39;number&#39;) {
-                    packedIds[j] = uuids[packedIds[j]];
-                }
-            }
-        }
-    }
-
-    // init engine
-    var canvas;
-
-    // 在浏览器下，是利用了一个特定的画布
-    if (cc.sys.isBrowser) {
-        canvas = document.getElementById(&#39;GameCanvas&#39;);
-    }
-
-
-    if (false) {
-        var ORIENTATIONS = {
-            &#39;portrait&#39;: 1,
-            &#39;landscape left&#39;: 2,
-            &#39;landscape right&#39;: 3
-        };
-        BK.Director.screenMode = ORIENTATIONS[settings.orientation];
-        initAdapter();
-    }
-
-    function setLoadingDisplay () {
-        // Loading splash scene
-        var splash = document.getElementById(&#39;splash&#39;);
-        var progressBar = splash.querySelector(&#39;.progress-bar span&#39;);
-        cc.loader.onProgress = function (completedCount, totalCount, item) {
-            var percent = 100 * completedCount / totalCount;
-            if (progressBar) {
-                progressBar.style.width = percent.toFixed(2) + &#39;%&#39;;
-            }
-        };
-        splash.style.display = &#39;block&#39;;
-        progressBar.style.width = &#39;0%&#39;;
-
-        cc.director.once(cc.Director.EVENT_AFTER_SCENE_LAUNCH, function () {
-            splash.style.display = &#39;none&#39;;
-        });
-    }
-
-    var onStart = function () {
-        if (false) {
-            BK.Script.loadlib();
-        }
-
-        cc.view.resizeWithBrowserSize(true);
-
-        if (!false &amp;&amp; !false) {
-            // UC browser on many android devices have performance issue with retina display
-            if (cc.sys.os !== cc.sys.OS_ANDROID || cc.sys.browserType !== cc.sys.BROWSER_TYPE_UC) {
-                cc.view.enableRetina(true);
-            }
-            if (cc.sys.isBrowser) {
-                setLoadingDisplay();
-            }
-
-            if (cc.sys.isMobile) {
-                if (settings.orientation === &#39;landscape&#39;) {
-                    cc.view.setOrientation(cc.macro.ORIENTATION_LANDSCAPE);
-                }
-                else if (settings.orientation === &#39;portrait&#39;) {
-                    cc.view.setOrientation(cc.macro.ORIENTATION_PORTRAIT);
-                }
-                cc.view.enableAutoFullScreen([
-                    cc.sys.BROWSER_TYPE_BAIDU,
-                    cc.sys.BROWSER_TYPE_WECHAT,
-                    cc.sys.BROWSER_TYPE_MOBILE_QQ,
-                    cc.sys.BROWSER_TYPE_MIUI,
-                ].indexOf(cc.sys.browserType) &lt; 0);
-            }
-
-            // Limit downloading max concurrent task to 2,
-            // more tasks simultaneously may cause performance draw back on some android system / brwosers.
-            // You can adjust the number based on your own test result, you have to set it before any loading process to take effect.
-            if (cc.sys.isBrowser &amp;&amp; cc.sys.os === cc.sys.OS_ANDROID) {
-                cc.macro.DOWNLOAD_MAX_CONCURRENT = 2;
-            }
-        }
-
-        // init assets
-        cc.AssetLibrary.init({
-            libraryPath: &#39;res/import&#39;,
-            rawAssetsBase: &#39;res/raw-&#39;,
-            rawAssets: settings.rawAssets,
-            packedAssets: settings.packedAssets,
-            md5AssetsMap: settings.md5AssetsMap
-        });
-
-        if (false) {
-            cc.Pipeline.Downloader.PackDownloader._doPreload(&quot;WECHAT_SUBDOMAIN&quot;, settings.WECHAT_SUBDOMAIN_DATA);
-        }
-
-        var launchScene = settings.launchScene;
-
-        // load scene
-        cc.director.loadScene(launchScene, null,
-            function () {
-                if (cc.sys.isBrowser) {
-                    // show canvas
-                    canvas.style.visibility = &#39;&#39;;
-                    var div = document.getElementById(&#39;GameDiv&#39;);
-                    if (div) {
-                        div.style.backgroundImage = &#39;&#39;;
-                    }
-                }
-                cc.loader.onProgress = null;
-                console.log(&#39;Success to load scene: &#39; + launchScene);
-            }
-        );
-    };
-
-    // jsList
-    var jsList = settings.jsList;
-        // 这个就用来加载工程内的 js 了
-    if (!false) {
-        var bundledScript = settings.debug ? &#39;src/project.dev.js&#39; : &#39;src/project.js&#39;;
-        if (jsList) {
-            jsList = jsList.map(function (x) {
-                return &#39;src/&#39; + x;
-            });
-            jsList.push(bundledScript);
-        }
-        else {
-            jsList = [bundledScript];
-        }
-    }
-
-    // anysdk scripts
-    if (cc.sys.isNative &amp;&amp; cc.sys.isMobile) {
-</code></pre><p>//            jsList = jsList.concat([‘src/anysdk/jsb_anysdk.js’, ‘src/anysdk/jsb_anysdk_constants.js’]);<br>        }</p>
-<pre><code>    // 游戏运行选项
-    var option = {
-        //width: width,
-        //height: height,
-        id: &#39;GameCanvas&#39;,
-        scenes: settings.scenes,
-        debugMode: settings.debug ? cc.DebugMode.INFO : cc.DebugMode.ERROR,
-        showFPS: (!false &amp;&amp; !false) &amp;&amp; settings.debug,
-        frameRate: 60,
-        jsList: jsList,
-        groupList: settings.groupList,
-        collisionMatrix: settings.collisionMatrix,
-        renderMode: 0
-    }
-
-    cc.game.run(option, onStart);
-}
-</code></pre><p>```<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
-
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">boot</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">			<span class="comment">// 这个settings 在 settings.js 里面获取</span></span><br><span class="line">        <span class="keyword">var</span> settings = <span class="built_in">window</span>._CCSettings;</span><br><span class="line">        <span class="built_in">window</span>._CCSettings = <span class="literal">undefined</span>;</span><br><span class="line"></span><br><span class="line">			<span class="comment">//  在非debug的时候执行</span></span><br><span class="line">        <span class="keyword">if</span> ( !settings.debug ) &#123;</span><br><span class="line">            <span class="keyword">var</span> uuids = settings.uuids;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> rawAssets = settings.rawAssets;</span><br><span class="line">            <span class="keyword">var</span> assetTypes = settings.assetTypes;</span><br><span class="line">            <span class="keyword">var</span> realRawAssets = settings.rawAssets = &#123;&#125;;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> mount <span class="keyword">in</span> rawAssets) &#123;</span><br><span class="line">                <span class="keyword">var</span> entries = rawAssets[mount];</span><br><span class="line">                <span class="keyword">var</span> realEntries = realRawAssets[mount] = &#123;&#125;;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">var</span> id <span class="keyword">in</span> entries) &#123;</span><br><span class="line">                    <span class="keyword">var</span> entry = entries[id];</span><br><span class="line">                    <span class="keyword">var</span> type = entry[<span class="number">1</span>];</span><br><span class="line">                    <span class="comment">// retrieve minified raw asset</span></span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">typeof</span> type === <span class="string">'number'</span>) &#123;</span><br><span class="line">                        entry[<span class="number">1</span>] = assetTypes[type];</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="comment">// retrieve uuid</span></span><br><span class="line">                    realEntries[uuids[id] || id] = entry;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> scenes = settings.scenes;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; scenes.length; ++i) &#123;</span><br><span class="line">                <span class="keyword">var</span> scene = scenes[i];</span><br><span class="line">                <span class="keyword">if</span> (<span class="keyword">typeof</span> scene.uuid === <span class="string">'number'</span>) &#123;</span><br><span class="line">                    scene.uuid = uuids[scene.uuid];</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> packedAssets = settings.packedAssets;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">var</span> packId <span class="keyword">in</span> packedAssets) &#123;</span><br><span class="line">                <span class="keyword">var</span> packedIds = packedAssets[packId];</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; packedIds.length; ++j) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (<span class="keyword">typeof</span> packedIds[j] === <span class="string">'number'</span>) &#123;</span><br><span class="line">                        packedIds[j] = uuids[packedIds[j]];</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// init engine</span></span><br><span class="line">        <span class="keyword">var</span> canvas;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 在浏览器下，是利用了一个特定的画布</span></span><br><span class="line">        <span class="keyword">if</span> (cc.sys.isBrowser) &#123;</span><br><span class="line">            canvas = <span class="built_in">document</span>.getElementById(<span class="string">'GameCanvas'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="literal">false</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> ORIENTATIONS = &#123;</span><br><span class="line">                <span class="string">'portrait'</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="string">'landscape left'</span>: <span class="number">2</span>,</span><br><span class="line">                <span class="string">'landscape right'</span>: <span class="number">3</span></span><br><span class="line">            &#125;;</span><br><span class="line">            BK.Director.screenMode = ORIENTATIONS[settings.orientation];</span><br><span class="line">            initAdapter();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">setLoadingDisplay</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="comment">// Loading splash scene</span></span><br><span class="line">            <span class="keyword">var</span> splash = <span class="built_in">document</span>.getElementById(<span class="string">'splash'</span>);</span><br><span class="line">            <span class="keyword">var</span> progressBar = splash.querySelector(<span class="string">'.progress-bar span'</span>);</span><br><span class="line">            cc.loader.onProgress = <span class="function"><span class="keyword">function</span> (<span class="params">completedCount, totalCount, item</span>) </span>&#123;</span><br><span class="line">                <span class="keyword">var</span> percent = <span class="number">100</span> * completedCount / totalCount;</span><br><span class="line">                <span class="keyword">if</span> (progressBar) &#123;</span><br><span class="line">                    progressBar.style.width = percent.toFixed(<span class="number">2</span>) + <span class="string">'%'</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;;</span><br><span class="line">            splash.style.display = <span class="string">'block'</span>;</span><br><span class="line">            progressBar.style.width = <span class="string">'0%'</span>;</span><br><span class="line"></span><br><span class="line">            cc.director.once(cc.Director.EVENT_AFTER_SCENE_LAUNCH, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                splash.style.display = <span class="string">'none'</span>;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> onStart = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="literal">false</span>) &#123;</span><br><span class="line">                BK.Script.loadlib();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            cc.view.resizeWithBrowserSize(<span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (!<span class="literal">false</span> &amp;&amp; !<span class="literal">false</span>) &#123;</span><br><span class="line">                <span class="comment">// UC browser on many android devices have performance issue with retina display</span></span><br><span class="line">                <span class="keyword">if</span> (cc.sys.os !== cc.sys.OS_ANDROID || cc.sys.browserType !== cc.sys.BROWSER_TYPE_UC) &#123;</span><br><span class="line">                    cc.view.enableRetina(<span class="literal">true</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span> (cc.sys.isBrowser) &#123;</span><br><span class="line">                    setLoadingDisplay();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (cc.sys.isMobile) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (settings.orientation === <span class="string">'landscape'</span>) &#123;</span><br><span class="line">                        cc.view.setOrientation(cc.macro.ORIENTATION_LANDSCAPE);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (settings.orientation === <span class="string">'portrait'</span>) &#123;</span><br><span class="line">                        cc.view.setOrientation(cc.macro.ORIENTATION_PORTRAIT);</span><br><span class="line">                    &#125;</span><br><span class="line">                    cc.view.enableAutoFullScreen([</span><br><span class="line">                        cc.sys.BROWSER_TYPE_BAIDU,</span><br><span class="line">                        cc.sys.BROWSER_TYPE_WECHAT,</span><br><span class="line">                        cc.sys.BROWSER_TYPE_MOBILE_QQ,</span><br><span class="line">                        cc.sys.BROWSER_TYPE_MIUI,</span><br><span class="line">                    ].indexOf(cc.sys.browserType) &lt; <span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// Limit downloading max concurrent task to 2,</span></span><br><span class="line">                <span class="comment">// more tasks simultaneously may cause performance draw back on some android system / brwosers.</span></span><br><span class="line">                <span class="comment">// You can adjust the number based on your own test result, you have to set it before any loading process to take effect.</span></span><br><span class="line">                <span class="keyword">if</span> (cc.sys.isBrowser &amp;&amp; cc.sys.os === cc.sys.OS_ANDROID) &#123;</span><br><span class="line">                    cc.macro.DOWNLOAD_MAX_CONCURRENT = <span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// init assets</span></span><br><span class="line">            cc.AssetLibrary.init(&#123;</span><br><span class="line">                libraryPath: <span class="string">'res/import'</span>,</span><br><span class="line">                rawAssetsBase: <span class="string">'res/raw-'</span>,</span><br><span class="line">                rawAssets: settings.rawAssets,</span><br><span class="line">                packedAssets: settings.packedAssets,</span><br><span class="line">                md5AssetsMap: settings.md5AssetsMap</span><br><span class="line">            &#125;);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="literal">false</span>) &#123;</span><br><span class="line">                cc.Pipeline.Downloader.PackDownloader._doPreload(<span class="string">"WECHAT_SUBDOMAIN"</span>, settings.WECHAT_SUBDOMAIN_DATA);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> launchScene = settings.launchScene;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// load scene</span></span><br><span class="line">            cc.director.loadScene(launchScene, <span class="literal">null</span>,</span><br><span class="line">                <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">if</span> (cc.sys.isBrowser) &#123;</span><br><span class="line">                        <span class="comment">// show canvas</span></span><br><span class="line">                        canvas.style.visibility = <span class="string">''</span>;</span><br><span class="line">                        <span class="keyword">var</span> div = <span class="built_in">document</span>.getElementById(<span class="string">'GameDiv'</span>);</span><br><span class="line">                        <span class="keyword">if</span> (div) &#123;</span><br><span class="line">                            div.style.backgroundImage = <span class="string">''</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                    cc.loader.onProgress = <span class="literal">null</span>;</span><br><span class="line">                    <span class="built_in">console</span>.log(<span class="string">'Success to load scene: '</span> + launchScene);</span><br><span class="line">                &#125;</span><br><span class="line">            );</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// jsList</span></span><br><span class="line">        <span class="keyword">var</span> jsList = settings.jsList;</span><br><span class="line">			<span class="comment">// 这个就用来加载工程内的 js 了</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="literal">false</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> bundledScript = settings.debug ? <span class="string">'src/project.dev.js'</span> : <span class="string">'src/project.js'</span>;</span><br><span class="line">            <span class="keyword">if</span> (jsList) &#123;</span><br><span class="line">                jsList = jsList.map(<span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="string">'src/'</span> + x;</span><br><span class="line">                &#125;);</span><br><span class="line">                jsList.push(bundledScript);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                jsList = [bundledScript];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// anysdk scripts</span></span><br><span class="line">        <span class="keyword">if</span> (cc.sys.isNative &amp;&amp; cc.sys.isMobile) &#123;</span><br><span class="line"><span class="comment">//            jsList = jsList.concat(['src/anysdk/jsb_anysdk.js', 'src/anysdk/jsb_anysdk_constants.js']);</span></span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">		<span class="comment">// 游戏运行选项</span></span><br><span class="line">        <span class="keyword">var</span> option = &#123;</span><br><span class="line">            <span class="comment">//width: width,</span></span><br><span class="line">            <span class="comment">//height: height,</span></span><br><span class="line">            id: <span class="string">'GameCanvas'</span>,</span><br><span class="line">            scenes: settings.scenes,</span><br><span class="line">            debugMode: settings.debug ? cc.DebugMode.INFO : cc.DebugMode.ERROR,</span><br><span class="line">            showFPS: (!<span class="literal">false</span> &amp;&amp; !<span class="literal">false</span>) &amp;&amp; settings.debug,</span><br><span class="line">            frameRate: <span class="number">60</span>,</span><br><span class="line">            jsList: jsList,</span><br><span class="line">            groupList: settings.groupList,</span><br><span class="line">            collisionMatrix: settings.collisionMatrix,</span><br><span class="line">            renderMode: <span class="number">0</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        cc.game.run(option, onStart);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -636,13 +449,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

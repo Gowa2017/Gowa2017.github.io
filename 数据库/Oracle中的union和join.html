@@ -333,8 +333,7 @@
 <h2 id="Outer-Joins"><a href="#Outer-Joins" class="headerlink" title="Outer Joins"></a>Outer Joins</h2><p><code>Outer Join</code>扩展了<code>simple join</code>的结果。一个<code>outer join</code>返回所有满足<em>Join Conditon</em>的行，同时从一个不满足条件的表返回一些或所有行。</p>
 <h3 id="LEFT-outer-JOIN"><a href="#LEFT-outer-JOIN" class="headerlink" title="LEFT [outer] JOIN"></a>LEFT [outer] JOIN</h3><p>想要Join表 A,B，同时返回A的所有行。在<code>FROM</code>后面使用<code>left [outer] join</code>语句，或者在<code>WHERE</code>语句中的<em>Join Conditon</em>对B的所有列使用<strong>outer join operator</strong>（+）。对A在B中没有匹配行，在B的列中就会返回NULL。<br>举个例子<br>有一个属地代码表md_area(areano, name)。<br>有一个用户表users(mdn,areano,….)。<br>我现在要统计users表中各属地的用户数，还要根据代码显示出属地名称，以便更加直观的进行统计。<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> area, areaname, ct <span class="keyword">from</span></span><br><span class="line">	(<span class="keyword">select</span> areano <span class="keyword">as</span> area, <span class="keyword">count</span>(*) <span class="keyword">as</span> ct <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">group</span> <span class="keyword">by</span> areano) t1</span><br><span class="line">	<span class="keyword">left</span> <span class="keyword">join</span> </span><br><span class="line">	(<span class="keyword">select</span> areano, <span class="keyword">name</span> <span class="keyword">as</span> areaname <span class="keyword">from</span> md_area t2) <span class="keyword">on</span> t2.areano = t1.area;</span><br></pre></td></tr></table></figure></p>
 <h3 id="Right-outer-Join"><a href="#Right-outer-Join" class="headerlink" title="Right [outer] Join"></a>Right [outer] Join</h3><p>接上例，其等于:<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> area, areaname, ct <span class="keyword">from</span></span><br><span class="line">	(<span class="keyword">select</span> areano, <span class="keyword">name</span> <span class="keyword">as</span> areaname <span class="keyword">from</span> md_area t2) </span><br><span class="line">	<span class="keyword">right</span> <span class="keyword">join</span> </span><br><span class="line">	(<span class="keyword">select</span> areano <span class="keyword">as</span> area, <span class="keyword">count</span>(*) <span class="keyword">as</span> ct <span class="keyword">from</span> <span class="keyword">users</span> <span class="keyword">group</span> <span class="keyword">by</span> areano) t1</span><br><span class="line">	<span class="keyword">on</span> t2.areano = t1.area;</span><br></pre></td></tr></table></figure></p>
-<h2 id="Antijoins-反连接）"><a href="#Antijoins-反连接）" class="headerlink" title="Antijoins (反连接）"></a>Antijoins (反连接）</h2><h2 id="Semijoins-（半连接）"><a href="#Semijoins-（半连接）" class="headerlink" title="Semijoins （半连接）"></a>Semijoins （半连接）</h2><p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
-
+<h2 id="Antijoins-反连接）"><a href="#Antijoins-反连接）" class="headerlink" title="Antijoins (反连接）"></a>Antijoins (反连接）</h2><h2 id="Semijoins-（半连接）"><a href="#Semijoins-（半连接）" class="headerlink" title="Semijoins （半连接）"></a>Semijoins （半连接）</h2>
     </div>
 
     
@@ -428,13 +427,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

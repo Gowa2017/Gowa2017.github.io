@@ -368,7 +368,6 @@
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">a = &#123;&#123;<span class="string">"one"</span>, <span class="string">"two"</span>&#125;, <span class="number">3</span>&#125;</span><br><span class="line">b = &#123;k = a[<span class="number">1</span>]&#125;</span><br></pre></td></tr></table></figure>
 <p>如果我们想单独的保存他们，结果将不会有相同的部分。然而，如果我们使用相同的 saved 表，那么结果就会是有相同部分的：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> t = &#123;&#125;</span><br><span class="line">save(<span class="string">"a"</span>, a, t)</span><br><span class="line">save(<span class="string">"b"</span>, b, t)</span><br><span class="line"></span><br><span class="line">  <span class="comment">--&gt; a = &#123;&#125;</span></span><br><span class="line">  <span class="comment">--&gt; a[1] = &#123;&#125;</span></span><br><span class="line">  <span class="comment">--&gt; a[1][1] = "one"</span></span><br><span class="line">  <span class="comment">--&gt; a[1][2] = "two"</span></span><br><span class="line">  <span class="comment">--&gt; a[2] = 3</span></span><br><span class="line">  <span class="comment">--&gt; b = &#123;&#125;</span></span><br><span class="line">  <span class="comment">--&gt; b["k"] = a[1]</span></span><br></pre></td></tr></table></figure>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -386,7 +385,7 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Linux-Unix/在安卓中进行共享库的注入.html" rel="next" title="在安卓中进行共享库的注入">
+                <a href="/Android/在安卓中进行共享库的注入.html" rel="next" title="在安卓中进行共享库的注入">
                   <i class="fa fa-chevron-left"></i> 在安卓中进行共享库的注入
                 </a>
             </div>
@@ -463,13 +462,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

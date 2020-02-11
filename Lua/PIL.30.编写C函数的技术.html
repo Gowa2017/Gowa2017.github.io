@@ -386,7 +386,6 @@
 <p>现在我们来看看 counter 函数的定义：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">      <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">counter</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> val = lua_tointeger(L, lua_upvalueindex(<span class="number">1</span>));</span><br><span class="line">        lua_pushinteger(L, ++val);  <span class="comment">/* new value */</span></span><br><span class="line">        lua_copy(L, <span class="number">-1</span>, lua_upvalueindex(<span class="number">1</span>));  <span class="comment">/* update upvalue */</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;  <span class="comment">/* return new value */</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这里的关键元素就是 <code>lua_upvalueindex</code>，其会对上值产生一个伪索引。实际上 <code>lua_upvalueindex(1)</code> 会产生运行函数第一个上值的伪索引。再次重复，伪索引也和正常的栈索引没有什么区别，只是其不存在与栈上而已。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -481,13 +480,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

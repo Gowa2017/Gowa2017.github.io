@@ -367,7 +367,7 @@
 <h2 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h2><p>@Autowired和@Inject基本是一样的，因为两者都是使用AutowiredAnnotationBeanPostProcessor来处理依赖注入。但是@Resource是个例外，它使用的是CommonAnnotationBeanPostProcessor来处理依赖注入。当然，两者都是BeanPostProcessor。</p>
 <p>@Autowired和@Inject<br>默认 autowired by type<br>可以 通过@Qualifier 显式指定 autowired by qualifier name。</p>
 <p>@Resource<br>默认 autowired by field name<br>如果 autowired by field name失败，会退化为 autowired by type<br>可以 通过@Qualifier 显式指定 autowired by qualifier name<br>如果 autowired by qualifier name失败，会退化为 autowired by field name。但是这时候如果 autowired by field name失败，就不会再退化为autowired by type了。</p>
-<p>建议多用 @Inject，这是 JSR 330 的规范。@Autowired 是 Spring 的实现，比如 Dagger 就用不了。@Resource 是 JSR 250 是比较老的规范。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+<p>建议多用 @Inject，这是 JSR 330 的规范。@Autowired 是 Spring 的实现，比如 Dagger 就用不了。@Resource 是 JSR 250 是比较老的规范。</p>
 
     </div>
 
@@ -462,13 +462,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

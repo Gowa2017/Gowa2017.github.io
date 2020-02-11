@@ -318,7 +318,6 @@
 <h2 id="会话阶段-session-stage"><a href="#会话阶段-session-stage" class="headerlink" title="会话阶段(session stage)"></a>会话阶段(session stage)</h2><p>一旦PPPoE会话开始，PPP数据就像其它PPP封装一样发送。所有的以太网数据包都是单播的。ETHER_TYPE域设置为0x8864。PPPoE的CODE必须设置为0x00。PPPoE会话的SESSION_ID不允许发生改变，必须是Discovery阶段所指定的值。PPPoE的payload包含一个PPP帧，帧始于PPP Protocol-ID。</p>
 <h2 id="TAG-TYPE和TAG-VALUE"><a href="#TAG-TYPE和TAG-VALUE" class="headerlink" title="TAG_TYPE和TAG_VALUE"></a>TAG_TYPE和TAG_VALUE</h2><p>0x0000 End-Of-List<br>      该TAG表明表中没有其它TAG了。该TAG的TAG_LENGTH必须总是0。不要求使用该标签，存在是为了向后兼容。<br>   <em>0x0101 Service-Name</em><br>      该TAG表明后面紧跟的是服务的名称。TAG_VALUE是不以NULL结束的UTF-8字符串。当TAG_LENGTH为0时，该TAG用于表明接受任何服务。使用Service-Name标签的例子是表明ISP(Internet服务提供商)或者一类服务或者服务的质量。<br>   <em>0x0102 AC-Name</em><br>      该TAG表明后面紧跟的字符串唯一地表示了某个特定的访问集中器。它可以是商标、型号以及序列号等信息的集合，或者该访问集中器MAC地址的一个简单的UTF-8表示。它不以NULL来结束。<br>   <em>0x0103 Host-Uniq</em><br>      该TAG由主机用于把访问集中器的响应（PADO或者PADS）与主机的某个唯一特定的请求联系起来。TAG_VALUE是主机选择的长度和值为任意的二进制数据。它不能由访问集中器解释。主机可以在PADI或者PADR中包含一个Host-Uniq标签。如果访问集中器收到了该标签，它必须在对应的PADO或者PADS中不加改变的包含该标签。<br>   <em>0x0104 AC-Cookie</em><br>      该TAG由访问集中器用于防止拒绝服务攻击（见“安全方面的考虑”）。访问集中器可以在PADO数据包中包含该TAG。如果主机收到了该标签，它必须在接下来的PADR中不加改变的包含该标签。TAG_VALUE I是长度和值任意的二进制数据，不能由主机解释。<br>   <em>0x0105 Vendor-Specific</em><br>      该TAG用来传送厂商自定义的信息。TAG_VALUE的头4个字节包含了厂商的识别码 ，其余字节尚未定义。厂商识别码的高字节为0，低3个字节为网络字节序的厂商的SMI网络管理专用企业码，如“定义值RFC”（参考文献[4]）中定义的那样。<br>      不推荐使用该TAG。为了确保互操作性，实现可以悄悄的忽略Vendor-Specific TAG。<br>   <em>0x0110 Relay-Session-Id</em><br>      该TAG可由中继流量的中间代理加入到Discovery数据包中。TAG_VALUE对主机和访问集中器都是晦涩难懂的（paque）。如果主机或访问集中器收到该TAG，则它们必须在所有的Discovery数据包中包含该TAG以作为响应。所有的PADI数据包必须保证足够空间来加入TAG_VALUE长度为12字节的Relay-Session-Id标签。<br>      如果Discovery数据包中已经包含一个Relay-Session-Id标签，则不允许再加入该标签。这种情况下，中间代理应该使用该现有的Relay-Session-Id标签。如果它不能使用现有的标签，或者没有足够空间来增加一个Relay- Session-Id标签,那么它应该向发送者返回一个Generic-Error标签。<br>   <em>0x0201 Service-Name-Error</em><br>      该TAG(典型的有一个长度为零的数据部分)表明了由于某种原因，没有理睬所请求的Service-Name。如果有数据部分,并且数据部分的头一个字节非0，那么它必须是一个      可打印的UTF-8字符串，解释请求被拒绝的原因。该字符串可以不以NULL结束。<br>   <em>0x0202 AC-System-Error</em><br>      该TAG表明了访问集中器在处理主机请求时出现了某个错误。(例如没有足够资源来创建一个虚拟电路。PADS数据包中可以包含该标签。<br>      如果有数据，并且数据的第一个字节不为0，那么（数据）必须是一个可打印的UTF-8 字符串，该字符串解释了错误的性质。该字符串可以不以NULL结束。<br>   <em>0x0203 Generic-Error</em><br>      该TAG表明发生了一个错误。当发生一个不可恢复的错误并且没有其它合适的TAG时，它可被加到PADO, PADR或PADS数据包中。如果出现数据部分，那么数据必须是一个UTF-8字符串，解释错误的性质。该字符串不允许以NULL结束。</p>
 <h2 id="数据包例子"><a href="#数据包例子" class="headerlink" title="数据包例子"></a>数据包例子</h2><p><img src="/res/pppoe-example.png" alt="例子"></p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -413,13 +412,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

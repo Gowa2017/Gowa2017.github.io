@@ -413,7 +413,7 @@
 <li>首先建立一个协程<em>co</em></li>
 <li><code>coroutine.resume(co, 1, 10)</code>会以参数<code>1, 10</code>启动<code>co</code>。首先打印出<em>co-body, 1, 10</em>然后调用<code>foo(1 + 1)</code>。</li>
 <li>在<code>foo()</code>中，打印出参数的值这里是2，然后放弃当前协程。放弃协程会返回<code>coroutine.yield()</code>返回的值，已经<strong>true</strong>。所以输出是<code>main true 4</code></li>
-<li>从调用<code>foo(a+1)</code>的位置重启协程，这会继续执行，被调用<code>coroutine.yield(a+b, a-b)</code>返回值是<code>true 11 -9</code>。<br><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></li>
+<li>从调用<code>foo(a+1)</code>的位置重启协程，这会继续执行，被调用<code>coroutine.yield(a+b, a-b)</code>返回值是<code>true 11 -9</code>。</li>
 </ol>
 
     </div>
@@ -508,13 +508,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

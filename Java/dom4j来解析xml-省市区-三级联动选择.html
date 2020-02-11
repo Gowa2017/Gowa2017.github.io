@@ -310,7 +310,6 @@
 <p>然后把数据绑定到我们的选择器上：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">final</span> OptionsPickerView pvOptions = <span class="keyword">new</span> OptionsPickerBuilder(<span class="keyword">this</span>, <span class="keyword">new</span> OnOptionsSelectListener() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onOptionsSelect</span><span class="params">(<span class="keyword">int</span> options1, <span class="keyword">int</span> options2, <span class="keyword">int</span> options3, View v)</span> </span>&#123;</span><br><span class="line">        StringBuffer sb = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">        sb.append(mProvinces.get(options1).getName());</span><br><span class="line">        sb.append(<span class="string">"-"</span>);</span><br><span class="line">        sb.append(mCities.get(options1).get(options2).getName());</span><br><span class="line">        sb.append(<span class="string">"-"</span>);</span><br><span class="line">        sb.append(mZones.get(options1).get(options2).get(options3).getValue());</span><br><span class="line">        String areazone = sb.toString().replace(<span class="string">"--"</span>,<span class="string">""</span>);</span><br><span class="line">        idcardAddress.setTvContent(areazone);</span><br><span class="line">        areaCode = String.format(<span class="string">"%s%s%s"</span>, mProvinces.get(options1).getCode(),</span><br><span class="line">                                        mCities.get(options1).get(options2).getCode(),</span><br><span class="line">                                        mZones.get(options1).get(options2).get(options3).getCode());</span><br><span class="line">        showToast(areazone);</span><br><span class="line">        Log.d(TAG, <span class="string">"onOptionsSelect: "</span> + areaCode);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">        .setTitleText(<span class="string">"城市选择"</span>)</span><br><span class="line">        .setDividerColor(Color.BLACK)</span><br><span class="line">        .setTextColorCenter(Color.BLACK) <span class="comment">//设置选中项文字颜色</span></span><br><span class="line">        .setContentTextSize(<span class="number">20</span>)</span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">pvOptions.setPicker(mProvinces, mCities, mZones);<span class="comment">//三级选择器</span></span><br><span class="line">pvOptions.show();</span><br></pre></td></tr></table></figure>
 <p>这样就大功告成了。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -404,13 +403,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

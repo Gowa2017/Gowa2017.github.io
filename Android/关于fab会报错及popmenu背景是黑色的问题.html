@@ -299,7 +299,7 @@
 <h1 id="ApplicationContext"><a href="#ApplicationContext" class="headerlink" title="ApplicationContext"></a>ApplicationContext</h1><p>这个上下文在应用存在期间，一直可用，所以对于生命周期长，或无法获取上下文的时候，可以使用这个来作为上下文。</p>
 <p>在CodePath上有一篇文章进行了描述上下文：<a href="https://guides.codepath.com/android/Using-Context" target="_blank" rel="noopener">https://guides.codepath.com/android/Using-Context</a></p>
 <h1 id="Context-用来做什么"><a href="#Context-用来做什么" class="headerlink" title="Context 用来做什么"></a>Context 用来做什么</h1><p>下面是一些例子。</p>
-<h2 id="显式启动一个组件"><a href="#显式启动一个组件" class="headerlink" title="显式启动一个组件"></a>显式启动一个组件</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Provide context if MyActivity is an internal activity.</span></span><br><span class="line">Intent intent = <span class="keyword">new</span> Intent(context, MyActivity.class);</span><br><span class="line">startActivity(intent);</span><br></pre></td></tr></table></figure>
+<h2 id="显式启动一个组件"><a href="#显式启动一个组件" class="headerlink" title="显式启动一个组件"></a>显式启动一个组件</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Provide context if MyActivity is an internal activity.</span></span><br><span class="line">Intent intent = <span class="keyword">new</span> Intent(context, MyActivity<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">startActivity(intent);</span><br></pre></td></tr></table></figure>
 <p>当显式启动一个组件时候，我们需要两部分信息：</p>
 <ul>
 <li>包名，标识了包含这个组件的应用。</li>
@@ -337,15 +337,7 @@
 <h2 id="适当的存储一个Context-使用-Application-Context"><a href="#适当的存储一个Context-使用-Application-Context" class="headerlink" title="适当的存储一个Context:使用  Application Context"></a>适当的存储一个Context:使用  Application Context</h2><p>为了避免内存泄漏，不要在其生命周期外持有对它的引用。检查所有你的背景线程，过起的handlers，及内部类，看看他们是不是会持有上下文引用。</p>
 <p>正确的方式是在<code>CustomManager.getInstance()</code>中存储 Application Context。应用上下文是单例的，且其与应用进程的生命周期相绑定。</p>
 <p>当需要一个在组件的生命周期外引用其上下文时，使用 应用上下文。</p>
-<p>```java<br>public static CustomManager getInstance(Context context) {<br>    if (sInstance == null) {</p>
-<pre><code>    // When storing a reference to a context, use the application context.
-    // Never store the context itself, which could be a component.
-    sInstance = new CustomManager(context.getApplicationContext());
-}
-
-return sInstance;
-</code></pre><p>}<br>```<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
-
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> CustomManager <span class="title">getInstance</span><span class="params">(Context context)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (sInstance == <span class="keyword">null</span>) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// When storing a reference to a context, use the application context.</span></span><br><span class="line">        <span class="comment">// Never store the context itself, which could be a component.</span></span><br><span class="line">        sInstance = <span class="keyword">new</span> CustomManager(context.getApplicationContext());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> sInstance;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -438,13 +430,13 @@ return sInstance;
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

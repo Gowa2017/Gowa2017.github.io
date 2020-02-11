@@ -336,7 +336,7 @@
 <li>当怎么在文件作用域（全局或命名空间作用域）声明变量或函数时，static 说明此变量或者函数是内部链接的，外部不可见。当我们声明一个变量，变量有静态生命周期的时候，编译器会将其初始化为0.</li>
 <li>当我们在函数内声明变量时，static 会在多次调用函数中保持此变量的状态。</li>
 <li>当我们在类声明内声明一个数据成员时，static 表明此成员被所有此类的实例所共享。static 数据成员必须在文件作用域进行定义。</li>
-<li>当我们在类声明中生命一个成员函数时，static 指明此方法为所有的此类实例所共享。静态成员方法不可以调用实例方法，因为其不含有 this 指针。想要达到这个目的，可以将实例作为一个参数传递给 static 方法。<br><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></li>
+<li>当我们在类声明中生命一个成员函数时，static 指明此方法为所有的此类实例所共享。静态成员方法不可以调用实例方法，因为其不含有 this 指针。想要达到这个目的，可以将实例作为一个参数传递给 static 方法。</li>
 </ol>
 
     </div>
@@ -432,13 +432,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

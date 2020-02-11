@@ -302,7 +302,6 @@
 <p>的形式，而我在导入的时候，忽略了 Packages 这个全局变量，所以导入错误。 另外，我是这样使用的是 <code>MediaScannerConnection.scanFile()</code> 这个静态方法，而看着有一个只需要两个参数的重载方法，一直使用那个，很遗憾，那个是需要先建立对象的，所以也是错误。所以最终的正确方法是：</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> path=<span class="string">"/sdcard/DCIM/Screenshots/2.png"</span>;</span><br><span class="line"><span class="keyword">if</span> (!requestScreenCapture()) &#123;</span><br><span class="line">    toast(<span class="string">"请求截图失败"</span>);</span><br><span class="line">    exit();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> img = captureScreen();</span><br><span class="line">images</span><br><span class="line">    .saveImage(img, path);</span><br><span class="line">importClass(Packages.android.media.MediaScannerConnection);</span><br><span class="line"><span class="keyword">let</span> p = [path];</span><br><span class="line">MediaScannerConnection.scanFile(context,p,<span class="literal">null</span>,<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
 <p>要记得这个使用方法。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -396,13 +395,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

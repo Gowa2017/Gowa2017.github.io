@@ -301,7 +301,7 @@
 <p>最终放弃了这个办法。</p>
 <h1 id="第二次猜测"><a href="#第二次猜测" class="headerlink" title="第二次猜测"></a>第二次猜测</h1><p>在谷歌上找到的相关问题症状，显示的都是因为重复类导致的。但通过在idea来寻找，并没有发现重复的类。而通过 包依赖来分析，依然也没有发现重复的不同版本的依赖。</p>
 <h1 id="第三种猜测"><a href="#第三种猜测" class="headerlink" title="第三种猜测"></a>第三种猜测</h1><p>昨天偶然的时候，看到在 libs 下有两个jar包，一个是 poi-shadow， 一个是    poi-scratchpad-3.17-beta1.jar，而查阅 poi.apache.org 发现，后一个包是针对操作 2003格式的文档的，而我操作的是 2007 文档，有ooxml就够了于是就把它删除了，之后重新编译，居然就OK了。</p>
-<h1 id="最终"><a href="#最终" class="headerlink" title="最终"></a>最终</h1><p>但我却依然无法知道具体是什么情况，导致了这样的错误发生。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+<h1 id="最终"><a href="#最终" class="headerlink" title="最终"></a>最终</h1><p>但我却依然无法知道具体是什么情况，导致了这样的错误发生。</p>
 
     </div>
 
@@ -398,13 +398,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

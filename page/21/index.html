@@ -311,7 +311,7 @@
 <li>2XX - success</li>
 <li>3XX - redirection</li>
 <li>4XX - client error</li>
-<li>5XX - server error<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></li>
+<li>5XX - server error</li>
 </ul>
 
       
@@ -406,7 +406,6 @@
 <h2 id="系统配置"><a href="#系统配置" class="headerlink" title="系统配置"></a>系统配置</h2><p><code>/etc/sysctl.conf</code> 把下列选项都改为1:</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net.ipv6.conf.all.disable_ipv6 = 1</span><br><span class="line">net.ipv6.conf.default.disable_ipv6 = 1</span><br><span class="line">net.ipv6.conf.lo.disable_ipv6 = 1</span><br></pre></td></tr></table></figure>
 <p>重启了之后，一看。果然可以了。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -518,7 +517,6 @@
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">        mTasksRepository.getTasks(<span class="keyword">new</span> TasksDataSource.LoadTasksCallback() &#123;</span><br><span class="line">... ...</span><br><span class="line"></span><br><span class="line">processTasks(tasks);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">processTasks</span><span class="params">(List&lt;Task&gt; tasks)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (tasks.isEmpty()) &#123;</span><br><span class="line">            <span class="comment">// Show a message indicating there are no tasks for that filter type.</span></span><br><span class="line">            processEmptyTasks();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// Show the list of tasks</span></span><br><span class="line">            mTasksView.showTasks(tasks);</span><br><span class="line">            <span class="comment">// Set the filter label's text.</span></span><br><span class="line">            showFilterLabel();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>回调过后，其就调用 View 的方法来更新界面显示了。</p>
 <p>瞧，多么简单。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -668,7 +666,6 @@
 <h3 id="调整一个预定义形状"><a href="#调整一个预定义形状" class="headerlink" title="调整一个预定义形状"></a>调整一个预定义形状</h3><p>有的时候预定义形状也不是很够用我们就需要进行一些调整。预定义的形状使用  线，曲线，就和一个自定义形状被定义时一样。为了允许调整这样预定义形状，我们定义了一些属性，而不是关注规格。</p>
 <p>下面的代码可以指定一个形状：</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:sp</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"3276600"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"978408"</span> <span class="attr">cy</span>=<span class="string">"484632"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rightArrow"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:avLst</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:gd</span> <span class="attr">name</span>=<span class="string">"adj1"</span> <span class="attr">fmla</span>=<span class="string">"val 50000"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:gd</span> <span class="attr">name</span>=<span class="string">"adj2"</span> <span class="attr">fmla</span>=<span class="string">"val 50000"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:avLst</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:sp</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -1319,13 +1316,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

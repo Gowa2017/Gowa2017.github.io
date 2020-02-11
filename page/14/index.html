@@ -1191,7 +1191,6 @@
 <h2 id="monitor"><a href="#monitor" class="headerlink" title="monitor"></a>monitor</h2><p>monitor组件由所有的包括master服务器在内的服务器都会加载，它的主要功能就是与master建立连接进行通信，从而对整个应用服务器群进行管理和监控。master服务器本身也会加载monitor服务器，因为master服务器也会收集其本身自己的监控信息。</p>
 <p>可以认为monitor服务器与master服务器是对等组件，monitor会通过master接受一些命令，比如关闭整个服务器等。对于一些周期性监控的信息，pomelo提供了两种收集方式，即pull方式和push方式。pull方式要求master周期地去与monitor通信，拉取相应的监控信息；push方式，则是由monitor周期地主动地向master报告其监控信息。</p>
 <p>monitor组件无配置项。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
       
     </div>
@@ -1262,13 +1261,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

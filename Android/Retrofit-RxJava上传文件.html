@@ -327,7 +327,7 @@
 <h1 id="MultipartBody"><a href="#MultipartBody" class="headerlink" title="MultipartBody"></a>MultipartBody</h1><p>MultipartBody 是 RequestBody 的子类，因为其有多个 Part 所以其还有一个内部类 Part，每个 Part 都是一个 RequestBody 加上此 Part 对应的信息如：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Content-Disposition: form-data; name=&quot;myFile&quot;; filename=&quot;foo.txt&quot;  这是 PartHeader </span><br><span class="line">Content-Type: text/plain  </span><br><span class="line"></span><br><span class="line">(content of the uploaded file foo.txt)  Part 中的 RequestBody</span><br></pre></td></tr></table></figure>
 <p>我们现在要做的就是在一个 RequestBody 上封装一个 CountingRequestBody ，重写且在写出数据的方法，回调进行通知。事实本质上还是进行了回调。</p>
-<p>这样做，依然还有 个问题，就是当我们从文件内读取数据，然后写入到 套接字的时候，如果IO快的话，会很快就返回到100%，但这个时候，网络的传输并没有完成，就会出现进度100%，然后却等几秒才有反应的问题。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+<p>这样做，依然还有 个问题，就是当我们从文件内读取数据，然后写入到 套接字的时候，如果IO快的话，会很快就返回到100%，但这个时候，网络的传输并没有完成，就会出现进度100%，然后却等几秒才有反应的问题。</p>
 
     </div>
 
@@ -423,13 +423,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

@@ -423,7 +423,6 @@
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="string">'global'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">outer</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> b = <span class="string">'outer'</span></span><br><span class="line">  </span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">inner</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> c = <span class="string">'inner'</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'a:'</span>, a)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'b:'</span>, b)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'c:'</span>, c)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> innerFunc = outer()</span><br><span class="line"></span><br><span class="line">a = <span class="string">'GLOBAL'</span></span><br><span class="line"></span><br><span class="line">innerFunc()</span><br><span class="line"></span><br><span class="line"><span class="comment">// a: GLOBAL</span></span><br><span class="line"><span class="comment">// b: outer</span></span><br><span class="line"><span class="comment">// c: inner</span></span><br></pre></td></tr></table></figure>
 <p>你可能会有疑问，为什么本节开头的那个例子输出的却是 John，而不是 Sam。</p>
 <p>这就有所不同了，因为我们的 name 是作为参数传递给 sayHello() 的，其实已经是本地作用域内的变量了，所以你再改变全局变量的值已经不会影响它了。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -517,13 +516,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

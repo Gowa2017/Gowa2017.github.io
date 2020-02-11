@@ -51,7 +51,7 @@
 <meta name="keywords" content="Android,逆向,Hooking">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hooking-Linux中的共享库函数">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/Hooking-Linux中的共享库函数.html">
+<meta property="og:url" content="https://gowa.club/Android/Hooking-Linux中的共享库函数.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="函数 Hooking 指的是一系列的在运行时用来拦截和改变已存函数行为的技术。本节使用动态加载API来演示一个进行 Hooking 的办法，主要是利用了 LD_PRELOAD 环境变量。LD_PRELOAD环境变量用来指定一个首先被加载器加载的共享库。先加载我们自己的共享库就能使我们拦截函数调用，接着我们就可以使用动态加载器的API来将原始的函数绑定到一个 函数指针，之后继续调用这个函数指针。也就">
 <meta property="og:locale" content="zh-Hans">
@@ -60,7 +60,7 @@
 <meta name="twitter:title" content="Hooking-Linux中的共享库函数">
 <meta name="twitter:description" content="函数 Hooking 指的是一系列的在运行时用来拦截和改变已存函数行为的技术。本节使用动态加载API来演示一个进行 Hooking 的办法，主要是利用了 LD_PRELOAD 环境变量。LD_PRELOAD环境变量用来指定一个首先被加载器加载的共享库。先加载我们自己的共享库就能使我们拦截函数调用，接着我们就可以使用动态加载器的API来将原始的函数绑定到一个 函数指针，之后继续调用这个函数指针。也就">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/Hooking-Linux中的共享库函数.html">
+<link rel="canonical" href="https://gowa.club/Android/Hooking-Linux中的共享库函数.html">
 
 
 <script id="page-configurations">
@@ -230,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Hooking-Linux中的共享库函数.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/Hooking-Linux中的共享库函数.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -261,14 +261,14 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
                   </a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux/Unix</span>
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
                   </a>
                 </span>
             </span>
@@ -282,8 +282,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/Hooking-Linux中的共享库函数.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/Hooking-Linux中的共享库函数.html" itemprop="commentCount"></span>
+    <a title="disqus" href="/Android/Hooking-Linux中的共享库函数.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/Hooking-Linux中的共享库函数.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -312,7 +312,6 @@
 <p>我们make 以后可以看到，输出了</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hooking</span><br><span class="line">Good Bye curel world!n</span><br></pre></td></tr></table></figure>
 <p>就是算注入进去了。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -408,13 +407,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -536,8 +535,8 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/Hooking-Linux中的共享库函数.html",
-            identifier: "Linux-Unix/Hooking-Linux中的共享库函数.html",
+            url: "https://gowa.club/Android/Hooking-Linux中的共享库函数.html",
+            identifier: "Android/Hooking-Linux中的共享库函数.html",
             title: "Hooking-Linux中的共享库函数"
           }
         }

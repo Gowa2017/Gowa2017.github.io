@@ -324,7 +324,6 @@
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- pumps one chunk from the source to the sink</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pump.step</span><span class="params">(src, snk)</span></span></span><br><span class="line">    <span class="keyword">local</span> chunk, src_err = src()</span><br><span class="line">    <span class="keyword">local</span> ret, snk_err = snk(chunk, src_err)</span><br><span class="line">    <span class="keyword">if</span> chunk <span class="keyword">and</span> ret <span class="keyword">then</span> <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">nil</span>, src_err <span class="keyword">or</span> snk_err <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- pumps all data from a source to a sink, using a step function</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">pump.all</span><span class="params">(src, snk, step)</span></span></span><br><span class="line">    base.<span class="built_in">assert</span>(src <span class="keyword">and</span> snk)</span><br><span class="line">    step = step <span class="keyword">or</span> pump.step</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">true</span> <span class="keyword">do</span></span><br><span class="line">        <span class="keyword">local</span> ret, err = step(src, snk)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> ret <span class="keyword">then</span></span><br><span class="line">            <span class="keyword">if</span> err <span class="keyword">then</span> <span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">1</span> <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <p>其本质，就是循环调用  step ，一步步的从 src 内拿取数据，直到出错或者完成。</p>
 <p>而对于 source，会根据 http 访问的模式，来决定，对应的函数，其实现在 socket.lua 中。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -418,13 +417,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

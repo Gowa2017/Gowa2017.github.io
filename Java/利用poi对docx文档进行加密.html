@@ -310,7 +310,6 @@
 <h2 id="部分内容的修改限制"><a href="#部分内容的修改限制" class="headerlink" title="部分内容的修改限制"></a>部分内容的修改限制</h2><p>这个级别的加密，可以使有的部分可以修改，有的内容禁止修改。我们使用对文件整体修改的例子上，对部分内容不加限制的代码如下：</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">            XWPFDocument document = <span class="keyword">new</span> XWPFDocument();</span><br><span class="line">            document.createParagraph().createRun().setText(<span class="string">"此文档禁止修改"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 注意这里</span></span><br><span class="line">            CTPermStart ctPermStart = document.getDocument().getBody().addNewPermStart();</span><br><span class="line">            ctPermStart.setEdGrp(STEdGrp.EVERYONE);</span><br><span class="line">            ctPermStart.setId(<span class="string">"123456"</span>); <span class="comment">//note the Id</span></span><br><span class="line">            document.createParagraph().createRun().setText(<span class="string">"此处可以修改"</span>);</span><br><span class="line">            document.getDocument().getBody().addNewPermEnd().setId(<span class="string">"123456"</span>); <span class="comment">//note the same Id</span></span><br><span class="line"><span class="comment">// 注意 setId。</span></span><br><span class="line">            OutputStream os = <span class="keyword">new</span> FileOutputStream(<span class="string">"test.docx"</span>);</span><br><span class="line">            document.enforceReadonlyProtection(<span class="string">"foobar"</span>, HashAlgorithm.md5);</span><br><span class="line">            document.write(os);</span><br><span class="line"></span><br><span class="line">            os.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            System.out.println(e.getMessage());</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>如此之后，我们可以发现，后面的这句文字可以修改，而其他的都不能修改。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -407,13 +406,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

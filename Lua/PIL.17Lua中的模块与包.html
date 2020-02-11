@@ -379,7 +379,6 @@
 <p>C 中的名称不能含有 <code>.</code>，所以一个子模块 <code>a.b</code> 的 C 库是不能导出 <code>luaopen_a.b</code>的。这里，<code>require</code> 又会将 <code>.</code> 转换成 <code>_</code>。一个模块 <code>a.b</code> 应该将其初始化函数命名为 <code>luaopen_a_b</code>。</p>
 <p>有一个额外的特性，<code>require</code> 有多一个搜索器来加载 C 子模块。当不能找到一个 对应名称  Lua 文件或者  C 文件的子模块文件时，<strong>最后一个搜索器会再次搜索 C PATH，不过这个时候会搜索包名称</strong>。比如，如果程序加载一个子模块 <code>a.b.c</code>，最后一个搜索器就会搜索 <code>a</code>。当其找到名称为 a 的 C 库时，<code>require</code> 就会尝试打开对应的子模块初始化函数 <code>luaopen_a_b_c</code>。<strong>这个特性允许将几个子模块放在一个库中，每个拥有不同的打开函数即可</strong>。</p>
 <p>从 Lua 的角度来看，在同一个包内的子模块间没有明显的联系。require 一个模块不不会自动的加载其子模块，同样，加载子模块也不会自动加载其父模块。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -474,13 +473,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

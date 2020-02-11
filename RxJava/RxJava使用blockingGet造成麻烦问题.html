@@ -317,7 +317,6 @@
 </ol>
 <p>我们换个方式想，对于 <code>collect()</code> 操作来说，其不会马上就将数据往下游发射，而是要等到上游数据发射完毕，发出了 <code>onComplete</code> 通知，才会往下游发送数据，这就好办了。</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line">List&lt;ComChangePersonInfo&gt; personInfos ;</span><br><span class="line">List&lt;MaterialInfo&gt; lst) ;</span><br><span class="line"></span><br><span class="line">        Map&lt;String, Integer&gt; map = Observable.fromIterable(lst)</span><br><span class="line">                .filter(m -&gt; TextUtils.equals(m.getMtype(), AppConstant.ComRegMaterialType.CARD))</span><br><span class="line">                .groupBy(m -&gt; m.getAboutPerson())</span><br><span class="line">                .collect(HashMap&lt;String,Single&lt;Long&gt;::<span class="keyword">new</span>, (BiConsumer&lt;Map&lt;String, Single&lt;Long&gt;&gt;, GroupedObservable&lt;String, MaterialInfo&gt;&gt;) (m, observable) -&gt; m.put(observable.getKey(), observable.count()))</span><br><span class="line">                .flatMap((Function&lt;HashMap&lt;String, Single&lt;Long&gt;&gt;, SingleSource&lt;HashMap&lt;String, Integer&gt;&gt;&gt;) stringSingleHashMap -&gt; &#123;</span><br><span class="line">                    HashMap&lt;String,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">                    stringSingleHashMap.forEach((k,v)-&gt;map.put(k,v.blockingGet().intValue()));</span><br><span class="line">                    <span class="keyword">return</span> Single.just(map);</span><br><span class="line">                &#125;)</span><br><span class="line">                .blockingGet();</span><br></pre></td></tr></table></figure>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -413,13 +412,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

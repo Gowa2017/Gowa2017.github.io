@@ -48,7 +48,7 @@
 </script>
 
   <meta name="description" content="我们知道，进程在打开的时候，就默认已经打开了三个文件描述符 0, 1, 2 方便大不了 标准输入，标准输出，标准错误。而我们要进行重定向的时候，比如到一个文件的时候，实际上进程不会关心他到底是被重定向到什么地方了，他只需要依然向这三个描述符进行相关的 IO 操作就行了。所以，我们需要来了解一下文件描述符背后的一些内容。">
-<meta name="keywords" content="Bash,Linux&#x2F;Unix">
+<meta name="keywords" content="Linux&#x2F;Unix,Bash">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Bash中的IO与重定向">
 <meta property="og:url" content="https://gowa.club/Linux-Unix/Bash中的IO与重定向.html">
@@ -402,7 +402,7 @@ T1:pD -> F1:flag
 <li>dup2() 就有所不同，当 <em>fildes2</em> 在使用的话，那么就会先关闭 <em>fildes2</em>，然后再进行复制。</li>
 </ul>
 <p>所以我猜想，对于输入输出的重定向，要么是利用：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">close(<span class="number">1</span>);</span><br><span class="line">dup()</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">close</span>(<span class="number">1</span>);</span><br><span class="line">dup()</span><br></pre></td></tr></table></figure>
 <p>或者是</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">dup2(fd, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <p>这样的形式来实现的。</p>
@@ -464,8 +464,43 @@ fd1 -> ftdirlist
 <h3 id="lt-lt-lt"><a href="#lt-lt-lt" class="headerlink" title="&lt;&lt;&lt;"></a>&lt;&lt;&lt;</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n] &lt;&lt;&lt; word</span><br></pre></td></tr></table></figure>
 <p>直接就是长串文本的搞法了：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cat &lt;&lt;&lt; <span class="string">"FF</span></span><br><span class="line"><span class="string">    <span class="variable">$VVVV</span></span></span><br><span class="line"><span class="string">`expr 1 + 2`</span></span><br><span class="line"><span class="string">FF"</span></span><br></pre></td></tr></table></figure>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
 
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
+
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
+                }
+                </script>
     </div>
 
     
@@ -474,8 +509,8 @@ fd1 -> ftdirlist
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Bash/" rel="tag"># Bash</a>
               <a href="/tags/Linux-Unix/" rel="tag"># Linux/Unix</a>
+              <a href="/tags/Bash/" rel="tag"># Bash</a>
           </div>
 
         
@@ -559,13 +594,13 @@ fd1 -> ftdirlist
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

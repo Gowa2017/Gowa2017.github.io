@@ -370,7 +370,6 @@ tbl.frm
 tbl.MYD
 tbl.MYI
 </code></pre><p>表tbl3有了自己的.ibd表空间数据文件。<br>但是，即使是这样，我们在进行物理备份的时候依然会很头疼。因为我们不仅要备份表的数据文件，还要备份一些数据字典文件（位于系统共享表空间内），还有重做日志（ib_logfile0/1）等等。<br>而且，从概念上讲，磁盘上的数据文件与InnoDB引擎在内存中的缓存池、二次缓存的数据并不一定是一致的。在事务已提交到重做日志，但还未更新到数据文件之间的时间窗口会产生很大的问题。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -464,13 +463,13 @@ tbl.MYI
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

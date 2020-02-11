@@ -701,8 +701,7 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
 <pre><code>35 0 * * 0 /path/to/myisamchk --fast --slient /pat/to/datadir/*/*.MYI
 </code></pre><p>通常情况下，MYSQL表需要更少的维护工作。如果对MyISAM表进行了许多动态行更新（具有varchar, BLOB, TEXT列的表）或者表已经进行了很多删除工作，你可能想要及时进行碎片整理或者释放空间。可以用<code>OPTIMIZE TABLE</code>来达成目的。当然，如果你能停止<code>mysqld</code>一会儿，切换到数据目录，然后执行下面的命令：</p>
 <pre><code>shell&gt; myisamchk -r -s --sort-index --myisam_sort_buffer_size=16M */*.MYI
-</code></pre><p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
-
+</code></pre>
     </div>
 
     
@@ -795,13 +794,13 @@ shell&gt; mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

@@ -391,7 +391,6 @@
 <p>另外一个关于效率的就在进程的创建。建立Lua State是很轻量的，但是，打开标准库就不那么轻量了，而且很多State并不一定需要全部的标准库。我们可以通过使用 预注册的库来避免这个开销。就和我们在<strong>require 函数一节</strong>说的一样。通过这种方式，不再需要为每个标准库调用<code>luaL_requiref</code>函数，我们只是将库打开函数放在 <code>package.preload</code>表中。如果进程调用 <code>require &quot;lib&quot;</code>，然后（也只有 <code>require</code>会）调用这个关联的函数来打开这个库。下面来看看：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">registerlib</span> <span class="params">(lua_State *L, <span class="keyword">const</span> <span class="keyword">char</span> *name, lua_CFunction f)</span> </span>&#123;</span><br><span class="line">	lua_getglobal(L, <span class="string">"package"</span>);</span><br><span class="line">	lua_getfield(L, <span class="number">-1</span>, <span class="string">"preload"</span>);</span><br><span class="line">	pua_pushcfunction(L, f);</span><br><span class="line">	lua_setfield(L, <span class="number">-2</span>, name);</span><br><span class="line">	lua_pop(L, <span class="number">2</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">openlibs</span> <span class="params">(lua_State *L)</span> </span>&#123;</span><br><span class="line">	luaL_requiref(L, <span class="string">"_G"</span>, luaopen_base, <span class="number">1</span>);</span><br><span class="line">	luaL_requiref(L, <span class="string">"package"</span>, luaoepn_package, <span class="number">1</span>);</span><br><span class="line">	lua_pop(L, <span class="number">2</span>);  <span class="comment">/* remove results from previous calls */</span></span><br><span class="line">        registerlib(L, <span class="string">"coroutine"</span>, luaopen_coroutine);</span><br><span class="line">        registerlib(L, <span class="string">"table"</span>, luaopen_table);</span><br><span class="line">        registerlib(L, <span class="string">"io"</span>, luaopen_io);</span><br><span class="line">        registerlib(L, <span class="string">"os"</span>, luaopen_os);</span><br><span class="line">        registerlib(L, <span class="string">"string"</span>, luaopen_string);</span><br><span class="line">        registerlib(L, <span class="string">"math"</span>, luaopen_math);</span><br><span class="line">        registerlib(L, <span class="string">"utf8"</span>, luaopen_utf8);</span><br><span class="line">        registerlib(L, <span class="string">"debug"</span>, luaopen_debug);”</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>打开基本库总是没有错的。我们也会需要 包 这个库；否则，我们就没有<code>require</code>函数来打开其他库。其他库都是可选的。我们可以调用我们自己的<code>openlibs</code>，而不用调用<code>luaL_openlibs</code>。当一个进程需要其中一个库时，就可以显示指定库名，<code>require</code>会调用对应的<code>luaopen_*</code>函数。</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -486,13 +485,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

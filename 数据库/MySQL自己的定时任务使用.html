@@ -352,7 +352,7 @@
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">EVENT</span> myevent</span><br><span class="line">    <span class="keyword">ON</span> SCHEDULE <span class="keyword">AT</span> <span class="keyword">CURRENT_TIMESTAMP</span> + <span class="built_in">INTERVAL</span> <span class="number">1</span> <span class="keyword">HOUR</span></span><br><span class="line">    <span class="keyword">DO</span></span><br><span class="line">      <span class="keyword">UPDATE</span> myschema.mytable <span class="keyword">SET</span> mycol = mycol + <span class="number">1</span>;</span><br><span class="line">      </span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">EVENT</span> e_hourly</span><br><span class="line">    <span class="keyword">ON</span> SCHEDULE</span><br><span class="line">      EVERY <span class="number">1</span> <span class="keyword">HOUR</span></span><br><span class="line">    <span class="keyword">COMMENT</span> <span class="string">'Clears out sessions table each hour.'</span></span><br><span class="line">    <span class="keyword">DO</span></span><br><span class="line">      <span class="keyword">DELETE</span> <span class="keyword">FROM</span> site_activity.sessions;</span><br></pre></td></tr></table></figure>
 <h2 id="ON-SCHEDULE"><a href="#ON-SCHEDULE" class="headerlink" title="ON SCHEDULE"></a>ON SCHEDULE</h2><p>如果只执行一次的话，使用  <code>at</code> 来指定执行时间。</p>
 <p>如果要重复执行的话，那么使用 <code>every</code> 来指定执行的时间间隔。在 <code>every</code> 后面可能会跟上一个 <code>START</code> 用来指定从什么时间开始执行。也有可能跟上一个 <code>END</code> 时间戳 来指定结束时间。</p>
-<h2 id="ON-COMPLETION"><a href="#ON-COMPLETION" class="headerlink" title="ON COMPLETION"></a>ON COMPLETION</h2><p>通常事件过期（指定结束日期的情况下）就会被 drop 掉。但是如果我们不想这样的话，可以用 <code>ON COMPLETION PRESERVE</code> 来保留这事件。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+<h2 id="ON-COMPLETION"><a href="#ON-COMPLETION" class="headerlink" title="ON COMPLETION"></a>ON COMPLETION</h2><p>通常事件过期（指定结束日期的情况下）就会被 drop 掉。但是如果我们不想这样的话，可以用 <code>ON COMPLETION PRESERVE</code> 来保留这事件。</p>
 
     </div>
 
@@ -446,13 +446,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

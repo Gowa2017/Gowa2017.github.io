@@ -312,7 +312,7 @@
 <li>传输数据<br><img src="/res/20170104-ftp-01.png" alt="ftp的pasv模式展示"><h1 id="PORT模式"><a href="#PORT模式" class="headerlink" title="PORT模式"></a>PORT模式</h1>PORT模式是由客户端选择一端口进行开放，然后服务端通过20端口进行连接后传输数据。其流程为:</li>
 <li>客户端发送PORT命令(包含数据端口)</li>
 <li>服务端连接客户端的数据端口</li>
-<li>传输数据<br><img src="/res/20170104-ftp-02.png" alt="ftp的PORT模式展示"><h1 id="访问策略的注意"><a href="#访问策略的注意" class="headerlink" title="访问策略的注意"></a>访问策略的注意</h1>服务器间通过FTP进行数据传输的时候，作为服务端，21端口是必须进行允许要进行上传或者下载的IP进行连接。<br>默认情况下，客户端都是采用的PASV模式进行传输，那么就是需要由服务端告知数据段口，客户端进行连接。<br>在iptables的默认策略是ACCPET的情况下，这并没有什么问题，但是如果默认策略是REJECT就得小心了。<br>而对于采用主动模式PORT的客户端，则就必须对进入的流量包进行一个允许了。<br><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></li>
+<li>传输数据<br><img src="/res/20170104-ftp-02.png" alt="ftp的PORT模式展示"><h1 id="访问策略的注意"><a href="#访问策略的注意" class="headerlink" title="访问策略的注意"></a>访问策略的注意</h1>服务器间通过FTP进行数据传输的时候，作为服务端，21端口是必须进行允许要进行上传或者下载的IP进行连接。<br>默认情况下，客户端都是采用的PASV模式进行传输，那么就是需要由服务端告知数据段口，客户端进行连接。<br>在iptables的默认策略是ACCPET的情况下，这并没有什么问题，但是如果默认策略是REJECT就得小心了。<br>而对于采用主动模式PORT的客户端，则就必须对进入的流量包进行一个允许了。</li>
 </ul>
 
     </div>
@@ -408,13 +408,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

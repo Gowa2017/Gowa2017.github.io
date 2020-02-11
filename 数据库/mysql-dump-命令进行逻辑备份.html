@@ -335,7 +335,6 @@
 </li>
 </ol>
 <p>自行添加CHAGE MASTER TO 需要的参数，比如主服务器地址等。<br><code>--no-autocommit</code> 以<code>set autocommit=0</code> 和<code>COMMIT</code>语句来包围<code>INSERT</code>语句。<br><code>--no-create-db, -n</code> 当<code>--databases,-B | --all-databases</code>指定的时候，禁用<code>CREATE DATABASES</code>语句<br><code>--no-create-info, -t</code> 不写出重新创建备份表的<code>CREATE TABLE</code>语句<br><code>--no-data, -d</code> 只要表结构。<br><code>--no-set-names, -N</code> 等价于<code>--skip-set-charset</code><br><code>--order-by-primary</code> 当主键、或唯一索引存在的时候以此排序列行。当MyISAM表要转到InnoDB表的时候，但会花费更多时间。<br><code>--password[=password],-p[password]</code> 密码<br><code>-pipe, -W</code><br><code>--port=port_num, -P port_num</code><br><code>--quick, -q</code> 对于dump大表很实用。强制mysqldump一次获取一行而不是获得整个记录并且进行缓存。<br><code>--quote-names, -Q</code><br><code>--result-file=file_name, -r file_name</code> 重定向至文件<br><code>--routines, -R</code> 包括函数跟结构。但没有时间戳，新导入的时间就是重新建立过程的时间戳。想要原来的时间戳，导出mysql.proc表后进行恢复。<br><code>--set-charset</code> 将<code>SET NAMES default_character_set</code>加到输出中。该选项默认启用。要想禁用SET NAMES语句，使用<code>--skip-set-charset</code>。<br><code>--skip-comments</code> 参见<code>--comments</code>选项的描述。<br><code>--socket=path, -S path</code> 当连接localhost(为默认主机)时使用的套接字文件。<br><code>--tab=path, -T path</code> 产生tab分割的数据文件。对于每个转储的表，mysqldump创建一个包含创建表的<code>CREATE TABLE</code>语句的<code>tbl_name.sql</code>文件，和一个包含其数据的<code>tbl_name.txt</code>文件。选项值为写入文件的目录。<br>    默认情况，.txt数据文件的格式是在列值和每行后面的新行之间使用tab字符。可以使用<code>--fields-xxx</code>和<code>--line--xxx</code>选项明显指定格式。<br>    注释：该选项只适用于mysqldump与mysqld服务器在同一台机器上运行时。你必须具有FILE权限，并且服务器必须有在你指定的目录中有写文件的许可。<br><code>--tables</code> 覆盖—-database或-B选项。选项后面的所有参量被看作表名。<br>—tariggers —skip-triggers<br><code>--user=user_name, -u user_name</code> 用户名<br><code>--verbose, -v</code> 冗长模式。打印出程序操作的详细信息。<br><code>--version, -V</code> 显示版本信息并退出。<br><code>--xml, -X</code> 转存为xml文件</p>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -431,13 +430,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

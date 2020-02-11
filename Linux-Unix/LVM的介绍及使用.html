@@ -315,7 +315,6 @@
 <p>快照可以挂载或以 <code>dd, tar</code> 命令备份。以 <code>dd</code> 备份的文件尺寸将会是 快照卷内存在的数据尺寸。想要恢复的时候，建立一个快照，挂载，接着把备份的文件解压过去。最后，和原始的LV合并。</p>
 <p>快照的主要用途是用来提供对文件系统的冷备份。</p>
 <h1 id="简单命令"><a href="#简单命令" class="headerlink" title="简单命令"></a>简单命令</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">lvmdiskscan  <span class="comment"># list all your devices capable of being used as a physical volume</span></span><br><span class="line">pvcreate DEVICE <span class="comment"># Create a physical volume on them</span></span><br><span class="line">pvcreate /dev/sda2 <span class="comment"># </span></span><br><span class="line">pvdisplay <span class="comment"># track created physical volumes</span></span><br><span class="line"></span><br><span class="line">vgcreate VolGroup00 /dev/sda2 <span class="comment"># create vg on pvs</span></span><br><span class="line">vgextend VolGroup00 /dev/sdb1 <span class="comment"># add vg /dev/sdb1 to vg VolGroup00</span></span><br><span class="line">vgdisplay <span class="comment"># track vg</span></span><br><span class="line"></span><br><span class="line">vgcreate VolGroup00 /</span><br></pre></td></tr></table></figure>
-<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
 
     </div>
 
@@ -410,13 +409,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

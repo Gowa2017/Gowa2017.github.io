@@ -307,7 +307,7 @@
 <p>根据 <a href="https://developer.android.com/reference/android/support/v4/content/FileProvider#Permissions" target="_blank" rel="noopener">官方文档</a>，我们需要临时进行授权，<a href="https://stackoverflow.com/questions/18249007/how-to-use-support-fileprovider-for-sharing-content-to-other-apps/18332000#18332000" target="_blank" rel="noopener">StackOverFlow 上也有这个问题的解答</a>：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">grantUriPermission(getPackageName(),apkUri,Intent.FLAG_GRANT_READ_URI_PERMISSION);</span><br></pre></td></tr></table></figure>
 <p><strong>最终：发觉我们的下载路径，并不是放在 provider 里面的，采用 Uri.fromFile 的形式能够正常执行升级了。</strong></p>
-<p>为什么后面又没有出现第二个问题了？这个问题很苦恼啊。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script><script>let graphviz_engines = ["circo",    "dot",    "fdp",    "neato",    "osage",    "twopi"];function doGraphviz(engine) {    let domAllDot = document.querySelectorAll('.language-' + engine);    for (let i = 0; i < domAllDot.length; i++) {        let dom = domAllDot[i];        let graphSource = dom.innerText || dom.textContent;        try {           let viz = new Viz();             viz.renderSVGElement(graphSource, {engine: engine})                 .then(r => {            dom.innerHTML ='';dom.append(r); });        } catch (e) {            console.error("Error when parsing node:", dom, e);        }    }}let init = function () {    for (let i = 0; i < graphviz_engines.length; i++) {        doGraphviz(graphviz_engines[i]);    }};if (typeof window.addEventListener != "undefined") {    window.addEventListener("load", init, false);} else {    window.attachEvent("onload", init);}</script></p>
+<p>为什么后面又没有出现第二个问题了？这个问题很苦恼啊。</p>
 
     </div>
 
@@ -402,13 +402,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-count">132</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
