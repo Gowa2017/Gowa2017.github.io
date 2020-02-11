@@ -326,7 +326,6 @@ I1:v -> V1:v
 I2:v ->V2:v
 }
 </v></i></v></i></data></v></data></v></vp></offset></flag></vp></offset></flag></p2></fd2></p1></fd1></p0></fd0></div>
-
 <p>对于上面这个图做简单的解释：</p>
 <ul>
 <li><strong>Process table entry 进程表项</strong>。在 <strong>进程表中</strong>，每个进程都会有一个记录项。每个进程表中的记录都会有已经打开的文件描述符表。每个文件描述符都于一个指向打开的文件表项指针。</li>
@@ -370,8 +369,6 @@ V1:data -> I1:i
 I1:v -> V1:v
 }
 </v></i></data></v></vp></offset></flag></vp></offset></flag></p2></fd2></p1></fd1></p0></fd0></p2></fd2></p1></fd1></p0></fd0></div>
-
-
 <h1 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h1><p>bash 中的重定向操作符有两类三个：</p>
 <ul>
 <li>输入重定向 <code>&lt;, &lt;&lt;, &lt;&lt;&lt;</code></li>
@@ -393,7 +390,6 @@ T1:pD -> F1:flag
 
 }
 </vp></offset></flag></pd></fdd></ps></fds></p2></fd2></p1></fd1></p0></fd0></div>
-
 <p>就是感官上有点怪异，我需要的是重定向是S，结果却是将要定向到的 D 复制给了 S。</p>
 <h2 id="dup-系统调用"><a href="#dup-系统调用" class="headerlink" title="dup 系统调用"></a>dup 系统调用</h2><p>有两个底层函数来完成文件描述符的复制：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">dup(<span class="keyword">int</span> fildes);</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">dup2(<span class="keyword">int</span> fildes, <span class="keyword">int</span> fildes2);</span><br></pre></td></tr></table></figure>
@@ -419,7 +415,6 @@ fd1 -> ftdirlist
 fd2 -> ftdirlist
 }
 </div>
-
 <p>与 </p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">ls 2&gt;&amp;1 &gt; dirlist</span><br></pre></td></tr></table></figure>
 <div class="language-dot">
@@ -433,7 +428,6 @@ fd2 -> ft1
 fd1 -> ftdirlist
 }
 </div>
-
 <p>的区别。</p>
 <p>这是再于，对于第二种情况，标准错误只是使用了标准输出的文件表项，而标准输出使用了 dirlist 的文件表项。</p>
 <h2 id="gt-gt-amp"><a href="#gt-gt-amp" class="headerlink" title="[&gt;]&gt;&amp;"></a>[&gt;]&gt;&amp;</h2><p>这个操作符实际上是用来进行表示复制文件描述符的意思的，我们可以用 <code>&gt;</code> 重定向到文件，但是如果是要重定向描述符的时候就只能用这个。</p>

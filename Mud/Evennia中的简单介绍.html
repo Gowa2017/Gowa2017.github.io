@@ -409,7 +409,6 @@ amp --> g: ServerAMPClient
 amp --> l: _server_started
 g ->> g: start EvenniaWebServer
 </div>
-
 <p>当用 telnet 传输数据的时候流动过程：</p>
 <div class="mermaid">
 sequenceDiagram
@@ -428,15 +427,46 @@ amp  ->> g: server_connection.callRemote
 g  ->> ssh: data_in()
 ssh ->> ssh: call_inputfuncs()
 </div>
-
 <p>命令则在 server/inputfuncs 里面。</p>
-<h1 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h1><p><div class="language-dot"><br>digraph {<br>rankdir =TB<br>center=true<br>W[label=”WEB”]<br>DB[label=DataBase]</div></p>
-<p>{rank=min; CLI APP W}<br>subgraph cluster_game{<br>label=”Game Server(twisted)”<br>node[shape=box]<br>AmpClient[label=”ServerAMPClient”]<br>WebServer[label=”EvenniaWebServer(WSGIWebServer)”]<br>EGI[label=”EvenniaGameIndexService”]<br>SSH[label=ServerSessionHandler]</p>
-<p>}<br>subgraph cluster_portal{<br>label=”Portal(twisted)”<br>node[shape=box]<br>AMP[label=AMPServer]<br>Telnet[label=EvenniaTelnetServer]<br>WebSocket[label=EvenniaWebSocketServer]<br>WebProxy[label=EvenniaWebProxy]<br>PSH[label=PortalSessionHandler]<br>}</p>
-<p>W -&gt; WebProxy[label=HTTP,color=red]<br>CLI -&gt; Telnet[label=telnet,color=red]</p>
-<p>Telnet -&gt; PSH -&gt; AMP -&gt; AmpClient[color=red]<br>AmpClient -&gt; SSH -&gt; DB[color=red]</p>
-<p>APP -&gt; WebSocket [label=websocket, color=red]<br>WebSocket -&gt; PSH [color=red]</p>
-<p>WebServer -&gt; WebProxy[label=EvenniaReverseProxyResource]<br>}<br>&lt;/div&gt;</p>
+<h1 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h1><div class="language-dot">
+digraph {
+rankdir =TB
+center=true
+W[label="WEB"]
+DB[label=DataBase]
+
+{rank=min; CLI APP W}
+subgraph cluster_game{
+label="Game Server(twisted)"
+node[shape=box]
+AmpClient[label="ServerAMPClient"]
+WebServer[label="EvenniaWebServer(WSGIWebServer)"]
+EGI[label="EvenniaGameIndexService"]
+SSH[label=ServerSessionHandler]
+
+}
+subgraph cluster_portal{
+label="Portal(twisted)"
+node[shape=box]
+AMP[label=AMPServer]
+Telnet[label=EvenniaTelnetServer]
+WebSocket[label=EvenniaWebSocketServer]
+WebProxy[label=EvenniaWebProxy]
+PSH[label=PortalSessionHandler]
+}
+
+W -> WebProxy[label=HTTP,color=red]
+CLI -> Telnet[label=telnet,color=red]
+
+Telnet -> PSH -> AMP -> AmpClient[color=red]
+AmpClient -> SSH -> DB[color=red]
+
+APP -> WebSocket [label=websocket, color=red]
+WebSocket -> PSH [color=red]
+
+WebServer -> WebProxy[label=EvenniaReverseProxyResource]
+}
+</div>
 <script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js">
  mermaid.initialize({startOnLoad:true}); 
 </script><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>

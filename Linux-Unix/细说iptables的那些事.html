@@ -318,7 +318,6 @@ TCP:d:nw -> HTTP:d:sw[style=dashed]
 TCP:d:ne -> HTTP:d:se[style=dashed]
 }
 </d></t></d></h></t></d></h></t></e></d></h></t></div>
-
 <p>从上至下，将应用层数据，层层加上自己层的头部，传递到链路上去。</p>
 <h1 id="Iptables"><a href="#Iptables" class="headerlink" title="Iptables"></a>Iptables</h1><ul>
 <li>Chain 由一系列的规则有序组成。</li>
@@ -381,7 +380,6 @@ r3 -> pom[lhead=cluster_postrouting]
 pon -> out
 }
 </div>
-
 <p>iptables 有五个表</p>
 <ul>
 <li>raw 只是为了用来设置包是否不需要跟踪</li>
@@ -442,7 +440,6 @@ r3 -> pon[lhead=cluster_postrouting]
 pon -> out
 }
 </div>
-
 <p>所以我们现在就可以很明确的知道这个转发过程了：</p>
 <ol>
 <li><strong>PREROUTING</strong> 协议栈收到包后，路由前，查看一下 nat 表，看是否有需要做 nat 操作的。</li>
