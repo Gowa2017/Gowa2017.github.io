@@ -319,20 +319,45 @@
 <li><strong><a href="https://github.com/evennia/evennia/wiki/Objects" target="_blank" rel="noopener">Object</a> - 注意是大写的，代表了游戏中的一个 typeclass，包括 Characters，Room, trees, 武器等</strong></li>
 </ul>
 <h2 id="TypeClass"><a href="#TypeClass" class="headerlink" title="TypeClass"></a>TypeClass</h2><p><strong>typeclass</strong> 是一个 Evennia 特有的术语。typeclass 使开发人员可以像对待普通的Python对象一样使用数据库持久对象。它利用特定的Django功能将Python类链接到数据库表。有时我们将此类代码实体叫做 <strong>being typeclassed</strong>。</p>
-<p>Evennia 中的主要 typeclass 是 <strong>Account, Object, Script, Channel</strong>。这些基类的子类（如 Character）会和它的父类使用同样的数据库表，但却能通过 <strong>Attributes, Tags</strong> 拥有更多不同的 Python 功能 持久性功能。可以对 typeclass 进行编码和处理，就像对待其他任何Python类一样，不同的是它必须继承（不论继承的层级）基本 typeclass 中的一个。同样，创建 Typeclass 的新实例会将新行添加到链接到它的数据库表中。</p>
+<p>Evennia 中的主要 typeclass 是 <strong>Account, Object, Script, Channel</strong>。这些基类的子类（如 Character）会和它的父类使用同样的数据库表，但却能通过 <strong>Attributes, Tags</strong> 拥有更多不同的 Python 功能和持久性功能。可以对 typeclass 进行编码和处理，就像对待其他任何Python类一样，不同的是它必须继承（不论继承的层级）基本 typeclass 中的一个。同样，创建 Typeclass 的新实例会将新行添加到链接到它的数据库表中。</p>
 <p>Evennia 的核心 typeclass 全部被命名为 <strong>DefaultAccount, DefaultObject</strong> 等等。当您初始化您的[游戏目录]时，您会自动获得其中的空子类，称为Account，Object等，您可以开始使用这些子类。</p>
-<p>可以看到，事实上都是围绕 typeclass 来进行工作。</p>
+<p>可以看到，事实上都是围绕 typeclass 来进行工作。他有一些基本上都会具有的字段：</p>
+<ul>
+<li><code>db_key</code>(str)。实体的主要标识，就如一个 “Rose”,”myscript” 这样。<code>name</code> 是一个别名</li>
+<li><code>db_date_created</code>(datetime) 时间戳</li>
+<li><code>db_typeclass_path</code>(str) 指向 (type)class 路径</li>
+</ul>
+<p>访问字段的时候我们可以使用 <code>obj.db.db_key</code> 的形式，或者是 <code>obj.key</code> 这样的形式，后面这种形式是一个包装后的访问方法。</p>
+<h3 id="handlers"><a href="#handlers" class="headerlink" title="handlers"></a>handlers</h3><p>每个 typeclass 还会有几个处理器：</p>
+<ul>
+<li><code>tags</code> - TagHandler 处理标签</li>
+<li><code>locks</code> - LockHandler 处理访问限制</li>
+<li><code>attributes</code> - AttributeHandler  处理 <strong>属性(attr)</strong>。</li>
+<li><code>db</code> - 上面的简写。</li>
+<li><code>naattributes</code> - Non-persistent AttributeHandler  非持久化属性的处理。</li>
+<li><code>ndb</code> 上面的简写</li>
+</ul>
 <h2 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h2><p><strong>Object</strong> 有三个特殊的子类：<em>Characters, Rooms and Exits.</em> 之所以他们比较特殊是因为这几个是基础。</p>
 <ul>
 <li>Characters 由 Accounts 控制的对象当一个新  Account 登录游戏的时候，就会建立一个新的 <code>Character</code> 对象，然后此新对象的 account 属性就会被设置为 Account 对象。一个 <code>Character</code> 在创建的时候必须有默认的命令集，否则的话这个账号将不能执行任何命令。如果您只是从evennia.DefaultCharacter继承了自己的类，并确保使用super（）调用父方法，那应该没问题。在game / typeclasses / characters.py中，有一个空的Character类可供您修改。</li>
 <li>Rooms 所有其他对象的根容器。真正将 Room 与其他任何对象分隔开的唯一事情是它们没有自己的位置，并且@dig之类的默认命令会创建此类的对象。因此，如果您想扩展房间以提供更多功能，只需继承ev.DefaultRoom。</li>
 <li><a href="https://github.com/evennia/evennia/wiki/Objects#exits" target="_blank" rel="noopener">Exits</a> Exits是将其他对象（通常是 Room）连接在一起的对象。Exits 具有将它们与其他对象分开的两个地方。首先，其 <strong>destination</strong> 属性已设置并指向有效对象，这个事实使得在数据库中定位 Exits 变得容易和快速。其次，Exits 在创建时会在其自身上定义特殊的“<a href="https://github.com/evennia/evennia/wiki/Commands" target="_blank" rel="noopener">Transit Command</a>”。此命令的名称与 Exits 对象的名称相同，并且在调用时将处理将角色移至出口的目的地的实际操作，允许您仅输入 Exit 的名称即可四处走动。</li>
 </ul>
-<h1 id="示例与使用-MySQL"><a href="#示例与使用-MySQL" class="headerlink" title="示例与使用 MySQL"></a>示例与使用 MySQL</h1><p>简单的安装非常的简单了：</p>
+<p>基本上来说，游戏内的所有内容都会用对象来表示，然后存在在数据库中。</p>
+<div class="language-dot">
+digraph {
+rankdir = BT
+Account -> DefaultAccount -> AccountDB -> TypedObject
+Channel -> DefaultChannel -> ChannelDB -> TypedObject
+Script -> DefaultScript -> ScriptDB -> TypedObject
+Object -> DefaultObject -> ObjectDB -> TypedObject
+}
+</div>
+<h1 id="安装与使用-MySQL"><a href="#安装与使用-MySQL" class="headerlink" title="安装与使用 MySQL"></a>安装与使用 MySQL</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装非常的简单了：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mkdir muddev &amp;&amp; <span class="built_in">cd</span> muddev</span><br><span class="line">git <span class="built_in">clone</span> https://github.com/evennia/evennia.git</span><br><span class="line">pip install -e evennia</span><br><span class="line">evennia --init game</span><br><span class="line"><span class="built_in">cd</span> game</span><br></pre></td></tr></table></figure>
 <p>就这么简单就安装好了，且初始化完毕一个 game 项目，现在我们已经在 game 项目中了。</p>
 <p>在<a href="https://github.com/evennia/evennia/wiki/Choosing-An-SQL-Server#mysql--mariadb" target="_blank" rel="noopener">选择一个数据库中</a>，我们可以看到是如何设置使用 MySQL 的.</p>
-<p>先在Mysql内建立库：</p>
+<h2 id="设置-MySQL"><a href="#设置-MySQL" class="headerlink" title="设置 MySQL"></a>设置 MySQL</h2><p>先在Mysql内建立库：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mysql -uroot -p</span><br></pre></td></tr></table></figure>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">'evennia'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'somepassword'</span>;</span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> evennia;</span><br><span class="line"><span class="keyword">ALTER</span> <span class="keyword">DATABASE</span> <span class="string">`evennia`</span> <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8;      <span class="comment"># note that it's `evennia` not 'evennia'!</span></span><br><span class="line"><span class="keyword">GRANT</span> <span class="keyword">ALL</span> <span class="keyword">PRIVILEGES</span> <span class="keyword">ON</span> evennia.* <span class="keyword">TO</span> <span class="string">'evennia'</span>@<span class="string">'localhost'</span>;</span><br><span class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</span><br><span class="line">exit</span><br></pre></td></tr></table></figure>
 <p>接着我们可以编辑我们项目下的 <em>server/conf/settings.py</em> 或者 <em>server/conf/secret_settings.py</em>（这个文件不会出现在 git 项目中）</p>
@@ -367,7 +392,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT id,db_key,a.`db_typeclass_path` FROM objects_objectdb a LIMIT 5;</span><br><span class="line">+----+------------------+------------------------------------------------+</span><br><span class="line">| id | db_key           | db_typeclass_path                              |</span><br><span class="line">+----+------------------+------------------------------------------------+</span><br><span class="line">|  1 | gowa             | typeclasses.characters.Character               |</span><br><span class="line">|  2 | Limbo            | typeclasses.rooms.Room                         |</span><br><span class="line">|  3 | Intro            | evennia.contrib.tutorial_world.rooms.IntroRoom |</span><br><span class="line">|  4 | tutorial         | typeclasses.exits.Exit                         |</span><br><span class="line">|  5 | Leaving Tutorial | evennia.contrib.tutorial_world.rooms.OutroRoom |</span><br><span class="line">+----+------------------+------------------------------------------------+</span><br></pre></td></tr></table></figure>
 <p>所有对象都在这个表内，但是呢，就用了 <code>db_typeclass_path</code> 来区别对象的不同。<strong>我猜测， Evennia 在启动的时候从数据库读取数据，然后根据其 typeclass 来构造 object，并根据数据库字段来设置属性</strong>。</p>
 <p>所以基本的概念就能明白了。</p>
-<h1 id="引擎内部"><a href="#引擎内部" class="headerlink" title="引擎内部"></a>引擎内部</h1><h2 id="twisted"><a href="#twisted" class="headerlink" title="twisted"></a>twisted</h2><p><a href="https://github.com/twisted/twisted" target="_blank" rel="noopener">twisted</a> 是一个异步网络引擎，其负责控制  Evennia 的事件循环。Twisted还具有构建网络协议和与外界通信所需的构建块。例如我们的MUD自定义版本的Telnet，Telnet + SSL，SSH，webclient-websockets等。Twisted还运行我们的集成Web服务器，为您的游戏提供基于Django的网站。</p>
+<h1 id="引擎探索"><a href="#引擎探索" class="headerlink" title="引擎探索"></a>引擎探索</h1><h2 id="twisted"><a href="#twisted" class="headerlink" title="twisted"></a>twisted</h2><p><a href="https://github.com/twisted/twisted" target="_blank" rel="noopener">twisted</a> 是一个异步网络引擎，其负责控制  Evennia 的事件循环。Twisted还具有构建网络协议和与外界通信所需的构建块。例如我们的MUD自定义版本的Telnet，Telnet + SSL，SSH，webclient-websockets等。Twisted还运行我们的集成Web服务器，为您的游戏提供基于Django的网站。</p>
 <p>Evennia 使用到了几个模块：</p>
 <figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> twisted.protocols <span class="keyword">import</span> amp</span><br><span class="line"><span class="keyword">from</span> twisted.internet <span class="keyword">import</span> reactor, endpoints</span><br></pre></td></tr></table></figure>
 <ul>
@@ -577,7 +602,7 @@ WebServer -> WebProxy[label=EvenniaReverseProxyResource]
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关键的组件与术语"><span class="nav-number">1.</span> <span class="nav-text">关键的组件与术语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组件"><span class="nav-number">1.1.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#术语"><span class="nav-number">1.2.</span> <span class="nav-text">术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TypeClass"><span class="nav-number">1.3.</span> <span class="nav-text">TypeClass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object"><span class="nav-number">1.4.</span> <span class="nav-text">Object</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#示例与使用-MySQL"><span class="nav-number">2.</span> <span class="nav-text">示例与使用 MySQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录结构"><span class="nav-number">3.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库"><span class="nav-number">4.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引擎内部"><span class="nav-number">5.</span> <span class="nav-text">引擎内部</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#twisted"><span class="nav-number">5.1.</span> <span class="nav-text">twisted</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令的执行"><span class="nav-number">6.</span> <span class="nav-text">命令的执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动命令"><span class="nav-number">6.1.</span> <span class="nav-text">启动命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构图"><span class="nav-number">7.</span> <span class="nav-text">架构图</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关键的组件与术语"><span class="nav-number">1.</span> <span class="nav-text">关键的组件与术语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组件"><span class="nav-number">1.1.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#术语"><span class="nav-number">1.2.</span> <span class="nav-text">术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TypeClass"><span class="nav-number">1.3.</span> <span class="nav-text">TypeClass</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#handlers"><span class="nav-number">1.3.1.</span> <span class="nav-text">handlers</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object"><span class="nav-number">1.4.</span> <span class="nav-text">Object</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装与使用-MySQL"><span class="nav-number">2.</span> <span class="nav-text">安装与使用 MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置-MySQL"><span class="nav-number">2.2.</span> <span class="nav-text">设置 MySQL</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录结构"><span class="nav-number">3.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库"><span class="nav-number">4.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引擎探索"><span class="nav-number">5.</span> <span class="nav-text">引擎探索</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#twisted"><span class="nav-number">5.1.</span> <span class="nav-text">twisted</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令的执行"><span class="nav-number">6.</span> <span class="nav-text">命令的执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动命令"><span class="nav-number">6.1.</span> <span class="nav-text">启动命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构图"><span class="nav-number">7.</span> <span class="nav-text">架构图</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -591,7 +616,7 @@ WebServer -> WebProxy[label=EvenniaReverseProxyResource]
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">311</span>
+          <span class="site-state-item-count">312</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
