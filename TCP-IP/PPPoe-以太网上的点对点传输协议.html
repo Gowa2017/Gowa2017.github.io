@@ -59,7 +59,7 @@
 <meta property="og:image" content="https://gowa.club/res/pppoe-payloadhead.png">
 <meta property="og:image" content="https://gowa.club/res/pppoe-payloadcontent.png">
 <meta property="og:image" content="https://gowa.club/res/pppoe-example.png">
-<meta property="og:updated_time" content="2019-11-16T14:47:48.270Z">
+<meta property="og:updated_time" content="2020-02-15T13:46:51.179Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PPPoe-以太网上的点对点传输协议">
 <meta name="twitter:description" content="PPPoE（英语：Point-to-Point Protocol Over Ethernet），以太网上的点对点协议，是将点对点协议（PPP）封装在以太网（Ethernet）框架中的一种网络隧道协议。由于协议中集成PPP协议，所以实现出传统以太网不能提供的身份验证、加密以及压缩等功能，也可用于缆线调制解调器（cable modem）和数字用户线路（DSL）等以以太网协议向用户提供接入服务的协议体系">
@@ -265,7 +265,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2019-11-16 22:47:48" itemprop="dateModified" datetime="2019-11-16T22:47:48+08:00">2019-11-16</time>
+                <time title="Modified: 2020-02-15 21:46:51" itemprop="dateModified" datetime="2020-02-15T21:46:51+08:00">2020-02-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -306,6 +306,53 @@
       
         <p>PPPoE（英语：Point-to-Point Protocol Over Ethernet），以太网上的点对点协议，是将点对点协议（PPP）封装在以太网（Ethernet）框架中的一种网络隧道协议。由于协议中集成PPP协议，所以实现出传统以太网不能提供的身份验证、加密以及压缩等功能，也可用于缆线调制解调器（cable modem）和数字用户线路（DSL）等以以太网协议向用户提供接入服务的协议体系。<br>本质上，它是一个允许在以太网 广播域中的两个以太网接口间创建点对点隧道的协议。<br><a id="more"></a></p>
 <h2 id="协议概述"><a href="#协议概述" class="headerlink" title="协议概述"></a>协议概述</h2><p>PPPoE分为两个阶段，即Discovery（地址发现）阶段和PPP会话阶段。当某个主机希望发起一个PPPoE会话时，它必须首先执行Discovery来确定对方的以太网MAC地址并建立起一个PPPoE会话标识符SESSION_ID(Access Concentrator生成)。虽然PPP定义的是端到端的对等关系，Discovery却是天生的一种客户端-服务器关系。在Discovery的过程中,主机(作为客户端)发现某个访问集中器（Access Concentrator，作为服务器），根据网络的拓扑结构，可能主机能够跟不止一个的访问集中器通信 。Discovery阶段允许主机发现所有的访问集中器并从中选择一个。当Discovery阶段成功完成之后，主机和访问集中器两者都具备了用于在以太网上建立点到点连接所需的所有信息。<br>Discovery阶段保持无状态（stateless）直到建立起一个PPP会话。一旦PPP会话建立，主机和访问集中器两者都必须为一个PPP虚拟接口分配资源。</p>
+<h1 id="PPP-协议"><a href="#PPP-协议" class="headerlink" title="PPP 协议"></a>PPP 协议</h1><p>PPP 是 点对点协议（Point-to-Point Procotol）的简称，所谓的 <strong>点对点</strong> 是指在一个<strong>串行链路</strong>只有两个端点，从一个端点，发送过去的数据，必然被另外一个端点给接收到，然后在其上传输 <strong>IP数据报</strong>。实际上他不是单个协议，而是一多个协议的集合。它支持建立的基本方法—<strong>链路控制协议（LCP，Link Control Protocol）</strong>，和一系列 <strong>NCP（网络控制协议，Net Control Procotol）</strong>协议，用来在基本链路建立后，对各种上层协议建立网络层链路。</p>
+<p>LCP 主要用来维护底层的双方通信路径，因此，PPP 操作只需要关注链路的两端，而不需要像 以太网和 Wi-Fi 的 MAC 层协议那样要处理共享资源的访问。一个 LCP 的操作过程大体如下：</p>
+<p>这里我们方便我们描述 PPPoE 写成了 C/S 形式，实际上 PPP 的端点间是对等的</p>
+<div class="mermaid">
+sequenceDiagram
+participant C as Client
+participant S as Server
+
+C ->> S:配置请求
+S -->> C:配置确认
+note left of C: 链路建立
+S ->> C:配置请求
+C -->> S:配置确认
+note right of S: 认证(CHAP)
+S ->> C: 认证请求
+C -->> S:认证材料
+note right of S: AAAServer 认证
+S -->> C: 认证成功
+note left of C: 网络建立
+note over C, S: 数据交换
+C ->> S: 终止请求
+S -->> C: 终止确认
+</div>
+<h1 id="PPPoE"><a href="#PPPoE" class="headerlink" title="PPPoE"></a>PPPoE</h1><p>PPPoE 则是为了在 以太网链路上进行传输 PPP 报文而设计的，我们知道 PPP 只能在两个端点间传输数据，所以 关键再于  PPPoE 的  PADI 报文，其会向链路层的广播地址发送 一个报文，所有一台网中的设备都有可能收到这个报文，然后对此报文进行响应。</p>
+<p>当对此报文响应的时候，确认双方的链路层地址后，就可以以点对点的形式进行传输了。</p>
+<div class="mermaid">
+sequenceDiagram
+participant C as Cient
+participant S as Server
+
+C ->> S: PADI[0x09]（广播）
+S -->> C: PADO[0x07]（单播）
+C ->> S: PADR[0x19]（单播）
+S -->> C: PADS[0x65]（单播）
+C -->> S: PADT[0xA7]（单播）
+</div>
+<h1 id="典型组网"><a href="#典型组网" class="headerlink" title="典型组网"></a>典型组网</h1><div class="language-dot">
+digraph{
+rankdir =LR
+C[label=Client]
+N[label=NAS]
+AAA[label="AAA服务器"]
+
+C -> N[label=PPPoE]
+N -> AAA[label=Radius]
+}
+</div>
 <h2 id="报文格式"><a href="#报文格式" class="headerlink" title="报文格式"></a>报文格式</h2><h3 id="以太网帧格式-更多介绍请查看RFC894-tcp-ip协议详解-卷1-第2章"><a href="#以太网帧格式-更多介绍请查看RFC894-tcp-ip协议详解-卷1-第2章" class="headerlink" title="以太网帧格式(更多介绍请查看RFC894/tcp/ip协议详解:卷1 第2章)"></a>以太网帧格式(更多介绍请查看RFC894/tcp/ip协议详解:卷1 第2章)</h3><p><img src="/res/pppoe-frame.png" alt="帧格式"><br>ETHER_TYPE设置为0x8863(Discovery阶段)或者0x8864(PPP会话阶段)</p>
 <h3 id="payloadheader"><a href="#payloadheader" class="headerlink" title="payloadheader"></a>payloadheader</h3><p><img src="/res/pppoe-payloadhead.png" alt="payload头部"></p>
 <h3 id="payload内容"><a href="#payload内容" class="headerlink" title="payload内容"></a>payload内容</h3><p><img src="/res/pppoe-payloadcontent.png" alt="payload内容"><br>包含0个或多个tag，每个tag是一个tlv(type-length-value)三元组</p>
@@ -318,7 +365,45 @@
 <h2 id="会话阶段-session-stage"><a href="#会话阶段-session-stage" class="headerlink" title="会话阶段(session stage)"></a>会话阶段(session stage)</h2><p>一旦PPPoE会话开始，PPP数据就像其它PPP封装一样发送。所有的以太网数据包都是单播的。ETHER_TYPE域设置为0x8864。PPPoE的CODE必须设置为0x00。PPPoE会话的SESSION_ID不允许发生改变，必须是Discovery阶段所指定的值。PPPoE的payload包含一个PPP帧，帧始于PPP Protocol-ID。</p>
 <h2 id="TAG-TYPE和TAG-VALUE"><a href="#TAG-TYPE和TAG-VALUE" class="headerlink" title="TAG_TYPE和TAG_VALUE"></a>TAG_TYPE和TAG_VALUE</h2><p>0x0000 End-Of-List<br>      该TAG表明表中没有其它TAG了。该TAG的TAG_LENGTH必须总是0。不要求使用该标签，存在是为了向后兼容。<br>   <em>0x0101 Service-Name</em><br>      该TAG表明后面紧跟的是服务的名称。TAG_VALUE是不以NULL结束的UTF-8字符串。当TAG_LENGTH为0时，该TAG用于表明接受任何服务。使用Service-Name标签的例子是表明ISP(Internet服务提供商)或者一类服务或者服务的质量。<br>   <em>0x0102 AC-Name</em><br>      该TAG表明后面紧跟的字符串唯一地表示了某个特定的访问集中器。它可以是商标、型号以及序列号等信息的集合，或者该访问集中器MAC地址的一个简单的UTF-8表示。它不以NULL来结束。<br>   <em>0x0103 Host-Uniq</em><br>      该TAG由主机用于把访问集中器的响应（PADO或者PADS）与主机的某个唯一特定的请求联系起来。TAG_VALUE是主机选择的长度和值为任意的二进制数据。它不能由访问集中器解释。主机可以在PADI或者PADR中包含一个Host-Uniq标签。如果访问集中器收到了该标签，它必须在对应的PADO或者PADS中不加改变的包含该标签。<br>   <em>0x0104 AC-Cookie</em><br>      该TAG由访问集中器用于防止拒绝服务攻击（见“安全方面的考虑”）。访问集中器可以在PADO数据包中包含该TAG。如果主机收到了该标签，它必须在接下来的PADR中不加改变的包含该标签。TAG_VALUE I是长度和值任意的二进制数据，不能由主机解释。<br>   <em>0x0105 Vendor-Specific</em><br>      该TAG用来传送厂商自定义的信息。TAG_VALUE的头4个字节包含了厂商的识别码 ，其余字节尚未定义。厂商识别码的高字节为0，低3个字节为网络字节序的厂商的SMI网络管理专用企业码，如“定义值RFC”（参考文献[4]）中定义的那样。<br>      不推荐使用该TAG。为了确保互操作性，实现可以悄悄的忽略Vendor-Specific TAG。<br>   <em>0x0110 Relay-Session-Id</em><br>      该TAG可由中继流量的中间代理加入到Discovery数据包中。TAG_VALUE对主机和访问集中器都是晦涩难懂的（paque）。如果主机或访问集中器收到该TAG，则它们必须在所有的Discovery数据包中包含该TAG以作为响应。所有的PADI数据包必须保证足够空间来加入TAG_VALUE长度为12字节的Relay-Session-Id标签。<br>      如果Discovery数据包中已经包含一个Relay-Session-Id标签，则不允许再加入该标签。这种情况下，中间代理应该使用该现有的Relay-Session-Id标签。如果它不能使用现有的标签，或者没有足够空间来增加一个Relay- Session-Id标签,那么它应该向发送者返回一个Generic-Error标签。<br>   <em>0x0201 Service-Name-Error</em><br>      该TAG(典型的有一个长度为零的数据部分)表明了由于某种原因，没有理睬所请求的Service-Name。如果有数据部分,并且数据部分的头一个字节非0，那么它必须是一个      可打印的UTF-8字符串，解释请求被拒绝的原因。该字符串可以不以NULL结束。<br>   <em>0x0202 AC-System-Error</em><br>      该TAG表明了访问集中器在处理主机请求时出现了某个错误。(例如没有足够资源来创建一个虚拟电路。PADS数据包中可以包含该标签。<br>      如果有数据，并且数据的第一个字节不为0，那么（数据）必须是一个可打印的UTF-8 字符串，该字符串解释了错误的性质。该字符串可以不以NULL结束。<br>   <em>0x0203 Generic-Error</em><br>      该TAG表明发生了一个错误。当发生一个不可恢复的错误并且没有其它合适的TAG时，它可被加到PADO, PADR或PADS数据包中。如果出现数据部分，那么数据必须是一个UTF-8字符串，解释错误的性质。该字符串不允许以NULL结束。</p>
 <h2 id="数据包例子"><a href="#数据包例子" class="headerlink" title="数据包例子"></a>数据包例子</h2><p><img src="/res/pppoe-example.png" alt="例子"></p>
+<script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js">
+ mermaid.initialize({startOnLoad:true}); 
+</script><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
 
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
+
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
+                }
+                </script>
     </div>
 
     
@@ -391,7 +476,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#协议概述"><span class="nav-number">1.</span> <span class="nav-text">协议概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#报文格式"><span class="nav-number">2.</span> <span class="nav-text">报文格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#以太网帧格式-更多介绍请查看RFC894-tcp-ip协议详解-卷1-第2章"><span class="nav-number">2.1.</span> <span class="nav-text">以太网帧格式(更多介绍请查看RFC894/tcp/ip协议详解:卷1 第2章)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#payloadheader"><span class="nav-number">2.2.</span> <span class="nav-text">payloadheader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#payload内容"><span class="nav-number">2.3.</span> <span class="nav-text">payload内容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发现阶段-discovery-stage"><span class="nav-number">3.</span> <span class="nav-text">发现阶段(discovery stage)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PPPoE-Active-Discovery-Initiation数据包-PADI"><span class="nav-number">3.1.</span> <span class="nav-text">PPPoE Active Discovery Initiation数据包(PADI)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-PPPoE-Active-Discovery-Offer-数据包-PADO"><span class="nav-number">3.2.</span> <span class="nav-text">The PPPoE Active Discovery Offer 数据包(PADO)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-PPPoE-Active-Discovery-Request-数据包-PADR"><span class="nav-number">3.3.</span> <span class="nav-text">The PPPoE Active Discovery Request 数据包(PADR)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-PPPoE-Active-Discovery-Session-confirmation-数据包-PADS"><span class="nav-number">3.4.</span> <span class="nav-text">The PPPoE Active Discovery Session-confirmation 数据包(PADS)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-PPPoE-Active-Discovery-Terminate数据包-PADT"><span class="nav-number">3.5.</span> <span class="nav-text">The PPPoE Active Discovery Terminate数据包(PADT)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#会话阶段-session-stage"><span class="nav-number">4.</span> <span class="nav-text">会话阶段(session stage)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TAG-TYPE和TAG-VALUE"><span class="nav-number">5.</span> <span class="nav-text">TAG_TYPE和TAG_VALUE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包例子"><span class="nav-number">6.</span> <span class="nav-text">数据包例子</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#协议概述"><span class="nav-number">1.</span> <span class="nav-text">协议概述</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PPP-协议"><span class="nav-number"></span> <span class="nav-text">PPP 协议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PPPoE"><span class="nav-number"></span> <span class="nav-text">PPPoE</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#典型组网"><span class="nav-number"></span> <span class="nav-text">典型组网</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#报文格式"><span class="nav-number">1.</span> <span class="nav-text">报文格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#以太网帧格式-更多介绍请查看RFC894-tcp-ip协议详解-卷1-第2章"><span class="nav-number">1.1.</span> <span class="nav-text">以太网帧格式(更多介绍请查看RFC894/tcp/ip协议详解:卷1 第2章)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#payloadheader"><span class="nav-number">1.2.</span> <span class="nav-text">payloadheader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#payload内容"><span class="nav-number">1.3.</span> <span class="nav-text">payload内容</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发现阶段-discovery-stage"><span class="nav-number">2.</span> <span class="nav-text">发现阶段(discovery stage)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PPPoE-Active-Discovery-Initiation数据包-PADI"><span class="nav-number">2.1.</span> <span class="nav-text">PPPoE Active Discovery Initiation数据包(PADI)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-PPPoE-Active-Discovery-Offer-数据包-PADO"><span class="nav-number">2.2.</span> <span class="nav-text">The PPPoE Active Discovery Offer 数据包(PADO)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-PPPoE-Active-Discovery-Request-数据包-PADR"><span class="nav-number">2.3.</span> <span class="nav-text">The PPPoE Active Discovery Request 数据包(PADR)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-PPPoE-Active-Discovery-Session-confirmation-数据包-PADS"><span class="nav-number">2.4.</span> <span class="nav-text">The PPPoE Active Discovery Session-confirmation 数据包(PADS)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-PPPoE-Active-Discovery-Terminate数据包-PADT"><span class="nav-number">2.5.</span> <span class="nav-text">The PPPoE Active Discovery Terminate数据包(PADT)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#会话阶段-session-stage"><span class="nav-number">3.</span> <span class="nav-text">会话阶段(session stage)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TAG-TYPE和TAG-VALUE"><span class="nav-number">4.</span> <span class="nav-text">TAG_TYPE和TAG_VALUE</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包例子"><span class="nav-number">5.</span> <span class="nav-text">数据包例子</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -405,7 +490,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">312</span>
+          <span class="site-state-item-count">313</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

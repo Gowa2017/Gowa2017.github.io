@@ -225,6 +225,109 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/利用idea调试maven项目.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Java/利用idea调试maven项目.html" class="post-title-link" itemprop="url">利用idea调试maven项目</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-17 16:37:41" itemprop="dateCreated datePublished" datetime="2018-07-17T16:37:41+08:00">2018-07-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Java/利用idea调试maven项目.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/利用idea调试maven项目.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>事情是这样的，之前曾经idea上调试过项目，但是出现一个很头疼的问题是，后面再调用哪个API都会直接跳转到到了登录界面。而如果将环境部署以后，则正常，谷歌良久，终于找到了解决办法，但是，之前的疑问依然没有解决。为什么开始的时候同样的操作是可以的，而后就不行了呢。</p>
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><ul>
+<li>OS: CentOS 7.5 x86_64</li>
+<li>IDE: ideaU</li>
+<li>开发语言: Java</li>
+<li>框架：jeeplus</li>
+<li>编译：maven-&gt;war</li>
+<li>中间件： tomcat 7.0.94</li>
+</ul>
+<p>开始的时候，直接导入项目，编译，然后在idea的 <code>Run/Debug Configration</code> 处添加好 tomcatserver local项目，指定好我的tomcat 路径，然后直接小臭虫就开始debug了。</p>
+<p>可是后面换了个机器，重新装一一下系统就坑了，不行了。谷歌才找到了解决的办法</p>
+<h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><p>ideaU -&gt; edit configration -&gt; 添加 maven -&gt; command line 输入 <code>tomcat7:run</code> 然后保存好后。</p>
+<p>点小臭虫居然就可以了，这是为什么呢？</p>
+<h1 id="另外一种办法"><a href="#另外一种办法" class="headerlink" title="另外一种办法"></a>另外一种办法</h1><p>在 idea 有了 tomcat server 插件集成的情况下。<br>按如下步骤进行：</p>
+<ol>
+<li>选择 Edit Configurations</li>
+<li>点 + 号，添加一个 Tomcat Server Local 配置</li>
+<li>在新添加的配置的 标签 Server 下指定自己的 Tomcat 程序位置</li>
+<li>在 Deployment 标签下，点 + 号添加我们的 smart.war exploded 。</li>
+<li>运行即可</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/CentOS中的ip命令.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1135,96 +1238,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android中的进程及内存管理.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Android/android中的进程及内存管理.html" class="post-title-link" itemprop="url">android中的进程及内存管理</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-06-12 12:46:17" itemprop="dateCreated datePublished" datetime="2018-06-12T12:46:17+08:00">2018-06-12</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Android/android中的进程及内存管理.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/android中的进程及内存管理.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>其实以为，安卓只需要在界面上进行了解就行了，其实不然。大多数时候，我们都是在JAVA进行业务逻辑的处理和数据的处理，与显示层其实没有什么太大的关系。更容易让我们忽略的是，如果对于内存管理，生命周期没有一定了解的话，总是会出现很多莫名其妙的问题。比如，基于网络获取的数据给存储到了 View或者 Activity内，那么，在安卓把它进行回收了的时候，就总是会出现 NPE 错误了。<br>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Android/android中的进程及内存管理.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1273,7 +1286,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">312</span>
+          <span class="site-state-item-count">313</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
