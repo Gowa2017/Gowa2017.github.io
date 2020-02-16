@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="在 Evennia 中，Script 也是一个很重要的对象。很多额外的系统都是用这个来实现的，比如一些战斗逻辑，或者是其他的事件逻辑，都是这样来实现的。">
+<meta name="keywords" content="Python,Evennia,Mud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evennia中的Script">
+<meta property="og:url" content="https://gowa.club/Mud/Evennia中的Script.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="在 Evennia 中，Script 也是一个很重要的对象。很多额外的系统都是用这个来实现的，比如一些战斗逻辑，或者是其他的事件逻辑，都是这样来实现的。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-16T15:47:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evennia中的Script">
+<meta name="twitter:description" content="在 Evennia 中，Script 也是一个很重要的对象。很多额外的系统都是用这个来实现的，比如一些战斗逻辑，或者是其他的事件逻辑，都是这样来实现的。">
+
+<link rel="canonical" href="https://gowa.club/Mud/Evennia中的Script.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Evennia中的Script | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Mud/Evennia中的Script.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Evennia中的Script
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-16 23:47:38" itemprop="dateCreated datePublished" datetime="2020-02-16T23:47:38+08:00">2020-02-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mud/" itemprop="url" rel="index">
+                    <span itemprop="name">Mud</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Mud/Evennia中的Script.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Mud/Evennia中的Script.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在 Evennia 中，<a href="https://github.com/evennia/evennia/wiki/Glossary#script" target="_blank" rel="noopener">Script</a> 也是一个很重要的对象。很多额外的系统都是用这个来实现的，比如一些战斗逻辑，或者是其他的事件逻辑，都是这样来实现的。</p>
+<a id="more"></a>
+<h1 id="Script"><a href="#Script" class="headerlink" title="Script"></a>Script</h1><p><a href="https://github.com/evennia/evennia/wiki/Glossary#script" target="_blank" rel="noopener">Script</a> 是这样被简单的介绍的：</p>
+<blockquote>
+<p>当我们提到 <em>Scripts</em> 的时候，实际上我们说的是 <strong>Script</strong> TypeClass。Scripts 是 Evennia 中一个比较特别的东西——他们和 Objects 类似，但不存在于游戏内。它们既可以用作存储数据的自定义位置，也可以用作持久游戏系统的构建块。由于可以使用计时功能进行初始化，因此它们也可以用于长期持续计时（对于快速更新，其他类型的计时器可能会更好）。</p>
+</blockquote>
+<p>我们可以看到有几个关键词 <strong>存储数据的自定义位置，构建块，计时</strong>。</p>
+<h1 id="详细介绍"><a href="#详细介绍" class="headerlink" title="详细介绍"></a>详细介绍</h1><p><a href="https://github.com/evennia/evennia/wiki/Scripts" target="_blank" rel="noopener">这里是详细的介绍</a>。</p>
+<p>Scripts 是角色内的 Objects 和角色外的一对兄弟。（一个在角色内，一个在角色外）。Sctips 很灵活所以也有些限制。</p>
+<ul>
+<li>我们必须选择名字来定义它们。基于我们想用他来干什么，可能会出现的名字是：<strong>OOBObjects, StorageContainers or TimerObjects.</strong>。</li>
+</ul>
+<p>Evennia 中， Scripts 可以用来做很多的事情：</p>
+<ul>
+<li>可以附加到 Objects 身上，以不同的方式影响 Objects ——— 或者不依附于游戏内的任何实体而存在（ <strong>Global Scripts</strong>）。</li>
+<li>可以用做 <strong>定时器</strong> 和 <strong>计时器</strong> ——任何会随着时间变化的东西。但是他们也可以完全不依赖于时间。注意，如果你想要的是只一个重复的对象方法调用，那么你应该考虑使用  <a href="https://github.com/evennia/evennia/wiki/TickerHandler" target="_blank" rel="noopener">TickHandler</a>。它的限制更多，但是它是专门做这项任务的。</li>
+<li>他们可以用来描述状态变更。Script 是承载持久但独特的系统处理程序的绝佳平台。例如，一个 Script 可以用来作为跟踪回合战斗系统跟踪状态的基础。由于脚本还可以在计时器上运行，因此它们还可以定期更新自身以执行各种操作。</li>
+<li>它们可以充当数据存储库，用于将游戏数据持久存储在数据库中。（感谢你拥有的 Attributes 能力）</li>
+</ul>
+<p>Script 也是一个 TypeClass ，和其他 Evennia 中的实体一样进行操作：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># create a new script </span></span><br><span class="line">new_script = evennia.create_script(key=<span class="string">"myscript"</span>, typeclass=...)  </span><br><span class="line"></span><br><span class="line"><span class="comment"># search (this is always a list, also if there is only one match)</span></span><br><span class="line">list_of_myscript = evennia.search_script(<span class="string">"myscript"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="新的-Script"><a href="#新的-Script" class="headerlink" title="新的 Script"></a>新的 Script</h2><p>Scripts 也被定义一个类，和其他的 TypeClass 一样。这个类有几个用来处理 时间相关的属性。不过他们都是 <strong>可选的</strong>——也可以没有任何时间组件（如充当数据库存储或持有持久性游戏系统）。</p>
+<p><strong>evennia/typeclasses/scripts.py</strong> 中能看到我们能做的事情。下面是一个例子：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> evennia <span class="keyword">import</span> DefaultScript</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyScript</span><span class="params">(DefaultScript)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">at_script_creation</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.key = <span class="string">"myscript"</span></span><br><span class="line">        self.interval = <span class="number">60</span>  <span class="comment"># 1 min repeat</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">at_repeat</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># do stuff every minute</span></span><br></pre></td></tr></table></figure>
+<p>当我们初始化我们自己的游戏在，<strong>mygame/typeclasses/scripts.py</strong> 已经继承了 <strong>DefaultScript</strong>。我们可以将它作为我们想要使用的 Scripts 的基类：我们可以调整 <strong>Script</strong> 的默认行为。例如：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># for example in mygame/typeclasses/scripts.py  </span></span><br><span class="line"><span class="comment"># Script class is defined at the top of this module</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Weather</span><span class="params">(Script)</span>:</span> </span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    A timer script that displays weather info. Meant to </span></span><br><span class="line"><span class="string">    be attached to a room. </span></span><br><span class="line"><span class="string">      </span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">at_script_creation</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.key = <span class="string">"weather_script"</span></span><br><span class="line">        self.desc = <span class="string">"Gives random weather messages."</span></span><br><span class="line">        self.interval = <span class="number">60</span> * <span class="number">5</span>  <span class="comment"># every 5 minutes</span></span><br><span class="line">        self.persistent = <span class="literal">True</span>  <span class="comment"># will survive reload</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">at_repeat</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"called every self.interval seconds."</span>        </span><br><span class="line">        rand = random.random()</span><br><span class="line">        <span class="keyword">if</span> rand &lt; <span class="number">0.5</span>:</span><br><span class="line">            weather = <span class="string">"A faint breeze is felt."</span></span><br><span class="line">        <span class="keyword">elif</span> rand &lt; <span class="number">0.7</span>:</span><br><span class="line">            weather = <span class="string">"Clouds sweep across the sky."</span> </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            weather = <span class="string">"There is a light drizzle of rain."</span></span><br><span class="line">        <span class="comment"># send this message to everyone inside the object this</span></span><br><span class="line">        <span class="comment"># script is attached to (likely a room)</span></span><br><span class="line">        self.obj.msg_contents(weather)</span><br></pre></td></tr></table></figure>
+<p>如果我们将此脚本，放到一个 room 上，那么它将会每隔 5 分钟就对房间内的所有人报告一些随机的天气信息。</p>
+<p>想要激活它，只需要将它挂到 Room 的 script 处理器上。</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">myroom.scripts.add(scripts.Weather)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>由于变量 <strong>TYPECLASS_PATHS</strong> 指定了我们 typeclasses 的位置，所以我们不需要指定 脚本的 完整路径 <em>typeclasses.scripts.Weather</em>，而只需要指定 <em>scripts.Weather</em>。</p>
+</blockquote>
+<p>同样，我们可以使用  <code>evennia.create_script</code> 函数来建立：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> evennia <span class="keyword">import</span> create_script</span><br><span class="line">create_script(<span class="string">'typeclasses.weather.Weather'</span>, obj=myroom)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果我们给了 <code>create_script()</code> 一个 <strong>关键词</strong> 参数，那么它将会覆盖 typeclass 类中的 key 。例如，下面就是一个每 10分钟运行一次的 天气脚本的 实例：</p>
+</blockquote>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">create_script(<span class="string">'typeclasses.weather.Weather'</span>, obj=myroom, </span><br><span class="line">               persistent=False, interval=10*60)</span><br></pre></td></tr></table></figure>
+<p>甚至，还可以使用游戏内的命令来构建：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@script here = typeclasses.scripts.Weather</span><br></pre></td></tr></table></figure>
+<h2 id="Scripts上的属性和函数"><a href="#Scripts上的属性和函数" class="headerlink" title="Scripts上的属性和函数"></a>Scripts上的属性和函数</h2><p>一个脚本拥有所有 typeclass 的属性，如 <code>db, ndb</code>。设置 <code>key</code> 将会是非常有用的事情，方便管理（例如通过名字删除）。这些参数通常是在 typeclass 中设置，但也可能通过在 <code>create_script()</code> 中指定来设置。</p>
+<ul>
+<li>desc 描述</li>
+<li>interval 执行间隔。<strong>interval == 0</strong> 的话将不会有时间组件，不会重复，但会永远存在。这在进行存储或者很多非时间相关的游戏系统的时候很常用。</li>
+<li>start_delay(bool) 在到达第一个 interval 的时候是否等待。</li>
+<li>repeats 重复次数。<code>repeats &lt;= 0</code>，会无限重复。注意，每次时间间隔到达都会增加这个值。所以 <code>start_delay=False, repeats=1</code> 会执行后立刻就退出。</li>
+<li>persistent 在服务器重启和关闭期间这个脚本是否存在。</li>
+</ul>
+<p>特殊的属性：</p>
+<ul>
+<li>obj 表示此脚本附加到的对象。我们不需要手动设置这个属性。我们用 <code>myobj.scripts.add(myscriptpath)</code> 或 <code>myobj</code>  作为<code>utils.create.create_script</code> 的参数时，会自动进行设置。</li>
+</ul>
+<p>了解钩子函数也很重要，通常我们的自定义就在与重写这些自定义函数。<code>src/scripts/scripts.py</code> 有更长更详细的描述。</p>
+<ul>
+<li>at_script_creation() 通常是脚本设置属性的地方，用来控制脚本如何运行。只执行一次。</li>
+<li>is_valid() 判断脚本是否应该继续执行与否。<code>obj.scripts.validate()</code> 调用的时候会被执行，我们可以手动运行。在 Evennia 的一些场景下也会调用，如 <code>reload</code>。这在用做状态管理器的时候很有用。如果方法返回 <code>False</code>，这个脚本会停止并立即清除。</li>
+<li>at_start() 当脚本开始运行或离开暂停时。对于持久化的脚本，服务器每次启动最少执行一次。这个方法总是被离开调用，及时<code>start_delay</code> 是 <code>False</code>。</li>
+<li>at_repeat() 每 <code>interval</code> 执行一次，或者永不执行。其在启动的时候会立刻执行，除非 <code>start_delay == True</code>。</li>
+<li>at_stop() 脚本停止时执行。用来进行自定义清理的时候用。</li>
+<li>at_server_reload() 热启动的时候执行。此时可用来进行存储非<strong>持久化</strong>但我们又想保留的数据。</li>
+<li>at_server_shutdown() 系统 reset 或者 shutdown 的时候执行。</li>
+</ul>
+<p>运行方法（通常是引擎自动调用，但我们也可以手动调用）：</p>
+<ul>
+<li>start() 启动脚本。我们将脚本添加到对象的时候就会被执行。<code>at_start()</code> 随后。</li>
+<li>stop() 停止，并删除。从一个处理器移除脚本会自动停止。<code>at_stop()</code>  随后。</li>
+<li>pause() 暂停脚本。所有的属性会被保留，定时器可以恢复。这在服务器 reload 和不会导致 <code>at_stop()</code> 钩子被调用时执行。这是挂起脚本，而不会改变状态。</li>
+<li>unpasue() 重启脚本。<code>at_start()</code> 会被调用来回收其内部的状态。定时器恢复。在服务器 reload 会重启所有的暂停脚本。</li>
+<li>force_repeat() 强制定时器执行一步。定时器会重置，<code>at_repeat()</code> 被调用。这也会增加计数器。</li>
+<li><code>time_until_next_repeat</code>() 到下一次定时器执行的剩余时间。None if repeats == 0.</li>
+<li>remaining_repeats() 剩余执行次数。</li>
+<li>reset_callcount(value=0) 重置已执行完的次数。repeats &gt; 0 才会有用。</li>
+<li>restart(interval=None, repeats=None, start_delay=None) 以不同的设置重新启动脚本。会调用 <code>at_stop()</code> 函数，然后执行 <code>at_start()</code>，没有改变的参数则保持状态。</li>
+</ul>
+<h2 id="全局脚本"><a href="#全局脚本" class="headerlink" title="全局脚本"></a>全局脚本</h2><p>一个脚本不需要一定连接到一个游戏内对象。我们不要给脚本添加附加对象参数就行了。</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># adding a global script</span></span><br><span class="line"><span class="keyword">from</span> evennia <span class="keyword">import</span> create_script</span><br><span class="line">create_script(<span class="string">"typeclasses.globals.MyGlobalEconomy"</span>, </span><br><span class="line">               key=<span class="string">"economy"</span>, persistent=<span class="literal">True</span>, obj=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+<p>然后，我们可以通过 key 或者 标识符来搜索 <code>evennia.search_script()</code>获得这个脚本。游戏中的 scripts 命令会显示所有的脚本。</p>
+<p>Evennia 提供了一个方便的容器 <strong>GLOBAL_SCRIPTS</strong> 来访问全局脚本。如果我们知道脚本的名字：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> evennia <span class="keyword">import</span> GLOBAL_SCRIPTS</span><br><span class="line"></span><br><span class="line">my_script = GLOBAL_SCRIPTS.my_script</span><br><span class="line"><span class="comment"># needed if there are spaces in name or name determined on the fly</span></span><br><span class="line">another_script = GLOBAL_SCRIPTS.get(<span class="string">"another script"</span>)</span><br><span class="line"><span class="comment"># get all global scripts (this returns a Queryset)</span></span><br><span class="line">all_scripts = GLOBAL_SCRIPTS.all()</span><br><span class="line"><span class="comment"># you can operate directly on the script</span></span><br><span class="line">GLOBAL_SCRIPTS.weather.db.current_weather = <span class="string">"Cloudy"</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：GLOBAL_SCRIPTS 使用 <code>key</code> 来索引全局脚本。如果我们两个脚本有同样的 key ，返回的结果是不确定的，依赖于数据库。最好的办法就是不要用同名的全局脚本，或者是使用 evennia.search_script 来搜索。</p>
+</blockquote>
+<p>有两个方法来让脚本成为 GLOBAL_SCRIPTS 的属性。一个是手动使用  <code>create_script()</code> 来手动建立一个全局脚本。通常我们需要是在服务器启动的时候自动执行这个事情，那么我们可以这样设置：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">GLOBAL_SCRIPTS = &#123;</span><br><span class="line">    <span class="string">"my_script"</span>: &#123;               </span><br><span class="line">        <span class="string">"typeclass"</span>: <span class="string">"scripts.Weather"</span>,</span><br><span class="line">        <span class="string">"repeats"</span>: <span class="number">-1</span>,</span><br><span class="line">        <span class="string">"interval"</span>: <span class="number">50</span>,</span><br><span class="line">        <span class="string">"desc"</span>: <span class="string">"Weather script"</span></span><br><span class="line">        <span class="string">"persistent"</span>: <span class="literal">True</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"storagescript"</span>: &#123;</span><br><span class="line">        <span class="string">"typeclass"</span>: <span class="string">"scripts.Storage"</span>,</span><br><span class="line">        <span class="string">"persistent"</span>: <span class="literal">True</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>除了其中的 <code>my_script, storagescript</code> 参数，其他所有参数都是可选的。如果没指定 typeclass，那么就会用 <code>settings.BASE_SCRIPT_TYPECLASS</code> 来建立。脚本与时间相关才需要时间参数。</p>
+<p>Evennia 会自动的使用  <code>settings.GLOBAL_SCRIPTS</code> 来建立和启动脚本（服务器启动时，除非 <code>key</code> 键的脚本已经存在）。在配置阅读和新脚本可用前我们必须 reload 服务器。</p>
+<blockquote>
+<p>不要让脚本出现严重错误，不然你会看到错误日志，同时脚本会回退到 DefaultScript</p>
+</blockquote>
+<p>一个脚本如下定义的时候，会保证在访问的时候是已存在的：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> evennia <span class="keyword">import</span> GLOBAL_SCRIPTS</span><br><span class="line"><span class="comment"># first stop the script </span></span><br><span class="line">GLOBAL_SCRIPTS.storagescript.stop()</span><br><span class="line"><span class="comment"># running the `scripts` command now will show no storagescript</span></span><br><span class="line"><span class="comment"># but below now it's recreated again! </span></span><br><span class="line">storage = GLOBAL_SCRIPTS.storagescript</span><br></pre></td></tr></table></figure>
+<p>也就是说，如果脚本被删除了，我们下一次使用 <code>settings. GLOBAL_SCRIPTS</code> 访问的时候，会使用配置文件的信息来重建脚本。</p>
+<blockquote>
+<p>如果我们的目的是为了存储持久化数据。，我们应该将 persistent=True。在 <code>settings.GLOBAL_SCRIPTS</code> 或者 在 typeclass 中设置。</p>
+</blockquote>
+<h1 id="Muddery-中的战斗系统"><a href="#Muddery-中的战斗系统" class="headerlink" title="Muddery 中的战斗系统"></a>Muddery 中的战斗系统</h1><p><a href="https://github.com/muddery/muddery/blob/master/muddery/typeclasses/character.py#L693" target="_blank" rel="noopener">抓了一下源码有点奇怪，muddery 是对每个角色，在使用攻击命令的时候，都挂上一个战斗处理器</a>：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="comment"># create a new combat handler</span></span><br><span class="line">chandler = create_script(settings.NORMAL_COMBAT_HANDLER)</span><br><span class="line">                </span><br><span class="line"><span class="comment"># set combat team and desc</span></span><br><span class="line">chandler.set_combat(&#123;<span class="number">1</span>: [target], <span class="number">2</span>: [self]&#125;, desc, <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>为什么不把逻辑单独放呢？</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Evennia/" rel="tag"># Evennia</a>
+              <a href="/tags/Mud/" rel="tag"># Mud</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Python/CentOS安装Python3.7.html" rel="next" title="CentOS安装Python3.7">
+                  <i class="fa fa-chevron-left"></i> CentOS安装Python3.7
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Script"><span class="nav-number">1.</span> <span class="nav-text">Script</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#详细介绍"><span class="nav-number">2.</span> <span class="nav-text">详细介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#新的-Script"><span class="nav-number">2.1.</span> <span class="nav-text">新的 Script</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scripts上的属性和函数"><span class="nav-number">2.2.</span> <span class="nav-text">Scripts上的属性和函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全局脚本"><span class="nav-number">2.3.</span> <span class="nav-text">全局脚本</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Muddery-中的战斗系统"><span class="nav-number">3.</span> <span class="nav-text">Muddery 中的战斗系统</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">314</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Mud/Evennia中的Script.html",
+            identifier: "Mud/Evennia中的Script.html",
+            title: "Evennia中的Script"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
