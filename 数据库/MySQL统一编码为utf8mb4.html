@@ -48,7 +48,7 @@
 </script>
 
   <meta name="description" content="据说 MySQL 的 utf8 编码并不是真正的 utf8，而是只有 3 个字节，所以很多内容可能是存储不了的。比如 emoji 表情，就会出错，在 MySQL 5.5.3 (released in early 2010)引入了一个新的字符编码 utf8mb4 ，可以完全的支持 Unicode 字符集。我们就来看看如何使用这个编码。 Step 1: 创建备份这是必须的，把我们的数据库备份一份。 参">
-<meta name="keywords" content="MySQL,数据库">
+<meta name="keywords" content="MySQL,Docker,数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL统一编码为utf8mb4">
 <meta property="og:url" content="https://gowa.club/数据库/MySQL统一编码为utf8mb4.html">
@@ -319,6 +319,13 @@
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># For each table</span></span><br><span class="line"><span class="keyword">REPAIR</span> <span class="keyword">TABLE</span> table_name;</span><br><span class="line"><span class="keyword">OPTIMIZE</span> <span class="keyword">TABLE</span> table_name;</span><br></pre></td></tr></table></figure>
 <p>不过，我们我们也可以用命令行来把这两个事情一起做了。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mysqlcheck -u root -p --auto-repair --optimize --all-databases</span><br></pre></td></tr></table></figure>
+<h1 id="Docker-如何设置呢？"><a href="#Docker-如何设置呢？" class="headerlink" title="Docker 如何设置呢？"></a>Docker 如何设置呢？</h1><p>自己使用 Docker File 来建立一个，带有配置文件的镜像：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mysql_charset.cnf</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[client]</span><br><span class="line">default-character-set = utf8mb4</span><br><span class="line"></span><br><span class="line">[mysql]</span><br><span class="line">default-character-set = utf8mb4</span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line">character-set-client-handshake = FALSE</span><br><span class="line">character-set-server = utf8mb4</span><br><span class="line">collation-server = utf8mb4_unicode_ci</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FROM mysql:5.7</span><br><span class="line">COPY ./mysqld_charset.cnf /etc/mysql/conf.d/mysqld_charset.cnf</span><br></pre></td></tr></table></figure>
+<p>然后执行：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker build  -t mysql-utf8-mb4:5.7 .</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker run --name=mysql -p 3306:3306 -v /opt/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=<span class="string">'wouinibaba'</span> -d mysql-utf8-mb4:5.7</span><br></pre></td></tr></table></figure>
+<p>即OK了</p>
 
     </div>
 
@@ -329,6 +336,7 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+              <a href="/tags/Docker/" rel="tag"># Docker</a>
               <a href="/tags/数据库/" rel="tag"># 数据库</a>
           </div>
 
@@ -392,7 +400,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-1-创建备份"><span class="nav-number">1.</span> <span class="nav-text">Step 1: 创建备份</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-2-升级服务器"><span class="nav-number">2.</span> <span class="nav-text">Step 2: 升级服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-3-修改数据库、表、列"><span class="nav-number">3.</span> <span class="nav-text">Step 3: 修改数据库、表、列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-4-检查列的最大长度和索引长度"><span class="nav-number">4.</span> <span class="nav-text">Step 4: 检查列的最大长度和索引长度</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-5-改变-connection-client-and-server-的字符集"><span class="nav-number">5.</span> <span class="nav-text">Step 5: 改变 connection, client, and server 的字符集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-6-修复和优化所有的表"><span class="nav-number">6.</span> <span class="nav-text">Step 6: 修复和优化所有的表</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-1-创建备份"><span class="nav-number">1.</span> <span class="nav-text">Step 1: 创建备份</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-2-升级服务器"><span class="nav-number">2.</span> <span class="nav-text">Step 2: 升级服务器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-3-修改数据库、表、列"><span class="nav-number">3.</span> <span class="nav-text">Step 3: 修改数据库、表、列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-4-检查列的最大长度和索引长度"><span class="nav-number">4.</span> <span class="nav-text">Step 4: 检查列的最大长度和索引长度</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-5-改变-connection-client-and-server-的字符集"><span class="nav-number">5.</span> <span class="nav-text">Step 5: 改变 connection, client, and server 的字符集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Step-6-修复和优化所有的表"><span class="nav-number">6.</span> <span class="nav-text">Step 6: 修复和优化所有的表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-如何设置呢？"><span class="nav-number">7.</span> <span class="nav-text">Docker 如何设置呢？</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

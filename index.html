@@ -405,6 +405,13 @@
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment"># For each table</span></span><br><span class="line"><span class="keyword">REPAIR</span> <span class="keyword">TABLE</span> table_name;</span><br><span class="line"><span class="keyword">OPTIMIZE</span> <span class="keyword">TABLE</span> table_name;</span><br></pre></td></tr></table></figure>
 <p>不过，我们我们也可以用命令行来把这两个事情一起做了。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">mysqlcheck -u root -p --auto-repair --optimize --all-databases</span><br></pre></td></tr></table></figure>
+<h1 id="Docker-如何设置呢？"><a href="#Docker-如何设置呢？" class="headerlink" title="Docker 如何设置呢？"></a>Docker 如何设置呢？</h1><p>自己使用 Docker File 来建立一个，带有配置文件的镜像：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mysql_charset.cnf</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">[client]</span><br><span class="line">default-character-set = utf8mb4</span><br><span class="line"></span><br><span class="line">[mysql]</span><br><span class="line">default-character-set = utf8mb4</span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line">character-set-client-handshake = FALSE</span><br><span class="line">character-set-server = utf8mb4</span><br><span class="line">collation-server = utf8mb4_unicode_ci</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FROM mysql:5.7</span><br><span class="line">COPY ./mysqld_charset.cnf /etc/mysql/conf.d/mysqld_charset.cnf</span><br></pre></td></tr></table></figure>
+<p>然后执行：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker build  -t mysql-utf8-mb4:5.7 .</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker run --name=mysql -p 3306:3306 -v /opt/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=<span class="string">'wouinibaba'</span> -d mysql-utf8-mb4:5.7</span><br></pre></td></tr></table></figure>
+<p>即OK了</p>
 
       
     </div>
