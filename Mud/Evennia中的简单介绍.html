@@ -328,11 +328,18 @@
 <li><code>db_typeclass_path</code>(str) 指向 (type)class 路径</li>
 </ul>
 <p>访问字段的时候我们可以使用 <code>obj.db.db_key</code> 的形式，或者是 <code>obj.key</code> 这样的形式，后面这种形式是一个包装后的访问方法。</p>
+<h3 id="attribute-与-property，-field"><a href="#attribute-与-property，-field" class="headerlink" title="attribute 与 property， field"></a>attribute 与 property， field</h3><p>这两个概念非常的容易模糊，在语义上，都相似，差别很细微。但是在这个上下文中的话差异是非常大的。</p>
+<ul>
+<li>Property Python对象上下文中使用。有些时候也被当做是 <a href="https://www.python-course.eu/python3_properties.php" target="_blank" rel="noopener">Python3中的内建函数 <code>property</code></a></li>
+<li>Field 一个字段，或者是数据库字段在 Evennia 上下文中表示的一个 TypeClass 中链接到数据库中一个列的 property。TypeClasses 只有很少的几个 property 是数据库的 field。</li>
+<li>Attribute 在 Evennia 上下文中代表了任意可以附加到 typeclass 上的数据。它允许我们持久化新的数据而不用改变 typeclass 的底层数据库结构。</li>
+</ul>
+<p><a href="https://github.com/evennia/evennia/wiki/Typeclasses#about-typeclass-properties" target="_blank" rel="noopener">更多关于 typeclass 属性的可以看这里</a></p>
 <h3 id="handlers"><a href="#handlers" class="headerlink" title="handlers"></a>handlers</h3><p>每个 typeclass 还会有几个处理器：</p>
 <ul>
 <li><code>tags</code> - TagHandler 处理标签</li>
 <li><code>locks</code> - LockHandler 处理访问限制</li>
-<li><code>attributes</code> - AttributeHandler  处理 <strong>属性(attr)</strong>。</li>
+<li><code>attributes</code> - <a href="https://github.com/evennia/evennia/wiki/Attributes#the-attributehandler" target="_blank" rel="noopener">AttributeHandler</a>  处理 <strong>附加属性(attr)</strong>。</li>
 <li><code>db</code> - 上面的简写。</li>
 <li><code>naattributes</code> - Non-persistent AttributeHandler  非持久化属性的处理。</li>
 <li><code>ndb</code> 上面的简写</li>
@@ -604,7 +611,7 @@ WebServer -> WebProxy[label=EvenniaReverseProxyResource]
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关键的组件与术语"><span class="nav-number">1.</span> <span class="nav-text">关键的组件与术语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组件"><span class="nav-number">1.1.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#术语"><span class="nav-number">1.2.</span> <span class="nav-text">术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TypeClass"><span class="nav-number">1.3.</span> <span class="nav-text">TypeClass</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#handlers"><span class="nav-number">1.3.1.</span> <span class="nav-text">handlers</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object"><span class="nav-number">1.4.</span> <span class="nav-text">Object</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装与使用-MySQL"><span class="nav-number">2.</span> <span class="nav-text">安装与使用 MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置-MySQL"><span class="nav-number">2.2.</span> <span class="nav-text">设置 MySQL</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录结构"><span class="nav-number">3.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库"><span class="nav-number">4.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引擎探索"><span class="nav-number">5.</span> <span class="nav-text">引擎探索</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#twisted"><span class="nav-number">5.1.</span> <span class="nav-text">twisted</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令的执行"><span class="nav-number">6.</span> <span class="nav-text">命令的执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动命令"><span class="nav-number">6.1.</span> <span class="nav-text">启动命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构图"><span class="nav-number">7.</span> <span class="nav-text">架构图</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#关键的组件与术语"><span class="nav-number">1.</span> <span class="nav-text">关键的组件与术语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#组件"><span class="nav-number">1.1.</span> <span class="nav-text">组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#术语"><span class="nav-number">1.2.</span> <span class="nav-text">术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TypeClass"><span class="nav-number">1.3.</span> <span class="nav-text">TypeClass</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#attribute-与-property，-field"><span class="nav-number">1.3.1.</span> <span class="nav-text">attribute 与 property， field</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#handlers"><span class="nav-number">1.3.2.</span> <span class="nav-text">handlers</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Object"><span class="nav-number">1.4.</span> <span class="nav-text">Object</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装与使用-MySQL"><span class="nav-number">2.</span> <span class="nav-text">安装与使用 MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">2.1.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置-MySQL"><span class="nav-number">2.2.</span> <span class="nav-text">设置 MySQL</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#目录结构"><span class="nav-number">3.</span> <span class="nav-text">目录结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库"><span class="nav-number">4.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#引擎探索"><span class="nav-number">5.</span> <span class="nav-text">引擎探索</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#twisted"><span class="nav-number">5.1.</span> <span class="nav-text">twisted</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命令的执行"><span class="nav-number">6.</span> <span class="nav-text">命令的执行</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动命令"><span class="nav-number">6.1.</span> <span class="nav-text">启动命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构图"><span class="nav-number">7.</span> <span class="nav-text">架构图</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -618,7 +625,7 @@ WebServer -> WebProxy[label=EvenniaReverseProxyResource]
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">314</span>
+          <span class="site-state-item-count">315</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
