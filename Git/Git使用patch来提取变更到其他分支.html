@@ -47,20 +47,20 @@
   };
 </script>
 
-  <meta name="description" content="HTTP Scripting背景这个文档假设你对HTTP和一些网络知识有了基本的了解。随着越来越多的应用转移到了Web服务上，“HTTP Scripting”已经变得越来越被人们所需要。为了能自动的从网站上获得信息、伪造用户、传输数据或者上传数据到服务器上都是非常重要的任务。Curl是一个命令行工具，用来进行所有类型的URL操作或者数据传输，但这个文档只把重心放在怎么用它来和一实际的HTTP服务器">
-<meta name="keywords" content="Curl,Linux">
+  <meta name="description" content="事情的缘由在于，我们的服务端用的是 svn 进行管理，而我在本地用的是 git ，采用主干 master 同步 svn trunk 的形式，然后我自己的功能代码是在本地分支 dev 进行的。然后，一个猥琐的事情发生了，我在 dev 分支下执行了 git svn dcommit  ，将分支代码提交到了 svn 上这一下就悲剧了。">
+<meta name="keywords" content="Git">
 <meta property="og:type" content="article">
-<meta property="og:title" content="curl-http脚本">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/curl-http脚本.html">
+<meta property="og:title" content="Git使用patch来提取变更到其他分支">
+<meta property="og:url" content="https://gowa.club/Git/Git使用patch来提取变更到其他分支.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="HTTP Scripting背景这个文档假设你对HTTP和一些网络知识有了基本的了解。随着越来越多的应用转移到了Web服务上，“HTTP Scripting”已经变得越来越被人们所需要。为了能自动的从网站上获得信息、伪造用户、传输数据或者上传数据到服务器上都是非常重要的任务。Curl是一个命令行工具，用来进行所有类型的URL操作或者数据传输，但这个文档只把重心放在怎么用它来和一实际的HTTP服务器">
+<meta property="og:description" content="事情的缘由在于，我们的服务端用的是 svn 进行管理，而我在本地用的是 git ，采用主干 master 同步 svn trunk 的形式，然后我自己的功能代码是在本地分支 dev 进行的。然后，一个猥琐的事情发生了，我在 dev 分支下执行了 git svn dcommit  ，将分支代码提交到了 svn 上这一下就悲剧了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-12-11T11:37:34.000Z">
+<meta property="og:updated_time" content="2020-02-22T08:56:00.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="curl-http脚本">
-<meta name="twitter:description" content="HTTP Scripting背景这个文档假设你对HTTP和一些网络知识有了基本的了解。随着越来越多的应用转移到了Web服务上，“HTTP Scripting”已经变得越来越被人们所需要。为了能自动的从网站上获得信息、伪造用户、传输数据或者上传数据到服务器上都是非常重要的任务。Curl是一个命令行工具，用来进行所有类型的URL操作或者数据传输，但这个文档只把重心放在怎么用它来和一实际的HTTP服务器">
+<meta name="twitter:title" content="Git使用patch来提取变更到其他分支">
+<meta name="twitter:description" content="事情的缘由在于，我们的服务端用的是 svn 进行管理，而我在本地用的是 git ，采用主干 master 同步 svn trunk 的形式，然后我自己的功能代码是在本地分支 dev 进行的。然后，一个猥琐的事情发生了，我在 dev 分支下执行了 git svn dcommit  ，将分支代码提交到了 svn 上这一下就悲剧了。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/curl-http脚本.html">
+<link rel="canonical" href="https://gowa.club/Git/Git使用patch来提取变更到其他分支.html">
 
 
 <script id="page-configurations">
@@ -74,7 +74,7 @@
   };
 </script>
 
-  <title>curl-http脚本 | 退思园</title>
+  <title>Git使用patch来提取变更到其他分支 | 退思园</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
     <script>
@@ -230,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/curl-http脚本.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/Git使用patch来提取变更到其他分支.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -243,7 +243,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          curl-http脚本
+          Git使用patch来提取变更到其他分支
         </h1>
 
         <div class="post-meta">
@@ -253,7 +253,7 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2017-12-11 19:37:34" itemprop="dateCreated datePublished" datetime="2017-12-11T19:37:34+08:00">2017-12-11</time>
+              <time title="Created: 2020-02-22 16:56:00" itemprop="dateCreated datePublished" datetime="2020-02-22T16:56:00+08:00">2020-02-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -261,8 +261,8 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux/Unix</span>
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
                   </a>
                 </span>
             </span>
@@ -276,8 +276,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/curl-http脚本.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/curl-http脚本.html" itemprop="commentCount"></span>
+    <a title="disqus" href="/Git/Git使用patch来提取变更到其他分支.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Git/Git使用patch来提取变更到其他分支.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -292,28 +292,36 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="HTTP-Scripting"><a href="#HTTP-Scripting" class="headerlink" title="HTTP Scripting"></a>HTTP Scripting</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>这个文档假设你对<strong>HTTP</strong>和一些网络知识有了基本的了解。<br>随着越来越多的应用转移到了<strong>Web</strong>服务上，<strong>“HTTP Scripting”</strong>已经变得越来越被人们所需要。为了能自动的从网站上获得信息、伪造用户、传输数据或者上传数据到服务器上都是非常重要的任务。<br><strong>Curl</strong>是一个命令行工具，用来进行所有类型的URL操作或者数据传输，但这个文档只把重心放在怎么用它来和一实际的HTTP服务器进行通信。我们假设你会使用<code>curl --help</code>或者<code>curl --manual</code>来获得一些更加基本的参考信息。<br>当然，<strong>Curl</strong>并不是万能的。它可以模拟请求，获取数据，发送数据，获得网站信息。你可能需要一些其他的脚本语言来把这些东西汇总在一起，或者你会需要做一些重复性的工作呢。</p>
-<h2 id="HTTP-协议"><a href="#HTTP-协议" class="headerlink" title="HTTP 协议"></a>HTTP 协议</h2><p>HTTP协议建立在TCP/IP之上，用来从网页服务器获取数据。这个协议也允许客户端以几种不同的方式向服务器发送数据，接下来我们就会看到。<br>HTTP是一个解释性的<strong>ASCII</strong>文本行由客户端发送到服务器以请求一个实际的动作，然后服务器会在返回客户端真正需要的内容之前返回一些文本行。<br>现在，curl充当一个客户端，发送一个请求。这个请求包含一种方式（<strong>GET, POST, HEAD等</strong>），一些请求头部或者请求主体。服务器返回状态行，响应头部和响应主体。这个“主体”怎么解释，由你的请求而定，比如会是HTML数据，或者一张图片。</p>
-<h2 id="观察协议"><a href="#观察协议" class="headerlink" title="观察协议"></a>观察协议</h2><p>用curl的<code>--verbose(-v)</code>选项会展示出curl发送的是何种数据以及一些其他信息。<br>一般情况下这个选项已经够用，但如果还不够详细的时候，可以用<code>--trace</code>和<code>--tarce-ascii</code>会更加详细。</p>
-<pre><code>curl --trace-ascii debugdump.txt http://www.baidu.com
-curl --verbose http://www.baidu.com
-</code></pre><h2 id="观察时间"><a href="#观察时间" class="headerlink" title="观察时间"></a>观察时间</h2><p>大多数时候我们确实想知道在整个请求回应过程中发生了什么，但某些时候我们可能只关注一下这耗费了多少时间。这个时候<code>--trace-time</code>选项就起了作用了。<br>这个选项会在每个跟踪输出的行前打印时间。</p>
-<h2 id="观察响应"><a href="#观察响应" class="headerlink" title="观察响应"></a>观察响应</h2><p>默认情况下，curl会把响应发送到标准输出。你可以用<code>-o</code>或者<code>-O</code>选项来进行重定向。</p>
-<h1 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h1><p><strong>URL</strong>（Uniform Resource Locator）格式指的是你怎么样指定在网络上的地址或者资源。比如 <a href="http://www.baidu.com" target="_blank" rel="noopener">www.baidu.com</a>这样的地址。<br>RFC 3986是对这个的规范性文档。但是呢，你可能会发现，它的称呼是URI，而不是URL。</p>
-<h2 id="主机"><a href="#主机" class="headerlink" title="主机"></a>主机</h2><p>大多数时候我们用主机名而不会直接指定IP地址，为了方便记忆。这个主机名到IP地址的解析，是由DNS来进行解析的，可能是公共的，也可能是内部的。<br>在某些时候，为了调试的需要，我们可以用<code>--resolve</code>为主机名指定一个不同的IP地址，而不是其原来定义的地址。如</p>
-<pre><code>curl --resolve www.baidu.com:80:www.163.com http://www.baidu.com
-</code></pre><h2 id="端口号"><a href="#端口号" class="headerlink" title="端口号"></a>端口号</h2><p>多数情况下，每个服务都有一个标准的端口号，比如HTTP的标准端口是80,但有的时候可能你会使用非标准的端口号如：</p>
-<pre><code>curl http://www.baidu.com:1234
-</code></pre><p>有的时候，你也想指定一个代理：</p>
-<pre><code>curl --proxy http://proxy.example.org:4321 http://www.baidu.com
-</code></pre><h2 id="用户名与密码"><a href="#用户名与密码" class="headerlink" title="用户名与密码"></a>用户名与密码</h2><p>在使用中可能有些网站需要账号密码才能进行访问。那你就可以这样：</p>
-<pre><code>curl http://user:password@www.baidu.com/
-curl -u user:password http://www.baidu.com
-</code></pre><p>但是，在当前的网站，可能已经不在用这样的方式进行用户的权限性验证了。而采用cookies或者表单了。</p>
-<h1 id="获取一个页面"><a href="#获取一个页面" class="headerlink" title="获取一个页面"></a>获取一个页面</h1><h2 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h2><p>这是最简单的情况，如：</p>
-<pre><code>curl www.baidu.com
-</code></pre><p>服务器返回的头部信息一般情况下是隐藏的，你可以用 <code>--include(-i)</code>选项让他显示出来。</p>
-<h2 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h2>
+        <p>事情的缘由在于，我们的服务端用的是 svn 进行管理，而我在本地用的是 git ，采用主干 master 同步 svn trunk 的形式，然后我自己的功能代码是在本地分支 dev 进行的。<br>然后，一个猥琐的事情发生了，我在 dev 分支下执行了 <code>git svn dcommit</code>  ，将分支代码提交到了 svn 上这一下就悲剧了。</p>
+<a id="more"></a>
+<p>事实上我一直有保证我的修改发生了 master，也就是 svn 代码库之后。每次 svn 代码有更新，我都会用 <code>git rebase master</code> 命令，将变更应用到外 dev 分支。实际上这样提交上去也没有什么问题，但是我的代码是没有开发完成了，有可能对线上代码造成破坏，所以将 svn 代码库回滚到了我提交前的代码库。</p>
+<p>但这个时候，我已经无法用 <code>rebase</code> 命令，再把新信息给同步过来，即使可以，有可能会 rebase 的时候丢失东西，如删除了文件等。</p>
+<p>所以我现在只有一条路，将我上一次 rebase 代码后的变更，都提交到一个新的，基于当前的，回滚过版本的 master 分支上，理论上是这样非常美好的。事实上也确实能执行。</p>
+<h1 id="git-patch-文件的生成"><a href="#git-patch-文件的生成" class="headerlink" title="git patch 文件的生成"></a>git patch 文件的生成</h1><p>我们可以用 <code>git format-patch</code> 来生成补丁文件。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git format-patch commitid -o ../patch</span><br></pre></td></tr></table></figure>
+<p>指定我上一次 commitId 后就会 生成很多个 patch 文件给我。</p>
+<h1 id="git-patch-文件的应用"><a href="#git-patch-文件的应用" class="headerlink" title="git patch 文件的应用"></a>git patch 文件的应用</h1><p>我们可以使用 <code>git apply</code> 或者  <code>git am</code> 命令来应用补丁，这两者的区别是，<code>am</code> 命令会进行提交，提交信息不会改变，而 <code>apply</code> 则不会进行提交，需要手动进行提交。如：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git am -s ../patch/0001-.patch</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git apply ../patch/0001-.patch</span><br></pre></td></tr></table></figure>
+<p>如果一切工作得好，那就没有问题了。</p>
+<p>但如果出现冲突，那就是会是悲剧了。</p>
+<h2 id="冲突的解决"><a href="#冲突的解决" class="headerlink" title="冲突的解决"></a>冲突的解决</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git am -s ../patch/0001-.patch <span class="comment"># 这一步出现了冲突</span></span><br><span class="line">git  apply --reject ../patch/0001-.patch <span class="comment"># 会将出现冲突的地方生成  .rej 文件，然后我们根据  .rej 文件手动进行解决</span></span><br><span class="line">git add files <span class="comment"># 添加我们修改后的文件。</span></span><br><span class="line">git am --resolved <span class="comment"># 继续被中止的打补丁</span></span><br><span class="line">git <span class="built_in">log</span> <span class="comment"># 确认一下结果</span></span><br></pre></td></tr></table></figure>
+<h1 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h1><p>我自己写了个脚本来完成这个事情：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> f <span class="keyword">in</span> ../patch/*; <span class="keyword">do</span> </span><br><span class="line">    git am -s  <span class="variable">$f</span>; </span><br><span class="line">    <span class="keyword">if</span> [ $? -ne 0 ]; <span class="keyword">then</span>  </span><br><span class="line">        git apply --reject <span class="variable">$f</span></span><br><span class="line">        <span class="built_in">exit</span>;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    rm -f <span class="variable">$f</span>; </span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>逻辑很简单，一旦补丁应用完成一个，就删除一个，如果失败，那么就用 apply 命令来检查一下，手动解决后继续执行。</p>
+<h1 id="patch-文件的格式"><a href="#patch-文件的格式" class="headerlink" title="patch 文件的格式"></a>patch 文件的格式</h1><figure class="highlight diff"><table><tr><td class="code"><pre><span class="line"><span class="comment">---</span></span><br><span class="line"> .../main/NewDataAnalysisFragment.java         |  4 +--</span><br><span class="line"> .../main/DataAnalysisListMainActivity.java    | 31 +++++++++++++++++++</span><br><span class="line"> 2 files changed, 33 insertions(+), 2 deletions(-)</span><br><span class="line"></span><br><span class="line">diff --git a/app/src/main/java/cn/nanming/smartsupervision/ui/activity/main/NewDataAnalysisFragment.java b/app/src/main/java/cn/nanming/smartsupervision/ui/activity/main/NewDataAnalysisFragment.java</span><br><span class="line">index 0aad785..ccb80b5 100644</span><br><span class="line"><span class="comment">--- a/app/src/main/java/cn/nanming/smartsupervision/ui/activity/main/NewDataAnalysisFragment.java</span></span><br><span class="line"><span class="comment">+++ b/app/src/main/java/cn/nanming/smartsupervision/ui/activity/main/NewDataAnalysisFragment.java</span></span><br><span class="line">@@ -29,7 +29,7 @@ import cn.nanming.smartsupervision.utils.CommonUtils;</span><br><span class="line">  * Date：2018/9/27</span><br><span class="line">  * Desc：数据分析新界面</span><br><span class="line">  */</span><br><span class="line"><span class="deletion">-@AppMenuView(value = "数据分析",ids = &#123;R.id.iv_work_load_analysis,R.id.iv_work_data_analysis&#125;,names = &#123;"工作量分析","数据分析"&#125;)</span></span><br><span class="line"><span class="addition">+@AppMenuView(value = "数据分析",ids = &#123;R.id.iv_work_load_analysis,R.id.iv_work_data_analysis&#125;,names = &#123;"工作量分析","数据分析M"&#125;)</span></span><br><span class="line"> public class NewDataAnalysisFragment extends BaseFragment &#123;</span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li>a：源文件，b:变更的文件</li>
+<li>index 0aad785..ccb80b5 100644 文件的索引变更，也就是git index的变更</li>
+<li>@@ -29,7 +29,7 @@ import cn.nanming.smartsupervision.utils.CommonUtils; 29,7 表示 29行开始后的7行中的内容变更情况（忽略空行）<br>看起来就像一个 diff 文件</li>
+</ul>
+<h1 id="apply-成功而-am-失败"><a href="#apply-成功而-am-失败" class="headerlink" title="apply 成功而 am 失败"></a>apply 成功而 am 失败</h1><p>这个问题的原因我一直没有找到。</p>
+<h1 id="避免将分支直接提交到-svn"><a href="#避免将分支直接提交到-svn" class="headerlink" title="避免将分支直接提交到 svn"></a>避免将分支直接提交到 svn</h1><p>提交代码之前用 </p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git svn dcommit --dry-run</span><br></pre></td></tr></table></figure>
+<p>因为我们的 dev 实际上是没有跟踪分支信息，所以说直接就提交到 master 上去了。</p>
+
     </div>
 
     
@@ -322,25 +330,21 @@ curl -u user:password http://www.baidu.com
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Curl/" rel="tag"># Curl</a>
-              <a href="/tags/Linux/" rel="tag"># Linux</a>
+              <a href="/tags/Git/" rel="tag"># Git</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/数据库/Mysql的Information-Schema-元数据库与Show语句.html" rel="next" title="Mysql的Information_Schema 元数据库与Show语句">
-                  <i class="fa fa-chevron-left"></i> Mysql的Information_Schema 元数据库与Show语句
+                <a href="/Mud/Evennia中从源码看对象的建立机制.html" rel="next" title="Evennia中从源码看对象的建立机制">
+                  <i class="fa fa-chevron-left"></i> Evennia中从源码看对象的建立机制
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Vim/vim-利用Vundle管理插件.html" rel="prev" title="vim-利用Vundle管理插件">
-                  vim-利用Vundle管理插件 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -386,7 +390,7 @@ curl -u user:password http://www.baidu.com
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP-Scripting"><span class="nav-number">1.</span> <span class="nav-text">HTTP Scripting</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景"><span class="nav-number">1.1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-协议"><span class="nav-number">1.2.</span> <span class="nav-text">HTTP 协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察协议"><span class="nav-number">1.3.</span> <span class="nav-text">观察协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察时间"><span class="nav-number">1.4.</span> <span class="nav-text">观察时间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察响应"><span class="nav-number">1.5.</span> <span class="nav-text">观察响应</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#URL"><span class="nav-number">2.</span> <span class="nav-text">URL</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主机"><span class="nav-number">2.1.</span> <span class="nav-text">主机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#端口号"><span class="nav-number">2.2.</span> <span class="nav-text">端口号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户名与密码"><span class="nav-number">2.3.</span> <span class="nav-text">用户名与密码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#获取一个页面"><span class="nav-number">3.</span> <span class="nav-text">获取一个页面</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GET"><span class="nav-number">3.1.</span> <span class="nav-text">GET</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HEAD"><span class="nav-number">3.2.</span> <span class="nav-text">HEAD</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#git-patch-文件的生成"><span class="nav-number">1.</span> <span class="nav-text">git patch 文件的生成</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git-patch-文件的应用"><span class="nav-number">2.</span> <span class="nav-text">git patch 文件的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#冲突的解决"><span class="nav-number">2.1.</span> <span class="nav-text">冲突的解决</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#脚本"><span class="nav-number">3.</span> <span class="nav-text">脚本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#patch-文件的格式"><span class="nav-number">4.</span> <span class="nav-text">patch 文件的格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#apply-成功而-am-失败"><span class="nav-number">5.</span> <span class="nav-text">apply 成功而 am 失败</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#避免将分支直接提交到-svn"><span class="nav-number">6.</span> <span class="nav-text">避免将分支直接提交到 svn</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -535,9 +539,9 @@ curl -u user:password http://www.baidu.com
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/curl-http脚本.html",
-            identifier: "Linux-Unix/curl-http脚本.html",
-            title: "curl-http脚本"
+            url: "https://gowa.club/Git/Git使用patch来提取变更到其他分支.html",
+            identifier: "Git/Git使用patch来提取变更到其他分支.html",
+            title: "Git使用patch来提取变更到其他分支"
           }
         }
       });
