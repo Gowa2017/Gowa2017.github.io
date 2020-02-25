@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="在 Evennia 中，我们可以通过命令的形式来进行对象的创建，移动等等，构造我们的世界也完全可以用命令的形式，设置，我们可以在游戏内执行 Python 命令等操作。这又是如何操作的呢？">
+<meta name="keywords" content="Evennia,Mud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evennia中看命令操纵内容的形式与过程">
+<meta property="og:url" content="https://gowa.club/Mud/Evennia中看命令操纵内容的形式与过程.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="在 Evennia 中，我们可以通过命令的形式来进行对象的创建，移动等等，构造我们的世界也完全可以用命令的形式，设置，我们可以在游戏内执行 Python 命令等操作。这又是如何操作的呢？">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-25T03:58:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evennia中看命令操纵内容的形式与过程">
+<meta name="twitter:description" content="在 Evennia 中，我们可以通过命令的形式来进行对象的创建，移动等等，构造我们的世界也完全可以用命令的形式，设置，我们可以在游戏内执行 Python 命令等操作。这又是如何操作的呢？">
+
+<link rel="canonical" href="https://gowa.club/Mud/Evennia中看命令操纵内容的形式与过程.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Evennia中看命令操纵内容的形式与过程 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Mud/Evennia中看命令操纵内容的形式与过程.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Evennia中看命令操纵内容的形式与过程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-25 11:58:31" itemprop="dateCreated datePublished" datetime="2020-02-25T11:58:31+08:00">2020-02-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mud/" itemprop="url" rel="index">
+                    <span itemprop="name">Mud</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Mud/Evennia中看命令操纵内容的形式与过程.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Mud/Evennia中看命令操纵内容的形式与过程.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在 Evennia 中，我们可以通过命令的形式来进行对象的创建，移动等等，构造我们的世界也完全可以用命令的形式，设置，我们可以在游戏内执行 Python 命令等操作。这又是如何操作的呢？</p>
+<a id="more"></a>
+<p>我们大体可以知道，输入，数据的来回路径是如何样的：</p>
+<p>输入：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Client -&gt;</span><br><span class="line"> PortalSession -&gt;</span><br><span class="line">  PortalSessionhandler -&gt;</span><br><span class="line">   (AMP) -&gt;</span><br><span class="line">    ServerSessionHandler -&gt;</span><br><span class="line">      ServerSession -&gt;</span><br><span class="line">        Inputfunc</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">msg -&gt;</span><br><span class="line"> ServerSession -&gt;</span><br><span class="line">  ServerSessionHandler -&gt;</span><br><span class="line">   (AMP) -&gt;</span><br><span class="line">    PortalSessionHandler -&gt;</span><br><span class="line">     PortalSession -&gt;</span><br><span class="line">      Client</span><br></pre></td></tr></table></figure>
+<p>对于任何玩家用户的输入（封装在 inputfunc）内，经由我们的 cmdhandler 进行处理后，就会执行具体的命令。</p>
+<p>比如我们的 create 命令。</p>
+<p>最终就是根据我们设置的 class 来实例化一个对象，然后存储到数据库中。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">Account = class_from_module(settings.BASE_ACCOUNT_TYPECLASS)</span><br><span class="line">account, errors = Account.create(</span><br><span class="line">    username=username, password=password, ip=address, session=session</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>在 DefaultAccount 中，create 方法则会默认把角色一起创建了：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@classmethod</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create</span><span class="params">(cls, *args, **kwargs)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Creates an Account (or Account/Character pair for MULTISESSION_MODE&lt;2)</span></span><br><span class="line"><span class="string">    with default (or overridden) permissions and having joined them to the</span></span><br><span class="line"><span class="string">    appropriate default channels.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Kwargs:</span></span><br><span class="line"><span class="string">        username (str): Username of Account owner</span></span><br><span class="line"><span class="string">        password (str): Password of Account owner</span></span><br><span class="line"><span class="string">        email (str, optional): Email address of Account owner</span></span><br><span class="line"><span class="string">        ip (str, optional): IP address of requesting connection</span></span><br><span class="line"><span class="string">        guest (bool, optional): Whether or not this is to be a Guest account</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        permissions (str, optional): Default permissions for the Account</span></span><br><span class="line"><span class="string">        typeclass (str, optional): Typeclass to use for new Account</span></span><br><span class="line"><span class="string">        character_typeclass (str, optional): Typeclass to use for new char</span></span><br><span class="line"><span class="string">            when applicable.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        account (Account): Account if successfully created; None if not</span></span><br><span class="line"><span class="string">        errors (list): List of error messages in string form</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    account = <span class="literal">None</span></span><br><span class="line">    errors = []</span><br><span class="line"></span><br><span class="line">    username = kwargs.get(<span class="string">"username"</span>)</span><br><span class="line">    password = kwargs.get(<span class="string">"password"</span>)</span><br><span class="line">    email = kwargs.get(<span class="string">"email"</span>, <span class="string">""</span>).strip()</span><br><span class="line">    guest = kwargs.get(<span class="string">"guest"</span>, <span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line">    permissions = kwargs.get(<span class="string">"permissions"</span>, settings.PERMISSION_ACCOUNT_DEFAULT)</span><br><span class="line">    typeclass = kwargs.get(<span class="string">"typeclass"</span>, cls)</span><br><span class="line"></span><br><span class="line">    ip = kwargs.get(<span class="string">"ip"</span>, <span class="string">""</span>)</span><br><span class="line">    <span class="keyword">if</span> ip <span class="keyword">and</span> CREATION_THROTTLE.check(ip):</span><br><span class="line">        errors.append(</span><br><span class="line">            <span class="string">"You are creating too many accounts. Please log into an existing account."</span></span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span>, errors</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Normalize username</span></span><br><span class="line">    username = cls.normalize_username(username)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Validate username</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> guest:</span><br><span class="line">        valid, errs = cls.validate_username(username)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> valid:</span><br><span class="line">            <span class="comment"># this echoes the restrictions made by django's auth</span></span><br><span class="line">            <span class="comment"># module (except not allowing spaces, for convenience of</span></span><br><span class="line">            <span class="comment"># logging in).</span></span><br><span class="line">            errors.extend(errs)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">None</span>, errors</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Validate password</span></span><br><span class="line">    <span class="comment"># Have to create a dummy Account object to check username similarity</span></span><br><span class="line">    valid, errs = cls.validate_password(password, account=cls(username=username))</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> valid:</span><br><span class="line">        errors.extend(errs)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span>, errors</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Check IP and/or name bans</span></span><br><span class="line">    banned = cls.is_banned(username=username, ip=ip)</span><br><span class="line">    <span class="keyword">if</span> banned:</span><br><span class="line">        <span class="comment"># this is a banned IP or name!</span></span><br><span class="line">        string = (</span><br><span class="line">            <span class="string">"|rYou have been banned and cannot continue from here."</span></span><br><span class="line">            <span class="string">"\nIf you feel this ban is in error, please email an admin.|x"</span></span><br><span class="line">        )</span><br><span class="line">        errors.append(string)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span>, errors</span><br><span class="line"></span><br><span class="line">    <span class="comment"># everything's ok. Create the new account.</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            account = create.create_account(</span><br><span class="line">                username, email, password, permissions=permissions, typeclass=typeclass</span><br><span class="line">            )</span><br><span class="line">            logger.log_sec(<span class="string">f"Account Created: <span class="subst">&#123;account&#125;</span> (IP: <span class="subst">&#123;ip&#125;</span>)."</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            errors.append(</span><br><span class="line">                <span class="string">"There was an error creating the Account. If this problem persists, contact an admin."</span></span><br><span class="line">            )</span><br><span class="line">            logger.log_trace()</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">None</span>, errors</span><br><span class="line"></span><br><span class="line">        <span class="comment"># This needs to be set so the engine knows this account is</span></span><br><span class="line">        <span class="comment"># logging in for the first time. (so it knows to call the right</span></span><br><span class="line">        <span class="comment"># hooks during login later)</span></span><br><span class="line">        account.db.FIRST_LOGIN = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Record IP address of creation, if available</span></span><br><span class="line">        <span class="keyword">if</span> ip:</span><br><span class="line">            account.db.creator_ip = ip</span><br><span class="line"></span><br><span class="line">        <span class="comment"># join the new account to the public channel</span></span><br><span class="line">        pchannel = ChannelDB.objects.get_channel(settings.DEFAULT_CHANNELS[<span class="number">0</span>][<span class="string">"key"</span>])</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> pchannel <span class="keyword">or</span> <span class="keyword">not</span> pchannel.connect(account):</span><br><span class="line">            string = <span class="string">f"New account '<span class="subst">&#123;account.key&#125;</span>' could not connect to public channel!"</span></span><br><span class="line">            errors.append(string)</span><br><span class="line">            logger.log_err(string)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> account <span class="keyword">and</span> settings.MULTISESSION_MODE &lt; <span class="number">2</span>:</span><br><span class="line">            <span class="comment"># Load the appropriate Character class</span></span><br><span class="line">            character_typeclass = kwargs.get(</span><br><span class="line">                <span class="string">"character_typeclass"</span>, settings.BASE_CHARACTER_TYPECLASS</span><br><span class="line">            )</span><br><span class="line">            character_home = kwargs.get(<span class="string">"home"</span>)</span><br><span class="line">            Character = class_from_module(character_typeclass)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Create the character</span></span><br><span class="line">            character, errs = Character.create(</span><br><span class="line">                account.key,</span><br><span class="line">                account,</span><br><span class="line">                ip=ip,</span><br><span class="line">                typeclass=character_typeclass,</span><br><span class="line">                permissions=permissions,</span><br><span class="line">                home=character_home,</span><br><span class="line">            )</span><br><span class="line">            errors.extend(errs)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> character:</span><br><span class="line">                <span class="comment"># Update playable character list</span></span><br><span class="line">                <span class="keyword">if</span> character <span class="keyword">not</span> <span class="keyword">in</span> account.characters:</span><br><span class="line">                    account.db._playable_characters.append(character)</span><br><span class="line"></span><br><span class="line">                <span class="comment"># We need to set this to have @ic auto-connect to this character</span></span><br><span class="line">                account.db._last_puppet = character</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> Exception:</span><br><span class="line">        <span class="comment"># We are in the middle between logged in and -not, so we have</span></span><br><span class="line">        <span class="comment"># to handle tracebacks ourselves at this point. If we don't,</span></span><br><span class="line">        <span class="comment"># we won't see any errors at all.</span></span><br><span class="line">        errors.append(<span class="string">"An error occurred. Please e-mail an admin if the problem persists."</span>)</span><br><span class="line">        logger.log_trace()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Update the throttle to indicate a new account was created from this IP</span></span><br><span class="line">    <span class="keyword">if</span> ip <span class="keyword">and</span> <span class="keyword">not</span> guest:</span><br><span class="line">        CREATION_THROTTLE.update(ip, <span class="string">"Too many accounts being created."</span>)</span><br><span class="line">    SIGNAL_ACCOUNT_POST_CREATE.send(sender=account, ip=ip)</span><br><span class="line">    <span class="keyword">return</span> account, errors</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Evennia/" rel="tag"># Evennia</a>
+              <a href="/tags/Mud/" rel="tag"># Mud</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Git/Git使用patch来提取变更到其他分支.html" rel="next" title="Git使用patch来提取变更到其他分支">
+                  <i class="fa fa-chevron-left"></i> Git使用patch来提取变更到其他分支
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">316</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">132</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Mud/Evennia中看命令操纵内容的形式与过程.html",
+            identifier: "Mud/Evennia中看命令操纵内容的形式与过程.html",
+            title: "Evennia中看命令操纵内容的形式与过程"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
