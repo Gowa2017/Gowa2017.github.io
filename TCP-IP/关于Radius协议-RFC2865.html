@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Radius 是广为使用的一种远程认证授权协议，在 AAA 系统中广为使用。各大 ISP 一般都用的这，在 TCP/IP 协议详解中其实也看到过类似的介绍。但是，久不接触，都已经忘记得差不多了。">
+<meta name="keywords" content="TCP&#x2F;IP,Radius">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于Radius协议-RFC2865">
+<meta property="og:url" content="https://gowa.club/TCP-IP/关于Radius协议-RFC2865.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="Radius 是广为使用的一种远程认证授权协议，在 AAA 系统中广为使用。各大 ISP 一般都用的这，在 TCP/IP 协议详解中其实也看到过类似的介绍。但是，久不接触，都已经忘记得差不多了。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-25T14:32:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于Radius协议-RFC2865">
+<meta name="twitter:description" content="Radius 是广为使用的一种远程认证授权协议，在 AAA 系统中广为使用。各大 ISP 一般都用的这，在 TCP/IP 协议详解中其实也看到过类似的介绍。但是，久不接触，都已经忘记得差不多了。">
+
+<link rel="canonical" href="https://gowa.club/TCP-IP/关于Radius协议-RFC2865.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>关于Radius协议-RFC2865 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/TCP-IP/关于Radius协议-RFC2865.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          关于Radius协议-RFC2865
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-02-25 22:32:51" itemprop="dateCreated datePublished" datetime="2020-02-25T22:32:51+08:00">2020-02-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TCP-IP/" itemprop="url" rel="index">
+                    <span itemprop="name">TCP/IP</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/TCP-IP/关于Radius协议-RFC2865.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="TCP-IP/关于Radius协议-RFC2865.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Radius 是广为使用的一种远程认证授权协议，在 AAA 系统中广为使用。各大 ISP 一般都用的这，在 TCP/IP 协议详解中其实也看到过类似的介绍。但是，久不接触，都已经忘记得差不多了。</p>
+<a id="more"></a>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p><a href="https://tools.ietf.org/html/rfc2865" target="_blank" rel="noopener">rfc2865</a> 有详细的介绍，这里只记录一些我关心的东西。不过,rfc 其实已经被后面的文档进行更新了很多内容了，相关 rfc 有：</p>
+<ul>
+<li>rfc2865-Remote Authentication Dial In User Service (RADIUS).pdf</li>
+<li>rfc2868-RADIUS Attributes for Tunnel Protocol Support.pdf</li>
+<li>rfc3162- RADIUS and IPv6.pdf</li>
+<li>rfc3575-IANA Considerations for RADIUS.pdf</li>
+<li>rfc5080-Common Remote Authentication Dial In User Service (RADIUS) Implementation Issues and Suggested Fixes.pdf</li>
+<li>rfc6929-Remote Authentication Dial-In User Service (RADIUS) Protocol Extensions.pdf</li>
+<li>rfc8044-Data Types in RADIUS.pdf</li>
+</ul>
+<p>一句话描述：<strong>rfc2865 描述了一个用来在期待对链路进行认证的网络访问服务器（NAS）与一个共享的认证服务器间携带认证、授权、配置信息协议</strong></p>
+<p>早期协议的使用 udp 1645 端口，不过这个与另外一个服务相冲突，所以就换成了 1812 端口。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>管理分散的串行线路和调制解调器池以处理大量  用户可能需要大量的管理支持。由于调制解调器池在定义上是到外界的链接，他们需要被很仔细小心的注意安全性，授权及计费。这可以通过维护一个用户数据库，允许用户进行认证（通过用户名和密码）及一些详细的配置信息，服务信息（PPP,SLIP等）。</p>
+<p>RADIUS 的主要特点是：</p>
+<p><strong>C/S</strong>模式：</p>
+<p>NAS 作为 RADIUS 客户端，就用户信息传输到 RADIUS 服务器，然后根据 RADIUS 服务器的响应来决定要进行的操作。</p>
+<p>RADIUS 服务器的任务是接受用户的连接请求，进行用户的认证授权，然后将所有必要的配置信息传输给 NAS 客户端以使其为用户提供服务。</p>
+<p>当然，RADIUS 服务器也可以充当成代理客户端。</p>
+<p><strong>网络安全性</strong>：</p>
+<p>在 NAS 和 RADIUS 间的通信通过一个预共享的密钥来进行授权，这个密钥永远不会在网络上传输。同时，所有的用户密码信息都会被加密后在 NAS 和 RADIUS 间进行传输。</p>
+<p><strong>灵活的认证机制</strong>：</p>
+<p>RADIUS 支持很多种机制来认证授权一个用户。他提供给 RADIUS 用户名和原始的密码时，其能支持 <strong>PPP， PAP，CHAP，UNIX login等认证授权机制。</strong></p>
+<p><strong>可扩展的协议</strong>：</p>
+<p>所有的事务都由变长的 <strong>Attribute-Length-Value</strong> 三元组组成。添加新的属性不会打乱已经实现的协议。</p>
+<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><p>文档中经常提到三个概念：</p>
+<ul>
+<li>service 服务：NAS 为拨号用户提供的一个服务，比如 PPP</li>
+<li>session 会话：NAS 为每个用户提供的服务都有一个 session，session 的开始，定义为服务的首次提供，会话的结束标志着服务的结束。一个用户可能会有多个 session，（并行或者串行），只要 NAS 支持。</li>
+<li>silently discard 静默丢弃：丢弃报文，不做任何处理。</li>
+</ul>
+<h1 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h1><p>当有个客户端（NAS）被配置为使用 RADIUS 时，所有此客户端的用户都需要向客户端提供身份信息。这可能会包含一个自定义的登录提示让用户输入其用户名和密码。还有一种操作方式是，用户会使用一个 <strong>链路层协议（如PPP）</strong>来将这些身份信息放在认证报文内。</p>
+<p>一旦客户端获取到信息，其可能会选择通过 RADIUS 进行认证。如果进行 RADIUS 认证，那么客户端就会创建一个 <strong>Access-Request</strong> ，其中大体会包含 <em>用户名，密码，客户端的ID，用户访问的 Port ID</em> 等信息 的报文。当包含密码的时候，会通过一个 RSA MD5 算法进行隐藏。</p>
+<p><strong>Access-Request</strong> 会被提交到 RADIUS。如果超过一定的时间没有响应，这个请求会被重传一定的次数。或者，客户端会选择将报文转发到另外一各 RADIUS，或者通过一定的调度算法选择 RADIUS 服务器。</p>
+<p>RADIUS 收到请求后，会验证客户端。一个没有包含预共享的密钥的客户端报文应该被 <strong>静默丢弃</strong>。如果客户端的认证通过，那么 RADIUS 就会查询用户数据库来找到该用户名的用户信息。在用户数据库中的记录会对此用户进行一系列的限制，必须满足此类限制才能让此用户进行访问。通常会包含密码的验证，但也可以只认证客户端或者 端口，这样的用户就可以直通了。</p>
+<p>RADIUS 也可以发送请求到其他服务器来做一些其他的事情。</p>
+<p>如果在 <strong>Access-Request</strong> 包含任何 Proxy-State 相关的属性，这些属性必须无修改的，有序的复制到响应报文内。其他属性倒是没有这个要求，放在什么位置都行。</p>
+<p>如果有些条件无法满足，RADIUS 就会发送一个 <strong>Access-Reject</strong> 响应来表示这个用户请求无效。RADIUS 可以包含一个文字信息在 <strong>Access-Reject</strong> 报文中来让客户端返回给用户。在 <strong>Access-Reject</strong> 报文中，除了 Proxy-State 属性，不允许其他任何属性存在。</p>
+<p>如果所有的条件都已满足， RADIUS 希望发起一个用户必须响应的挑战话，RADIUS 发送一个 <strong>Access-Challenge</strong> 响应。其可能包含一个文字消息来让客户端返回给用户，提示用户对此挑战进行响应，也可能包含一个 State 属性。</p>
+<p>当客户端收到一个 <strong>Access-Challenge</strong> 报文且其支持 <strong>挑战/请求</strong>的话，那么其应该显示此文字信息给用户，并提示用户进行响应。然后客户端会会重传其 <strong>Access-Request</strong> ，不过会使用一个新的 <strong>请求ID</strong>，同时 User-Password 属性会被响应所替换（加密的），也要包含在 <strong>Access-Challenge</strong> 中返回的 State 属性（在一个请求中，只有0 或 1 个此属性的实例存在）。Radius 可对此新的 <strong>Access-Request</strong> 报文进行响应：<strong>Access-Accept, Access-Reject, Access-Challenge</strong>等。</p>
+<p>如果如果的条件都达成，为此用户的所有配置信息列表会放到一个 <strong>Access-Accept</strong> 响应中。这只怕配置包含了 <strong>服务的类型（SLIP, PPP, Login User）</strong>和所有期望的服务必要的信息。对于 SLIP 和 PPP，这可能会包含 IP 地址，子网掩码，MTU，期望的压缩方式，期望的包过滤标识等。对于角色模式的用户，这可能会包含期望的协议和域名。</p>
+<h2 id="挑战-响应"><a href="#挑战-响应" class="headerlink" title="挑战/响应"></a>挑战/响应</h2><p>在 <strong>挑战/响应</strong> 认证中，用户会收到一个不可预测的数字，请求用户进行加密后返回结果。已授权的用户会有一些特殊的设备进行此项工作（如智能卡，或软件），能计算出正确的响应。未授权的用户，则会很困难。</p>
+<p><strong>Access-Challenge</strong> 包典型的会包含一个 <strong>Reply-Message</strong> 信息，其中是会显示给用户的内容。</p>
+<p>用户的响应最终由客户端传以第二个 <strong>Access-Request</strong> 传输给RADIUS。如果通过，那么就会返回 <strong>Access-Accept</strong>。</p>
+<p>例如：</p>
+<p> NAS 发送一个 Access-Request 包给 RADIUS 服务器，其内包含 <strong>NAS-Identifier, NAS-Port, User-Name, User-password（有可能只是固定的字符串或没有）</strong>。RADIUS 返回一个 <strong>Access-Challenge</strong> ，其内包含 State 与 Reply-Message（Challenge 12345679）。 NAS 提醒用户进行响应，然后发送一个 <strong>新的 Access-Request</strong> 到服务器（有一个新的 ID，NAS-Identifier, NAS-Port, User-Name, User-Password（用户输入的响应，加密）），以及一些 State 属性（由 Access-Challenge返回）。然后 RADIUS 进行认证后就会有结果了。</p>
+<h2 id="PAP-与-CHAP"><a href="#PAP-与-CHAP" class="headerlink" title="PAP 与 CHAP"></a>PAP 与 CHAP</h2><p>对于 PAP，客户端会将 <strong>PAP ID</strong> 与密码包含在 <strong>Access-Requect</strong> 包中作为User-Name 和 User-Password 属性。NAS 可能会包含 <em>Service-Type =Framed-User 和 Framed-Protocol = PPP</em> 属性来提示 RADIUS 其期望的是 PPP 服务。</p>
+<p>对于 CHAP，NAS 会产生一个随机的挑战（最好是16字节）然后发送给用户，用户会返回一个 CHAP 响应其中包含 CHAP ID 和 CHAP username。NAS 会将 <strong>CHAP username</strong> 作为 <em>User-Name</em> 属性，将 <strong>CHAP ID 和 CHAP 响应</strong>作为 <em>CHAP-Password</em> 属性放在 <strong>Access-Request</strong> 报文内传输给 RADIUS。这个随机挑战可以包含在 CHAP-Challenge 属性（当其是16 字节长时），也可以被放在 <em>Request Authenticator</em> 字段内。NAS 可能会包含 <em>Service-Type =Framed-User 和 Framed-Protocol = PPP</em> 属性来提示 RADIUS 其期望的是 PPP 服务。</p>
+<p>RADIUS 基于 User-Name 来查找密码，然后将 User-Name，找到的密码，CHAP Challenge 用 CHAP ID以 MD5 进行加密，最后后 CHAP-Password 进行比较，看是否匹配。</p>
+<h2 id="为什么使用-UDP"><a href="#为什么使用-UDP" class="headerlink" title="为什么使用 UDP"></a>为什么使用 UDP</h2><p> RADIUS 有几个特点：</p>
+<ol>
+<li>如果到主 RADIUS 的请求失败了，那么就必须查询第二个 RADIUS。为了达到这个要求，那么请求的副本必须在传输层进行保持以进行可能的重传。这就意味着，重传计时其是必须的。</li>
+<li>这个协议的时间要求和TCP非常的不同。一个极端情况，RADIUS 不需要一个灵敏的对丢失数据的检测机制。用户愿意为认证的完成等待几秒。而 TCP的重传（基于平均往返时间）是不需要的，TCP 确认的开销也不会存在。另外一个极端的情况是，用户不愿意等待很久。因此，TCP 的 大概 2分钟可靠传输也是不实用的。更快的使用一个备用的服务器允许用户在放弃等待前就能认证完毕。</li>
+<li>这个协议是无状态的，此简化了UDP的使用。客户端和服务器来回交互。系统的重启是独立的。这不会造成很大的超时，也不用检测 TCP 连接的丢失，代码可以写来处理异常的事件。UDP 完全避免了这些特殊的处理。每个客户端和服务器都可以打开他们的 UDP 传输一次，然后让其一直打开，处理所有网络上的失败事件。</li>
+<li>UDP 简化了服务器的实现。在早期的 RADIUS 实现中，服务器是单线程的。这就是说，单个请求收到后进行处理，然后返回。这在后端安全机制需要时时的环境下被发现是无法管理的。服务器的请求队列被充满，在每分钟有很多用户进行认证的时候，这个往返时间将会超过用户的预期的等待。最明显的解决办法是让服务器成为多线程的。这个目标通过 UDP 很容易达成。独立的进程被派生出来为每个请求服务，然后直接传输到客户端的NAS。</li>
+</ol>
+<p>使用 UDP 有一个要求：我们必须手动的管理到同个服务器的重传计时器。</p>
+<h1 id="报文格式"><a href="#报文格式" class="headerlink" title="报文格式"></a>报文格式</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> 0                   1                   2                   3</span><br><span class="line"> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|     Code      |  Identifier   |            Length             |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|                                                               |</span><br><span class="line">|                         Authenticator                         |</span><br><span class="line">|                                                               |</span><br><span class="line">|                                                               |</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">|  Attributes ...</span><br><span class="line">+-+-+-+-+-+-+-+-+-+-+-+-+-</span><br></pre></td></tr></table></figure>
+<p>前的20字节意义是固定的。Authenticator 占 16 字节。</p>
+<h1 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h1><p>NAS：192.168.1.16 </p>
+<p>User-Name:nemo</p>
+<p>Port:3</p>
+<p>Passowrd:arctangent</p>
+<p>Request Authenticator 是一个16字节的 NAS 产生的随机数。</p>
+<p>User-Password 是一个 16 字节的密码，以 null 填充，用 MD5(预共享密钥|Request Authenticator) 进行XOR 异或。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">01 00 00 38 0f 40 3f 94 73 97 80 57 bd 83 d5 cb</span><br><span class="line">98 f4 22 7a 01 06 6e 65 6d 6f 02 12 0d be 70 8d</span><br><span class="line">93 d4 13 ce 31 96 e4 3f 78 2a 0a ee 04 06 c0 a8</span><br><span class="line">01 10 05 06 00 00 00 03</span><br><span class="line"></span><br><span class="line"> 1 Code = Access-Request (1)</span><br><span class="line"> 1 ID = 0</span><br><span class="line"> 2 Length = 56</span><br><span class="line">16 Request Authenticator</span><br><span class="line"></span><br><span class="line">Attributes:</span><br><span class="line"> 6  User-Name = &quot;nemo&quot;</span><br><span class="line">18  User-Password</span><br><span class="line"> 6  NAS-IP-Address = 192.168.1.16</span><br><span class="line"> 6  NAS-Port = 3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">02 00 00 26 86 fe 22 0e 76 24 ba 2a 10 05 f6 bf</span><br><span class="line">9b 55 e0 b2 06 06 00 00 00 01 0f 06 00 00 00 00</span><br><span class="line">0e 06 c0 a8 01 03</span><br><span class="line"></span><br><span class="line"> 1 Code = Access-Accept (2)</span><br><span class="line"> 1 ID = 0 (same as in Access-Request)</span><br><span class="line"> 2 Length = 38</span><br><span class="line">16 Response Authenticator</span><br><span class="line"></span><br><span class="line">Attributes:</span><br><span class="line"> 6  Service-Type (6) = Login (1)</span><br><span class="line"> 6  Login-Service (15) = Telnet (0)</span><br><span class="line"> 6  Login-IP-Host (14) = 192.168.1.3</span><br></pre></td></tr></table></figure>
+<p>CHAP</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">01 01 00 47 2a ee 86 f0 8d 0d 55 96 9c a5 97 8e</span><br><span class="line">0d 33 67 a2 01 08 66 6c 6f 70 73 79 03 13 16 e9</span><br><span class="line">75 57 c3 16 18 58 95 f2 93 ff 63 44 07 72 75 04</span><br><span class="line">06 c0 a8 01 10 05 06 00 00 00 14 06 06 00 00 00</span><br><span class="line">02 07 06 00 00 00 01</span><br><span class="line"></span><br><span class="line"> 1 Code = 1     (Access-Request)</span><br><span class="line"> 1 ID = 1</span><br><span class="line"> 2 Length = 71</span><br><span class="line">16 Request Authenticator</span><br><span class="line"></span><br><span class="line">Attributes:</span><br><span class="line"> 8  User-Name (1) = &quot;flopsy&quot;</span><br><span class="line">19  CHAP-Password (3)</span><br><span class="line"> 6  NAS-IP-Address (4) = 192.168.1.16</span><br><span class="line"> 6  NAS-Port (5) = 20</span><br><span class="line"> 6  Service-Type (6) = Framed (2)</span><br><span class="line"> 6  Framed-Protocol (7) = PPP (1)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">02 01 00 38 15 ef bc 7d ab 26 cf a3 dc 34 d9 c0</span><br><span class="line">3c 86 01 a4 06 06 00 00 00 02 07 06 00 00 00 01</span><br><span class="line">08 06 ff ff ff fe 0a 06 00 00 00 02 0d 06 00 00</span><br><span class="line">00 01 0c 06 00 00 05 dc</span><br><span class="line"></span><br><span class="line"> 1 Code = Access-Accept (2)</span><br><span class="line"> 1 ID = 1 (same as in Access-Request)</span><br><span class="line"> 2 Length = 56</span><br><span class="line">16 Response Authenticator</span><br><span class="line"></span><br><span class="line">Attributes:</span><br><span class="line"> 6  Service-Type (6) = Framed (2)</span><br><span class="line"> 6  Framed-Protocol (7) = PPP (1)</span><br><span class="line"> 6  Framed-IP-Address (8) = 255.255.255.254</span><br><span class="line"> 6  Framed-Routing (10) = None (0)</span><br><span class="line"> 6  Framed-Compression (13) = VJ TCP/IP Header Compression (1)</span><br><span class="line"> 6  Framed-MTU (12) = 1500</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/TCP-IP/" rel="tag"># TCP/IP</a>
+              <a href="/tags/Radius/" rel="tag"># Radius</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Mud/Evennia中看命令操纵内容的形式与过程.html" rel="next" title="Evennia中看命令操纵内容的形式与过程">
+                  <i class="fa fa-chevron-left"></i> Evennia中看命令操纵内容的形式与过程
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#术语"><span class="nav-number">1.2.</span> <span class="nav-text">术语</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#操作"><span class="nav-number">2.</span> <span class="nav-text">操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#挑战-响应"><span class="nav-number">2.1.</span> <span class="nav-text">挑战/响应</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PAP-与-CHAP"><span class="nav-number">2.2.</span> <span class="nav-text">PAP 与 CHAP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么使用-UDP"><span class="nav-number">2.3.</span> <span class="nav-text">为什么使用 UDP</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#报文格式"><span class="nav-number">3.</span> <span class="nav-text">报文格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#例子"><span class="nav-number">4.</span> <span class="nav-text">例子</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">317</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">133</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/TCP-IP/关于Radius协议-RFC2865.html",
+            identifier: "TCP-IP/关于Radius协议-RFC2865.html",
+            title: "关于Radius协议-RFC2865"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
