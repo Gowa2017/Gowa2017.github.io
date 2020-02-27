@@ -432,45 +432,56 @@ SS ->> ACC: cmd parse and do func
 SS ->> ACC: ServerSessionHandler.login Accout 与 ServerSession 连接
 ACC ->> CHAR: Account.at_post_login,puppet_object 将 puppet 与 SererSession 连接
 </div>
-<script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js">
+<h1 id="Accout-ServerSession-Character-关系"><a href="#Accout-ServerSession-Character-关系" class="headerlink" title="Accout, ServerSession, Character 关系"></a>Accout, ServerSession, Character 关系</h1><p><div class="language-dot">
+digraph{
+rankdir = LR
+node[shape=record]
+S[label="<h>ServerSession|<obj>puppet|<acc>account|<objid>puid|uid|uname"]
+C[label="<h>Character|<acc>account|<ss>sessions"]
+A[label="<h>Account|is_connected|<ss> sessions"]
+
+S:obj -> C:h
+S:objId -> C:h
+S:acc -> A:h
+
+C:acc -> A:h
+
+C:ss -> S:h
+
+A:ss -> S:h
+}
+</ss></h></ss></acc></h></objid></acc></obj></h></div><script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js">
  mermaid.initialize({startOnLoad:true}); 
-</script><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
-                // graphviz init
-                let graphviz_engines = ["circo",
-                    "dot",
-                    "fdp",
-                    "neato",
-                    "osage",
-                    "twopi"];
+</script><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script><br>                // graphviz init<br>                let graphviz_engines = [“circo”,<br>                    “dot”,<br>                    “fdp”,<br>                    “neato”,<br>                    “osage”,<br>                    “twopi”];</p>
+<pre><code>            function doGraphviz(engine) {
+                let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
+                for (let i = 0; i &lt; domAllDot.length; i++) {
+                    let dom = domAllDot[i];
+                    let graphSource = dom.innerText || dom.textContent;
 
-                function doGraphviz(engine) {
-                    let domAllDot = document.querySelectorAll('.language-' + engine);
-                    for (let i = 0; i < domAllDot.length; i++) {
-                        let dom = domAllDot[i];
-                        let graphSource = dom.innerText || dom.textContent;
-
-                        try {
-                           let viz = new Viz();
-                             viz.renderSVGElement(graphSource, {engine: engine})
-                                 .then(r => {
-                            dom.innerHTML ='';dom.append(r); });
-                        } catch (e) {
-                            console.error("Error when parsing node:", dom, e);
-                        } 
-                    }
-                } 
-
-                let init = function () {
-                    for (let i = 0; i < graphviz_engines.length; i++) {
-                        doGraphviz(graphviz_engines[i]);
-                    }
-                };
-                if (typeof window.addEventListener != "undefined") {
-                    window.addEventListener("load", init, false);
-                } else {
-                    window.attachEvent("onload", init);
+                    try {
+                       let viz = new Viz();
+                         viz.renderSVGElement(graphSource, {engine: engine})
+                             .then(r =&gt; {
+                        dom.innerHTML =&#39;&#39;;dom.append(r); });
+                    } catch (e) {
+                        console.error(&quot;Error when parsing node:&quot;, dom, e);
+                    } 
                 }
-                </script>
+            } 
+
+            let init = function () {
+                for (let i = 0; i &lt; graphviz_engines.length; i++) {
+                    doGraphviz(graphviz_engines[i]);
+                }
+            };
+            if (typeof window.addEventListener != &quot;undefined&quot;) {
+                window.addEventListener(&quot;load&quot;, init, false);
+            } else {
+                window.attachEvent(&quot;onload&quot;, init);
+            }
+            &lt;/script&gt;
+</code></pre></script></p>
     </div>
 
     
@@ -544,7 +555,7 @@ ACC ->> CHAR: Account.at_post_login,puppet_object 将 puppet 与 SererSession �
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Portal-和-Server"><span class="nav-number">1.</span> <span class="nav-text">Portal 和 Server</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EvenniaWebSocket"><span class="nav-number">2.</span> <span class="nav-text">EvenniaWebSocket</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#internet-TCPServer"><span class="nav-number">2.1.</span> <span class="nav-text">internet.TCPServer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象建立时序"><span class="nav-number">3.</span> <span class="nav-text">对象建立时序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ServerSessionHandler"><span class="nav-number">3.1.</span> <span class="nav-text">ServerSessionHandler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#portal-connect"><span class="nav-number">3.1.1.</span> <span class="nav-text">portal_connect</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#server-receive-msgportal2server"><span class="nav-number">3.1.2.</span> <span class="nav-text">server_receive_msgportal2server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data-in"><span class="nav-number">3.1.3.</span> <span class="nav-text">data_in()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#inputfuncs"><span class="nav-number">3.2.</span> <span class="nav-text">inputfuncs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connect命令"><span class="nav-number">3.3.</span> <span class="nav-text">connect命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ServerSessionHandler-1"><span class="nav-number">3.4.</span> <span class="nav-text">ServerSessionHandler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#login"><span class="nav-number">3.4.1.</span> <span class="nav-text">login</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServerSession-at-login"><span class="nav-number">3.4.2.</span> <span class="nav-text">ServerSession.at_login()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#account-at-init"><span class="nav-number">3.4.3.</span> <span class="nav-text">account.at_init</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#account-at-post-login"><span class="nav-number">3.4.4.</span> <span class="nav-text">account.at_post_login</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时序图"><span class="nav-number">3.5.</span> <span class="nav-text">时序图</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Portal-和-Server"><span class="nav-number">1.</span> <span class="nav-text">Portal 和 Server</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EvenniaWebSocket"><span class="nav-number">2.</span> <span class="nav-text">EvenniaWebSocket</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#internet-TCPServer"><span class="nav-number">2.1.</span> <span class="nav-text">internet.TCPServer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#对象建立时序"><span class="nav-number">3.</span> <span class="nav-text">对象建立时序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ServerSessionHandler"><span class="nav-number">3.1.</span> <span class="nav-text">ServerSessionHandler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#portal-connect"><span class="nav-number">3.1.1.</span> <span class="nav-text">portal_connect</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#server-receive-msgportal2server"><span class="nav-number">3.1.2.</span> <span class="nav-text">server_receive_msgportal2server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#data-in"><span class="nav-number">3.1.3.</span> <span class="nav-text">data_in()</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#inputfuncs"><span class="nav-number">3.2.</span> <span class="nav-text">inputfuncs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#connect命令"><span class="nav-number">3.3.</span> <span class="nav-text">connect命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ServerSessionHandler-1"><span class="nav-number">3.4.</span> <span class="nav-text">ServerSessionHandler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#login"><span class="nav-number">3.4.1.</span> <span class="nav-text">login</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ServerSession-at-login"><span class="nav-number">3.4.2.</span> <span class="nav-text">ServerSession.at_login()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#account-at-init"><span class="nav-number">3.4.3.</span> <span class="nav-text">account.at_init</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#account-at-post-login"><span class="nav-number">3.4.4.</span> <span class="nav-text">account.at_post_login</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时序图"><span class="nav-number">3.5.</span> <span class="nav-text">时序图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Accout-ServerSession-Character-关系"><span class="nav-number">4.</span> <span class="nav-text">Accout, ServerSession, Character 关系</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
