@@ -225,6 +225,113 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/了解REST.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Java/了解REST.html" class="post-title-link" itemprop="url">了解REST</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-14 10:21:06" itemprop="dateCreated datePublished" datetime="2018-07-14T10:21:06+08:00">2018-07-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Java/了解REST.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/了解REST.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>REST (Representational State Transfer)是一个设计分发系统时的架构风格。其不是标准，而只是一系列的约束，比如是无状态的，客户端/服务端关联，以及一个接口。REST并不是严格的与HTTP有关系，但这是最常见的情况。</p>
+<h1 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h1><ul>
+<li><strong>Resource</strong> ：这个表示易于理解和目录结构或者 URIs。</li>
+<li><strong>Representations</strong>：传输 XML、JSON数据来代表对应的对象或者属性</li>
+<li><strong>Messages</strong>：显式的使用HTTP方法。</li>
+<li><strong>Stateless</strong>：在请求之间，服务器并不会存储客户端的上下文。状态依赖会限制伸缩性。客户端来保存会话状态。</li>
+</ul>
+<h1 id="HTTP方法"><a href="#HTTP方法" class="headerlink" title="HTTP方法"></a>HTTP方法</h1><p>使用 HTTP方法来 映射 CRUD（create, retrieve, update, delete）操作到HTTP请求。</p>
+<h2 id="GET"><a href="#GET" class="headerlink" title="GET"></a>GET</h2><p>获取信息。GET 请求必须是安全的，幂等的，意思就是无论以同样的参数重复多少次，这个结果应该是一样的。他们可能会有副作用，但是用户并不期望，所以对于系统的操作来说是他们并不是严重的。请求也可能是局部的或者有条件的：</p>
+<p><code>GET /addresses/1</code></p>
+<h2 id="POST"><a href="#POST" class="headerlink" title="POST"></a>POST</h2><p>请求对于URI处的资源根据提供的实体做一些事情。通常，POST用来创建新的 实体，也可以用来更新。</p>
+<p><code>POST /addresses</code></p>
+<h2 id="PUT"><a href="#PUT" class="headerlink" title="PUT"></a>PUT</h2><p>存储一个实体到对应的URI。PUT可以建立一个新实体或者更新一个实体。一个PUT请求是幂等的。幂等是 PUT 与POST主要不同。</p>
+<p><code>PUT /addresses/1</code></p>
+<blockquote>
+<p>PUT 会替换一个已存在的实体。如果只有数据元素的子集被提供，那么其他的就会被替换为null。</p>
+</blockquote>
+<h2 id="HTTP-status-codes"><a href="#HTTP-status-codes" class="headerlink" title="HTTP status codes"></a>HTTP status codes</h2><p>Status codes indicate the result of the HTTP request.</p>
+<ul>
+<li>1XX - informational</li>
+<li>2XX - success</li>
+<li>3XX - redirection</li>
+<li>4XX - client error</li>
+<li>5XX - server error</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/开启主机对IPv6的支持.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1154,108 +1261,11 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Java中的定时器Timer与TimerTask.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Java/Java中的定时器Timer与TimerTask.html" class="post-title-link" itemprop="url">Java中的定时器Timer与TimerTask</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-06-07 13:48:30" itemprop="dateCreated datePublished" datetime="2018-06-07T13:48:30+08:00">2018-06-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Java/Java中的定时器Timer与TimerTask.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Java中的定时器Timer与TimerTask.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>定时器在我们需要循环执行，或者指定时间执行某个任务的时候非常的有用，所以Java其自身也提供了相应的类来实现这些功能。Java的 <code>java.util</code> 包内包含了 <em>Timer, TimerTask</em>。</p>
-<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>从命令上就可以看出，<em>Timer</em> 是一个定时器，其实质是单独开了一个线程来进行计时。</p>
-<p><em>TimerTask</em>是一个任务，其本质，是一个实现了 <em>Runnable</em> 接口的抽象类。其只定义了一个抽象方法 <code>run()</code>，所以我们在使用的时候，实现这个<code>run()</code>方法就行了。</p>
-<p>我们主要关注的是，Timer的冲个调度方法：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">schedule</span><span class="params">(TimerTask task, <span class="keyword">long</span> delay)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">schedule</span><span class="params">(TimerTask task, Date time)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">schedule</span><span class="params">(TimerTask task, <span class="keyword">long</span> delay, <span class="keyword">long</span> period)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">schedule</span><span class="params">(TimerTask task, <span class="keyword">long</span> delay, <span class="keyword">long</span> period)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>其方便代表的意思是：</p>
-<ol>
-<li>指定延迟<em>delay</em> ms 后执行 <em>task</em>。</li>
-<li>在指定时间 <em>time</em> 时 执行 <em>task</em>。</li>
-<li>指定延迟<em>delay</em> ms 后，每 <em>period</em> ms 执行一次 <em>task</em> 任务</li>
-<li>在指定时间 <em>time</em> 时 延迟 <em>delay</em> ms 执行 <em>task</em>，之后每 <em>period</em> ms 执行一次任务。</li>
-</ol>
-<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><p>我们要实现一个模拟用户在线学习的功能，每个10秒钟，就给他增加学习时间：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> Timer().schedule(<span class="keyword">new</span> TimerTask() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    addLearnTime();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,<span class="number">10000</span>,<span class="number">10000</span>);</span><br></pre></td></tr></table></figure>
-<p>就是这么简单。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/21/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><span class="space">&hellip;</span><a class="page-number" href="/page/32/">32</a><a class="extend next" rel="next" href="/page/23/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/21/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/21/">21</a><span class="page-number current">22</span><a class="page-number" href="/page/23/">23</a><span class="space">&hellip;</span><a class="page-number" href="/page/33/">33</a><a class="extend next" rel="next" href="/page/23/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1299,7 +1309,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">320</span>
+          <span class="site-state-item-count">321</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
