@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="在 Evennia 中，实际上地图这个概念，表示的是各个房间之间的关联关系。而我们用一定的图形将其表达出来。反过来，我们定义了一个地图（就是各个房间之间的布局和关系），那么我们就可以将其在游戏中建立起来。">
+<meta name="keywords" content="Python,Evennia,Mud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evennia建立动态地图和静态地图">
+<meta property="og:url" content="https://gowa.club/Mud/Evennia建立动态地图和静态地图.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="在 Evennia 中，实际上地图这个概念，表示的是各个房间之间的关联关系。而我们用一定的图形将其表达出来。反过来，我们定义了一个地图（就是各个房间之间的布局和关系），那么我们就可以将其在游戏中建立起来。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-01T07:26:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evennia建立动态地图和静态地图">
+<meta name="twitter:description" content="在 Evennia 中，实际上地图这个概念，表示的是各个房间之间的关联关系。而我们用一定的图形将其表达出来。反过来，我们定义了一个地图（就是各个房间之间的布局和关系），那么我们就可以将其在游戏中建立起来。">
+
+<link rel="canonical" href="https://gowa.club/Mud/Evennia建立动态地图和静态地图.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Evennia建立动态地图和静态地图 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Mud/Evennia建立动态地图和静态地图.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Evennia建立动态地图和静态地图
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-01 15:26:03" itemprop="dateCreated datePublished" datetime="2020-03-01T15:26:03+08:00">2020-03-01</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mud/" itemprop="url" rel="index">
+                    <span itemprop="name">Mud</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Mud/Evennia建立动态地图和静态地图.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Mud/Evennia建立动态地图和静态地图.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在 Evennia 中，实际上地图这个概念，表示的是各个房间之间的关联关系。而我们用一定的图形将其表达出来。反过来，我们定义了一个地图（就是各个房间之间的布局和关系），那么我们就可以将其在游戏中建立起来。</p>
+<a id="more"></a>
+<h1 id="静态地图"><a href="#静态地图" class="headerlink" title="静态地图"></a>静态地图</h1><p>这里介绍在游戏内建立一个基于预绘制出来的地图在游戏内中的显示。也介绍了如何使用 <a href="https://github.com/evennia/evennia/wiki/Batch-code-processor来进行高级的构建世界。在下一节什么会介绍" target="_blank" rel="noopener">https://github.com/evennia/evennia/wiki/Batch-code-processor来进行高级的构建世界。在下一节什么会介绍</a> <strong>动态地图</strong> 的建立，其是基于已经存在的房间来建立一个动态的地图。</p>
+<p>Evennia 并不要求其内的 房间 被 “逻辑的” 进行位置设定。我们的 <strong>出口</strong> 可以被任意命名。我们可以将一个名叫 <em>west</em> 的出口引导向其实是一个位于很远的北方的一个房间。我们可以在房间内放置其他房间，而这样的房间在空间集合上是无法描述坐标的。</p>
+<p>不过，多数游戏确实是将房间进行逻辑组合的。这样做的话，游戏就可以用地图的形式来展示了。本节的目的就在于此。</p>
+<p>我们将本文章规划为几节来进行讲述：</p>
+<ol>
+<li><strong>规划地图</strong>——在这里，我们将提供一个小的示例地图，供本教程的其余部分使用。</li>
+<li><strong>建立一个地图对象</strong>——这将展示如何制作角色可以拾取并观看的静态游戏中“地图”对象。</li>
+<li><strong>构建地图区域</strong>——在这里，我们实际上将根据我们之前设计的地图创建一个小的示例区域。</li>
+<li><strong>地图代码</strong>——这会将地图链接到该位置，因此我们的输出如下所示：</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">crossroads(<span class="comment">#3)</span></span><br><span class="line">↑╚∞╝↑</span><br><span class="line">≈↑│↑∩  The merger of two roads. To the north looms a mighty castle.</span><br><span class="line">O─O─O  To the south, the glow of a campfire can be seen. To the east lie</span><br><span class="line">≈↑│↑∩  the vast mountains <span class="keyword">and</span> to the west <span class="keyword">is</span> heard the waves of the sea.</span><br><span class="line">↑▲O▲↑</span><br><span class="line"></span><br><span class="line">Exits: north(<span class="comment">#8), east(#9), south(#10), west(#11)</span></span><br></pre></td></tr></table></figure>
+<p>我们会建设自己的游戏目录是<code>mygame</code> ，并且我们没有修改默认的命令。</p>
+<h2 id="地图规划"><a href="#地图规划" class="headerlink" title="地图规划"></a>地图规划</h2><p>MUD 中的地图有不同的形状和大小。有些看起来只是用线连接起来的盒子。而某些呢是复杂的图形。</p>
+<p>我们的地图就用简单的文字来进行显示，但并不意味着我们就只能使用字母或者数字。根据所选的字体，我们能用的字符可是非常多的。而且我们使用  utf-8 编码。</p>
+<p>我们的地图看起来是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">≈≈↑↑↑↑↑∩∩</span><br><span class="line">≈≈↑╔═╗↑∩∩   account 能访问的地方用 &quot;o&quot; 来标记。</span><br><span class="line">≈≈↑║O║↑∩∩   最上方是一个可被访问的承包。</span><br><span class="line">≈≈↑╚∞╝↑∩∩   右边是一排屋舍，左边和沙滩。</span><br><span class="line">≈≈≈↑│↑∩∩∩   最下方是一个有帐篷的营地。</span><br><span class="line">≈≈O─O─O⌂∩   中间就是开始的地方。一个十字路口连接这几个区域</span><br><span class="line">≈≈≈↑│↑∩∩∩   </span><br><span class="line">≈≈↑▲O▲↑∩∩   </span><br><span class="line">≈≈↑↑▲↑↑∩∩</span><br><span class="line">≈≈↑↑↑↑↑∩∩</span><br></pre></td></tr></table></figure>
+<p>制作地图的时候，根据我们想要实现的东西有很多需要考虑的东西。在这里我们就显示一个我们周围  5*5 的地方。这就确认在每个能能访问的地方都会计算周围的2个字符。</p>
+<h2 id="建立地图对象"><a href="#建立地图对象" class="headerlink" title="建立地图对象"></a>建立地图对象</h2><p>我们建立一个地图对象，然后 accout 可以捡起来和丢弃，事实上我们只是利用来其描述来显示代表地图的文字而已。</p>
+<p>Evennia 提供了 <a href="https://github.com/evennia/evennia/wiki/Batch-Processors" target="_blank" rel="noopener">Batch-Processors</a> 用作游戏外创建的输入文件。在此例子中我们会使用两个给力的批处理器：<a href="https://github.com/evennia/evennia/wiki/Batch-code%20processor" target="_blank" rel="noopener">Batch-Code-Processors</a>，以命令 <code>@batchcode</code> 调用。这允许我们用 Python 文件来建立我们的世界。这些文件有访问  Evennia 中的 API 的能力。</p>
+<p>下面是一个简单的示例：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mygame/world/batchcode_map.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> evennia <span class="keyword">import</span> create_object</span><br><span class="line"><span class="keyword">from</span> evennia <span class="keyword">import</span> DefaultObject</span><br><span class="line"></span><br><span class="line"><span class="comment"># We use the create_object function to call into existence a </span></span><br><span class="line"><span class="comment"># DefaultObject named "Map" wherever you are standing.</span></span><br><span class="line"></span><br><span class="line">map = create_object(DefaultObject, key=<span class="string">"Map"</span>, location=caller.location)</span><br><span class="line"></span><br><span class="line"><span class="comment"># We then access its description directly to make it our map.</span></span><br><span class="line"></span><br><span class="line">map.db.desc = <span class="string">"""</span></span><br><span class="line"><span class="string">≈≈↑↑↑↑↑∩∩</span></span><br><span class="line"><span class="string">≈≈↑╔═╗↑∩∩</span></span><br><span class="line"><span class="string">≈≈↑║O║↑∩∩</span></span><br><span class="line"><span class="string">≈≈↑╚∞╝↑∩∩</span></span><br><span class="line"><span class="string">≈≈≈↑│↑∩∩∩</span></span><br><span class="line"><span class="string">≈≈O─O─O⌂∩</span></span><br><span class="line"><span class="string">≈≈≈↑│↑∩∩∩</span></span><br><span class="line"><span class="string">≈≈↑▲O▲↑∩∩</span></span><br><span class="line"><span class="string">≈≈↑↑▲↑↑∩∩</span></span><br><span class="line"><span class="string">≈≈↑↑↑↑↑∩∩</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># This message lets us know our map was created successfully.</span></span><br><span class="line">caller.msg(<span class="string">"A map appears out of thin air and falls to the ground."</span>)</span><br></pre></td></tr></table></figure>
+<p>然后我们在游戏中用命令进行调用：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">unquell</span><br><span class="line">@batchcode batchcode_map</span><br><span class="line">@batchcode batchcode_map</span><br><span class="line">Running Batch-code processor - Automatic mode for batchcode_map ...</span><br><span class="line">01/01: from evennia import create_object\nfrom evennia import D[...]</span><br><span class="line">A map appears out of thin air and falls to the ground.</span><br><span class="line">End of batch file.</span><br><span class="line">  Batchfile &apos;batchcode_map&apos; applied.</span><br><span class="line"> </span><br><span class="line">look Map</span><br><span class="line">Map(#75)</span><br><span class="line"></span><br><span class="line">≈≈↑↑↑↑↑∩∩</span><br><span class="line">≈≈↑╔═╗↑∩∩</span><br><span class="line">≈≈↑║O║↑∩∩</span><br><span class="line">≈≈↑╚∞╝↑∩∩</span><br><span class="line">≈≈≈↑│↑∩∩∩</span><br><span class="line">≈≈O─O─O⌂∩</span><br><span class="line">≈≈≈↑│↑∩∩∩</span><br><span class="line">≈≈↑▲O▲↑∩∩</span><br><span class="line">≈≈↑↑▲↑↑∩∩</span><br><span class="line">≈≈↑↑↑↑↑∩∩</span><br></pre></td></tr></table></figure>
+<p>然后就会执行此脚本内的内容。你会看到，有一个 map 已经落到了地上，可以将他捡起来。</p>
+<h2 id="构建地图区域"><a href="#构建地图区域" class="headerlink" title="构建地图区域"></a>构建地图区域</h2><p>我们先前构建了地图对象，但是实际上地图中的位置是还没有建立的。现在我们来写一个构建这些位置的脚本。我们有个五个区域需要建立：<em>城堡，山寨，营地，海岸，十字路口</em>，我们的例子将会如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mygame/world/batchcode_world.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> evennia <span class="keyword">import</span> create_object, search_object</span><br><span class="line"><span class="keyword">from</span> typeclasses <span class="keyword">import</span> rooms, exits</span><br><span class="line"></span><br><span class="line"><span class="comment"># We begin by creating our rooms so we can detail them later.</span></span><br><span class="line"></span><br><span class="line">centre = create_object(rooms.Room, key=<span class="string">"crossroads"</span>)</span><br><span class="line">north = create_object(rooms.Room, key=<span class="string">"castle"</span>)</span><br><span class="line">east = create_object(rooms.Room, key=<span class="string">"cottage"</span>)</span><br><span class="line">south = create_object(rooms.Room, key=<span class="string">"camp"</span>)</span><br><span class="line">west = create_object(rooms.Room, key=<span class="string">"coast"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># This is where we set up the cross roads.</span></span><br><span class="line"><span class="comment"># The rooms description is what we see with the 'look' command.</span></span><br><span class="line"></span><br><span class="line">centre.db.desc = <span class="string">"""</span></span><br><span class="line"><span class="string">The merger of two roads. A single lamp post dimly illuminates the lonely crossroads.</span></span><br><span class="line"><span class="string">To the north looms a mighty castle. To the south the glow of a campfire can be seen.</span></span><br><span class="line"><span class="string">To the east lie a wall of mountains and to the west the dull roar of the open sea.</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Here we are creating exits from the centre "crossroads" location to </span></span><br><span class="line"><span class="comment"># destinations to the north, east, south, and west. We will be able </span></span><br><span class="line"><span class="comment"># to use the exit by typing it's key e.g. "north" or an alias e.g. "n".</span></span><br><span class="line"></span><br><span class="line">centre_north = create_object(exits.Exit, key=<span class="string">"north"</span>, </span><br><span class="line">                            aliases=[<span class="string">"n"</span>], location=centre, destination=north)</span><br><span class="line">centre_east = create_object(exits.Exit, key=<span class="string">"east"</span>, </span><br><span class="line">                            aliases=[<span class="string">"e"</span>], location=centre, destination=east)</span><br><span class="line">centre_south = create_object(exits.Exit, key=<span class="string">"south"</span>, </span><br><span class="line">                            aliases=[<span class="string">"s"</span>], location=centre, destination=south)</span><br><span class="line">centre_west = create_object(exits.Exit, key=<span class="string">"west"</span>, </span><br><span class="line">                            aliases=[<span class="string">"w"</span>], location=centre, destination=west)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Now we repeat this for the other rooms we'll be implementing.</span></span><br><span class="line"><span class="comment"># This is where we set up the northern castle.</span></span><br><span class="line"></span><br><span class="line">north.db.desc = <span class="string">"An impressive castle surrounds you. "</span> \</span><br><span class="line">                <span class="string">"There might be a princess in one of these towers."</span></span><br><span class="line">north_south = create_object(exits.Exit, key=<span class="string">"south"</span>, </span><br><span class="line">                            aliases=[<span class="string">"s"</span>], location=north, destination=centre)</span><br><span class="line"></span><br><span class="line"><span class="comment"># This is where we set up the eastern cottage.</span></span><br><span class="line"></span><br><span class="line">east.db.desc = <span class="string">"A cosy cottage nestled among mountains "</span> \</span><br><span class="line">               <span class="string">"stretching east as far as the eye can see."</span></span><br><span class="line">east_west = create_object(exits.Exit, key=<span class="string">"west"</span>, </span><br><span class="line">                            aliases=[<span class="string">"w"</span>], location=east, destination=centre)</span><br><span class="line"></span><br><span class="line"><span class="comment"># This is where we set up the southern camp.</span></span><br><span class="line"></span><br><span class="line">south.db.desc = <span class="string">"Surrounding a clearing are a number of "</span> \</span><br><span class="line">                <span class="string">"tribal tents and at their centre a roaring fire."</span></span><br><span class="line">south_north = create_object(exits.Exit, key=<span class="string">"north"</span>, </span><br><span class="line">                            aliases=[<span class="string">"n"</span>], location=south, destination=centre)</span><br><span class="line"></span><br><span class="line"><span class="comment"># This is where we set up the western coast.</span></span><br><span class="line"></span><br><span class="line">west.db.desc = <span class="string">"The dark forest halts to a sandy beach. "</span> \</span><br><span class="line">               <span class="string">"The sound of crashing waves calms the soul."</span></span><br><span class="line">west_east = create_object(exits.Exit, key=<span class="string">"east"</span>, </span><br><span class="line">                            aliases=[<span class="string">"e"</span>], location=west, destination=centre)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Lastly, lets make an entrance to our world from the default Limbo room.</span></span><br><span class="line"></span><br><span class="line">limbo = search_object(<span class="string">'Limbo'</span>)[<span class="number">0</span>]</span><br><span class="line">limbo_exit = create_object(exits.Exit, key=<span class="string">"enter world"</span>, </span><br><span class="line">                            aliases=[<span class="string">"enter"</span>], location=limbo, destination=centre)</span><br></pre></td></tr></table></figure>
+<p>执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@batchcode batchcode_world</span><br></pre></td></tr></table></figure>
+<h2 id="游戏中的小地图"><a href="#游戏中的小地图" class="headerlink" title="游戏中的小地图"></a>游戏中的小地图</h2><p>现在我们已经有了平面图和游戏中的区域了，但实际上我们需要的是看到周围的小地图，这将会随着我们的移动而变化。</p>
+<p>我们 <strong>可能可以</strong> 手动在建立各个小地图，然后在小地图的描述上写入地图的一部分。但是有的 MUD 有数以千计的房间，这样做是不现实的。当我们地图有变更的时候，想要进行房间描述的变化更是一个灾难。</p>
+<p>因此，我们应该建立一个中心模块来保持地图。<strong>房间</strong> 引用此中心模块来获取地图。当我们的地图变更，那么我们重新执行一下 batch Code 就行了。</p>
+<p>想要制作我们自己的小地图，我们就需要将我们的地图进行分隔。对于我们的字符串显示的地图，很好的是，Python 允许我们将字符串看到字符的列表，因此我们可以从字符串内抓取要显示的字符。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># We place our map into a sting here.</span></span><br><span class="line">world_map = <span class="string">"""\</span></span><br><span class="line"><span class="string">≈≈↑↑↑↑↑∩∩</span></span><br><span class="line"><span class="string">≈≈↑╔═╗↑∩∩</span></span><br><span class="line"><span class="string">≈≈↑║O║↑∩∩</span></span><br><span class="line"><span class="string">≈≈↑╚∞╝↑∩∩</span></span><br><span class="line"><span class="string">≈≈≈↑│↑∩∩∩</span></span><br><span class="line"><span class="string">≈≈O─O─O⌂∩</span></span><br><span class="line"><span class="string">≈≈≈↑│↑∩∩∩</span></span><br><span class="line"><span class="string">≈≈↑▲O▲↑∩∩</span></span><br><span class="line"><span class="string">≈≈↑↑▲↑↑∩∩</span></span><br><span class="line"><span class="string">≈≈↑↑↑↑↑∩∩</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># This turns our map string into a list of rows. Because python </span></span><br><span class="line"><span class="comment"># allows us to treat strings as a list of characters, we can access </span></span><br><span class="line"><span class="comment"># those characters with world_map[5][5] where world_map[row][column].</span></span><br><span class="line">world_map = world_map.split(<span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">return_map</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    返回整个地图</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    map = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#实际上是将地图分隔成行进行保存</span></span><br><span class="line">    <span class="keyword">for</span> valuey <span class="keyword">in</span> world_map:</span><br><span class="line">        map += valuey</span><br><span class="line">        map += <span class="string">"\n"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> map</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">return_minimap</span><span class="params">(x, y, radius = <span class="number">2</span>)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    返回地图的一部分。</span></span><br><span class="line"><span class="string">    返回位置(x,y) 处半径为2的所有字符</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    map = <span class="string">""</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#For each row we need, add the characters we need.</span></span><br><span class="line">    <span class="keyword">for</span> valuey <span class="keyword">in</span> world_map[y-radius:y+radius+<span class="number">1</span>]:</span><br><span class="line">        <span class="keyword">for</span> valuex <span class="keyword">in</span> valuey[x-radius:x+radius+<span class="number">1</span>]:</span><br><span class="line">            map += valuex</span><br><span class="line">        map += <span class="string">"\n"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> map</span><br></pre></td></tr></table></figure>
+<p>在此地图模块建立后，我们用其替换我们硬编码的 <code>batchcode_map.py</code>。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mygame/world/batchcode_map.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> evennia <span class="keyword">import</span> create_object</span><br><span class="line"><span class="keyword">from</span> evennia <span class="keyword">import</span> DefaultObject</span><br><span class="line"><span class="keyword">from</span> world <span class="keyword">import</span> map_module</span><br><span class="line"></span><br><span class="line">map = create_object(DefaultObject, key=<span class="string">"Map"</span>, location=caller.location)</span><br><span class="line"></span><br><span class="line">map.db.desc = map_module.return_map()</span><br><span class="line"></span><br><span class="line">caller.msg(<span class="string">"A map appears out of thin air and falls to the ground."</span>)</span><br></pre></td></tr></table></figure>
+<p>进入游戏，执行此脚本：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@batchcode batchcode_map</span><br></pre></td></tr></table></figure>
+<p>我们要先删除我们之前的地图，记住这个问题。</p>
+<p>现在我们将注意力转移到我们的游戏 <strong>房间上</strong>。<code>return_minimap</code> 将会被用来在我们的房间内，使其包含一个简单的地图。这是有一点复杂的。</p>
+<p>我们可以用 <code>room.db.desc = map_string + description_string</code> 的形式来显示地图，但事实上我们想要的是让小地图紧挨着 <code>room.db.desc</code>。所以会使用  EvTable 来实现这个目的。我们会建立一个  一行 两列 的 EvTable 。一列用来放描述，一行用来放地图。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># mygame\world\batchcode_world.py</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Add to imports</span></span><br><span class="line"><span class="keyword">from</span> evennia.utils <span class="keyword">import</span> evtable</span><br><span class="line"><span class="keyword">from</span> world <span class="keyword">import</span> map_module</span><br><span class="line"></span><br><span class="line"><span class="comment"># [...]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Replace the descriptions with the below code.</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The cross roads.</span></span><br><span class="line"><span class="comment"># We pass what we want in our table and EvTable does the rest.</span></span><br><span class="line"><span class="comment"># Passing two arguments will create two columns but we could add more.</span></span><br><span class="line"><span class="comment"># We also specify no border.</span></span><br><span class="line">centre.db.desc = evtable.EvTable(map_module.return_minimap(<span class="number">4</span>,<span class="number">5</span>), </span><br><span class="line">                 <span class="string">"The merger of two roads. A single lamp post dimly "</span> \</span><br><span class="line">                 <span class="string">"illuminates the lonely crossroads. To the north "</span> \</span><br><span class="line">                 <span class="string">"looms a mighty castle. To the south the glow of "</span> \</span><br><span class="line">                 <span class="string">"a campfire can be seen. To the east lie a wall of "</span> \</span><br><span class="line">                 <span class="string">"mountains and to the west the dull roar of the open sea."</span>, </span><br><span class="line">                 border=<span class="literal">None</span>)</span><br><span class="line"><span class="comment"># EvTable allows formatting individual columns and cells. We use that here</span></span><br><span class="line"><span class="comment"># to set a maximum width for our description, but letting the map fill</span></span><br><span class="line"><span class="comment"># whatever space it needs. </span></span><br><span class="line">centre.db.desc.reformat_column(<span class="number">1</span>, width=<span class="number">70</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># [...]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The northern castle.</span></span><br><span class="line">north.db.desc = evtable.EvTable(map_module.return_minimap(<span class="number">4</span>,<span class="number">2</span>), </span><br><span class="line">                <span class="string">"An impressive castle surrounds you. There might be "</span> \</span><br><span class="line">                <span class="string">"a princess in one of these towers."</span>, </span><br><span class="line">                border=<span class="literal">None</span>)</span><br><span class="line">north.db.desc.reformat_column(<span class="number">1</span>, width=<span class="number">70</span>)   </span><br><span class="line"></span><br><span class="line"><span class="comment"># [...]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The eastern cottage.</span></span><br><span class="line">east.db.desc = evtable.EvTable(map_module.return_minimap(<span class="number">6</span>,<span class="number">5</span>), </span><br><span class="line">               <span class="string">"A cosy cottage nestled among mountains stretching "</span> \</span><br><span class="line">               <span class="string">"east as far as the eye can see."</span>, </span><br><span class="line">               border=<span class="literal">None</span>)</span><br><span class="line">east.db.desc.reformat_column(<span class="number">1</span>, width=<span class="number">70</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># [...]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The southern camp.</span></span><br><span class="line">south.db.desc = evtable.EvTable(map_module.return_minimap(<span class="number">4</span>,<span class="number">7</span>), </span><br><span class="line">                <span class="string">"Surrounding a clearing are a number of tribal tents "</span> \</span><br><span class="line">                <span class="string">"and at their centre a roaring fire."</span>, </span><br><span class="line">                border=<span class="literal">None</span>)</span><br><span class="line">south.db.desc.reformat_column(<span class="number">1</span>, width=<span class="number">70</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># [...]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># The western coast.</span></span><br><span class="line">west.db.desc = evtable.EvTable(map_module.return_minimap(<span class="number">2</span>,<span class="number">5</span>), </span><br><span class="line">               <span class="string">"The dark forest halts to a sandy beach. The sound of "</span> \</span><br><span class="line">               <span class="string">"crashing waves calms the soul."</span>, </span><br><span class="line">               border=<span class="literal">None</span>)</span><br><span class="line">west.db.desc.reformat_column(<span class="number">1</span>, width=<span class="number">70</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="动态地图"><a href="#动态地图" class="headerlink" title="动态地图"></a>动态地图</h1><p>我们在此节将会介绍，通过 房间 间的关联关系来动态的建立地图。</p>
+<h2 id="房间格子"><a href="#房间格子" class="headerlink" title="房间格子"></a>房间格子</h2><p>要想此例子工作，至少有两个需求要达到</p>
+<ol>
+<li>游戏的结构要跟随一个逻辑布局。我们在此例子中建设，只使用基本方向（N,E,S,W）</li>
+<li>房间必须正确的连接。</li>
+</ol>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>原理是，一只  <strong>蠕虫</strong>(Warm) 从当前位置，选取一个方向进行移动，并标记出位置。当走到一个预定义的距离后就停止，然后从另外一个方向进行移动。要注意的是，我们想要的是个很容易调用而不要太复杂。因此我们会将这些内容封装到一个 Python Class 中。</p>
+<p>当我们执行 <code>look</code> 命令的时候，将会看到如下类似的东西：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Hallway</span><br><span class="line"></span><br><span class="line">      [.]   [.]</span><br><span class="line">      [@][.][.][.][.]</span><br><span class="line">      [.]   [.]   [.]</span><br><span class="line"></span><br><span class="line">The distant echoes of the forgotten</span><br><span class="line">wail throughout the empty halls.</span><br><span class="line"></span><br><span class="line">Exits: North, East, South</span><br></pre></td></tr></table></figure>
+<p>我们有 <code>[@]</code> 来定义当前的位置，<code>[.]</code> 来定义其他房间。</p>
+<h2 id="设置地图显示"><a href="#设置地图显示" class="headerlink" title="设置地图显示"></a>设置地图显示</h2><p>我们首先要定义不同的房间如何进行显示。以便我们的 “Worm”知道如何根据 Room 中的 <code>sector_type</code> 属性来绘制图样。例子中我们定义两个符号——一个普通房间，及一个我们已经在其中的房间。我们也定义了一个如果房间没有 <code>setor_type</code> 属性的房间。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># in mygame/world/map.py</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># the symbol is identified with a key "sector_type" on the </span></span><br><span class="line"><span class="comment"># Room. Keys None and "you" must always exist. </span></span><br><span class="line">SYMBOLS = &#123; <span class="literal">None</span> : <span class="string">' . '</span>, <span class="comment"># for rooms without sector_type Attribute </span></span><br><span class="line">            <span class="string">'you'</span> : <span class="string">'[@]'</span>,</span><br><span class="line">            <span class="string">'SECT_INSIDE'</span>: <span class="string">'[.]'</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>试图访问一个不存在的属性将会返回 <code>None</code>，这就是说没有 <code>setor_type</code> 的房间将会显示为 <code>.</code>。现在点开始构造 Map 类.</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Map</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, caller, max_width=<span class="number">9</span>, max_length=<span class="number">9</span>)</span>:</span></span><br><span class="line">        self.caller = caller</span><br><span class="line">        self.max_width = max_width</span><br><span class="line">        self.max_length = max_length</span><br><span class="line">        self.worm_has_mapped = &#123;&#125; <span class="string">" </span></span><br><span class="line"><span class="string">        self.curX = None</span></span><br><span class="line"><span class="string">        self.curY = None</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>self.caller 通常是角色自己，调用地图的对象。</li>
+<li>self.max_width/length 将要产生地图的最大宽度和长度。设置为 奇数来让我们的地图有一个中心点。</li>
+<li>self.worm_has_mapped。 Worm 已经标记出的位置。</li>
+<li>self.curX/Y Worm 当前位置</li>
+</ul>
+<p>在实际进行任何类型的地图之前，我们需要创建一个空的显示区域，并使用以下方法对其进行完整性检查</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_grid</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="comment"># This method simply creates an empty grid/display area</span></span><br><span class="line">    <span class="comment"># with the specified variables from __init__(self):</span></span><br><span class="line">    board = []</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> range(self.max_width):</span><br><span class="line">        board.append([])</span><br><span class="line">        <span class="keyword">for</span> column <span class="keyword">in</span> range(self.max_length):</span><br><span class="line">            board[row].append(<span class="string">'   '</span>)</span><br><span class="line">    <span class="keyword">return</span> board</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_grid</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="comment"># this method simply checks the grid to make sure </span></span><br><span class="line">    <span class="comment"># that both max_l and max_w are odd numbers.</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span> <span class="keyword">if</span> self.max_length % <span class="number">2</span> != <span class="number">0</span> <span class="keyword">or</span> self.max_width % <span class="number">2</span> != <span class="number">0</span>\</span><br><span class="line">        <span class="keyword">else</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_room_on_map</span><span class="params">(self, room, max_distance)</span>:</span></span><br><span class="line">    self.draw(room)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> max_distance == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> exit <span class="keyword">in</span> room.exits:</span><br><span class="line">        <span class="keyword">if</span> exit.name <span class="keyword">not</span> <span class="keyword">in</span> (<span class="string">"north"</span>, <span class="string">"east"</span>, <span class="string">"west"</span>, <span class="string">"south"</span>):</span><br><span class="line">            <span class="comment"># we only map in the cardinal directions. Mapping up/down would be</span></span><br><span class="line">            <span class="comment"># an interesting learning project for someone who wanted to try it.</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> self.has_drawn(exit.destination): </span><br><span class="line">            <span class="comment"># we've been to the destination already, skip ahead.</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        self.update_pos(room, exit.name.lower())</span><br><span class="line">        self.draw_room_on_map(exit.destination, max_distance - <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="Mapper"><a href="#Mapper" class="headerlink" title="Mapper"></a>Mapper</h2><ul>
+<li><code>self.draw(self, room)</code> - 将房间绘制到表格</li>
+<li><code>self.has_drawn(self, room)</code> - 是否已经绘制</li>
+<li><code>self.median(self, number)</code> - 计算 0，n 中间的中位数。</li>
+<li><code>self.update_pos(self, room, exit_name)</code> - 重置 worm 的位置。</li>
+<li><code>self.start_loc_on_grid(self)</code> - 标记我们的当前位置</li>
+<li><code>self.show_map</code> -绘制完毕显示地图</li>
+<li><code>self.draw_room_on_map(self, room, max_distance)</code> - 主要方法函数。</li>
+</ul>
+<h2 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h2><h3 id="init"><a href="#init" class="headerlink" title="init"></a><strong>init</strong></h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#mygame/world/map.py</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Map</span><span class="params">(object)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, caller, max_width=<span class="number">9</span>, max_length=<span class="number">9</span>)</span>:</span></span><br><span class="line">        self.caller = caller</span><br><span class="line">        self.max_width = max_width</span><br><span class="line">        self.max_length = max_length</span><br><span class="line">        self.worm_has_mapped = &#123;&#125;</span><br><span class="line">        self.curX = <span class="literal">None</span></span><br><span class="line">        self.curY = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.check_grid():</span><br><span class="line">            <span class="comment"># we have to store the grid into a variable</span></span><br><span class="line">            self.grid = self.create_grid()</span><br><span class="line">            <span class="comment"># we use the algebraic relationship</span></span><br><span class="line">            self.draw_room_on_map(caller.location, </span><br><span class="line">                                  ((min(max_width, max_length) <span class="number">-1</span> ) / <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="draw-room-on-map"><a href="#draw-room-on-map" class="headerlink" title="draw_room_on_map"></a>draw_room_on_map</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># in mygame/world/map.py, in the Map class</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_room_on_map</span><span class="params">(self, room, max_distance)</span>:</span></span><br><span class="line">    self.draw(room)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> max_distance == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> exit <span class="keyword">in</span> room.exits:</span><br><span class="line">        <span class="keyword">if</span> exit.name <span class="keyword">not</span> <span class="keyword">in</span> (<span class="string">"north"</span>, <span class="string">"east"</span>, <span class="string">"west"</span>, <span class="string">"south"</span>):</span><br><span class="line">            <span class="comment"># we only map in the cardinal directions. Mapping up/down would be</span></span><br><span class="line">            <span class="comment"># an interesting learning project for someone who wanted to try it.</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> self.has_drawn(exit.destination): </span><br><span class="line">            <span class="comment"># we've been to the destination already, skip ahead.</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">        self.update_pos(room, exit.name.lower())</span><br><span class="line">        self.draw_room_on_map(exit.destination, max_distance - <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="draw"><a href="#draw" class="headerlink" title="draw"></a>draw</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw</span><span class="params">(self, room)</span>:</span></span><br><span class="line">    <span class="comment"># draw initial ch location on map first!</span></span><br><span class="line">    <span class="keyword">if</span> room == self.caller.location:</span><br><span class="line">        self.start_loc_on_grid()</span><br><span class="line">        self.worm_has_mapped[room] = [self.curX, self.curY]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># map all other rooms</span></span><br><span class="line">        self.worm_has_mapped[room] = [self.curX, self.curY]</span><br><span class="line">        <span class="comment"># this will use the sector_type Attribute or None if not set.</span></span><br><span class="line">        self.grid[self.curX][self.curY] = SYMBOLS[room.db.sector_type]</span><br></pre></td></tr></table></figure>
+<h3 id="start-loc-on-grid"><a href="#start-loc-on-grid" class="headerlink" title="start_loc_on_grid"></a>start_loc_on_grid</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">median</span><span class="params">(self, num)</span>:</span></span><br><span class="line">    lst = sorted(range(<span class="number">0</span>, num))</span><br><span class="line">    n = len(lst)</span><br><span class="line">    m = n <span class="number">-1</span></span><br><span class="line">    <span class="keyword">return</span> (lst[n//<span class="number">2</span>] + lst[m//<span class="number">2</span>]) / <span class="number">2.0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">start_loc_on_grid</span><span class="params">(self)</span>:</span></span><br><span class="line">    x = self.median(self.max_width)</span><br><span class="line">    y = self.median(self.max_length)</span><br><span class="line">    <span class="comment"># x and y are floats by default, can't index lists with float types</span></span><br><span class="line">    x, y = int(x), int(y) </span><br><span class="line"></span><br><span class="line">    self.grid[x][y] = SYMBOLS[<span class="string">'you'</span>]</span><br><span class="line">    self.curX, self.curY = x, y <span class="comment"># updating worms current location</span></span><br></pre></td></tr></table></figure>
+<h3 id="has-drawn"><a href="#has-drawn" class="headerlink" title="has_drawn"></a>has_drawn</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">has_drawn</span><span class="params">(self, room)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span> <span class="keyword">if</span> room <span class="keyword">in</span> self.worm_has_mapped.keys() <span class="keyword">else</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<h3 id="update-pos"><a href="#update-pos" class="headerlink" title="update_pos"></a>update_pos</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_pos</span><span class="params">(self, room, exit_name)</span>:</span></span><br><span class="line">    <span class="comment"># this ensures the coordinates stays up to date </span></span><br><span class="line">    <span class="comment"># to where the worm is currently at.</span></span><br><span class="line">    self.curX, self.curY = \</span><br><span class="line">      self.worm_has_mapped[room][<span class="number">0</span>], self.worm_has_mapped[room][<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># now we have to actually move the pointer </span></span><br><span class="line">    <span class="comment"># variables depending on which 'exit' it found</span></span><br><span class="line">    <span class="keyword">if</span> exit_name == <span class="string">'east'</span>:</span><br><span class="line">        self.curY += <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span> exit_name == <span class="string">'west'</span>:</span><br><span class="line">        self.curY -= <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span> exit_name == <span class="string">'north'</span>:</span><br><span class="line">        self.curX -= <span class="number">1</span></span><br><span class="line">    <span class="keyword">elif</span> exit_name == <span class="string">'south'</span>:</span><br><span class="line">        self.curX += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h3 id="show-map"><a href="#show-map" class="headerlink" title="show_map"></a>show_map</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_map</span><span class="params">(self)</span>:</span></span><br><span class="line">    map_string = <span class="string">""</span></span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> self.grid:</span><br><span class="line">        map_string += <span class="string">" "</span>.join(row)</span><br><span class="line">        map_string += <span class="string">"\n"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> map_string</span><br></pre></td></tr></table></figure>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>我们将地图放在 <code>return_appearance</code> 方法中.</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># in mygame/typeclasses/rooms.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> evennia <span class="keyword">import</span> DefaultRoom</span><br><span class="line"><span class="keyword">from</span> world.map <span class="keyword">import</span> Map</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Room</span><span class="params">(DefaultRoom)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">return_appearance</span><span class="params">(self, looker)</span>:</span></span><br><span class="line">        <span class="comment"># [...]</span></span><br><span class="line">        string = <span class="string">"%s\n"</span> % Map(looker).show_map()</span><br><span class="line">        <span class="comment"># Add all the normal stuff like room description, </span></span><br><span class="line">        <span class="comment"># contents, exits etc. </span></span><br><span class="line">        string += <span class="string">"\n"</span> + super().return_appearance(looker)</span><br><span class="line">        <span class="keyword">return</span> string</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Evennia/" rel="tag"># Evennia</a>
+              <a href="/tags/Mud/" rel="tag"># Mud</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Mud/Evennia中的Object使用的介绍.html" rel="next" title="Evennia中的Object使用的介绍">
+                  <i class="fa fa-chevron-left"></i> Evennia中的Object使用的介绍
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#静态地图"><span class="nav-number">1.</span> <span class="nav-text">静态地图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#地图规划"><span class="nav-number">1.1.</span> <span class="nav-text">地图规划</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立地图对象"><span class="nav-number">1.2.</span> <span class="nav-text">建立地图对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构建地图区域"><span class="nav-number">1.3.</span> <span class="nav-text">构建地图区域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#游戏中的小地图"><span class="nav-number">1.4.</span> <span class="nav-text">游戏中的小地图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动态地图"><span class="nav-number">2.</span> <span class="nav-text">动态地图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#房间格子"><span class="nav-number">2.1.</span> <span class="nav-text">房间格子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">2.2.</span> <span class="nav-text">概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置地图显示"><span class="nav-number">2.3.</span> <span class="nav-text">设置地图显示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mapper"><span class="nav-number">2.4.</span> <span class="nav-text">Mapper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map"><span class="nav-number">2.5.</span> <span class="nav-text">Map</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#init"><span class="nav-number">2.5.1.</span> <span class="nav-text">init</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#draw-room-on-map"><span class="nav-number">2.5.2.</span> <span class="nav-text">draw_room_on_map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#draw"><span class="nav-number">2.5.3.</span> <span class="nav-text">draw</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#start-loc-on-grid"><span class="nav-number">2.5.4.</span> <span class="nav-text">start_loc_on_grid</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#has-drawn"><span class="nav-number">2.5.5.</span> <span class="nav-text">has_drawn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#update-pos"><span class="nav-number">2.5.6.</span> <span class="nav-text">update_pos</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#show-map"><span class="nav-number">2.5.7.</span> <span class="nav-text">show_map</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用"><span class="nav-number">3.</span> <span class="nav-text">使用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">322</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">134</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Mud/Evennia建立动态地图和静态地图.html",
+            identifier: "Mud/Evennia建立动态地图和静态地图.html",
+            title: "Evennia建立动态地图和静态地图"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
