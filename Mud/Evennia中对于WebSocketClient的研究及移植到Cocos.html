@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Eevenia 内建了对于 WebSocket 的支持，在浏览器上的时候就是使用其进行通信的。其本质是将我们的输入的文字，封装成为对应的 输入函数，命令，组成的 JSON 格式的数据，发送给服务端进行处理。现在我准备在 Cocos 上完成这个工作，所以来研究一下其实现。">
+<meta name="keywords" content="JavaScript,Evennia,Mud,Cocos">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evennia中对于WebSocketClient的研究及移植到Cocos">
+<meta property="og:url" content="https://gowa.club/Mud/Evennia中对于WebSocketClient的研究及移植到Cocos.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="Eevenia 内建了对于 WebSocket 的支持，在浏览器上的时候就是使用其进行通信的。其本质是将我们的输入的文字，封装成为对应的 输入函数，命令，组成的 JSON 格式的数据，发送给服务端进行处理。现在我准备在 Cocos 上完成这个工作，所以来研究一下其实现。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-02T05:20:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evennia中对于WebSocketClient的研究及移植到Cocos">
+<meta name="twitter:description" content="Eevenia 内建了对于 WebSocket 的支持，在浏览器上的时候就是使用其进行通信的。其本质是将我们的输入的文字，封装成为对应的 输入函数，命令，组成的 JSON 格式的数据，发送给服务端进行处理。现在我准备在 Cocos 上完成这个工作，所以来研究一下其实现。">
+
+<link rel="canonical" href="https://gowa.club/Mud/Evennia中对于WebSocketClient的研究及移植到Cocos.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Evennia中对于WebSocketClient的研究及移植到Cocos | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Mud/Evennia中对于WebSocketClient的研究及移植到Cocos.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Evennia中对于WebSocketClient的研究及移植到Cocos
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-02 13:20:53" itemprop="dateCreated datePublished" datetime="2020-03-02T13:20:53+08:00">2020-03-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mud/" itemprop="url" rel="index">
+                    <span itemprop="name">Mud</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Mud/Evennia中对于WebSocketClient的研究及移植到Cocos.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Mud/Evennia中对于WebSocketClient的研究及移植到Cocos.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Eevenia 内建了对于 WebSocket 的支持，在浏览器上的时候就是使用其进行通信的。其本质是将我们的输入的文字，封装成为对应的 <strong>输入函数</strong>，<strong>命令</strong>，组成的 JSON 格式的数据，发送给服务端进行处理。现在我准备在 Cocos 上完成这个工作，所以来研究一下其实现。</p>
+<a id="more"></a>
+<h1 id="基本框架"><a href="#基本框架" class="headerlink" title="基本框架"></a>基本框架</h1><p>在源码 <a href="https://github.com/evennia/evennia/blob/master/evennia/web/webclient/static/webclient/js/evennia.js" target="_blank" rel="noopener">evennia.js</a> 中，可以看到相关的信息。 Evenia 的客户端有两个主要的元素组成：</p>
+<ul>
+<li><strong>connection</strong>。代表与服务器 <em>Portal</em> 的一个连接，可以往这个连接上发送消息。</li>
+<li><strong>emitter</strong>。一个自定义的发射器，有默认实现。在 connection 收到消息后，会调用此发射器将数据进行 JSON 反序列号后发射出去。</li>
+</ul>
+<p>其同时还定义了两个数据</p>
+<ul>
+<li><strong>cmdid</strong>，命令序号，每发送一次消息，序号就会递增，主要是为了来进行与响应相对应。这个序号只有在我们 Evennia.msg() 的时候，指定了回调的情况下，能够将消息分发回去有用。</li>
+<li><strong>cmdmap</strong>。以 cmdid 作为索引的结构，主要是为了用来记录某个 cmdid 的命令所对应的回调。当我们调用 Evennia 的时候设置了回调，那么就会被执行；而如果发送消息的时候，没有设置回调，那么就会将回调发送到 <code>emitter</code> 某种类型命令的回调去，如 <code>text</code>。</li>
+</ul>
+<h2 id="init"><a href="#init" class="headerlink" title="init()"></a>init()</h2><p>主要实现对于网络连接的初始化。默认情况下会有一个 <em>emitter, connection</em> 的实现，当然，我们也可以按照其格式自己实现相关的数据结构。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">init: <span class="function"><span class="keyword">function</span>(<span class="params">opts</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.initialized) &#123;</span><br><span class="line">        <span class="comment">// make it safe to call multiple times.</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.initialized = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">    opts = opts || &#123;&#125;;</span><br><span class="line">    <span class="keyword">this</span>.emitter = opts.emitter || <span class="keyword">new</span> DefaultEmitter();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (opts.connection) &#123;</span><br><span class="line">       <span class="keyword">this</span>.connection = opts.connection;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (<span class="built_in">window</span>.WebSocket &amp;&amp; wsactive) &#123;</span><br><span class="line">        <span class="keyword">this</span>.connection = <span class="keyword">new</span> WebsocketConnection();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.connection = <span class="keyword">new</span> AjaxCometConnection();</span><br><span class="line">    &#125;</span><br><span class="line">    log(<span class="string">'Evennia initialized.'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>初始化的时候调用应该类似：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Evennia.init(&#123;<span class="attr">emitter</span>: em, <span class="attr">connection</span>: conn&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="msg"><a href="#msg" class="headerlink" title="msg()"></a>msg()</h2><p>当我们想要往服务器发送消息的时候调用此方法：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">msg: <span class="function"><span class="keyword">function</span> (<span class="params">cmdname, args, kwargs, callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!cmdname) &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (kwargs) &#123;</span><br><span class="line">        kwargs.cmdid = cmdid++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> outargs = args ? args : [];</span><br><span class="line">    <span class="keyword">var</span> outkwargs = kwargs ? kwargs : &#123;&#125;;</span><br><span class="line">    <span class="keyword">var</span> data = [cmdname, outargs, outkwargs];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> callback === <span class="string">'function'</span>) &#123;</span><br><span class="line">        cmdmap[cmdid] = callback;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.connection.msg(data);</span><br><span class="line"></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>我们看到，消息的格式类似</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">[str, [], &#123;&#125;]</span><br></pre></td></tr></table></figure>
+<p>的形式， str 指定的是要执行的命令，注意要与 <strong>输入函数区别开来</strong>，绝大部分消息的输入函数都是 <code>text</code>，而将命令作为输入函数的参数进行传递，如：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">[<span class="string">"text"</span>,[<span class="string">"connect gowa ccc"</span>],&#123;<span class="attr">"cmdid"</span>:<span class="number">0</span>&#125;]</span><br></pre></td></tr></table></figure>
+<p>而后，这个消息就会被 Server 的 <code>text</code> 输入函数处理，构造 <code>connect</code> 命令执行。</p>
+<h2 id="emit"><a href="#emit" class="headerlink" title="emit()"></a>emit()</h2><p>这个函数，用来将 Server 返回的数据进行发射出去。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">emit: <span class="function"><span class="keyword">function</span> (<span class="params">cmdname, args, kwargs</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (kwargs.cmdid) &#123;</span><br><span class="line">        cmdmap[kwargs.cmdid].apply(<span class="keyword">this</span>, [args, kwargs]);</span><br><span class="line">        <span class="keyword">delete</span> cmdmap[kwargs.cmdid];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">this</span>.emitter.emit(cmdname, args, kwargs);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<p>我们看到，如果对于返回的消息中带有 <em>cmdid</em>，那么就会将消息发射至此 <em>cmdi</em>d  对应的回调函数内去。</p>
+<p>而如果返回的消息不是针对某个 <em>cmdid</em>  的，那么就会将消息交由 <code>emitter</code> 进行处理，原封不动。</p>
+<h1 id="DefaultEmitter"><a href="#DefaultEmitter" class="headerlink" title="DefaultEmitter"></a>DefaultEmitter</h1><p><code>Emitter</code> 的默认实现。其定义了一个数据结构 </p>
+<ul>
+<li>listeners。以命令作为索引，然后其值是对应的命令的消息处理器。对于找不到相应的消息处理器的，那么就会调用一个叫做 <em>default</em> 的消息处理器。</li>
+</ul>
+<p>还定义了三个方法，我们实现 <code>Emitter</code> 的时候必须实现这三个方法：</p>
+<ul>
+<li>emit(cmdname, args, kwargs)：发射数据到我们相应的命令接收器。</li>
+<li>on(cmdname, listener)：添加指定类型消息的处理器。</li>
+<li>off(cmdname)：移除指定类型消息处理器。</li>
+</ul>
+<h1 id="消息图"><a href="#消息图" class="headerlink" title="消息图"></a>消息图</h1><div class="language-dot">
+digraph{
+rankdir =TB
+C[label=WebScoketConnection]
+E[label=Emitter]
+S[label=Portal]
+MCB[label=MsgCallback]
+CCB[label=CMDCallback]
+U[label=User]
+
+subgraph cluster_evennia{
+label= Evennia
+C E D[label=MSG]
+}
+U -> D
+D -> C[label="msg()"]
+C -> S
+
+S -> C[color=red]
+C -> D[color=red]
+D -> E[color=red,label="emit()"]
+E -> MCB[color=red]
+E -> CCB[color=red]
+
+
+{rank=min; U}
+{rank=max; S}
+}
+</div>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
+
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
+
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
+                }
+                </script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/Evennia/" rel="tag"># Evennia</a>
+              <a href="/tags/Mud/" rel="tag"># Mud</a>
+              <a href="/tags/Cocos/" rel="tag"># Cocos</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Mud/Evennia建立动态地图和静态地图.html" rel="next" title="Evennia建立动态地图和静态地图">
+                  <i class="fa fa-chevron-left"></i> Evennia建立动态地图和静态地图
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本框架"><span class="nav-number">1.</span> <span class="nav-text">基本框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#init"><span class="nav-number">1.1.</span> <span class="nav-text">init()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#msg"><span class="nav-number">1.2.</span> <span class="nav-text">msg()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#emit"><span class="nav-number">1.3.</span> <span class="nav-text">emit()</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DefaultEmitter"><span class="nav-number">2.</span> <span class="nav-text">DefaultEmitter</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息图"><span class="nav-number">3.</span> <span class="nav-text">消息图</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">323</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">135</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Mud/Evennia中对于WebSocketClient的研究及移植到Cocos.html",
+            identifier: "Mud/Evennia中对于WebSocketClient的研究及移植到Cocos.html",
+            title: "Evennia中对于WebSocketClient的研究及移植到Cocos"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>

@@ -50,17 +50,17 @@
   <meta name="description" content="很抽象的，对连接建立到，将角色拉到游戏中，建立相关的属性，是如何实现这么一个过程的呢？有必要来研究一下。这里我们就看一下用 websocket 连接时候的过程。">
 <meta name="keywords" content="Python,Evennia,Mud">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Evennia中从源码看对象的建立机制">
-<meta property="og:url" content="https://gowa.club/Mud/Evennia中从源码看对象的建立机制.html">
+<meta property="og:title" content="Evennia中从源码看Session与Account的建立机制">
+<meta property="og:url" content="https://gowa.club/Mud/Evennia中从源码看Session与Account的建立机制.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="很抽象的，对连接建立到，将角色拉到游戏中，建立相关的属性，是如何实现这么一个过程的呢？有必要来研究一下。这里我们就看一下用 websocket 连接时候的过程。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2020-02-18T14:12:34.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Evennia中从源码看对象的建立机制">
+<meta name="twitter:title" content="Evennia中从源码看Session与Account的建立机制">
 <meta name="twitter:description" content="很抽象的，对连接建立到，将角色拉到游戏中，建立相关的属性，是如何实现这么一个过程的呢？有必要来研究一下。这里我们就看一下用 websocket 连接时候的过程。">
 
-<link rel="canonical" href="https://gowa.club/Mud/Evennia中从源码看对象的建立机制.html">
+<link rel="canonical" href="https://gowa.club/Mud/Evennia中从源码看Session与Account的建立机制.html">
 
 
 <script id="page-configurations">
@@ -74,7 +74,7 @@
   };
 </script>
 
-  <title>Evennia中从源码看对象的建立机制 | 退思园</title>
+  <title>Evennia中从源码看Session与Account的建立机制 | 退思园</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
     <script>
@@ -230,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Mud/Evennia中从源码看对象的建立机制.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Mud/Evennia中从源码看Session与Account的建立机制.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -243,7 +243,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Evennia中从源码看对象的建立机制
+          Evennia中从源码看Session与Account的建立机制
         </h1>
 
         <div class="post-meta">
@@ -276,8 +276,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Mud/Evennia中从源码看对象的建立机制.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Mud/Evennia中从源码看对象的建立机制.html" itemprop="commentCount"></span>
+    <a title="disqus" href="/Mud/Evennia中从源码看Session与Account的建立机制.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Mud/Evennia中从源码看Session与Account的建立机制.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -432,7 +432,7 @@ SS ->> ACC: cmd parse and do func
 SS ->> ACC: ServerSessionHandler.login Accout 与 ServerSession 连接
 ACC ->> CHAR: Account.at_post_login,puppet_object 将 puppet 与 SererSession 连接
 </div>
-<h1 id="Accout-ServerSession-Character-关系"><a href="#Accout-ServerSession-Character-关系" class="headerlink" title="Accout, ServerSession, Character 关系"></a>Accout, ServerSession, Character 关系</h1><p><div class="language-dot">
+<h1 id="Accout-ServerSession-Character-关系"><a href="#Accout-ServerSession-Character-关系" class="headerlink" title="Accout, ServerSession, Character 关系"></a>Accout, ServerSession, Character 关系</h1><div class="language-dot">
 digraph{
 rankdir = LR
 node[shape=record]
@@ -450,38 +450,46 @@ C:ss -> S:h
 
 A:ss -> S:h
 }
-</ss></h></ss></acc></h></objid></acc></obj></h></div><script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js">
+</ss></h></ss></acc></h></objid></acc></obj></h></div>
+<script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js">
  mermaid.initialize({startOnLoad:true}); 
-</script><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script><br>                // graphviz init<br>                let graphviz_engines = [“circo”,<br>                    “dot”,<br>                    “fdp”,<br>                    “neato”,<br>                    “osage”,<br>                    “twopi”];</p>
-<pre><code>            function doGraphviz(engine) {
-                let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
-                for (let i = 0; i &lt; domAllDot.length; i++) {
-                    let dom = domAllDot[i];
-                    let graphSource = dom.innerText || dom.textContent;
+</script><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
 
-                    try {
-                       let viz = new Viz();
-                         viz.renderSVGElement(graphSource, {engine: engine})
-                             .then(r =&gt; {
-                        dom.innerHTML =&#39;&#39;;dom.append(r); });
-                    } catch (e) {
-                        console.error(&quot;Error when parsing node:&quot;, dom, e);
-                    } 
-                }
-            } 
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
 
-            let init = function () {
-                for (let i = 0; i &lt; graphviz_engines.length; i++) {
-                    doGraphviz(graphviz_engines[i]);
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
                 }
-            };
-            if (typeof window.addEventListener != &quot;undefined&quot;) {
-                window.addEventListener(&quot;load&quot;, init, false);
-            } else {
-                window.attachEvent(&quot;onload&quot;, init);
-            }
-            &lt;/script&gt;
-</code></pre></script></p>
+                </script>
     </div>
 
     
@@ -569,7 +577,7 @@ A:ss -> S:h
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">322</span>
+          <span class="site-state-item-count">323</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -582,7 +590,7 @@ A:ss -> S:h
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">134</span>
+        <span class="site-state-item-count">135</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -704,9 +712,9 @@ A:ss -> S:h
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Mud/Evennia中从源码看对象的建立机制.html",
-            identifier: "Mud/Evennia中从源码看对象的建立机制.html",
-            title: "Evennia中从源码看对象的建立机制"
+            url: "https://gowa.club/Mud/Evennia中从源码看Session与Account的建立机制.html",
+            identifier: "Mud/Evennia中从源码看Session与Account的建立机制.html",
+            title: "Evennia中从源码看Session与Account的建立机制"
           }
         }
       });
