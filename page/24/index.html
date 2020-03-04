@@ -225,6 +225,111 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/RxJava/RxJava2简介.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/RxJava/RxJava2简介.html" class="post-title-link" itemprop="url">RxJava2简介</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-05-08 02:14:29" itemprop="dateCreated datePublished" datetime="2018-05-08T02:14:29+08:00">2018-05-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/RxJava/" itemprop="url" rel="index">
+                    <span itemprop="name">RxJava</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/RxJava/RxJava2简介.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="RxJava/RxJava2简介.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>RxJava是 <strong>响应式扩展</strong> 的Java VM实现：采用观察者序列来组成异步和事件驱动的程序的一个库。</p>
+<p>其扩展了 <strong>观察者模式</strong> 来支持 数据/事件的序列，并增加了操作符，这允许我们通过生命来组成序列，而不用担心底层的如 线程，同步，线程安全和并发数据结构等。</p>
+<h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h1><p>在 AS 中 加上</p>
+<figure class="highlight gradle"><table><tr><td class="code"><pre><span class="line"><span class="keyword">compile</span> <span class="string">"io.reactivex.rxjava2:rxjava:2.x.y"</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>把 x, y  换成最新的版本号。</p>
+</blockquote>
+<h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><p>例子程序：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> rxjava.examples;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> io.reactivex.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorld</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Flowable.just(<span class="string">"Hello world"</span>).subscribe(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果我们使用的开发环境不支持  Java 8 的 lambdas，必须自己创建一个内部的 Consumer。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> io.reactivex.functions.Consumer;</span><br><span class="line"></span><br><span class="line">Flowable.just(<span class="string">"Hello world"</span>)</span><br><span class="line">  .subscribe(<span class="keyword">new</span> Consumer&lt;String&gt;() &#123;</span><br><span class="line">      <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accept</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">          System.out.println(s);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure>
+<h1 id="基本类"><a href="#基本类" class="headerlink" title="基本类"></a>基本类</h1><ul>
+<li><strong>io.reactivex.Flowable</strong>: 0..N flows, supporting Reactive-Streams and backpressure</li>
+<li><strong>io.reactivex.Observable</strong>: 0..N flows, no backpressure,</li>
+<li><strong>io.reactivex.Single</strong>: a flow of exactly 1 item or an error,</li>
+<li><strong>io.reactivex.Completable</strong>: a flow without items but only a completion or error signal,</li>
+<li><strong>io.reactivex.Maybe</strong>: a flow with no items, exactly one item or an error.</li>
+</ul>
+<h1 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h1><h2 id="Upstream-downstream"><a href="#Upstream-downstream" class="headerlink" title="Upstream, downstream"></a>Upstream, downstream</h2><p>RxJava中的数据流由 <code>一个源，0个或多个中间步骤，随后是一个数据消费者或者结合步骤（这些步骤会通过某些方式来消费数据流）</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">source.operator1().operator2().operator3().subscribe(consumer);</span><br><span class="line"></span><br><span class="line">source.flatMap(value -&gt; source.operator1().operator2().operator3());</span><br></pre></td></tr></table></figure>
+<p>在这，如果我们把自己想象成 <code>operator2</code>，往左边看，直到source，这部分叫做 <strong>upstream</strong>。右边到 subscriber/consumer 之间的叫做 <strong>downstream</strong>。当每个元素写在单独一行的时候会更直观：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">source</span><br><span class="line">  .operator1()</span><br><span class="line">  .operator2()</span><br><span class="line">  .operator3()</span><br><span class="line">  .subscribe(consumer)</span><br></pre></td></tr></table></figure>
+<h2 id="动作中的对象"><a href="#动作中的对象" class="headerlink" title="动作中的对象"></a>动作中的对象</h2><p>在RxJAVA文档中，<strong>emission, emits, item, event, signal, data</strong></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/关于安卓权限的适配.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1087,109 +1192,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/LVM的介绍及使用.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Linux-Unix/LVM的介绍及使用.html" class="post-title-link" itemprop="url">LVM的介绍及使用</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-03-14 07:28:23" itemprop="dateCreated datePublished" datetime="2018-03-14T07:28:23+08:00">2018-03-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux/Unix</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Linux-Unix/LVM的介绍及使用.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/LVM的介绍及使用.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>LVM是Linux内核中的一个 逻辑卷组管理工具；其管理磁盘驱动器或类似的块存储设备。其利用了内核的 <code>device-mapper</code> 特性来给系统提供独立于底层磁盘的分区。使用LVM，抽象了你的存储然后拥有的是<em>虚拟分区</em>，这使 <em>扩展/收缩</em> 更加容易。</p>
-<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><ul>
-<li><p>物理卷（PV/Physical volume）<br>可在其上建立卷组的分区或硬盘。每个PV都有一个特殊的头部，并且被分隔成PE。把PV想象成用来建立硬盘驱动的巨大块。</p>
-</li>
-<li><p>卷组（VG/Volume group）<br>一组用来当作存储卷的PV（像一个硬盘一样提供服务）。其包含LV。可以把vg想象成硬盘驱动器。</p>
-</li>
-<li>逻辑卷（LV、Logical volume）<br>存在于卷组内的<code>虚拟/逻辑 分区</code>，由PE组成。把PV想象成常规分区。</li>
-<li>物理扩展（PE、Physical extend）<br>PV中的最小单位，可以被分配给LV（默认是 4MB）。PE是硬盘的一部分，然后可以被分配给任何分区。</li>
-</ul>
-<p>例子<br><img src="/res/Lvm-1.svg" alt="Various elements of the LVM"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Physical disks</span><br><span class="line">                </span><br><span class="line">  Disk1 (/dev/sda):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Partition1 50 GiB (Physical volume) |Partition2 80 GiB (Physical volume)     |</span><br><span class="line">    |/dev/sda1                           |/dev/sda2                               |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |</span><br><span class="line">                                  </span><br><span class="line">  Disk2 (/dev/sdb):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Partition1 120 GiB (Physical volume)                 |</span><br><span class="line">    |/dev/sdb1                                            |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LVM logical volumes</span><br><span class="line"></span><br><span class="line">  Volume Group1 (/dev/MyStorage/ = /dev/sda1 + /dev/sda2 + /dev/sdb1):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Logical volume1 15 GiB  |Logical volume2 35 GiB      |Logical volume3 200 GiB              |</span><br><span class="line">    |/dev/MyStorage/rootvol  |/dev/MyStorage/homevol      |/dev/MyStorage/mediavol              |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|</span><br><span class="line">```   </span><br><span class="line"> </span><br><span class="line">![nner workings of the version 1 of LVM. In this diagram, PE stands for a Physical Extent.](/res/500px-LVM1.svg.png)</span><br><span class="line"></span><br><span class="line"># LV类型</span><br><span class="line">除了简单的LV外，LVM支持 *snapshots（快照）、LV缓存（logical volume caching）、预分配的LV、RAID*，</span><br><span class="line"></span><br><span class="line">## Snapshots（快照）</span><br><span class="line">LVM允许你对系统以一个更效率的方式做快照。其利用了一种叫做 **COW（copy-on-write）**技术。初始建立的快照只是简单的包含对真实数据inodes的 **硬链接**。因此，如果数据一直没有改变，快照几乎只是包含了Inode的指针，而不是数据本身。当修改一个快照指向的文件或者目录，LVM会自动克隆被快照引用老的数据。所以，可以使用35GB来快照一个系统，当预计修改少于2GB的时候，可以只留下2G的空闲空间（在原始和快照分区上都要）。想要创建快照，必须在 VG内有未分配的空间。快照也会像其他卷一样消耗VG的空间。因此，如果想要使用快照来备份 root 分区，那么不要把VG的空间全部分配给 root LV。</span><br><span class="line"></span><br><span class="line">### 配置</span><br><span class="line">如此简单的就可以建立一个 快照LV：</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line">lvcreate --size 100M --snapshot --name snap01 /dev/mapper/vg0-vg</span><br></pre></td></tr></table></figure>
-<p>上面建立这个快照，在快照卷充满以前我们只能修改100M的数据。</p>
-<p>当 <em>snap01</em> 建立后就可以把 <em>pv</em> 这个LV恢复到之前的状态：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lvconvert --merge /dev/mapper/vg0-snap01</span><br></pre></td></tr></table></figure>
-<p>如果原始的LV是活跃的，合并会在下一次重启时发生。</p>
-<p>合并后 快照不会继续存在。</p>
-<p>可以建立多个快照，然后每个都可以任意合并到原始的LV。</p>
-<p>快照可以挂载或以 <code>dd, tar</code> 命令备份。以 <code>dd</code> 备份的文件尺寸将会是 快照卷内存在的数据尺寸。想要恢复的时候，建立一个快照，挂载，接着把备份的文件解压过去。最后，和原始的LV合并。</p>
-<p>快照的主要用途是用来提供对文件系统的冷备份。</p>
-<h1 id="简单命令"><a href="#简单命令" class="headerlink" title="简单命令"></a>简单命令</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">lvmdiskscan  <span class="comment"># list all your devices capable of being used as a physical volume</span></span><br><span class="line">pvcreate DEVICE <span class="comment"># Create a physical volume on them</span></span><br><span class="line">pvcreate /dev/sda2 <span class="comment"># </span></span><br><span class="line">pvdisplay <span class="comment"># track created physical volumes</span></span><br><span class="line"></span><br><span class="line">vgcreate VolGroup00 /dev/sda2 <span class="comment"># create vg on pvs</span></span><br><span class="line">vgextend VolGroup00 /dev/sdb1 <span class="comment"># add vg /dev/sdb1 to vg VolGroup00</span></span><br><span class="line">vgdisplay <span class="comment"># track vg</span></span><br><span class="line"></span><br><span class="line">vgcreate VolGroup00 /</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1238,7 +1240,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">323</span>
+          <span class="site-state-item-count">324</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

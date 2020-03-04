@@ -225,6 +225,112 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/vnc在CentOS的开启相关知识.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Linux-Unix/vnc在CentOS的开启相关知识.html" class="post-title-link" itemprop="url">vnc在CentOS的开启相关知识</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-18 10:02:22" itemprop="dateCreated datePublished" datetime="2018-07-18T10:02:22+08:00">2018-07-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/vnc在CentOS的开启相关知识.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/vnc在CentOS的开启相关知识.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>自己用才MAC，但是公司用的VPN是网御星云的，必须在windows下用，但是服务器配置还可以，单独用的话有点浪费。于是装了CentOS，KVM布置了一个虚拟机，然后准备开启VNC来支持。另外，所使用的idea也需要在图形化的界面下进行调试，也需要开启VNC。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>简单来说，就是我们在服务器上启动一个 vnc服务器，CentOS的叫做 <strong>Xvnc</strong>，此服务器会接受我们 我们的连接，然后监控窗口系统的信息发送给我们，再把我们的操作反馈到服务器的窗口信息。 所以，使用 vnc 的前提是，我们开启了窗口系统，怎么开启，这里不赘述，自行谷歌。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>先安装 gnome 桌面环境:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum groupinstall &quot;GNOME Desktop&quot;</span><br></pre></td></tr></table></figure>
+<p>CentOS上的安装，非常简单：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install vncserver</span><br></pre></td></tr></table></figure>
+<p>就OK了，然后，直接在当前用户下执行命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vncserver</span><br></pre></td></tr></table></figure>
+<p>就OK了，但是这里有很多细节其实我们还不知道的。</p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>执行 <code>vncserver</code> 命令的时候，我们可以指定很多选项，如果不指定任何选项的话，会默认使用第一个可用的 显示ID，通常是 1。用这个显示ID启动  Xvnc，在Xvnc会话里启动窗口管理器。我们可以以 <code>vncserver :13</code>这样的形式指定显示ID。</p>
+<ol>
+<li><code>$HOME/.vnc/xstartup</code> 一个shell脚本，指定当VNC桌面开始时执行的 X 程序。如果这文件不存在，vncserver会建立一个默认的 xstartup 脚本，此脚本尝试 启动你选择的窗口管理器。</li>
+<li><code>/etc/tigervnc/vncserver-config-defaults</code> 这是一个可选的，系统层面的文件与<code>$HOME/.vnc/config</code>相等。如果此文件存在并定义了传递给Xvnc的选项，所有用户都会默认使用这些选项。<code>$HOME/.vnc/config</code>会重写这个文件内设置。文件的加载顺序是：<code>/etc/tigervnc/vncserver-config-defaults, $HOME/.vnc/config,  /etc/tigervnc/vncserver-config-mandatory</code>所有文件都不一定要求必须存在。</li>
+<li><code>/etc/tigervnc/vncserver-config-mandatory</code>系统层面与<code>$HOME/.vnc/config</code>想等的配置文件。如果这个文件定义了参数，那么就其会覆盖 <code>$HOME/.vnc/config</code>内定义的对应参数。</li>
+<li><code>$HOME/.vnc/config</code> 用户的配置文件</li>
+<li><code>$HOME/.vnc/passwd</code> 密码文件</li>
+<li><code>$HOME/.vnc/host:display#.log</code> 日志文件</li>
+<li><code>$HOME/.vnc/host:display#.pid</code> pid文件</li>
+</ol>
+<h1 id="以服务的形式启动CentOS-7"><a href="#以服务的形式启动CentOS-7" class="headerlink" title="以服务的形式启动CentOS 7"></a>以服务的形式启动CentOS 7</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@.service</span><br></pre></td></tr></table></figure>
+<p>把此文件中的 <user> 一用户名替代 。</user></p>
+<p>执行 <code>systemctl daemon-reload</code></p>
+<p>执行 <code>systemctl enable vncserver@&lt;display&gt;.service</code></p>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>以服务的形式启动失败了，最后是以命令的形式进行启动的。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/利用idea调试maven项目.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1148,96 +1254,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/安卓被强杀后台恢复时候崩溃的解决办法.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Android/安卓被强杀后台恢复时候崩溃的解决办法.html" class="post-title-link" itemprop="url">安卓被强杀后台恢复时候崩溃的解决办法</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-06-18 11:50:35" itemprop="dateCreated datePublished" datetime="2018-06-18T11:50:35+08:00">2018-06-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Android/安卓被强杀后台恢复时候崩溃的解决办法.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/安卓被强杀后台恢复时候崩溃的解决办法.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>业务场景是这样的，用户在登录的时候，登录成功后会返回用户相当信息。当然，这个用户信息就放在了一个单例 的userManager里面。所有的Manager都是在Application建立的时候进行注册的。现在的问题就是，如果进入后台模式，再重新进入的话，很多基于用户ID的查询显示都会出现NPE错误。因为userManager中保存用户信息的变量已经被重新回收初始化了。<br>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Android/安卓被强杀后台恢复时候崩溃的解决办法.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1286,7 +1302,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">323</span>
+          <span class="site-state-item-count">324</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
