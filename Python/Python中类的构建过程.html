@@ -377,21 +377,93 @@
 <h1 id="过程图"><a href="#过程图" class="headerlink" title="过程图"></a>过程图</h1><div class="mermaid">
 sequenceDiagram
 participant P as Compiler
-participant C as Foo(base1, base2, metaclass=Metaclass)
-participant M as Metaclass
+participant C as Person(metaclass=Meta)
+participant M as Meta
 
-P ->> C: Foo()
+P ->> C: create class object
 P ->> M: __prepare__()
-P ->> P: exec(body, globals(), namespace)
-P ->> M: Metaclass(name, bases, namespace, **kwds)
+P ->> P: exec(body, globals(),'namespace)
+P ->> M: Meta(name, bases, namespace, **kwds)
 M ->> M: __new()__
 </div>
-<p>我们来验证一下这个过程：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Meta</span><span class="params">(type)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(self, *args, **kwargs)</span>:</span> </span><br><span class="line">        print(<span class="string">'start  instance object'</span>)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(name, bases, namespace, kwargs)</span>:</span></span><br><span class="line">        print(<span class="string">'create class object'</span>)</span><br><span class="line">        <span class="keyword">return</span> super().__new__(name,bases,namespace, kwargs)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__prepare__</span><span class="params">(name, bases, **kwds)</span>:</span></span><br><span class="line">        print(<span class="string">'prepare namespace'</span>)</span><br><span class="line">        <span class="keyword">return</span> &#123;&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span><span class="params">(metaclass=Meta)</span>:</span></span><br><span class="line">        print(<span class="string">'exec class body'</span>)</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">p = Person()</span><br></pre></td></tr></table></figure>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">python 1.py</span><br><span class="line">prepare namespace</span><br><span class="line"><span class="built_in">exec</span> class body</span><br><span class="line">create class object</span><br><span class="line">start  instance object</span><br></pre></td></tr></table></figure>
-<script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js">
+<h1 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h1><p>我们来验证一下这个过程：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Meta</span><span class="params">(type)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(name, bases, namespace, kwargs)</span>:</span></span><br><span class="line">        print(<span class="string">'create class object'</span>)</span><br><span class="line">        <span class="keyword">return</span> super().__new__(name,bases,namespace, kwargs)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__prepare__</span><span class="params">(name, bases, **kwds)</span>:</span></span><br><span class="line">        print(<span class="string">'prepare namespace'</span>)</span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">'a'</span>:<span class="number">1</span>,<span class="string">'b'</span>:<span class="number">2</span>&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span><span class="params">(metaclass=Meta)</span>:</span></span><br><span class="line">        print(<span class="string">'exec class body'</span>)</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">p = Person()</span><br><span class="line">print(p.a)</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">prepare namespace</span><br><span class="line"><span class="built_in">exec</span> class body</span><br><span class="line">create class object</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+<h1 id="type"><a href="#type" class="headerlink" title="type()"></a>type()</h1><p>实际上 <code>type()</code> 是一个类。他是一个重载的类，可以接收 1 个或者 3 个参数。</p>
+<ul>
+<li>1 个参数时。返回给定 <em>对象</em> 的类型。返回的值是一个 <strong>类对象</strong>，通常会和 <code>object.__class__</code> 相同</li>
+<li>3 个参数时。 返回一个新的 <strong>类对象</strong>。这是一个 <code>class</code> 语法的动态形式。</li>
+</ul>
+<p>刚才的例子我们可以用 <code>type()</code> 来查看一下我们的类型：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(type(Person))</span><br><span class="line">print(type(p))</span><br><span class="line">print(type(Meta))</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&lt;class <span class="string">'__main__.Meta'</span>&gt;</span><br><span class="line">&lt;class <span class="string">'__main__.Person'</span>&gt;</span><br><span class="line">&lt;class <span class="string">'type'</span>&gt;</span><br></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>Python 在遇到 <code>class</code> 语法的时候会准备建立 <strong>类对象</strong></li>
+<li>如果 <code>class</code> 定义的时候没有指定 <code>metaclass</code> ，那么会默认使用  <code>type()</code> 来建立。</li>
+<li>如果指定了 <code>metaclass</code>，那么就会调用  <code>metaclass.__prepare__(name,bases, **kwds)</code> 来建立命名空间。</li>
+<li>Python 执行 类体代码</li>
+<li>调用 <code>metaclass(name, bases, namespace, **kwds)</code>来建立 <strong>类对象</strong>，最终实际上会调用到 <code>__new__()</code> 方法。</li>
+</ol>
+<p><code>metaclass</code> 是控制我们定义的类，在 Python 中的 <strong>类对象</strong> 是如何建立的。这通过控制命名空间和初始化来建立。</p>
+<p>我们可以得出这么一个结论：</p>
+<ul>
+<li><strong>类对象</strong> 用来建立类。</li>
+<li><strong>类对象</strong> 却由 <code>metaclass</code> 来建立。</li>
+<li>任何对象，由谁建立，那么他就是谁的实例。</li>
+</ul>
+<div class="language-dot">
+digraph{
+rankdir = LR
+I[label="class instance"]
+C[label="class object"]
+M[label="Metaclass"]
+M -> C[label="__new__()"]
+C -> I[label="__new__()"]
+}
+</div>
+<h1 id="几个特殊方法"><a href="#几个特殊方法" class="headerlink" title="几个特殊方法"></a>几个特殊方法</h1><h2 id="call"><a href="#call" class="headerlink" title="__call__"></a><code>__call__</code></h2><blockquote>
+<p>在 <strong>类对象</strong> 中定义了 <code>__call__</code>  方法，那么所有的 <strong>类实例</strong> 都可以用 <code>inst()</code> 的形式进行调用。</p>
+</blockquote>
+<p>Person 是一个 <strong>类对象</strong>，其并没有定义 <code>__call__</code>，所以其实例是无法进行调用的。</p>
+<p>而  Person 也是一个对象，其 <strong>类对象</strong> 是 <code>Meta</code>，<code>Meta</code> 继承自 <code>type()</code>，其拥有 <code>__call__</code>，所以可以调用。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">p = Person()</span><br></pre></td></tr></table></figure>
+<p>但是 </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">p()</span><br></pre></td></tr></table></figure>
+<p>是不可行的。</p>
+<p>想要 Person 的实例都可调用，则 Person 定义的时候，就必须加上 <code>__call__</code> 方法。</p>
+<h2 id="new"><a href="#new" class="headerlink" title="__new__"></a><code>__new__</code></h2><p>用来建立一个新对象，这个时候对象并没有建立，所以其是一个 <strong>类方法</strong>，静态方法的意思。</p>
+<h2 id="init"><a href="#init" class="headerlink" title="__init__"></a><code>__init__</code></h2><p>用来初始化一个对象，这个时候对象已经建立，所以可以接收一个 <code>self</code> 参数。<script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js">
  mermaid.initialize({startOnLoad:true}); 
-</script>
+</script><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script><br>                // graphviz init<br>                let graphviz_engines = [“circo”,<br>                    “dot”,<br>                    “fdp”,<br>                    “neato”,<br>                    “osage”,<br>                    “twopi”];</p>
+<pre><code>            function doGraphviz(engine) {
+                let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
+                for (let i = 0; i &lt; domAllDot.length; i++) {
+                    let dom = domAllDot[i];
+                    let graphSource = dom.innerText || dom.textContent;
+
+                    try {
+                       let viz = new Viz();
+                         viz.renderSVGElement(graphSource, {engine: engine})
+                             .then(r =&gt; {
+                        dom.innerHTML =&#39;&#39;;dom.append(r); });
+                    } catch (e) {
+                        console.error(&quot;Error when parsing node:&quot;, dom, e);
+                    } 
+                }
+            } 
+
+            let init = function () {
+                for (let i = 0; i &lt; graphviz_engines.length; i++) {
+                    doGraphviz(graphviz_engines[i]);
+                }
+            };
+            if (typeof window.addEventListener != &quot;undefined&quot;) {
+                window.addEventListener(&quot;load&quot;, init, false);
+            } else {
+                window.attachEvent(&quot;onload&quot;, init);
+            }
+            &lt;/script&gt;
+</code></pre></script></p>
     </div>
 
     
@@ -460,7 +532,7 @@ M ->> M: __new()__
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Objects-values-types"><span class="nav-number">1.</span> <span class="nav-text">Objects, values, types</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类-对象"><span class="nav-number">2.</span> <span class="nav-text">类[对象]</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#调用性"><span class="nav-number">2.1.</span> <span class="nav-text">调用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类的定义"><span class="nav-number">2.2.</span> <span class="nav-text">类的定义</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类实例"><span class="nav-number">3.</span> <span class="nav-text">类实例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Metaclasses"><span class="nav-number">4.</span> <span class="nav-text">Metaclasses</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MRO-解析"><span class="nav-number">4.1.</span> <span class="nav-text">MRO 解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决定合适的-metaclass"><span class="nav-number">4.2.</span> <span class="nav-text">决定合适的 metaclass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备类的命名空间"><span class="nav-number">4.3.</span> <span class="nav-text">准备类的命名空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行类体"><span class="nav-number">4.4.</span> <span class="nav-text">执行类体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立类对象"><span class="nav-number">4.5.</span> <span class="nav-text">建立类对象</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#过程图"><span class="nav-number">5.</span> <span class="nav-text">过程图</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Objects-values-types"><span class="nav-number">1.</span> <span class="nav-text">Objects, values, types</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类-对象"><span class="nav-number">2.</span> <span class="nav-text">类[对象]</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#调用性"><span class="nav-number">2.1.</span> <span class="nav-text">调用性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类的定义"><span class="nav-number">2.2.</span> <span class="nav-text">类的定义</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#类实例"><span class="nav-number">3.</span> <span class="nav-text">类实例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Metaclasses"><span class="nav-number">4.</span> <span class="nav-text">Metaclasses</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MRO-解析"><span class="nav-number">4.1.</span> <span class="nav-text">MRO 解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#决定合适的-metaclass"><span class="nav-number">4.2.</span> <span class="nav-text">决定合适的 metaclass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备类的命名空间"><span class="nav-number">4.3.</span> <span class="nav-text">准备类的命名空间</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行类体"><span class="nav-number">4.4.</span> <span class="nav-text">执行类体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立类对象"><span class="nav-number">4.5.</span> <span class="nav-text">建立类对象</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#过程图"><span class="nav-number">5.</span> <span class="nav-text">过程图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实例"><span class="nav-number">6.</span> <span class="nav-text">实例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#type"><span class="nav-number">7.</span> <span class="nav-text">type()</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#几个特殊方法"><span class="nav-number">9.</span> <span class="nav-text">几个特殊方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#call"><span class="nav-number">9.1.</span> <span class="nav-text">__call__</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#new"><span class="nav-number">9.2.</span> <span class="nav-text">__new__</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#init"><span class="nav-number">9.3.</span> <span class="nav-text">__init__</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
