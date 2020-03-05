@@ -425,6 +425,9 @@ C -> I[label="__new__()"]
 <p>在 <strong>类对象</strong> 中定义了 <code>__call__</code>  方法，那么所有的 <strong>类实例</strong> 都可以用 <code>inst()</code> 的形式进行调用。</p>
 </blockquote>
 <p>Person 是一个 <strong>类对象</strong>，其并没有定义 <code>__call__</code>，所以其实例是无法进行调用的。</p>
+<blockquote>
+<p><strong>call</strong> 这个方法是定义在类对象上的，能让类实例被调用。</p>
+</blockquote>
 <p>而  Person 也是一个对象，其 <strong>类对象</strong> 是 <code>Meta</code>，<code>Meta</code> 继承自 <code>type()</code>，其拥有 <code>__call__</code>，所以可以调用。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">p = Person()</span><br></pre></td></tr></table></figure>
 <p>但是 </p>
@@ -479,8 +482,8 @@ C -> I[label="__new__()"]
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Mud/Evennia中对于WebSocketClient的研究及移植到Cocos.html" rel="next" title="Evennia中对于WebSocketClient的研究及移植到Cocos">
-                  <i class="fa fa-chevron-left"></i> Evennia中对于WebSocketClient的研究及移植到Cocos
+                <a href="/Mud/Evennia中游戏对象的管理机制.html" rel="next" title="Evennia中游戏对象的管理机制">
+                  <i class="fa fa-chevron-left"></i> Evennia中游戏对象的管理机制
                 </a>
             </div>
 
@@ -546,7 +549,7 @@ C -> I[label="__new__()"]
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">324</span>
+          <span class="site-state-item-count">325</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
