@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Evennia 游戏中的 Python 系统，允许执行任意的 Python 代码，而只有很少的限制。这样一个系统非常的强力，但也会有潜在的危险，如果我们要使用这样一个系统，那么就要记住其可能出现的危险。但是，这系统的强大又让人需要使用它来实现一些东西。">
+<meta name="keywords" content="Python,Evennia,Mud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evennia中的游戏内的Python系统">
+<meta property="og:url" content="https://gowa.club/Mud/Evennia中的游戏内的Python系统.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="Evennia 游戏中的 Python 系统，允许执行任意的 Python 代码，而只有很少的限制。这样一个系统非常的强力，但也会有潜在的危险，如果我们要使用这样一个系统，那么就要记住其可能出现的危险。但是，这系统的强大又让人需要使用它来实现一些东西。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-06T14:22:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evennia中的游戏内的Python系统">
+<meta name="twitter:description" content="Evennia 游戏中的 Python 系统，允许执行任意的 Python 代码，而只有很少的限制。这样一个系统非常的强力，但也会有潜在的危险，如果我们要使用这样一个系统，那么就要记住其可能出现的危险。但是，这系统的强大又让人需要使用它来实现一些东西。">
+
+<link rel="canonical" href="https://gowa.club/Mud/Evennia中的游戏内的Python系统.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Evennia中的游戏内的Python系统 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Mud/Evennia中的游戏内的Python系统.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Evennia中的游戏内的Python系统
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-06 22:22:17" itemprop="dateCreated datePublished" datetime="2020-03-06T22:22:17+08:00">2020-03-06</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mud/" itemprop="url" rel="index">
+                    <span itemprop="name">Mud</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Mud/Evennia中的游戏内的Python系统.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Mud/Evennia中的游戏内的Python系统.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Evennia 游戏中的 Python 系统，允许执行任意的 Python 代码，而只有很少的限制。这样一个系统非常的强力，但也会有潜在的危险，如果我们要使用这样一个系统，那么就要记住其可能出现的危险。但是，这系统的强大又让人需要使用它来实现一些东西。</p>
+<a id="more"></a>
+<h1 id="警告"><a href="#警告" class="headerlink" title="警告"></a>警告</h1><ol>
+<li>在这个系统中，不受信任玩家的可能会执行 Python 代码。所以要小心的限制谁可以使用这个系统。</li>
+<li>我们完全可以在游戏外的 Python 中完成这些事情。in-game Python 系统并不是为了完全的替代我们的游戏特性。</li>
+</ol>
+<h1 id="基本结构和概念"><a href="#基本结构和概念" class="headerlink" title="基本结构和概念"></a>基本结构和概念</h1><ul>
+<li>in-game Pyhon 的基础是 <strong>events（事件）</strong>。一个<strong>事件</strong> 定义了我们想要调用一些 Python 代码上下文。例如，一个定义在 <strong>Exits</strong> 上的事件在每次有角色通过的时候触发。事件会在 <code>typeclass</code> 上进行描述。所有继承自此 <code>typeclass</code>  的对象都可以访问这些事件。</li>
+<li><strong>Callbacks（回调）</strong> 可以设置在不同的对象上，或者在代码定义的事件上。这些回调可能包含任意的代码和描述一个对象特定的行为。如果事件被触发，所有连接到此对象事件上的回调都会被执行。</li>
+</ul>
+<p>我们在特定场景下观察这个系统，当一个对象被捡起的时候（使用 <code>get</code> 命令），一个特定的事件被触发：</p>
+<ol>
+<li>事件 <em>get</em> 设置在对象上。（<code>Object</code> tyleclass）</li>
+<li>当使用 <code>get</code> 命令来拾取对象的时候，对象的 <code>at_get</code> hook 被调用。</li>
+<li>一个修改过的 hook 被 <em>事件系统</em> 设置在 <em>DefaultObject</em> 上。这个 hook 会执行（或调用）这个对象上的 <code>get</code> 事件。</li>
+<li>所有绑定到此<code>get</code>事件上的回调都会被按序执行。这些回调就像包含 Python 代码的函数一样工作，这些代码你可以在游戏内编写（使用在编辑回调本身时将列出的特定变量。）</li>
+<li>在不同的回调中，可以在添加多行的 Python 代码。在这个例子中，<em>character</em> 变量将会包含捡起此对象的角色，而 <em>obj</em> 包含的是被捡起的对象。</li>
+</ol>
+<p>这样当我们在此对象上建立一个 <code>get</code> 回调，并把他放进来：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">character.msg(<span class="string">"You have picked up &#123;&#125; and have completed this quest!"</span>.format(obj.get_display_name(character)))</span><br></pre></td></tr></table></figure>
+<p>那当我们捡起此对象的时候，就会收到消息：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">You pick up a sword.</span><br><span class="line">You have picked up a sword and have completed this quest!</span><br></pre></td></tr></table></figure></p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>这个系统是默认没有安装的。我们需要手动进行安装。步骤如下：</p>
+<ol>
+<li>启动主脚本 <code>@py evennia.create_script(&quot;evennia.contrib.ingame_python.scripts.EventHandler&quot;)</code></li>
+<li>设置权限（可选）：<ol>
+<li><code>EVENTS_WITH_VALIDATION</code>：一个用户组可以编辑回调，但是需要审批（默认是 None）</li>
+<li><code>EVENTS_WITHOUT_VALIDATION</code>：一个组拥有权限来编辑回调，而不需要验证。</li>
+<li><code>EVENTS_VALIDATING</code>：一个用户组可以验证回调。</li>
+<li><code>EVENTS_CALENDAR</code>：日历类型（<code>Node, standard, custom</code>，默认是 Node）</li>
+</ol>
+</li>
+<li>添加 <code>call</code> 命令</li>
+<li>从 in-game Python 继承我们自定义的 <code>typeclass</code> ：<ul>
+<li>evennia.contrib.ingame_python.typeclasses.EventCharacter</li>
+<li>evennia.contrib.ingame_python.typeclasses.EventExit</li>
+<li>evennia.contrib.ingame_python.typeclasses.EventObject</li>
+<li>evennia.contrib.ingame_python.typeclasses.EventRoom</li>
+</ul>
+</li>
+</ol>
+<p>下面的各节详细的描述了每个步骤。</p>
+<blockquote>
+<p>注意，如果我们启动的时候没有启动主脚本（如重置了数据库），我们可以会在登录的时候收到错误，告知我们 <code>callback</code> 属性没有定义。这个时候我们重新执行一下主脚本就行了。</p>
+</blockquote>
+<h2 id="启动事件脚本"><a href="#启动事件脚本" class="headerlink" title="启动事件脚本"></a>启动事件脚本</h2><p>只需要一个命令就能启动事件脚本：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@py evennia.create_script(&quot;evennia.contrib.ingame_python.scripts.EventHandler&quot;)</span><br></pre></td></tr></table></figure>
+<p>这个命令会建立一个全局脚本（也就是说，独立于任何对象的脚本）。这个脚本将会保留基本的设置，不同的回调等。我们可以直接访问它，不过我们更应该使用 callback handler（回调管理器）。建立这个脚本，将会在所有的对象上建立一个  <code>callback</code> 管理器。</p>
+<h2 id="编辑权限"><a href="#编辑权限" class="headerlink" title="编辑权限"></a>编辑权限</h2><p>这个系统添加了三个权限。我们可以在我们的配置文件中直接进行修改。在事件系统定义的配置如下：</p>
+<ul>
+<li><code>EVENTS_WITH_VALIDATION</code> 定义一个可以编辑回调的权限，但是需要审批。如果我们把这个值设置为 <code>wizards</code>，那么拥有 <code>wizards</code> 权限的用户就能编辑回调了。这些回调不会被连接，需要被管理员进行检查和审批。这个配置可以包含 <code>None</code>，意味着没有用户可以经过验证来编辑回调。</li>
+<li><code>EVENTS_WITHOUT_VALIDATION</code> 定义一个允许编辑回调而不需要验证的权限。默认情况下，这个设置是 <code>immortals</code>，意味着只有这个权限的用户才能进行编辑回调，同时不需要管理员验证就能连接到对象。</li>
+<li><code>EVENTS_VALIDATING</code>：定义谁能验证回调。默认情况下，这被设置为 <code>immortals</code>，只有他们才能看到需要验证的回调，能接受或者拒绝这些验证。</li>
+</ul>
+<p>我们可以在我们的配置文件中覆盖这些设置：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Event settings</span></span><br><span class="line">EVENTS_WITH_VALIDATION = <span class="string">"wizards"</span></span><br><span class="line">EVENTS_WITHOUT_VALIDATION = <span class="string">"immortals"</span></span><br><span class="line">EVENTS_VALIDATING = <span class="string">"immortals"</span></span><br></pre></td></tr></table></figure>
+<p>另外，如果我们想使用 <strong>时间相关的</strong> 事件的话，那么还有一个配置我们必须得设置。需要制定我们使用的日历类型。默认情况下，时间相关的事件是被禁用的。我们可以改变 <code>EVENTS_CALENDAR</code> 的设置来启用：</p>
+<ul>
+<li><code>standard</code> 标准日历，有标准的天，年，月等。</li>
+<li><code>custom</code> 一个自定义的日历将会使用 <a href="https://github.com/evennia/evennia/blob/master/evennia/contrib/custom_gametime.py" target="_blank" rel="noopener">自定义游戏时间</a> 来调度时间</li>
+</ul>
+<p>同时也定义了可以在独立的用户上设置的权限：</p>
+<ul>
+<li><code>events_without_validation</code> 这将会给予用户编辑回调，且不经过验证的权限。</li>
+<li><code>events_validating</code> 这个允许用户执行需要验证的回调的有效性检查。</li>
+</ul>
+<p>具体而言，如果我们想给某个用户编辑回调而不经过任何审批的权限，（如用户 kaldara），我们可能会像下面这样做：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@perm *kaldara = events_without_validation</span><br></pre></td></tr></table></figure>
+<p>移除权限使用 <code>del</code>：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@perm/del *kaldara = events_without_validation</span><br></pre></td></tr></table></figure>
+<p>使用 <code>@call</code> 权限与这些设置相关：默认情况下，只有拥有<code>events_without_validation</code> 权限和在组 <code>EVENTS_WITH_VALIDATION</code> 内，或此组上的用户才能执行。</p>
+<h2 id="添加-call-命令"><a href="#添加-call-命令" class="headerlink" title="添加 @call 命令"></a>添加 @call 命令</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> evennia <span class="keyword">import</span> default_cmds</span><br><span class="line"><span class="keyword">from</span> evennia.contrib.ingame_python.commands <span class="keyword">import</span> CmdCallback</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CharacterCmdSet</span><span class="params">(default_cmds.CharacterCmdSet)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    The `CharacterCmdSet` contains general in-game commands like `look`,</span></span><br><span class="line"><span class="string">    `get`, etc available on in-game Character objects. It is merged with</span></span><br><span class="line"><span class="string">    the `PlayerCmdSet` when a Player puppets a Character.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    key = <span class="string">"DefaultCharacter"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">at_cmdset_creation</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        Populates the cmdset</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        super(CharacterCmdSet, self).at_cmdset_creation()</span><br><span class="line">        self.add(CmdCallback())</span><br></pre></td></tr></table></figure>
+<h2 id="改变-typeclass-的父类"><a href="#改变-typeclass-的父类" class="headerlink" title="改变 typeclass 的父类"></a>改变 typeclass 的父类</h2><p>如：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> evennia.contrib.ingame_python.typeclasses <span class="keyword">import</span> EventCharacter</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Character</span><span class="params">(EventCharacter)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># ...</span></span><br></pre></td></tr></table></figure>
+<h1 id="使用-call-命令"><a href="#使用-call-命令" class="headerlink" title="使用 @call 命令"></a>使用 @call 命令</h1><p><code>in-Game</code> Python 系统依赖于其 <code>@call</code> 命令。谁可以执行这个命令，谁可以对此命令做些什么，依赖于我们设置的权限。</p>
+<p><code>@call</code> 命令允许 添加，编辑和删除特定对象事件的回调。事件系统可以被使用在大多数 Evennia 的对象，基本上所有的 <code>typeclass</code> 对象（除了玩家）。<code>@call</code> 命令的第一个参数是我们想要编辑的对象的名字。其也可以用来知道特定对象上哪些事件是可用的。</p>
+<h2 id="测试回调和事件"><a href="#测试回调和事件" class="headerlink" title="测试回调和事件"></a>测试回调和事件</h2><p>为了查看某个对象上已连接的事件，可以使用  <code>@call</code> 命令，以其名字或者 ID 作为参数。如 <code>@call here</code> 来测试当前位置事件，或<code>call self</code> 来自己身上的事件。</p>
+<p>这个命令会显示一个表，包含：</p>
+<ul>
+<li>第一列是事件名字</li>
+<li>第二列，此事件上挂了的回调的数量，及回调的总行数。</li>
+<li>一个简单的帮助说明回调的用途。</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">+------------------+---------+-----------------------------------------------+</span><br><span class="line">| Event name       |  Number | Description                                   |</span><br><span class="line">+~~~~~~~~~~~~~~~~~~+~~~~~~~~~+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+</span><br><span class="line">| can_delete       |   0 (0) | Can the character be deleted?                 |</span><br><span class="line">| can_move         |   0 (0) | Can the character move?                       |</span><br><span class="line">| can_part         |   0 (0) | Can the departing character leave this room?  |</span><br><span class="line">| delete           |   0 (0) | Before deleting the character.                |</span><br><span class="line">| greet            |   0 (0) | A new character arrives in the location of    |</span><br><span class="line">|                  |         | this character.                               |</span><br><span class="line">| move             |   0 (0) | After the character has moved into its new    |</span><br><span class="line">|                  |         | room.                                         |</span><br><span class="line">| puppeted         |   0 (0) | When the character has been puppeted by a     |</span><br><span class="line">|                  |         | player.                                       |</span><br><span class="line">| time             |   0 (0) | A repeated event to be called regularly.      |</span><br><span class="line">| unpuppeted       |   0 (0) | When the character is about to be un-         |</span><br><span class="line">|                  |         | puppeted.                                     |</span><br><span class="line">+------------------+---------+-----------------------------------------------+</span><br></pre></td></tr></table></figure>
+<h2 id="建立新的回调"><a href="#建立新的回调" class="headerlink" title="建立新的回调"></a>建立新的回调</h2><p> <code>/add</code> 开关用来添加一个回调。其需要除对象的 <strong>名称/dbref</strong> 外的 两个参数：</p>
+<ul>
+<li>在 = 号标志后，指定需要编辑的事件（如果没有指定，将会显示可能的事件列表，如上）</li>
+<li><p>参数（可选）</p>
+<p>我们将在后面看到使用参数的回调。但是现在，让我们来尝试组织一个角色通过当前房间的 <em>north</em> 出口。</p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@call north</span><br><span class="line">+------------------+---------+-----------------------------------------------+</span><br><span class="line">| Event name       |  Number | Description                                   |</span><br><span class="line">+~~~~~~~~~~~~~~~~~~+~~~~~~~~~+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+</span><br><span class="line">| can_traverse     |   0 (0) | Can the character traverse through this exit? |</span><br><span class="line">| msg_arrive       |   0 (0) | Customize the message when a character        |</span><br><span class="line">|                  |         | arrives through this exit.                    |</span><br><span class="line">| msg_leave        |   0 (0) | Customize the message when a character leaves |</span><br><span class="line">|                  |         | through this exit.                            |</span><br><span class="line">| time             |   0 (0) | A repeated event to be called regularly.      |</span><br><span class="line">| traverse         |   0 (0) | After the character has traversed through     |</span><br><span class="line">|                  |         | this exit.                                    |</span><br><span class="line">+------------------+---------+-----------------------------------------------+</span><br></pre></td></tr></table></figure>
+<p>如果我们想要阻止一个角色通过这个出口，最好的事件应该是 <code>can_traverse</code>。</p>
+<blockquote>
+<p>为什么不是 <code>traverse</code>，根据文档说明，<code>traverse</code> 是在角色已经通过了出口后调用的。这已经太晚了。</p>
+</blockquote>
+<p>现在我们来编辑这个事件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@call/add north = can_traverse</span><br></pre></td></tr></table></figure>
+<p>当一个角色想要通过这个出口的时候就会调用此事件。我们可以用 <code>deny()</code> 事件函数来拒绝角色通过。<br>这个事件中我们可以使用的 变量：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">- character: the character that wants to traverse this exit.</span><br><span class="line">- exit: the exit to be traversed.</span><br><span class="line">- room: the room in which stands the character before moving.</span><br></pre></td></tr></table></figure>
+<p>后面的章节会详细的解释 <code>eventfuncs</code>。不过现在，我们只需要这样做就行了。在打开的编辑器中我们可以输入如下的代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> character.id == <span class="number">1</span>:</span><br><span class="line">    character.msg(<span class="string">"You're the superuser, 'course I'll let you pass."</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    character.msg(<span class="string">"Hold on, what do you think you're doing?"</span>)</span><br><span class="line">    deny()</span><br></pre></td></tr></table></figure>
+<p>现在我们使用 <code>:wq</code> 来保存这个回调。<br>如果我们调用 <code>@call north</code> 就能看到有活跃的回调了。如果我们使用 <code>@call north=can_traverse</code> 可以看更详细的信息。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">call north</span><br><span class="line">+------------------+---------+-----------------------------------------------+</span><br><span class="line">| Callback name    |  Number | Description                                   |</span><br><span class="line">+~~~~~~~~~~~~~~~~~~+~~~~~~~~~+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+</span><br><span class="line">| can_traverse     |   1 (5) | Can the character traverse through this exit? |</span><br><span class="line">| msg_arrive       |   <span class="number">0</span> (<span class="number">0</span>) | Customize the message when a character        |</span><br><span class="line">|                  |         | arrives through this exit.                    |</span><br><span class="line">| msg_leave        |   <span class="number">0</span> (<span class="number">0</span>) | Customize the message when a character        |</span><br><span class="line">|                  |         | leaves through this exit.                     |</span><br><span class="line">| time             |   <span class="number">0</span> (<span class="number">0</span>) | A repeated event to be called regularly.      |</span><br><span class="line">| traverse         |   <span class="number">0</span> (<span class="number">0</span>) | After the characer has traversed through      |</span><br><span class="line">|                  |         | this exit.                                    |</span><br><span class="line">+------------------+---------+-----------------------------------------------+</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">call north=can_traverse</span><br><span class="line">+--------------+--------------+-----------------+--------------+-------------+</span><br><span class="line">|       Number | Author       | Updated         | Param        | Valid       |</span><br><span class="line">+~~~~~~~~~~~~~~+~~~~~~~~~~~~~~+~~~~~~~~~~~~~~~~~+~~~~~~~~~~~~~~+~~~~~~~~~~~~~+</span><br><span class="line">|            <span class="number">1</span> | g            | <span class="number">18</span> seconds ago  |              | Yes         |</span><br><span class="line">+--------------+--------------+-----------------+--------------+-------------+</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">call north=can_traverse <span class="number">1</span></span><br><span class="line">Callback can_traverse <span class="number">1</span> of north:</span><br><span class="line">Created by g on <span class="number">2020</span><span class="number">-03</span><span class="number">-06</span> <span class="number">15</span>:<span class="number">31</span>:<span class="number">40.</span></span><br><span class="line">Updated by g on <span class="number">2020</span><span class="number">-03</span><span class="number">-06</span> <span class="number">15</span>:<span class="number">32</span>:<span class="number">43</span></span><br><span class="line">This callback <span class="keyword">is</span> connected <span class="keyword">and</span> active.</span><br><span class="line">Callback code:</span><br><span class="line"><span class="keyword">if</span> character.id == <span class="number">1</span>:</span><br><span class="line">    character.msg(<span class="string">"You're the super, pass"</span>)</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    character.msg(<span class="string">'you can'</span>to <span class="keyword">pass</span> this<span class="string">')</span></span><br><span class="line"><span class="string">    deny()</span></span><br></pre></td></tr></table></figure>
+<h2 id="编辑和删除回调"><a href="#编辑和删除回调" class="headerlink" title="编辑和删除回调"></a>编辑和删除回调</h2><p><code>@call/edit</code>     <code>@call/del</code> 用来编辑和删除回调。</p>
+<h1 id="使用事件"><a href="#使用事件" class="headerlink" title="使用事件"></a>使用事件</h1><p>下面的章节描述了如何用事件来完成很多任务，从最简单的到最复杂的。</p>
+<h2 id="eventfuncs"><a href="#eventfuncs" class="headerlink" title="eventfuncs"></a>eventfuncs</h2><p>为了使开发变得更容易， in-game Python 系统提供了 <code>eventfuncs</code> 来在回调中使用。我们可以不使用他们，他们只是简化而已。一个 eventfunc 只是一个我们可以在回调代码中使用的函数而已。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Argument</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>deny</td>
+<td><code>()</code></td>
+<td>Prevent an action from happening.</td>
+<td><code>deny()</code></td>
+</tr>
+<tr>
+<td>get</td>
+<td><code>(**kwargs)</code></td>
+<td>Get a single object.</td>
+<td><code>char = get(id=1)</code></td>
+</tr>
+<tr>
+<td>call_event</td>
+<td><code>(obj, name, seconds=0)</code></td>
+<td>Call another event.</td>
+<td><code>call_event(char, &quot;chain_1&quot;, 20)</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="deny"><a href="#deny" class="headerlink" title="deny"></a>deny</h3><p>用来中断回调的执行及相应的动作。在 <code>can_*</code> 事件中，这用来阻止动作的发生。</p>
+<h3 id="get"><a href="#get" class="headerlink" title="get"></a>get</h3><p>根据一个特定的标识来获取一个对象。这通常用来根据一个ID 获取对象。</p>
+<h3 id="call-event"><a href="#call-event" class="headerlink" title="call_event"></a>call_event</h3><p>某些回调会调用其他事件。这是链式事件的一部分。用来立即调用另外一事件，或者在定义的时间调用。</p>
+<p>第一个参数是对象，第二个参数是事件的名称，第三个参数是调用事件的延时秒数（默认是0，立即调用）</p>
+<h2 id="回调变量"><a href="#回调变量" class="headerlink" title="回调变量"></a>回调变量</h2><h2 id="带参调用回调"><a href="#带参调用回调" class="headerlink" title="带参调用回调"></a>带参调用回调</h2><h2 id="时间相关的事件"><a href="#时间相关的事件" class="headerlink" title="时间相关的事件"></a>时间相关的事件</h2><h2 id="链式事件"><a href="#链式事件" class="headerlink" title="链式事件"></a>链式事件</h2><h1 id="代码中使用事件"><a href="#代码中使用事件" class="headerlink" title="代码中使用事件"></a>代码中使用事件</h1><p>此节描述了从代码中进行回调和使用事件，如何创建新的事件，如何在命令中调用他们，及如何处理特定的情况（如参数）。</p>
+<p>本节中，我们看到如何实现以下例子：我们将会创建一个 <code>push</code> 命令来压入对象。对象会对此命令做出反应，同时触发特定的事件。</p>
+<h2 id="添加新的事件"><a href="#添加新的事件" class="headerlink" title="添加新的事件"></a>添加新的事件</h2><p>新的事件应该在 <code>typeclass</code> 里面完成。事件被包含在 <code>_events</code> 类变量中，这是一个字典，以事件名称为键，一个描述事件的元组作为值。同时我们需要注册此类来告诉 in-game Python 系统其包含事件。</p>
+<p>这里我们在对象上添加 <code>push</code> 事件。在我们的 <code>typeclasses/objects.py</code> 文件中，如此写下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> evennia.contrib.ingame_python.utils <span class="keyword">import</span> register_events</span><br><span class="line"><span class="keyword">from</span> evennia.contrib.ingame_python.typeclasses <span class="keyword">import</span> EventObject</span><br><span class="line"></span><br><span class="line">EVENT_PUSH = <span class="string">"""</span></span><br><span class="line"><span class="string">A character push the object.</span></span><br><span class="line"><span class="string">This event is called when a character uses the "push" command on</span></span><br><span class="line"><span class="string">an object in the same room.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Variables you can use in this event:</span></span><br><span class="line"><span class="string">    character: the character that pushes this object.</span></span><br><span class="line"><span class="string">    obj: the object connected to this event.</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@register_events</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Object</span><span class="params">(EventObject)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Class representing objects.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    _events = &#123;</span><br><span class="line">        <span class="string">"push"</span>: ([<span class="string">"character"</span>, <span class="string">"obj"</span>], EVENT_PUSH),</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p> 重启游戏，然后我们新建一个对象观察：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">create box</span><br><span class="line">call box</span><br><span class="line">+------------------+---------+-----------------------------------------------+</span><br><span class="line">| Callback name    |  Number | Description                                   |</span><br><span class="line">+~~~~~~~~~~~~~~~~~~+~~~~~~~~~+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~+</span><br><span class="line">| drop             |   0 (0) | When a character drops this object.           |</span><br><span class="line">| get              |   0 (0) | When a character gets this object.            |</span><br><span class="line">| push             |   0 (0) | A character push the object.                  |</span><br><span class="line">| time             |   0 (0) | A repeated event to be called regularly.      |</span><br><span class="line">+------------------+---------+-----------------------------------------------+</span><br></pre></td></tr></table></figure>
+<h2 id="代码中调用事件"><a href="#代码中调用事件" class="headerlink" title="代码中调用事件"></a>代码中调用事件</h2><p>in-game Python 系统可以所有对象上都有的 handler 来访问。这个 hanlder 被命名为 <code>callbacks</code>，且能从任何 <code>typeclass</code> 对象访问（角色，房间，出口等）。这个 handler 提供了几个方法来测试和调用此对象上的一个事件或回调。</p>
+<p>想要调用一个事件，使用 <code>callbacks.call</code>。它需要参数：</p>
+<ul>
+<li>需要调用的事件名称</li>
+<li>事件定义的位置参数。这需要按照事件定义的顺序传递过去。</li>
+</ul>
+<p>现在，我们已经为所有的对象添加了事件 <code>push</code>。这个事件当前永远不会被触发。我们应该添加一个 <code>push</code> 命令，使用对象的名称作为参数。如果此对象有效，他就能调用 <code>push</code> 事件。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> commands.command <span class="keyword">import</span> Command</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CmdPush</span><span class="params">(Command)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Push something.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Usage:</span></span><br><span class="line"><span class="string">        push &lt;something&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Push something where you are, like an elevator button.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line"></span><br><span class="line">    key = <span class="string">"push"</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Called when pushing something."""</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self.args.strip():</span><br><span class="line">            self.msg(<span class="string">"Usage: push &lt;something&gt;"</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Search for this object</span></span><br><span class="line">        obj = self.caller.search(self.args)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> obj:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        self.msg(<span class="string">"You push &#123;&#125;."</span>.format(obj.get_display_name(self.caller)))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Call the "push" event of this object</span></span><br><span class="line">        obj.callbacks.call(<span class="string">"push"</span>, self.caller, obj)</span><br></pre></td></tr></table></figure>
+<p>这里，我们用以下参数调用 <code>callbacks.call</code>：</p>
+<ul>
+<li><code>&quot;push&quot;</code>：调用事件名称</li>
+<li><code>self.caller</code>：使用命令的对象</li>
+<li><code>obj</code>：被 <code>push</code> 的对象。</li>
+</ul>
+<p>在 <strong>push</strong> 回调中，我们可以使用 <em>character</em> 变量，和 <em>obj</em> 变量了。</p>
+<h2 id="观察效果"><a href="#观察效果" class="headerlink" title="观察效果"></a>观察效果</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@create/drop rock</span><br><span class="line">@desc rock = It&apos;s a single rock, apparently pretty heavy.  Perhaps you can try to push it though.</span><br><span class="line">@call/add rock = push</span><br></pre></td></tr></table></figure>
+<p>我们执行 <code>push rock</code> 就会看到相关的输出了：</p>
+<blockquote>
+<p>You push box(#7).<br>You push a rock… is… it… going… to… move?</p>
+</blockquote>
+<h2 id="添加新的-eventfuncs"><a href="#添加新的-eventfuncs" class="headerlink" title="添加新的 eventfuncs"></a>添加新的 eventfuncs</h2><p>事件函数，如 <code>deny()</code>，定义在 <em>contrib/events/eventfuncs.py</em>。我们可以自己新建一个文件，命名叫 <em>eventfuncs.py</em>在我们的 world 目录中。这其中的函数将会被添加为辅助函数。</p>
+<p>我们同样可以在其他地方进行保存这个文件。不过这样的话我们就需要在 <em>server/conf/settings.py</em> 中设置一个全局变量，只定要搜索的路径：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">EVENTFUNCS_LOCATIONS = [</span><br><span class="line">        <span class="string">"world.events.functions"</span>,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h2 id="创建有参数的事件"><a href="#创建有参数的事件" class="headerlink" title="创建有参数的事件"></a>创建有参数的事件</h2><p>当我们想要建立有参数的事件时，我们可以在 <code>_events</code> 中定义事件的时候，在代表值的元组中添加更多的参数。第三个参数必须包含一个在事件触发时会被调用来在回调中进行过滤的回调。经常使用的是两种参数：</p>
+<ul>
+<li>keyword参数：这个事件的回调将根据特定的 keyword 来过滤。</li>
+<li>Phrase 参数：事件的回调将会使用整个 phrase 来过滤，别使用其中的词来检查。<code>say</code> 命令使用的是 phrase 参数。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> evennia.contrib.ingame_python.utils <span class="keyword">import</span> register_events, phrase_event</span><br><span class="line"><span class="comment"># ...</span></span><br><span class="line"><span class="meta">@register_events</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeTypeclass</span>:</span></span><br><span class="line">    _events = &#123;</span><br><span class="line">        <span class="string">"say"</span>: ([<span class="string">"speaker"</span>, <span class="string">"character"</span>, <span class="string">"message"</span>], CHARACTER_SAY, phrase_event),</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>当我们调用某个事件时，<code>obj.callbacks.call</code>，我们必须同时提供相应的参数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">obj.callbacks.call(..., parameters=<span class="string">"&lt;put parameters here&gt;"</span>)</span><br></pre></td></tr></table></figure>
+<p>不提供参数的话，系统俱乐部知道怎么样过滤回调列表。</p>
+<h1 id="禁止所有事件"><a href="#禁止所有事件" class="headerlink" title="禁止所有事件"></a>禁止所有事件</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">obj.callbacks.call(..., parameters=<span class="string">"&lt;put parameters here&gt;"</span>)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Evennia/" rel="tag"># Evennia</a>
+              <a href="/tags/Mud/" rel="tag"># Mud</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Mud/Evennia中Attribute的解释.html" rel="next" title="Evennia中Attribute的解释">
+                  <i class="fa fa-chevron-left"></i> Evennia中Attribute的解释
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#警告"><span class="nav-number">1.</span> <span class="nav-text">警告</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本结构和概念"><span class="nav-number">2.</span> <span class="nav-text">基本结构和概念</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装"><span class="nav-number">3.</span> <span class="nav-text">安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动事件脚本"><span class="nav-number">3.1.</span> <span class="nav-text">启动事件脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编辑权限"><span class="nav-number">3.2.</span> <span class="nav-text">编辑权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加-call-命令"><span class="nav-number">3.3.</span> <span class="nav-text">添加 @call 命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改变-typeclass-的父类"><span class="nav-number">3.4.</span> <span class="nav-text">改变 typeclass 的父类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用-call-命令"><span class="nav-number">4.</span> <span class="nav-text">使用 @call 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#测试回调和事件"><span class="nav-number">4.1.</span> <span class="nav-text">测试回调和事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立新的回调"><span class="nav-number">4.2.</span> <span class="nav-text">建立新的回调</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编辑和删除回调"><span class="nav-number">4.3.</span> <span class="nav-text">编辑和删除回调</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用事件"><span class="nav-number">5.</span> <span class="nav-text">使用事件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#eventfuncs"><span class="nav-number">5.1.</span> <span class="nav-text">eventfuncs</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#deny"><span class="nav-number">5.1.1.</span> <span class="nav-text">deny</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#get"><span class="nav-number">5.1.2.</span> <span class="nav-text">get</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#call-event"><span class="nav-number">5.1.3.</span> <span class="nav-text">call_event</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#回调变量"><span class="nav-number">5.2.</span> <span class="nav-text">回调变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#带参调用回调"><span class="nav-number">5.3.</span> <span class="nav-text">带参调用回调</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时间相关的事件"><span class="nav-number">5.4.</span> <span class="nav-text">时间相关的事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#链式事件"><span class="nav-number">5.5.</span> <span class="nav-text">链式事件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码中使用事件"><span class="nav-number">6.</span> <span class="nav-text">代码中使用事件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加新的事件"><span class="nav-number">6.1.</span> <span class="nav-text">添加新的事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码中调用事件"><span class="nav-number">6.2.</span> <span class="nav-text">代码中调用事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#观察效果"><span class="nav-number">6.3.</span> <span class="nav-text">观察效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加新的-eventfuncs"><span class="nav-number">6.4.</span> <span class="nav-text">添加新的 eventfuncs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建有参数的事件"><span class="nav-number">6.5.</span> <span class="nav-text">创建有参数的事件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#禁止所有事件"><span class="nav-number">7.</span> <span class="nav-text">禁止所有事件</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">327</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">135</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Mud/Evennia中的游戏内的Python系统.html",
+            identifier: "Mud/Evennia中的游戏内的Python系统.html",
+            title: "Evennia中的游戏内的Python系统"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>

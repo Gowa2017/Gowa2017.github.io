@@ -225,6 +225,202 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/安装instantclient连接oracle数据库.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/数据库/安装instantclient连接oracle数据库.html" class="post-title-link" itemprop="url">安装instantclient连接oracle数据库</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-26 13:08:44" itemprop="dateCreated datePublished" datetime="2018-09-26T13:08:44+08:00">2018-09-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/数据库/安装instantclient连接oracle数据库.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/安装instantclient连接oracle数据库.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>很久没有用。对接上级数据需要用到 Oracle，没法，只能重新捡起来了。 Oracle 官方的文档还是比较完善的，看起来就是比较麻烦。方便下次吧。</p>
+<h1 id="客户端下载"><a href="#客户端下载" class="headerlink" title="客户端下载"></a>客户端下载</h1><p>在页面 <a href="https://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html" target="_blank" rel="noopener">https://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html</a> 下载好对于的 instant 与 sqlplus 版本。我下载的是 12.2 版本。</p>
+<p>我下载的是当前用户的 Home 目录下，也就是 <code>~</code>。把他们解压到一起：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd</span><br><span class="line">unzip instantclient-basic-linux.x64-12.2.0.1.0.zip</span><br><span class="line">unzip instantclient-sqlplus-linux.x64-12.2.0.1.0.zip</span><br></pre></td></tr></table></figure>
+<p>下载完毕后可以看一下都有些什么文件：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls -1 instantclient_12_2</span><br><span class="line">adrci</span><br><span class="line">BASIC_README</span><br><span class="line">genezi</span><br><span class="line">glogin.sql</span><br><span class="line">libclntshcore.so.12.1</span><br><span class="line">libclntsh.so</span><br><span class="line">libclntsh.so.12.1</span><br><span class="line">libipc1.so</span><br><span class="line">libmql1.so</span><br><span class="line">libnnz12.so</span><br><span class="line">libocci.so.12.1</span><br><span class="line">libociei.so</span><br><span class="line">libocijdbc12.so</span><br><span class="line">libons.so</span><br><span class="line">liboramysql12.so</span><br><span class="line">libsqlplusic.so</span><br><span class="line">libsqlplus.so</span><br><span class="line">ojdbc8.jar</span><br><span class="line">sqlplus</span><br><span class="line">SQLPLUS_README</span><br><span class="line">uidrvci</span><br><span class="line">xstreams.jar</span><br></pre></td></tr></table></figure>
+<p>安装官方文档上的说明还有一些后续步骤需要做： <a href="https://www.oracle.com/technetwork/database/features/instant-client/sqlplus-cloud-3080557.html" target="_blank" rel="noopener">https://www.oracle.com/technetwork/database/features/instant-client/sqlplus-cloud-3080557.html</a></p>
+<p><strong>动态连接库</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd instantclient_12_2</span><br><span class="line">ln -s libclntsh.so.12.1 libclntsh.so</span><br></pre></td></tr></table></figure>
+<p>建立这么一个软连接后，需要在动态库寻找路径里面加入这个。有两种方法可以做到。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=~/instantclient_12_2:$LD_LIBRARY_PATH</span><br></pre></td></tr></table></figure>
+<p>或者在配置文件内指定：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo /home/myuser/instantclient_12_2 &gt; /etc/ld.so.conf.d/oic.conf</span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure>
+<p>相关环境变量设置：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export ORACLE_HOME=~/instantclient_12_2</span><br><span class="line">export TNS_ADMIN=~/instantclient_12_2</span><br><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME</span><br><span class="line">export PATH=$PATH:$ORACLE_HOME</span><br><span class="line">export NLS_LANG="AMERICAN_AMERICA.AL32UTF8"  #这个是为了防止乱码</span><br></pre></td></tr></table></figure>
+<h1 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h1><p>我们可以采用  tnsname.ora 来连接，或者直接用命令行连接：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd instantclient_12_2</span><br><span class="line">touch tnsname.ora</span><br></pre></td></tr></table></figure>
+<p><strong>命令行连接</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlplus user/password@//172.230.1.11:1521/topicis</span><br></pre></td></tr></table></figure>
+<h1 id="数据导出为csv"><a href="#数据导出为csv" class="headerlink" title="数据导出为csv"></a>数据导出为csv</h1><p>因为想要将数据导出，然后装到 MySQL 去，所以选择了以 csv 的形式，可更方便一些。关于数据的导出， Oracle 很多都是用的 pl/sql 或者现在新出品的 sql developer，但是我需要的是定时任务自动执行这样，所以只能使用 sqlplus 来进行导出来。</p>
+<p>主要就是利用 sqlplus 的 spool 命令来把显示内容转存到文件中。我们可以用一个简单的示例来展示：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlplus user/password@//172.230.1.11:1521/topicis &lt;&lt; EOF</span><br><span class="line">spool test.csv</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">sysdate</span> <span class="keyword">from</span> dual;</span><br><span class="line">spool off;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>事实上我们可以把想要执行的命令放到一个 sql 文件中，然后以 @filename 的形式来调用。比如上面的语句我们就可以放在一个文件 test.sql 中：<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">spool test.csv</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">sysdate</span> <span class="keyword">from</span> dual;</span><br><span class="line">spool off;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlplus user/password@//172.230.1.11:1521/topicis &lt;&lt; EOF</span><br><span class="line">@test</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/FloatingActionButton在安卓6.0上崩溃的问题.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Android/FloatingActionButton在安卓6.0上崩溃的问题.html" class="post-title-link" itemprop="url">FloatingActionButton在安卓6.0上崩溃的问题</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-25 17:56:53" itemprop="dateCreated datePublished" datetime="2018-09-25T17:56:53+08:00">2018-09-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Android/FloatingActionButton在安卓6.0上崩溃的问题.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/FloatingActionButton在安卓6.0上崩溃的问题.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>这个问题其实不是什么大问题。6.0似乎用的人不多了没怎么在意。空的时候搜索了一下 stackoverflow 果然有人遇到相同问题。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/Android/FloatingActionButton在安卓6.0上崩溃的问题.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Misc/关于职业与工作方向的思考.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1712,186 +1908,6 @@ y' = b + w_1x_1</script><p><em>b, w1</em> 我们可以随便选一个初值。�
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/关于fab会报错及popmenu背景是黑色的问题.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Android/关于fab会报错及popmenu背景是黑色的问题.html" class="post-title-link" itemprop="url">关于fab会报错及popmenu背景是黑色的问题</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-08-31 18:51:45" itemprop="dateCreated datePublished" datetime="2018-08-31T18:51:45+08:00">2018-08-31</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Android/关于fab会报错及popmenu背景是黑色的问题.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/关于fab会报错及popmenu背景是黑色的问题.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>遇到一个问题，就是我以前用的是Activity继承的是 FragmentActivit，然后可以使用 getActivity()函数。而我换成AppCompactActivity后，就不能使用这个了，我就打算用this,或者getBaseContext来做上下文，结果就是popMenu居然背景变成黑色了，换了多个主题还是一样。后面发现了问题。<br>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Android/关于fab会报错及popmenu背景是黑色的问题.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android使用AppCompatActivity添加应用操作栏.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Android/android使用AppCompatActivity添加应用操作栏.html" class="post-title-link" itemprop="url">android使用AppCompatActivity添加应用操作栏</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-08-28 21:28:12" itemprop="dateCreated datePublished" datetime="2018-08-28T21:28:12+08:00">2018-08-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Android/android使用AppCompatActivity添加应用操作栏.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/android使用AppCompatActivity添加应用操作栏.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>我们的项目是以前的一个大牛搞的，我是刚接触安卓，不是很理解一些做法。比如说，其继承自 FragmentActivity 的 BaseActivity，却不是使用的 AppCompatActivity。然后其头部的操作栏，也是自己定义了一个ActionBar,感觉有点过时了。特意的看了一下现在的实现办法。<br>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Android/android使用AppCompatActivity添加应用操作栏.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1940,7 +1956,7 @@ y' = b + w_1x_1</script><p><em>b, w1</em> 我们可以随便选一个初值。�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">325</span>
+          <span class="site-state-item-count">327</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

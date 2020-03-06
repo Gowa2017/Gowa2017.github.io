@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Evennia 游戏中的所有东西都用 Object 来表示，某个对象有什么特性，完全通过 Attribute 来存储各类数据。而我们实际上可以在 Attribute 内存储任何类型的数据，只需要我们进行合适的序列化与反序列化就行了。事情的起因是，当我查看一个账号登录的时候，拉取角色的时候，没有看到角色构建的过程，很迷惑这个问题。所以深入来了解了一下。">
+<meta name="keywords" content="Python,Evennia,Mud">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Evennia中Attribute的解释">
+<meta property="og:url" content="https://gowa.club/Mud/Evennia中Attribute的解释.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="Evennia 游戏中的所有东西都用 Object 来表示，某个对象有什么特性，完全通过 Attribute 来存储各类数据。而我们实际上可以在 Attribute 内存储任何类型的数据，只需要我们进行合适的序列化与反序列化就行了。事情的起因是，当我查看一个账号登录的时候，拉取角色的时候，没有看到角色构建的过程，很迷惑这个问题。所以深入来了解了一下。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-05T07:32:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evennia中Attribute的解释">
+<meta name="twitter:description" content="Evennia 游戏中的所有东西都用 Object 来表示，某个对象有什么特性，完全通过 Attribute 来存储各类数据。而我们实际上可以在 Attribute 内存储任何类型的数据，只需要我们进行合适的序列化与反序列化就行了。事情的起因是，当我查看一个账号登录的时候，拉取角色的时候，没有看到角色构建的过程，很迷惑这个问题。所以深入来了解了一下。">
+
+<link rel="canonical" href="https://gowa.club/Mud/Evennia中Attribute的解释.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Evennia中Attribute的解释 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Mud/Evennia中Attribute的解释.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Evennia中Attribute的解释
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-05 15:32:23" itemprop="dateCreated datePublished" datetime="2020-03-05T15:32:23+08:00">2020-03-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mud/" itemprop="url" rel="index">
+                    <span itemprop="name">Mud</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Mud/Evennia中Attribute的解释.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Mud/Evennia中Attribute的解释.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Evennia 游戏中的所有东西都用 Object 来表示，某个对象有什么特性，完全通过 Attribute 来存储各类数据。而我们实际上可以在 Attribute 内存储任何类型的数据，只需要我们进行合适的序列化与反序列化就行了。事情的起因是，当我查看一个账号登录的时候，拉取角色的时候，没有看到角色构建的过程，很迷惑这个问题。所以深入来了解了一下。</p>
+<a id="more"></a>
+<h1 id="文前"><a href="#文前" class="headerlink" title="文前"></a>文前</h1><p>对于所有的 TypeClass 对象，都继承自 TypedObject，然后其内定义了一个 attribute 属性：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@lazy_property</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">attributes</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> AttributeHandler(self)</span><br></pre></td></tr></table></figure>
+<p>懒加载形式，只在使用的时候才会用到。</p>
+<h1 id="Attribute"><a href="#Attribute" class="headerlink" title="Attribute"></a>Attribute</h1><p>Attribute 是一个 模型，其同样使用了 <code>SharedMemoryModel</code> 进行缓存。他只定义了几个字段：</p>
+<ul>
+<li>db_key。这个没什么说的。</li>
+<li>db_value。这个定义为类型 PickledObjectField ，可以接收任何形式的 Python 对象。只是在存储和取除的时候要做一下转换操作。</li>
+<li>db_strvalue。存储字符串，主要来表征 db_value，方便快速搜索。</li>
+<li>db_category。可选，分类。</li>
+<li>db_lock_storage。锁。</li>
+<li>db_model。属性是附加到哪个模型上的。</li>
+<li>db_attrtype。属性的子类。（Attribute 的子类）</li>
+<li>db_date_created。创建时间</li>
+</ul>
+<p>对于属性的操作，增删改查，实际上都是通过一个 AttributeHandler 来管理的。</p>
+<h1 id="AttributeHandler"><a href="#AttributeHandler" class="headerlink" title="AttributeHandler"></a>AttributeHandler</h1><p>每个对象都会有一个 AttributeHandler。简单的公布了三个方法 <code>get(), set(), has()</code>。当我们访问某个属性的时候，就会触发 <code>get()</code> 方法。这个方法首先会从此 Handlder 的缓存里面取，如果没有，那么就会去查数据库。</p>
+<p>获取属性后，实际上返回的就是这个属性的值。而对于这个值，是什么类型就有很多说法了。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    self,</span></span></span><br><span class="line"><span class="function"><span class="params">    key=None,</span></span></span><br><span class="line"><span class="function"><span class="params">    default=None,</span></span></span><br><span class="line"><span class="function"><span class="params">    category=None,</span></span></span><br><span class="line"><span class="function"><span class="params">    return_obj=False,</span></span></span><br><span class="line"><span class="function"><span class="params">    strattr=False,</span></span></span><br><span class="line"><span class="function"><span class="params">    raise_exception=False,</span></span></span><br><span class="line"><span class="function"><span class="params">    accessing_obj=None,</span></span></span><br><span class="line"><span class="function"><span class="params">    default_access=True,</span></span></span><br><span class="line"><span class="function"><span class="params">    return_list=False,</span></span></span><br><span class="line"><span class="function"><span class="params">)</span>:</span></span><br><span class="line">    ret = []</span><br><span class="line">    <span class="keyword">for</span> keystr <span class="keyword">in</span> make_iter(key):</span><br><span class="line">        <span class="comment"># it's okay to send a None key</span></span><br><span class="line">        attr_objs = self._getcache(keystr, category)</span><br><span class="line">        print(attr_objs)</span><br><span class="line">        <span class="keyword">if</span> attr_objs:</span><br><span class="line">            ret.extend(attr_objs)</span><br><span class="line">        <span class="keyword">elif</span> raise_exception:</span><br><span class="line">            <span class="keyword">raise</span> AttributeError</span><br><span class="line">        <span class="keyword">elif</span> return_obj:</span><br><span class="line">            ret.append(<span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> accessing_obj:</span><br><span class="line">        <span class="comment"># check 'attrread' locks</span></span><br><span class="line">        ret = [</span><br><span class="line">            attr</span><br><span class="line">            <span class="keyword">for</span> attr <span class="keyword">in</span> ret</span><br><span class="line">            <span class="keyword">if</span> attr.access(accessing_obj, self._attrread, default=default_access)</span><br><span class="line">        ]</span><br><span class="line">    <span class="keyword">if</span> strattr:</span><br><span class="line">        ret = ret <span class="keyword">if</span> return_obj <span class="keyword">else</span> [attr.strvalue <span class="keyword">for</span> attr <span class="keyword">in</span> ret <span class="keyword">if</span> attr]</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        ret = ret <span class="keyword">if</span> return_obj <span class="keyword">else</span> [attr.value <span class="keyword">for</span> attr <span class="keyword">in</span> ret <span class="keyword">if</span> attr]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> return_list:</span><br><span class="line">        <span class="keyword">return</span> ret <span class="keyword">if</span> ret <span class="keyword">else</span> [default] <span class="keyword">if</span> default <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">else</span> []</span><br><span class="line">    <span class="keyword">return</span> ret[<span class="number">0</span>] <span class="keyword">if</span> ret <span class="keyword">and</span> len(ret) == <span class="number">1</span> <span class="keyword">else</span> ret <span class="keyword">or</span> default</span><br></pre></td></tr></table></figure>
+<p>获取属性，后，返回值，触发 Attribute.value 方法：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__value_get</span><span class="params">(self)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Getter. Allows for `value = self.value`.</span></span><br><span class="line"><span class="string">    We cannot cache here since it makes certain cases (such</span></span><br><span class="line"><span class="string">    as storing a dbobj which is then deleted elsewhere) out-of-sync.</span></span><br><span class="line"><span class="string">    The overhead of unpickling seems hard to avoid.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="keyword">return</span> from_pickle(self.db_value, db_obj=self)</span><br></pre></td></tr></table></figure>
+<p>这就需要将值转换一下。这个方法就不贴了，太长。</p>
+<p>但是最重要的一点就是，对于是数据库对象的值，其会构建成相关的对象。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">elif</span> _IS_PACKED_DBOBJ(item):</span><br><span class="line">    <span class="comment"># this must be checked before tuple</span></span><br><span class="line">    <span class="keyword">return</span> unpack_dbobj(item)</span><br></pre></td></tr></table></figure>
+<h1 id="unpack-dbobj"><a href="#unpack-dbobj" class="headerlink" title="unpack_dbobj"></a>unpack_dbobj</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">unpack_dbobj</span><span class="params">(item)</span>:</span></span><br><span class="line">    _init_globals()</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        obj = item[<span class="number">3</span>] <span class="keyword">and</span> _TO_MODEL_MAP[item[<span class="number">1</span>]].objects.get(id=item[<span class="number">3</span>])</span><br><span class="line">    <span class="keyword">except</span> ObjectDoesNotExist:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">except</span> TypeError:</span><br><span class="line">        <span class="keyword">if</span> hasattr(item, <span class="string">"pk"</span>):</span><br><span class="line">            <span class="comment"># this happens if item is already an obj</span></span><br><span class="line">            <span class="keyword">return</span> item</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="keyword">if</span> item[<span class="number">1</span>] <span class="keyword">in</span> _IGNORE_DATETIME_MODELS:</span><br><span class="line">        <span class="comment"># if we are replacing models we ignore the datatime</span></span><br><span class="line">        <span class="keyword">return</span> obj</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># even if we got back a match, check the sanity of the date (some</span></span><br><span class="line">        <span class="comment"># databases may 're-use' the id)</span></span><br><span class="line">        <span class="keyword">return</span> _TO_DATESTRING(obj) == item[<span class="number">2</span>] <span class="keyword">and</span> obj <span class="keyword">or</span> <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+<p>实际上是拿到相关的 model,和 ID，然后来获取。</p>
+<h1 id="pack-dbobj"><a href="#pack-dbobj" class="headerlink" title="pack_dbobj"></a>pack_dbobj</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">pack_dbobj</span><span class="params">(item)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Check and convert django database objects to an internal representation.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        item (any): A database entity to pack</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        packed (any or tuple): Either returns the original input item</span></span><br><span class="line"><span class="string">            or the packing tuple `("__packed_dbobj__", key, creation_time, id)`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    _init_globals()</span><br><span class="line">    obj = item</span><br><span class="line">    natural_key = _FROM_MODEL_MAP[</span><br><span class="line">        hasattr(obj, <span class="string">"id"</span>)</span><br><span class="line">        <span class="keyword">and</span> hasattr(obj, <span class="string">"db_date_created"</span>)</span><br><span class="line">        <span class="keyword">and</span> hasattr(obj, <span class="string">"__dbclass__"</span>)</span><br><span class="line">        <span class="keyword">and</span> obj.__dbclass__.__name__.lower()</span><br><span class="line">    ]</span><br><span class="line">    <span class="comment"># build the internal representation as a tuple</span></span><br><span class="line">    <span class="comment">#  ("__packed_dbobj__", key, creation_time, id)</span></span><br><span class="line">    <span class="keyword">return</span> (</span><br><span class="line">        natural_key</span><br><span class="line">        <span class="keyword">and</span> (<span class="string">"__packed_dbobj__"</span>, natural_key, _TO_DATESTRING(obj), _GA(obj, <span class="string">"id"</span>))</span><br><span class="line">        <span class="keyword">or</span> item</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p>打包的时候，数据库对象存储的实际上是一个元组：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(<span class="string">'__packed_dbobj__'</span>,<span class="string">'model",'</span>date<span class="string">','</span>id<span class="string">')</span></span><br></pre></td></tr></table></figure>
+<p>最后再进行一下序列化。</p>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>这个数据库查询也很诡异，查询出结果后绑定到模型实例上，这个过程是 Django 做的，没空看代码了。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Evennia/" rel="tag"># Evennia</a>
+              <a href="/tags/Mud/" rel="tag"># Mud</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Python/Python中类的构建过程.html" rel="next" title="Python中类的构建过程">
+                  <i class="fa fa-chevron-left"></i> Python中类的构建过程
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/Mud/Evennia中的游戏内的Python系统.html" rel="prev" title="Evennia中的游戏内的Python系统">
+                  Evennia中的游戏内的Python系统 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#文前"><span class="nav-number">1.</span> <span class="nav-text">文前</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Attribute"><span class="nav-number">2.</span> <span class="nav-text">Attribute</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#AttributeHandler"><span class="nav-number">3.</span> <span class="nav-text">AttributeHandler</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#unpack-dbobj"><span class="nav-number">4.</span> <span class="nav-text">unpack_dbobj</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#pack-dbobj"><span class="nav-number">5.</span> <span class="nav-text">pack_dbobj</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最后"><span class="nav-number">6.</span> <span class="nav-text">最后</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">327</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">135</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Mud/Evennia中Attribute的解释.html",
+            identifier: "Mud/Evennia中Attribute的解释.html",
+            title: "Evennia中Attribute的解释"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
