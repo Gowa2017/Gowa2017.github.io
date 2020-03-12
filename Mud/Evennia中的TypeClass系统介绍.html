@@ -329,11 +329,13 @@
 <li><code>SharedMemoryModelBase(ModelBase)</code> 建立一个 模型，但是此模型会使用 idmapper，</li>
 <li><code>TypeclassBase(SharedMemoryModelBase)</code> 这个是针对 TypeClass 的 <code>MetaClass</code> ，控制 typecalss 类对象的建立，我们可以看到，其是继承自 <code>SharedMemoryModelBase</code>，因此，所有的 TypeClass 都使用了 idmapper 来保证我们内存中的对象不会因为从 Django 处拿到的数据库映射产生变化。</li>
 </ul>
-<h2 id="SharedMemoryModelBase"><a href="#SharedMemoryModelBase" class="headerlink" title="SharedMemoryModelBase"></a>SharedMemoryModelBase</h2><p>这个用做缓存的和包装的 <code>metaclass</code> 控制一个模型在建立的时候，使其能在类对象上缓存数据。</p>
-<h3 id="call"><a href="#call" class="headerlink" title="__call__"></a><code>__call__</code></h3><p>定义了这个方法，那么所有使用  idmapper 的 Model ，都能用 <code>Model()</code> 的形式调用。也就是说，使用这个 <code>metaclss</code> 建立好的 <strong>类对象</strong>，在构建实例的时候，不然经过这个 <code>__call__</code> 方法。我们来看一下其用途：</p>
+<h2 id="SharedMemoryModelBase"><a href="#SharedMemoryModelBase" class="headerlink" title="SharedMemoryModelBase"></a>SharedMemoryModelBase</h2><p>这个用来控制一个 <code>typeclass</code>，其作为  <code>metaclass</code> 控制一个模型在建立的时候，使其能在类对象上缓存数据。</p>
+<h3 id="call"><a href="#call" class="headerlink" title="__call__"></a><code>__call__</code></h3><p>定义了这个方法，那么所有使用  idmapper 的 Model ，都能用 <code>Model()</code> 的形式调用。也就是说，使用这个 <code>metaclss</code> 建立好的 <strong>类对象</strong>，在构建实例的时候，必然经过这个 <code>__call__</code> 方法。我们来看一下其用途：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(cls, *args, **kwargs)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">new_instance</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">return</span> super(SharedMemoryModelBase, cls).__call__(*args, **kwargs)</span><br><span class="line"></span><br><span class="line">    instance_key = cls._get_cache_key(args, kwargs)</span><br><span class="line">    <span class="comment"># depending on the arguments, we might not be able to infer the PK, so in that case we create a new instance</span></span><br><span class="line">    <span class="keyword">if</span> instance_key <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="keyword">return</span> new_instance()</span><br><span class="line">    cached_instance = cls.get_cached_instance(instance_key)</span><br><span class="line">    <span class="keyword">if</span> cached_instance <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        cached_instance = new_instance()</span><br><span class="line">        cls.cache_instance(cached_instance, new=<span class="literal">True</span>)</span><br><span class="line">    <span class="keyword">return</span> cached_instance</span><br></pre></td></tr></table></figure>
-<p>可以看到，事实上并不复杂，就是在某个模型的时候，差一下类对象上的缓存是否存在，如果存在就返回已缓存的数据，否则的话就从数据库去拿，然后同时缓存到类对象上。</p>
-<p>类对象的缓存，是在构建类对象的时候就确定的。见下一个方法。</p>
+<p>可以看到，事实上并不复杂，就是在某个模型的时候，查一下类对象上的缓存是否存在，如果存在就返回已缓存的数据，否则的话就从数据库去拿，然后同时缓存到类对象上。</p>
+<p>类对象的缓存，是在构建类对象的时候就确定的。见下一个方法。另外，在进行缓存对象的时候，还会触发对于对象的 <code>at_init()</code> 方法</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># SharedMemoryModel</span></span><br><span class="line"><span class="meta">	@classmethod</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">cache_instance</span><span class="params">(cls, instance, new=False)</span>:</span></span><br><span class="line">      pk = instance._get_pk_val()</span><br><span class="line">      <span class="keyword">if</span> pk <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">          cls.__dbclass__.__instance_cache__[pk] = instance</span><br><span class="line">          <span class="keyword">if</span> new:</span><br><span class="line">              <span class="keyword">try</span>:</span><br><span class="line">                  <span class="comment"># trigger the at_init hook only</span></span><br><span class="line">                  <span class="comment"># at first initialization</span></span><br><span class="line">                  instance.at_init()</span><br><span class="line">              <span class="keyword">except</span> AttributeError:</span><br><span class="line">                  <span class="comment"># The at_init hook is not assigned to all entities</span></span><br><span class="line">                  <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<p>同时，在 <code>Model</code> 更新了数据的时候，也会对缓存进行刷新，这就会重新触发 <code>at_init</code> 方法。</p>
 <h3 id="new"><a href="#new" class="headerlink" title="__new__"></a><code>__new__</code></h3><p>这个方法，用来构建一个类对象，具体而言，事实上就是在类对象上挂上缓存，然后封装一些 <code>wrapper</code> ，然后调用 Django 的 模型去建立类对象</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">__new__</span><span class="params">(cls, name, bases, attrs)</span>:</span></span><br><span class="line"></span><br><span class="line">      attrs[<span class="string">"typename"</span>] = cls.__name__</span><br><span class="line">      attrs[<span class="string">"path"</span>] = <span class="string">"%s.%s"</span> % (attrs[<span class="string">"__module__"</span>], name)</span><br><span class="line">      attrs[<span class="string">"_is_deleted"</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">      <span class="comment"># set up the typeclass handling only if a variable _is_typeclass is set on the class</span></span><br><span class="line">      <span class="function"><span class="keyword">def</span> <span class="title">create_wrapper</span><span class="params">(cls, fieldname, wrappername, editable=True, foreignkey=False)</span>:</span></span><br><span class="line">          <span class="string">"Helper method to create property wrappers with unique names (must be in separate call)"</span></span><br><span class="line">.....</span><br><span class="line">      <span class="keyword">for</span> fieldname, field <span class="keyword">in</span> (</span><br><span class="line">          (fname, field)</span><br><span class="line">          <span class="keyword">for</span> fname, field <span class="keyword">in</span> list(attrs.items())</span><br><span class="line">          <span class="keyword">if</span> fname.startswith(<span class="string">"db_"</span>) <span class="keyword">and</span> type(field).__name__ != <span class="string">"ManyToManyField"</span></span><br><span class="line">      ):</span><br><span class="line">          foreignkey = type(field).__name__ == <span class="string">"ForeignKey"</span></span><br><span class="line">          wrappername = <span class="string">"dbid"</span> <span class="keyword">if</span> fieldname == <span class="string">"id"</span> <span class="keyword">else</span> fieldname.replace(<span class="string">"db_"</span>, <span class="string">""</span>, <span class="number">1</span>)</span><br><span class="line">          <span class="keyword">if</span> wrappername <span class="keyword">not</span> <span class="keyword">in</span> attrs:</span><br><span class="line">              <span class="comment"># makes sure not to overload manually created wrappers on the model</span></span><br><span class="line">              create_wrapper(</span><br><span class="line">                  cls, fieldname, wrappername, editable=field.editable, foreignkey=foreignkey</span><br><span class="line">              )</span><br><span class="line"></span><br><span class="line">      <span class="keyword">return</span> super().__new__(cls, name, bases, attrs)</span><br></pre></td></tr></table></figure>
 <p>可能你会疑惑，那么缓存池呢？看下一个方法</p>
@@ -444,7 +446,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">328</span>
+          <span class="site-state-item-count">329</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -457,7 +459,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">135</span>
+        <span class="site-state-item-count">136</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -536,6 +538,15 @@
 
 
   
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
 
 
 

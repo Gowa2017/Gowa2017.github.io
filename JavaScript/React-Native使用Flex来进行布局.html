@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="React Native 官方已经推荐使用  expo 来进行项目的开发了，但是国内使用的话还有几个非常猥琐的问题。一个就是项目的初始化很慢，还有就是要进行模拟器运行的时候，客户端下载非常的慢。不过推荐得用不是。">
+<meta name="keywords" content="JavaScript,React Native">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React-Native使用Flex来进行布局">
+<meta property="og:url" content="https://gowa.club/JavaScript/React-Native使用Flex来进行布局.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="React Native 官方已经推荐使用  expo 来进行项目的开发了，但是国内使用的话还有几个非常猥琐的问题。一个就是项目的初始化很慢，还有就是要进行模拟器运行的时候，客户端下载非常的慢。不过推荐得用不是。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-09T15:22:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React-Native使用Flex来进行布局">
+<meta name="twitter:description" content="React Native 官方已经推荐使用  expo 来进行项目的开发了，但是国内使用的话还有几个非常猥琐的问题。一个就是项目的初始化很慢，还有就是要进行模拟器运行的时候，客户端下载非常的慢。不过推荐得用不是。">
+
+<link rel="canonical" href="https://gowa.club/JavaScript/React-Native使用Flex来进行布局.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>React-Native使用Flex来进行布局 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/React-Native使用Flex来进行布局.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          React-Native使用Flex来进行布局
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-09 23:22:54" itemprop="dateCreated datePublished" datetime="2020-03-09T23:22:54+08:00">2020-03-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/JavaScript/React-Native使用Flex来进行布局.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/React-Native使用Flex来进行布局.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>React Native 官方已经推荐使用  expo 来进行项目的开发了，但是国内使用的话还有几个非常猥琐的问题。一个就是项目的初始化很慢，还有就是要进行模拟器运行的时候，客户端下载非常的慢。不过推荐得用不是。</p>
+<a id="more"></a>
+<p>至于为什么用 RN，这又是另外一个话题了。场景是需要为一个 MUD 游戏做一个图形界面来，降低上手的难度。这样的话实际上就只是文字和一些文字框的游戏。开始是准备用比较属性的 Cocos Creator，不过感觉用来做 MUD 的客户端还是有点重了。另外就是其对于 UI 控件的实现是自己用 C 在底层实现的，实际上非常的不好用。</p>
+<p>另外，还有点比较好的就是，RN 可以像网页那样用 Flex 进行布局，就容易多了。</p>
+<h1 id="项目建立"><a href="#项目建立" class="headerlink" title="项目建立"></a>项目建立</h1><p>实际上，在<a href="https://reactnative.dev/docs/getting-started" target="_blank" rel="noopener">官方的文档</a>中，使用 expo 的步骤非常简单：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm install -g expo-cli</span><br><span class="line">expo init AwesomeProject</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> AwesomeProject</span><br><span class="line">npm start <span class="comment"># you ca</span></span><br></pre></td></tr></table></figure>
+<p>然后就可以在浏览器中进行我们的操作进行启动模拟器等了。</p>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>项目初始化和在模拟器上运行很慢，这个其实我挂了梯子就好了？梯子的问题？</p>
+<h1 id="编辑器"><a href="#编辑器" class="headerlink" title="编辑器"></a>编辑器</h1><p>没法了，使用 vscode 吧，用官方推荐的 atom 加上 <a href="https://nuclide.io/" target="_blank" rel="noopener">https://nuclide.io/</a> ，居然找不到这个插件，那就算了吧。</p>
+<h1 id="Flex-布局"><a href="#Flex-布局" class="headerlink" title="Flex 布局"></a>Flex 布局</h1><p>官方的定义是，FlexBox 是一个可以使用 Flex 算法来指定子视图的布局的组件。其设计的目的，是为了提供一个在不同屏幕尺寸间的一致性布局。</p>
+<p>我们知道，我们的容器一般都是 <em>View</em>，所以我们只需要在 <em>View</em> 中指定 <code>flex</code> 就能使用其布局了。</p>
+<p><a href="https://reactnative.dev/docs/flexbox" target="_blank" rel="noopener">官方文档说明在此</a>。</p>
+<h1 id="轴"><a href="#轴" class="headerlink" title="轴"></a>轴</h1><p>一般来说，定义了两个轴。横轴（row），纵轴（column）。Flex 所定义的行为就在两个轴上作用的。</p>
+<h1 id="属性列表"><a href="#属性列表" class="headerlink" title="属性列表"></a>属性列表</h1><ul>
+<li>flex：定义了当前视图如何在主轴上填充可用空间的。其是一个数值，定义了主轴上所占据空间的比例。有点类似与安卓中的 <code>layout_weight</code> 的意思，就是权重的概念。</li>
+<li>flexDirection：定义子视图是沿主轴哪个方向进行填充的。<ul>
+<li><code>row</code> 左至右</li>
+<li><code>column</code> 上至下（<strong>默认值）</strong>。</li>
+<li><code>row-reverse</code> 从右至左。</li>
+<li><code>column-reverse</code> 由底而上。</li>
+</ul>
+</li>
+<li>justifyContent：在<strong>主轴</strong>方向是如何对排列子视图。<ul>
+<li><code>flex-start</code> 从开始对齐</li>
+<li><code>flex-end</code> 从尾部开始</li>
+<li><code>space-between</code> 子视图间的间隔距离相等进行排列</li>
+<li><code>center</code> 居中</li>
+<li><code>space-around</code> 与 <code>space-between</code> ，不过这个在边界间也会计算相等的距离。</li>
+<li><code>space-evenly</code> 这个和上个选项很相似，但是区别在哪里？</li>
+</ul>
+</li>
+<li>alignItems：<strong>次轴</strong>如何排列子视图的。<ul>
+<li><code>stretch</code> 拉伸子视图来填满容器的次轴的高度。不能设置子视图的高度为确切的数字</li>
+<li><code>flex-start</code></li>
+<li><code>flex-end</code></li>
+<li><code>center</code></li>
+<li><code>baseline</code>。对准一个基线。</li>
+</ul>
+</li>
+<li>alignSelf：改变子视图自身。</li>
+<li>alignContent：定义了<strong>次轴方向</strong>的行分布情况。这<strong>只会在使用了 <code>flexWrap</code> 来包装子视图多行的情况。</strong>。意思只有在子视图多行的情况生效。<ul>
+<li><code>flex-start</code></li>
+<li><code>flex-end</code></li>
+<li><code>center</code></li>
+<li><code>stretch</code></li>
+<li><code>space-between</code></li>
+<li><code>space-around</code></li>
+</ul>
+</li>
+<li>flexWrap：作用于 <strong>主轴</strong>。控制当子视图超过了 <strong>主轴</strong> 的尺寸的时候怎么办 。默认情况下，子视图是被强制设置为一行的（这会让有些元素看不到）。如果允许转行的话，那么超过尺寸的那些元素就会放新的行上，包装起来，这个时候 <code>alignContent</code> 就会生效了。</li>
+<li>flexGrow</li>
+<li>flexShrink</li>
+<li>flexBasis</li>
+<li>width，height 宽高<ul>
+<li><code>auto</code> 自动计算</li>
+<li><code>pixels</code>  绝对值</li>
+<li><code>percentage</code> 百分比</li>
+</ul>
+</li>
+<li>position<ul>
+<li><code>relative</code> 默认值</li>
+<li><code>absolute</code> 绝对位置</li>
+</ul>
+</li>
+</ul>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/React-Native/" rel="tag"># React Native</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Mud/Evennia中的Spawner与Prototypes.html" rel="next" title="Evennia中的Spawner与Prototypes">
+                  <i class="fa fa-chevron-left"></i> Evennia中的Spawner与Prototypes
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#项目建立"><span class="nav-number">1.</span> <span class="nav-text">项目建立</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编辑器"><span class="nav-number">3.</span> <span class="nav-text">编辑器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Flex-布局"><span class="nav-number">4.</span> <span class="nav-text">Flex 布局</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#轴"><span class="nav-number">5.</span> <span class="nav-text">轴</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#属性列表"><span class="nav-number">6.</span> <span class="nav-text">属性列表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意事项"><span class="nav-number">7.</span> <span class="nav-text">注意事项</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">329</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">136</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/JavaScript/React-Native使用Flex来进行布局.html",
+            identifier: "JavaScript/React-Native使用Flex来进行布局.html",
+            title: "React-Native使用Flex来进行布局"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
