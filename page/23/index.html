@@ -225,6 +225,99 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/开启主机对IPv6的支持.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Linux-Unix/开启主机对IPv6的支持.html" class="post-title-link" itemprop="url">开启主机对IPv6的支持</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-12 21:03:21" itemprop="dateCreated datePublished" datetime="2018-07-12T21:03:21+08:00">2018-07-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/开启主机对IPv6的支持.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/开启主机对IPv6的支持.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>事情的是经过是，摩尔互联的节点客户端，无法启动。返回的错误是 <code>address famliy not support</code>，根据这个原因我推测，应该是绑定套接字的时候，不支持这个协议族，而查看了一下 ip addr，有ipv4地址，但是没有链路层地址和ipv6地址。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>从 TCP/IP 协议详解上了解到，ipV6地址，其实应该是每个接口都会有，而且每个接口可能会有几个。有链路本地地址，子网的，全局的IPV6地址，而我这个一个都没有，肯定是系统给禁止了。于是我们就来把他找出来吧。</p>
+<p>用 <code>strace ./mol_node</code> 就能看出点端倪了。</p>
+<h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><h2 id="模块加载"><a href="#模块加载" class="headerlink" title="模块加载"></a>模块加载</h2><p>内核协议栈要支持IpV6，首先要加载 ipv6模块。在文件中 <code>/etc/modprobe.d/disable_ipv6.conf</code> 中有类似字样：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">alias ipv6 off</span><br><span class="line">options ipv6 disable=1</span><br></pre></td></tr></table></figure>
+<p>看名字就能知道，我们需要把 off 改为 on， 1 改为0.</p>
+<p>这样才会加载进来模块。</p>
+<h2 id="网络支持"><a href="#网络支持" class="headerlink" title="网络支持"></a>网络支持</h2><p>文件 <code>/etc/sysconfig/network</code><br>中，<code>NETWORKING_IPV6=no</code> 改为 <code>NETWORKING_IPV6=yes</code></p>
+<h2 id="系统配置"><a href="#系统配置" class="headerlink" title="系统配置"></a>系统配置</h2><p><code>/etc/sysctl.conf</code> 把下列选项都改为1:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">net.ipv6.conf.all.disable_ipv6 = 1</span><br><span class="line">net.ipv6.conf.default.disable_ipv6 = 1</span><br><span class="line">net.ipv6.conf.lo.disable_ipv6 = 1</span><br></pre></td></tr></table></figure>
+<p>重启了之后，一看。果然可以了。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android中使用的MVP架构.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1158,129 +1251,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Java的接口与抽象类(Interface与Abstarct-Class).html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Java/Java的接口与抽象类(Interface与Abstarct-Class).html" class="post-title-link" itemprop="url">Java的接口与抽象类(Interface与Abstarct-Class)</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-06-01 09:10:15" itemprop="dateCreated datePublished" datetime="2018-06-01T09:10:15+08:00">2018-06-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Java/Java的接口与抽象类(Interface与Abstarct-Class).html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Java的接口与抽象类(Interface与Abstarct-Class).html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>在Java中感觉接口与抽象类非常的相似，但其实应该是有区别的，不然的话何必要设计出这两个东西来呢，所以呢仔细看了一下官方的文档，了解一下细节。</p>
-<h1 id="接口Interface"><a href="#接口Interface" class="headerlink" title="接口Interface"></a>接口Interface</h1><p>在Java编程语言中，接口是一个引用类型，类似于一个类，它<strong>只能包含常量，方法签名，缺省方法，静态方法和嵌套类型</strong>。 方法体只存在于默认方法和静态方法中。 接口不能被实例化 - 它们只能由类实现或由其他接口扩展。 </p>
-<p>定义一个<strong>接口</strong>就和定义一个类相似：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">OperateCar</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// constant declarations, if any</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">// method signatures</span></span><br><span class="line">   </span><br><span class="line">   <span class="comment">// An enum with values RIGHT, LEFT</span></span><br><span class="line">   <span class="function"><span class="keyword">int</span> <span class="title">turn</span><span class="params">(Direction direction,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">double</span> radius,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">double</span> startSpeed,</span></span></span><br><span class="line"><span class="function"><span class="params">            <span class="keyword">double</span> endSpeed)</span></span>;</span><br><span class="line">   <span class="function"><span class="keyword">int</span> <span class="title">changeLanes</span><span class="params">(Direction direction,</span></span></span><br><span class="line"><span class="function"><span class="params">                   <span class="keyword">double</span> startSpeed,</span></span></span><br><span class="line"><span class="function"><span class="params">                   <span class="keyword">double</span> endSpeed)</span></span>;</span><br><span class="line">   <span class="function"><span class="keyword">int</span> <span class="title">signalTurn</span><span class="params">(Direction direction,</span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">boolean</span> signalOn)</span></span>;</span><br><span class="line">   <span class="function"><span class="keyword">int</span> <span class="title">getRadarFront</span><span class="params">(<span class="keyword">double</span> distanceToCar,</span></span></span><br><span class="line"><span class="function"><span class="params">                     <span class="keyword">double</span> speedOfCar)</span></span>;</span><br><span class="line">   <span class="function"><span class="keyword">int</span> <span class="title">getRadarRear</span><span class="params">(<span class="keyword">double</span> distanceToCar,</span></span></span><br><span class="line"><span class="function"><span class="params">                    <span class="keyword">double</span> speedOfCar)</span></span>;</span><br><span class="line">         ......</span><br><span class="line">   <span class="comment">// more method signatures</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>接口内的方法，只有签名，而没有方法体。</p>
-</blockquote>
-<p>接口，只是方法的集合。任何实现了接口所定义方法的类或对象，都课被当做那个接口使用。还一个可实例化的类实现了一个接口，那么其应该为接口内的所有方法提供一个方法体。</p>
-<p>例如，下面这个类就实现了上述的接口：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OperateBMW760i</span> <span class="keyword">implements</span> <span class="title">OperateCar</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// the OperateCar method signatures, with implementation --</span></span><br><span class="line">    <span class="comment">// for example:</span></span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">signalTurn</span><span class="params">(Direction direction, <span class="keyword">boolean</span> signalOn)</span> </span>&#123;</span><br><span class="line">       <span class="comment">// code to turn BMW's LEFT turn indicator lights on</span></span><br><span class="line">       <span class="comment">// code to turn BMW's LEFT turn indicator lights off</span></span><br><span class="line">       <span class="comment">// code to turn BMW's RIGHT turn indicator lights on</span></span><br><span class="line">       <span class="comment">// code to turn BMW's RIGHT turn indicator lights off</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// other members, as needed -- for example, helper classes not </span></span><br><span class="line">    <span class="comment">// visible to clients of the interface</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在上面的机器人汽车示例中，实施接口的是汽车制造商。 当然，雪佛兰的实施将与丰田的实施大不相同，但两家制造商将坚持相同的接口。 作为接口客户的指导制造商将构建使用汽车位置GPS数据，数字街道地图和交通数据来驱动汽车的系统。 这样做时，指导系统将调用接口方法：转弯，改变车道，制动，加速等等。</p>
-<h1 id="抽象类Abstract-Class"><a href="#抽象类Abstract-Class" class="headerlink" title="抽象类Abstract Class"></a>抽象类Abstract Class</h1><p>抽象类的定义很简单，其实就是一个声明为 <strong>abstract</strong>的类，其可能，也可能不包含抽象方法。抽象类不能被实例化，但他们可以作为其他类的超类。</p>
-<p>抽象方法就是由关键字 <strong>abstract</strong> 修饰 的方法。其也不会有方法体：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">moveTo</span><span class="params">(<span class="keyword">double</span> deltaX, <span class="keyword">double</span> deltaY)</span></span>;</span><br></pre></td></tr></table></figure>
-<p>如果一个类包含了抽象方法，那么它自己必须是 <strong>abstract</strong>的。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">GraphicObject</span> </span>&#123;</span><br><span class="line">   <span class="comment">// declare fields</span></span><br><span class="line">   <span class="comment">// declare nonabstract methods</span></span><br><span class="line">   <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">draw</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当一个抽象类被继承的时候，子类通常会提供所有抽象方法的实现。如果没有的话，子类也必须声明为 <strong>abstract</strong>。</p>
-<blockquote>
-<p>接口中没有被声明为 <code>defalut, static</code>的方法是 <strong>隐式</strong> 抽象的，所以 <code>abstract</code> 关键字没有被用来修饰接口方法。</p>
-</blockquote>
-<h1 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h1><p>抽象类和接口非常的相似。我们不能实例化他们，他们可能包含了有实现或没有实现的方法。</p>
-<p>然而，对于抽象类，可以定义 非 <code>statis, final</code> 的字段，可以定义 <code>public protected private</code> 约束的方法。</p>
-<p>对于接口，所有的字段都自动是 <code>public,statis,final</code>的，所有声明的方法都是 <code>public</code>的。此外，我们只能扩展一个（抽象）类，不论其是否是抽象的，而我们可以实现任意数量的接口。</p>
-<p>怎么选择抽象类还是接口？</p>
-<p><strong>以下情况考虑使用抽象类</strong>：    </p>
-<ul>
-<li>在几个非常相关的类间共享代码</li>
-<li>希望扩展抽象类的类有很多公共的方法和字段，或者需要不止是 <code>public</code> 的修饰符。</li>
-<li>想声明非<code>static, final</code>的字段。这允许我们定义用来访问和修改这个对象的状态。</li>
-</ul>
-<p><strong>以下情况考虑使用接口</strong>：    </p>
-<ul>
-<li>期望不相关的类实现我们的接口。例如，接口 <em>Comparable, Cloneable</em></li>
-<li>想要对一个具体的数据类型指定行为，但是并不在乎谁实现了它的行为。</li>
-<li>想要利用类型的多重继承优势。</li>
-</ul>
-<p>JDK中一个抽象类的例子是 <em>AbstractMap</em>，其是 <em>集合框架</em> 的一部分。其子类（<strong>HashMap, TreeMap, ConcurrentHashMap</strong>）共享很多方法（如 <em>get, put, containsKey, containsValue）</em>。</p>
-<p>JDK中一个实现了多个接口的例子就是 <strong>HashMap</strong>，其实现了接口 <em>Serializable, Cloneable, Map<k, v></k,></em>。通过阅读这些接口列表，我们可以推端一个 <em>HaspMap</em>的实例可以被克隆，序列化（可以被转换为一个字节流），并且拥有 map 的功能。此外，<em>Map<k,v></k,v></em>接口已经被增强了，提供了很多默认方法如 <em>merge, forEach</em>。</p>
-<blockquote>
-<p>很多库使用了 抽象类和接口。<em>HaspMap</em> 实现了几个接口，但也扩展了抽象类<em>AbstractMap</em>。</p>
-</blockquote>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1329,7 +1299,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">329</span>
+          <span class="site-state-item-count">330</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

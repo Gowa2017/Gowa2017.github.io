@@ -311,6 +311,31 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">(<span class="string">"cmdname"</span>, (args), &#123;kwargs&#125;)</span><br></pre></td></tr></table></figure>
 <p>这通常会被叫做 <em>输入命令</em> 或者 <em>输出命令</em>，根据数据的流向来定。一个 <strong>输入命令</strong> 的最终端点会是一个与之匹配的 <code>inputfunc</code>。这个函数的格式一般是 <code>cmdname(session, *args, **kwargs)</code>，其中 <code>session</code> 指的是这个命令的源 ServerSession。</p>
 <p>输出命令被一个匹配的 <em>outfunc</em> 来进行处理。其责任是将Evennia 内部的表示转换为一个适合发送到客户端的格式。它是硬编码的。选择哪个 <em>outfunc</em> 以及如何处理传出数据取决于所连接客户端的性质。只有在开发一个支持 Evennia 协议的时候需要添加 <em>outfunc</em>。</p>
+<h1 id="text"><a href="#text" class="headerlink" title="text"></a>text</h1><p>实际上，大多数时候我们的交互都是使用 <code>text</code> 输入函数的。对于我们的输入，如果是使用  <em>telent</em> 连接，那么会由 <code>telnet</code> 服务器封装成 <code>{&#39;text&#39;: [[&#39;co g g \n&#39;], {&#39;options&#39;: {}}]}</code> 的形式交给SessionHandler，经  <code>AMPSERVER</code> 最终到达  ServerSessionHandler 。照这个格式，就会匹配到我们的 <code>text</code> 输入函数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> session:</span><br><span class="line">    input_debug = session.protocol_flags.get(<span class="string">"INPUTDEBUG"</span>, <span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">for</span> cmdname, (cmdargs, cmdkwargs) <span class="keyword">in</span> kwargs.items():</span><br><span class="line">        cname = cmdname.strip().lower()</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            cmdkwargs.pop(<span class="string">"options"</span>, <span class="literal">None</span>)</span><br><span class="line">            <span class="keyword">if</span> cname <span class="keyword">in</span> _INPUT_FUNCS:</span><br><span class="line">                _INPUT_FUNCS[cname](session, *cmdargs, **cmdkwargs)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                _INPUT_FUNCS[<span class="string">"default"</span>](session, cname, *cmdargs, **cmdkwargs)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> err:</span><br><span class="line">            <span class="keyword">if</span> input_debug:</span><br><span class="line">                session.msg(err)</span><br><span class="line">            log_trace()</span><br></pre></td></tr></table></figure>
+<p>最终，就会将 <code>cmdargs</code> 解析成命令来执行。</p>
+<h1 id="输出"><a href="#输出" class="headerlink" title="输出"></a>输出</h1><p>我们的数据，一般都是调用  <code>msg()</code> 方法来发送消息的。在 <strong>Object, Channel, Account</strong> 都有实现这个方法。</p>
+<ul>
+<li>对于，Object，Account 没有说的，就是找到此 Object 连接上的 Session 进行发送。</li>
+<li>对于 Channel，则是将消息发送给 Account。</li>
+</ul>
+<p>对于 <code>msg()</code> 方法，我们所传递给需要发送的数据，不限于是 <code>string</code>，其他任何格式都是可以进行发送的了</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> text <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> (isinstance(text, str) <span class="keyword">or</span> isinstance(text, tuple)):</span><br><span class="line">        <span class="comment"># sanitize text before sending across the wire</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            text = to_str(text)</span><br><span class="line">        <span class="keyword">except</span> Exception:</span><br><span class="line">            text = repr(text)</span><br><span class="line">    kwargs[<span class="string">"text"</span>] = text</span><br></pre></td></tr></table></figure>
+<p>但是，转换前，都是试图将其转换成 <code>string</code> 格式的，如果是 <code>string,</code>或者是 <code>tuple</code> 的话，就不用进行转换。</p>
+<p>实际上我们可以看到，对于我们要发送的消息，其实也是放在 <code>kwargs</code> 中的 <code>text</code> 键内的。最终，会将由 PortalSessionHandler，根据键中的 <code>text</code>，在寻找一个 <code>send_text</code> 方法。对于 telnet 来说，其只会发送出 <code>cmdargs</code> 中的内容。</p>
+<p>而对于  WebSocket ，则是会格式化成为 JSON，来发送</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">self.sendLine(json.dumps([cmd, args, kwargs]))</span><br></pre></td></tr></table></figure>
+<p>比如，我们要发送消息：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">obj.msg(<span class="string">'你好'</span>,&#123;<span class="string">'a'</span>:<span class="string">'npc'</span>, <span class="string">'b'</span>:<span class="string">'users'</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>最终会转成：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">[<span class="string">"text"</span>, <span class="string">"\u8fd9\u91cc\u6709\u4e2a\u8001\u677f"</span>, &#123;<span class="attr">"a"</span>: <span class="string">"npc"</span>, <span class="attr">"b"</span>: <span class="string">"users"</span>&#125;]</span><br></pre></td></tr></table></figure>
+<p>发送到 WebSocket 客户端。</p>
+<p>而只会发送 字符串到 telnet，对于 kwars 中指定的参数，一般是用来指定相关的设置，通过其他命令发送下去。</p>
+<h1 id="Muddery-封装成-Json格式返回"><a href="#Muddery-封装成-Json格式返回" class="headerlink" title="Muddery 封装成 Json格式返回"></a>Muddery 封装成 Json格式返回</h1><p>本来，Evennia 中的格式， <code>(&quot;cmdname&quot;,(args),{kwargs})</code>是很好的，但是  <code>Muddery</code>全封装成 JSON 格式了，然后呢为了让 WebSocket 使用。事实上，没有必要做这么大的转换，我们完全可以根据 Session 中记录的，是使用的何种客户端来进行不同的返回格式。</p>
+<p>如使用 的 <strong>Telnet</strong> 那么就返回文字，如果返回的 WebSocket 就返回给 JSON 格式，所有的数据都放在 <code>kwargs</code> 里面，这样不是就能做到很好的兼容么。</p>
+<p>世界上 muddery ，是将所有的数据，先转换成 JSON 字符串，然后放到 <code>args</code> 中。这就比较蛋疼了。</p>
+<p>其在 ServerSession 中重写了 <code>data_out</code> 方法，所以说呢，传输逻辑改变了。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">out_text = json.dumps(&#123;<span class="string">"data"</span>: text, <span class="string">"context"</span>: context&#125;)</span><br><span class="line"><span class="keyword">return</span> super(ServerSession, self).data_out(text=out_text, **kwargs)</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -384,7 +409,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MessagePath"><span class="nav-number">1.</span> <span class="nav-text">MessagePath</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OOB"><span class="nav-number">2.</span> <span class="nav-text">OOB</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MessagePath"><span class="nav-number">1.</span> <span class="nav-text">MessagePath</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OOB"><span class="nav-number">2.</span> <span class="nav-text">OOB</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#text"><span class="nav-number">3.</span> <span class="nav-text">text</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#输出"><span class="nav-number">4.</span> <span class="nav-text">输出</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Muddery-封装成-Json格式返回"><span class="nav-number">5.</span> <span class="nav-text">Muddery 封装成 Json格式返回</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -398,7 +423,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">329</span>
+          <span class="site-state-item-count">330</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
