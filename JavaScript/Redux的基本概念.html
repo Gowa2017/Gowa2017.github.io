@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="实际上之前听过群友说过这个东西，但是具体不知道什么作用的，大概想着也不会有用着的地方。但是在最近想要用 Reactive Native 来写一个 APP 的时候，突然发现，原来这是一个比较实用的神器的。所以，有必要来简单的学一下。这里不具体的介绍如何使用它，而是从上而下对其的工作的机制有一个大概的了解。">
+<meta name="keywords" content="JavaScript,React Native,Redux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redux的基本概念">
+<meta property="og:url" content="https://gowa.club/JavaScript/Redux的基本概念.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="实际上之前听过群友说过这个东西，但是具体不知道什么作用的，大概想着也不会有用着的地方。但是在最近想要用 Reactive Native 来写一个 APP 的时候，突然发现，原来这是一个比较实用的神器的。所以，有必要来简单的学一下。这里不具体的介绍如何使用它，而是从上而下对其的工作的机制有一个大概的了解。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://gowa.club/res/1*QERgzuzphdQz4e0fNs1CFQ.gif">
+<meta property="og:updated_time" content="2020-03-21T14:32:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redux的基本概念">
+<meta name="twitter:description" content="实际上之前听过群友说过这个东西，但是具体不知道什么作用的，大概想着也不会有用着的地方。但是在最近想要用 Reactive Native 来写一个 APP 的时候，突然发现，原来这是一个比较实用的神器的。所以，有必要来简单的学一下。这里不具体的介绍如何使用它，而是从上而下对其的工作的机制有一个大概的了解。">
+<meta name="twitter:image" content="https://gowa.club/res/1*QERgzuzphdQz4e0fNs1CFQ.gif">
+
+<link rel="canonical" href="https://gowa.club/JavaScript/Redux的基本概念.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Redux的基本概念 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/Redux的基本概念.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Redux的基本概念
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-03-21 22:32:48" itemprop="dateCreated datePublished" datetime="2020-03-21T22:32:48+08:00">2020-03-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/JavaScript/Redux的基本概念.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/Redux的基本概念.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>实际上之前听过群友说过这个东西，但是具体不知道什么作用的，大概想着也不会有用着的地方。但是在最近想要用 Reactive Native 来写一个 APP 的时候，突然发现，原来这是一个比较实用的神器的。所以，有必要来简单的学一下。这里不具体的介绍如何使用它，而是从上而下对其的工作的机制有一个大概的了解。</p>
+<a id="more"></a>
+<p><a href="https://cn.redux.js.org" target="_blank" rel="noopener">Redux 的中文网站</a> 有详细的介绍。</p>
+<h1 id="基本的概念"><a href="#基本的概念" class="headerlink" title="基本的概念"></a>基本的概念</h1><p>Redux 是 <strong>一个专为 JavaScript 应用设计可预测的状态容器</strong>。我基本的限制就是将所有的状态（数据）放在一个统一的地方进行存储（Store），然后将此这些 State 暴露给所有的组件使用。</p>
+<p>这样的话，就不会在各个组件（控件）间进行复杂的传值，依赖的解决等等。</p>
+<p>首先先来一张图：</p>
+<p><img src="../res/1*QERgzuzphdQz4e0fNs1CFQ.gif" alt></p>
+<h2 id="术语"><a href="#术语" class="headerlink" title="术语"></a>术语</h2><p>上面的图中展示了几个概念：</p>
+<ul>
+<li><strong>Action</strong>。行为（动作）是把数据从应用（译者注：这里之所以不叫 view 是因为这些数据有可能是服务器响应，用户输入或其它非 view 的数据 ）传到 store 的有效载荷。它是 store 数据的<strong>唯一</strong>来源。一般来说你会通过 <a href="https://cn.redux.js.org/docs/api/Store.html#dispatch" target="_blank" rel="noopener"><code>store.dispatch()</code></a> 将 action 传到 store。</li>
+<li><strong>Reducers</strong> 指定了应用状态的变化如何响应 <a href="https://cn.redux.js.org/docs/basics/Actions.html" target="_blank" rel="noopener">actions</a> 并发送到 store 的，记住 actions 只是描述了<em>有事情发生了</em>这一事实，并没有描述应用如何更新 state。 上图中， Store 会有一个总的 Reducers ，然后其可以是由多个小的  Reducer 进行组成的。</li>
+<li><strong>Store</strong> ，负责将 Actions, Reducers，State 组合在一起。负责管理整个 State。调用 Reducers 等等。就我个人理解而言，其主要就是根据响应的 Action，然后来调用 Reducer ，更新 State 。通知订阅了此 State 的相关订阅者。其职能为：<ul>
+<li>维持应用的 state；</li>
+<li>提供 <a href="https://cn.redux.js.org/docs/api/Store.html#getState" target="_blank" rel="noopener"><code>getState()</code></a> 方法获取 state；</li>
+<li>提供 <a href="https://cn.redux.js.org/docs/api/Store.html#dispatch" target="_blank" rel="noopener"><code>dispatch(action)</code></a> 方法更新 state；</li>
+<li>通过 <a href="https://cn.redux.js.org/docs/api/Store.html#subscribe" target="_blank" rel="noopener"><code>subscribe(listener)</code></a> 注册监听器;</li>
+<li>通过 <a href="https://cn.redux.js.org/docs/api/Store.html#subscribe" target="_blank" rel="noopener"><code>subscribe(listener)</code></a> 返回的函数注销监听器。</li>
+</ul>
+</li>
+<li><strong>Middleware</strong>。这个东西，位于 Store 和 Actions 之间。这个的设计主要是为了来进行异步的调用。在这里我们就可以进行一些副作用的操作，因为 Redux 强烈建议，<strong>不要在 Reducer</strong> 中进行任何有副作用的操作。可以有多个 <strong>Middleware</strong>，这里可以在拦截 Actions。</li>
+</ul>
+<h2 id="selectors"><a href="#selectors" class="headerlink" title="selectors"></a>selectors</h2><p><a href="https://cn.redux.js.org/docs/recipes/ComputingDerivedData.html" target="_blank" rel="noopener">官方推荐是使用 Reselect</a> 来进行创建。</p>
+<blockquote>
+<p><a href="https://github.com/faassen/reselect.git" target="_blank" rel="noopener">Reselect</a> 库可以创建可记忆的(Memoized)、可组合的 <strong>selector</strong> 函数。Reselect selectors 可以用来高效地计算 Redux store 里的衍生数据。</p>
+</blockquote>
+<p>就比如，我们的组件应该都是关心 State 中的一部分数据，而不是全部都关注。因此，我们都会在 <em>mapStateToProps</em> 做一些运算，得出我们想要的数据，这个运算函数，我们将把个叫做 <strong>selectors</strong> 。但是，每次都进行重新计算，或当 State 的数据 过大，或者计算逻辑比较复杂的时候，就会有性能的损失。Reselect 就是为了让我们来干这活的。</p>
+<p>这个抽空再看了。</p>
+<h3 id="创建可记忆的-Selector"><a href="#创建可记忆的-Selector" class="headerlink" title="创建可记忆的 Selector"></a>创建可记忆的 Selector</h3><p>Reselect 提供 <code>createSelector</code> 函数来创建可记忆的 selector。<code>createSelector</code> 接收一个 input-selectors 数组和一个转换函数作为参数。如果 state tree 的改变会引起 input-selector 值变化，那么 selector 会调用转换函数，传入 input-selectors 作为参数，并返回结果。如果 input-selectors 的值和前一次的一样，它将会直接返回前一次计算的数据，而不会再调用一次转换函数。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; createSelector &#125; <span class="keyword">from</span> <span class="string">'reselect'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getVisibilityFilter = <span class="function"><span class="params">state</span> =&gt;</span> state.visibilityFilter</span><br><span class="line"><span class="keyword">const</span> getTodos = <span class="function"><span class="params">state</span> =&gt;</span> state.todos</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> getVisibleTodos = createSelector(</span><br><span class="line">  [getVisibilityFilter, getTodos],</span><br><span class="line">  (visibilityFilter, todos) =&gt; &#123;</span><br><span class="line">    <span class="keyword">switch</span> (visibilityFilter) &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'SHOW_ALL'</span>:</span><br><span class="line">        <span class="keyword">return</span> todos</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'SHOW_COMPLETED'</span>:</span><br><span class="line">        <span class="keyword">return</span> todos.filter(<span class="function"><span class="params">t</span> =&gt;</span> t.completed)</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'SHOW_ACTIVE'</span>:</span><br><span class="line">        <span class="keyword">return</span> todos.filter(<span class="function"><span class="params">t</span> =&gt;</span> !t.completed)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="组合-Selector"><a href="#组合-Selector" class="headerlink" title="组合 Selector"></a>组合 Selector</h3><p>可记忆的 selector 自身可以作为其它可记忆的 selector 的 input-selector。下面的 <code>getVisibleTodos</code> 被当作另一个 selector 的 input-selector，来进一步通过关键字（keyword）过滤 todos。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> getKeyword = <span class="function"><span class="params">state</span> =&gt;</span> state.keyword</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getVisibleTodosFilteredByKeyword = createSelector(</span><br><span class="line">  [getVisibleTodos, getKeyword],</span><br><span class="line">  (visibleTodos, keyword) =&gt;</span><br><span class="line">    visibleTodos.filter(<span class="function"><span class="params">todo</span> =&gt;</span> todo.text.indexOf(keyword) &gt; <span class="number">-1</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="Middleware"><a href="#Middleware" class="headerlink" title="Middleware"></a>Middleware</h2><p>相对于 Express 或者 Koa 的 middleware，Redux middleware 被用于解决不同的问题，但其中的概念是类似的。<strong>它提供的是位于 action 被发起之后，到达 reducer 之前的扩展点。</strong> 你可以利用 Redux middleware 来进行日志记录、创建崩溃报告、调用异步接口或者路由等等。</p>
+<h1 id="React-Redux"><a href="#React-Redux" class="headerlink" title="React Redux"></a>React Redux</h1><p>这个玩意，是 Redux 专门为 React 所设计的库。简化了我们的使用。这个库的使用比较简单，关于再于其提供的 <code>connect()</code> 函数。其有两个关键的内容：</p>
+<ul>
+<li><strong>Provider</strong> 这个组件，能让我们在整个应用的剩余部分 都能访问  Redux 的 Store。</li>
+<li><code>connect()</code> 。这个函数能让我们的 React 组件，与  Redux 的 Store 连接起来。而不用我们手动进行绑定。</li>
+</ul>
+<h2 id="connect"><a href="#connect" class="headerlink" title="connect()"></a>connect()</h2><p>原型：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">connect</span>(<span class="params">mapStateToProps?, mapDispatchToProps?, mergeProps?, options?</span>)</span></span><br></pre></td></tr></table></figure>
+<h3 id="mapStateToProps-state-ownProps-gt-Object"><a href="#mapStateToProps-state-ownProps-gt-Object" class="headerlink" title="mapStateToProps?: (state, ownProps?) =&gt; Object"></a>mapStateToProps?: (state, ownProps?) =&gt; Object</h3><p>如果 <em>mapStateToProps</em> 是一个函数，那么 <code>connect</code> 执行后的组件将会订阅 Redux Store。这就意味着，每当 Store 进行了更新，这个函数就会被执行。mapStateToProps 的返回必须是一个简单对象，然后可以被合并到组件的 <code>props</code> 中。如果我们不想订阅 Store 的更新，那么就将此参数传递为 <code>null</code> 或者 <code>undefined</code>就行了。</p>
+<p>同时，这个函数定义的参数个数决定了这个函数何时会被调用。</p>
+<ul>
+<li><p>如果只有 <code>state</code> 参数。那么 Store 更新时会调用，同时将 State 作为唯一的参数进行传递。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> mapStateToProps = <span class="function"><span class="params">state</span> =&gt;</span> (&#123; <span class="attr">todos</span>: state.todos &#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>ownProps</code> 如果还有这个参数。在 Store 更新或者 组件收到新的 <code>props</code> 参数时都会被调用。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> mapStateToProps = <span class="function">(<span class="params">state, ownProps</span>) =&gt;</span> (&#123;</span><br><span class="line">  todo: state.todos[ownProps.id]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="mapDispatchToProps-Object-dispatch-ownProps-gt-Object"><a href="#mapDispatchToProps-Object-dispatch-ownProps-gt-Object" class="headerlink" title="mapDispatchToProps?: Object | (dispatch, ownProps?) =&gt; Object`"></a>mapDispatchToProps?: Object | (dispatch, ownProps?) =&gt; Object`</h3><p>这个参数比较复杂，其根据传递的参数，类型的不同而有不同的语义。</p>
+<p>具体而言，对于 <code>connect()</code> 的这个参数，我们可以：<strong>不提供；提供一个对象；提供一个函数</strong>。</p>
+<h4 id="不提供"><a href="#不提供" class="headerlink" title="不提供"></a>不提供</h4><p>如果不提供这个参数，那么在我们 <code>connect()</code> 后的组件中，将会拥有一个属性 <code>dispatch()</code> ，我们可以用其来进行事件的派发。</p>
+<h4 id="提供一个函数"><a href="#提供一个函数" class="headerlink" title="提供一个函数"></a>提供一个函数</h4><p>如果我们提供一个函数，这个参数最大可以拥有两个参数，而根据其拥有参数的不同，意义又是不一样的。</p>
+<p>但是，无论是几个参数，最终我们提供的这个函数，其第一个参数都会是 <code>dispatch()</code>，而因此，我们可以在这个函数中调用此函数来进行事件的派发。</p>
+<p><strong>只有一个参数</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> mapDispatchToProps = <span class="function"><span class="params">dispatch</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="comment">// dispatching plain actions</span></span><br><span class="line">    increment: <span class="function"><span class="params">()</span> =&gt;</span> dispatch(&#123; <span class="attr">type</span>: <span class="string">'INCREMENT'</span> &#125;),</span><br><span class="line">    decrement: <span class="function"><span class="params">()</span> =&gt;</span> dispatch(&#123; <span class="attr">type</span>: <span class="string">'DECREMENT'</span> &#125;),</span><br><span class="line">    reset: <span class="function"><span class="params">()</span> =&gt;</span> dispatch(&#123; <span class="attr">type</span>: <span class="string">'RESET'</span> &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当然，我们也可以将其转发到一个 <code>actionCreator</code></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> mapDispatchToProps = <span class="function"><span class="params">dispatch</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="comment">// explicitly forwarding arguments</span></span><br><span class="line">    onClick: <span class="function"><span class="params">event</span> =&gt;</span> dispatch(trackClick(event)),</span><br><span class="line"></span><br><span class="line">    <span class="comment">// implicitly forwarding arguments</span></span><br><span class="line">    onReceiveImpressions: <span class="function">(<span class="params">...impressions</span>) =&gt;</span></span><br><span class="line">      dispatch(trackImpressions(impressions))</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>有两个参数</strong></p>
+<p>如果函数有两个参数，那么第二个参数，将会是我们传递给 <code>conenct()</code> 中的 <code>props</code> <code>，而每当这个组件收到新的</code> <code>prop</code> 的时候，此函数都会被调用。</p>
+<p>这就意味着，我们可能不是在组件进行重新渲染的时候重新绑定新的 <code>props</code> 到 action dispatchers，而是在 组件的 <code>props</code> 改变时干这个事情。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Binds on component re-rendering</span></span><br><span class="line">render() &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> this.props.toggleTodo(this.props.todoId)&#125; /&gt;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="xml">const mapDispatchToProps = dispatch =&gt; &#123;</span></span><br><span class="line"><span class="xml">  return &#123;</span></span><br><span class="line"><span class="xml">    toggleTodo: todoId =&gt; dispatch(toggleTodo(todoId))</span></span><br><span class="line"><span class="xml">  &#125;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Binds on props change</span></span><br><span class="line">render() &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> this.props.toggleTodo()&#125; /&gt;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="xml">const mapDispatchToProps = (dispatch, ownProps) =&gt; &#123;</span></span><br><span class="line"><span class="xml">  return &#123;</span></span><br><span class="line"><span class="xml">    toggleTodo: () =&gt; dispatch(toggleTodo(ownProps.todoId))</span></span><br><span class="line"><span class="xml">  &#125;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure>
+<h4 id="作为函数的返回值"><a href="#作为函数的返回值" class="headerlink" title="作为函数的返回值"></a>作为函数的返回值</h4><p><em>mapDispatchToProps</em> 函数必须返回纯对象：</p>
+<ul>
+<li>这个对象中的所有字段都会被注入到我们的属性中，其值通常是一个被调用时会分发事件的函数。</li>
+<li>如果作为值的函数中使用了 action creator ，那么一个约定就是将此函数的键命名来和 action creator 一致。</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> increment = <span class="function"><span class="params">()</span> =&gt;</span> (&#123; <span class="attr">type</span>: <span class="string">'INCREMENT'</span> &#125;)</span><br><span class="line"><span class="keyword">const</span> decrement = <span class="function"><span class="params">()</span> =&gt;</span> (&#123; <span class="attr">type</span>: <span class="string">'DECREMENT'</span> &#125;)</span><br><span class="line"><span class="keyword">const</span> reset = <span class="function"><span class="params">()</span> =&gt;</span> (&#123; <span class="attr">type</span>: <span class="string">'RESET'</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapDispatchToProps = <span class="function"><span class="params">dispatch</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="comment">// dispatching actions returned by action creators</span></span><br><span class="line">    increment: <span class="function"><span class="params">()</span> =&gt;</span> dispatch(increment()),</span><br><span class="line">    decrement: <span class="function"><span class="params">()</span> =&gt;</span> dispatch(decrement()),</span><br><span class="line">    reset: <span class="function"><span class="params">()</span> =&gt;</span> dispatch(reset())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><em>mapDispatchToProps</em> 的返回值将会 <strong>合并</strong> 到我们 <em>connect</em> 后的组件的 <em>props</em> 中。我们就可以直接调用他进行事件的分发了。</p>
+<h4 id="bindActionCreators"><a href="#bindActionCreators" class="headerlink" title="bindActionCreators"></a>bindActionCreators</h4><p>如果我们来手动对这个函数进行处理，那么会比较麻烦。所以呢，Redux 提供了一个函数来简化我们的事情。</p>
+<blockquote>
+<p>bindActionCreators 将一个对象中值是 <code>action creators</code> 的对象转换为一个键相同，但是每个 <code>action creator</code> 都被一个 <code>dispatch()</code> 进行了包装的函数，这样我们就可以直接调用这个 <code>action creator</code> 的包装函数来分发事件了。</p>
+</blockquote>
+<p><code>bindActionCreators</code> 接收两个参数：</p>
+<ol>
+<li>一个 <strong>函数（一个 action creator）</strong>，或者是一对象（每个字段都是一个 action creator）</li>
+<li>dispatch</li>
+</ol>
+<p>通过 <code>bindActionCreators</code>包装后的函数会自动的转发这些参数，因此我们不需要进行手动处理。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; bindActionCreators &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> increment = <span class="function"><span class="params">()</span> =&gt;</span> (&#123; <span class="attr">type</span>: <span class="string">'INCREMENT'</span> &#125;)</span><br><span class="line"><span class="keyword">const</span> decrement = <span class="function"><span class="params">()</span> =&gt;</span> (&#123; <span class="attr">type</span>: <span class="string">'DECREMENT'</span> &#125;)</span><br><span class="line"><span class="keyword">const</span> reset = <span class="function"><span class="params">()</span> =&gt;</span> (&#123; <span class="attr">type</span>: <span class="string">'RESET'</span> &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// binding an action creator</span></span><br><span class="line"><span class="comment">// returns (...args) =&gt; dispatch(increment(...args))</span></span><br><span class="line"><span class="keyword">const</span> boundIncrement = bindActionCreators(increment, dispatch)</span><br><span class="line"></span><br><span class="line"><span class="comment">// binding an object full of action creators</span></span><br><span class="line"><span class="keyword">const</span> boundActionCreators = bindActionCreators(</span><br><span class="line">  &#123; increment, decrement, reset &#125;,</span><br><span class="line">  dispatch</span><br><span class="line">)</span><br><span class="line"><span class="comment">// returns</span></span><br><span class="line"><span class="comment">// &#123;</span></span><br><span class="line"><span class="comment">//   increment: (...args) =&gt; dispatch(increment(...args)),</span></span><br><span class="line"><span class="comment">//   decrement: (...args) =&gt; dispatch(decrement(...args)),</span></span><br><span class="line"><span class="comment">//   reset: (...args) =&gt; dispatch(reset(...args)),</span></span><br><span class="line"><span class="comment">// &#125;</span></span><br></pre></td></tr></table></figure>
+<p>在我们的 <code>mapDispatchToProps</code> 这个参数中我们就可以这样使用：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; bindActionCreators &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapDispatchToProps</span>(<span class="params">dispatch</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> bindActionCreators(&#123; increment, decrement, reset &#125;, dispatch)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// component receives props.increment, props.decrement, props.reset</span></span><br><span class="line">connect(</span><br><span class="line">  <span class="literal">null</span>,</span><br><span class="line">  mapDispatchToProps</span><br><span class="line">)(Counter)</span><br></pre></td></tr></table></figure>
+<p><code>mapDispatchToProps</code>之前我们说过，如果我们提供了这个参数，那么就不会再收到默认的<code>dispatch()</code> 。我们可以手动他把他加在我们的 <code>mapDispatchToProps</code> 的返回中。虽然大多数时候我们不需要这样。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; bindActionCreators &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapDispatchToProps</span>(<span class="params">dispatch</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    dispatch,</span><br><span class="line">    ...bindActionCreators(&#123; increment, decrement, reset &#125;, dispatch)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="提供一个对象"><a href="#提供一个对象" class="headerlink" title="提供一个对象"></a>提供一个对象</h4><p>我们在 React 中分发事件的流程其实也很传统：定义一个 action creator，然后将其包装在一个类似 <code>(…args) =&gt; dispatch(actionCreator(…args))</code> 的函数中，然后将这个包装函数传递成为组件的属性。</p>
+<p>因此呢，我们的 <code>connect()</code> 也支持将 <code>mapDispatchToProps</code> 传递为一个对象。如果我们传递的这个对象中都是 <code>action creator</code>，那么，<code>connect()</code> 会自动的调用 <code>bindActionCreators</code>。</p>
+<p>官方推荐的就是，一直使用这个方式。</p>
+<p>但是需要注意的是：</p>
+<blockquote>
+<p><em>mapDispatchToProps</em> 对象每个字段都被假设为一个 action creator</p>
+<p>我们的组件不会再拥有一个 <code>dispatch</code> <em>prop</em>。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// React Redux does this for you automatically:</span></span><br><span class="line">dispatch =&gt; bindActionCreators(mapDispatchToProps, dispatch)</span><br></pre></td></tr></table></figure>
+<p>因此，我们的 <em>mapDIspatchToProps</em> 可以简单写成这样：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> mapDispatchToProps = &#123;</span><br><span class="line">  increment,</span><br><span class="line">  decrement,</span><br><span class="line">  reset</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ol>
+<li>不提供 <em>mapDispatchToProps</em> ，<em>store.dispatch</em> 会注入到我们组件中 <em>this.props.dispatch</em></li>
+<li><em>mapDispatchToProps</em> 是一个完全由 <em>action creator</em> 组成的对象。那么将此对象中的所有 <code>action creator</code> 放在一个包装函数中（可直接调用派发事件），注入到我们的组件中。<em>this.props.action_creator_wrap_function …</em> ，当然，这个名称由我们自己定。</li>
+<li><em>mapDispatchToProps</em> 是一个函数。</li>
+</ol>
+<h3 id="mergeProps-stateProps-dispatchProps-ownProps-gt-Object"><a href="#mergeProps-stateProps-dispatchProps-ownProps-gt-Object" class="headerlink" title="mergeProps?: (stateProps, dispatchProps, ownProps) =&gt; Object"></a><code>mergeProps?: (stateProps, dispatchProps, ownProps) =&gt; Object</code></h3><p>这个参数，这个决定了我们包装后的组件的属性是如何确定的。如果我们不提供这个参数，我们包装后的组件默认情况下将会拥有 <code>{ ...ownProps, ...stateProps, ...dispatchProps }</code></p>
+<p>这个函数最多可以拥有三个参数：他们将会是<code>mapStateToProps(), mapDispatchToProps()</code> 的返回值，及包装后组件的 <em>props</em>。</p>
+<ul>
+<li><code>stateProps</code></li>
+<li><code>dispatchProps</code></li>
+<li><code>ownProps</code></li>
+</ul>
+<p>相当于在此对我们的组件最终拥有的属性进行一个过滤和选择。</p>
+<h3 id="options-Object"><a href="#options-Object" class="headerlink" title="options?: Object"></a><code>options?: Object</code></h3><h3 id="connect-Returns"><a href="#connect-Returns" class="headerlink" title="connect() Returns"></a>connect() Returns</h3><p><code>connect()</code> 的返回值，是一个包装函数，其将我们的组件进行包装，包装后的组件会拥有一些由 <code>connect()</code> 注入的属性。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; login, logout &#125; <span class="keyword">from</span> <span class="string">'./actionCreators'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapState = <span class="function"><span class="params">state</span> =&gt;</span> state.user</span><br><span class="line"><span class="keyword">const</span> mapDispatch = &#123; login, logout &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// first call: returns a hoc that you can use to wrap any component</span></span><br><span class="line"><span class="keyword">const</span> connectUser = connect(</span><br><span class="line">  mapState,</span><br><span class="line">  mapDispatch</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// second call: returns the wrapper component with mergedProps</span></span><br><span class="line"><span class="comment">// you may use the hoc to enable different components to get the same behavior</span></span><br><span class="line"><span class="keyword">const</span> ConnectedUserLogin = connectUser(Login)</span><br><span class="line"><span class="keyword">const</span> ConnectedUserProfile = connectUser(Profile)</span><br></pre></td></tr></table></figure>
+<p>大多数的情况下，这个包装函数都会被正确的调用，而不需要我们存储在一个临时变量中。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; login, logout &#125; <span class="keyword">from</span> <span class="string">'./actionCreators'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapState = <span class="function"><span class="params">state</span> =&gt;</span> state.user</span><br><span class="line"><span class="keyword">const</span> mapDispatch = &#123; login, logout &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// call connect to generate the wrapper function, and immediately call</span></span><br><span class="line"><span class="comment">// the wrapper function to generate the final wrapper component.</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(</span><br><span class="line">  mapState,</span><br><span class="line">  mapDispatch</span><br><span class="line">)(Login)</span><br></pre></td></tr></table></figure>
+<h3 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h3><h4 id="注入-dispatch，不监听-Store"><a href="#注入-dispatch，不监听-Store" class="headerlink" title="注入 dispatch，不监听 Store"></a>注入 dispatch，不监听 Store</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect()(TodoApp)</span><br></pre></td></tr></table></figure>
+<h4 id="注入所有的-action-creator，但不监听-Store"><a href="#注入所有的-action-creator，但不监听-Store" class="headerlink" title="注入所有的 action creator，但不监听 Store"></a>注入所有的 action creator，但不监听 Store</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> actionCreators <span class="keyword">from</span> <span class="string">'./actionCreators'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(</span><br><span class="line">  <span class="literal">null</span>,</span><br><span class="line">  actionCreators</span><br><span class="line">)(TodoApp)</span><br></pre></td></tr></table></figure>
+<h4 id="注入dispatch和所有全局-State-的字段-（别这样干）"><a href="#注入dispatch和所有全局-State-的字段-（别这样干）" class="headerlink" title="注入dispatch和所有全局 State 的字段 （别这样干）"></a>注入dispatch和所有全局 State 的字段 （别这样干）</h4><blockquote>
+<p>这样干会让任何的性能优化失效。因为每个状态的变更都会导致全部重新渲染。通常我们的做法是在不同的组件上，<code>connect()</code>，并监听 State 中的一部分。</p>
+</blockquote>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// don't do this!</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(<span class="function"><span class="params">state</span> =&gt;</span> state)(TodoApp)</span><br></pre></td></tr></table></figure>
+<h4 id="注入-dispatch-和-todos"><a href="#注入-dispatch-和-todos" class="headerlink" title="注入 dispatch 和 todos"></a>注入 dispatch 和 todos</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapStateToProps</span>(<span class="params">state</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">todos</span>: state.todos &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(mapStateToProps)(TodoApp)</span><br></pre></td></tr></table></figure>
+<h4 id="注入-todos-和所有的-action-creators"><a href="#注入-todos-和所有的-action-creators" class="headerlink" title="注入 todos 和所有的 action creators"></a>注入 todos 和所有的 action creators</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> actionCreators <span class="keyword">from</span> <span class="string">'./actionCreators'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapStateToProps</span>(<span class="params">state</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">todos</span>: state.todos &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(</span><br><span class="line">  mapStateToProps,</span><br><span class="line">  actionCreators</span><br><span class="line">)(TodoApp)</span><br></pre></td></tr></table></figure>
+<h4 id="就所有的-action-creators-注入成为一个属性"><a href="#就所有的-action-creators-注入成为一个属性" class="headerlink" title="就所有的 action creators 注入成为一个属性"></a>就所有的 action creators 注入成为一个属性</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> actionCreators <span class="keyword">from</span> <span class="string">'./actionCreators'</span></span><br><span class="line"><span class="keyword">import</span> &#123; bindActionCreators &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapStateToProps</span>(<span class="params">state</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">todos</span>: state.todos &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapDispatchToProps</span>(<span class="params">dispatch</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">actions</span>: bindActionCreators(actionCreators, dispatch) &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(</span><br><span class="line">  mapStateToProps,</span><br><span class="line">  mapDispatchToProps</span><br><span class="line">)(TodoApp)</span><br></pre></td></tr></table></figure>
+<h4 id="注入特定的-action-creator"><a href="#注入特定的-action-creator" class="headerlink" title="注入特定的 action creator"></a>注入特定的 action creator</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; addTodo &#125; <span class="keyword">from</span> <span class="string">'./actionCreators'</span></span><br><span class="line"><span class="keyword">import</span> &#123; bindActionCreators &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapStateToProps</span>(<span class="params">state</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">todos</span>: state.todos &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapDispatchToProps</span>(<span class="params">dispatch</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> bindActionCreators(&#123; addTodo &#125;, dispatch)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(</span><br><span class="line">  mapStateToProps,</span><br><span class="line">  mapDispatchToProps</span><br><span class="line">)(TodoApp)</span><br></pre></td></tr></table></figure>
+<h4 id="以-mapDispatchToProps-是对象的形式注入-action-creators"><a href="#以-mapDispatchToProps-是对象的形式注入-action-creators" class="headerlink" title="以 mapDispatchToProps 是对象的形式注入 action creators"></a>以 mapDispatchToProps 是对象的形式注入 action creators</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; addTodo, deleteTodo &#125; <span class="keyword">from</span> <span class="string">'./actionCreators'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapStateToProps</span>(<span class="params">state</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">todos</span>: state.todos &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> mapDispatchToProps = &#123;</span><br><span class="line">  addTodo,</span><br><span class="line">  deleteTodo</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(</span><br><span class="line">  mapStateToProps,</span><br><span class="line">  mapDispatchToProps</span><br><span class="line">)(TodoApp)</span><br></pre></td></tr></table></figure>
+<h4 id="将不同的action-creators-注入到不同的属性中（分组）"><a href="#将不同的action-creators-注入到不同的属性中（分组）" class="headerlink" title="将不同的action creators 注入到不同的属性中（分组）"></a>将不同的action creators 注入到不同的属性中（分组）</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> todoActionCreators <span class="keyword">from</span> <span class="string">'./todoActionCreators'</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> counterActionCreators <span class="keyword">from</span> <span class="string">'./counterActionCreators'</span></span><br><span class="line"><span class="keyword">import</span> &#123; bindActionCreators &#125; <span class="keyword">from</span> <span class="string">'redux'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapStateToProps</span>(<span class="params">state</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">todos</span>: state.todos &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapDispatchToProps</span>(<span class="params">dispatch</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    todoActions: bindActionCreators(todoActionCreators, dispatch),</span><br><span class="line">    counterActions: bindActionCreators(counterActionCreators, dispatch)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(</span><br><span class="line">  mapStateToProps,</span><br><span class="line">  mapDispatchToProps</span><br><span class="line">)(TodoApp)</span><br></pre></td></tr></table></figure>
+<h4 id="根据包装后的组件选择性的注入一些属性"><a href="#根据包装后的组件选择性的注入一些属性" class="headerlink" title="根据包装后的组件选择性的注入一些属性"></a>根据包装后的组件选择性的注入一些属性</h4><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> actionCreators <span class="keyword">from</span> <span class="string">'./actionCreators'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapStateToProps</span>(<span class="params">state</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> &#123; <span class="attr">todos</span>: state.todos &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">mergeProps</span>(<span class="params">stateProps, dispatchProps, ownProps</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Object</span>.assign(&#123;&#125;, ownProps, &#123;</span><br><span class="line">    todos: stateProps.todos[ownProps.userId],</span><br><span class="line">    addTodo: <span class="function"><span class="params">text</span> =&gt;</span> dispatchProps.addTodo(ownProps.userId, text)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> connect(</span><br><span class="line">  mapStateToProps,</span><br><span class="line">  actionCreators,</span><br><span class="line">  mergeProps</span><br><span class="line">)(TodoApp)</span><br></pre></td></tr></table></figure>
+<h2 id><a href="#" class="headerlink" title=" "></a> </h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/React-Native/" rel="tag"># React Native</a>
+              <a href="/tags/Redux/" rel="tag"># Redux</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/JavaScript/JS中使用正则表达式的exec与match的问题.html" rel="next" title="JS中使用正则表达式的exec与match的问题">
+                  <i class="fa fa-chevron-left"></i> JS中使用正则表达式的exec与match的问题
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/JavaScript/RNGN与Redux联合使用的探索.html" rel="prev" title="RNGN与Redux联合使用的探索">
+                  RNGN与Redux联合使用的探索 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基本的概念"><span class="nav-number">1.</span> <span class="nav-text">基本的概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#术语"><span class="nav-number">1.1.</span> <span class="nav-text">术语</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#selectors"><span class="nav-number">1.2.</span> <span class="nav-text">selectors</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建可记忆的-Selector"><span class="nav-number">1.2.1.</span> <span class="nav-text">创建可记忆的 Selector</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组合-Selector"><span class="nav-number">1.2.2.</span> <span class="nav-text">组合 Selector</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Middleware"><span class="nav-number">1.3.</span> <span class="nav-text">Middleware</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#React-Redux"><span class="nav-number">2.</span> <span class="nav-text">React Redux</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#connect"><span class="nav-number">2.1.</span> <span class="nav-text">connect()</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mapStateToProps-state-ownProps-gt-Object"><span class="nav-number">2.1.1.</span> <span class="nav-text">mapStateToProps?: (state, ownProps?) =&gt; Object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mapDispatchToProps-Object-dispatch-ownProps-gt-Object"><span class="nav-number">2.1.2.</span> <span class="nav-text">mapDispatchToProps?: Object | (dispatch, ownProps?) =&gt; Object`</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#不提供"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">不提供</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#提供一个函数"><span class="nav-number">2.1.2.2.</span> <span class="nav-text">提供一个函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#作为函数的返回值"><span class="nav-number">2.1.2.3.</span> <span class="nav-text">作为函数的返回值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#bindActionCreators"><span class="nav-number">2.1.2.4.</span> <span class="nav-text">bindActionCreators</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#提供一个对象"><span class="nav-number">2.1.2.5.</span> <span class="nav-text">提供一个对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">2.1.2.6.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mergeProps-stateProps-dispatchProps-ownProps-gt-Object"><span class="nav-number">2.1.3.</span> <span class="nav-text">mergeProps?: (stateProps, dispatchProps, ownProps) =&gt; Object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#options-Object"><span class="nav-number">2.1.4.</span> <span class="nav-text">options?: Object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#connect-Returns"><span class="nav-number">2.1.5.</span> <span class="nav-text">connect() Returns</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用示例"><span class="nav-number">2.1.6.</span> <span class="nav-text">使用示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#注入-dispatch，不监听-Store"><span class="nav-number">2.1.6.1.</span> <span class="nav-text">注入 dispatch，不监听 Store</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注入所有的-action-creator，但不监听-Store"><span class="nav-number">2.1.6.2.</span> <span class="nav-text">注入所有的 action creator，但不监听 Store</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注入dispatch和所有全局-State-的字段-（别这样干）"><span class="nav-number">2.1.6.3.</span> <span class="nav-text">注入dispatch和所有全局 State 的字段 （别这样干）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注入-dispatch-和-todos"><span class="nav-number">2.1.6.4.</span> <span class="nav-text">注入 dispatch 和 todos</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注入-todos-和所有的-action-creators"><span class="nav-number">2.1.6.5.</span> <span class="nav-text">注入 todos 和所有的 action creators</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#就所有的-action-creators-注入成为一个属性"><span class="nav-number">2.1.6.6.</span> <span class="nav-text">就所有的 action creators 注入成为一个属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注入特定的-action-creator"><span class="nav-number">2.1.6.7.</span> <span class="nav-text">注入特定的 action creator</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#以-mapDispatchToProps-是对象的形式注入-action-creators"><span class="nav-number">2.1.6.8.</span> <span class="nav-text">以 mapDispatchToProps 是对象的形式注入 action creators</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将不同的action-creators-注入到不同的属性中（分组）"><span class="nav-number">2.1.6.9.</span> <span class="nav-text">将不同的action creators 注入到不同的属性中（分组）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#根据包装后的组件选择性的注入一些属性"><span class="nav-number">2.1.6.10.</span> <span class="nav-text">根据包装后的组件选择性的注入一些属性</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#null"><span class="nav-number">2.2.</span> <span class="nav-text"> </span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">335</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">139</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/JavaScript/Redux的基本概念.html",
+            identifier: "JavaScript/Redux的基本概念.html",
+            title: "Redux的基本概念"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>

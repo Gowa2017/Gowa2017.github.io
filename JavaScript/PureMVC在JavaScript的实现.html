@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="据说是在游戏开发的时候，利用 Cocos Creator 来做的时候，对于复杂的情况下，实际上没有一个比较完整的架构是会比较恼火的。所以看到很多人都用了 PureMVC 来进行做管理框架。而在之前所涉及的一个游戏中，也看到在 Cocos2D-lua 中有过 PureMVC-LUA 的实现来做的。/关于使用PureMVC-LUA进行开发的一个过程。">
+<meta name="keywords" content="JavaScript,PureMVC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PureMVC在JavaScript的实现">
+<meta property="og:url" content="https://gowa.club/JavaScript/PureMVC在JavaScript的实现.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="据说是在游戏开发的时候，利用 Cocos Creator 来做的时候，对于复杂的情况下，实际上没有一个比较完整的架构是会比较恼火的。所以看到很多人都用了 PureMVC 来进行做管理框架。而在之前所涉及的一个游戏中，也看到在 Cocos2D-lua 中有过 PureMVC-LUA 的实现来做的。/关于使用PureMVC-LUA进行开发的一个过程。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://gowa.club/res/puremvc-concept-diagram.png">
+<meta property="og:updated_time" content="2020-04-07T06:09:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PureMVC在JavaScript的实现">
+<meta name="twitter:description" content="据说是在游戏开发的时候，利用 Cocos Creator 来做的时候，对于复杂的情况下，实际上没有一个比较完整的架构是会比较恼火的。所以看到很多人都用了 PureMVC 来进行做管理框架。而在之前所涉及的一个游戏中，也看到在 Cocos2D-lua 中有过 PureMVC-LUA 的实现来做的。/关于使用PureMVC-LUA进行开发的一个过程。">
+<meta name="twitter:image" content="https://gowa.club/res/puremvc-concept-diagram.png">
+
+<link rel="canonical" href="https://gowa.club/JavaScript/PureMVC在JavaScript的实现.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>PureMVC在JavaScript的实现 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/PureMVC在JavaScript的实现.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PureMVC在JavaScript的实现
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-07 14:09:15" itemprop="dateCreated datePublished" datetime="2020-04-07T14:09:15+08:00">2020-04-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/JavaScript/PureMVC在JavaScript的实现.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/PureMVC在JavaScript的实现.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>据说是在游戏开发的时候，利用 Cocos Creator 来做的时候，对于复杂的情况下，实际上没有一个比较完整的架构是会比较恼火的。所以看到很多人都用了 PureMVC 来进行做管理框架。而在之前所涉及的一个游戏中，也看到在 Cocos2D-lua 中有过 PureMVC-LUA 的实现来做的。<a href="/Cocos2d-X/关于使用PureMVC-LUA进行开发的一个过程.html" title="/关于使用PureMVC-LUA进行开发的一个过程">/关于使用PureMVC-LUA进行开发的一个过程</a>。</p>
+<a id="more"></a>
+<h1 id="架构图"><a href="#架构图" class="headerlink" title="架构图"></a>架构图</h1><p><img src="../res/puremvc-concept-diagram.png" alt></p>
+<p>其中就用到来一个 Facade 模式，6 个角色。</p>
+<h1 id="角色"><a href="#角色" class="headerlink" title="角色"></a>角色</h1><ul>
+<li>Facade 这个用来连接 Model, View, Controler，外部的组件（角色）不会直接访问 这三者，而是通过  Facade 来进行。<strong>M/V/C</strong> 及 Facade 都是单例的。</li>
+<li>View/Mediator。Mediator 会通过 Facade 注册到 View中。由其负责管理其所引用的一个或多个 View Components ，而规范的来说，各个 View Components 会将其自身的一些 API 暴露给  Mediator。其主要职责：<strong>是处理 View Component 派发的事件和系统其他部 分发出来的 Notification（通知）</strong>。同时因为 Mediator 也会经常和 Proxy 交互，所以经常在 Mediator 的构造方法中取得 Proxy</li>
+<li>Model/Proxy。Proxy 会通过 Facade 注册到 Model 中，每个 Proxy 用来管理一部分数据。这里有一个原则就是：<strong>Proxy 不监听 Notification，也永远不会被通知，因为 Proxy 并不关心 View 的状态。但是，Proxy 提供方法和属性让其它角色更新数据。 </strong> Proxy 应该是通过 Notification 的形式来通知 View 状态的变化。</li>
+<li>Controler/Command：Controller 保存所有 Command （实例）的映射。Command 类是无状态的，只在需 要时才被创建。 Command 可以获取 Proxy 对象并与之交互，发送 Notification，执行其他 的 Command。经常用于复杂的或系统范围的操作，如应用程序的“启动”和 “关闭”。应用程序的业务逻辑应该在这里实现。</li>
+</ul>
+<h1 id="通信"><a href="#通信" class="headerlink" title="通信"></a>通信</h1><p>PureMVC 使用了一个观察者模式来进行相互之间的通信。你可以不用关心 PureMVC 的 Observer/Notification 机制是怎么实现的，它 已经在框架内部实现了。你只需要使用一个非常简单的方法从 Proxy, Mediator, Command 和 Facade 发送 Notification，甚至不需要创建一个 Notification 实例。</p>
+<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><p>实际上，多数时候，我们都不用管理  <strong>M/V/C</strong>，我们只需要自己实例化一个 Facede ，实现一些我们自己的逻辑。然后把重点聚焦于  <strong>Mediator, Proxy, Command</strong> 上就行了。</p>
+<h1 id="Mediator"><a href="#Mediator" class="headerlink" title="Mediator"></a>Mediator</h1><p>通常，我们会将一个 Mediator 通过 Facade 来注册到 View 中，在注册的时候，我们会知道 Mediaotr 会关注哪些事件，并为其建立观察者。<strong>当我们发送通知的时候，Mediator 回调是其实现的 handlerNotification 方法</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// facade.js</span></span><br><span class="line">Facade.prototype.registerMediator = <span class="function"><span class="keyword">function</span>(<span class="params">mediator</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.view != <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.view.registerMediator(mediator);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">//View.js</span></span><br><span class="line">View.prototype.registerMediator = <span class="function"><span class="keyword">function</span>(<span class="params">mediator</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.mediatorMap[mediator.getMediatorName()] != <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    mediator.initializeNotifier(<span class="keyword">this</span>.multitonKey);</span><br><span class="line">    <span class="comment">// register the mediator for retrieval by name</span></span><br><span class="line">    <span class="keyword">this</span>.mediatorMap[mediator.getMediatorName()] = mediator;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get notification interests if any</span></span><br><span class="line">    <span class="keyword">var</span> interests = mediator.listNotificationInterests();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// register mediator as an observer for each notification</span></span><br><span class="line">    <span class="keyword">if</span>(interests.length &gt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// create observer referencing this mediators handleNotification method</span></span><br><span class="line">        <span class="keyword">var</span> observer = <span class="keyword">new</span> Observer(mediator.handleNotification, mediator);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; interests.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">this</span>.registerObserver(interests[i], observer);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    mediator.onRegister();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">View.prototype.registerObserver = <span class="function"><span class="keyword">function</span>(<span class="params">notificationName, observer</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.observerMap[notificationName] != <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.observerMap[notificationName].push(observer);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.observerMap[notificationName] = [observer];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>对于每个 Mediator 所关心的事件，可以通过  <code>mediator.listNotificationInterests()</code> 来获取，然后为每个通知建立一个观察者，最终，则是会回调 <code>mediator.handleNotification()</code> 方法。</p>
+<p>由于 Mediator 经常需要于 Proxy 交互，所以 Facade 提供了这么一个方法来获取 Proxy。<strong>我们不应该向 Proxy 发送任何的 Notification，直接调用就是了</strong></p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">Facade.prototype.retrieveProxy = <span class="function"><span class="keyword">function</span>(<span class="params">proxyName</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.model.retrieveProxy(proxyName);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="Command"><a href="#Command" class="headerlink" title="Command"></a>Command</h1><p>这是一些我们实现一下游戏逻辑的地方。<strong>应用程序的业务逻辑应该在这里实现。</strong>同样，我们通过  Facade 来注册命令到 Controler。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// facade.js</span></span><br><span class="line">Facade.prototype.registerCommand = <span class="function"><span class="keyword">function</span>(<span class="params">notificationName, commandClassRef</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.controller.registerCommand(notificationName, commandClassRef);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Controler.js</span></span><br><span class="line">Controller.prototype.registerCommand= <span class="function"><span class="keyword">function</span>(<span class="params">notificationName, commandClassRef</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.commandMap[notificationName] == <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.view.registerObserver(notificationName, <span class="keyword">new</span> Observer(<span class="keyword">this</span>.executeCommand, <span class="keyword">this</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.commandMap[notificationName]= commandClassRef;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>我们看到，实际上，Command 的注册，也会在 View 中建立一个观察者。</p>
+<p>也就是说，对于  listeners 和  Comannd 都是在 View 中进行引用的。</p>
+<p>只不过，Command 会是在 Controler 的环境内，调用 controler.executeCommand() 方法，而对于  Mediator ，则是每个 Mediator 自己的 <code>handleNotification()</code> 方法。</p>
+<h1 id="Notification"><a href="#Notification" class="headerlink" title="Notification"></a>Notification</h1><p>我们可以在 Mediaotr, Proxy, Command 中发送通知，但是只有  Mediator 会监听通知，进行回调。对于 Command 只会在有通知的时候，直接执行。具体而言就是 Command 的收到 Notifacation 的回调是 <code>controler.executeCommand()</code> 方法，而 Mediator 是其自己实现的 <code>handleNotification()</code>。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// facade.js</span></span><br><span class="line">Facade.prototype.sendNotification = <span class="function"><span class="keyword">function</span>(<span class="params">notificationName, body, type</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.notifyObservers(<span class="keyword">new</span> Notification(notificationName, body, type));</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Facade.prototype.notifyObservers = <span class="function"><span class="keyword">function</span>(<span class="params">notification</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.view != <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">this</span>.view.notifyObservers(notification);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// View.js</span></span><br><span class="line"></span><br><span class="line">View.prototype.notifyObservers = <span class="function"><span class="keyword">function</span>(<span class="params">notification</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// SIC</span></span><br><span class="line">    <span class="keyword">if</span>(<span class="keyword">this</span>.observerMap[notification.getName()] != <span class="literal">null</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> observers_ref = <span class="keyword">this</span>.observerMap[notification.getName()], observers = [], observer</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; observers_ref.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            observer = observers_ref[i];</span><br><span class="line">            observers.push(observer);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; observers.length; i++)</span><br><span class="line">        &#123;</span><br><span class="line">            observer = observers[i];</span><br><span class="line">            observer.notifyObserver(notification);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>那么对于 Meditor 的回调：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">mediator.handleNotification.call(mediator, notification)</span><br></pre></td></tr></table></figure>
+<p>而对于  Command：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">controler.executeCommand(controler, notification)</span><br></pre></td></tr></table></figure>
+<p>也就是说，Command 会在 Controler 内执行，而对于 Mediator 的回调，是在其自己的环境内进行执行的。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// controler.js</span></span><br><span class="line"></span><br><span class="line">Controller.prototype.executeCommand= <span class="function"><span class="keyword">function</span>(<span class="params">note</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> commandClassRef= <span class="keyword">this</span>.commandMap[note.getName()];</span><br><span class="line">    <span class="keyword">if</span>(commandClassRef == <span class="literal">null</span>)</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> commandInstance= <span class="keyword">new</span> commandClassRef();</span><br><span class="line">    commandInstance.initializeNotifier(<span class="keyword">this</span>.multitonKey);</span><br><span class="line">    commandInstance.execute(note);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h1 id="MacroCommand"><a href="#MacroCommand" class="headerlink" title="MacroCommand"></a>MacroCommand</h1><p>有两种类型的命令：</p>
+<ul>
+<li>MacroCommand 这个 Command 会执行多个 SubCommand。</li>
+<li>SimpleCommand 单一命令，直接调用  execute 方法进行执行。</li>
+</ul>
+<p>典型的例子是在初始化的时候，执行一个初始化 Command ，而将对于注册 Proxy 等相关的 Commond 放到一个 MacroCommand 中去。</p>
+<h1 id="图"><a href="#图" class="headerlink" title="图"></a>图</h1><div class="language-dot">
+digraph {
+{Mediator Proxy Command} -> Facade[label="use"]
+Facade -> View[label="registerMediator()"]
+Facade -> Model[label="registerProxy()"]
+Facade -> Controler[label="registerCommand()"]
+SubCommand -> Command[label="addSubCommand()"]
+}
+</div>
+<p><div class="language-dot">
+digraph {
+{Mediator Proxy Command} -> Facade[label="use"]
+Facade -> View [label="sendNotification()"]
+View -> Mediator[label="handleNotification()"]
+View -> Controler[label="executeCommand()"]
+}
+</div><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script><br>                // graphviz init<br>                let graphviz_engines = [“circo”,<br>                    “dot”,<br>                    “fdp”,<br>                    “neato”,<br>                    “osage”,<br>                    “twopi”];</p>
+<pre><code>            function doGraphviz(engine) {
+                let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
+                for (let i = 0; i &lt; domAllDot.length; i++) {
+                    let dom = domAllDot[i];
+                    let graphSource = dom.innerText || dom.textContent;
+
+                    try {
+                       let viz = new Viz();
+                         viz.renderSVGElement(graphSource, {engine: engine})
+                             .then(r =&gt; {
+                        dom.innerHTML =&#39;&#39;;dom.append(r); });
+                    } catch (e) {
+                        console.error(&quot;Error when parsing node:&quot;, dom, e);
+                    } 
+                }
+            } 
+
+            let init = function () {
+                for (let i = 0; i &lt; graphviz_engines.length; i++) {
+                    doGraphviz(graphviz_engines[i]);
+                }
+            };
+            if (typeof window.addEventListener != &quot;undefined&quot;) {
+                window.addEventListener(&quot;load&quot;, init, false);
+            } else {
+                window.attachEvent(&quot;onload&quot;, init);
+            }
+            &lt;/script&gt;
+</code></pre></script></p>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/PureMVC/" rel="tag"># PureMVC</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/JavaScript/RNGN与Redux联合使用的探索.html" rel="next" title="RNGN与Redux联合使用的探索">
+                  <i class="fa fa-chevron-left"></i> RNGN与Redux联合使用的探索
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/Docker/关于在内网环境部署Docker业务.html" rel="prev" title="关于在内网环境部署Docker业务">
+                  关于在内网环境部署Docker业务 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#架构图"><span class="nav-number">1.</span> <span class="nav-text">架构图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#角色"><span class="nav-number">2.</span> <span class="nav-text">角色</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通信"><span class="nav-number">3.</span> <span class="nav-text">通信</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#应用"><span class="nav-number">4.</span> <span class="nav-text">应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mediator"><span class="nav-number">5.</span> <span class="nav-text">Mediator</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Command"><span class="nav-number">6.</span> <span class="nav-text">Command</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notification"><span class="nav-number">7.</span> <span class="nav-text">Notification</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MacroCommand"><span class="nav-number">8.</span> <span class="nav-text">MacroCommand</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#图"><span class="nav-number">9.</span> <span class="nav-text">图</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">335</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">139</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/JavaScript/PureMVC在JavaScript的实现.html",
+            identifier: "JavaScript/PureMVC在JavaScript的实现.html",
+            title: "PureMVC在JavaScript的实现"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>

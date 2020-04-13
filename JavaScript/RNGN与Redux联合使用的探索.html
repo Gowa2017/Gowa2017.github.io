@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="在之前的文章中就有说过，对于 Redux而言。其作为一个状态管理器，只允许我们通过 reducer 来修改 Store 里面的 State。然后，当状态改变后，交由 React[Native] 进行确定是否重新进行渲染。而今天看到了 React Native Game Engine 如出一辙，不过那个是定时进行渲染罢了。">
+<meta name="keywords" content="JavaScript,React Native,Redux,React Native Game Engine">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RNGN与Redux联合使用的探索">
+<meta property="og:url" content="https://gowa.club/JavaScript/RNGN与Redux联合使用的探索.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="在之前的文章中就有说过，对于 Redux而言。其作为一个状态管理器，只允许我们通过 reducer 来修改 Store 里面的 State。然后，当状态改变后，交由 React[Native] 进行确定是否重新进行渲染。而今天看到了 React Native Game Engine 如出一辙，不过那个是定时进行渲染罢了。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-02T15:29:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RNGN与Redux联合使用的探索">
+<meta name="twitter:description" content="在之前的文章中就有说过，对于 Redux而言。其作为一个状态管理器，只允许我们通过 reducer 来修改 Store 里面的 State。然后，当状态改变后，交由 React[Native] 进行确定是否重新进行渲染。而今天看到了 React Native Game Engine 如出一辙，不过那个是定时进行渲染罢了。">
+
+<link rel="canonical" href="https://gowa.club/JavaScript/RNGN与Redux联合使用的探索.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>RNGN与Redux联合使用的探索 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/RNGN与Redux联合使用的探索.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          RNGN与Redux联合使用的探索
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-02 23:29:12" itemprop="dateCreated datePublished" datetime="2020-04-02T23:29:12+08:00">2020-04-02</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/" itemprop="url" rel="index">
+                    <span itemprop="name">JavaScript</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/JavaScript/RNGN与Redux联合使用的探索.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/RNGN与Redux联合使用的探索.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在之前的文章中就有说过，对于 Redux而言。其作为一个状态管理器，只允许我们通过 <code>reducer</code> 来修改 Store 里面的 State。然后，当状态改变后，交由 React[Native] 进行确定是否重新进行渲染。而今天看到了 <a href="https://github.com/bberak/react-native-game-engine" target="_blank" rel="noopener">React Native Game Engine</a> 如出一辙，不过那个是定时进行渲染罢了。</p>
+<a id="more"></a>
+<h1 id="Redux"><a href="#Redux" class="headerlink" title="Redux"></a>Redux</h1><div class="language-dot">
+digraph {
+subgraph cluster_store{
+label=Store
+Reducers  -> State
+}
+{Network Component} -> Reducers[label=dispatch,color=red]
+State -> Component[color=blue]
+
+}
+</div>
+<p>究其原理，React Redux 会通过 Provider ，将 Store 暴露给 React 的组件。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;Provider store=&#123;store&#125;&gt;</span><br><span class="line">  &lt;App /&gt;</span><br><span class="line">&lt;<span class="regexp">/Provider&gt;</span></span><br></pre></td></tr></table></figure>
+<p>同时其提供了一个 <code>connect()</code>，使我们的组件能够与此 Store 连接起来。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">connect(</span><br><span class="line">  mapStateToProps,</span><br><span class="line">  mapDispatchToProps</span><br><span class="line">)(Counter)</span><br></pre></td></tr></table></figure>
+<p> 在此过程中，我们可以把一部分 State 的内容进行选择，成为我们组件的 <code>props</code> 属性，同时，会将 <code>Store,dispatch</code> 的也映射过去，方便进行触发 <code>reducers</code>。</p>
+<p>剩下的就交给 React 了。</p>
+<h1 id="React-Native-Game-Engine"><a href="#React-Native-Game-Engine" class="headerlink" title="React Native Game Engine"></a>React Native Game Engine</h1><p>这个所做的事情，大同小异了。抛开其包装的许多功能不说。首先其会设置一个定时器：</p>
+<h2 id="Timer"><a href="#Timer" class="headerlink" title="Timer"></a>Timer</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// GameEngine</span></span><br><span class="line">    <span class="keyword">this</span>.timer = props.timer || <span class="keyword">new</span> DefaultTimer();</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// DefaultTimer</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">DefaultTimer</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscribers = [];</span><br><span class="line">    <span class="keyword">this</span>.loopId = <span class="literal">null</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  loop = <span class="function"><span class="params">time</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.loopId) &#123;</span><br><span class="line">      <span class="keyword">this</span>.subscribers.forEach(<span class="function"><span class="params">callback</span> =&gt;</span> &#123;</span><br><span class="line">        callback(time);</span><br><span class="line">      &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.loopId = requestAnimationFrame(<span class="keyword">this</span>.loop);</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  start() &#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="keyword">this</span>.loopId) &#123;</span><br><span class="line">      <span class="keyword">this</span>.loop();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  stop() &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.loopId) &#123;</span><br><span class="line">      cancelAnimationFrame(<span class="keyword">this</span>.loopId);</span><br><span class="line">      <span class="keyword">this</span>.loopId = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  subscribe(callback) &#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.subscribers.indexOf(callback) === <span class="number">-1</span>)</span><br><span class="line">      <span class="keyword">this</span>.subscribers.push(callback);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  unsubscribe(callback) &#123;</span><br><span class="line">    <span class="keyword">this</span>.subscribers = <span class="keyword">this</span>.subscribers.filter(<span class="function"><span class="params">s</span> =&gt;</span> s !== callback)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后会在其内加上一个回调：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// GameEngine</span></span><br><span class="line">    <span class="keyword">this</span>.timer.subscribe(<span class="keyword">this</span>.updateHandler);</span><br></pre></td></tr></table></figure>
+<p>这样每次定时器到点，都会执行我们的回调。</p>
+<h2 id="updateHandler"><a href="#updateHandler" class="headerlink" title="updateHandler"></a>updateHandler</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">updateHandler = <span class="function"><span class="params">currentTime</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> args = &#123;</span><br><span class="line">    touches: <span class="keyword">this</span>.touches,</span><br><span class="line">    screen: <span class="keyword">this</span>.screen,</span><br><span class="line">    layout: <span class="keyword">this</span>.layout,</span><br><span class="line">    events: <span class="keyword">this</span>.events,</span><br><span class="line">    dispatch: <span class="keyword">this</span>.dispatch,</span><br><span class="line">    time: &#123;</span><br><span class="line">      current: currentTime,</span><br><span class="line">      previous: <span class="keyword">this</span>.previousTime,</span><br><span class="line">      delta: currentTime - (<span class="keyword">this</span>.previousTime || currentTime),</span><br><span class="line">      previousDelta: <span class="keyword">this</span>.previousDelta</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">let</span> newState = <span class="keyword">this</span>.props.systems.reduce(</span><br><span class="line">    (state, sys) =&gt; sys(state, args),</span><br><span class="line">    <span class="keyword">this</span>.state.entities</span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  <span class="keyword">this</span>.touches.length = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">this</span>.events.length = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">this</span>.previousTime = currentTime;</span><br><span class="line">  <span class="keyword">this</span>.previousDelta = args.time.delta;</span><br><span class="line">  <span class="keyword">this</span>.setState(&#123; <span class="attr">entities</span>: newState &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>其关于在于：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> newState = <span class="keyword">this</span>.props.systems.reduce(</span><br><span class="line">  (state, sys) =&gt; sys(state, args),</span><br><span class="line">  <span class="keyword">this</span>.state.entities</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>这段代码，会对所有我们传入的 <code>reducers</code> 进行依次调用：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">arr.reduce(callback( accumulator, currentValue[, index[, array]] )[, initialValue])</span><br></pre></td></tr></table></figure>
+<p>其结果，就是就当前的状态，获得一个新的状态，然后改变状态，最后交给 React 进行渲染。</p>
+<h2 id="Array-prototype-reduce"><a href="#Array-prototype-reduce" class="headerlink" title="Array.prototype.reduce()"></a>Array.prototype.reduce()</h2><p>这个方法，会每数组中的每个元素执行一个由我们提供的 <code>reducer</code>，然后得出单个结果。其原型如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">arr.reduce(callback( accumulator, currentValue[, index[, array]] )[, initialValue])</span><br></pre></td></tr></table></figure>
+<p>对于我们的 <code>reducer</code>，其接收四个参数:</p>
+<ol>
+<li>Accumulator(<code>acc</code>) 累加器</li>
+<li>Current Value(<code>cur</code>) 当前值</li>
+<li>Current Index(<code>index</code>) 当前索引</li>
+<li>Source Array(<code>src</code>) 源数组</li>
+</ol>
+<p>对于 <code>reducer</code> 执行后返回的结果，会存储在 <code>acc</code> 中，那么在多次迭代中会记录这个值。</p>
+<h2 id="Reducer"><a href="#Reducer" class="headerlink" title="Reducer"></a>Reducer</h2><p>回头看 GameEngine 中，对于 <code>systems</code> 的使用：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">let</span> newState = <span class="keyword">this</span>.props.systems.reduce(</span><br><span class="line">  (state, sys) =&gt; sys(state, args),</span><br><span class="line">  <span class="keyword">this</span>.state.entities</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p>可以把每个我们传入的 <code>sys</code> 看作是 Reducer。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> MoveFinger = <span class="function">(<span class="params">entities, &#123; touches &#125;</span>) =&gt;</span> &#123;</span><br><span class="line">  touches.filter(<span class="function"><span class="params">t</span> =&gt;</span> t.type === <span class="string">"move"</span>).forEach(<span class="function"><span class="params">t</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> finger = entities[t.id];</span><br><span class="line">    <span class="keyword">if</span> (finger &amp;&amp; finger.position) &#123;</span><br><span class="line">      finger.position = [</span><br><span class="line">        finger.position[<span class="number">0</span>] + t.delta.pageX,</span><br><span class="line">        finger.position[<span class="number">1</span>] + t.delta.pageY</span><br><span class="line">      ];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> entities;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这个只会根据 <code>touches</code> 来改变位置信息。</p>
+<div class="language-dot">
+digraph {
+State
+subgraph cluster_engine{
+label=Engine
+Systems
+Timer -> UpdateHandler
+ UpdateHandler -> Systems[label=reduce]
+}
+Systems -> State -> Component[color=red]
+}
+</div>
+<p>如果我们改造一下：</p>
+<div class="language-dot">
+digraph {
+subgraph cluster_store{
+label=Store
+Reducers  -> State[color=red]
+Systems
+}
+subgraph cluster_engine{
+label=Engine
+UpdateHandler  -> GameComponent[style=dotted,label=setState]
+Timer -> UpdateHandler
+ UpdateHandler -> Systems[label=dispatch]
+}
+Systems -> State -> Component[color=red]
+Network -> Reducers
+
+Component -> State[label=connect]
+GameComponent -> State[label=connect,style=dotted]
+}
+}
+</div>
+<p>但是这样改造的后，Game Engine 内的组件可以使用 <code>connect</code> 的形式连接 Redux ，或者由 Game Engine 来 <code>connect</code>，然后向下传递，进行修改。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script><br>                // graphviz init<br>                let graphviz_engines = [“circo”,<br>                    “dot”,<br>                    “fdp”,<br>                    “neato”,<br>                    “osage”,<br>                    “twopi”];</p>
+<pre><code>            function doGraphviz(engine) {
+                let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
+                for (let i = 0; i &lt; domAllDot.length; i++) {
+                    let dom = domAllDot[i];
+                    let graphSource = dom.innerText || dom.textContent;
+
+                    try {
+                       let viz = new Viz();
+                         viz.renderSVGElement(graphSource, {engine: engine})
+                             .then(r =&gt; {
+                        dom.innerHTML =&#39;&#39;;dom.append(r); });
+                    } catch (e) {
+                        console.error(&quot;Error when parsing node:&quot;, dom, e);
+                    } 
+                }
+            } 
+
+            let init = function () {
+                for (let i = 0; i &lt; graphviz_engines.length; i++) {
+                    doGraphviz(graphviz_engines[i]);
+                }
+            };
+            if (typeof window.addEventListener != &quot;undefined&quot;) {
+                window.addEventListener(&quot;load&quot;, init, false);
+            } else {
+                window.attachEvent(&quot;onload&quot;, init);
+            }
+            &lt;/script&gt;
+</code></pre></script></p>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+              <a href="/tags/React-Native/" rel="tag"># React Native</a>
+              <a href="/tags/Redux/" rel="tag"># Redux</a>
+              <a href="/tags/React-Native-Game-Engine/" rel="tag"># React Native Game Engine</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/JavaScript/Redux的基本概念.html" rel="next" title="Redux的基本概念">
+                  <i class="fa fa-chevron-left"></i> Redux的基本概念
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/JavaScript/PureMVC在JavaScript的实现.html" rel="prev" title="PureMVC在JavaScript的实现">
+                  PureMVC在JavaScript的实现 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redux"><span class="nav-number">1.</span> <span class="nav-text">Redux</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#React-Native-Game-Engine"><span class="nav-number">2.</span> <span class="nav-text">React Native Game Engine</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Timer"><span class="nav-number">2.1.</span> <span class="nav-text">Timer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#updateHandler"><span class="nav-number">2.2.</span> <span class="nav-text">updateHandler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Array-prototype-reduce"><span class="nav-number">2.3.</span> <span class="nav-text">Array.prototype.reduce()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reducer"><span class="nav-number">2.4.</span> <span class="nav-text">Reducer</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">335</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">139</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/JavaScript/RNGN与Redux联合使用的探索.html",
+            identifier: "JavaScript/RNGN与Redux联合使用的探索.html",
+            title: "RNGN与Redux联合使用的探索"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
