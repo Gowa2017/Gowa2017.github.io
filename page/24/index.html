@@ -225,6 +225,446 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android中使用的MVP架构.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Android/android中使用的MVP架构.html" class="post-title-link" itemprop="url">android中使用的MVP架构</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-11 21:38:22" itemprop="dateCreated datePublished" datetime="2018-07-11T21:38:22+08:00">2018-07-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Android/android中使用的MVP架构.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/android中使用的MVP架构.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>从未写过代码的人，现在转行做安卓，很多问题其实都不知道。就比如吧，刚上班一周就开始马上贡献代码给公司了，但其实做得非常的差。刚开始的时候是做一些，拉取数据，然后在RecyclerView中进行展示，或者在一LinearLayout内展示内容。但一般遇到业务逻辑比较复杂，而且后面老是变更各种需求的时候，这个问题就比较麻烦了。</p>
+<h1 id="典型问题"><a href="#典型问题" class="headerlink" title="典型问题"></a>典型问题</h1><p>比如业务上，我们把不同的数据，如：人员信息，职务信息，基本情况分别放在三个表内，现在接口那边，为减轻服务器压力，并不会进行联合查询，而是分别返回，每个接口返回对应的数据。那么，当我们需要基于三个返回的数据进行业务判断的时候，那么我们就需要等待三个数据都返回后再进行操作。</p>
+<p>那么，我们要么是通过同过串联式调用，第一个调用成功后，在其网络获取请求的回调函数中调用第二个接口。这是非常低的。</p>
+<p>或者并发调用，使用一个handler，等待三个接口返回的数据都到达后进行处理。</p>
+<p>最疯狂的时候，需要调用10个接口的数据来进行处理，这可能是顶层设计的问题，或者是后端优化不行的问题，但是已经不大可能改了。只能是这样将就着去适配。</p>
+<p>偶然看到了 google 的  例子内看到了他们对于架构的描述。</p>
+<h1 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h1><p>平常用得最多的可能就是 MVC，<strong>model, view, controler</strong>，view负责显示逻辑，model负责获取数据，controler负责业务逻辑。但事实上在安卓内，我们是把一大坨代码，都放在activity或者 fragment中的，哈哈，what’s a fuck。等到业务需求变更的时候，一种想死的心油然而生。</p>
+<p>就比如我们干的事情，在view中，写获取数据，写业务逻辑，简直就是坨屎在那里。</p>
+<h1 id="MVP"><a href="#MVP" class="headerlink" title="MVP"></a>MVP</h1><p>这可能是现在用得最多的架构模式了。model属于数据获取模型，presenter用于处理业务逻辑，view负责显示就OK了。</p>
+<p>但事实上这个架构不好理解，特别是连续不断的回调实在让人蛋疼。而对于是以接口的方式进行相互连接，而不是对象持有的方式也让人有点感觉茫然。好在，谷歌提供了一些比较实际的例子。</p>
+<p>整个架构的关键就在于 Presenter，它对 Model，View都进行了引用，所以能在两者间进行通信和调度。最终看了代码的感觉是，其专心的只是逻辑，至于数据从哪里来，怎么显示，他不是很关心，这个交由 Model, View自己去实现。</p>
+<h2 id="Contract"><a href="#Contract" class="headerlink" title="Contract"></a>Contract</h2><p>代码中使用了一个 接口类来定义每个 View, Presenter要实现的接口。</p>
+<p>每个activity/fragment都会定义附加逻辑及model。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TasksContract</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">interface</span> <span class="title">View</span> <span class="keyword">extends</span> <span class="title">BaseView</span>&lt;<span class="title">Presenter</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">setLoadingIndicator</span><span class="params">(<span class="keyword">boolean</span> active)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showTasks</span><span class="params">(List&lt;Task&gt; tasks)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showAddTask</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showTaskDetailsUi</span><span class="params">(String taskId)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showTaskMarkedComplete</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showTaskMarkedActive</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showCompletedTasksCleared</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showLoadingTasksError</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showNoTasks</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showActiveFilterLabel</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showCompletedFilterLabel</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showAllFilterLabel</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showNoActiveTasks</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showNoCompletedTasks</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showSuccessfullySavedMessage</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">boolean</span> <span class="title">isActive</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showFilteringPopUpMenu</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">interface</span> <span class="title">Presenter</span> <span class="keyword">extends</span> <span class="title">BasePresenter</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">result</span><span class="params">(<span class="keyword">int</span> requestCode, <span class="keyword">int</span> resultCode)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">loadTasks</span><span class="params">(<span class="keyword">boolean</span> forceUpdate)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">addNewTask</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">openTaskDetails</span><span class="params">(@NonNull Task requestedTask)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">completeTask</span><span class="params">(@NonNull Task completedTask)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">activateTask</span><span class="params">(@NonNull Task activeTask)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">clearCompletedTasks</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function"><span class="keyword">void</span> <span class="title">setFiltering</span><span class="params">(TasksFilterType requestType)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="function">TasksFilterType <span class="title">getFiltering</span><span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>定义了V/P需要实现的接口。</p>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>通过在 View 中来初始化 Presenter：，在 <code>onCreate()</code>方法中：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> TasksPresenter mTasksPresenter;</span><br><span class="line"></span><br><span class="line">    mTasksPresenter = <span class="keyword">new</span> TasksPresenter(</span><br><span class="line">            Injection.provideTasksRepository(getApplicationContext()), tasksFragment);</span><br></pre></td></tr></table></figure>
+<p>这样就获得了对 Presenter 的引用。第一个参数是传递给构造器的 model实现，这个有点特别，因为他实现了缓存等操作比较复杂，我们先不关注这个。</p>
+<p>在 Presenter的构造器中：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">TasksPresenter</span><span class="params">(@NonNull TasksRepository tasksRepository, @NonNull TasksContract.View tasksView)</span> </span>&#123;</span><br><span class="line">    mTasksRepository = checkNotNull(tasksRepository, <span class="string">"tasksRepository cannot be null"</span>);</span><br><span class="line">    mTasksView = checkNotNull(tasksView, <span class="string">"tasksView cannot be null!"</span>);</span><br><span class="line"></span><br><span class="line">    mTasksView.setPresenter(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其持有了 model/view，所以其就能进行两者的调用操作了。</p>
+<h3 id="Presenter-与-Model交互"><a href="#Presenter-与-Model交互" class="headerlink" title="Presenter 与 Model交互"></a>Presenter 与 Model交互</h3><p>看一个简单的方法，当需要获取所有的任务列表的时候，在 View中会看到如此的调用：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">mPresenter.loadTasks(<span class="keyword">false</span>);</span><br></pre></td></tr></table></figure>
+<p>但我们观察一下这个方法，会发现：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">mTasksRepository.getTasks(<span class="keyword">new</span> TasksDataSource.LoadTasksCallback() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onTasksLoaded</span><span class="params">(List&lt;Task&gt; tasks)</span> </span>&#123;</span><br><span class="line">        List&lt;Task&gt; tasksToShow = <span class="keyword">new</span> ArrayList&lt;Task&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// This callback may be called twice, once for the cache and once for loading</span></span><br><span class="line">        <span class="comment">// the data from the server API, so we check before decrementing, otherwise</span></span><br><span class="line">        <span class="comment">// it throws "Counter has been corrupted!" exception.</span></span><br><span class="line">        <span class="keyword">if</span> (!EspressoIdlingResource.getIdlingResource().isIdleNow()) &#123;</span><br><span class="line">            EspressoIdlingResource.decrement(); <span class="comment">// Set app as idle.</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// We filter the tasks based on the requestType</span></span><br><span class="line">        <span class="keyword">for</span> (Task task : tasks) &#123;</span><br><span class="line">            <span class="keyword">switch</span> (mCurrentFiltering) &#123;</span><br><span class="line">                <span class="keyword">case</span> ALL_TASKS:</span><br><span class="line">                    tasksToShow.add(task);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> ACTIVE_TASKS:</span><br><span class="line">                    <span class="keyword">if</span> (task.isActive()) &#123;</span><br><span class="line">                        tasksToShow.add(task);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">case</span> COMPLETED_TASKS:</span><br><span class="line">                    <span class="keyword">if</span> (task.isCompleted()) &#123;</span><br><span class="line">                        tasksToShow.add(task);</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    tasksToShow.add(task);</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// The view may not be able to handle UI updates anymore</span></span><br><span class="line">        <span class="keyword">if</span> (!mTasksView.isActive()) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (showLoadingUI) &#123;</span><br><span class="line">            mTasksView.setLoadingIndicator(<span class="keyword">false</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        processTasks(tasksToShow);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDataNotAvailable</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// The view may not be able to handle UI updates anymore</span></span><br><span class="line">        <span class="keyword">if</span> (!mTasksView.isActive()) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        mTasksView.showLoadingTasksError();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>其实是调用了 model去获取任务，调用方法的时候，同时传递给 model一个回调，其在获取数据成功后就会进行回调：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">        mTasksRepository.getTasks(<span class="keyword">new</span> TasksDataSource.LoadTasksCallback() &#123;</span><br><span class="line">... ...</span><br><span class="line"></span><br><span class="line">processTasks(tasks);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">processTasks</span><span class="params">(List&lt;Task&gt; tasks)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (tasks.isEmpty()) &#123;</span><br><span class="line">            <span class="comment">// Show a message indicating there are no tasks for that filter type.</span></span><br><span class="line">            processEmptyTasks();</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// Show the list of tasks</span></span><br><span class="line">            mTasksView.showTasks(tasks);</span><br><span class="line">            <span class="comment">// Set the filter label's text.</span></span><br><span class="line">            showFilterLabel();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>回调过后，其就调用 View 的方法来更新界面显示了。</p>
+<p>瞧，多么简单。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Word-OOXML中的drawingML.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Java/Word-OOXML中的drawingML.html" class="post-title-link" itemprop="url">Word-OOXML中的drawingML</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-10 21:06:34" itemprop="dateCreated datePublished" datetime="2018-07-10T21:06:34+08:00">2018-07-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Java/Word-OOXML中的drawingML.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Word-OOXML中的drawingML.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>DrawingML中的所有媒体对象都存储在一个<strong>图片形状</strong>中。这个图片形状使用一个 <code>blipFill</code> 元素来显示媒体对象。如果是音频的情况下，使用的是图标；在视频情况下，使用的是一个一帧来显示。</p>
+<h1 id="简单例子"><a href="#简单例子" class="headerlink" title="简单例子"></a>简单例子</h1><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">  <span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span> ...<span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId4"</span> <span class="attr">r:link</span>=<span class="string">""</span> /&gt;</span> <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:fillRect</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span> ... <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>blipFill</code>元素用来引用图片文件，因为引用的是这个文件包内的文件，所以使用了一个 关联ID（relationship ID）。</p>
+<h1 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h1><p>DrawingML 文件格式被分解为下面的三个部分：</p>
+<ul>
+<li>指定基本图片</li>
+<li>指定图片属性</li>
+<li>转换图标</li>
+</ul>
+<p>下面一个一个的来看这个。</p>
+<h2 id="指定基本图片"><a href="#指定基本图片" class="headerlink" title="指定基本图片"></a>指定基本图片</h2><p>图片通过 <code>pic</code> 元素插入文档中，这与 <code>shape</code> 元素类似，但有一些关键的不同，这些关键的不同使图片信息保存得更加完整。基本的图片会包含一个 <code>blipfill</code> 元素和一些基本的 <code>non-visual</code>（不可见）属性 。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPr</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">name</span>=<span class="string">"St_Patrick's_Day.jpg"</span>/&gt;</span> <span class="tag">&lt;<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"1"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:nvPr</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId2"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1346200"</span> <span class="attr">y</span>=<span class="string">"914400"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"3657600"</span> <span class="attr">cy</span>=<span class="string">"2743200"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:ln</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:ln</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="给图片指定属性"><a href="#给图片指定属性" class="headerlink" title="给图片指定属性"></a>给图片指定属性</h2><p>现在基本的图片已经指定了，我们可以可以把注意力转移到更复杂的属性上面，比如重新着色，图片描述等。下面的例子中，把 绿色 转变成了紫色。这可以通过 <code>duotone</code> 元素来实现，这个元素允许两个基本的颜色来重新着色整个图片。一个用于在图片的暗色部分，一个用于图片的亮色部分。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPr</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">name</span>=<span class="string">"St_Patrick's_Day.jpg"</span> <span class="attr">descr</span>=<span class="string">"This is a Saint Patrick's day picture"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">p:nvPr</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId2"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:duotone</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">a:srgbClr</span> <span class="attr">val</span>=<span class="string">"000000"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:schemeClr</span> <span class="attr">val</span>=<span class="string">"accent4"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">a:duotone</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:blip</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1346200"</span> <span class="attr">y</span>=<span class="string">"914400"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"3657600"</span> <span class="attr">cy</span>=<span class="string">"2743200"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:ln</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:ln</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="转换图片"><a href="#转换图片" class="headerlink" title="转换图片"></a>转换图片</h2><p>现在，基本属性和附加属性都已经指定了，现在我们可以配合形状属性来使用了。下面的例子用同一张图片，加上了3D视角，一个简单的阴影，一个边框。这些形状属性可以同样使用到<code>shape</code>元素。一个图片特定的不同就是，边框。形状的边框只会向外，而图片是内外都会扩张。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPr</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">name</span>=<span class="string">"St_Patrick's_Day.jpg"</span> <span class="attr">descr</span>=<span class="string">"This is a Saint Patrick's day picture"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">p:nvPr</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId2"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:duotone</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:srgbClr</span> <span class="attr">val</span>=<span class="string">"000000"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:schemeClr</span> <span class="attr">val</span>=<span class="string">"accent4"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:duotone</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:blip</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1346200"</span> <span class="attr">y</span>=<span class="string">"914400"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"3657600"</span> <span class="attr">cy</span>=<span class="string">"2743200"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:ln</span> <span class="attr">w</span>=<span class="string">"57150"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:solidFill</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:schemeClr</span> <span class="attr">val</span>=<span class="string">"bg1"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:solidFill</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:ln</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:effectLst</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:outerShdw</span> <span class="attr">blurRad</span>=<span class="string">"50800"</span> <span class="attr">dist</span>=<span class="string">"50800"</span> <span class="attr">dir</span>=<span class="string">"2700000"</span> <span class="attr">algn</span>=<span class="string">"tl"</span> <span class="attr">rotWithShape</span>=<span class="string">"0"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:srgbClr</span> <span class="attr">val</span>=<span class="string">"7D7D7D"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a:alpha</span> <span class="attr">val</span>=<span class="string">"65000"</span>/&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">a:srgbClr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:outerShdw</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:effectLst</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:scene3d</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:camera</span> <span class="attr">prst</span>=<span class="string">"perspectiveRelaxedModerately"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:lightRig</span> <span class="attr">rig</span>=<span class="string">"threePt"</span> <span class="attr">dir</span>=<span class="string">"t"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:rot</span> <span class="attr">lat</span>=<span class="string">"0"</span> <span class="attr">lon</span>=<span class="string">"0"</span> <span class="attr">rev</span>=<span class="string">"18900000"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">a:lightRig</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:scene3d</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="坐标系统及变换"><a href="#坐标系统及变换" class="headerlink" title="坐标系统及变换"></a>坐标系统及变换</h1><h2 id="坐标系统"><a href="#坐标系统" class="headerlink" title="坐标系统"></a>坐标系统</h2><p>所有的 drawingML形状都位于一个2D的笛卡尔空间内，原点是（0，0），原点位于左上角。坐标的单位以 <strong>EMU（914400EMUS 1 英寸）</strong>，可为正也可为负。</p>
+<h2 id="形状变换"><a href="#形状变换" class="headerlink" title="形状变换"></a>形状变换</h2><p>一个 形状变换 可以总结为下面的连续操作：</p>
+<ol>
+<li>变换 和 缩放需要了解 原始的 边界盒子成为一个矩形，这通过 <code>offset, extents</code>来指定。</li>
+<li>在中心点 和 <code>flipH, flipV</code> 之间进行翻转。</li>
+<li>根据 <code>rot</code> 属性 围绕中心点进行旋转。</li>
+</ol>
+<p>为了渲染不在一个组内的形状，渲染器简单的对原始形状应用形状变换。</p>
+<h3 id="缩放和转换形状"><a href="#缩放和转换形状" class="headerlink" title="缩放和转换形状"></a>缩放和转换形状</h3><p>形状可以水平缩放，垂直缩放，尺寸转换或者填充一个给定的边界盒子。边界盒子通过指定 <code>offset</code> 的 x,y 来指定（<code>a:off</code> 的 x,y 属性）以及 <code>extents</code> x,y （<code>a:ext</code>的 x,y，两者都必须大于或者等于0）。边界盒子的左上角位于 offset指定的，边界盒子的右下角位于 offset + extent。</p>
+<p>如果开始的形状 宽度为0（垂直线）， <code>cx</code> 和 <code>a:ext</code> 属性会被忽略，水平缩放被跳过。类似，如果 开始形状的高度为0，<code>cy, a:ext</code>都会被忽略，然后垂直缩放被跳过。</p>
+<p> <img src="../res/drawingML01.png" alt></p>
+<p> 上面的形状可以如下表示：</p>
+ <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1866680"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1371600"</span> <span class="attr">cy</span>=<span class="string">"1371600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在上面的例子中，当转换这个形状来填充指定的边界盒子的时候，任何给这个形状的效果都会消失。</p>
+</blockquote>
+<p>这个例子显示了，在缩放形状的时候，不需要任何额外的参数。边界盒子用来表示缩放已经足够了。下面的XML片段表示了一个 星形 的 <code>offset, extents</code>在缩放前后的效果。在这个实际的例子中，边界盒子被选择来具有相同的左上角，也就是同样的<code>offset</code>。</p>
+<p><img src="../res/drawingML02.png" alt></p>
+<p>缩放前：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1066800"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1371600"</span> <span class="attr">cy</span>=<span class="string">"1371600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>缩放后：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1066800"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"2438400"</span> <span class="attr">cy</span>=<span class="string">"2133600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="形状旋转"><a href="#形状旋转" class="headerlink" title="形状旋转"></a>形状旋转</h3><p>通过 <code>rot</code> 属性来表示旋转。形状会围绕 边界盒子的中心顺时针旋转，角度由 <code>rot</code> 指定。每个单位是 1/1000 弧分（1/60000 度）。</p>
+<p>上面例子中小的个星星经过 45度顺时针旋转后，就变成了下面这样。</p>
+<p><img src="../res/drawingML03.png" alt></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span> <span class="attr">rot</span>=<span class="string">"2700000"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1066800"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1371600"</span> <span class="attr">cy</span>=<span class="string">"1371600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="翻转形状"><a href="#翻转形状" class="headerlink" title="翻转形状"></a>翻转形状</h3><p>翻转，是在一个 水平线，和垂直线，于中心点相交 处进行反射。<code>flipH, flipV</code> 属性控制水平和垂直翻转。这两个数值都可以没有，也可以都等于0 ，这个时候表明不需要进行翻转，都等于1表示需要进行翻转。</p>
+<p>下面的例子就是水平和垂直进行了翻转。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span> <span class="attr">flipH</span>=<span class="string">"1"</span> <span class="attr">flipV</span>=<span class="string">"1"</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"3964937"</span> <span class="attr">y</span>=<span class="string">"2652643"</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"168838"</span> <span class="attr">cy</span>=<span class="string">"1219199"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="../res/drawingML04.png" alt></p>
+<h1 id="形状定义和属性"><a href="#形状定义和属性" class="headerlink" title="形状定义和属性"></a>形状定义和属性</h1><p>DrawingML我使用一般就是针对形状和属性进行，这包括两个方便的主题：</p>
+<ol>
+<li>预定义的形状</li>
+<li>自定义形状和属性</li>
+</ol>
+<h2 id="坐标系统-1"><a href="#坐标系统-1" class="headerlink" title="坐标系统"></a>坐标系统</h2><p>为了指定一个形状，我们要先了解一些高等级的系统，就叫做坐标系统吧。这就是文档，形状，和路径的坐标系统，下面我们会介绍。</p>
+<h3 id="文档坐标系统"><a href="#文档坐标系统" class="headerlink" title="文档坐标系统"></a>文档坐标系统</h3><p>为了在文档内指定一个形状，我们必须要先了解文档坐标系统。这个系统也拥有 <strong>x, y</strong>组件，而且从 (0,0)开始，位于 左上角。这个坐标向右，向下增长。文档的坐标的单位是 <strong>EMU（ 91440 EMUs /英寸，36000 EMUs/cm）</strong>。还有，为了给形状指定一个位置，还要指定形状的宽高，这也叫做形状的 <code>extent</code>。这个值的单位也是 EMU。为了指定这两个值，可以如下面这样：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:sp</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"3200400"</span> <span class="attr">y</span>=<span class="string">"1600200"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1200000"</span> <span class="attr">cy</span>=<span class="string">"1000000"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:sp</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里我们会看到，新形状被放在 文档中(3200400, 1600200）位置。其大小为 1200000 EMUs，1000000 EMUs。</p>
+<p>宽高就设置了形状包含的边界盒子。</p>
+<h3 id="形状坐标系统"><a href="#形状坐标系统" class="headerlink" title="形状坐标系统"></a>形状坐标系统</h3><p>现在我们有了形状，我们可以进入形状内部的坐标系了。形状坐标系也有 <code>x,y</code> 组件，（0，0）位于左上角。 宽高通过 extent来指定，单位也是EMU。这个坐标系用来定义 很多形状属性的位置。</p>
+<h3 id="路径坐标系"><a href="#路径坐标系" class="headerlink" title="路径坐标系"></a>路径坐标系</h3><p>这坐标系的 x,y 也是从 (0,0） 左上角开始的。特别的是，这个坐标系内的其单位是相对于 坐标空间内的值。这与形状坐标系有相同的规格但是不同的单位。形状坐标系使用  EMUs，路径坐标系使用（1/width）作为 x 的单位，(1/height）作为 y 的单位。这就是说，如果路径指定为 宽高 (2, 1），那么，路径坐标（1,1）就在形状坐标系内等于 (6000000,1000000）。路径坐标会会更容易理解些，后面会看到，<code>path</code> 元素描述的时候会说到。</p>
+<blockquote>
+<p>所有的规格和坐标都必须用全部数字来指定。</p>
+</blockquote>
+<h2 id="指定一个预定义形状"><a href="#指定一个预定义形状" class="headerlink" title="指定一个预定义形状"></a>指定一个预定义形状</h2><p>准确来说，有187个预定义的形状可以使用。</p>
+<h3 id="使用预定义形状"><a href="#使用预定义形状" class="headerlink" title="使用预定义形状"></a>使用预定义形状</h3><p>指定一个预定义形状非常的简单，下面我们来指定一个星形：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">p:sp</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1981200"</span> <span class="attr">y</span>=<span class="string">"533400"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1143000"</span> <span class="attr">cy</span>=<span class="string">"1066800"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"heart"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:sp</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="调整一个预定义形状"><a href="#调整一个预定义形状" class="headerlink" title="调整一个预定义形状"></a>调整一个预定义形状</h3><p>有的时候预定义形状也不是很够用我们就需要进行一些调整。预定义的形状使用  线，曲线，就和一个自定义形状被定义时一样。为了允许调整这样预定义形状，我们定义了一些属性，而不是关注规格。</p>
+<p>下面的代码可以指定一个形状：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:sp</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"3276600"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"978408"</span> <span class="attr">cy</span>=<span class="string">"484632"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rightArrow"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:avLst</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:gd</span> <span class="attr">name</span>=<span class="string">"adj1"</span> <span class="attr">fmla</span>=<span class="string">"val 50000"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:gd</span> <span class="attr">name</span>=<span class="string">"adj2"</span> <span class="attr">fmla</span>=<span class="string">"val 50000"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:avLst</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:sp</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/升级glibc到2.18及出现的问题.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Linux-Unix/升级glibc到2.18及出现的问题.html" class="post-title-link" itemprop="url">升级glibc到2.18及出现的问题</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-09 22:52:07" itemprop="dateCreated datePublished" datetime="2018-07-09T22:52:07+08:00">2018-07-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/升级glibc到2.18及出现的问题.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/升级glibc到2.18及出现的问题.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>同时要用个mol_node这个东西来挂挖矿的钱包，但是libc库要求最低是2.18，但是我这个最低的是2.17的，当然不能用了，还好，gcc 4.8.5的，直接用来编译升级就好了。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/Linux-Unix/升级glibc到2.18及出现的问题.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/SpringMVC工作流程.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Java/SpringMVC工作流程.html" class="post-title-link" itemprop="url">SpringMVC工作流程</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-07 19:46:35" itemprop="dateCreated datePublished" datetime="2018-07-07T19:46:35+08:00">2018-07-07</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Java/SpringMVC工作流程.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/SpringMVC工作流程.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>转行开始安卓了，以前做运维的很多技能都用不着了，但是开发这个东西，还是需要经验和技术的积累。比如说什么 Spring,Mybatis,bootstrap等等，以前只接触服务端开发，压根就不知道这些东西啊。正好，让我们从jeeplus这个公司大佬用着的框架来熟悉一下。<br>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/Java/SpringMVC工作流程.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/使用join进行联合查询.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -841,393 +1281,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/关于Java操纵word文书.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Java/关于Java操纵word文书.html" class="post-title-link" itemprop="url">关于Java操纵word文书</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-05-18 08:57:47" itemprop="dateCreated datePublished" datetime="2018-05-18T08:57:47+08:00">2018-05-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Java/关于Java操纵word文书.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/关于Java操纵word文书.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>公司做的业务需要为各部门生成其所需要的执法文书，或者是存档表单打印出来，纸质存档。但是涉及到会有图片，而且是数量类型是不定的这种情况。不能不来研究一下图片是怎么操作的了。</p>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我们其实知道，word2007的 docx 格式，其实是一个xml文件的压缩包，操作 docx文档，其实就是操作那些xml文件。那么，我们需要明白的是，对于docx文档中的 xml 文件，在我们所使用的工具库内的表现形式是什么样的。</p>
-<h1 id="图片表示"><a href="#图片表示" class="headerlink" title="图片表示"></a>图片表示</h1><p>图片是以 DrawingML 形式进行保存的。这包括三个部分：</p>
-<ul>
-<li>指定一个基本图片</li>
-<li>对图标附加属性</li>
-<li>转换图片</li>
-</ul>
-<h2 id="指定基本图片"><a href="#指定基本图片" class="headerlink" title="指定基本图片"></a>指定基本图片</h2><p>通过使用图片元素pic，可以将图片插入到演示文档中，该图片元素类似于形状元素，但包含一些关键区别，可以更加完整地存储图片信息。<br>这个基本的图片元素应该包含blipfill和一些基本的非可视图片属性。</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPr</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">name</span>=<span class="string">"St_Patrick's_Day.jpg"</span>/&gt;</span> <span class="tag">&lt;<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"1"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:nvPr</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId2"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1346200"</span> <span class="attr">y</span>=<span class="string">"914400"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"3657600"</span> <span class="attr">cy</span>=<span class="string">"2743200"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:ln</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:ln</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="附加属性"><a href="#附加属性" class="headerlink" title="附加属性"></a>附加属性</h2><p>现在已经指定了基本图片，我们可以继续使用更复杂的属性，例如重新着色选项和图片描述。 在下面的图片中，请注意曾经是绿色的图片已被重新着色为紫色。 这可以通过使用双色调元素来完成，这允许设置两种基色以用于重新着色整个图片。 第一个用于处理图片较暗的区域，第二个用于处理较亮的区域。 我们可以在下面看到黑色（＃000000）确实用于较暗的区域，而accent4（在这种情况下为紫色）用于较亮的区域。</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPr</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">name</span>=<span class="string">"St_Patrick's_Day.jpg"</span> <span class="attr">descr</span>=<span class="string">"This is a Saint Patrick's day picture"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">p:nvPr</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId2"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:duotone</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">a:srgbClr</span> <span class="attr">val</span>=<span class="string">"000000"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:schemeClr</span> <span class="attr">val</span>=<span class="string">"accent4"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">a:duotone</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:blip</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1346200"</span> <span class="attr">y</span>=<span class="string">"914400"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"3657600"</span> <span class="attr">cy</span>=<span class="string">"2743200"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:ln</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:ln</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h2 id="转换图片"><a href="#转换图片" class="headerlink" title="转换图片"></a>转换图片</h2><p>现在已经指定了基本属性和附加图片属性，我们可以开始合并形状属性。 下面是与上面描述的相同的图片，应用了3D相机透视图以及简单阴影和白色轮廓。 这些形状属性与可应用于形状元素的形状属性相同。 这里可以看到一幅特定图片的差异，图片边框。 它不是边界向内和向外扩展，而只是向外扩展。</p>
-<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">  <span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPr</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">name</span>=<span class="string">"St_Patrick's_Day.jpg"</span> <span class="attr">descr</span>=<span class="string">"This is a Saint Patrick's day picture"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">p:nvPr</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId2"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:duotone</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:srgbClr</span> <span class="attr">val</span>=<span class="string">"000000"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:schemeClr</span> <span class="attr">val</span>=<span class="string">"accent4"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:duotone</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:blip</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1346200"</span> <span class="attr">y</span>=<span class="string">"914400"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"3657600"</span> <span class="attr">cy</span>=<span class="string">"2743200"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:ln</span> <span class="attr">w</span>=<span class="string">"57150"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:solidFill</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:schemeClr</span> <span class="attr">val</span>=<span class="string">"bg1"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:solidFill</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:ln</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:effectLst</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:outerShdw</span> <span class="attr">blurRad</span>=<span class="string">"50800"</span> <span class="attr">dist</span>=<span class="string">"50800"</span> <span class="attr">dir</span>=<span class="string">"2700000"</span> <span class="attr">algn</span>=<span class="string">"tl"</span> <span class="attr">rotWithShape</span>=<span class="string">"0"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:srgbClr</span> <span class="attr">val</span>=<span class="string">"7D7D7D"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a:alpha</span> <span class="attr">val</span>=<span class="string">"65000"</span>/&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">a:srgbClr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:outerShdw</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:effectLst</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:scene3d</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:camera</span> <span class="attr">prst</span>=<span class="string">"perspectiveRelaxedModerately"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:lightRig</span> <span class="attr">rig</span>=<span class="string">"threePt"</span> <span class="attr">dir</span>=<span class="string">"t"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:rot</span> <span class="attr">lat</span>=<span class="string">"0"</span> <span class="attr">lon</span>=<span class="string">"0"</span> <span class="attr">rev</span>=<span class="string">"18900000"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">a:lightRig</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:scene3d</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h1 id="POI插入图片"><a href="#POI插入图片" class="headerlink" title="POI插入图片"></a>POI插入图片</h1><p>在POI中，是把图片信息存储在一个 <em>ByteArrayInputStream</em>中的，我们要做的，就是把这个信息添加到 文件内，然后在  main document part内展出 出来，据说官方的poi少了一个展示的过程，所以我们需要手动进行添加。</p>
-<h2 id="获取-byte"><a href="#获取-byte" class="headerlink" title="获取 byte[]"></a>获取 byte[]</h2><p>我们的图片大多是从网络读取，所以参考了一下网上利用 HttpUrlConnection 来获取图片的操作，但是还有更好更方便的后面再研究了：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">byte</span>[] getImageFromURL(String urlPath) &#123;</span><br><span class="line">        System.out.println(urlPath);</span><br><span class="line">        <span class="keyword">byte</span>[] data = <span class="keyword">null</span>;</span><br><span class="line">        InputStream is = <span class="keyword">null</span>;</span><br><span class="line">        HttpURLConnection conn = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            URL url = <span class="keyword">new</span> URL(urlPath);</span><br><span class="line">            conn = (HttpURLConnection) url.openConnection();</span><br><span class="line">            conn.setDoInput(<span class="keyword">true</span>);</span><br><span class="line">            <span class="comment">// conn.setDoOutput(true);</span></span><br><span class="line">            conn.setRequestMethod(<span class="string">"GET"</span>);</span><br><span class="line">            conn.setConnectTimeout(<span class="number">6000</span>);</span><br><span class="line">            is = conn.getInputStream();</span><br><span class="line">            <span class="keyword">if</span> (conn.getResponseCode() == <span class="number">200</span>) &#123;</span><br><span class="line">                data = readInputStream(is);</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                data = <span class="keyword">null</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (MalformedURLException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (is != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    is.close();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            conn.disconnect();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> data;</span><br></pre></td></tr></table></figure>
-<h2 id="添加图片到xml包"><a href="#添加图片到xml包" class="headerlink" title="添加图片到xml包"></a>添加图片到xml包</h2><p>我们只要清楚，word的文档主要是在 document.xml内显示，然后其最常用的块级别的元素就是 <strong>Paragraph</strong> -&gt; <strong>Run</strong> -&gt; <strong>Text</strong>。这样。</p>
-<p>XWPFDocumet本身，提供了一个将二进制序列存储到包内的方法：</p>
-<p><code>public String addPictureData(byte[] pictureData, int format) throws InvalidFormatException {</code><br>这会返回一个ID。我们前面说过，POI似乎添加了后不能直接显示，还需要在文档的 xml 内插入对应的代码。这个没有什么接口，就只能才采用非常基本的方式了：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createPicture</span><span class="params">(XWPFRun run, String blipId, <span class="keyword">int</span> id, <span class="keyword">int</span> width, <span class="keyword">int</span> height)</span> </span>&#123;</span><br><span class="line">      <span class="keyword">final</span> <span class="keyword">int</span> EMU = <span class="number">9525</span>;</span><br><span class="line">      width *= EMU;</span><br><span class="line">      height *= EMU;</span><br><span class="line">      <span class="comment">//String blipId = getAllPictures().get(id).getPackageRelationship().getId();</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">      CTInline inline = run.getCTR().addNewDrawing().addNewInline();</span><br><span class="line"></span><br><span class="line">      String picXml = <span class="string">""</span> +</span><br><span class="line">              <span class="string">"&lt;a:graphic xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\"&gt;"</span> +</span><br><span class="line">              <span class="string">"   &lt;a:graphicData uri=\"http://schemas.openxmlformats.org/drawingml/2006/picture\"&gt;"</span> +</span><br><span class="line">              <span class="string">"      &lt;pic:pic xmlns:pic=\"http://schemas.openxmlformats.org/drawingml/2006/picture\"&gt;"</span> +</span><br><span class="line">              <span class="string">"         &lt;pic:nvPicPr&gt;"</span> +</span><br><span class="line">              <span class="string">"            &lt;pic:cNvPr id=\""</span> + id + <span class="string">"\" name=\"Generated\"/&gt;"</span> +</span><br><span class="line">              <span class="string">"            &lt;pic:cNvPicPr/&gt;"</span> +</span><br><span class="line">              <span class="string">"         &lt;/pic:nvPicPr&gt;"</span> +</span><br><span class="line">              <span class="string">"         &lt;pic:blipFill&gt;"</span> +</span><br><span class="line">              <span class="string">"            &lt;a:blip r:embed=\""</span> + blipId + <span class="string">"\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"/&gt;"</span> +</span><br><span class="line">              <span class="string">"            &lt;a:stretch&gt;"</span> +</span><br><span class="line">              <span class="string">"               &lt;a:fillRect/&gt;"</span> +</span><br><span class="line">              <span class="string">"            &lt;/a:stretch&gt;"</span> +</span><br><span class="line">              <span class="string">"         &lt;/pic:blipFill&gt;"</span> +</span><br><span class="line">              <span class="string">"         &lt;pic:spPr&gt;"</span> +</span><br><span class="line">              <span class="string">"            &lt;a:xfrm&gt;"</span> +</span><br><span class="line">              <span class="string">"               &lt;a:off x=\"0\" y=\"0\"/&gt;"</span> +</span><br><span class="line">              <span class="string">"               &lt;a:ext cx=\""</span> + width + <span class="string">"\" cy=\""</span> + height + <span class="string">"\"/&gt;"</span> +</span><br><span class="line">              <span class="string">"            &lt;/a:xfrm&gt;"</span> +</span><br><span class="line">              <span class="string">"            &lt;a:prstGeom prst=\"rect\"&gt;"</span> +</span><br><span class="line">              <span class="string">"               &lt;a:avLst/&gt;"</span> +</span><br><span class="line">              <span class="string">"            &lt;/a:prstGeom&gt;"</span> +</span><br><span class="line">              <span class="string">"         &lt;/pic:spPr&gt;"</span> +</span><br><span class="line">              <span class="string">"      &lt;/pic:pic&gt;"</span> +</span><br><span class="line">              <span class="string">"   &lt;/a:graphicData&gt;"</span> +</span><br><span class="line">              <span class="string">"&lt;/a:graphic&gt;"</span>;</span><br><span class="line"></span><br><span class="line">      <span class="comment">//CTGraphicalObjectData graphicData = inline.addNewGraphic().addNewGraphicData();</span></span><br><span class="line">      XmlToken xmlToken = <span class="keyword">null</span>;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">          xmlToken = XmlToken.Factory.parse(picXml);</span><br><span class="line">      &#125; <span class="keyword">catch</span> (XmlException xe) &#123;</span><br><span class="line">          xe.printStackTrace();</span><br><span class="line">      &#125;</span><br><span class="line">      inline.set(xmlToken);</span><br><span class="line">      <span class="comment">//graphicData.set(xmlToken);</span></span><br><span class="line"></span><br><span class="line">      inline.setDistT(<span class="number">0</span>);</span><br><span class="line">      inline.setDistB(<span class="number">0</span>);</span><br><span class="line">      inline.setDistL(<span class="number">0</span>);</span><br><span class="line">      inline.setDistR(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">      CTPositiveSize2D extent = inline.addNewExtent();</span><br><span class="line">      extent.setCx(width);</span><br><span class="line">      extent.setCy(height);</span><br><span class="line"></span><br><span class="line">      CTNonVisualDrawingProps docPr = inline.addNewDocPr();</span><br><span class="line">      docPr.setId(id);</span><br><span class="line">      docPr.setName(<span class="string">"Picture "</span> + id);</span><br><span class="line">      docPr.setDescr(<span class="string">"Generated"</span>);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
-<p>这个方法，会在 <code>run</code> 内插入 上面代码中的 xml 内容。我们的图片才会正常的显示，其实当我们拿到了二进制的序列后，只需要两步即可：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPic</span><span class="params">(<span class="keyword">byte</span>[] data)</span> </span>&#123;</span><br><span class="line">    XWPFParagraph p = <span class="keyword">this</span>.createParagraph();</span><br><span class="line">    XWPFRun r = p.createRun();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//将数据添加到包内</span></span><br><span class="line">        String id = p.getDocument().addPictureData(data, Document.PICTURE_TYPE_PNG);</span><br><span class="line">        <span class="comment">// documents.xml内写入代码</span></span><br><span class="line">        createPicture(r, id, <span class="keyword">this</span>.getNextPicNameNumber(Document.PICTURE_TYPE_PNG), <span class="number">600</span>, <span class="number">600</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h1 id="操纵表格"><a href="#操纵表格" class="headerlink" title="操纵表格"></a>操纵表格</h1><p>首先要明白的是，tbl 是一个块级别的元素。<br>tbl 有 行 tr 与 与 单元格 tc。<br>tbl 有 一个虚拟的<code>网格列</code>概念。<br>tc 通过 占据 网格列来获取宽度。</p>
-<p>对于需要动态写入表格的时候，如果是带表头的表格，且是文档中的第一个表，我们可以如下操作：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">XWPFTable t = <span class="keyword">new</span> CustomXWPFDocument().getTables().get(<span class="number">0</span>);</span><br><span class="line">XWPFTableRow row = t.createRow();</span><br><span class="line">XWPFTableCell cell = row.getCell(<span class="number">0</span>);</span><br><span class="line">cell.setText(<span class="string">"第二行第一列"</span>);</span><br></pre></td></tr></table></figure>
-<p>再看看，我们的文件是否已经OK了。</p>
-<p>有几个坑，是踩过的。对于word中的表格来说，其对齐是分两部分来设置的。</p>
-<p>单元格 cell 设置 垂直对齐，而水平对齐，是在 Paragraph中来设置，所以如果要让一个单元格中的元素居中我们必须：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; cell.getParagraphs().size(); k++) &#123;</span><br><span class="line">                    XWPFParagraph paragraph = cell.getParagraphs().get(k);</span><br><span class="line">                    paragraph.setAlignment(ParagraphAlignment.CENTER);</span><br><span class="line">                &#125;</span><br></pre></td></tr></table></figure>
-<h2 id="inline图片的显示"><a href="#inline图片的显示" class="headerlink" title="inline图片的显示"></a>inline图片的显示</h2><p>在采用上节所说的方法添加图片到表格中内，出现了表格就显示了一行的情况，实在是百思不得其解。后面把文档打开了观察，原来我们是把元素设置了居中的，图片被居中上部的内容挡住了，即使没有内容但是我们设置了居中，就是会被挡住。</p>
-<p>最后采用的方法，是移除了其中所有的段落：</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cell.getParagraphs.size();i ++)&#123;</span><br><span class="line">	cell.removeParagraph(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>重新添加段落 run 后正常的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/word2007文档格式.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Java/word2007文档格式.html" class="post-title-link" itemprop="url">word2007文档格式</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-05-16 23:10:53" itemprop="dateCreated datePublished" datetime="2018-05-16T23:10:53+08:00">2018-05-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Java/word2007文档格式.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/word2007文档格式.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>对于文书来说，有很多需要生成的，一直以来用的是POI，但是似乎对文档的控制粒度粗了一下，所以潜心下来看一下怎么样操作docx4j。<br>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Java/word2007文档格式.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/Git命令-stash.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Git/Git命令-stash.html" class="post-title-link" itemprop="url">Git命令-stash</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-05-15 11:18:14" itemprop="dateCreated datePublished" datetime="2018-05-15T11:18:14+08:00">2018-05-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Git/Git命令-stash.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Git/Git命令-stash.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>事情是这样的，用git在版本管理，经常是切换到其他分支去开发新功能。但是，经常有些BUG需要修补，而新功能某些文件没有进行跟踪就 stash了。等到我过几天回去再修改了些文件。又stash了。反正，问题就是，我用stash把我修改过的东西，覆盖回来了。产生冲突，很恶心。所以不能不仔细看一下这个到底是个什么原因，有什么办法来解决没有？</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Git/Git命令-stash.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/进程和线程概念览.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Android/进程和线程概念览.html" class="post-title-link" itemprop="url">进程和线程概念览</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-05-08 22:49:37" itemprop="dateCreated datePublished" datetime="2018-05-08T22:49:37+08:00">2018-05-08</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Android/进程和线程概念览.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/进程和线程概念览.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>当某个应用组件启动且该应用没有运行其他任何组件时，Android 系统会使用单个执行线程为应用启动新的 Linux 进程。默认情况下，同一应用的所有组件在相同的进程和线程（称为“主”线程）中运行。 如果某个应用组件启动且该应用已存在进程（因为存在该应用的其他组件），则该组件会在此进程内启动并使用相同的执行线程。 但是，您可以安排应用中的其他组件在单独的进程中运行，并为任何进程创建额外的线程。</p>
-<p>本文档介绍进程和线程在 Android 应用中的工作方式。<br>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Android/进程和线程概念览.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1276,20 +1329,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">335</span>
+          <span class="site-state-item-count">339</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">139</span>
+        <span class="site-state-item-count">141</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

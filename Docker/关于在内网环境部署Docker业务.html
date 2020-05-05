@@ -301,7 +301,8 @@
 <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">tar -zxf rpmdir.tgz </span><br><span class="line"><span class="built_in">cd</span> rpmdir</span><br><span class="line">yum localinstall *</span><br><span class="line">systemctl <span class="built_in">enable</span> docker</span><br><span class="line">systemctl start docker</span><br><span class="line">docker info <span class="comment"># 查看一下安装好没有</span></span><br></pre></td></tr></table></figure>
 <h1 id="Docker-镜像上传"><a href="#Docker-镜像上传" class="headerlink" title="Docker 镜像上传"></a>Docker 镜像上传</h1><p>我利用这个 DockerFile 来建立 mysql5.7 mb4 的镜像</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/guillaumeprevost/docker-mysql-utf8mb4.git</span><br><span class="line"><span class="built_in">cd</span> docker-mysql-utf8mb4</span><br><span class="line">docker build -t mysql5.7utf8mb4 .</span><br><span class="line">docker save mysql5.7utf8mb4 &gt; mysql5.7utf8mb4.tar</span><br><span class="line">scp mysql5.7utf8mb4.tar user@server:~</span><br></pre></td></tr></table></figure>
-<h2 id="服务器上运行"><a href="#服务器上运行" class="headerlink" title="服务器上运行"></a>服务器上运行</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker load &lt; mysql5.7utf8mb4.tar</span><br><span class="line">setenforce 0 <span class="comment"># 这个是为了关闭 seLinux ，避免无法将数据目录映射出来</span></span><br><span class="line">docker run -d -p 3306:3306 --name mysql -v /data:/var/lib/mysql  -e MYSQL_ROOT_PASSWORD=<span class="string">'password'</span> mysql5.7utf8mb4</span><br></pre></td></tr></table></figure>
+<h2 id="服务器上运行"><a href="#服务器上运行" class="headerlink" title="服务器上运行"></a>服务器上运行</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">docker load &lt; mysql5.7utf8mb4.tar</span><br><span class="line">setenforce 0 <span class="comment"># 这个是为了关闭 seLinux ，避免无法将数据目录映射出来</span></span><br><span class="line">mkdir -p /data/config</span><br><span class="line">touch /data/config/my.cnf</span><br><span class="line">docker run -d -p 3306:3306 --name mysql -v /data/data:/var/lib/mysql -v /data/config/my.cnf:/etc/mysql/conf.d/my.cnf --restart always -e MYSQL_ROOT_PASSWORD=<span class="string">'gdgdstudy'</span> mysql5.7utf8mb4</span><br></pre></td></tr></table></figure>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[mysqld]</span></span><br><span class="line"><span class="attr">log_bin</span>=mysql-bin</span><br><span class="line"><span class="attr">server_id</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">lower_case_table_names</span>=<span class="number">1</span></span><br><span class="line"><span class="attr">secure_file_priv</span>=<span class="string">"/"</span></span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -326,6 +327,9 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+                <a href="/Linux-Unix/Bash中的字符串相关的注意要点.html" rel="prev" title="Bash中的字符串相关的注意要点">
+                  Bash中的字符串相关的注意要点 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
       </footer>
@@ -385,20 +389,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">335</span>
+          <span class="site-state-item-count">339</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-count">27</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">139</span>
+        <span class="site-state-item-count">141</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
