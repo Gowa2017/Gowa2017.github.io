@@ -425,46 +425,45 @@ on -> GearText -> cn
 <p>当我们加载 bin 文件的时候，就会将我们设置的信息加载后进行处理。大体而言，就是在 GComponent 构造了各个子元素后，会调用子元素的 <code>setup_afterAdd</code> 方法，此时，就会读取出此 GObject 的 gears（Gear类型索引，控制器索引），然后添加每页的显示信息。</p>
 <p>如此，当 GComponent 应用 Controller 的时候，就会跟着变化了。</p>
 <h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><ol>
-<li><p><a href="https://www.fairygui.com/docs/guide/editor/package.html" target="_blank" rel="noopener">此处介绍</a> FairyGUI 是以包来组织 UI，但是不会自动解决依赖的问题，我们 UI 的依赖必须手动在建立之前进行加载，否则无法正常显示的。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script></p>
-<pre><code>         // graphviz init
-         let graphviz_engines = [&quot;circo&quot;,
-             &quot;dot&quot;,
-             &quot;fdp&quot;,
-             &quot;neato&quot;,
-             &quot;osage&quot;,
-             &quot;twopi&quot;];
-
-         function doGraphviz(engine) {
-             let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
-             for (let i = 0; i &lt; domAllDot.length; i++) {
-                 let dom = domAllDot[i];
-                 let graphSource = dom.innerText || dom.textContent;
-
-                 try {
-                    let viz = new Viz();
-                      viz.renderSVGElement(graphSource, {engine: engine})
-                          .then(r =&gt; {
-                     dom.innerHTML =&#39;&#39;;dom.append(r); });
-                 } catch (e) {
-                     console.error(&quot;Error when parsing node:&quot;, dom, e);
-                 } 
-             }
-         } 
-
-         let init = function () {
-             for (let i = 0; i &lt; graphviz_engines.length; i++) {
-                 doGraphviz(graphviz_engines[i]);
-             }
-         };
-         if (typeof window.addEventListener != &quot;undefined&quot;) {
-             window.addEventListener(&quot;load&quot;, init, false);
-         } else {
-             window.attachEvent(&quot;onload&quot;, init);
-         }
-         &lt;/script&gt;
-</code></pre></li>
+<li><a href="https://www.fairygui.com/docs/guide/editor/package.html" target="_blank" rel="noopener">此处介绍</a> FairyGUI 是以包来组织 UI，但是不会自动解决依赖的问题，我们 UI 的依赖必须手动在建立之前进行加载，否则无法正常显示的。</li>
 </ol>
-</script></p></li></ol>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
+
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
+
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
+                }
+                </script>
     </div>
 
     

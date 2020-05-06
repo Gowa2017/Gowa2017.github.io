@@ -349,46 +349,45 @@ M -> UIComponent -> "FairyGUI bin 文件"
 <ul>
 <li>Proxy 负责与数据模型的交互，然后发出通知。</li>
 <li>Mediaotr 负责关注相应的通知类型，进行响应，最终会调用到 UIComponent 中的关于 UI 逻辑的部分。</li>
-<li><p>UIComponent 负责加载 FairyGUI 发布的 bin 文件，构造 UI。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script></p>
-<pre><code>          // graphviz init
-          let graphviz_engines = [&quot;circo&quot;,
-              &quot;dot&quot;,
-              &quot;fdp&quot;,
-              &quot;neato&quot;,
-              &quot;osage&quot;,
-              &quot;twopi&quot;];
-
-          function doGraphviz(engine) {
-              let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
-              for (let i = 0; i &lt; domAllDot.length; i++) {
-                  let dom = domAllDot[i];
-                  let graphSource = dom.innerText || dom.textContent;
-
-                  try {
-                     let viz = new Viz();
-                       viz.renderSVGElement(graphSource, {engine: engine})
-                           .then(r =&gt; {
-                      dom.innerHTML =&#39;&#39;;dom.append(r); });
-                  } catch (e) {
-                      console.error(&quot;Error when parsing node:&quot;, dom, e);
-                  } 
-              }
-          } 
-
-          let init = function () {
-              for (let i = 0; i &lt; graphviz_engines.length; i++) {
-                  doGraphviz(graphviz_engines[i]);
-              }
-          };
-          if (typeof window.addEventListener != &quot;undefined&quot;) {
-              window.addEventListener(&quot;load&quot;, init, false);
-          } else {
-              window.attachEvent(&quot;onload&quot;, init);
-          }
-          &lt;/script&gt;
-</code></pre></li>
+<li>UIComponent 负责加载 FairyGUI 发布的 bin 文件，构造 UI。</li>
 </ul>
-</script></p></li></ul>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
+
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
+
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
+                }
+                </script>
     </div>
 
     
