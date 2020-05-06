@@ -335,8 +335,9 @@ digraph {
 Core[label="PureMVC CORE"]
 F[label=Facade]
 P[label=Proxy]
-M[label=Mediator]
+M[label="Mediator\n调用Proxy\n调用UIComponent更新方法\n为UIComponent绑定事件"]
 C[label=Command]
+UIComponent[label="UIComponent\n根据数据更新UI方法"]
 F -> Core[dir=both]
 F -> {P M C}[dir=both]
 P -> Model -> {Server Local Cache}
