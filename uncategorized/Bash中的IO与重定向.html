@@ -48,19 +48,18 @@
 </script>
 
   <meta name="description" content="我们知道，进程在打开的时候，就默认已经打开了三个文件描述符 0, 1, 2 方便大不了 标准输入，标准输出，标准错误。而我们要进行重定向的时候，比如到一个文件的时候，实际上进程不会关心他到底是被重定向到什么地方了，他只需要依然向这三个描述符进行相关的 IO 操作就行了。所以，我们需要来了解一下文件描述符背后的一些内容。">
-<meta name="keywords" content="Linux&#x2F;Unix,Bash">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Bash中的IO与重定向">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/Bash中的IO与重定向.html">
+<meta property="og:title" content="退思园">
+<meta property="og:url" content="https://gowa.club/uncategorized/Bash中的IO与重定向.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="我们知道，进程在打开的时候，就默认已经打开了三个文件描述符 0, 1, 2 方便大不了 标准输入，标准输出，标准错误。而我们要进行重定向的时候，比如到一个文件的时候，实际上进程不会关心他到底是被重定向到什么地方了，他只需要依然向这三个描述符进行相关的 IO 操作就行了。所以，我们需要来了解一下文件描述符背后的一些内容。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-17T04:04:35.000Z">
+<meta property="og:updated_time" content="2020-05-19T12:16:35.043Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Bash中的IO与重定向">
+<meta name="twitter:title" content="退思园">
 <meta name="twitter:description" content="我们知道，进程在打开的时候，就默认已经打开了三个文件描述符 0, 1, 2 方便大不了 标准输入，标准输出，标准错误。而我们要进行重定向的时候，比如到一个文件的时候，实际上进程不会关心他到底是被重定向到什么地方了，他只需要依然向这三个描述符进行相关的 IO 操作就行了。所以，我们需要来了解一下文件描述符背后的一些内容。">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/Bash中的IO与重定向.html">
+<link rel="canonical" href="https://gowa.club/uncategorized/Bash中的IO与重定向.html">
 
 
 <script id="page-configurations">
@@ -74,7 +73,7 @@
   };
 </script>
 
-  <title>Bash中的IO与重定向 | 退思园</title>
+  <title> | 退思园</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
     <script>
@@ -230,7 +229,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/Bash中的IO与重定向.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/uncategorized/Bash中的IO与重定向.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -243,7 +242,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Bash中的IO与重定向
+          
         </h1>
 
         <div class="post-meta">
@@ -253,19 +252,15 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2020-01-17 12:04:35" itemprop="dateCreated datePublished" datetime="2020-01-17T12:04:35+08:00">2020-01-17</time>
+              <time title="Created: 2020-01-17 00:00:00" itemprop="dateCreated datePublished" datetime="2020-01-17T00:00:00+08:00">2020-01-17</time>
             </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux/Unix</span>
-                  </a>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
                 </span>
-            </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-05-19 20:16:35" itemprop="dateModified" datetime="2020-05-19T20:16:35+08:00">2020-05-19</time>
+              </span>
 
           
   
@@ -276,8 +271,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/Bash中的IO与重定向.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/Bash中的IO与重定向.html" itemprop="commentCount"></span>
+    <a title="disqus" href="/uncategorized/Bash中的IO与重定向.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="uncategorized/Bash中的IO与重定向.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -369,6 +364,15 @@ V1:data -> I1:i
 I1:v -> V1:v
 }
 </v></i></data></v></vp></offset></flag></vp></offset></flag></p2></fd2></p1></fd1></p0></fd0></p2></fd2></p1></fd1></p0></fd0></div>
+<h1 id="BASH-的特殊文件"><a href="#BASH-的特殊文件" class="headerlink" title="BASH 的特殊文件"></a>BASH 的特殊文件</h1><p>在进行重定向的时候，BASH 内部会使用几个特殊的文件</p>
+<ul>
+<li>/dev/fd/<em>fd</em> 如果 <em>fd</em> 是一个有效的数字，那么 <em>fd</em> 将被复制</li>
+<li>/dev/stdin 文件描述符 <em>0</em> 被复制</li>
+<li>/dev/stdout 文件描述符 <em>1</em> 被复制</li>
+<li>/dev/stderr 文件描述符 <em>2</em> 被复制</li>
+<li>/dev/tcp/<em>host</em>/<em>port</em>  BASH 会尝试打开到 <em>host:port</em> 的 TCP 连接</li>
+<li>/dev/udp/<em>host</em>/<em>port</em> BASH 会尝试打开到 <em>host:port</em> 的 UDP 连接。</li>
+</ul>
 <h1 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h1><p>bash 中的重定向操作符有两类三个：</p>
 <ul>
 <li>输入重定向 <code>&lt;, &lt;&lt;, &lt;&lt;&lt;</code></li>
@@ -391,14 +395,15 @@ T1:pD -> F1:flag
 }
 </vp></offset></flag></pd></fdd></ps></fds></p2></fd2></p1></fd1></p0></fd0></div>
 <p>就是感官上有点怪异，我需要的是重定向是S，结果却是将要定向到的 D 复制给了 S。</p>
+<p>实际上换个思路，我们将文件描述符 S 重新定向到了 D 所指向的文件表项。</p>
 <h2 id="dup-系统调用"><a href="#dup-系统调用" class="headerlink" title="dup 系统调用"></a>dup 系统调用</h2><p>有两个底层函数来完成文件描述符的复制：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">dup(<span class="keyword">int</span> fildes);</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">dup2(<span class="keyword">int</span> fildes, <span class="keyword">int</span> fildes2);</span><br></pre></td></tr></table></figure>
 <ul>
-<li>dup() 会返回文件描述符表中最小的那个整数，让此整数代表指向 <em>fildes</em> 的文件表项。</li>
+<li>dup() 会返回文件描述符表中最小的那个整数，让此整数也指向 <em>fildes</em> 的文件表项。</li>
 <li>dup2() 就有所不同，当 <em>fildes2</em> 在使用的话，那么就会先关闭 <em>fildes2</em>，然后再进行复制。</li>
 </ul>
 <p>所以我猜想，对于输入输出的重定向，要么是利用：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">close</span>(<span class="number">1</span>);</span><br><span class="line">dup()</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">close</span>(<span class="number">1</span>);</span><br><span class="line">dup(fildes)</span><br></pre></td></tr></table></figure>
 <p>或者是</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">dup2(fd, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <p>这样的形式来实现的。</p>
@@ -430,7 +435,40 @@ fd1 -> ftdirlist
 </div>
 <p>的区别。</p>
 <p>这是再于，对于第二种情况，标准错误只是使用了标准输出的文件表项，而标准输出使用了 dirlist 的文件表项。</p>
-<h2 id="gt-gt-amp"><a href="#gt-gt-amp" class="headerlink" title="[&gt;]&gt;&amp;"></a>[&gt;]&gt;&amp;</h2><p>这个操作符实际上是用来进行表示复制文件描述符的意思的，我们可以用 <code>&gt;</code> 重定向到文件，但是如果是要重定向描述符的时候就只能用这个。</p>
+<p>这是因为：<strong>重定向是定向到文件描述符所指向的文件表项，而不是定向到文件描述符本身（这本来就说不通）</strong></p>
+<h2 id="lt-输入"><a href="#lt-输入" class="headerlink" title="&lt; 输入"></a>&lt; 输入</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n]&lt;word</span><br></pre></td></tr></table></figure>
+<p>这会让名为 <em>word</em> 经过扩展后的文件在描述符 <em>n</em> 上打开，如果省略了 <em>n</em>，那么就会在标准输入 <em>0</em> 上打开</p>
+<h2 id="gt-输出"><a href="#gt-输出" class="headerlink" title="&gt; 输出"></a>&gt; 输出</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n]&gt;[|]word</span><br></pre></td></tr></table></figure>
+<p>这会让名为 <em>word</em> 经过扩展后的文件在描述符 <em>n</em> 上打开，<em>如果省略了n</em> 那么就在标准输出 <em>1</em> 上打开。文件不存在则会创建，文件存在则会被截短。</p>
+<blockquote>
+<p>注意：如果用 <code>&gt;</code> 进行重定向，而 <code>noclobber</code> 选项已设置，在文件存在的时候就会失败。</p>
+<p>而 <code>&gt;|</code> 无论文件是否存在都会成功。</p>
+</blockquote>
+<h2 id="gt-gt-追加"><a href="#gt-gt-追加" class="headerlink" title="&gt;&gt; 追加"></a>&gt;&gt; 追加</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n] &gt;&gt; word</span><br></pre></td></tr></table></figure>
+<h2 id="gt-amp-word"><a href="#gt-amp-word" class="headerlink" title="&gt;&amp;word"></a>&gt;&amp;word</h2><p>这个描述符允许我们同时将标准输出，标准错误都重定向到同一个文件。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&amp;&gt;word <span class="comment"># ==== &gt;word 2&gt;&amp;1</span></span><br><span class="line">&gt;&amp;word</span><br></pre></td></tr></table></figure>
+<p>推荐用第一种形式。</p>
+<p>用第二中形式的时候，注意，<em>word</em> 不能扩展成一个数字或者是 <code>-</code>，因为这时候会有特殊的意义。</p>
+<h2 id="gt-gt-amp-word"><a href="#gt-gt-amp-word" class="headerlink" title="&gt;&gt;&amp;word"></a>&gt;&gt;&amp;word</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&amp;word</span><br><span class="line">&gt;&gt;word 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<h2 id="lt-lt-here-document"><a href="#lt-lt-here-document" class="headerlink" title="&lt;&lt; here-document"></a>&lt;&lt; here-document</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[n] &lt;&lt;[-]word</span><br><span class="line">    here-document</span><br><span class="line">delimiter</span><br></pre></td></tr></table></figure>
+<p>这个类型的用法让 SHELL 从当前的源读取输入，直到一个包含 <em>word</em> 的行出现（没有拖尾的空白）。期间读取的所有行都会作为一个命令的标准输入。</p>
+<p>对于 <strong>word</strong>，不会进行变量扩展，命令替换，算数运算或者文件名扩展进行。也就是其是一个字面意义的字符串。</p>
+<p>如果 <em>word</em> 中有任意部分加了引号，那么 <em>delimiter</em> 是去除引号的结果，并且，在 <em>here-document</em> 中的所有内容都不会进行各种扩展。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">echo</span>&lt;&lt;<span class="string">"F"</span>F</span><br><span class="line"><span class="variable">$VVVVV</span></span><br><span class="line">`expr 1 + 1`</span><br><span class="line">FF</span><br></pre></td></tr></table></figure>
+<p>将会输出：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> cat&lt;&lt;&quot;F&quot;F</span><br><span class="line">$VVVVV</span><br><span class="line">`expr 1 + 1`</span><br><span class="line">FF</span><br><span class="line">$VVVVV</span><br><span class="line">`expr 1 + 1`</span><br></pre></td></tr></table></figure>
+<p>如果 <em>word</em> 中没有引号出现，那么 <em>here-document</em> 中就会进行各种扩展。字符序列 <code>\newline</code> 将会被忽略，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">\, $, `</span><br></pre></td></tr></table></figure>
+<p>必须用 <code>\</code> 进行反引。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> cat&lt;&lt;FF</span><br><span class="line">$PATH</span><br><span class="line">`expr 1 + 1`</span><br><span class="line">\`</span><br><span class="line">FF</span><br><span class="line">/Users/gowa/venv/bin:</span><br><span class="line">2</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+<p>如果重定向符是 <code>&lt;&lt;-</code>，那么所有开头的 <code>Tab</code> 都会被去除。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> cat&lt;&lt;-FF</span><br><span class="line">$PATH</span><br><span class="line">	`expr 1 + 1`</span><br><span class="line">\`</span><br><span class="line">FF</span><br><span class="line">/Users/gowa/venv/bin:</span><br><span class="line">2</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+<h2 id="lt-lt-lt-立即字符"><a href="#lt-lt-lt-立即字符" class="headerlink" title="&lt;&lt;&lt; 立即字符"></a>&lt;&lt;&lt; 立即字符</h2><p>here-document 的变种。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n] &lt;&lt;&lt; word</span><br></pre></td></tr></table></figure>
+<p>直接就是长串文本的搞法了：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cat &lt;&lt;&lt; <span class="string">"FF</span></span><br><span class="line"><span class="string">    <span class="variable">$VVVV</span></span></span><br><span class="line"><span class="string">`expr 1 + 2`</span></span><br><span class="line"><span class="string">FF"</span></span><br></pre></td></tr></table></figure>
+<h2 id="gt-gt-amp-digit"><a href="#gt-gt-amp-digit" class="headerlink" title="[&gt;]&gt;&amp;digit"></a>[&gt;]&gt;&amp;digit</h2><p>这个操作符实际上是用来进行表示复制文件描述符的意思的，我们可以用 <code>&gt;</code> 重定向到文件，但是如果是要重定向描述符的时候就只能用这个。</p>
+<p>我们可以把 <code>&amp;</code> 理解为，取<strong>文件描述符的文件表项的意思</strong>。</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n]&lt;&amp;word</span><br></pre></td></tr></table></figure>
 <ul>
 <li>当 Word 不是数字就会出错。</li>
@@ -444,20 +482,21 @@ fd1 -> ftdirlist
 <li>如果 <code>n</code> 未指定，那么就会使用  <em>1</em></li>
 <li><strong>特殊情况</strong>：如果 <code>n</code> 未指定，<em>word</em> 不是数字，也不是 <code>-</code>（它是个文件名），那么标准输出，标准错误都会被重定向到 <em>word</em> 代表的文件。</li>
 </ul>
-<h3 id="lt-lt-here-document"><a href="#lt-lt-here-document" class="headerlink" title="&lt;&lt; here-document"></a>&lt;&lt; here-document</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n] &lt;&lt;[-] word</span><br><span class="line">    here-document</span><br><span class="line">delimiter</span><br></pre></td></tr></table></figure>
-<p>在这个命令中， <code>&lt;&lt;</code> 表示跟随其后的是一个文档，而 <em>word</em> 表示文档的结束符，<em>delimiter</em> 表征结束。如：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">wc &lt;&lt; EOF</span><br><span class="line">a b c </span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
-<p>使用这个的时候需要注意：</p>
-<p><strong>在 word 上 不会进行 参数和变量展开，命令替换，算数展开，或文件名展开</strong></p>
-<p><strong>如果 <em>word</em> 有部分是加了引用的，那么这个 <em>delimiter</em> 应该是 <em>word</em> 去除引号后的结果。并且 her-document 中的所有内容不会进行展开。</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> VVVV=<span class="string">"vvvvvv"</span></span><br><span class="line">cat &lt;&lt; <span class="string">"F"</span>F</span><br><span class="line"><span class="variable">$VVVV</span></span><br><span class="line">`expr 1 + 2`</span><br><span class="line">FF</span><br><span class="line"><span class="variable">$VVVV</span></span><br><span class="line">`expr 1 + 2`</span><br></pre></td></tr></table></figure>
-<p><strong>如果未引用word，则对本文的所有行进行参数扩展，命令替换和算术扩展，字符序列\ newline将被忽略，并且必须使用’\’来引用字符’\’，’$ ‘和’`’。</strong></p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> VVVV=<span class="string">"vvvvvv"</span></span><br><span class="line">cat &lt;&lt; FF</span><br><span class="line"><span class="variable">$VVVV</span></span><br><span class="line">`expr 1 + 2`</span><br><span class="line">FF</span><br><span class="line">vvvvvv</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
-<p><code>&lt;&lt;-</code> 是一种特殊情况，所有开头的  tab 会被去掉，同时会将 <em>delimiter</em> 包含进来。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> VVVV=<span class="string">"vvvvvv"</span></span><br><span class="line">cat &lt;&lt;- FF</span><br><span class="line">    <span class="variable">$VVVV</span></span><br><span class="line">`expr 1 + 2`</span><br><span class="line">FF</span><br><span class="line">vvvvvv</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
-<h3 id="lt-lt-lt"><a href="#lt-lt-lt" class="headerlink" title="&lt;&lt;&lt;"></a>&lt;&lt;&lt;</h3><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n] &lt;&lt;&lt; word</span><br></pre></td></tr></table></figure>
-<p>直接就是长串文本的搞法了：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cat &lt;&lt;&lt; <span class="string">"FF</span></span><br><span class="line"><span class="string">    <span class="variable">$VVVV</span></span></span><br><span class="line"><span class="string">`expr 1 + 2`</span></span><br><span class="line"><span class="string">FF"</span></span><br></pre></td></tr></table></figure>
+<h2 id="lt-gt-amp-digit-移动文件描述符"><a href="#lt-gt-amp-digit-移动文件描述符" class="headerlink" title="{&lt;|&gt;}&amp;digit- 移动文件描述符"></a>{&lt;|&gt;}&amp;digit- 移动文件描述符</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[n]&lt;&amp;digit-</span><br><span class="line">[n]&gt;&amp;digit-</span><br></pre></td></tr></table></figure>
+<p>会将 digit 表示的文件表项移动（复制后，关闭 digit）到文件描述符 n。</p>
+<h2 id="lt-gt-读写打开文件描述符"><a href="#lt-gt-读写打开文件描述符" class="headerlink" title="&lt;&gt;读写打开文件描述符"></a>&lt;&gt;读写打开文件描述符</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[n]&lt;&gt;word</span><br></pre></td></tr></table></figure>
+<p>如果 <em>word</em> 指定的文件不存在，那么就会建立他。</p>
+<h1 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h1><p>BASH 可以连接套套接字，这来源于其内部使用的 <code>/dev/{tcp|udp}/host/port</code> 特殊文件。我们可以利用  <code>&lt;&gt;</code> 与此结合来连接套接字：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">exec</span> 3&lt;&gt; /dev/tcp/www.baidu.com/80</span><br></pre></td></tr></table></figure>
+<p>为什么要用 <code>exec</code>？</p>
+<p><a href="https://www.computerhope.com/unix/bash/exec.htm" target="_blank" rel="noopener">参考一下这篇文章把</a></p>
+<h1 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">exec</span> [-cl] [-a name] [<span class="built_in">command</span> [arguments]]</span><br></pre></td></tr></table></figure>
+<p>如果指定了命令，那么其就会替换当前的SHELL，不会建立新的进程。参数会传递给指定的命令去。</p>
+<p>-c 以空环境执行命令</p>
+<p>-l 传递给命令代第 0 个位置参数前加上横线，就和 login api做的一样。</p>
+<p>-a name ，将 <code>name</code> 作为第 0 个位置参数。</p>
+<p>当我们不指定任何命令执行 exec 时，所有的输出都会重定向到文件去：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">bash-3.2$ bash</span><br><span class="line">bash-3.2$ <span class="built_in">exec</span> &gt; file</span><br><span class="line">bash-3.2$ date</span><br><span class="line">bash-3.2$ <span class="built_in">exit</span></span><br><span class="line">bash-3.2$ cat file</span><br><span class="line">Thu 18 Sep 2014 23:56:25 CEST</span><br></pre></td></tr></table></figure>
 <script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
                 // graphviz init
                 let graphviz_engines = ["circo",
@@ -502,10 +541,6 @@ fd1 -> ftdirlist
     
 
       <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/Linux-Unix/" rel="tag"># Linux/Unix</a>
-              <a href="/tags/Bash/" rel="tag"># Bash</a>
-          </div>
 
         
 
@@ -567,7 +602,7 @@ fd1 -> ftdirlist
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#File-Descriptor"><span class="nav-number">1.</span> <span class="nav-text">File Descriptor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重定向"><span class="nav-number">2.</span> <span class="nav-text">重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件描述符复制"><span class="nav-number">2.1.</span> <span class="nav-text">文件描述符复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dup-系统调用"><span class="nav-number">2.2.</span> <span class="nav-text">dup 系统调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重定向的顺序"><span class="nav-number">2.3.</span> <span class="nav-text">重定向的顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gt-gt-amp"><span class="nav-number">2.4.</span> <span class="nav-text">[&gt;]&gt;&amp;</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-lt-here-document"><span class="nav-number">2.4.1.</span> <span class="nav-text">&lt;&lt; here-document</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lt-lt-lt"><span class="nav-number">2.4.2.</span> <span class="nav-text">&lt;&lt;&lt;</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#File-Descriptor"><span class="nav-number">1.</span> <span class="nav-text">File Descriptor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BASH-的特殊文件"><span class="nav-number">2.</span> <span class="nav-text">BASH 的特殊文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重定向"><span class="nav-number">3.</span> <span class="nav-text">重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件描述符复制"><span class="nav-number">3.1.</span> <span class="nav-text">文件描述符复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dup-系统调用"><span class="nav-number">3.2.</span> <span class="nav-text">dup 系统调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重定向的顺序"><span class="nav-number">3.3.</span> <span class="nav-text">重定向的顺序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lt-输入"><span class="nav-number">3.4.</span> <span class="nav-text">&lt; 输入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gt-输出"><span class="nav-number">3.5.</span> <span class="nav-text">&gt; 输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gt-gt-追加"><span class="nav-number">3.6.</span> <span class="nav-text">&gt;&gt; 追加</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gt-amp-word"><span class="nav-number">3.7.</span> <span class="nav-text">&gt;&amp;word</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gt-gt-amp-word"><span class="nav-number">3.8.</span> <span class="nav-text">&gt;&gt;&amp;word</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lt-lt-here-document"><span class="nav-number">3.9.</span> <span class="nav-text">&lt;&lt; here-document</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lt-lt-lt-立即字符"><span class="nav-number">3.10.</span> <span class="nav-text">&lt;&lt;&lt; 立即字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gt-gt-amp-digit"><span class="nav-number">3.11.</span> <span class="nav-text">[&gt;]&gt;&amp;digit</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lt-gt-amp-digit-移动文件描述符"><span class="nav-number">3.12.</span> <span class="nav-text">{&lt;|&gt;}&amp;digit- 移动文件描述符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#lt-gt-读写打开文件描述符"><span class="nav-number">3.13.</span> <span class="nav-text">&lt;&gt;读写打开文件描述符</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#套接字"><span class="nav-number">4.</span> <span class="nav-text">套接字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#exec"><span class="nav-number">5.</span> <span class="nav-text">exec</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -725,9 +760,9 @@ fd1 -> ftdirlist
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/Bash中的IO与重定向.html",
-            identifier: "Linux-Unix/Bash中的IO与重定向.html",
-            title: "Bash中的IO与重定向"
+            url: "https://gowa.club/uncategorized/Bash中的IO与重定向.html",
+            identifier: "uncategorized/Bash中的IO与重定向.html",
+            title: ""
           }
         }
       });
