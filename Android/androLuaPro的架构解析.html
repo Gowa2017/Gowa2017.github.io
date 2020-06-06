@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="架不住喜欢 Lua，所以看了一下 Lua 在安卓上的使用，但是项目都不多。最终找到了一个击于 luajava 的实现  AndroiLua_pro。下面我们来看一下他是怎么样让 Lua 用起来的。">
+<meta name="keywords" content="Lua,Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="androLuaPro的架构解析">
+<meta property="og:url" content="https://gowa.club/Android/androLuaPro的架构解析.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="架不住喜欢 Lua，所以看了一下 Lua 在安卓上的使用，但是项目都不多。最终找到了一个击于 luajava 的实现  AndroiLua_pro。下面我们来看一下他是怎么样让 Lua 用起来的。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-03T07:55:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="androLuaPro的架构解析">
+<meta name="twitter:description" content="架不住喜欢 Lua，所以看了一下 Lua 在安卓上的使用，但是项目都不多。最终找到了一个击于 luajava 的实现  AndroiLua_pro。下面我们来看一下他是怎么样让 Lua 用起来的。">
+
+<link rel="canonical" href="https://gowa.club/Android/androLuaPro的架构解析.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>androLuaPro的架构解析 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/androLuaPro的架构解析.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          androLuaPro的架构解析
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-12-03 15:55:09" itemprop="dateCreated datePublished" datetime="2019-12-03T15:55:09+08:00">2019-12-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua</span>
+                  </a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Android/androLuaPro的架构解析.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/androLuaPro的架构解析.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>架不住喜欢 Lua，所以看了一下 Lua 在安卓上的使用，但是项目都不多。最终找到了一个击于 <a href="https://github.com/jasonsantos/luajava" target="_blank" rel="noopener">luajava</a> 的实现  <a href="https://github.com/nirenr/AndroLua_pro" target="_blank" rel="noopener">AndroiLua_pro</a>。下面我们来看一下他是怎么样让 Lua 用起来的。</p>
+<a id="more"></a>
+<p>关于 LuaJava 的解析可以看 <a href="/Lua/JNI使用-LuaJava实现.html" title="JNI使用-LuaJava实现">JNI使用-LuaJava实现</a>。</p>
+<h1 id="LuaApplication"><a href="#LuaApplication" class="headerlink" title="LuaApplication"></a>LuaApplication</h1><p>LuaApplication  在启动的时候定义了几个用来存储模块和脚本的路径：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onCreate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onCreate();</span><br><span class="line">    mApp = <span class="keyword">this</span>;</span><br><span class="line">    CrashHandler crashHandler = CrashHandler.getInstance();</span><br><span class="line">    <span class="comment">// 注册crashHandler</span></span><br><span class="line">    crashHandler.init(getApplicationContext());</span><br><span class="line">    mSharedPreferences = getSharedPreferences(<span class="keyword">this</span>);</span><br><span class="line">    <span class="comment">//初始化AndroLua工作目录</span></span><br><span class="line">    <span class="keyword">if</span> (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) &#123;</span><br><span class="line">        String sdDir = Environment.getExternalStorageDirectory().getAbsolutePath();</span><br><span class="line">        luaExtDir = sdDir + <span class="string">"/AndroLua"</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        File[] fs = <span class="keyword">new</span> File(<span class="string">"/storage"</span>).listFiles();</span><br><span class="line">        <span class="keyword">for</span> (File f : fs) &#123;</span><br><span class="line">            String[] ls = f.list();</span><br><span class="line">            <span class="keyword">if</span> (ls == <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (ls.length &gt; <span class="number">5</span>) &#123;</span><br><span class="line">                luaExtDir = f.getAbsolutePath() + <span class="string">"/AndroLua"</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (luaExtDir == <span class="keyword">null</span>) &#123;</span><br><span class="line">            luaExtDir = getDir(<span class="string">"AndroLua"</span>, Context.MODE_PRIVATE).getAbsolutePath();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    File destDir = <span class="keyword">new</span> File(luaExtDir);</span><br><span class="line">    <span class="keyword">if</span> (!destDir.exists()) &#123;</span><br><span class="line">        destDir.mkdirs();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//定义文件夹</span></span><br><span class="line">    luaFilesDir = getFilesDir().getAbsolutePath();</span><br><span class="line">    odexDir = getDir(<span class="string">"odex"</span>, Context.MODE_PRIVATE).getAbsolutePath();</span><br><span class="line">    luaNativeLibDir = getDir(<span class="string">"lib"</span>, Context.MODE_PRIVATE).getAbsolutePath();</span><br><span class="line">    luaModuleDir = getDir(<span class="string">"lua"</span>, Context.MODE_PRIVATE).getAbsolutePath();</span><br><span class="line">    luaCpath = getApplicationInfo().nativeLibraryDir + <span class="string">"/lib?.so"</span> + <span class="string">";"</span> + luaNativeLibDir + <span class="string">"/lib?.so"</span>;</span><br><span class="line">    <span class="comment">//luaDir = extDir;</span></span><br><span class="line">    luaLpath = luaModuleDir + <span class="string">"/?.lua;"</span> + luaModuleDir + <span class="string">"/lua/?.lua;"</span> + luaModuleDir + <span class="string">"/?/init.lua;"</span>;</span><br><span class="line">    <span class="comment">//checkInfo();</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>简单来说就是这几个路径：</p>
+<ul>
+<li>luaExtDir：/sdcard/AndroLua 存储于外部存储中的目录，lua文件目录。</li>
+<li>appFilesDir： /data/data/com.androlua/files</li>
+<li>odexDir:  /data/data/com.androlua/app_odex</li>
+<li>luaNativeLibDir: /data/data/com.androlua/app_lib  Lua So 库路径</li>
+<li>luaModuleDir: /data/data/com.androlua/app_lua </li>
+<li>luaCpath： /data/app/com.androlua…/lib 加上我们的 libDir 目录，在此下查找 so 库。</li>
+<li>luaLpath：在 luaModuleDir 下查找的 lua 模块路径，在此路径下查找 .lua 文件 </li>
+</ul>
+<h1 id="Welcome"><a href="#Welcome" class="headerlink" title="Welcome"></a>Welcome</h1><p>这个是在第一次启动，或者是有更新的时候启动的 Activity，其做的一个最重要的工作就是：<br>将 apk 内 assets 目录下的文件解压到 appFilesDir。<br>将 apk 内 lua （位于 resources ）目录下的文件解压到 luaModuleDir。</p>
+<p>所以看着有点蛋疼。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">unApk(<span class="string">"assets"</span>, appFilesDir);</span><br><span class="line">unApk(<span class="string">"lua"</span>, luaModuleDir);</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">unApk</span><span class="params">(String dir, String extDir)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = dir.length() + <span class="number">1</span>;</span><br><span class="line">        ZipFile zip = <span class="keyword">new</span> ZipFile(getApplicationInfo().publicSourceDir);</span><br><span class="line">        Enumeration&lt;? extends ZipEntry&gt; entries = zip.entries();</span><br><span class="line">        <span class="keyword">while</span> (entries.hasMoreElements()) &#123;</span><br><span class="line">            ZipEntry entry = entries.nextElement();</span><br><span class="line">            String name = entry.getName();</span><br><span class="line">            <span class="keyword">if</span> (name.indexOf(dir) != <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            String path = name.substring(i);</span><br><span class="line">            <span class="keyword">if</span> (entry.isDirectory()) &#123;</span><br><span class="line">                File f = <span class="keyword">new</span> File(extDir + File.separator + path);</span><br><span class="line">                <span class="keyword">if</span> (!f.exists()) &#123;</span><br><span class="line">                    <span class="comment">//noinspection ResultOfMethodCallIgnored</span></span><br><span class="line">                    f.mkdirs();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                String fname = extDir + File.separator + path;</span><br><span class="line">                File ff = <span class="keyword">new</span> File(fname);</span><br><span class="line">                File temp = <span class="keyword">new</span> File(fname).getParentFile();</span><br><span class="line">                <span class="keyword">if</span> (!temp.exists()) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (!temp.mkdirs()) &#123;</span><br><span class="line">                        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"create file "</span> + temp.getName() + <span class="string">" fail"</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (ff.exists() &amp;&amp; entry.getSize() == ff.length() &amp;&amp; LuaUtil.getFileMD5(zip.getInputStream(entry)).equals(LuaUtil.getFileMD5(ff)))</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                &#125; <span class="keyword">catch</span> (NullPointerException ignored) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">                FileOutputStream out = <span class="keyword">new</span> FileOutputStream(extDir + File.separator + path);</span><br><span class="line">                InputStream in = zip.getInputStream(entry);</span><br><span class="line">                <span class="keyword">byte</span>[] buf = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4096</span>];</span><br><span class="line">                <span class="keyword">int</span> count = <span class="number">0</span>;</span><br><span class="line">                <span class="keyword">while</span> ((count = in.read(buf)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                    out.write(buf, <span class="number">0</span>, count);</span><br><span class="line">                &#125;</span><br><span class="line">                out.close();</span><br><span class="line">                in.close();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        zip.close();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中 getApplicationInfo().publicSourceDir 获取的是我们安装后的 base.apk 路径，相当于是将 apk (zip压缩包)内的目录解压到指定目录。</p>
+<h1 id="LuaActivity"><a href="#LuaActivity" class="headerlink" title="LuaActivity"></a>LuaActivity</h1><h2 id="initLua"><a href="#initLua" class="headerlink" title="initLua()"></a>initLua()</h2><p>在建立的时候会初始化一个 Lua 虚拟机，同时压入很多的全局变量：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initLua</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    L = LuaStateFactory.newLuaState();</span><br><span class="line">    L.openLibs();</span><br><span class="line">    <span class="comment">// 压入 this, activity 两个全局变量，其都代表了 Activity 本身。</span></span><br><span class="line">    L.pushJavaObject(<span class="keyword">this</span>);</span><br><span class="line">    L.setGlobal(<span class="string">"activity"</span>);</span><br><span class="line">    L.getGlobal(<span class="string">"activity"</span>);</span><br><span class="line">    L.setGlobal(<span class="string">"this"</span>);</span><br><span class="line">    <span class="comment">// 压入全局变量 _LuaContext 表示当前虚拟机所在的上下文信息。</span></span><br><span class="line">    L.pushContext(<span class="keyword">this</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 压入一些路径信息给 luajava</span></span><br><span class="line">    L.getGlobal(<span class="string">"luajava"</span>);</span><br><span class="line">    L.pushString(luaExtDir);</span><br><span class="line">    L.setField(-<span class="number">2</span>, <span class="string">"luaextdir"</span>);</span><br><span class="line">    L.pushString(luaDir);</span><br><span class="line">    L.setField(-<span class="number">2</span>, <span class="string">"luadir"</span>);</span><br><span class="line">    L.pushString(luaPath);</span><br><span class="line">    L.setField(-<span class="number">2</span>, <span class="string">"luapath"</span>);</span><br><span class="line">    L.pop(<span class="number">1</span>);</span><br><span class="line">    initENV();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 压入一个 print 函数</span></span><br><span class="line">    JavaFunction print = <span class="keyword">new</span> LuaPrint(<span class="keyword">this</span>, L);</span><br><span class="line">    print.register(<span class="string">"print"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置包查找路径</span></span><br><span class="line">    L.getGlobal(<span class="string">"package"</span>);</span><br><span class="line">    L.pushString(luaLpath);</span><br><span class="line">    L.setField(-<span class="number">2</span>, <span class="string">"path"</span>);</span><br><span class="line">    L.pushString(luaCpath);</span><br><span class="line">    L.setField(-<span class="number">2</span>, <span class="string">"cpath"</span>);</span><br><span class="line">    L.pop(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set/call 函数</span></span><br><span class="line">    JavaFunction set = <span class="keyword">new</span> JavaFunction(L) &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">execute</span><span class="params">()</span> <span class="keyword">throws</span> LuaException </span>&#123;</span><br><span class="line">            LuaThread thread = (LuaThread) L.toJavaObject(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">            thread.set(L.toString(<span class="number">3</span>), L.toJavaObject(<span class="number">4</span>));</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    set.register(<span class="string">"set"</span>);</span><br><span class="line"></span><br><span class="line">    JavaFunction call = <span class="keyword">new</span> JavaFunction(L) &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">execute</span><span class="params">()</span> <span class="keyword">throws</span> LuaException </span>&#123;</span><br><span class="line">            LuaThread thread = (LuaThread) L.toJavaObject(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">int</span> top = L.getTop();</span><br><span class="line">            <span class="keyword">if</span> (top &gt; <span class="number">3</span>) &#123;</span><br><span class="line">                Object[] args = <span class="keyword">new</span> Object[top - <span class="number">3</span>];</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">4</span>; i &lt;= top; i++) &#123;</span><br><span class="line">                    args[i - <span class="number">4</span>] = L.toJavaObject(i);</span><br><span class="line">                &#125;</span><br><span class="line">                thread.call(L.toString(<span class="number">3</span>), args);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (top == <span class="number">3</span>) &#123;</span><br><span class="line">                thread.call(L.toString(<span class="number">3</span>));</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ;</span><br><span class="line">    &#125;;</span><br><span class="line">    call.register(<span class="string">"call"</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>他做了这么一个假设，就是每个 Activity 都应该有一个需要执行的 Lua 文件，这个是通过 Intent 传递过来的，所以就需要从 Intent 里面拿出这个 Lua 文件路径。</p>
+<h2 id="getLuaFilePath"><a href="#getLuaFilePath" class="headerlink" title="getLuaFilePath"></a>getLuaFilePath</h2><p>这个方法有三个重载。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 从 intent 获取 lua 文件</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getLuaFilePath</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从指定的目录下获取 lua 文件。目录默认情况下是设置为 appFilesDir 的</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getLuaFilePath</span><span class="params">(String path)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 没用到</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">getLuaFilePath</span><span class="params">(String dir, String name)</span></span>;</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Lua/" rel="tag"># Lua</a>
+              <a href="/tags/Android/" rel="tag"># Android</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Android/Android利用Input类实现模拟输入.html" rel="next" title="Android利用Input类实现模拟输入">
+                  <i class="fa fa-chevron-left"></i> Android利用Input类实现模拟输入
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/Android/Android的Service.html" rel="prev" title="Android的Service">
+                  Android的Service <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#LuaApplication"><span class="nav-number">1.</span> <span class="nav-text">LuaApplication</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Welcome"><span class="nav-number">2.</span> <span class="nav-text">Welcome</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#LuaActivity"><span class="nav-number">3.</span> <span class="nav-text">LuaActivity</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#initLua"><span class="nav-number">3.1.</span> <span class="nav-text">initLua()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getLuaFilePath"><span class="nav-number">3.2.</span> <span class="nav-text">getLuaFilePath</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">348</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">143</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Android/androLuaPro的架构解析.html",
+            identifier: "Android/androLuaPro的架构解析.html",
+            title: "androLuaPro的架构解析"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>

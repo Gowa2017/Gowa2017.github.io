@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="ELF 是一种在计算机中用来描述 可执行文件，编译对象代码，共享库，core dumps 的一种标准格式。其在很多系统上都有进行使用。">
+<meta name="keywords" content="Android,逆向,Hooking,ELF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ELF文件格式">
+<meta property="og:url" content="https://gowa.club/Android/ELF文件格式.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="ELF 是一种在计算机中用来描述 可执行文件，编译对象代码，共享库，core dumps 的一种标准格式。其在很多系统上都有进行使用。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://gowa.club/res/260px-Elf-layout--en.svg.png">
+<meta property="og:image" content="https://gowa.club/res/ELF_Executable_and_Linkable_Format_diagram_by_Ange_Albertini.png">
+<meta property="og:updated_time" content="2019-11-22T14:32:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ELF文件格式">
+<meta name="twitter:description" content="ELF 是一种在计算机中用来描述 可执行文件，编译对象代码，共享库，core dumps 的一种标准格式。其在很多系统上都有进行使用。">
+<meta name="twitter:image" content="https://gowa.club/res/260px-Elf-layout--en.svg.png">
+
+<link rel="canonical" href="https://gowa.club/Android/ELF文件格式.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>ELF文件格式 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/ELF文件格式.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ELF文件格式
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2019-11-22 22:32:07" itemprop="dateCreated datePublished" datetime="2019-11-22T22:32:07+08:00">2019-11-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Android/ELF文件格式.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/ELF文件格式.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>ELF 是一种在计算机中用来描述 <em>可执行文件，编译对象代码，共享库，core dumps</em> 的一种标准格式。其在很多系统上都有进行使用。</p>
+<a id="more"></a>
+<p>每个 ELF 文件都由一个 ELF 头 加上文件数据组成。文件数据可能包含以下三部分：</p>
+<ul>
+<li><p>Program header table（程序头表），描述了 0 个或多个内存段。其显示了在运行时会使用到的段内容。</p>
+</li>
+<li><p>Section header table( 节头别)，描述了 0 个或多个节。其列出了二进制文件的节信息，在进行链接和重定位的时候会有用。</p>
+</li>
+<li><p>被 Programe header table 或者 section header table 中的项所引用的数据。</p>
+<p><img src="../res/260px-Elf-layout--en.svg.png" alt="img"></p>
+</li>
+</ul>
+<p>文件中的每个字节只会被一个节所拥有，而也有可能不被任何节拥有。</p>
+<p>有一张比较完整的大图，来自于维基百科：</p>
+<p><img src="../res/ELF_Executable_and_Linkable_Format_diagram_by_Ange_Albertini.png" alt="img"></p>
+<h1 id="ELF-Header"><a href="#ELF-Header" class="headerlink" title="ELF Header"></a>ELF Header</h1><p><a href="https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.eheader.html#elfid" target="_blank" rel="noopener">https://refspecs.linuxfoundation.org/elf/gabi4+/ch4.eheader.html#elfid</a></p>
+<p>ELF 头定义了是使用 32 还是 64 位的地址。就长度是 52（32bit）或者 64（64bit）。其在 C 内的结构表示如下：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> EI_NIDENT 16</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">char</span>   e_ident[EI_NIDENT];</span><br><span class="line">        Elf32_Half      e_type;</span><br><span class="line">        Elf32_Half      e_machine;</span><br><span class="line">        Elf32_Word      e_version;</span><br><span class="line">        Elf32_Addr      e_entry;</span><br><span class="line">        Elf32_Off       e_phoff;</span><br><span class="line">        Elf32_Off       e_shoff;</span><br><span class="line">        Elf32_Word      e_flags;</span><br><span class="line">        Elf32_Half      e_ehsize;</span><br><span class="line">        Elf32_Half      e_phentsize;</span><br><span class="line">        Elf32_Half      e_phnum;</span><br><span class="line">        Elf32_Half      e_shentsize;</span><br><span class="line">        Elf32_Half      e_shnum;</span><br><span class="line">        Elf32_Half      e_shstrndx;</span><br><span class="line">&#125; Elf32_Ehdr;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">        <span class="keyword">unsigned</span> <span class="keyword">char</span>   e_ident[EI_NIDENT];</span><br><span class="line">        Elf64_Half      e_type;</span><br><span class="line">        Elf64_Half      e_machine;</span><br><span class="line">        Elf64_Word      e_version;</span><br><span class="line">        Elf64_Addr      e_entry;</span><br><span class="line">        Elf64_Off       e_phoff;</span><br><span class="line">        Elf64_Off       e_shoff;</span><br><span class="line">        Elf64_Word      e_flags;</span><br><span class="line">        Elf64_Half      e_ehsize;</span><br><span class="line">        Elf64_Half      e_phentsize;</span><br><span class="line">        Elf64_Half      e_phnum;</span><br><span class="line">        Elf64_Half      e_shentsize;</span><br><span class="line">        Elf64_Half      e_shnum;</span><br><span class="line">        Elf64_Half      e_shstrndx;</span><br><span class="line">&#125; Elf64_Ehdr;</span><br></pre></td></tr></table></figure>
+<h2 id="e-indent"><a href="#e-indent" class="headerlink" title="e_indent"></a>e_indent</h2><p>ELF Identification 的意思。其是一个 16字节的数组。描述了16个属性。这个字段标记了文件本身，同时提供了与机器无关的数据以用来解析文件内容。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Value</strong></th>
+<th><strong>Purpose</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EI_MAG0</code></td>
+<td><code>0</code></td>
+<td>0x7f</td>
+</tr>
+<tr>
+<td><code>EI_MAG1</code></td>
+<td><code>1</code></td>
+<td>‘E’</td>
+</tr>
+<tr>
+<td><code>EI_MAG2</code></td>
+<td><code>2</code></td>
+<td>‘L’</td>
+</tr>
+<tr>
+<td><code>EI_MAG3</code></td>
+<td><code>3</code></td>
+<td>‘F’</td>
+</tr>
+<tr>
+<td><code>EI_CLASS</code></td>
+<td><code>4</code></td>
+<td>32/64bit  ELFCLASSNONE 无效 ELFCLASS32/ELFCLASS3264</td>
+</tr>
+<tr>
+<td><code>EI_DATA</code></td>
+<td><code>5</code></td>
+<td>Data encoding</td>
+</tr>
+<tr>
+<td><code>EI_VERSION</code></td>
+<td><code>6</code></td>
+<td>ELF 头版本号</td>
+</tr>
+<tr>
+<td><code>EI_OSABI</code></td>
+<td><code>7</code></td>
+<td>Operating system/ABI identification如 AIX/Linux/Solaris等</td>
+</tr>
+<tr>
+<td><code>EI_ABIVERSION</code></td>
+<td><code>8</code></td>
+<td>ABI version</td>
+</tr>
+<tr>
+<td><code>EI_PAD</code></td>
+<td><code>9</code></td>
+<td>Start of padding bytes。暂时没用</td>
+</tr>
+<tr>
+<td><code>EI_NIDENT</code></td>
+<td><code>16</code></td>
+<td>Size of <code>e_ident[]</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="e-type"><a href="#e-type" class="headerlink" title="e_type"></a>e_type</h2><p>文件类型。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Value</strong></th>
+<th><strong>Meaning</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ET_NONE</code></td>
+<td><code>0</code></td>
+<td>No file type</td>
+</tr>
+<tr>
+<td><code>ET_REL</code></td>
+<td><code>1</code></td>
+<td>Relocatable file</td>
+</tr>
+<tr>
+<td><code>ET_EXEC</code></td>
+<td><code>2</code></td>
+<td>Executable file</td>
+</tr>
+<tr>
+<td><code>ET_DYN</code></td>
+<td><code>3</code></td>
+<td>Shared object file</td>
+</tr>
+<tr>
+<td><code>ET_CORE</code></td>
+<td><code>4</code></td>
+<td>Core file</td>
+</tr>
+<tr>
+<td><code>ET_LOOS</code></td>
+<td><code>0xfe00</code></td>
+<td>Operating system-specific</td>
+</tr>
+<tr>
+<td><code>ET_HIOS</code></td>
+<td><code>0xfeff</code></td>
+<td>Operating system-specific</td>
+</tr>
+<tr>
+<td><code>ET_LOPROC</code></td>
+<td><code>0xff00</code></td>
+<td>Processor-specific</td>
+</tr>
+<tr>
+<td><code>ET_HIPROC</code></td>
+<td><code>0xffff</code></td>
+<td>Processor-specific</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="e-machine"><a href="#e-machine" class="headerlink" title="e_machine"></a>e_machine</h2><p>CPU 架构</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Value</strong></th>
+<th><strong>Meaning</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EM_NONE</code></td>
+<td><code>0</code></td>
+<td>No machine</td>
+</tr>
+<tr>
+<td><code>EM_M32</code></td>
+<td><code>1</code></td>
+<td>AT&amp;T WE 32100</td>
+</tr>
+<tr>
+<td><code>EM_SPARC</code></td>
+<td><code>2</code></td>
+<td>SPARC</td>
+</tr>
+<tr>
+<td><code>EM_386</code></td>
+<td><code>3</code></td>
+<td>Intel 80386</td>
+</tr>
+<tr>
+<td><code>EM_68K</code></td>
+<td><code>4</code></td>
+<td>Motorola 68000</td>
+</tr>
+<tr>
+<td><code>EM_88K</code></td>
+<td><code>5</code></td>
+<td>Motorola 88000</td>
+</tr>
+<tr>
+<td>reserved</td>
+<td><code>6</code></td>
+<td>Reserved for future use (was <code>EM_486</code>)</td>
+</tr>
+<tr>
+<td><code>EM_860</code></td>
+<td><code>7</code></td>
+<td>Intel 80860</td>
+</tr>
+<tr>
+<td><code>EM_MIPS</code></td>
+<td><code>8</code></td>
+<td>MIPS I Architecture</td>
+</tr>
+<tr>
+<td><code>EM_S370</code></td>
+<td><code>9</code></td>
+<td>IBM System/370 Processor</td>
+</tr>
+<tr>
+<td><code>EM_MIPS_RS3_LE</code></td>
+<td><code>10</code></td>
+<td>MIPS RS3000 Little-endian</td>
+</tr>
+<tr>
+<td>reserved</td>
+<td><code>11-14</code></td>
+<td>Reserved for future use</td>
+</tr>
+<tr>
+<td><code>EM_PARISC</code></td>
+<td><code>15</code></td>
+<td>Hewlett-Packard PA-RISC</td>
+</tr>
+<tr>
+<td>reserved</td>
+<td><code>16</code></td>
+<td>Reserved for future use</td>
+</tr>
+<tr>
+<td><code>EM_VPP500</code></td>
+<td><code>17</code></td>
+<td>Fujitsu VPP500</td>
+</tr>
+<tr>
+<td><code>EM_SPARC32PLUS</code></td>
+<td><code>18</code></td>
+<td>Enhanced instruction set SPARC</td>
+</tr>
+<tr>
+<td><code>EM_960</code></td>
+<td><code>19</code></td>
+<td>Intel 80960</td>
+</tr>
+<tr>
+<td><code>EM_PPC</code></td>
+<td><code>20</code></td>
+<td>PowerPC</td>
+</tr>
+<tr>
+<td><code>EM_PPC64</code></td>
+<td><code>21</code></td>
+<td>64-bit PowerPC</td>
+</tr>
+<tr>
+<td><code>EM_S390</code></td>
+<td><code>22</code></td>
+<td>IBM System/390 Processor</td>
+</tr>
+<tr>
+<td>reserved</td>
+<td><code>23-35</code></td>
+<td>Reserved for future use</td>
+</tr>
+<tr>
+<td><code>EM_V800</code></td>
+<td><code>36</code></td>
+<td>NEC V800</td>
+</tr>
+<tr>
+<td><code>EM_FR20</code></td>
+<td><code>37</code></td>
+<td>Fujitsu FR20</td>
+</tr>
+<tr>
+<td><code>EM_RH32</code></td>
+<td><code>38</code></td>
+<td>TRW RH-32</td>
+</tr>
+<tr>
+<td><code>EM_RCE</code></td>
+<td><code>39</code></td>
+<td>Motorola RCE</td>
+</tr>
+<tr>
+<td><code>EM_ARM</code></td>
+<td><code>40</code></td>
+<td>Advanced RISC Machines ARM</td>
+</tr>
+<tr>
+<td><code>EM_ALPHA</code></td>
+<td><code>41</code></td>
+<td>Digital Alpha</td>
+</tr>
+<tr>
+<td><code>EM_SH</code></td>
+<td><code>42</code></td>
+<td>Hitachi SH</td>
+</tr>
+<tr>
+<td><code>EM_SPARCV9</code></td>
+<td><code>43</code></td>
+<td>SPARC Version 9</td>
+</tr>
+<tr>
+<td><code>EM_TRICORE</code></td>
+<td><code>44</code></td>
+<td>Siemens TriCore embedded processor</td>
+</tr>
+<tr>
+<td><code>EM_ARC</code></td>
+<td><code>45</code></td>
+<td>Argonaut RISC Core, Argonaut Technologies Inc.</td>
+</tr>
+<tr>
+<td><code>EM_H8_300</code></td>
+<td><code>46</code></td>
+<td>Hitachi H8/300</td>
+</tr>
+<tr>
+<td><code>EM_H8_300H</code></td>
+<td><code>47</code></td>
+<td>Hitachi H8/300H</td>
+</tr>
+<tr>
+<td><code>EM_H8S</code></td>
+<td><code>48</code></td>
+<td>Hitachi H8S</td>
+</tr>
+<tr>
+<td><code>EM_H8_500</code></td>
+<td><code>49</code></td>
+<td>Hitachi H8/500</td>
+</tr>
+<tr>
+<td><code>EM_IA_64</code></td>
+<td><code>50</code></td>
+<td>Intel IA-64 processor architecture</td>
+</tr>
+<tr>
+<td><code>EM_MIPS_X</code></td>
+<td><code>51</code></td>
+<td>Stanford MIPS-X</td>
+</tr>
+<tr>
+<td><code>EM_COLDFIRE</code></td>
+<td><code>52</code></td>
+<td>Motorola ColdFire</td>
+</tr>
+<tr>
+<td><code>EM_68HC12</code></td>
+<td><code>53</code></td>
+<td>Motorola M68HC12</td>
+</tr>
+<tr>
+<td><code>EM_MMA</code></td>
+<td><code>54</code></td>
+<td>Fujitsu MMA Multimedia Accelerator</td>
+</tr>
+<tr>
+<td><code>EM_PCP</code></td>
+<td><code>55</code></td>
+<td>Siemens PCP</td>
+</tr>
+<tr>
+<td><code>EM_NCPU</code></td>
+<td><code>56</code></td>
+<td>Sony nCPU embedded RISC processor</td>
+</tr>
+<tr>
+<td><code>EM_NDR1</code></td>
+<td><code>57</code></td>
+<td>Denso NDR1 microprocessor</td>
+</tr>
+<tr>
+<td><code>EM_STARCORE</code></td>
+<td><code>58</code></td>
+<td>Motorola Star*Core processor</td>
+</tr>
+<tr>
+<td><code>EM_ME16</code></td>
+<td><code>59</code></td>
+<td>Toyota ME16 processor</td>
+</tr>
+<tr>
+<td><code>EM_ST100</code></td>
+<td><code>60</code></td>
+<td>STMicroelectronics ST100 processor</td>
+</tr>
+<tr>
+<td><code>EM_TINYJ</code></td>
+<td><code>61</code></td>
+<td>Advanced Logic Corp. TinyJ embedded processor family</td>
+</tr>
+<tr>
+<td><code>EM_X86_64</code></td>
+<td><code>62</code></td>
+<td>AMD x86-64 architecture</td>
+</tr>
+<tr>
+<td><code>EM_PDSP</code></td>
+<td><code>63</code></td>
+<td>Sony DSP Processor</td>
+</tr>
+<tr>
+<td><code>EM_PDP10</code></td>
+<td><code>64</code></td>
+<td>Digital Equipment Corp. PDP-10</td>
+</tr>
+<tr>
+<td><code>EM_PDP11</code></td>
+<td><code>65</code></td>
+<td>Digital Equipment Corp. PDP-11</td>
+</tr>
+<tr>
+<td><code>EM_FX66</code></td>
+<td><code>66</code></td>
+<td>Siemens FX66 microcontroller</td>
+</tr>
+<tr>
+<td><code>EM_ST9PLUS</code></td>
+<td><code>67</code></td>
+<td>STMicroelectronics ST9+ 8/16 bit microcontroller</td>
+</tr>
+<tr>
+<td><code>EM_ST7</code></td>
+<td><code>68</code></td>
+<td>STMicroelectronics ST7 8-bit microcontroller</td>
+</tr>
+<tr>
+<td><code>EM_68HC16</code></td>
+<td><code>69</code></td>
+<td>Motorola MC68HC16 Microcontroller</td>
+</tr>
+<tr>
+<td><code>EM_68HC11</code></td>
+<td><code>70</code></td>
+<td>Motorola MC68HC11 Microcontroller</td>
+</tr>
+<tr>
+<td><code>EM_68HC08</code></td>
+<td><code>71</code></td>
+<td>Motorola MC68HC08 Microcontroller</td>
+</tr>
+<tr>
+<td><code>EM_68HC05</code></td>
+<td><code>72</code></td>
+<td>Motorola MC68HC05 Microcontroller</td>
+</tr>
+<tr>
+<td><code>EM_SVX</code></td>
+<td><code>73</code></td>
+<td>Silicon Graphics SVx</td>
+</tr>
+<tr>
+<td><code>EM_ST19</code></td>
+<td><code>74</code></td>
+<td>STMicroelectronics ST19 8-bit microcontroller</td>
+</tr>
+<tr>
+<td><code>EM_VAX</code></td>
+<td><code>75</code></td>
+<td>Digital VAX</td>
+</tr>
+<tr>
+<td><code>EM_CRIS</code></td>
+<td><code>76</code></td>
+<td>Axis Communications 32-bit embedded processor</td>
+</tr>
+<tr>
+<td><code>EM_JAVELIN</code></td>
+<td><code>77</code></td>
+<td>Infineon Technologies 32-bit embedded processor</td>
+</tr>
+<tr>
+<td><code>EM_FIREPATH</code></td>
+<td><code>78</code></td>
+<td>Element 14 64-bit DSP Processor</td>
+</tr>
+<tr>
+<td><code>EM_ZSP</code></td>
+<td><code>79</code></td>
+<td>LSI Logic 16-bit DSP Processor</td>
+</tr>
+<tr>
+<td><code>EM_MMIX</code></td>
+<td><code>80</code></td>
+<td>Donald Knuth’s educational 64-bit processor</td>
+</tr>
+<tr>
+<td><code>EM_HUANY</code></td>
+<td><code>81</code></td>
+<td>Harvard University machine-independent object files</td>
+</tr>
+<tr>
+<td><code>EM_PRISM</code></td>
+<td><code>82</code></td>
+<td>SiTera Prism</td>
+</tr>
+<tr>
+<td><code>EM_AVR</code></td>
+<td><code>83</code></td>
+<td>Atmel AVR 8-bit microcontroller</td>
+</tr>
+<tr>
+<td><code>EM_FR30</code></td>
+<td><code>84</code></td>
+<td>Fujitsu FR30</td>
+</tr>
+<tr>
+<td><code>EM_D10V</code></td>
+<td><code>85</code></td>
+<td>Mitsubishi D10V</td>
+</tr>
+<tr>
+<td><code>EM_D30V</code></td>
+<td><code>86</code></td>
+<td>Mitsubishi D30V</td>
+</tr>
+<tr>
+<td><code>EM_V850</code></td>
+<td><code>87</code></td>
+<td>NEC v850</td>
+</tr>
+<tr>
+<td><code>EM_M32R</code></td>
+<td><code>88</code></td>
+<td>Mitsubishi M32R</td>
+</tr>
+<tr>
+<td><code>EM_MN10300</code></td>
+<td><code>89</code></td>
+<td>Matsushita MN10300</td>
+</tr>
+<tr>
+<td><code>EM_MN10200</code></td>
+<td><code>90</code></td>
+<td>Matsushita MN10200</td>
+</tr>
+<tr>
+<td><code>EM_PJ</code></td>
+<td><code>91</code></td>
+<td>picoJava</td>
+</tr>
+<tr>
+<td><code>EM_OPENRISC</code></td>
+<td><code>92</code></td>
+<td>OpenRISC 32-bit embedded processor</td>
+</tr>
+<tr>
+<td><code>EM_ARC_A5</code></td>
+<td><code>93</code></td>
+<td>ARC Cores Tangent-A5</td>
+</tr>
+<tr>
+<td><code>EM_XTENSA</code></td>
+<td><code>94</code></td>
+<td>Tensilica Xtensa Architecture</td>
+</tr>
+<tr>
+<td><code>EM_VIDEOCORE</code></td>
+<td><code>95</code></td>
+<td>Alphamosaic VideoCore processor</td>
+</tr>
+<tr>
+<td><code>EM_TMM_GPP</code></td>
+<td><code>96</code></td>
+<td>Thompson Multimedia General Purpose Processor</td>
+</tr>
+<tr>
+<td><code>EM_NS32K</code></td>
+<td><code>97</code></td>
+<td>National Semiconductor 32000 series</td>
+</tr>
+<tr>
+<td><code>EM_TPC</code></td>
+<td><code>98</code></td>
+<td>Tenor Network TPC processor</td>
+</tr>
+<tr>
+<td><code>EM_SNP1K</code></td>
+<td><code>99</code></td>
+<td>Trebia SNP 1000 processor</td>
+</tr>
+<tr>
+<td><code>EM_ST200</code></td>
+<td><code>100</code></td>
+<td>STMicroelectronics (www.st.com) ST200 microcontroller</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="e-version"><a href="#e-version" class="headerlink" title="e_version"></a>e_version</h2><p>文件版本</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>Name</strong></th>
+<th><strong>Value</strong></th>
+<th><strong>Meaning</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EV_NONE</code></td>
+<td><code>0</code></td>
+<td>Invalid version</td>
+</tr>
+<tr>
+<td><code>EV_CURRENT</code></td>
+<td><code>1</code></td>
+<td>Current version</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="e-entry"><a href="#e-entry" class="headerlink" title="e_entry"></a>e_entry</h2><p>入口地址。如果没有，那么就是0。</p>
+<h2 id="e-phoff"><a href="#e-phoff" class="headerlink" title="e_phoff"></a>e_phoff</h2><p>Program header table 偏移值。</p>
+<h2 id="e-shoff"><a href="#e-shoff" class="headerlink" title="e_shoff"></a>e_shoff</h2><p>Section header table 偏移值。</p>
+<h2 id="e-flags"><a href="#e-flags" class="headerlink" title="e_flags"></a>e_flags</h2><p>这个需要根据 e_machine 来解析。</p>
+<h2 id="e-ehsize"><a href="#e-ehsize" class="headerlink" title="e_ehsize"></a>e_ehsize</h2><p>ELF header 大小。</p>
+<h2 id="e-phentsize"><a href="#e-phentsize" class="headerlink" title="e_phentsize"></a>e_phentsize</h2><p>Program header table  中每项的大小，全部项大小都是一致的。</p>
+<h2 id="e-phnum"><a href="#e-phnum" class="headerlink" title="e_phnum"></a>e_phnum</h2><p>Program header table  内的项目数量。</p>
+<h2 id="e-shentsize"><a href="#e-shentsize" class="headerlink" title="e_shentsize"></a>e_shentsize</h2><p>每个 Section header table 的大小</p>
+<h2 id="e-shnum"><a href="#e-shnum" class="headerlink" title="e_shnum"></a>e_shnum</h2><p>Section header table 中每项的大小。 e_shnum e_shentsize 就给出了Section header table  的大小</p>
+<p>If the number of sections is greater than or equal to <code>SHN_LORESERVE</code> (<code>0xff00</code>), this member has the value zero and the actual number of section header table entries is contained in the <code>sh_size</code> field of the section header at index <code>0</code>. (Otherwise, the <code>sh_size</code> member of the initial entry contains <code>0</code>.)</p>
+<h2 id="e-shstrndx"><a href="#e-shstrndx" class="headerlink" title="e_shstrndx"></a>e_shstrndx</h2><p>每个 section 内，包含 section 名称的section header table 项目索引。</p>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">readelf  -h a.out</span><br><span class="line">ELF Header:</span><br><span class="line">  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00</span><br><span class="line">  Class:                             ELF64</span><br><span class="line">  Data:                              2<span class="string">'s complement, little endian</span></span><br><span class="line"><span class="string">  Version:                           1 (current)</span></span><br><span class="line"><span class="string">  OS/ABI:                            UNIX - System V</span></span><br><span class="line"><span class="string">  ABI Version:                       0</span></span><br><span class="line"><span class="string">  Type:                              EXEC (Executable file)</span></span><br><span class="line"><span class="string">  Machine:                           Advanced Micro Devices X86-64</span></span><br><span class="line"><span class="string">  Version:                           0x1</span></span><br><span class="line"><span class="string">  Entry point address:               0x400440</span></span><br><span class="line"><span class="string">  Start of program headers:          64 (bytes into file)</span></span><br><span class="line"><span class="string">  Start of section headers:          4504 (bytes into file)</span></span><br><span class="line"><span class="string">  Flags:                             0x0</span></span><br><span class="line"><span class="string">  Size of this header:               64 (bytes)</span></span><br><span class="line"><span class="string">  Size of program headers:           56 (bytes)</span></span><br><span class="line"><span class="string">  Number of program headers:         9</span></span><br><span class="line"><span class="string">  Size of section headers:           64 (bytes)</span></span><br><span class="line"><span class="string">  Number of section headers:         30</span></span><br><span class="line"><span class="string">  Section header string table index: 27</span></span><br></pre></td></tr></table></figure>
+<h1 id="Program-header"><a href="#Program-header" class="headerlink" title="Program header"></a>Program header</h1><h2 id="具体参考一下-https-refspecs-linuxfoundation-org-elf-gabi4-ch5-pheader-html"><a href="#具体参考一下-https-refspecs-linuxfoundation-org-elf-gabi4-ch5-pheader-html" class="headerlink" title="具体参考一下 https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.pheader.html"></a>具体参考一下 <a href="https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.pheader.html" target="_blank" rel="noopener">https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.pheader.html</a></h2><h1 id="Objdump"><a href="#Objdump" class="headerlink" title="Objdump"></a>Objdump</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">objdump  --<span class="built_in">help</span></span><br><span class="line">Usage: objdump &lt;option(s)&gt; &lt;file(s)&gt;</span><br><span class="line"> Display information from object &lt;file(s)&gt;.</span><br><span class="line"> At least one of the following switches must be given:</span><br><span class="line">  -a, --archive-headers    Display archive header information</span><br><span class="line">  -f, --file-headers       Display the contents of the overall file header</span><br><span class="line">  -p, --private-headers    Display object format specific file header contents</span><br><span class="line">  -P, --private=OPT,OPT... Display object format specific contents</span><br><span class="line">  -h, --[section-]headers  Display the contents of the section headers</span><br><span class="line">  -x, --all-headers        Display the contents of all headers</span><br><span class="line">  -d, --disassemble        Display assembler contents of executable sections</span><br><span class="line">  -D, --disassemble-all    Display assembler contents of all sections</span><br><span class="line">  -S, --<span class="built_in">source</span>             Intermix <span class="built_in">source</span> code with disassembly</span><br><span class="line">  -s, --full-contents      Display the full contents of all sections requested</span><br><span class="line">  -g, --debugging          Display debug information <span class="keyword">in</span> object file</span><br><span class="line">  -e, --debugging-tags     Display debug information using ctags style</span><br><span class="line">  -G, --stabs              Display (<span class="keyword">in</span> raw form) any STABS info <span class="keyword">in</span> the file</span><br><span class="line">  -W[lLiaprmfFsoRt] or</span><br><span class="line">  --dwarf[=rawline,=decodedline,=info,=abbrev,=pubnames,=aranges,=macro,=frames,</span><br><span class="line">          =frames-interp,=str,=loc,=Ranges,=pubtypes,</span><br><span class="line">          =gdb_index,=trace_info,=trace_abbrev,=trace_aranges,</span><br><span class="line">          =addr,=cu_index]</span><br><span class="line">                           Display DWARF info <span class="keyword">in</span> the file</span><br><span class="line">  -t, --syms               Display the contents of the symbol table(s)</span><br><span class="line">  -T, --dynamic-syms       Display the contents of the dynamic symbol table</span><br><span class="line">  -r, --reloc              Display the relocation entries <span class="keyword">in</span> the file</span><br><span class="line">  -R, --dynamic-reloc      Display the dynamic relocation entries <span class="keyword">in</span> the file</span><br><span class="line">  @&lt;file&gt;                  Read options from &lt;file&gt;</span><br><span class="line">  -v, --version            Display this program<span class="string">'s version number</span></span><br><span class="line"><span class="string">  -i, --info               List object formats and architectures supported</span></span><br><span class="line"><span class="string">  -H, --help               Display this information</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"> The following switches are optional:</span></span><br><span class="line"><span class="string">  -b, --target=BFDNAME           Specify the target object format as BFDNAME</span></span><br><span class="line"><span class="string">  -m, --architecture=MACHINE     Specify the target architecture as MACHINE</span></span><br><span class="line"><span class="string">  -j, --section=NAME             Only display information for section NAME</span></span><br><span class="line"><span class="string">  -M, --disassembler-options=OPT Pass text OPT on to the disassembler</span></span><br><span class="line"><span class="string">  -EB --endian=big               Assume big endian format when disassembling</span></span><br><span class="line"><span class="string">  -EL --endian=little            Assume little endian format when disassembling</span></span><br><span class="line"><span class="string">      --file-start-context       Include context from start of file (with -S)</span></span><br><span class="line"><span class="string">  -I, --include=DIR              Add DIR to search list for source files</span></span><br><span class="line"><span class="string">  -l, --line-numbers             Include line numbers and filenames in output</span></span><br><span class="line"><span class="string">  -F, --file-offsets             Include file offsets when displaying information</span></span><br><span class="line"><span class="string">  -C, --demangle[=STYLE]         Decode mangled/processed symbol names</span></span><br><span class="line"><span class="string">                                  The STYLE, if specified, can be `auto'</span>, `gnu<span class="string">',</span></span><br><span class="line"><span class="string">                                  `lucid'</span>, `arm<span class="string">', `hp'</span>, `edg<span class="string">', `gnu-v3'</span>, `java<span class="string">'</span></span><br><span class="line"><span class="string">                                  or `gnat'</span></span><br><span class="line">  -w, --wide                     Format output <span class="keyword">for</span> more than 80 columns</span><br><span class="line">  -z, --disassemble-zeroes       Do not skip blocks of zeroes when disassembling</span><br><span class="line">      --start-address=ADDR       Only process data whose address is &gt;= ADDR</span><br><span class="line">      --stop-address=ADDR        Only process data whose address is &lt;= ADDR</span><br><span class="line">      --prefix-addresses         Print complete address alongside disassembly</span><br><span class="line">      --[no-]show-raw-insn       Display hex alongside symbolic disassembly</span><br><span class="line">      --insn-width=WIDTH         Display WIDTH bytes on a single line <span class="keyword">for</span> -d</span><br><span class="line">      --adjust-vma=OFFSET        Add OFFSET to all displayed section addresses</span><br><span class="line">      --special-syms             Include special symbols <span class="keyword">in</span> symbol dumps</span><br><span class="line">      --prefix=PREFIX            Add PREFIX to absolute paths <span class="keyword">for</span> -S</span><br><span class="line">      --prefix-strip=LEVEL       Strip initial directory names <span class="keyword">for</span> -S</span><br><span class="line">      --dwarf-depth=N        Do not display DIEs at depth N or greater</span><br><span class="line">      --dwarf-start=N        Display DIEs starting with N, at the same depth</span><br><span class="line">                             or deeper</span><br><span class="line">      --dwarf-check          Make additional dwarf internal consistency checks.</span><br><span class="line"></span><br><span class="line">objdump: supported targets: elf64-x86-64 elf32-i386 elf32-x86-64 a.out-i386-linux pei-i386 pei-x86-64 elf64-l1om elf64-k1om elf64-little elf64-big elf32-little elf32-big plugin srec symbolsrec verilog tekhex binary ihex</span><br><span class="line">objdump: supported architectures: i386 i386:x86-64 i386:x64-32 i8086 i386:intel i386:x86-64:intel i386:x64-32:intel l1om l1om:intel k1om k1om:intel plugin</span><br><span class="line"></span><br><span class="line">The following i386/x86-64 specific disassembler options are supported <span class="keyword">for</span> use</span><br><span class="line">with the -M switch (multiple options should be separated by commas):</span><br><span class="line">  x86-64      Disassemble <span class="keyword">in</span> 64bit mode</span><br><span class="line">  i386        Disassemble <span class="keyword">in</span> 32bit mode</span><br><span class="line">  i8086       Disassemble <span class="keyword">in</span> 16bit mode</span><br><span class="line">  att         Display instruction <span class="keyword">in</span> AT&amp;T syntax</span><br><span class="line">  intel       Display instruction <span class="keyword">in</span> Intel syntax</span><br><span class="line">  att-mnemonic</span><br><span class="line">              Display instruction <span class="keyword">in</span> AT&amp;T mnemonic</span><br><span class="line">  intel-mnemonic</span><br><span class="line">              Display instruction <span class="keyword">in</span> Intel mnemonic</span><br><span class="line">  addr64      Assume 64bit address size</span><br><span class="line">  addr32      Assume 32bit address size</span><br><span class="line">  addr16      Assume 16bit address size</span><br><span class="line">  data32      Assume 32bit data size</span><br><span class="line">  data16      Assume 16bit data size</span><br><span class="line">  suffix      Always display instruction suffix <span class="keyword">in</span> AT&amp;T syntax</span><br><span class="line">Report bugs to &lt;http://bugzilla.redhat.com/bugzilla/&gt;.</span><br></pre></td></tr></table></figure>
+<h1 id="重要段信息"><a href="#重要段信息" class="headerlink" title="重要段信息"></a>重要段信息</h1><p>可执行文件和共享库文件都代表了代表一个程序。为了执行这些程序，    系统必须利用这个文件来建立动态程序表示或者说是进程映像。一个进程映像会在虚拟内存空间进行分段来保存其 代码，数据，栈等。</p>
+<ul>
+<li>Program Header 描述了一个对象文件和程序直接相关的信息，其定位了文件中的段映像及其他用来创建内存映像必须的信息。</li>
+<li>Program Loading 给出了一个程序运行必须加载的 对象文件。</li>
+<li>Dynamic Linking 在系统加载完程序后，其必须完成解析完组成进程的对象文件中的符号引用。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Android/" rel="tag"># Android</a>
+              <a href="/tags/逆向/" rel="tag"># 逆向</a>
+              <a href="/tags/Hooking/" rel="tag"># Hooking</a>
+              <a href="/tags/ELF/" rel="tag"># ELF</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Android/Hooking-Linux中的共享库函数.html" rel="next" title="Hooking-Linux中的共享库函数">
+                  <i class="fa fa-chevron-left"></i> Hooking-Linux中的共享库函数
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/RxJava/Retrofit-OkHttp请求过程-源码阅读md.html" rel="prev" title="Retrofit-OkHttp请求过程-源码阅读">
+                  Retrofit-OkHttp请求过程-源码阅读 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ELF-Header"><span class="nav-number">1.</span> <span class="nav-text">ELF Header</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#e-indent"><span class="nav-number">1.1.</span> <span class="nav-text">e_indent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-type"><span class="nav-number">1.2.</span> <span class="nav-text">e_type</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-machine"><span class="nav-number">1.3.</span> <span class="nav-text">e_machine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-version"><span class="nav-number">1.4.</span> <span class="nav-text">e_version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-entry"><span class="nav-number">1.5.</span> <span class="nav-text">e_entry</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-phoff"><span class="nav-number">1.6.</span> <span class="nav-text">e_phoff</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-shoff"><span class="nav-number">1.7.</span> <span class="nav-text">e_shoff</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-flags"><span class="nav-number">1.8.</span> <span class="nav-text">e_flags</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-ehsize"><span class="nav-number">1.9.</span> <span class="nav-text">e_ehsize</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-phentsize"><span class="nav-number">1.10.</span> <span class="nav-text">e_phentsize</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-phnum"><span class="nav-number">1.11.</span> <span class="nav-text">e_phnum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-shentsize"><span class="nav-number">1.12.</span> <span class="nav-text">e_shentsize</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-shnum"><span class="nav-number">1.13.</span> <span class="nav-text">e_shnum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-shstrndx"><span class="nav-number">1.14.</span> <span class="nav-text">e_shstrndx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例子"><span class="nav-number">1.15.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Program-header"><span class="nav-number">2.</span> <span class="nav-text">Program header</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#具体参考一下-https-refspecs-linuxfoundation-org-elf-gabi4-ch5-pheader-html"><span class="nav-number">2.1.</span> <span class="nav-text">具体参考一下 https://refspecs.linuxfoundation.org/elf/gabi4+/ch5.pheader.html</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Objdump"><span class="nav-number">3.</span> <span class="nav-text">Objdump</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重要段信息"><span class="nav-number">4.</span> <span class="nav-text">重要段信息</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">348</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">143</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Android/ELF文件格式.html",
+            identifier: "Android/ELF文件格式.html",
+            title: "ELF文件格式"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
