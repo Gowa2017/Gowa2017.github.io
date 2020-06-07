@@ -47,20 +47,20 @@
   };
 </script>
 
-  <meta name="description" content="locale 可以用几个环境变量来改变。当然，之前在 TLPI 上看到过，但是都忘记得差不多了。正好遇到了，macOS 中在 vim 用 + 寄存器复制出来的中文是乱码的。所以需要了解一下。locale 被位置敏感的程序用来渲染文字，正确的显示货币值，时间和日期的格式等等。">
-<meta name="keywords" content="Linux,运维">
+  <meta name="description" content="这个是好久以前看 APUE 的时候就看过了，不过最近在用 Python 做服务的时候，想着如何让其也能如同其他程序一样在后台运行而不会随着终端的退出而终止呢。所以又回顾来看了一下 UNIX 的进程模型。 进程的产生开始的时候，内核只有一个进程（或许是），所有的进程都为 ID 为 1 的这个进程产生。而产生进程，就是使用的 fork 这个调用来产生的。 在 Unix编程中exec函数族的一点疑问 也">
+<meta name="keywords" content="Linux&#x2F;Unix">
 <meta property="og:type" content="article">
-<meta property="og:title" content="了解locale环境变量">
-<meta property="og:url" content="https://gowa.club/Linux-Unix/了解locale环境变量.html">
+<meta property="og:title" content="UNIX中的进程模型">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/UNIX中的进程模型.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="locale 可以用几个环境变量来改变。当然，之前在 TLPI 上看到过，但是都忘记得差不多了。正好遇到了，macOS 中在 vim 用 + 寄存器复制出来的中文是乱码的。所以需要了解一下。locale 被位置敏感的程序用来渲染文字，正确的显示货币值，时间和日期的格式等等。">
+<meta property="og:description" content="这个是好久以前看 APUE 的时候就看过了，不过最近在用 Python 做服务的时候，想着如何让其也能如同其他程序一样在后台运行而不会随着终端的退出而终止呢。所以又回顾来看了一下 UNIX 的进程模型。 进程的产生开始的时候，内核只有一个进程（或许是），所有的进程都为 ID 为 1 的这个进程产生。而产生进程，就是使用的 fork 这个调用来产生的。 在 Unix编程中exec函数族的一点疑问 也">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-09T12:41:33.000Z">
+<meta property="og:updated_time" content="2020-06-07T13:06:01.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="了解locale环境变量">
-<meta name="twitter:description" content="locale 可以用几个环境变量来改变。当然，之前在 TLPI 上看到过，但是都忘记得差不多了。正好遇到了，macOS 中在 vim 用 + 寄存器复制出来的中文是乱码的。所以需要了解一下。locale 被位置敏感的程序用来渲染文字，正确的显示货币值，时间和日期的格式等等。">
+<meta name="twitter:title" content="UNIX中的进程模型">
+<meta name="twitter:description" content="这个是好久以前看 APUE 的时候就看过了，不过最近在用 Python 做服务的时候，想着如何让其也能如同其他程序一样在后台运行而不会随着终端的退出而终止呢。所以又回顾来看了一下 UNIX 的进程模型。 进程的产生开始的时候，内核只有一个进程（或许是），所有的进程都为 ID 为 1 的这个进程产生。而产生进程，就是使用的 fork 这个调用来产生的。 在 Unix编程中exec函数族的一点疑问 也">
 
-<link rel="canonical" href="https://gowa.club/Linux-Unix/了解locale环境变量.html">
+<link rel="canonical" href="https://gowa.club/Linux-Unix/UNIX中的进程模型.html">
 
 
 <script id="page-configurations">
@@ -74,7 +74,7 @@
   };
 </script>
 
-  <title>了解locale环境变量 | 退思园</title>
+  <title>UNIX中的进程模型 | 退思园</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
     <script>
@@ -230,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/了解locale环境变量.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/UNIX中的进程模型.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -243,7 +243,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          了解locale环境变量
+          UNIX中的进程模型
         </h1>
 
         <div class="post-meta">
@@ -253,7 +253,7 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2019-04-09 20:41:33" itemprop="dateCreated datePublished" datetime="2019-04-09T20:41:33+08:00">2019-04-09</time>
+              <time title="Created: 2020-06-07 21:06:01" itemprop="dateCreated datePublished" datetime="2020-06-07T21:06:01+08:00">2020-06-07</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -276,8 +276,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Linux-Unix/了解locale环境变量.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/了解locale环境变量.html" itemprop="commentCount"></span>
+    <a title="disqus" href="/Linux-Unix/UNIX中的进程模型.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/UNIX中的进程模型.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -292,41 +292,67 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>locale 可以用几个环境变量来改变。当然，之前在 TLPI 上看到过，但是都忘记得差不多了。正好遇到了，macOS 中在 vim 用 + 寄存器复制出来的中文是乱码的。所以需要了解一下。<br>locale 被位置敏感的程序用来渲染文字，正确的显示货币值，时间和日期的格式等等。</p>
-<a id="more"></a>
-<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>macOS 在英文界面的时候，我查看了一下 locale 相关的变量：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ locale</span><br><span class="line">LANG=</span><br><span class="line">LC_COLLATE=<span class="string">"C"</span></span><br><span class="line">LC_CTYPE=<span class="string">"UTF-8"</span></span><br><span class="line">LC_MESSAGES=<span class="string">"C"</span></span><br><span class="line">LC_MONETARY=<span class="string">"C"</span></span><br><span class="line">LC_NUMERIC=<span class="string">"C"</span></span><br><span class="line">LC_TIME=<span class="string">"C"</span></span><br><span class="line">LC_ALL=</span><br></pre></td></tr></table></figure>
-<p>再切换到中文界面：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ locale</span><br><span class="line">LANG=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_COLLATE=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_CTYPE=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_MESSAGES=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_MONETARY=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_NUMERIC=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_TIME=<span class="string">"zh_CN.UTF-8"</span></span><br><span class="line">LC_ALL=</span><br></pre></td></tr></table></figure>
-<p>看来影响的原因就是因为 locale 设置的问题。</p>
-<h1 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h1><p>locale 的格式类似 <code>language[_territory][.codeset][@modifier]</code>。 例如 ： zh_CN.UTF-8</p>
-<ul>
-<li>language <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank" rel="noopener">ISO 639 language code</a> 语言代码</li>
-<li>territory <a href="https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes" target="_blank" rel="noopener">ISO 3166 country code</a> 国家代码</li>
-<li>.codeset <a href="https://en.wikipedia.org/wiki/Character_encoding" target="_blank" rel="noopener"> character set</a> 字符集或者是编码形式如 <strong>ISO-8859-1</strong> 和 <strong>UTF-8</strong></li>
-<li>modifier</li>
-</ul>
-<h1 id="变量解释"><a href="#变量解释" class="headerlink" title="变量解释"></a>变量解释</h1><h2 id="LANG"><a href="#LANG" class="headerlink" title="LANG"></a>LANG</h2><p>安装的默认 locale。</p>
-<p>在没有设置 <strong>LC_*</strong> 变量的情况下，就会使用  <strong>LANG</strong> 变量。</p>
-<ul>
-<li>LC<em>ALL 覆盖 LANG 及其他 LC</em>* 变量的设置。</li>
-<li>LC_COLLATE 影响用来排序和正则式的规则。设置为 C 会让 ls 命令将 . 放在前面，大写的比小写的更前面。</li>
-<li>LC_TIME 时间日期格式。</li>
-<li>LC_CTYPE 代表 正则 表达式 匹配, 字符类(character classification), 转换, 区分大小写 的 比较, 以及 宽字符 函数.</li>
-<li>LC_MESSAGES 代表 可以 本地化的 消息 (自然语言)</li>
-<li>LC_MONETARY 代表 货币 格式.</li>
-<li>LC_NUMERIC 代表 数字 格式 (比如 小数点 和 千位分组符).</li>
-</ul>
-<h1 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h1><p>Linux 上有两个命令 <code>locale/localectl</code> 来进行设置 locale。</p>
-<ul>
-<li>locale 用来查看相关的 locale 信息，支持的语言，字符集</li>
-<li>localectl 就用来设置对应的 locale 了。</li>
-</ul>
-<p>我们可以利用设置 L_ALL 或者  LANG 变量了更改语言和字符集。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">localectl  <span class="built_in">set</span>-locale LANG=zh_CN.utf8</span><br></pre></td></tr></table></figure>
-<p>然后退出重新登录。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">locale</span><br><span class="line">LANG=zh_CN.utf8</span><br><span class="line">LC_CTYPE=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_NUMERIC=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_TIME=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_COLLATE=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_MONETARY=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_MESSAGES=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_PAPER=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_NAME=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_ADDRESS=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_TELEPHONE=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_MEASUREMENT=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_IDENTIFICATION=<span class="string">"zh_CN.utf8"</span></span><br><span class="line">LC_ALL=</span><br></pre></td></tr></table></figure>
+        <p>这个是好久以前看 APUE 的时候就看过了，不过最近在用 Python 做服务的时候，想着如何让其也能如同其他程序一样在后台运行而不会随着终端的退出而终止呢。所以又回顾来看了一下 UNIX 的进程模型。</p>
+<h1 id="进程的产生"><a href="#进程的产生" class="headerlink" title="进程的产生"></a>进程的产生</h1><p>开始的时候，内核只有一个进程（或许是），所有的进程都为 ID 为 1 的这个进程产生。而产生进程，就是使用的 <code>fork</code> 这个调用来产生的。</p>
+<p>在 <a href="/Linux-Unix/Unix编程中exec函数族的一点疑问.html" title="Unix编程中exec函数族的一点疑问">Unix编程中exec函数族的一点疑问</a> 也提到，实际上继承的产生，就是 <code>fork-exec</code> 这么一个过程。能让新建里的进程执行不同的程序这样。</p>
+<p><code>fork</code> 会调用一次，返回两次。调用 <code>fork</code> 的进程我们称其为 父进程，而 <code>fork</code> 产生的进程我们叫他子进程。这样， <code>fork</code> 在父进程中会返回子进程的进程 ID，而在子进程中返回 0。代码中就是以此来判断是执行在父进程中，还是在子进程中的。</p>
+<h1 id="进程是什么"><a href="#进程是什么" class="headerlink" title="进程是什么"></a>进程是什么</h1><p>对内核而言，进程，其实是一个数据结构。进程中一般都会有一个或多个线程，所谓线程，也就是会由内核调度执行的代码序列。内核被设计为，当一个进程结束的时候，会保留一下此进程的部分信息，供对此进程信息关心的其他进程所使用。</p>
+<p>一般来说，作为一个进程产生的父进程，其有理由也有必要关心其子进程的运作信息。因此，<code>wait, waitpid</code> 函数族就是为了让父进程来获取子进程情况的一些函数调用。</p>
+<p>一旦一个进程结束，但其父进程却也没有调用 <code>wait</code> 函数族中的一个来获取子进程最后在内核中的剩余信息，那么，这些信息就会一直保留，这是会出问题的。</p>
+<p>因此，init 进程被设计为自动成为所有父进程已终止的进程的父进程，由其来进行子进程终止后的善后处理。这样就会避免了 <strong>僵尸进程</strong> 的产生。</p>
+<h1 id="两次-fork"><a href="#两次-fork" class="headerlink" title="两次 fork"></a>两次 fork</h1><p>事实上，一次 fork 就行了，为什么要两次呢？</p>
+<p>这是为了让最早的进程不终止的情况下，其所产生的进程也不会成为僵尸进程。</p>
+<h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><p><div class="language-dot">
+digraph {
+subgraph cluster_kernel{
+label=Kernel
+Dchild
+Dcchild
+}
+Init
+Parent
+Child
+CChild
 
+Parent -> Child[label=fork]
+Child-> CChild[label="fork and exit"]
+Dchild -> Child
+Dcchild -> CChild
+Parent -> Dchild[label=wait,color=red,dir=back]
+CChild -> Init[label=父进程变更]
+
+{rank=min Parent Init}
+}
+</div><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script><br>                // graphviz init<br>                let graphviz_engines = [“circo”,<br>                    “dot”,<br>                    “fdp”,<br>                    “neato”,<br>                    “osage”,<br>                    “twopi”];</p>
+<pre><code>            function doGraphviz(engine) {
+                let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
+                for (let i = 0; i &lt; domAllDot.length; i++) {
+                    let dom = domAllDot[i];
+                    let graphSource = dom.innerText || dom.textContent;
+
+                    try {
+                       let viz = new Viz();
+                         viz.renderSVGElement(graphSource, {engine: engine})
+                             .then(r =&gt; {
+                        dom.innerHTML =&#39;&#39;;dom.append(r); });
+                    } catch (e) {
+                        console.error(&quot;Error when parsing node:&quot;, dom, e);
+                    } 
+                }
+            } 
+
+            let init = function () {
+                for (let i = 0; i &lt; graphviz_engines.length; i++) {
+                    doGraphviz(graphviz_engines[i]);
+                }
+            };
+            if (typeof window.addEventListener != &quot;undefined&quot;) {
+                window.addEventListener(&quot;load&quot;, init, false);
+            } else {
+                window.attachEvent(&quot;onload&quot;, init);
+            }
+            &lt;/script&gt;
+</code></pre></script></p>
     </div>
 
     
@@ -335,25 +361,21 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Linux/" rel="tag"># Linux</a>
-              <a href="/tags/运维/" rel="tag"># 运维</a>
+              <a href="/tags/Linux-Unix/" rel="tag"># Linux/Unix</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/Android/Retrofit对象的建立及与RxJava的使用.html" rel="next" title="Retrofit对象的建立及与RxJava的使用">
-                  <i class="fa fa-chevron-left"></i> Retrofit对象的建立及与RxJava的使用
+                <a href="/Python/Python2和3中字符串与编码.html" rel="next" title="Python2和3中字符串与编码">
+                  <i class="fa fa-chevron-left"></i> Python2和3中字符串与编码
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Java/Java的Lambda-方法引用及Stream.html" rel="prev" title="Java的Lambda-方法引用及Stream">
-                  Java的Lambda-方法引用及Stream <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -399,7 +421,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#原因"><span class="nav-number">1.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#格式"><span class="nav-number">2.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量解释"><span class="nav-number">3.</span> <span class="nav-text">变量解释</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LANG"><span class="nav-number">3.1.</span> <span class="nav-text">LANG</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#设置"><span class="nav-number">4.</span> <span class="nav-text">设置</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#进程的产生"><span class="nav-number">1.</span> <span class="nav-text">进程的产生</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程是什么"><span class="nav-number">2.</span> <span class="nav-text">进程是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#两次-fork"><span class="nav-number">3.</span> <span class="nav-text">两次 fork</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型"><span class="nav-number">4.</span> <span class="nav-text">模型</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -557,9 +579,9 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Linux-Unix/了解locale环境变量.html",
-            identifier: "Linux-Unix/了解locale环境变量.html",
-            title: "了解locale环境变量"
+            url: "https://gowa.club/Linux-Unix/UNIX中的进程模型.html",
+            identifier: "Linux-Unix/UNIX中的进程模型.html",
+            title: "UNIX中的进程模型"
           }
         }
       });
