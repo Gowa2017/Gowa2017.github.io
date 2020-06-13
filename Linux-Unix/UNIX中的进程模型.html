@@ -47,18 +47,18 @@
   };
 </script>
 
-  <meta name="description" content="这个是好久以前看 APUE 的时候就看过了，不过最近在用 Python 做服务的时候，想着如何让其也能如同其他程序一样在后台运行而不会随着终端的退出而终止呢。所以又回顾来看了一下 UNIX 的进程模型。 进程的产生开始的时候，内核只有一个进程（或许是），所有的进程都为 ID 为 1 的这个进程产生。而产生进程，就是使用的 fork 这个调用来产生的。 在 Unix编程中exec函数族的一点疑问 也">
+  <meta name="description" content="这个是好久以前看 APUE 的时候就看过了，不过最近在用 Python 做服务的时候，想着如何让其也能如同其他程序一样在后台运行而不会随着终端的退出而终止呢。所以又回顾来看了一下 UNIX 的进程模型。">
 <meta name="keywords" content="Linux&#x2F;Unix">
 <meta property="og:type" content="article">
 <meta property="og:title" content="UNIX中的进程模型">
 <meta property="og:url" content="https://gowa.club/Linux-Unix/UNIX中的进程模型.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="这个是好久以前看 APUE 的时候就看过了，不过最近在用 Python 做服务的时候，想着如何让其也能如同其他程序一样在后台运行而不会随着终端的退出而终止呢。所以又回顾来看了一下 UNIX 的进程模型。 进程的产生开始的时候，内核只有一个进程（或许是），所有的进程都为 ID 为 1 的这个进程产生。而产生进程，就是使用的 fork 这个调用来产生的。 在 Unix编程中exec函数族的一点疑问 也">
+<meta property="og:description" content="这个是好久以前看 APUE 的时候就看过了，不过最近在用 Python 做服务的时候，想着如何让其也能如同其他程序一样在后台运行而不会随着终端的退出而终止呢。所以又回顾来看了一下 UNIX 的进程模型。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2020-06-07T13:06:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="UNIX中的进程模型">
-<meta name="twitter:description" content="这个是好久以前看 APUE 的时候就看过了，不过最近在用 Python 做服务的时候，想着如何让其也能如同其他程序一样在后台运行而不会随着终端的退出而终止呢。所以又回顾来看了一下 UNIX 的进程模型。 进程的产生开始的时候，内核只有一个进程（或许是），所有的进程都为 ID 为 1 的这个进程产生。而产生进程，就是使用的 fork 这个调用来产生的。 在 Unix编程中exec函数族的一点疑问 也">
+<meta name="twitter:description" content="这个是好久以前看 APUE 的时候就看过了，不过最近在用 Python 做服务的时候，想着如何让其也能如同其他程序一样在后台运行而不会随着终端的退出而终止呢。所以又回顾来看了一下 UNIX 的进程模型。">
 
 <link rel="canonical" href="https://gowa.club/Linux-Unix/UNIX中的进程模型.html">
 
@@ -293,6 +293,7 @@
 
       
         <p>这个是好久以前看 APUE 的时候就看过了，不过最近在用 Python 做服务的时候，想着如何让其也能如同其他程序一样在后台运行而不会随着终端的退出而终止呢。所以又回顾来看了一下 UNIX 的进程模型。</p>
+<a id="more"></a>
 <h1 id="进程的产生"><a href="#进程的产生" class="headerlink" title="进程的产生"></a>进程的产生</h1><p>开始的时候，内核只有一个进程（或许是），所有的进程都为 ID 为 1 的这个进程产生。而产生进程，就是使用的 <code>fork</code> 这个调用来产生的。</p>
 <p>在 <a href="/Linux-Unix/Unix编程中exec函数族的一点疑问.html" title="Unix编程中exec函数族的一点疑问">Unix编程中exec函数族的一点疑问</a> 也提到，实际上继承的产生，就是 <code>fork-exec</code> 这么一个过程。能让新建里的进程执行不同的程序这样。</p>
 <p><code>fork</code> 会调用一次，返回两次。调用 <code>fork</code> 的进程我们称其为 父进程，而 <code>fork</code> 产生的进程我们叫他子进程。这样， <code>fork</code> 在父进程中会返回子进程的进程 ID，而在子进程中返回 0。代码中就是以此来判断是执行在父进程中，还是在子进程中的。</p>
@@ -302,7 +303,7 @@
 <p>因此，init 进程被设计为自动成为所有父进程已终止的进程的父进程，由其来进行子进程终止后的善后处理。这样就会避免了 <strong>僵尸进程</strong> 的产生。</p>
 <h1 id="两次-fork"><a href="#两次-fork" class="headerlink" title="两次 fork"></a>两次 fork</h1><p>事实上，一次 fork 就行了，为什么要两次呢？</p>
 <p>这是为了让最早的进程不终止的情况下，其所产生的进程也不会成为僵尸进程。</p>
-<h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><p><div class="language-dot">
+<h1 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h1><div class="language-dot">
 digraph {
 subgraph cluster_kernel{
 label=Kernel
@@ -322,37 +323,46 @@ Parent -> Dchild[label=wait,color=red,dir=back]
 CChild -> Init[label=父进程变更]
 
 {rank=min Parent Init}
+
 }
-</div><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script><br>                // graphviz init<br>                let graphviz_engines = [“circo”,<br>                    “dot”,<br>                    “fdp”,<br>                    “neato”,<br>                    “osage”,<br>                    “twopi”];</p>
-<pre><code>            function doGraphviz(engine) {
-                let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
-                for (let i = 0; i &lt; domAllDot.length; i++) {
-                    let dom = domAllDot[i];
-                    let graphSource = dom.innerText || dom.textContent;
+</div>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
 
-                    try {
-                       let viz = new Viz();
-                         viz.renderSVGElement(graphSource, {engine: engine})
-                             .then(r =&gt; {
-                        dom.innerHTML =&#39;&#39;;dom.append(r); });
-                    } catch (e) {
-                        console.error(&quot;Error when parsing node:&quot;, dom, e);
-                    } 
-                }
-            } 
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
 
-            let init = function () {
-                for (let i = 0; i &lt; graphviz_engines.length; i++) {
-                    doGraphviz(graphviz_engines[i]);
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
                 }
-            };
-            if (typeof window.addEventListener != &quot;undefined&quot;) {
-                window.addEventListener(&quot;load&quot;, init, false);
-            } else {
-                window.attachEvent(&quot;onload&quot;, init);
-            }
-            &lt;/script&gt;
-</code></pre></script></p>
+                </script>
     </div>
 
     
@@ -376,6 +386,9 @@ CChild -> Init[label=父进程变更]
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+                <a href="/Lua/再看Lua中的协程实现.html" rel="prev" title="再看Lua中的协程实现">
+                  再看Lua中的协程实现 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
       </footer>
@@ -435,7 +448,7 @@ CChild -> Init[label=父进程变更]
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">349</span>
+          <span class="site-state-item-count">350</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

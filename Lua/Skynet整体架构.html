@@ -301,7 +301,7 @@
 <h1 id="服务"><a href="#服务" class="headerlink" title="服务"></a>服务</h1><p>每个服务，实际上就是一个 <code>skynet_context</code> 结构体：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">skynet_context</span> &#123;</span></span><br><span class="line">	<span class="keyword">void</span> * instance;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">skynet_module</span> * <span class="title">mod</span>;</span></span><br><span class="line">	<span class="keyword">void</span> * cb_ud;</span><br><span class="line">	skynet_cb cb;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">message_queue</span> *<span class="title">queue</span>;</span></span><br><span class="line">	FILE * logfile;</span><br><span class="line">	<span class="keyword">uint64_t</span> cpu_cost;	<span class="comment">// in microsec</span></span><br><span class="line">	<span class="keyword">uint64_t</span> cpu_start;	<span class="comment">// in microsec</span></span><br><span class="line">	<span class="keyword">char</span> result[<span class="number">32</span>];</span><br><span class="line">	<span class="keyword">uint32_t</span> handle;</span><br><span class="line">	<span class="keyword">int</span> session_id;</span><br><span class="line">	<span class="keyword">int</span> ref;</span><br><span class="line">	<span class="keyword">int</span> message_count;</span><br><span class="line">	<span class="keyword">bool</span> init;</span><br><span class="line">	<span class="keyword">bool</span> endless;</span><br><span class="line">	<span class="keyword">bool</span> profile;</span><br><span class="line"></span><br><span class="line">	CHECKCALLING_DECL</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>所有的服务 <code>skynet_context</code> 结构都会存在在全局变量 <strong>H</strong> 中：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">handle_storage</span> *<span class="title">H</span> = <span class="title">NULL</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">handle_storage</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rwlock</span> <span class="title">lock</span>;</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint32_t</span> harbor;</span><br><span class="line">	<span class="keyword">uint32_t</span> handle_index;</span><br><span class="line">	<span class="keyword">int</span> slot_size;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">skynet_context</span> ** <span class="title">slot</span>;</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">int</span> name_cap;</span><br><span class="line">	<span class="keyword">int</span> name_count;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">handle_name</span> *<span class="title">name</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">handle_storage</span> *<span class="title">H</span> = <span class="title">NULL</span>;</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">handle_storage</span> &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">rwlock</span> <span class="title">lock</span>;</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">uint32_t</span> harbor;</span><br><span class="line">	<span class="keyword">uint32_t</span> handle_index;</span><br><span class="line">	<span class="keyword">int</span> slot_size;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">skynet_context</span> ** <span class="title">slot</span>;</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> name_cap;</span><br><span class="line">	<span class="keyword">int</span> name_count;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">handle_name</span> *<span class="title">name</span>;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <p>每当我们新建一个服务的时候，就会将服务自身注册到 <strong>H</strong> 中，每个服务自身，会持有其在 <strong>H</strong> 中的索引。</p>
 <p>服务如何建立的可以看 <a href="/Lua/skynet的服务载入流程.html" title="skynet的服务载入流程#C服务的建立过程">skynet的服务载入流程#C服务的建立过程</a></p>
 <p>从 <code>skynet_context</code> 的结构中我们可以看到三个属性：</p>
@@ -323,12 +323,11 @@
 <ul>
 <li><code>recvctrl_fd</code> 接收控制命令</li>
 <li><code>sendctrl_fd</code> 发送控制命令，与上面个文件描述形成管道</li>
-<li><code>event_fd</code>  一个 <code>kqueue</code></li>
+<li><code>event_fd</code> 一个 <code>kqueue</code></li>
 </ul>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line">	<span class="keyword">volatile</span> <span class="keyword">uint64_t</span> time;</span><br><span class="line">	<span class="keyword">int</span> recvctrl_fd;</span><br><span class="line">	<span class="keyword">int</span> sendctrl_fd;</span><br><span class="line">	<span class="keyword">int</span> checkctrl;</span><br><span class="line">	poll_fd event_fd;</span><br><span class="line">	<span class="keyword">int</span> alloc_id;</span><br><span class="line">	<span class="keyword">int</span> event_n;</span><br><span class="line">	<span class="keyword">int</span> event_index;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket_object_interface</span> <span class="title">soi</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">event</span> <span class="title">ev</span>[<span class="title">MAX_EVENT</span>];</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> <span class="title">slot</span>[<span class="title">MAX_SOCKET</span>];</span></span><br><span class="line">	<span class="keyword">char</span> <span class="built_in">buffer</span>[MAX_INFO];</span><br><span class="line">	<span class="keyword">uint8_t</span> udpbuffer[MAX_UDP_PACKAGE];</span><br><span class="line">	fd_set rfds;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 <h1 id="消息分发"><a href="#消息分发" class="headerlink" title="消息分发"></a>消息分发</h1><div class="language-dot">
 digraph {
-
 subgraph cluster_service{
 label=skynet_context
 SN[label="SNLUA"]
@@ -340,36 +339,44 @@ MQ[label="Queue"]
 Q -> MQ -> SN -> L -> "skynet.dispatch_message"[label="workerthread"]
 }
 </div>
-<p>本质上，服务间的消息传递，就是将消息，通过 skynet 引擎提供的 API，然后递交到另外一个服务的 Queue 里面去，然后由工作线程拿出来进行处理。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script><br>                // graphviz init<br>                let graphviz_engines = [“circo”,<br>                    “dot”,<br>                    “fdp”,<br>                    “neato”,<br>                    “osage”,<br>                    “twopi”];</p>
-<pre><code>            function doGraphviz(engine) {
-                let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
-                for (let i = 0; i &lt; domAllDot.length; i++) {
-                    let dom = domAllDot[i];
-                    let graphSource = dom.innerText || dom.textContent;
+<p>本质上，服务间的消息传递，就是将消息，通过 skynet 引擎提供的 API，然后递交到另外一个服务的 Queue 里面去，然后由工作线程拿出来进行处理。</p>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
 
-                    try {
-                       let viz = new Viz();
-                         viz.renderSVGElement(graphSource, {engine: engine})
-                             .then(r =&gt; {
-                        dom.innerHTML =&#39;&#39;;dom.append(r); });
-                    } catch (e) {
-                        console.error(&quot;Error when parsing node:&quot;, dom, e);
-                    } 
-                }
-            } 
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
 
-            let init = function () {
-                for (let i = 0; i &lt; graphviz_engines.length; i++) {
-                    doGraphviz(graphviz_engines[i]);
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
                 }
-            };
-            if (typeof window.addEventListener != &quot;undefined&quot;) {
-                window.addEventListener(&quot;load&quot;, init, false);
-            } else {
-                window.attachEvent(&quot;onload&quot;, init);
-            }
-            &lt;/script&gt;
-</code></pre></script></p>
+                </script>
     </div>
 
     
@@ -456,7 +463,7 @@ Q -> MQ -> SN -> L -> "skynet.dispatch_message"[label="workerthread"]
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">349</span>
+          <span class="site-state-item-count">350</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
