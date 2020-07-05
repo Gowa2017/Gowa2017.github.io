@@ -308,6 +308,54 @@
 <li><a href="https://developer.android.com/ndk/guides/standalone_toolchain.html" target="_blank" rel="noopener">独立工具链</a>，用于与其他编译工具集成，或者与基于 <code>configure</code> 的项目搭配使用。</li>
 </ul>
 <p>这里我只关心一下 CMake 的方式，因为其他两种的话，我并不打算使用，具体的用法参考对应文档就行了。</p>
+<h1 id="CPU和架构"><a href="#CPU和架构" class="headerlink" title="CPU和架构"></a>CPU和架构</h1><p>因为 C 代码 编译成二进制代码，是针对特定的 CPU 指令集的，所以说，在编译的时候，我们就要用对相应的工具链，才能编译出正常能跑的二进制代码。</p>
+<blockquote>
+<p>不同的 Android 设备使用不同的 CPU，而不同的 CPU 支持不同的指令集。CPU 与指令集的每种组合都有专属的应用二进制接口 (ABI)。ABI 包含以下信息：</p>
+<ul>
+<li>可使用的 CPU 指令集（和扩展指令集）。</li>
+<li>运行时内存存储和加载的字节顺序。Android 始终是 little-endian。</li>
+<li>在应用和系统之间传递数据的规范（包括对齐限制），以及系统调用函数时如何使用堆栈和寄存器。</li>
+<li>可执行二进制文件（例如程序和共享库）的格式，以及它们支持的内容类型。Android 始终使用 ELF。如需了解详情，请参阅 <a href="http://www.sco.com/developers/gabi/2001-04-24/contents.html" target="_blank" rel="noopener">ELF System V 应用二进制接口</a>。</li>
+<li>如何重整 C++ 名称。如需了解详情，请参阅 <a href="http://itanium-cxx-abi.github.io/cxx-abi/" target="_blank" rel="noopener">Generic/Itanium C++ ABI</a>。</li>
+</ul>
+<p>本页列举了 NDK 支持的 ABI，并且介绍了每个 ABI 的运行原理。</p>
+<p>ABI 还可以指平台支持的原生 API。如需影响 32 位系统的此类 ABI 问题列表，请参阅 <a href="https://android.googlesource.com/platform/bionic/+/master/docs/32-bit-abi.md" target="_blank" rel="noopener">32 位 ABI 错误</a>。</p>
+</blockquote>
+<h2 id="支持的-ABI"><a href="#支持的-ABI" class="headerlink" title="支持的 ABI"></a>支持的 ABI</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">ABI</th>
+<th style="text-align:left">支持的指令集</th>
+<th style="text-align:left">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="https://developer.android.com/ndk/guides/abis#v7a" target="_blank" rel="noopener"><code>armeabi-v7a</code></a></td>
+<td style="text-align:left">armeabi<br>Thumb-2<br>VFPv3-D16</td>
+<td style="text-align:left">与 ARMv5/v6 设备不兼容。</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://developer.android.com/ndk/guides/abis#arm64-v8a" target="_blank" rel="noopener"><code>arm64-v8a</code></a></td>
+<td style="text-align:left">AArch64</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://developer.android.com/ndk/guides/abis#x86" target="_blank" rel="noopener"><code>x86</code></a></td>
+<td style="text-align:left">x86 (IA-32)<br>MMX<br>SSE/2/3<br>SSSE3</td>
+<td style="text-align:left">不支持 MOVBE 或 SSE4。</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://developer.android.com/ndk/guides/abis#86-64" target="_blank" rel="noopener"><code>x86_64</code></a></td>
+<td style="text-align:left">x86-64<br>MMX<br>SSE/2/3<br>SSSE3<br>SSE4.1、4.2<br>POPCNT</td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p><strong>注意</strong>：NDK 以前支持 ARMv5 (armeabi) 以及 32 位和 64 位 MIPS，但 NDK r17 已不再支持。</p>
+</blockquote>
 <h1 id="CMake"><a href="#CMake" class="headerlink" title="CMake"></a>CMake</h1><p>Android NDK 支持使用 CMake 编译应用的 C 和 C++ 代码。本页讨论如何通过 Android Gradle 插件的 ExternalNativeBuild 或通过直接调用 CMake 将 CMake 用于 NDK。</p>
 <blockquote>
 <p>注意：如果您使用的是 Android Studio，请转至<a href="https://developer.android.com/studio/projects/add-native-code.html" target="_blank" rel="noopener">向您的项目添加 C 和 C++ 代码</a>，了解以下基础知识：向项目中添加原生源代码，创建 CMake 编译脚本，将您的 CMake 项目添加为 Gradle 依赖项，以及使用比 SDK 中更新的版本的 CMake。</p>
@@ -317,7 +365,7 @@
 <p>在调用 cmake 时，命令行会提供诸如 ABI、minSdkVersion 等编译参数。有关所支持参数的列表，参阅工具链参数部分。</p>
 <p>当我们使用 gradle 进行编译的时候，会自动使用此工具链文件，而若我们是手动通过命令行进行编译的，则必须手动指定此工具链文件，如：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ cmake \</span><br><span class="line">        -DCMAKE_TOOLCHAIN_FILE=<span class="variable">$ANDROID_NDK_HOME</span>/build/cmake/android.toolchain.cmake \</span><br><span class="line">        -DANDROID_ABI=<span class="variable">$ABI</span> \</span><br><span class="line">        -DANDROID_NATIVE_API_LEVEL=<span class="variable">$MINSDKVERSION</span> \</span><br><span class="line">        <span class="variable">$OTHER_ARGS</span></span><br></pre></td></tr></table></figure>
-<h2 id="工具链文件什么用？"><a href="#工具链文件什么用？" class="headerlink" title="工具链文件什么用？"></a>工具链文件什么用？</h2><p>CMake 使用一系列的工具来进行 <strong>编译，链接</strong>库和创建归档文件，以及其他一些驱动编译的任务。常规情况下， CMake 会使用宿主设备上的工具链。但是在交叉编译的情况下，我们就必须指定一个工具链文件来知晓会使用的编译器和其他工具的路径。</p>
+<h2 id="工具链文件什么用？"><a href="#工具链文件什么用？" class="headerlink" title="工具链文件什么用？"></a>工具链文件什么用？</h2><p>CMake 使用一系列的工具来进行 <strong>编译，链接</strong>库和创建归档文件，以及其他一些驱动编译的任务。常规情况下， CMake 会使用宿主设备上的工具链。但是在交叉编译的情况下，我们就必须指定一个工具链文件来知会使用的编译器和其他工具的路径。</p>
 <p>对于我们想要编译的安卓项目来说 ，当我们指定了项目使用的 API 等级（MINSDKVERSION），目标设备的架构（ABI），我们就能通过工具链文件知道调用相应的工具来进行编译了。</p>
 <h2 id="android-toolchain-cmake"><a href="#android-toolchain-cmake" class="headerlink" title="android.toolchain.cmake"></a>android.toolchain.cmake</h2><p>这个文件有点长，有 700 多行。其位于 AOSP 项目的 <a href="https://android.googlesource.com/platform/ndk/+/master/build/cmake/android.toolchain.cmake" target="_blank" rel="noopener">这个链接</a>，</p>
 <h3 id="查找-NDK-路径"><a href="#查找-NDK-路径" class="headerlink" title="查找 NDK 路径"></a>查找 NDK 路径</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">get_filename_component(ANDROID_NDK_EXPECTED_PATH</span><br><span class="line">    &quot;$&#123;CMAKE_CURRENT_LIST_DIR&#125;/../..&quot; ABSOLUTE)</span><br><span class="line">if(NOT ANDROID_NDK)</span><br><span class="line">  set(ANDROID_NDK &quot;$&#123;ANDROID_NDK_EXPECTED_PATH&#125;&quot;)</span><br></pre></td></tr></table></figure>
@@ -352,6 +400,63 @@
 </ul>
 <h3 id="设置编译器"><a href="#设置编译器" class="headerlink" title="设置编译器"></a>设置编译器</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set(ANDROID_C_COMPILER</span><br><span class="line">  &quot;$&#123;ANDROID_TOOLCHAIN_ROOT&#125;/bin/clang$&#123;ANDROID_TOOLCHAIN_SUFFIX&#125;&quot;)</span><br><span class="line">set(ANDROID_CXX_COMPILER</span><br><span class="line">  &quot;$&#123;ANDROID_TOOLCHAIN_ROOT&#125;/bin/clang++$&#123;ANDROID_TOOLCHAIN_SUFFIX&#125;&quot;)</span><br><span class="line">set(ANDROID_ASM_COMPILER</span><br><span class="line">  &quot;$&#123;ANDROID_TOOLCHAIN_ROOT&#125;/bin/clang$&#123;ANDROID_TOOLCHAIN_SUFFIX&#125;&quot;)</span><br><span class="line"># Clang can fail to compile if CMake doesn&apos;t correctly supply the target and</span><br><span class="line"># external toolchain, but to do so, CMake needs to already know that the</span><br><span class="line"># compiler is clang. Tell CMake that the compiler is really clang, but don&apos;t</span><br><span class="line"># use CMakeForceCompiler, since we still want compile checks. We only want</span><br><span class="line"># to skip the compiler ID detection step.</span><br><span class="line">set(CMAKE_C_COMPILER_ID_RUN TRUE)</span><br><span class="line">set(CMAKE_CXX_COMPILER_ID_RUN TRUE)</span><br><span class="line">set(CMAKE_C_COMPILER_ID Clang)</span><br><span class="line">set(CMAKE_CXX_COMPILER_ID Clang)</span><br><span class="line">set(CMAKE_C_COMPILER_VERSION 8.0)</span><br><span class="line">set(CMAKE_CXX_COMPILER_VERSION 8.0)</span><br><span class="line">set(CMAKE_C_STANDARD_COMPUTED_DEFAULT 11)</span><br><span class="line">set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT 14)</span><br><span class="line">set(CMAKE_C_COMPILER_TARGET   $&#123;ANDROID_LLVM_TRIPLE&#125;)</span><br><span class="line">set(CMAKE_CXX_COMPILER_TARGET $&#123;ANDROID_LLVM_TRIPLE&#125;)</span><br><span class="line">set(CMAKE_ASM_COMPILER_TARGET $&#123;ANDROID_LLVM_TRIPLE&#125;)</span><br><span class="line">set(CMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN   &quot;$&#123;ANDROID_TOOLCHAIN_ROOT&#125;&quot;)</span><br><span class="line">set(CMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN &quot;$&#123;ANDROID_TOOLCHAIN_ROOT&#125;&quot;)</span><br><span class="line">set(CMAKE_ASM_COMPILER_EXTERNAL_TOOLCHAIN &quot;$&#123;ANDROID_TOOLCHAIN_ROOT&#125;&quot;)</span><br><span class="line">set(ANDROID_AR &quot;$&#123;ANDROID_TOOLCHAIN_PREFIX&#125;ar$&#123;ANDROID_TOOLCHAIN_SUFFIX&#125;&quot;)</span><br><span class="line">set(ANDROID_RANLIB</span><br><span class="line">  &quot;$&#123;ANDROID_TOOLCHAIN_PREFIX&#125;ranlib$&#123;ANDROID_TOOLCHAIN_SUFFIX&#125;&quot;)</span><br></pre></td></tr></table></figure>
 <p>这个没啥说的，就是设置编译器为 NDK 自带的 clang/clang++ 了。<br>还设置了 <code>CMAKE_C_COMPILER_TARGET , CMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN,ANDROID_AR, ANDROID_RANLIB</code>。</p>
+<h2 id="正确指定架构"><a href="#正确指定架构" class="headerlink" title="正确指定架构"></a>正确指定架构</h2><p>我们有两种方式来确保我们使用正确的架构进行构建。</p>
+<ol>
+<li>调用  Clang 是指定 <code>-target</code> 参数。</li>
+<li>调用具有前缀的 Clang</li>
+</ol>
+<p>例如，若要为 64 位 ARM Android 编译值为 21 的 <code>minSdkVersion</code>，可使用以下两种方法，您可以选择使用其中最方便的方法：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ <span class="variable">$NDK</span>/toolchains/llvm/prebuilt/<span class="variable">$HOST_TAG</span>/clang++ \</span><br><span class="line">    -target aarch64-linux-android21 foo.cpp</span><br></pre></td></tr></table></figure>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">$ <span class="variable">$NDK</span>/toolchains/llvm/prebuilt/<span class="variable">$HOST_TAG</span>/aarch64-linux-android21-clang++ \</span><br><span class="line">    foo.cpp</span><br></pre></td></tr></table></figure>
+<p>这里的 <strong>前缀</strong> 是一个三元组：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">ABI</th>
+<th style="text-align:left">三元组</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">armeabi-v7a</td>
+<td style="text-align:left"><code>armv7a-linux-androideabi</code></td>
+</tr>
+<tr>
+<td style="text-align:left">arm64-v8a</td>
+<td style="text-align:left"><code>aarch64-linux-android</code></td>
+</tr>
+<tr>
+<td style="text-align:left">x86</td>
+<td style="text-align:left"><code>i686-linux-android</code></td>
+</tr>
+<tr>
+<td style="text-align:left">x86-64</td>
+<td style="text-align:left"><code>x86_64-linux-android</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p><strong>注意</strong>：对于 32 位 ARM，编译器会使用前缀 <code>armv7a-linux-androideabi</code>，但 binutils 工具会使用前缀 <code>arm-linux-androideabi</code>。对于其他架构，所有工具的前缀都相同。</p>
+<p><strong>因为这个原因，编译有的项目会出现问题</strong></p>
+</blockquote>
+<p>许多项目的构建脚本都预计使用 GCC 风格的交叉编译器，其中每个编译器仅针对一种操作系统/架构组合，因此可能无法正常处理 <code>-target</code>。在这些情况下，最好使用三元组前缀的 Clang 二进制文件。</p>
+<h1 id="Autoconf-项目"><a href="#Autoconf-项目" class="headerlink" title="Autoconf 项目"></a>Autoconf 项目</h1><p>对于这种项目，因为 Autoconf 支持指定相关的编译工具链，所以我们可以手动进行指定：</p>
+<ul>
+<li>target 目标架构三元组</li>
+<li>binutils 相关的变量</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># Check out the source.</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/glennrp/libpng</span><br><span class="line"><span class="built_in">cd</span> libpng</span><br><span class="line"><span class="comment"># 指定宿主机编译工具链所在路径，根据宿主机来选择，如是 macos 或者是 x86的</span></span><br><span class="line"><span class="built_in">export</span> TOOLCHAIN=<span class="variable">$NDK</span>/toolchains/llvm/prebuilt/darwin-x86_64</span><br><span class="line"><span class="built_in">export</span> TOOLCHAIN=<span class="variable">$NDK</span>/toolchains/llvm/prebuilt/linux-x86_64</span><br><span class="line"><span class="comment"># 指定目标架构三元组</span></span><br><span class="line"><span class="built_in">export</span> TARGET=aarch64-linux-android</span><br><span class="line"><span class="built_in">export</span> TARGET=armv7a-linux-androideabi</span><br><span class="line"><span class="built_in">export</span> TARGET=i686-linux-android</span><br><span class="line"><span class="built_in">export</span> TARGET=x86_64-linux-android</span><br><span class="line"><span class="comment"># 指定安桌最低API</span></span><br><span class="line"><span class="built_in">export</span> API=21</span><br><span class="line"><span class="comment"># 指定 binutils </span></span><br><span class="line"><span class="built_in">export</span> AR=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span>-ar</span><br><span class="line"><span class="built_in">export</span> AS=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span>-as</span><br><span class="line"><span class="built_in">export</span> CC=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span><span class="variable">$API</span>-clang</span><br><span class="line"><span class="built_in">export</span> CXX=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span><span class="variable">$API</span>-clang++</span><br><span class="line"><span class="built_in">export</span> LD=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span>-ld</span><br><span class="line"><span class="built_in">export</span> RANLIB=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span>-ranlib</span><br><span class="line"><span class="built_in">export</span> STRIP=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span>-strip</span><br><span class="line">./configure --host <span class="variable">$TARGET</span></span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+<p>对于非 AUTOCONF 的项目，有的可以用 AUTOCONF项目的方式进行替换，但有的不行，必须手动进行替换。</p>
+<h1 id="luasocket-手动配置示例"><a href="#luasocket-手动配置示例" class="headerlink" title="luasocket 手动配置示例"></a>luasocket 手动配置示例</h1><p>这个项目比较简单，不外乎就是配置好工具链，然后编译就行，这里我们显示可能出现的问题，我们故意使用了 <code>armv7a-linux-androideabi</code> 这个架构：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/diegonehab/luasocket.git </span><br><span class="line"><span class="built_in">cd</span> luasocket </span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> TOOLCHAIN=<span class="variable">$ANDROID_NDK_HOME</span>/toolchains/llvm/prebuilt/darwin-x86_64</span><br><span class="line"><span class="comment"># export TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/linux-x86_64</span></span><br><span class="line"><span class="comment"># 指定目标架构三元组</span></span><br><span class="line"><span class="comment"># export TARGET=aarch64-linux-android</span></span><br><span class="line"><span class="built_in">export</span> TARGET=armv7a-linux-androideabi</span><br><span class="line"><span class="comment"># export TARGET=i686-linux-android</span></span><br><span class="line"><span class="comment"># export TARGET=x86_64-linux-android</span></span><br><span class="line"><span class="comment"># 指定安桌最低API</span></span><br><span class="line"><span class="built_in">export</span> API=21</span><br><span class="line"><span class="comment"># 指定 binutils </span></span><br><span class="line"><span class="built_in">export</span> AR=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span>-ar</span><br><span class="line"><span class="built_in">export</span> AS=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span>-as</span><br><span class="line"><span class="built_in">export</span> CC_linux=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span><span class="variable">$API</span>-clang</span><br><span class="line"><span class="built_in">export</span> CXX=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span><span class="variable">$API</span>-clang++</span><br><span class="line"><span class="built_in">export</span> LD_linux=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span>-ld</span><br><span class="line"><span class="built_in">export</span> RANLIB=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span>-ranlib</span><br><span class="line"><span class="built_in">export</span> STRIP=<span class="variable">$TOOLCHAIN</span>/bin/<span class="variable">$TARGET</span>-strip</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这下面是和项目相关的</span></span><br><span class="line"><span class="built_in">export</span> PLAT=linux LUAV=5.3</span><br><span class="line"><span class="built_in">export</span> LUAINC_linux_base=/usr/<span class="built_in">local</span>/opt/lua/include</span><br><span class="line"><span class="built_in">export</span> LUAPREFIX_linux=build CDIR_linux=lib LDIR_linux=lua</span><br><span class="line"></span><br><span class="line">make <span class="variable">$@</span></span><br></pre></td></tr></table></figure>
+<p>这将会报错：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ake[2]: /Users/gowa/Library/Android/sdk/ndk/21.2.6472646/toolchains/llvm/prebuilt/darwin-x86_64/bin/armv7a-linux-androideabi-ld: No such file or directory</span><br><span class="line">make[2]: *** [socket-3.0-rc1.so] Error 1</span><br><span class="line">make[1]: *** [linux] Error 2</span><br><span class="line">make: *** [linux] Error 2</span><br></pre></td></tr></table></figure>
+<p>这就 是上面说的，对于 <code>armv7a-linux-androideabi</code> 编译器能正常识别，但是 binuitls 无法正常识别的原因：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> LD_linux=<span class="variable">$TOOLCHAIN</span>/bin/arm-linux-androideabi-ld</span><br></pre></td></tr></table></figure>
+<p>这样就能成功了。，没毛病。其他的 <code>ar, as, ranlib, strip</code> 也需要这样进行修改的</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>实际上通过工具链文件就指定了我们需要使用的 NDK 编译器，及相关的工具，平台库等信息。</p>
 
     </div>
@@ -427,7 +532,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NDK-和工具"><span class="nav-number">1.</span> <span class="nav-text">NDK 和工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编译项目"><span class="nav-number">2.</span> <span class="nav-text">编译项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CMake"><span class="nav-number">3.</span> <span class="nav-text">CMake</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CMake-工具链文件"><span class="nav-number">3.1.</span> <span class="nav-text">CMake 工具链文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具链文件什么用？"><span class="nav-number">3.2.</span> <span class="nav-text">工具链文件什么用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#android-toolchain-cmake"><span class="nav-number">3.3.</span> <span class="nav-text">android.toolchain.cmake</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查找-NDK-路径"><span class="nav-number">3.3.1.</span> <span class="nav-text">查找 NDK 路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-TOOLCHAIN"><span class="nav-number">3.3.2.</span> <span class="nav-text">ANDROID_TOOLCHAIN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-API"><span class="nav-number">3.3.3.</span> <span class="nav-text">ANDROID_API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-PLATFORM"><span class="nav-number">3.3.4.</span> <span class="nav-text">ANDROID_PLATFORM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认工具链与-ABI"><span class="nav-number">3.3.5.</span> <span class="nav-text">默认工具链与 ABI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-PLATFORM-1"><span class="nav-number">3.3.6.</span> <span class="nav-text">ANDROID_PLATFORM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-STL"><span class="nav-number">3.3.7.</span> <span class="nav-text">ANDROID_STL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#try-compile"><span class="nav-number">3.3.8.</span> <span class="nav-text">try_compile()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-LLVM-TRIPLE"><span class="nav-number">3.3.9.</span> <span class="nav-text">ANDROID_LLVM_TRIPLE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-HOST-TAG"><span class="nav-number">3.3.10.</span> <span class="nav-text">ANDROID_HOST_TAG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工具链路径"><span class="nav-number">3.3.11.</span> <span class="nav-text">工具链路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置编译器"><span class="nav-number">3.3.12.</span> <span class="nav-text">设置编译器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#NDK-和工具"><span class="nav-number">1.</span> <span class="nav-text">NDK 和工具</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编译项目"><span class="nav-number">2.</span> <span class="nav-text">编译项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CPU和架构"><span class="nav-number">3.</span> <span class="nav-text">CPU和架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#支持的-ABI"><span class="nav-number">3.1.</span> <span class="nav-text">支持的 ABI</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CMake"><span class="nav-number">4.</span> <span class="nav-text">CMake</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CMake-工具链文件"><span class="nav-number">4.1.</span> <span class="nav-text">CMake 工具链文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工具链文件什么用？"><span class="nav-number">4.2.</span> <span class="nav-text">工具链文件什么用？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#android-toolchain-cmake"><span class="nav-number">4.3.</span> <span class="nav-text">android.toolchain.cmake</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查找-NDK-路径"><span class="nav-number">4.3.1.</span> <span class="nav-text">查找 NDK 路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-TOOLCHAIN"><span class="nav-number">4.3.2.</span> <span class="nav-text">ANDROID_TOOLCHAIN</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-API"><span class="nav-number">4.3.3.</span> <span class="nav-text">ANDROID_API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-PLATFORM"><span class="nav-number">4.3.4.</span> <span class="nav-text">ANDROID_PLATFORM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#默认工具链与-ABI"><span class="nav-number">4.3.5.</span> <span class="nav-text">默认工具链与 ABI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-PLATFORM-1"><span class="nav-number">4.3.6.</span> <span class="nav-text">ANDROID_PLATFORM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-STL"><span class="nav-number">4.3.7.</span> <span class="nav-text">ANDROID_STL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#try-compile"><span class="nav-number">4.3.8.</span> <span class="nav-text">try_compile()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-LLVM-TRIPLE"><span class="nav-number">4.3.9.</span> <span class="nav-text">ANDROID_LLVM_TRIPLE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ANDROID-HOST-TAG"><span class="nav-number">4.3.10.</span> <span class="nav-text">ANDROID_HOST_TAG</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工具链路径"><span class="nav-number">4.3.11.</span> <span class="nav-text">工具链路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#设置编译器"><span class="nav-number">4.3.12.</span> <span class="nav-text">设置编译器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正确指定架构"><span class="nav-number">4.4.</span> <span class="nav-text">正确指定架构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Autoconf-项目"><span class="nav-number">5.</span> <span class="nav-text">Autoconf 项目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#luasocket-手动配置示例"><span class="nav-number">6.</span> <span class="nav-text">luasocket 手动配置示例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
