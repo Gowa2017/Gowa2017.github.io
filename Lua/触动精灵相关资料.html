@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="库路径dialog(package.path)dialog(package.cpath) /data/data/?.lua;/sdcard/TouchSprite/lua/?.lua;/sdcard/TouchSprite/lua/?.luac;/data/data/com.touchsprite.android/TouchSprite/?.lua;/data/data/com.touchspri">
+<meta name="keywords" content="Lua">
+<meta property="og:type" content="article">
+<meta property="og:title" content="触动精灵相关资料">
+<meta property="og:url" content="https://gowa.club/Lua/触动精灵相关资料.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="库路径dialog(package.path)dialog(package.cpath) /data/data/?.lua;/sdcard/TouchSprite/lua/?.lua;/sdcard/TouchSprite/lua/?.luac;/data/data/com.touchsprite.android/TouchSprite/?.lua;/data/data/com.touchspri">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-07-05T13:08:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="触动精灵相关资料">
+<meta name="twitter:description" content="库路径dialog(package.path)dialog(package.cpath) /data/data/?.lua;/sdcard/TouchSprite/lua/?.lua;/sdcard/TouchSprite/lua/?.luac;/data/data/com.touchsprite.android/TouchSprite/?.lua;/data/data/com.touchspri">
+
+<link rel="canonical" href="https://gowa.club/Lua/触动精灵相关资料.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>触动精灵相关资料 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/触动精灵相关资料.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          触动精灵相关资料
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-05 21:08:26" itemprop="dateCreated datePublished" datetime="2020-07-05T21:08:26+08:00">2020-07-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Lua/触动精灵相关资料.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/触动精灵相关资料.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="库路径"><a href="#库路径" class="headerlink" title="库路径"></a>库路径</h1><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">dialog(<span class="built_in">package</span>.<span class="built_in">path</span>)</span><br><span class="line">dialog(<span class="built_in">package</span>.<span class="built_in">cpath</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/data/data/?.lua;</span><br><span class="line">/sdcard/TouchSprite/lua/?.lua;</span><br><span class="line">/sdcard/TouchSprite/lua/?.luac;</span><br><span class="line">/data/data/com.touchsprite.android/TouchSprite/?.lua;</span><br><span class="line">/data/data/com.touchsprite.android/files/tslibs/?.lua;</span><br><span class="line">/data/data/com.touchsprite.android/files/tslibs/?/?.lua;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/data/data/?.so;</span><br><span class="line">/data/data/com.touchsprite.android/files/tslibs/?.so;</span><br><span class="line">/data/data/com.touchsprite.android/files/plugin/?.so;</span><br><span class="line">/data/data/?.so;</span><br><span class="line">/sdcard/TouchSprite/lua/?.so;</span><br></pre></td></tr></table></figure>
+<h1 id="关于http-post-文件"><a href="#关于http-post-文件" class="headerlink" title="关于http.post 文件"></a>关于http.post 文件</h1><p>触动有三个地方提供了 http 相关的操作。</p>
+<h2 id="TSLib"><a href="#TSLib" class="headerlink" title="TSLib"></a>TSLib</h2><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> url = <span class="string">'http://www.baidu.com'</span></span><br><span class="line">data = <span class="string">"abcdbef"</span>,</span><br><span class="line">options = &#123;</span><br><span class="line">    tstab = <span class="number">1</span>,</span><br><span class="line">    timeOut = <span class="number">10</span>,</span><br><span class="line">    urlEnCode = <span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">local</span> str = httpPost(url, data, options)</span><br></pre></td></tr></table></figure>
+<p>这个不能指定头部等内容</p>
+<h2 id="ts-so"><a href="#ts-so" class="headerlink" title="ts.so"></a>ts.so</h2><p>这个就可以指定头部，和直接用 lua 表来进行作为参数了</p>
+<h3 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h3><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> ts = <span class="built_in">require</span>(<span class="string">"ts"</span>)</span><br><span class="line">header_send = &#123;typeget = <span class="string">"iOS"</span>&#125;</span><br><span class="line">body_send = &#123;</span><br><span class="line">    [<span class="string">"username"</span>] = <span class="string">"aa"</span>,</span><br><span class="line">    [<span class="string">"password"</span>] = <span class="string">"1234"</span></span><br><span class="line">&#125;</span><br><span class="line">ts.setHttpsTimeOut(<span class="number">60</span>)</span><br><span class="line">code, status_resp, body_resp = ts.httpsPost(<span class="string">"https://www.baidu.com"</span>, header_send, body_send)</span><br></pre></td></tr></table></figure>
+<h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">--Android 脚本实例</span></span><br><span class="line"><span class="keyword">local</span> ts = <span class="built_in">require</span>(<span class="string">"ts"</span>)</span><br><span class="line">data = &#123;</span><br><span class="line">    tstab = <span class="string">"tstab"</span>,</span><br><span class="line">    header_send = &#123;typeget = <span class="string">"android"</span>&#125;,</span><br><span class="line">    body_send = &#123;id = <span class="string">"687"</span>&#125;,</span><br><span class="line">    <span class="built_in">format</span> = <span class="string">"gbk"</span></span><br><span class="line">&#125;</span><br><span class="line">code, header_resp, body_resp = ts.httpsPost(<span class="string">"http://whois.pconline.com.cn/ip.jsp"</span>, data)</span><br></pre></td></tr></table></figure>
+<h2 id="tsnet-so"><a href="#tsnet-so" class="headerlink" title="tsnet.so"></a>tsnet.so</h2><p>这个高级库，需要购买VIP才能用，或者是IOS 专业版，放弃他。</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">"tsnet"</span>)</span><br><span class="line"><span class="built_in">status</span>, header, content =</span><br><span class="line">    http.post(</span><br><span class="line">    <span class="string">"https://whois.pconline.com.cn/ip.jsp"</span>,</span><br><span class="line">    &#123;</span><br><span class="line">        headers = &#123;aaa = <span class="number">123</span>, cd = <span class="number">12</span>&#125;,</span><br><span class="line">        params = &#123;aaa = <span class="number">111</span>, bbb = <span class="number">222</span>&#125;,</span><br><span class="line">        opts = &#123;charset = <span class="string">"gbk"</span>&#125;</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>但这几个都没有解决一个问题：对于文件是如何处理的？是将文件直接传递文件描述符，还是需要手动进行转换成分段的形式进行传输呢？</p>
+<h2 id="问题的解决"><a href="#问题的解决" class="headerlink" title="问题的解决"></a>问题的解决</h2><h2 id="tsnet-so-1"><a href="#tsnet-so-1" class="headerlink" title="tsnet.so"></a>tsnet.so</h2><p>使用 ltn12, multipart-post 来解决。</p>
+<p>multipart-post 用来将文件封装成 multipart 格式，然后调用  tsnet 的API进行上传：</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">"tsnet"</span>)</span><br><span class="line"><span class="keyword">local</span> enc = (<span class="built_in">require</span> <span class="string">"multipart-post"</span>).encode</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">uploadfile</span><span class="params">(url, filepath)</span></span></span><br><span class="line">    <span class="keyword">local</span> body, boundary = enc &#123;file = &#123;data = <span class="built_in">io</span>.<span class="built_in">open</span>(filepath)&#125;&#125;</span><br><span class="line">    <span class="keyword">local</span> headers = &#123;</span><br><span class="line">        [<span class="string">"content-length"</span>] = #body,</span><br><span class="line">        [<span class="string">"content-type"</span>] = <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"multipart/form-data; boundary=%s"</span>, boundary)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">print</span>(body)</span><br><span class="line">    <span class="keyword">return</span> http.post(</span><br><span class="line">        url,</span><br><span class="line">        &#123;</span><br><span class="line">            headers = headers,</span><br><span class="line">            params = body,</span><br><span class="line">            opts = &#123;charset = <span class="string">"gbk"</span>&#125;</span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">status</span>, header, content = uploadfile(<span class="string">"http://oss.888ce.cn:8081/mz/oss/pic/upload/scriptImg"</span>, <span class="string">"1.png"</span>)</span><br><span class="line">dialog(<span class="built_in">status</span>)</span><br><span class="line">dialog(content)</span><br></pre></td></tr></table></figure>
+<h2 id="ts-so-1"><a href="#ts-so-1" class="headerlink" title="ts.so"></a>ts.so</h2><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">"ts"</span>)</span><br><span class="line"><span class="keyword">local</span> enc = (<span class="built_in">require</span> <span class="string">"multipart-post"</span>).encode</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">uploadfile</span><span class="params">(url, filepath)</span></span></span><br><span class="line">    <span class="keyword">local</span> body, boundary = enc &#123;file = &#123;data = <span class="built_in">io</span>.<span class="built_in">open</span>(filepath)&#125;&#125;</span><br><span class="line">    <span class="keyword">local</span> headers = &#123;</span><br><span class="line">    		typeget=<span class="string">'android'</span>,</span><br><span class="line">        [<span class="string">"content-length"</span>] = #body,</span><br><span class="line">        [<span class="string">"content-type"</span>] = <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"multipart/form-data; boundary=%s"</span>, boundary)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ts.httpPost(</span><br><span class="line">        url,</span><br><span class="line">        &#123;</span><br><span class="line">      			tstab=<span class="string">'tstab'</span>,</span><br><span class="line">            header_send = headers,</span><br><span class="line">            body_send = body,</span><br><span class="line">            <span class="built_in">format</span> = <span class="string">'gbk'</span></span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">status</span>, header, content = uploadfile(<span class="string">"http://oss.888ce.cn:8081/mz/oss/pic/upload/scriptImg"</span>, <span class="string">"1.png"</span>)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Lua/" rel="tag"># Lua</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/macOS/Parallels虚拟机无法使用lt2p网络的问题.html" rel="next" title="Parallels虚拟机无法使用lt2p网络的问题">
+                  <i class="fa fa-chevron-left"></i> Parallels虚拟机无法使用lt2p网络的问题
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/Python/Python编码中的一些实用片段.html" rel="prev" title="Python编码中的一些实用片段">
+                  Python编码中的一些实用片段 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#库路径"><span class="nav-number">1.</span> <span class="nav-text">库路径</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于http-post-文件"><span class="nav-number">2.</span> <span class="nav-text">关于http.post 文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TSLib"><span class="nav-number">2.1.</span> <span class="nav-text">TSLib</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ts-so"><span class="nav-number">2.2.</span> <span class="nav-text">ts.so</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#iOS"><span class="nav-number">2.2.1.</span> <span class="nav-text">iOS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android"><span class="nav-number">2.2.2.</span> <span class="nav-text">Android</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tsnet-so"><span class="nav-number">2.3.</span> <span class="nav-text">tsnet.so</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#问题的解决"><span class="nav-number">2.4.</span> <span class="nav-text">问题的解决</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tsnet-so-1"><span class="nav-number">2.5.</span> <span class="nav-text">tsnet.so</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ts-so-1"><span class="nav-number">2.6.</span> <span class="nav-text">ts.so</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">354</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">146</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Lua/触动精灵相关资料.html",
+            identifier: "Lua/触动精灵相关资料.html",
+            title: "触动精灵相关资料"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>

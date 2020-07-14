@@ -225,6 +225,411 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/LVM的介绍及使用.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Linux-Unix/LVM的介绍及使用.html" class="post-title-link" itemprop="url">LVM的介绍及使用</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-03-14 07:28:23" itemprop="dateCreated datePublished" datetime="2018-03-14T07:28:23+08:00">2018-03-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/LVM的介绍及使用.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/LVM的介绍及使用.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>LVM是Linux内核中的一个 逻辑卷组管理工具；其管理磁盘驱动器或类似的块存储设备。其利用了内核的 <code>device-mapper</code> 特性来给系统提供独立于底层磁盘的分区。使用LVM，抽象了你的存储然后拥有的是<em>虚拟分区</em>，这使 <em>扩展/收缩</em> 更加容易。</p>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><ul>
+<li><p>物理卷（PV/Physical volume）<br>可在其上建立卷组的分区或硬盘。每个PV都有一个特殊的头部，并且被分隔成PE。把PV想象成用来建立硬盘驱动的巨大块。</p>
+</li>
+<li><p>卷组（VG/Volume group）<br>一组用来当作存储卷的PV（像一个硬盘一样提供服务）。其包含LV。可以把vg想象成硬盘驱动器。</p>
+</li>
+<li>逻辑卷（LV、Logical volume）<br>存在于卷组内的<code>虚拟/逻辑 分区</code>，由PE组成。把PV想象成常规分区。</li>
+<li>物理扩展（PE、Physical extend）<br>PV中的最小单位，可以被分配给LV（默认是 4MB）。PE是硬盘的一部分，然后可以被分配给任何分区。</li>
+</ul>
+<p>例子<br><img src="/res/Lvm-1.svg" alt="Various elements of the LVM"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Physical disks</span><br><span class="line">                </span><br><span class="line">  Disk1 (/dev/sda):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Partition1 50 GiB (Physical volume) |Partition2 80 GiB (Physical volume)     |</span><br><span class="line">    |/dev/sda1                           |/dev/sda2                               |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ |</span><br><span class="line">                                  </span><br><span class="line">  Disk2 (/dev/sdb):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Partition1 120 GiB (Physical volume)                 |</span><br><span class="line">    |/dev/sdb1                                            |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">LVM logical volumes</span><br><span class="line"></span><br><span class="line">  Volume Group1 (/dev/MyStorage/ = /dev/sda1 + /dev/sda2 + /dev/sdb1):</span><br><span class="line">     _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _</span><br><span class="line">    |Logical volume1 15 GiB  |Logical volume2 35 GiB      |Logical volume3 200 GiB              |</span><br><span class="line">    |/dev/MyStorage/rootvol  |/dev/MyStorage/homevol      |/dev/MyStorage/mediavol              |</span><br><span class="line">    |_ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ |_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|</span><br><span class="line">```   </span><br><span class="line"> </span><br><span class="line">![nner workings of the version 1 of LVM. In this diagram, PE stands for a Physical Extent.](/res/500px-LVM1.svg.png)</span><br><span class="line"></span><br><span class="line"># LV类型</span><br><span class="line">除了简单的LV外，LVM支持 *snapshots（快照）、LV缓存（logical volume caching）、预分配的LV、RAID*，</span><br><span class="line"></span><br><span class="line">## Snapshots（快照）</span><br><span class="line">LVM允许你对系统以一个更效率的方式做快照。其利用了一种叫做 **COW（copy-on-write）**技术。初始建立的快照只是简单的包含对真实数据inodes的 **硬链接**。因此，如果数据一直没有改变，快照几乎只是包含了Inode的指针，而不是数据本身。当修改一个快照指向的文件或者目录，LVM会自动克隆被快照引用老的数据。所以，可以使用35GB来快照一个系统，当预计修改少于2GB的时候，可以只留下2G的空闲空间（在原始和快照分区上都要）。想要创建快照，必须在 VG内有未分配的空间。快照也会像其他卷一样消耗VG的空间。因此，如果想要使用快照来备份 root 分区，那么不要把VG的空间全部分配给 root LV。</span><br><span class="line"></span><br><span class="line">### 配置</span><br><span class="line">如此简单的就可以建立一个 快照LV：</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line">lvcreate --size 100M --snapshot --name snap01 /dev/mapper/vg0-vg</span><br></pre></td></tr></table></figure>
+<p>上面建立这个快照，在快照卷充满以前我们只能修改100M的数据。</p>
+<p>当 <em>snap01</em> 建立后就可以把 <em>pv</em> 这个LV恢复到之前的状态：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">lvconvert --merge /dev/mapper/vg0-snap01</span><br></pre></td></tr></table></figure>
+<p>如果原始的LV是活跃的，合并会在下一次重启时发生。</p>
+<p>合并后 快照不会继续存在。</p>
+<p>可以建立多个快照，然后每个都可以任意合并到原始的LV。</p>
+<p>快照可以挂载或以 <code>dd, tar</code> 命令备份。以 <code>dd</code> 备份的文件尺寸将会是 快照卷内存在的数据尺寸。想要恢复的时候，建立一个快照，挂载，接着把备份的文件解压过去。最后，和原始的LV合并。</p>
+<p>快照的主要用途是用来提供对文件系统的冷备份。</p>
+<h1 id="简单命令"><a href="#简单命令" class="headerlink" title="简单命令"></a>简单命令</h1><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">lvmdiskscan  <span class="comment"># list all your devices capable of being used as a physical volume</span></span><br><span class="line">pvcreate DEVICE <span class="comment"># Create a physical volume on them</span></span><br><span class="line">pvcreate /dev/sda2 <span class="comment"># </span></span><br><span class="line">pvdisplay <span class="comment"># track created physical volumes</span></span><br><span class="line"></span><br><span class="line">vgcreate VolGroup00 /dev/sda2 <span class="comment"># create vg on pvs</span></span><br><span class="line">vgextend VolGroup00 /dev/sdb1 <span class="comment"># add vg /dev/sdb1 to vg VolGroup00</span></span><br><span class="line">vgdisplay <span class="comment"># track vg</span></span><br><span class="line"></span><br><span class="line">vgcreate VolGroup00 /</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/rsync进行数据同步.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Linux-Unix/rsync进行数据同步.html" class="post-title-link" itemprop="url">rsync进行数据同步</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-03-12 09:19:02" itemprop="dateCreated datePublished" datetime="2018-03-12T09:19:02+08:00">2018-03-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/rsync进行数据同步.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/rsync进行数据同步.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>rsync是一个快速，灵活的可用来替代rcp的工具，但是其有更多的选项和使用 rsync 远程更新协议来提高已更新文件的传输速度。</p>
+<p>rsync远程更新协议允许rsync只传输文件中的不同，使用一种校验和搜索算法。</p>
+<h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><ul>
+<li>支持复制链接，设备，所有者，组及权限</li>
+<li>类似GNU tar 的排除选项</li>
+<li>类似 CVS 的排除模式</li>
+<li>可以使用透明的远程shell，包括 ssh/rsh</li>
+<li>不需要特权</li>
+<li>文件传输管道最小化了开销</li>
+<li>支持匿名或授权的rsync守护进程</li>
+</ul>
+<h1 id="一般说明"><a href="#一般说明" class="headerlink" title="一般说明"></a>一般说明</h1><p>Rsync从远程主机复制文件或复制文件到远程主机，或只是在本地主机上复制文件（不支持在两个远程主机间复制文件）。</p>
+<p>有两种不同的方式来远程主机：使用远程-shell来作为传输（ssh,rsh），或者通过 TCP来联系rsync服务。当源或目标主机标识的路径包含一个 <code>:</code> 的时候会使用远程shell。当源或目标主机后的路径包含两个 <code>::</code> 的时候就会直接与远程的rsync服务通信，或者 <code>rsync://</code> 链接被指定也是一样（查看<code>通过远程-shell连接使用 rsync-服务特性</code>来查看例外）。</p>
+<p>作为一个特殊情况，如果单独一个源参数，没有目标参数，那么会输出一个列表，类似<code>ls -l</code></p>
+<p>如果源或目标都没有指定一个远程主机的话，那只是在本地进行复制。</p>
+<h1 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h1><p>查看 <strong>README</strong> 了解安装指令。</p>
+<p>安装后，你可以有rsync联系任何可以通过远程shell访问的机器（包括 rsync 服务模式协议的机器）。对于远程传输，现代的rsync使用 ssh 来进行通信，默认情况下可能已经配置成了不同的shell，如 rsh/remsh。</p>
+<p>可以指定我们自己喜欢的远程shell，使用 <code>-e</code> 命令行选项， 或设置 <code>RSYNC_RSH</code> 环境变量。</p>
+<blockquote>
+<p>rsync 必须在源或目标机器上都安装。</p>
+</blockquote>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>可以以类似 rcp 的方式使用 rsync，必须指定源和目标，其中一个可能会是远程主机。</p>
+<p>也许最好的方式是以实际的例子进行展示：</p>
+<pre><code>rsync -t *.c foo:src/
+</code></pre><p>这将会传输任何匹配 <code>*.c</code> 格式的文件到机器foo上的 src 目录内。如果foo机器上有些文件已经存在，那么rsync会使用远程更新协议来发送不同的部分。</p>
+<pre><code>rsync -avz foo:src/bar /data/tmp
+</code></pre><p>这会递归将远程foo机器上，src/bar 目录 传输到 /data/tmp/bar。文件以<code>archive</code>模式传输，这能确保 符号链接，设备文件，属性，权限，所有信息都被完整传输。同时，使用压缩可以减少传输的数据量。</p>
+<pre><code>rsync -avz foo:src/bar/ /data/tmp
+</code></pre><p>源后拖尾的 <code>/</code> 改变了行为，将不会在目标上建立一个目录。</p>
+<h1 id="使用-1"><a href="#使用-1" class="headerlink" title="使用"></a>使用</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Usage: rsync [OPTION]... SRC [SRC]... DEST</span><br><span class="line">  or   rsync [OPTION]... SRC [SRC]... [USER@]HOST:DEST</span><br><span class="line">  or   rsync [OPTION]... SRC [SRC]... [USER@]HOST::DEST</span><br><span class="line">  or   rsync [OPTION]... SRC [SRC]... rsync://[USER@]HOST[:PORT]/DEST</span><br><span class="line">  or   rsync [OPTION]... [USER@]HOST:SRC [DEST]</span><br><span class="line">  or   rsync [OPTION]... [USER@]HOST::SRC [DEST]</span><br><span class="line">  or   rsync [OPTION]... rsync://[USER@]HOST[:PORT]/SRC [DEST]</span><br><span class="line">The &apos;:&apos; usages connect via remote shell, while &apos;::&apos; &amp; &apos;rsync://&apos; usages connect</span><br><span class="line">to an rsync daemon, and require SRC or DEST to start with a module name.</span><br><span class="line"></span><br><span class="line">Options</span><br><span class="line"> -v, --verbose               increase verbosity</span><br><span class="line"> -q, --quiet                 suppress non-error messages</span><br><span class="line">     --no-motd               suppress daemon-mode MOTD (see manpage caveat)</span><br><span class="line"> -c, --checksum              skip based on checksum, not mod-time &amp; size</span><br><span class="line"> -a, --archive               archive mode; same as -rlptgoD (no -H)</span><br><span class="line">     --no-OPTION             turn off an implied OPTION (e.g. --no-D)</span><br><span class="line"> -r, --recursive             recurse into directories</span><br><span class="line"> -R, --relative              use relative path names</span><br><span class="line">     --no-implied-dirs       don&apos;t send implied dirs with --relative</span><br><span class="line"> -b, --backup                make backups (see --suffix &amp; --backup-dir)</span><br><span class="line">     --backup-dir=DIR        make backups into hierarchy based in DIR</span><br><span class="line">     --suffix=SUFFIX         set backup suffix (default ~ w/o --backup-dir)</span><br><span class="line"> -u, --update                skip files that are newer on the receiver</span><br><span class="line">     --inplace               update destination files in-place (SEE MAN PAGE)</span><br><span class="line">     --append                append data onto shorter files</span><br><span class="line"> -d, --dirs                  transfer directories without recursing</span><br><span class="line"> -l, --links                 copy symlinks as symlinks</span><br><span class="line"> -L, --copy-links            transform symlink into referent file/dir</span><br><span class="line">     --copy-unsafe-links     only &quot;unsafe&quot; symlinks are transformed</span><br><span class="line">     --safe-links            ignore symlinks that point outside the source tree</span><br><span class="line"> -k, --copy-dirlinks         transform symlink to a dir into referent dir</span><br><span class="line"> -K, --keep-dirlinks         treat symlinked dir on receiver as dir</span><br><span class="line"> -H, --hard-links            preserve hard links</span><br><span class="line"> -p, --perms                 preserve permissions</span><br><span class="line">     --executability         preserve the file&apos;s executability</span><br><span class="line">     --chmod=CHMOD           affect file and/or directory permissions</span><br><span class="line"> -o, --owner                 preserve owner (super-user only)</span><br><span class="line"> -g, --group                 preserve group</span><br><span class="line">     --devices               preserve device files (super-user only)</span><br><span class="line">     --specials              preserve special files</span><br><span class="line"> -D                          same as --devices --specials</span><br><span class="line"> -t, --times                 preserve times</span><br><span class="line"> -O, --omit-dir-times        omit directories when preserving times</span><br><span class="line">     --super                 receiver attempts super-user activities</span><br><span class="line"> -S, --sparse                handle sparse files efficiently</span><br><span class="line"> -n, --dry-run               show what would have been transferred</span><br><span class="line"> -W, --whole-file            copy files whole (without rsync algorithm)</span><br><span class="line"> -x, --one-file-system       don&apos;t cross filesystem boundaries</span><br><span class="line"> -B, --block-size=SIZE       force a fixed checksum block-size</span><br><span class="line"> -e, --rsh=COMMAND           specify the remote shell to use</span><br><span class="line">     --rsync-path=PROGRAM    specify the rsync to run on the remote machine</span><br><span class="line">     --existing              skip creating new files on receiver</span><br><span class="line">     --ignore-existing       skip updating files that already exist on receiver</span><br><span class="line">     --remove-source-files   sender removes synchronized files (non-dirs)</span><br><span class="line">     --del                   an alias for --delete-during</span><br><span class="line">     --delete                delete extraneous files from destination dirs</span><br><span class="line">     --delete-before         receiver deletes before transfer (default)</span><br><span class="line">     --delete-during         receiver deletes during transfer, not before</span><br><span class="line">     --delete-after          receiver deletes after transfer, not before</span><br><span class="line">     --delete-excluded       also delete excluded files from destination dirs</span><br><span class="line">     --ignore-errors         delete even if there are I/O errors</span><br><span class="line">     --force                 force deletion of directories even if not empty</span><br><span class="line">     --max-delete=NUM        don&apos;t delete more than NUM files</span><br><span class="line">     --max-size=SIZE         don&apos;t transfer any file larger than SIZE</span><br><span class="line">     --min-size=SIZE         don&apos;t transfer any file smaller than SIZE</span><br><span class="line">     --partial               keep partially transferred files</span><br><span class="line">     --partial-dir=DIR       put a partially transferred file into DIR</span><br><span class="line">     --delay-updates         put all updated files into place at transfer&apos;s end</span><br><span class="line"> -m, --prune-empty-dirs      prune empty directory chains from the file-list</span><br><span class="line">     --numeric-ids           don&apos;t map uid/gid values by user/group name</span><br><span class="line">     --timeout=TIME          set I/O timeout in seconds</span><br><span class="line"> -I, --ignore-times          don&apos;t skip files that match in size and mod-time</span><br><span class="line">     --size-only             skip files that match in size</span><br><span class="line">     --modify-window=NUM     compare mod-times with reduced accuracy</span><br><span class="line"> -T, --temp-dir=DIR          create temporary files in directory DIR</span><br><span class="line"> -y, --fuzzy                 find similar file for basis if no dest file</span><br><span class="line">     --compare-dest=DIR      also compare destination files relative to DIR</span><br><span class="line">     --copy-dest=DIR         ... and include copies of unchanged files</span><br><span class="line">     --link-dest=DIR         hardlink to files in DIR when unchanged</span><br><span class="line"> -z, --compress              compress file data during the transfer</span><br><span class="line">     --compress-level=NUM    explicitly set compression level</span><br><span class="line"> -C, --cvs-exclude           auto-ignore files the same way CVS does</span><br><span class="line"> -f, --filter=RULE           add a file-filtering RULE</span><br><span class="line"> -F                          same as --filter=&apos;dir-merge /.rsync-filter&apos;</span><br><span class="line">                             repeated: --filter=&apos;- .rsync-filter&apos;</span><br><span class="line">     --exclude=PATTERN       exclude files matching PATTERN</span><br><span class="line">     --exclude-from=FILE     read exclude patterns from FILE</span><br><span class="line">     --include=PATTERN       don&apos;t exclude files matching PATTERN</span><br><span class="line">     --include-from=FILE     read include patterns from FILE</span><br><span class="line">     --files-from=FILE       read list of source-file names from FILE</span><br><span class="line"> -0, --from0                 all *-from/filter files are delimited by 0s</span><br><span class="line">     --address=ADDRESS       bind address for outgoing socket to daemon</span><br><span class="line">     --port=PORT             specify double-colon alternate port number</span><br><span class="line">     --sockopts=OPTIONS      specify custom TCP options</span><br><span class="line">     --blocking-io           use blocking I/O for the remote shell</span><br><span class="line">     --stats                 give some file-transfer stats</span><br><span class="line"> -8, --8-bit-output          leave high-bit chars unescaped in output</span><br><span class="line"> -h, --human-readable        output numbers in a human-readable format</span><br><span class="line">     --progress              show progress during transfer</span><br><span class="line"> -P                          same as --partial --progress</span><br><span class="line"> -i, --itemize-changes       output a change-summary for all updates</span><br><span class="line">     --out-format=FORMAT     output updates using the specified FORMAT</span><br><span class="line">     --log-file=FILE         log what we&apos;re doing to the specified FILE</span><br><span class="line">     --log-file-format=FMT   log updates using the specified FMT</span><br><span class="line">     --password-file=FILE    read password from FILE</span><br><span class="line">     --list-only             list the files instead of copying them</span><br><span class="line">     --bwlimit=KBPS          limit I/O bandwidth; KBytes per second</span><br><span class="line">     --write-batch=FILE      write a batched update to FILE</span><br><span class="line">     --only-write-batch=FILE like --write-batch but w/o updating destination</span><br><span class="line">     --read-batch=FILE       read a batched update from FILE</span><br><span class="line">     --protocol=NUM          force an older protocol version to be used</span><br><span class="line"> -E, --extended-attributes   copy extended attributes</span><br><span class="line">     --cache                 disable fcntl(F_NOCACHE)</span><br><span class="line"> -4, --ipv4                  prefer IPv4</span><br><span class="line"> -6, --ipv6                  prefer IPv6</span><br><span class="line">     --version               print version number</span><br><span class="line">(-h) --help                  show this help (-h works with no other options)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/MySQL二进制日志格式.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/数据库/MySQL二进制日志格式.html" class="post-title-link" itemprop="url">MySQL二进制日志格式</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-03-08 23:45:43" itemprop="dateCreated datePublished" datetime="2018-03-08T23:45:43+08:00">2018-03-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/数据库/MySQL二进制日志格式.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/MySQL二进制日志格式.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我们都知道二进制日志是一个非常好的习惯和工具。其可以用来进行恢复数据到某一时间点，或重放整个数据的变更过程，但其实这里面还有不少学问。</p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>二进制日志包含的是描述数据库改变（比如表建立或表数据修改）的事件。在使用 <strong>基于行</strong> 的日志格式时也会包含可能会改变数据的事件（如 <code>DELETE</code>语句，但并无匹配行）。二进制日志也会记录每个语句更新数据所消耗的时间。二进制日志的设计，有两个重要的目标：</p>
+<ul>
+<li>复制，二进制日志记录了在主服务器上数据变更记录，用来发送给从服务器。主服务器会把二进制日志中的事件发送给从服务器，然后在从服务器上再次执行。</li>
+<li>一些数据恢复操作需要二进制日志。在一个备份恢复后，二进制日志中在此备份后的事件可以被重新执行。这能保证让数据库从备份时恢复到最新状态。</li>
+</ul>
+<p>二进制日志并不会记录类似 <code>select, show</code>这些不会改变数据的语句。</p>
+<p>开启二进制日志会使服务器性能轻微下降，但开启这个日志来设置从服务器和数据恢复的好处远远大过了性能的降低。</p>
+<p>要保护好二进制日志，因为记录的语句中可能会含有密码。</p>
+<h1 id="二进制日志格式"><a href="#二进制日志格式" class="headerlink" title="二进制日志格式"></a>二进制日志格式</h1><p>二进制日志有几种格式。</p>
+<ul>
+<li>基于语句的日志格式。选项 <code>--binlog-format=STATEMENT</code></li>
+<li>基于行的格式。主服务器将表示每个单独表行受影响的事件写入二进制日志。选项<code>--binlog-format=ROW</code></li>
+<li>混合格式。当设置这个选项<code>--bilong-format=MIXED</code>，默认会使用 基于行的格式，但在某些情况下会自动切换为基于语句的格式。</li>
+</ul>
+<p>在MySQL5.5中，默认的二进制日志格式是 STATEMET。</p>
+<p>日志格式可以被存储引擎设置或限制。这用来避免在使用不同存储引擎的主从服务器在执行特定语句时的问题。</p>
+<p>在基于语句的复制中，<strong>在复制非确定性的语句时可能会出现问题</strong>。在确定一个语句使用基于语句的复制是否安全时，MySQL会确定能不能保证这个语句可以用基于语句的格式进行复制。如果不能保证，则会抛出警告。为了避免这个问题，可以采用基于行的复制。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html" class="post-title-link" itemprop="url">Cocos2d-X-lua中关于类的实现及使用</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-02-26 14:53:59" itemprop="dateCreated datePublished" datetime="2018-02-26T14:53:59+08:00">2018-02-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cocos2d-X/" itemprop="url" rel="index">
+                    <span itemprop="name">Cocos2d-X</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Lua中，没有什么其他的数据对象，只有表。但是其提供的元表和元方法，让我们的程序有了更多的可能。另外，我们必须明白一点的就是，cocos2dx框架中，开启了一个Lua State，我们所有的脚本，逻辑都是在这里面执行，然后这个里面会调用一些 cocos2dx 导出给 lua 使用的接口，最终还是通过 c 代码来完成工作的。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos2d-X/cocos2dx-lua的启动流程.lua.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -811,371 +1216,11 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/skynet中的网络服务与消息处理.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Lua/skynet中的网络服务与消息处理.html" class="post-title-link" itemprop="url">skynet中的网络服务与消息处理</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-02-13 18:07:32" itemprop="dateCreated datePublished" datetime="2018-02-13T18:07:32+08:00">2018-02-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Lua/" itemprop="url" rel="index">
-                    <span itemprop="name">Lua</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Lua/skynet中的网络服务与消息处理.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/skynet中的网络服务与消息处理.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>网络信息与普通消息的封装似乎有所不同，所以关注一下这个过程是非常的有必要的。我们先从网络服务的注册开始说起。skynet封装了一个socket库作为Lua模块来给我们使用。我们可以看一下对于一个socket的注册是怎么样的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Lua/skynet中的网络服务与消息处理.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/skynet中服务分析(wathchdog,gate,snxa.gateserver).html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Lua/skynet中服务分析(wathchdog,gate,snxa.gateserver).html" class="post-title-link" itemprop="url">skynet中服务分析(wathchdog,gate,snxa.gateserver)</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-02-13 16:29:56" itemprop="dateCreated datePublished" datetime="2018-02-13T16:29:56+08:00">2018-02-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Lua/" itemprop="url" rel="index">
-                    <span itemprop="name">Lua</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Lua/skynet中服务分析(wathchdog,gate,snxa.gateserver).html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/skynet中服务分析(wathchdog,gate,snxa.gateserver).html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>其实对于服务还是有些迷惑。比如在skynet.wiki中说到，<em>gate</em>服务，是<em>snax.gateserver</em>的一个实现，然后watchdog又是gate的一个使用。看了一下代码确实有点头疼，现在来从头分析一下。<br>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Lua/skynet中服务分析(wathchdog,gate,snxa.gateserver).html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.9Lua中的闭包.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Lua/PIL.9Lua中的闭包.html" class="post-title-link" itemprop="url">PIL.9Lua中的闭包</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-02-12 09:14:15" itemprop="dateCreated datePublished" datetime="2018-02-12T09:14:15+08:00">2018-02-12</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Lua/" itemprop="url" rel="index">
-                    <span itemprop="name">Lua</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Lua/PIL.9Lua中的闭包.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/PIL.9Lua中的闭包.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Lua中的函数是 <strong>第一类</strong>的值加上合适的<strong>词法域</strong>。那么，函数是<strong>第一类值</strong>意味着什么呢？这是说，在Lua中，一个函数，就是一个和 数字或字符串一样具有某些权限的值。一个程序可以把函数存储在变量中（全局或者局部都可以）和表中，把函数作为参数传递给其他函数，或者以函数作为值返回。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Lua/PIL.9Lua中的闭包.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos2d-X/cocos2dx-基本概念.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Cocos2d-X/cocos2dx-基本概念.html" class="post-title-link" itemprop="url">Cocos2d-X-基本概念</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-02-11 14:23:18" itemprop="dateCreated datePublished" datetime="2018-02-11T14:23:18+08:00">2018-02-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Cocos2d-X/" itemprop="url" rel="index">
-                    <span itemprop="name">Cocos2d-X</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Cocos2d-X/cocos2dx-基本概念.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cocos2d-X/cocos2dx-基本概念.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>游戏其实是对画面、文字、动作、剧情的展示。无论是MMORPG还是小小的游戏，都需要有这样的表达方式。而cocos2d就是通过你来给砖头，他来建房子的这样一个东西。当然，其实我喜欢Lua但是其对Lua的文档实在是太少，只能自己摸索了。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Cocos2d-X/cocos2dx-基本概念.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/27/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><span class="page-number current">28</span><a class="page-number" href="/page/29/">29</a><span class="space">&hellip;</span><a class="page-number" href="/page/35/">35</a><a class="extend next" rel="next" href="/page/29/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <a class="extend prev" rel="prev" href="/page/27/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><span class="page-number current">28</span><a class="page-number" href="/page/29/">29</a><span class="space">&hellip;</span><a class="page-number" href="/page/36/">36</a><a class="extend next" rel="next" href="/page/29/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1219,7 +1264,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">350</span>
+          <span class="site-state-item-count">354</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1232,7 +1277,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">143</span>
+        <span class="site-state-item-count">146</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
