@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="从 FluffOS的简单架构分析 中我们知道，Fluffos 实际上分为 driver 和 VM 两层，但其实更确切的说的话，在 driver 内还可以分为网络通信层，驱动与VM 的接口层这样。不过，暂时不用分那么细来理解就够了。">
+<meta name="keywords" content="Mud,FluffOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fluffos中的Apply与efuns">
+<meta property="og:url" content="https://gowa.club/Mud/Fluffos中的Apply与efuns.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="从 FluffOS的简单架构分析 中我们知道，Fluffos 实际上分为 driver 和 VM 两层，但其实更确切的说的话，在 driver 内还可以分为网络通信层，驱动与VM 的接口层这样。不过，暂时不用分那么细来理解就够了。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-07-15T15:59:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fluffos中的Apply与efuns">
+<meta name="twitter:description" content="从 FluffOS的简单架构分析 中我们知道，Fluffos 实际上分为 driver 和 VM 两层，但其实更确切的说的话，在 driver 内还可以分为网络通信层，驱动与VM 的接口层这样。不过，暂时不用分那么细来理解就够了。">
+
+<link rel="canonical" href="https://gowa.club/Mud/Fluffos中的Apply与efuns.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Fluffos中的Apply与efuns | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Mud/Fluffos中的Apply与efuns.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Fluffos中的Apply与efuns
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-15 23:59:53" itemprop="dateCreated datePublished" datetime="2020-07-15T23:59:53+08:00">2020-07-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mud/" itemprop="url" rel="index">
+                    <span itemprop="name">Mud</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Mud/Fluffos中的Apply与efuns.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Mud/Fluffos中的Apply与efuns.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>从 <a href="/MUD/FluffOS的简单架构分析.html" title="FluffOS的简单架构分析">FluffOS的简单架构分析</a> 中我们知道，Fluffos 实际上分为 driver 和 VM 两层，但其实更确切的说的话，在 driver 内还可以分为网络通信层，驱动与VM 的接口层这样。不过，暂时不用分那么细来理解就够了。</p>
+<a id="more"></a>
+<h1 id="几个数据结构"><a href="#几个数据结构" class="headerlink" title="几个数据结构"></a>几个数据结构</h1><h2 id="interactive-t"><a href="#interactive-t" class="headerlink" title="interactive_t"></a>interactive_t</h2><p>这个代表的是一个可交互对象，也就是玩家 User 本身，在玩家进行网络连接的时候初始化。它会与一个 <code>object_t</code> 对象联系起来，还会保存此 User 所代表的，网络客户端上的 IP 端口等信息。</p>
+<p>在添加新的 User，连线的时候，其是与 <code>master_ob</code> 相联系在一起的，同时，它也会与一个 bufferevent 套接字相关联，当这个网络套接字上有数据或者事件的时候，就会拿到这个 <code>interactive_t</code> ，将逻辑转交到与其关联的 <code>object_t</code> 对象，也就是 LPC 内。</p>
+<h2 id="object-t"><a href="#object-t" class="headerlink" title="object_t"></a>object_t</h2><p>这个结构是一个 LPC 内对象的 C 层的表示，他会与一个编译后的 LPC 程序 <code>program_t</code> 相关联，也会保持对 <code>interactive_t</code> 的引用。</p>
+<h2 id="program-t"><a href="#program-t" class="headerlink" title="program_t"></a>program_t</h2><p>一段可执行的，编译后的 LPC 代码了。</p>
+<h2 id="sentence-t"><a href="#sentence-t" class="headerlink" title="sentence_t"></a>sentence_t</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">//object.h</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sentence_t</span> &#123;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> NO_ADD_ACTION</span></span><br><span class="line">  <span class="keyword">char</span> *verb;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">sentence_t</span> *<span class="title">next</span>;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">object_t</span> *<span class="title">ob</span>;</span></span><br><span class="line">  <span class="keyword">union</span> string_or_func function;</span><br><span class="line">  <span class="keyword">int</span> flags;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这个代表的是，一个用户输入岁的动词，与可执行的函数的绑定。</p>
+<p>如果绑定的是一个 object_t 的函数，会使用 apply 的形式调用。</p>
+<p>而如果就直接是一个函数指针，那么就直接调用就是了。</p>
+<h2 id="VM-的栈"><a href="#VM-的栈" class="headerlink" title="VM 的栈"></a>VM 的栈</h2><p>类似 Lua 的栈一样，这些函数调用，都是需要先将参数压入到栈上，然后由函数从栈上再去取的。同样，对于一个正在执行的 LPC　代码。</p>
+<p>其会记录一个　current_obj , current_prog 这两者有可能并不一致。</p>
+<h1 id="网络数据的传输执行过程"><a href="#网络数据的传输执行过程" class="headerlink" title="网络数据的传输执行过程"></a>网络数据的传输执行过程</h1><p>我们从用户输入数据到最终执行返回来看一次结构。我们知道，在用户进行连接的时候，就会建立一个 <code>interactive_t</code> 对象，然后会对此对象连接上来的套接子建立一个 bufferevent 结构，设置回调。</p>
+<p>添加新用户的时候还会设置一个命令处理器：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// comm.cc</span></span><br><span class="line">  <span class="comment">// Command handler</span></span><br><span class="line">  <span class="keyword">auto</span> base = evconnlistener_get_base(port-&gt;ev_conn);</span><br><span class="line">  user-&gt;ev_command = evtimer_new(base, on_user_command, user);</span><br></pre></td></tr></table></figure>
+<p>对于使用  telnet 会初始化一个 telnet 的处理器：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// comm.cc</span></span><br><span class="line">    <span class="keyword">if</span> (user-&gt;connection_type == PORT_TELNET) &#123;</span><br><span class="line">      user-&gt;telnet = net_telnet_init(user);</span><br><span class="line">      send_initial_telnet_negotiations(user);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// comm.cc</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">new_user_event_listener</span><span class="params">(event_base *base, <span class="keyword">interactive_t</span> *user)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">auto</span> bev =</span><br><span class="line">      bufferevent_socket_new(base, user-&gt;fd, BEV_OPT_CLOSE_ON_FREE | BEV_OPT_DEFER_CALLBACKS);</span><br><span class="line">  bufferevent_setcb(bev, on_user_read, on_user_write, on_user_events, user);</span><br><span class="line">  bufferevent_enable(bev, EV_READ | EV_WRITE);</span><br><span class="line"></span><br><span class="line">  bufferevent_set_timeouts(bev, <span class="literal">nullptr</span>, <span class="literal">nullptr</span>);</span><br><span class="line"></span><br><span class="line">  user-&gt;ev_buffer = bev;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="on-user-read"><a href="#on-user-read" class="headerlink" title="on_user_read"></a>on_user_read</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// comm.cc</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">on_user_read</span><span class="params">(bufferevent *bev, <span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">auto</span> user = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">interactive_t</span> *&gt;(arg);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (user == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">    fatal(<span class="string">"on_user_read: user == NULL, Driver BUG."</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Read user input</span></span><br><span class="line">  get_user_data(user);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// <span class="doctag">TODO:</span> currently get_user_data() will schedule command execution.</span></span><br><span class="line">  <span class="comment">// should probably move it here.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>针对用户的输入，会读取数据进行执行。最终都会对 <code>interactive_t</code> 这个结构上所关联的 <code>object_t</code> 进行 <code>apply()</code> 调用：</p>
+<p>对于使用  telnet 连接的，读取了数据后，就会触发定时器的执行：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// comm.cc</span></span><br><span class="line">    <span class="keyword">case</span> PORT_TELNET: &#123;</span><br><span class="line">      <span class="keyword">int</span> start = ip-&gt;text_end;</span><br><span class="line"></span><br><span class="line">      <span class="comment">// this will read data into ip-&gt;text</span></span><br><span class="line">      telnet_recv(ip-&gt;telnet, <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">const</span> <span class="keyword">char</span> *&gt;(&amp;buf[<span class="number">0</span>]), num_bytes);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// If we read something</span></span><br><span class="line">      <span class="keyword">if</span> (ip-&gt;text_end &gt; start) &#123;</span><br><span class="line">        <span class="comment">/* handle snooping - snooper does not see type-ahead due to</span></span><br><span class="line"><span class="comment">         telnet being in linemode */</span></span><br><span class="line">        <span class="keyword">if</span> (!(ip-&gt;iflags &amp; NOECHO)) &#123;</span><br><span class="line">          handle_snoop(ip-&gt;text + start, ip-&gt;text_end - start, ip);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// search for command.</span></span><br><span class="line">        <span class="keyword">if</span> (cmd_in_buf(ip)) &#123;</span><br><span class="line">          ip-&gt;iflags |= CMD_IN_BUF;</span><br><span class="line">          <span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> <span class="title">zero_sec</span> = &#123;</span><span class="number">0</span>, <span class="number">0</span>&#125;;</span><br><span class="line">          evtimer_del(ip-&gt;ev_command);</span><br><span class="line">          evtimer_add(ip-&gt;ev_command, &amp;zero_sec);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="on-user-command"><a href="#on-user-command" class="headerlink" title="on_user_command"></a>on_user_command</h3><p>在这里，会将用户的输入都解析，跳过一些不必要的命令和输入，然后调用 <code>process_input()</code></p>
+<h3 id="process-input"><a href="#process-input" class="headerlink" title="process_input"></a>process_input</h3><p>在这里才会解析命令。这个还要看，看所关联的 object_t 是不是有 <code>process_input</code> 这个方法。如果没有就在本地解析，如果有的话，就要压到 VM 里面去解析；在VM解析失败，还是会回到驱动层来解析。</p>
+<p>对于 ES2 来说，角色继承了 <code>alias.c</code> 这个对象，其具有 <code>process_input</code> 方法，所以先会走一遍，然后返回回来后，继续执行。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// comm.cc</span></span><br><span class="line">  <span class="keyword">if</span> (!(ip-&gt;iflags &amp; HAS_PROCESS_INPUT)) &#123;</span><br><span class="line">    parse_command(user_command, command_giver);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * send a copy of user input back to user object to provide</span></span><br><span class="line"><span class="comment">   * support for things like command history and mud shell</span></span><br><span class="line"><span class="comment">   * programming languages.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  copy_and_push_string(user_command);</span><br><span class="line">  ret = apply(APPLY_PROCESS_INPUT, command_giver, <span class="number">1</span>, ORIGIN_DRIVER);</span><br><span class="line">  <span class="keyword">if</span> (!IP_VALID(ip, command_giver)) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (!ret) &#123;</span><br><span class="line">    ip-&gt;iflags &amp;= ~HAS_PROCESS_INPUT;</span><br><span class="line">    parse_command(user_command, command_giver);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> NO_ADD_ACTION</span></span><br><span class="line">  <span class="keyword">if</span> (ret-&gt;type == T_STRING) &#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">char</span> buf[MAX_TEXT];</span><br><span class="line"></span><br><span class="line">    <span class="built_in">strncpy</span>(buf, ret-&gt;u.<span class="built_in">string</span>, MAX_TEXT - <span class="number">1</span>);</span><br><span class="line">    parse_command(buf, command_giver);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (ret-&gt;type != T_NUMBER || !ret-&gt;u.number) &#123;</span><br><span class="line">      parse_command(user_command, command_giver);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>parse_command</code> 最终会走到 <code>user_parser()</code> 这个函数去，这个函数，就是根据玩家的输入的命令找到一个 <code>sentence_t</code>，然后进行执行。</p>
+<h3 id="user-parser"><a href="#user-parser" class="headerlink" title="user_parser"></a>user_parser</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// add_action.cc</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">user_parser</span><span class="params">(<span class="keyword">char</span> *buff)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">char</span> verb_buff[MAX_VERB_BUFF];</span><br><span class="line">  <span class="keyword">sentence_t</span> *s;</span><br><span class="line">  <span class="keyword">char</span> *p;</span><br><span class="line">  <span class="keyword">int</span> length;</span><br><span class="line">  <span class="keyword">char</span> *user_verb = <span class="literal">nullptr</span>;</span><br><span class="line">  <span class="keyword">int</span> where;</span><br><span class="line">  <span class="keyword">int</span> save_illegal_sentence_action;</span><br><span class="line"></span><br><span class="line">  debug(add_action, <span class="string">"cmd [/%s]: '%s'\n"</span>, command_giver-&gt;obname, buff);</span><br><span class="line"></span><br><span class="line">  <span class="comment">/* strip trailing spaces. */</span></span><br><span class="line">  <span class="keyword">for</span> (p = buff + <span class="built_in">strlen</span>(buff) - <span class="number">1</span>; p &gt;= buff; p--) &#123;</span><br><span class="line">    <span class="keyword">if</span> (*p != <span class="string">' '</span>) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    *p = <span class="string">'\0'</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (buff[<span class="number">0</span>] == <span class="string">'\0'</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  length = p - buff + <span class="number">1</span>;</span><br><span class="line">  p = <span class="built_in">strchr</span>(buff, <span class="string">' '</span>);</span><br><span class="line">  <span class="keyword">if</span> (p == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">    user_verb = findstring(buff);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    *p = <span class="string">'\0'</span>;</span><br><span class="line">    user_verb = findstring(buff);</span><br><span class="line">    *p = <span class="string">' '</span>;</span><br><span class="line">    length = p - buff;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (!user_verb) &#123;</span><br><span class="line">    <span class="comment">/* either an xverb or a verb without a specific add_action */</span></span><br><span class="line">    user_verb = buff;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/*</span></span><br><span class="line"><span class="comment">   * copy user_verb into a static character buffer to be pointed to by</span></span><br><span class="line"><span class="comment">   * last_verb.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  <span class="built_in">strncpy</span>(verb_buff, user_verb, MAX_VERB_BUFF - <span class="number">1</span>);</span><br><span class="line">  <span class="keyword">if</span> (p) &#123;</span><br><span class="line">    <span class="keyword">int</span> pos;</span><br><span class="line"></span><br><span class="line">    pos = p - buff;</span><br><span class="line">    <span class="keyword">if</span> (pos &lt; MAX_VERB_BUFF) &#123;</span><br><span class="line">      verb_buff[pos] = <span class="string">'\0'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  save_illegal_sentence_action = illegal_sentence_action;</span><br><span class="line">  illegal_sentence_action = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (s = command_giver-&gt;sent; s; s = s-&gt;next) &#123;</span><br><span class="line">    <span class="keyword">svalue_t</span> *ret;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (s-&gt;flags &amp; (V_NOSPACE | V_SHORT)) &#123;</span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">strncmp</span>(buff, s-&gt;verb, <span class="built_in">strlen</span>(s-&gt;verb)) != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">/* note: if was add_action(blah, "") then accept it */</span></span><br><span class="line">      <span class="keyword">if</span> (s-&gt;verb[<span class="number">0</span>] &amp;&amp; (user_verb != s-&gt;verb)) &#123;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Now we have found a special sentence !</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!(s-&gt;flags &amp; V_FUNCTION))</span><br><span class="line">      debug(add_action, <span class="string">"Local command %s on /%s\n"</span>, s-&gt;function.s, s-&gt;ob-&gt;obname);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (s-&gt;flags &amp; V_NOSPACE) &#123;</span><br><span class="line">      <span class="keyword">int</span> l1 = <span class="built_in">strlen</span>(s-&gt;verb);</span><br><span class="line">      <span class="keyword">int</span> l2 = <span class="built_in">strlen</span>(verb_buff);</span><br><span class="line"></span><br><span class="line">      <span class="keyword">if</span> (l1 &lt; l2) &#123;</span><br><span class="line">        last_verb = verb_buff + l1;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        last_verb = <span class="string">""</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (!s-&gt;verb[<span class="number">0</span>] || (s-&gt;flags &amp; V_SHORT)) &#123;</span><br><span class="line">        last_verb = verb_buff;</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        last_verb = s-&gt;verb;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * If the function is static and not defined by current object, then</span></span><br><span class="line"><span class="comment">     * it will fail. If this is called directly from user input, then</span></span><br><span class="line"><span class="comment">     * the origin is the driver and it will be allowed.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    where = (current_object ? ORIGIN_EFUN : ORIGIN_DRIVER);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Remember the object, to update moves.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    save_command_giver(command_giver);</span><br><span class="line">    <span class="keyword">if</span> (s-&gt;flags &amp; V_NOSPACE) &#123;</span><br><span class="line">      copy_and_push_string(&amp;buff[<span class="built_in">strlen</span>(s-&gt;verb)]);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (buff[length] == <span class="string">' '</span>) &#123;</span><br><span class="line">      copy_and_push_string(&amp;buff[length + <span class="number">1</span>]);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      push_undefined();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (s-&gt;flags &amp; V_FUNCTION) &#123;</span><br><span class="line">      ret = call_function_pointer(s-&gt;function.f, <span class="number">1</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (s-&gt;function.s[<span class="number">0</span>] == APPLY___INIT_SPECIAL_CHAR) &#123;</span><br><span class="line">        error(<span class="string">"Illegal function name.\n"</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      ret = apply(s-&gt;function.s, s-&gt;ob, <span class="number">1</span>, where);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/* s may be dangling at this point */</span></span><br><span class="line"></span><br><span class="line">    restore_command_giver();</span><br><span class="line"></span><br><span class="line">    last_verb = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* was this the right verb? */</span></span><br><span class="line">    <span class="keyword">if</span> (ret == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">      <span class="comment">/* is it still around?  Otherwise, ignore this ...</span></span><br><span class="line"><span class="comment">         it moved somewhere or dested itself */</span></span><br><span class="line">      <span class="keyword">if</span> (s == command_giver-&gt;sent) &#123;</span><br><span class="line">        <span class="keyword">char</span> buf[<span class="number">256</span>];</span><br><span class="line">        <span class="keyword">if</span> (s-&gt;flags &amp; V_FUNCTION) &#123;</span><br><span class="line">          <span class="built_in">sprintf</span>(buf, <span class="string">"Verb '%s' bound to uncallable function pointer.\n"</span>, s-&gt;verb);</span><br><span class="line">          error(buf);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="built_in">sprintf</span>(buf, <span class="string">"Function for verb '%s' not found.\n"</span>, s-&gt;verb);</span><br><span class="line">          error(buf);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ret &amp;&amp; (ret-&gt;type != T_NUMBER || ret-&gt;u.number != <span class="number">0</span>)) &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> PACKAGE_MUDLIB_STATS</span></span><br><span class="line">      <span class="keyword">if</span> (command_giver &amp;&amp; command_giver-&gt;interactive</span><br><span class="line">#ifndef NO_WIZARDS</span><br><span class="line">          &amp;&amp; !(command_giver-&gt;flags &amp; O_IS_WIZARD)</span><br><span class="line">#endif</span><br><span class="line">      ) &#123;</span><br><span class="line">        add_moves(&amp;s-&gt;ob-&gt;stats, <span class="number">1</span>);</span><br><span class="line">      &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">      <span class="keyword">if</span> (!illegal_sentence_action) &#123;</span><br><span class="line">        illegal_sentence_action = save_illegal_sentence_action;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (illegal_sentence_action) &#123;</span><br><span class="line">      <span class="keyword">switch</span> (illegal_sentence_action) &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">          error(</span><br><span class="line">              <span class="string">"Illegal to call remove_action() [caller was /%s] from a verb "</span></span><br><span class="line">              <span class="string">"returning zero.\n"</span>,</span><br><span class="line">              illegal_sentence_ob-&gt;obname);</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">          error(</span><br><span class="line">              <span class="string">"Illegal to move or destruct an object (/%s) defining actions "</span></span><br><span class="line">              <span class="string">"from a verb function(%s) in object(/%s) which returns zero.\n"</span>,</span><br><span class="line">              illegal_sentence_ob-&gt;obname, user_verb, s-&gt;ob-&gt;obname);</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  notify_no_command();</span><br><span class="line">  illegal_sentence_action = save_illegal_sentence_action;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这收到输入的时候，会遍历 <code>object_t</code> 上的 <code>sentence_t</code> 链表。根据此 <code>sentence_t</code> 的 flag 还有  verb 来进行匹配。在两种情况下会匹配不上：</p>
+<ol>
+<li><code>sentence_t</code> 的 flag 是 (V_NOSPACE | V_SHORT)，同时输入匹配不上其 verb。</li>
+<li><code>sentence_t</code> 的 flag 是 V_FUNCTION ，且 verb 不为空，用户输入verb 匹配不上。</li>
+</ol>
+<p>这就提供了一个情况：</p>
+<p>当 sentence_t 的 flag 是 V_FUNCTION，但 verb 为空，那么就会全部都匹配上了。</p>
+<p>ES2 就是利用了这么一个事实，来对所有的指令进行了 hook。</p>
+<h2 id="on-user-write"><a href="#on-user-write" class="headerlink" title="on_user_write"></a>on_user_write</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// comm.cc</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">on_user_write</span><span class="params">(bufferevent *bev, <span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">auto</span> user = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">interactive_t</span> *&gt;(arg);</span><br><span class="line">  <span class="keyword">if</span> (user == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">    fatal(<span class="string">"on_user_write: user == NULL, Driver BUG."</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// nothing to do.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个为什么不对用户进行写入？可能语义不太一样。</p>
+<h2 id="on-user-events"><a href="#on-user-events" class="headerlink" title="on_user_events"></a>on_user_events</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// comm.cc</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">on_user_events</span><span class="params">(bufferevent *bev, short events, <span class="keyword">void</span> *arg)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">auto</span> user = <span class="keyword">reinterpret_cast</span>&lt;<span class="keyword">interactive_t</span> *&gt;(arg);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (user == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">    fatal(<span class="string">"on_user_events: user == NULL, Driver BUG."</span>);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (events &amp; (BEV_EVENT_ERROR | BEV_EVENT_EOF)) &#123;</span><br><span class="line">    user-&gt;iflags |= NET_DEAD;</span><br><span class="line">    remove_interactive(user-&gt;ob, <span class="number">0</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    debug(event, <span class="string">"on_user_events: ignored unknown events: %d\n"</span>, events);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>针对玩家出现了错误事件，关闭套接子事件的处理。</p>
+<h1 id="apply"><a href="#apply" class="headerlink" title="apply"></a>apply</h1><p>我们在前面的描述中知道，实际上，加载一个文件，就是会分配一个 <code>object_t</code> 的数据结构（C层），然后 C 层这个数据结构会引用一个编译后的 LPC 程序（我想应该是二进制码，操作码，参数的形式）。然后解释器就会执行这样的二进制码。</p>
+<p>最终，如果我们要调用 <code>create</code> 的话，其实要走的路还很多。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">svalue_t</span> *apply(<span class="keyword">const</span> <span class="keyword">char</span> *fun, <span class="keyword">object_t</span> *ob, <span class="keyword">int</span> num_arg, <span class="keyword">int</span> where);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><em>fun</em> 要调用的 <code>object_t</code> 对象上的方法</li>
+<li><em>ob</em> 应 apply 的<code>object_t</code> 对象</li>
+<li><em>num_arg</em> 参数个数，这些参数会在 <code>apply()</code> 前就压到栈上去</li>
+<li><em>where</em> 从哪里调用的这个函数</li>
+</ul>
+<p>apply 实际上最终还调用的是 <code>apply_low()</code> 函数。</p>
+<p>任何我们从网络端点上收到的数据想要传递到 VM 中的逻辑，都是通过 <code>apply()</code> 的形式进行实现的。</p>
+<h2 id="apply-low"><a href="#apply-low" class="headerlink" title="apply_low"></a>apply_low</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">apply_low</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *fun, <span class="keyword">object_t</span> *ob, <span class="keyword">int</span> num_arg)</span></span></span><br></pre></td></tr></table></figure>
+<p>这个函数，会在 object_t 对象引用的 LPC 程序上查找 <em>fun</em> 函数执行，同时将传递 <em>num_arg</em> 个已压到参栈上的参数。</p>
+<p>如果这个函数在 LPC 程序中找不到，那么就会在被 <em>inherit pointer</em> 指向的继承对象中进行查找（如果函数名是以 <code>::</code> 开头的）</p>
+<p>需要注意的是，对于 apply 的时候的几个概念：</p>
+<ul>
+<li>current_object 当前在哪个对象上进行 apply</li>
+<li>current_prog 当前在哪个 LPC 程序上进行 apply 一般来说，这个和 current_object.prog 是一样的。但是，当执行的是继承的父对象的时候，就不一样了。这个是 current_prog 表示的是父对象上的 LPC 程序。</li>
+<li>:: 开头的方法，不会在 current_object 进行查找。类似于 super 一样。</li>
+</ul>
+<h2 id="call-create"><a href="#call-create" class="headerlink" title="call_create"></a>call_create</h2><p>首先会调用 object 上的 <code>__init</code>方法，这个方法总是会在 LPC 对象的最后一个方法。而且这个方法是会自动生成的。最后，在 <code>apply()</code>  <code>create</code> 方法。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">call_create</span><span class="params">(<span class="keyword">object_t</span> *ob, <span class="keyword">int</span> num_arg)</span> </span>&#123;</span><br><span class="line">  <span class="comment">/* Be sure to update time first ! */</span></span><br><span class="line">  set_nextreset(ob);</span><br><span class="line"></span><br><span class="line">  call___INIT(ob);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (ob-&gt;flags &amp; O_DESTRUCTED) &#123;</span><br><span class="line">    pop_n_elems(num_arg);</span><br><span class="line">    <span class="keyword">return</span>; <span class="comment">/* sigh */</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  apply(APPLY_CREATE, ob, num_arg, ORIGIN_DRIVER);</span><br><span class="line"></span><br><span class="line">  ob-&gt;flags |= O_RESET_STATE;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="call-program"><a href="#call-program" class="headerlink" title="call_program"></a>call_program</h2><p>调用一个程序，实际上，就是让 C 来执行 LPC 编译后的代码，从某个地址开始。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> call_program(prog, offset) eval_instruction(prog-&gt;program + offset)</span></span><br></pre></td></tr></table></figure>
+<p>VM 会有一个堆栈， 一些全局变量。VM 在 C 层执行一个 LPC 程序，实际上，执行的是 LPC 编译过后的字节码。</p>
+<p>然后 VM 的解释器，会负责解释这些字节码，进行相关的内存操作，函数调用（C 层）。</p>
+<h1 id="efuns"><a href="#efuns" class="headerlink" title="efuns"></a>efuns</h1><p>efuns 是由 驱动层提供的，具体是在 <code>src/packages</code> 里面。在编译的时候，会调用 <code>src/tools/make_func</code> 来生成相关的文件。对 efuns 的调用，实际上会被编译成为一个索引（操作码？）。然后根据这个索引前往 <code>efun_table</code> 找到对应的函数进行调用。</p>
+<p>服务器与客户端的通信，在 VM 中，都是通过 某个 <code>object_t</code> 对象，找到  <code>interactivate_t</code> 对象，然后进行套接字的读写的。</p>
+<p>我们创作的核心其实就是利用提供的 efuns 来编写我们自己的函数来实现各种功能。</p>
+<p>我们可以看一下一些关键的 efuns 。</p>
+<h2 id="add-action"><a href="#add-action" class="headerlink" title="add_action"></a>add_action</h2><p>这个函数，实际上就是将一个命令，与一个特定的 LPC 对象中的方法进行关联，形成一个 sentence_t。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add_action</span><span class="params">( <span class="built_in">string</span> | function fun, <span class="built_in">string</span> | <span class="built_in">string</span> * cmd)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">add_action</span><span class="params">( <span class="built_in">string</span> | function fun, <span class="built_in">string</span> | <span class="built_in">string</span> * cmd, <span class="keyword">int</span> flag )</span></span>;</span><br></pre></td></tr></table></figure>
+<p>按照文档上的说明：</p>
+<blockquote>
+<p>当玩家键入的指令匹配 <code>cmd</code> 时，呼叫局部函数 <code>fun</code>，玩家指令的参数会做为字符串参数传给函数 <code>fun</code>，如果指令错误必须返回0，否则 <code>fun</code> 必须返回1。</p>
+<p>如果第二个参数 <code>cmd</code> 是一个数组，所有在数组中的指令都会呼叫函数 <code>fun</code>，你可以使用 query_verb() 外部函数找到呼叫函数的指令。</p>
+<p>如果指令错误，会继续查找其它命令，直到返回 true 或错误信息给玩家。</p>
+<p>通常 add_action() 只会从 init() apply 方法中调用，而且定义命令的对象必须是玩家可以接触到的，或者是玩家本身，或者被玩家携带，或者是玩家所在的房间，或者是玩家所在房间中的其它对象。</p>
+<p>如果不指定参数 <code>flag</code>，默认为0，代表输入指令必须完全匹配 <code>cmd</code> 才可生效，如果参数 <code>flag</code> 大于 0，只需玩家输入的指令前面部分匹配 <code>cmd</code> 即可生效。其中如果 <code>flag</code> 是 1 时 query_verb() 会返回输入的完整指令，如果参数 <code>flag</code> 是 2 时 query_verb() 会返回匹配部分以后的内容，而且这两种模式下获取的参数也不一样。</p>
+</blockquote>
+<p>再看一下其 C 代码的实现：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// add_action.cc</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">f_add_action</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">  LPC_INT flag;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (st_num_arg == <span class="number">3</span>) &#123;</span><br><span class="line">    flag = (sp--)-&gt;u.number;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    flag = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (sp-&gt;type == T_ARRAY) &#123;</span><br><span class="line">    <span class="keyword">int</span> i, n = sp-&gt;u.arr-&gt;size;</span><br><span class="line">    <span class="keyword">svalue_t</span> *sv = sp-&gt;u.arr-&gt;item;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (sv[i].type == T_STRING) &#123;</span><br><span class="line">        add_action(sp - <span class="number">1</span>, sv[i].u.<span class="built_in">string</span>, flag &amp; <span class="number">3</span>);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    free_array((sp--)-&gt;u.arr);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    add_action((sp - <span class="number">1</span>), sp-&gt;u.<span class="built_in">string</span>, flag &amp; <span class="number">3</span>);</span><br><span class="line">    free_string_svalue(sp--);</span><br><span class="line">  &#125;</span><br><span class="line">  pop_stack();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>第三个参数，可以没有，默认就是 0。</p>
+<p>第二个参数如果是数组，那么就会添加多个 action去。</p>
+<p>最终的实际实现如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// add_action.cc</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add_action</span><span class="params">(<span class="keyword">svalue_t</span> *str, <span class="keyword">const</span> <span class="keyword">char</span> *cmd, <span class="keyword">int</span> flag)</span> </span>&#123;</span><br><span class="line">  <span class="keyword">sentence_t</span> *p;</span><br><span class="line">  <span class="keyword">object_t</span> *ob;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (current_object-&gt;flags &amp; O_DESTRUCTED) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  ob = current_object;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> NO_SHADOWS</span></span><br><span class="line">  <span class="keyword">while</span> (ob-&gt;shadowing) &#123;</span><br><span class="line">    ob = ob-&gt;shadowing;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">/* don't allow add_actions of a static function from a shadowing object */</span></span><br><span class="line">  <span class="keyword">if</span> ((ob != current_object) &amp;&amp; str-&gt;type == T_STRING &amp;&amp; is_static(str-&gt;u.<span class="built_in">string</span>, ob)) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">  <span class="keyword">if</span> (command_giver == <span class="literal">nullptr</span> || (command_giver-&gt;flags &amp; O_DESTRUCTED)) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (ob != command_giver</span><br><span class="line">#ifndef NO_ENVIRONMENT</span><br><span class="line">      &amp;&amp; ob-&gt;super != command_giver &amp;&amp; ob-&gt;super != command_giver-&gt;super &amp;&amp;</span><br><span class="line">      ob != command_giver-&gt;super</span><br><span class="line">#endif</span><br><span class="line">  ) &#123;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125; <span class="comment">/* No need for an error, they know what they</span></span><br><span class="line"><span class="comment">     * did wrong. */</span></span><br><span class="line">  p = alloc_sentence();</span><br><span class="line">  <span class="keyword">if</span> (str-&gt;type == T_STRING) &#123;</span><br><span class="line">    debug(add_action, <span class="string">"--Add action '%s' (ob: %s func: '%s')\n"</span>, cmd, ob-&gt;obname, str-&gt;u.<span class="built_in">string</span>);</span><br><span class="line">    p-&gt;function.s = make_shared_string(str-&gt;u.<span class="built_in">string</span>);</span><br><span class="line">    p-&gt;flags = flag;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    debug(add_action, <span class="string">"--Add action '%s' (ob: %s func: &lt;function&gt;)\n"</span>, cmd, ob-&gt;obname);</span><br><span class="line"></span><br><span class="line">    p-&gt;function.f = str-&gt;u.fp;</span><br><span class="line">    str-&gt;u.fp-&gt;hdr.ref++;</span><br><span class="line">    p-&gt;flags = flag | V_FUNCTION;</span><br><span class="line">  &#125;</span><br><span class="line">  p-&gt;ob = ob;</span><br><span class="line">  p-&gt;verb = make_shared_string(cmd);</span><br><span class="line">  <span class="comment">/* This is ok; adding to the top of the list doesn't harm anything */</span></span><br><span class="line">  p-&gt;next = command_giver-&gt;sent;</span><br><span class="line">  command_giver-&gt;sent = p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关键的地方在于，分配了一个 <code>sentence_t</code> 结构，设置此结构中的 <code>function</code> 字段为一个字符串，或者是一个函数；设置 <code>sentence_t</code> 结构的 LPC 对象，动词等；最后，将此结构放到函数调用者的 <code>sentence_t</code> 链表中。</p>
+<p>在解析用户的命令，<code>user_parser()</code> 中就会遍历这个链表，然后进行 verb 的匹配。注意上面提到细节上，可以进行全局匹配的问题。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Mud/" rel="tag"># Mud</a>
+              <a href="/tags/FluffOS/" rel="tag"># FluffOS</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/JavaScript/AutoJs的初始化与脚本执行过程.html" rel="next" title="AutoJs的初始化与脚本执行过程">
+                  <i class="fa fa-chevron-left"></i> AutoJs的初始化与脚本执行过程
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#几个数据结构"><span class="nav-number">1.</span> <span class="nav-text">几个数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#interactive-t"><span class="nav-number">1.1.</span> <span class="nav-text">interactive_t</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#object-t"><span class="nav-number">1.2.</span> <span class="nav-text">object_t</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#program-t"><span class="nav-number">1.3.</span> <span class="nav-text">program_t</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sentence-t"><span class="nav-number">1.4.</span> <span class="nav-text">sentence_t</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VM-的栈"><span class="nav-number">1.5.</span> <span class="nav-text">VM 的栈</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络数据的传输执行过程"><span class="nav-number">2.</span> <span class="nav-text">网络数据的传输执行过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#on-user-read"><span class="nav-number">2.1.</span> <span class="nav-text">on_user_read</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#on-user-command"><span class="nav-number">2.1.1.</span> <span class="nav-text">on_user_command</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#process-input"><span class="nav-number">2.1.2.</span> <span class="nav-text">process_input</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#user-parser"><span class="nav-number">2.1.3.</span> <span class="nav-text">user_parser</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#on-user-write"><span class="nav-number">2.2.</span> <span class="nav-text">on_user_write</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#on-user-events"><span class="nav-number">2.3.</span> <span class="nav-text">on_user_events</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#apply"><span class="nav-number">3.</span> <span class="nav-text">apply</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#apply-low"><span class="nav-number">3.1.</span> <span class="nav-text">apply_low</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#call-create"><span class="nav-number">3.2.</span> <span class="nav-text">call_create</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#call-program"><span class="nav-number">3.3.</span> <span class="nav-text">call_program</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#efuns"><span class="nav-number">4.</span> <span class="nav-text">efuns</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#add-action"><span class="nav-number">4.1.</span> <span class="nav-text">add_action</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">356</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">147</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Mud/Fluffos中的Apply与efuns.html",
+            identifier: "Mud/Fluffos中的Apply与efuns.html",
+            title: "Fluffos中的Apply与efuns"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
