@@ -381,6 +381,7 @@
 <li>最终，所有 APP 拥有的运行时开始的时候都是一样的。</li>
 <li>所有的 APP 都是从 XposedBridge 进行启动的。这些都是静态类方法来启动。</li>
 <li>对于我们安装的所有模块，XposedBridge 都会尝试加载，也就是说所有进程都会尝试加载进来，然后执行对应的 HOOK。因此，一般还会在模块的 HOOK 类实现里面指定要 HOOK 的对应 APP，否则的话就太坑了。</li>
+<li>最后，我们的 XposedIntaller 会对我们的安装模块进行记录，更新 <code>/data/data/de.robv.android.xposed.installer/conf/modules.list</code> 文件。</li>
 </ol>
 
     </div>
