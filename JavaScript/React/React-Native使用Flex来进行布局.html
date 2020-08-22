@@ -48,10 +48,10 @@
 </script>
 
   <meta name="description" content="React Native 官方已经推荐使用  expo 来进行项目的开发了，但是国内使用的话还有几个非常猥琐的问题。一个就是项目的初始化很慢，还有就是要进行模拟器运行的时候，客户端下载非常的慢。不过推荐得用不是。">
-<meta name="keywords" content="JavaScript,React Native">
+<meta name="keywords" content="JavaScript,React Native,React">
 <meta property="og:type" content="article">
 <meta property="og:title" content="React-Native使用Flex来进行布局">
-<meta property="og:url" content="https://gowa.club/JavaScript/React-Native使用Flex来进行布局.html">
+<meta property="og:url" content="https://gowa.club/JavaScript/React/React-Native使用Flex来进行布局.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="React Native 官方已经推荐使用  expo 来进行项目的开发了，但是国内使用的话还有几个非常猥琐的问题。一个就是项目的初始化很慢，还有就是要进行模拟器运行的时候，客户端下载非常的慢。不过推荐得用不是。">
 <meta property="og:locale" content="zh-Hans">
@@ -60,7 +60,7 @@
 <meta name="twitter:title" content="React-Native使用Flex来进行布局">
 <meta name="twitter:description" content="React Native 官方已经推荐使用  expo 来进行项目的开发了，但是国内使用的话还有几个非常猥琐的问题。一个就是项目的初始化很慢，还有就是要进行模拟器运行的时候，客户端下载非常的慢。不过推荐得用不是。">
 
-<link rel="canonical" href="https://gowa.club/JavaScript/React-Native使用Flex来进行布局.html">
+<link rel="canonical" href="https://gowa.club/JavaScript/React/React-Native使用Flex来进行布局.html">
 
 
 <script id="page-configurations">
@@ -230,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/React-Native使用Flex来进行布局.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/JavaScript/React/React-Native使用Flex来进行布局.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -265,6 +265,12 @@
                     <span itemprop="name">JavaScript</span>
                   </a>
                 </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JavaScript/React/" itemprop="url" rel="index">
+                    <span itemprop="name">React</span>
+                  </a>
+                </span>
             </span>
 
           
@@ -276,8 +282,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/JavaScript/React-Native使用Flex来进行布局.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/React-Native使用Flex来进行布局.html" itemprop="commentCount"></span>
+    <a title="disqus" href="/JavaScript/React/React-Native使用Flex来进行布局.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="JavaScript/React/React-Native使用Flex来进行布局.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -299,15 +305,13 @@
 <h1 id="项目建立"><a href="#项目建立" class="headerlink" title="项目建立"></a>项目建立</h1><p>实际上，在<a href="https://reactnative.dev/docs/getting-started" target="_blank" rel="noopener">官方的文档</a>中，使用 expo 的步骤非常简单：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">npm install -g expo-cli</span><br><span class="line">expo init AwesomeProject</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> AwesomeProject</span><br><span class="line">npm start <span class="comment"># you ca</span></span><br></pre></td></tr></table></figure>
 <p>然后就可以在浏览器中进行我们的操作进行启动模拟器等了。</p>
-<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>项目初始化和在模拟器上运行很慢，这个其实我挂了梯子就好了？梯子的问题？</p>
-<h1 id="编辑器"><a href="#编辑器" class="headerlink" title="编辑器"></a>编辑器</h1><p>没法了，使用 vscode 吧，用官方推荐的 atom 加上 <a href="https://nuclide.io/" target="_blank" rel="noopener">https://nuclide.io/</a> ，居然找不到这个插件，那就算了吧。</p>
 <h1 id="Flex-布局"><a href="#Flex-布局" class="headerlink" title="Flex 布局"></a>Flex 布局</h1><p>官方的定义是，FlexBox 是一个可以使用 Flex 算法来指定子视图的布局的组件。其设计的目的，是为了提供一个在不同屏幕尺寸间的一致性布局。</p>
 <p>我们知道，我们的容器一般都是 <em>View</em>，所以我们只需要在 <em>View</em> 中指定 <code>flex</code> 就能使用其布局了。</p>
 <p><a href="https://reactnative.dev/docs/flexbox" target="_blank" rel="noopener">官方文档说明在此</a>。</p>
 <h1 id="轴"><a href="#轴" class="headerlink" title="轴"></a>轴</h1><p>一般来说，定义了两个轴。横轴（row），纵轴（column）。Flex 所定义的行为就在两个轴上作用的。</p>
 <h1 id="属性列表"><a href="#属性列表" class="headerlink" title="属性列表"></a>属性列表</h1><ul>
 <li>flex：定义了当前视图如何在主轴上填充可用空间的。其是一个数值，定义了主轴上所占据空间的比例。有点类似与安卓中的 <code>layout_weight</code> 的意思，就是权重的概念。</li>
-<li>flexDirection：定义子视图是沿主轴哪个方向进行填充的。<ul>
+<li>flexDirection：定义主轴的方向<ul>
 <li><code>row</code> 左至右</li>
 <li><code>column</code> 上至下（<strong>默认值）</strong>。</li>
 <li><code>row-reverse</code> 从右至左。</li>
@@ -368,6 +372,7 @@
           <div class="post-tags">
               <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
               <a href="/tags/React-Native/" rel="tag"># React Native</a>
+              <a href="/tags/React/" rel="tag"># React</a>
           </div>
 
         
@@ -430,7 +435,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#项目建立"><span class="nav-number">1.</span> <span class="nav-text">项目建立</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#问题"><span class="nav-number">2.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#编辑器"><span class="nav-number">3.</span> <span class="nav-text">编辑器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Flex-布局"><span class="nav-number">4.</span> <span class="nav-text">Flex 布局</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#轴"><span class="nav-number">5.</span> <span class="nav-text">轴</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#属性列表"><span class="nav-number">6.</span> <span class="nav-text">属性列表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意事项"><span class="nav-number">7.</span> <span class="nav-text">注意事项</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#项目建立"><span class="nav-number">1.</span> <span class="nav-text">项目建立</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Flex-布局"><span class="nav-number">2.</span> <span class="nav-text">Flex 布局</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#轴"><span class="nav-number">3.</span> <span class="nav-text">轴</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#属性列表"><span class="nav-number">4.</span> <span class="nav-text">属性列表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意事项"><span class="nav-number">5.</span> <span class="nav-text">注意事项</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -444,7 +449,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">362</span>
+          <span class="site-state-item-count">363</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -588,8 +593,8 @@
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/JavaScript/React-Native使用Flex来进行布局.html",
-            identifier: "JavaScript/React-Native使用Flex来进行布局.html",
+            url: "https://gowa.club/JavaScript/React/React-Native使用Flex来进行布局.html",
+            identifier: "JavaScript/React/React-Native使用Flex来进行布局.html",
             title: "React-Native使用Flex来进行布局"
           }
         }
