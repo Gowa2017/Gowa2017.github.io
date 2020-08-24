@@ -47,20 +47,20 @@
   };
 </script>
 
-  <meta name="description" content="其实对于服务还是有些迷惑。比如在skynet.wiki中说到，gate服务，是snax.gateserver的一个实现，然后watchdog又是gate的一个使用。看了一下代码确实有点头疼，现在来从头分析一下。">
+  <meta name="description" content="其实对于服务还是有些迷惑。比如在 skynet.wiki 中说到，gate服务，是snax.gateserver的一个实现，然后 watchdog 又是 gate 的一个使用。看了一下代码确实有点头疼，现在来从头分析一下。">
 <meta name="keywords" content="Lua,Skynet">
 <meta property="og:type" content="article">
 <meta property="og:title" content="skynet中服务分析(wathchdog,gate,snxa.gateserver)">
-<meta property="og:url" content="https://gowa.club/Lua/skynet中服务分析(wathchdog,gate,snxa.gateserver).html">
+<meta property="og:url" content="https://gowa.club/Lua/Skynet/skynet中服务分析(wathchdog,gate,snxa.gateserver).html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="其实对于服务还是有些迷惑。比如在skynet.wiki中说到，gate服务，是snax.gateserver的一个实现，然后watchdog又是gate的一个使用。看了一下代码确实有点头疼，现在来从头分析一下。">
+<meta property="og:description" content="其实对于服务还是有些迷惑。比如在 skynet.wiki 中说到，gate服务，是snax.gateserver的一个实现，然后 watchdog 又是 gate 的一个使用。看了一下代码确实有点头疼，现在来从头分析一下。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2018-02-13T08:29:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="skynet中服务分析(wathchdog,gate,snxa.gateserver)">
-<meta name="twitter:description" content="其实对于服务还是有些迷惑。比如在skynet.wiki中说到，gate服务，是snax.gateserver的一个实现，然后watchdog又是gate的一个使用。看了一下代码确实有点头疼，现在来从头分析一下。">
+<meta name="twitter:description" content="其实对于服务还是有些迷惑。比如在 skynet.wiki 中说到，gate服务，是snax.gateserver的一个实现，然后 watchdog 又是 gate 的一个使用。看了一下代码确实有点头疼，现在来从头分析一下。">
 
-<link rel="canonical" href="https://gowa.club/Lua/skynet中服务分析(wathchdog,gate,snxa.gateserver).html">
+<link rel="canonical" href="https://gowa.club/Lua/Skynet/skynet中服务分析(wathchdog,gate,snxa.gateserver).html">
 
 
 <script id="page-configurations">
@@ -230,7 +230,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/skynet中服务分析(wathchdog,gate,snxa.gateserver).html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/Skynet/skynet中服务分析(wathchdog,gate,snxa.gateserver).html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -265,6 +265,12 @@
                     <span itemprop="name">Lua</span>
                   </a>
                 </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua/Skynet/" itemprop="url" rel="index">
+                    <span itemprop="name">Skynet</span>
+                  </a>
+                </span>
             </span>
 
           
@@ -276,8 +282,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Lua/skynet中服务分析(wathchdog,gate,snxa.gateserver).html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/skynet中服务分析(wathchdog,gate,snxa.gateserver).html" itemprop="commentCount"></span>
+    <a title="disqus" href="/Lua/Skynet/skynet中服务分析(wathchdog,gate,snxa.gateserver).html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/Skynet/skynet中服务分析(wathchdog,gate,snxa.gateserver).html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -292,17 +298,18 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>其实对于服务还是有些迷惑。比如在skynet.wiki中说到，<em>gate</em>服务，是<em>snax.gateserver</em>的一个实现，然后watchdog又是gate的一个使用。看了一下代码确实有点头疼，现在来从头分析一下。<br><a id="more"></a></p>
+        <p>其实对于服务还是有些迷惑。比如在 skynet.wiki 中说到，<em>gate</em>服务，是<em>snax.gateserver</em>的一个实现，然后 watchdog 又是 gate 的一个使用。看了一下代码确实有点头疼，现在来从头分析一下。</p>
+<a id="more"></a>
 <h1 id="启动-watchdog"><a href="#启动-watchdog" class="headerlink" title="启动 watchdog"></a>启动 watchdog</h1><p><em>main.lua</em>中：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- examples/main.lua</span></span><br><span class="line">		<span class="keyword">local</span> watchdog = skynet.newservice(<span class="string">"watchdog"</span>)</span><br><span class="line">        skynet.call(watchdog, <span class="string">"lua"</span>, <span class="string">"start"</span>, &#123;</span><br><span class="line">                port = <span class="number">8888</span>,</span><br><span class="line">                maxclient = max_client,</span><br><span class="line">                nodelay = <span class="literal">true</span>,</span><br><span class="line">        &#125;)</span><br></pre></td></tr></table></figure>
 <p>就是注册，并启动了服务<em>watchdog</em>。首先加载脚本 <em>wathchdog.lua</em>，然后执行其中的启动函数：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- examples/wathchdog.lua</span></span><br><span class="line">skynet.start(<span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">        skynet.dispatch(<span class="string">"lua"</span>, <span class="function"><span class="keyword">function</span><span class="params">(session, source, cmd, subcmd, ...)</span></span></span><br><span class="line">                <span class="keyword">if</span> cmd == <span class="string">"socket"</span> <span class="keyword">then</span></span><br><span class="line">                        <span class="keyword">local</span> f = SOCKET[subcmd]</span><br><span class="line">                        f(...)</span><br><span class="line">                        <span class="comment">-- socket api don't need return</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                        <span class="keyword">local</span> f = <span class="built_in">assert</span>(CMD[cmd])</span><br><span class="line">                        skynet.ret(skynet.pack(f(subcmd, ...)))</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span>)</span><br><span class="line"></span><br><span class="line">        gate = skynet.newservice(<span class="string">"gate"</span>)</span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></table></figure>
 <p>我们看到，<em>watchdog.lua</em>的启动函数只是注册了 <code>lua</code>类型消息的处理函数，其中还对 <code>socket</code>操作的消息类型定义了操作。</p>
 <p>最后，启动了服务 <em>gate</em>。在<em>gate.lua</em>中，定义了很多多的操作 <em>CMD{}</em>，和<em>handler{}</em>，然后启动了 gateserver。</p>
-<h1 id="启动gate"><a href="#启动gate" class="headerlink" title="启动gate"></a>启动gate</h1><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- service/gate.lua</span></span><br><span class="line"><span class="keyword">local</span> gateserver = <span class="built_in">require</span> <span class="string">"snax.gateserver"</span></span><br><span class="line">gateserver.start(handler)</span><br></pre></td></tr></table></figure>
+<h1 id="启动-gate"><a href="#启动-gate" class="headerlink" title="启动 gate"></a>启动 gate</h1><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- service/gate.lua</span></span><br><span class="line"><span class="keyword">local</span> gateserver = <span class="built_in">require</span> <span class="string">"snax.gateserver"</span></span><br><span class="line">gateserver.start(handler)</span><br></pre></td></tr></table></figure>
 <p>其本质，是把 <em>snax.gateserver.lua</em>加载到了 <em>gate</em>服务的虚拟机内，然后执行。</p>
 <p>那么，背后的意义就是，<em>wathchdog</em>服务启动了一个<em>gate</em>服务，而且两者之间建立了联系。</p>
-<h1 id="启动网络服务"><a href="#启动网络服务" class="headerlink" title="启动网络服务"></a>启动网络服务</h1><p>之后我们调用 </p>
+<h1 id="启动网络服务"><a href="#启动网络服务" class="headerlink" title="启动网络服务"></a>启动网络服务</h1><p>之后我们调用</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">skynet.call(watchdog, <span class="string">"lua"</span>, <span class="string">"start"</span>, &#123;</span><br><span class="line">        port = <span class="number">8888</span>,</span><br><span class="line">        maxclient = max_client,</span><br><span class="line">        nodelay = <span class="literal">true</span>,</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <p>其实这个消息是转发给了 <em>gate</em>：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">skynet.call(gate, <span class="string">"lua"</span>, <span class="string">"open"</span>, conf)</span><br></pre></td></tr></table></figure>
@@ -321,28 +328,28 @@
 <p>其就是根据消息类型，来进行对应的操作。</p>
 <p>在<em>gate.lua</em>中，定义了几个操作：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> handler = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handler.open</span><span class="params">(source, conf)</span></span></span><br><span class="line">        watchdog = conf.watchdog <span class="keyword">or</span> source</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handler.message</span><span class="params">(fd, msg, sz)</span></span></span><br><span class="line">        <span class="comment">-- recv a package, forward it</span></span><br><span class="line">        <span class="keyword">local</span> c = connection[fd]</span><br><span class="line">        <span class="keyword">local</span> agent = c.agent</span><br><span class="line">        <span class="keyword">if</span> agent <span class="keyword">then</span></span><br><span class="line">                skynet.redirect(agent, c.client, <span class="string">"client"</span>, <span class="number">1</span>, msg, sz)</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">                skynet.send(watchdog, <span class="string">"lua"</span>, <span class="string">"socket"</span>, <span class="string">"data"</span>, fd, netpack.<span class="built_in">tostring</span>(msg, sz))</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<p>其在连接打开的时候，会把 watchdog设置为消息来源，或者指定的服务。</p>
-<p>这也就是，当我们的<em>watchdog</em>启动了<em>gate</em>服务后，以后 <em>gate</em>收到常规的消息，都会转发到 <em>watchdog</em>服务去。如果是用单独的agent进行消息处理的话，就转发到对应的 agent。</p>
+<p>其在连接打开的时候，会把 watchdog 设置为消息来源，或者指定的服务。</p>
+<p>这也就是，当我们的<em>watchdog</em>启动了<em>gate</em>服务后，以后 <em>gate</em>收到常规的消息，都会转发到 <em>watchdog</em>服务去。如果是用单独的 agent 进行消息处理的话，就转发到对应的 agent。</p>
 <p>事实上我还有一个疑问的就是，对于网络信息，框架底层到底是怎么处理的？</p>
-<p>请查看 <a href="/Lua/skynet中的网络服务与消息处理.html">skynet中的网络服务与消息处理</a>一节</p>
+<p>请查看 <a href="/Lua/skynet中的网络服务与消息处理.html">skynet 中的网络服务与消息处理</a>一节</p>
 <h1 id="消息处理流程"><a href="#消息处理流程" class="headerlink" title="消息处理流程"></a>消息处理流程</h1><p>我们把<em>gate</em> 服务注册到了 skynet 中去后，在收到了对应的套接字消息后就会调用对应的回调函数进行处理。</p>
 <p>一个典型服务器端流程是：</p>
 <pre><code>bind() -&gt; listen() -&gt; accept() -&gt; read() -&gt; response -&gt; write() -&gt; close()
 </code></pre><p>客户端：</p>
 <pre><code>connect -&gt; read()/write() -&gt; close()
-</code></pre><p>当我们注册了服务后，其实 <em>gate</em> 服务应该是处于 <code>accept()</code>状态，但这个工作由skynet完成。</p>
+</code></pre><p>当我们注册了服务后，其实 <em>gate</em> 服务应该是处于 <code>accept()</code>状态，但这个工作由 skynet 完成。</p>
 <p><em>gate</em> 服务注册了两种消息类型的处理机制：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">skynet.register_protocol &#123;</span><br><span class="line">        name = <span class="string">"socket"</span>,</span><br><span class="line">        id = skynet.PTYPE_SOCKET,       <span class="comment">-- PTYPE_SOCKET = 6</span></span><br><span class="line">        <span class="built_in">unpack</span> = <span class="function"><span class="keyword">function</span> <span class="params">( msg, sz )</span></span></span><br><span class="line">                <span class="keyword">return</span> netpack.filter( queue, msg, sz)</span><br><span class="line">        <span class="keyword">end</span>,</span><br><span class="line">        dispatch = <span class="function"><span class="keyword">function</span> <span class="params">(_, _, q, type, ...)</span></span></span><br><span class="line">                queue = q</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">type</span> <span class="keyword">then</span></span><br><span class="line">                        MSG[<span class="built_in">type</span>](...)</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">skynet.start(<span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">        skynet.dispatch(<span class="string">"lua"</span>, <span class="function"><span class="keyword">function</span> <span class="params">(_, address, cmd, ...)</span></span></span><br><span class="line">                <span class="keyword">local</span> f = CMD[cmd]</span><br><span class="line">                <span class="keyword">if</span> f <span class="keyword">then</span></span><br><span class="line">                        skynet.ret(skynet.pack(f(address, ...)))</span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                        skynet.ret(skynet.pack(handler.command(cmd, address, ...)))</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span>)</span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></table></figure>
-<p> 对于网络消息，定义在 <em>MSG{}</em>内，用来处理数据；而对于 lua 类型的消息，则定义在 <em>CMD{}</em>内，主要用来控制服务的启停。</p>
-<h2 id="处理方法"><a href="#处理方法" class="headerlink" title="处理方法"></a>处理方法</h2><p>下面是MSG的定义：</p>
+<p>对于网络消息，定义在 <em>MSG{}</em>内，用来处理数据；而对于 lua 类型的消息，则定义在 <em>CMD{}</em>内，主要用来控制服务的启停。</p>
+<h2 id="处理方法"><a href="#处理方法" class="headerlink" title="处理方法"></a>处理方法</h2><p>下面是 MSG 的定义：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> MSG = &#123;</span><br><span class="line">	<span class="built_in">open</span>,  <span class="comment">-- new connect</span></span><br><span class="line">	<span class="built_in">close</span>, <span class="comment">-- client close</span></span><br><span class="line">	<span class="built_in">error</span>, <span class="comment">-- error</span></span><br><span class="line">	warning,</span><br><span class="line">	more = dispatch_queue(),</span><br><span class="line">	data = dispatch_msg(fd, msg, sz), <span class="comment">-- message</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-<p>我们在一个监听套接字上可能出现的事件有：连接建立，数据到达，出错，关闭，甚至还有shutdown半开状态。</p>
+<p>我们在一个监听套接字上可能出现的事件有：连接建立，数据到达，出错，关闭，甚至还有 shutdown 半开状态。</p>
 <p>其实对应的事件中都是调用我们自己定义的函数来处理的：</p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> handler = &#123;</span><br><span class="line">		<span class="built_in">open</span>,  <span class="comment">-- serivce start</span></span><br><span class="line">		message, <span class="comment">-- data</span></span><br><span class="line">		connect, <span class="comment">-- new connect </span></span><br><span class="line">		disconnect, <span class="comment">-- client close</span></span><br><span class="line">		<span class="built_in">error</span>, <span class="comment">-- 错误</span></span><br><span class="line">		warning,</span><br><span class="line">		command, <span class="comment">-- 自定义命令</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> handler = &#123;</span><br><span class="line">		<span class="built_in">open</span>,  <span class="comment">-- serivce start</span></span><br><span class="line">		message, <span class="comment">-- data</span></span><br><span class="line">		connect, <span class="comment">-- new connect</span></span><br><span class="line">		disconnect, <span class="comment">-- client close</span></span><br><span class="line">		<span class="built_in">error</span>, <span class="comment">-- 错误</span></span><br><span class="line">		warning,</span><br><span class="line">		command, <span class="comment">-- 自定义命令</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>完全不用关注 <code>gateserver.lua</code>中定义的那些函数，我们只关注一下我们自己定义的。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> handler = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handler.open</span><span class="params">(source, conf)</span></span></span><br><span class="line">        watchdog = conf.watchdog <span class="keyword">or</span> source</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handler.connect</span><span class="params">(fd, addr)</span></span></span><br><span class="line">        <span class="keyword">local</span> c = &#123;</span><br><span class="line">                fd = fd,</span><br><span class="line">                ip = addr,</span><br><span class="line">        &#125;</span><br><span class="line">        connection[fd] = c</span><br><span class="line">        skynet.send(watchdog, <span class="string">"lua"</span>, <span class="string">"socket"</span>, <span class="string">"open"</span>, fd, addr)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handler.message</span><span class="params">(fd, msg, sz)</span></span></span><br><span class="line">        <span class="comment">-- recv a package, forward it</span></span><br><span class="line">        <span class="keyword">local</span> c = connection[fd]</span><br><span class="line">        <span class="keyword">local</span> agent = c.agent</span><br><span class="line">        <span class="keyword">if</span> agent <span class="keyword">then</span></span><br><span class="line">                skynet.redirect(agent, c.client, <span class="string">"client"</span>, <span class="number">1</span>, msg, sz)</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">                skynet.send(watchdog, <span class="string">"lua"</span>, <span class="string">"socket"</span>, <span class="string">"data"</span>, fd, netpack.<span class="built_in">tostring</span>(msg, sz))</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handler.disconnect</span><span class="params">(fd)</span></span></span><br><span class="line">        close_fd(fd)</span><br><span class="line">        skynet.send(watchdog, <span class="string">"lua"</span>, <span class="string">"socket"</span>, <span class="string">"close"</span>, fd)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handler.error</span><span class="params">(fd, msg)</span></span></span><br><span class="line">        close_fd(fd)</span><br><span class="line">        skynet.send(watchdog, <span class="string">"lua"</span>, <span class="string">"socket"</span>, <span class="string">"error"</span>, fd, msg)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">handler.warning</span><span class="params">(fd, size)</span></span></span><br><span class="line">        skynet.send(watchdog, <span class="string">"lua"</span>, <span class="string">"socket"</span>, <span class="string">"warning"</span>, fd, size)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <p>看来这个<em>wathchdog</em>只是一个接收各种事件的服务而已，并没有干什么卵事。</p>
-<p>其还有一个重要的功能，就是每当一个新连接到来时开启一个agent服务。之后的消息 <em>gate</em> 就会全部都丢给 agent处理了。</p>
+<p>其还有一个重要的功能，就是每当一个新连接到来时开启一个 agent 服务。之后的消息 <em>gate</em> 就会全部都丢给 agent 处理了。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">SOCKET.open</span><span class="params">(fd, addr)</span></span></span><br><span class="line">        skynet.<span class="built_in">error</span>(<span class="string">"New client from : "</span> .. addr)</span><br><span class="line">        agent[fd] = skynet.newservice(<span class="string">"agent"</span>)</span><br><span class="line">        skynet.call(agent[fd], <span class="string">"lua"</span>, <span class="string">"start"</span>, &#123; gate = gate, client = fd, watchdog = skynet.self() &#125;)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <p>整个服务流程就是如下：</p>
 <pre><code>client connect() -&gt; gate.connect() -&gt; watchdog.open() -&gt; new agent。
@@ -372,7 +379,7 @@ client data -&gt; gate.data -&gt; agent.dispatch()
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Lua/skynet中的网络服务与消息处理.html" rel="prev" title="skynet中的网络服务与消息处理">
+                <a href="/Lua/Skynet/skynet中的网络服务与消息处理.html" rel="prev" title="skynet中的网络服务与消息处理">
                   skynet中的网络服务与消息处理 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
@@ -420,7 +427,7 @@ client data -&gt; gate.data -&gt; agent.dispatch()
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#启动-watchdog"><span class="nav-number">1.</span> <span class="nav-text">启动 watchdog</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动gate"><span class="nav-number">2.</span> <span class="nav-text">启动gate</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动网络服务"><span class="nav-number">3.</span> <span class="nav-text">启动网络服务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息处理流程"><span class="nav-number">4.</span> <span class="nav-text">消息处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#处理方法"><span class="nav-number">4.1.</span> <span class="nav-text">处理方法</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#启动-watchdog"><span class="nav-number">1.</span> <span class="nav-text">启动 watchdog</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动-gate"><span class="nav-number">2.</span> <span class="nav-text">启动 gate</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动网络服务"><span class="nav-number">3.</span> <span class="nav-text">启动网络服务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息处理流程"><span class="nav-number">4.</span> <span class="nav-text">消息处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#处理方法"><span class="nav-number">4.1.</span> <span class="nav-text">处理方法</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -441,7 +448,7 @@ client data -&gt; gate.data -&gt; agent.dispatch()
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-count">31</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -578,8 +585,8 @@ client data -&gt; gate.data -&gt; agent.dispatch()
       DISQUS.reset({
         reload: true,
         config: {page: {
-            url: "https://gowa.club/Lua/skynet中服务分析(wathchdog,gate,snxa.gateserver).html",
-            identifier: "Lua/skynet中服务分析(wathchdog,gate,snxa.gateserver).html",
+            url: "https://gowa.club/Lua/Skynet/skynet中服务分析(wathchdog,gate,snxa.gateserver).html",
+            identifier: "Lua/Skynet/skynet中服务分析(wathchdog,gate,snxa.gateserver).html",
             title: "skynet中服务分析(wathchdog,gate,snxa.gateserver)"
           }
         }
