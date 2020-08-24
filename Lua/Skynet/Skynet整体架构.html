@@ -346,43 +346,39 @@ Q -> MQ -> SN -> L -> "skynet.dispatch_message"[label="workerthread"]
 }
 </div>
 <p>本质上，服务间的消息传递，就是将消息，通过 skynet 引擎提供的 API，然后递交到另外一个服务的 Queue 里面去，然后由工作线程拿出来进行处理。</p>
-<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
-                // graphviz init
-                let graphviz_engines = ["circo",
-                    "dot",
-                    "fdp",
-                    "neato",
-                    "osage",
-                    "twopi"];
+<blockquote>
+<p>简单说，可以把 skynet 理解为一个简单的操作系统，它可以用来调度数千个 lua 虚拟机，让它们并行工作。每个 lua 虚拟机都可以接收处理其它虚拟机发送过来的消息，以及对其它虚拟机发送消息。每个 lua 虚拟机，可以看成 skynet 这个操作系统下的独立进程，你可以在 skynet 工作时启动新的进程、销毁不再使用的进程、还可以通过调试控制台监管它们。skynet 同时掌控了外部的网络数据输入，和定时器的管理；它会把这些转换为一致的（类似进程间的消息）消息输入给这些进程。</p>
+<p><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script><br>                // graphviz init<br>                let graphviz_engines = [“circo”,<br>                    “dot”,<br>                    “fdp”,<br>                    “neato”,<br>                    “osage”,<br>                    “twopi”];</p>
+</blockquote>
+<pre><code>            function doGraphviz(engine) {
+                let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
+                for (let i = 0; i &lt; domAllDot.length; i++) {
+                    let dom = domAllDot[i];
+                    let graphSource = dom.innerText || dom.textContent;
 
-                function doGraphviz(engine) {
-                    let domAllDot = document.querySelectorAll('.language-' + engine);
-                    for (let i = 0; i < domAllDot.length; i++) {
-                        let dom = domAllDot[i];
-                        let graphSource = dom.innerText || dom.textContent;
-
-                        try {
-                           let viz = new Viz();
-                             viz.renderSVGElement(graphSource, {engine: engine})
-                                 .then(r => {
-                            dom.innerHTML ='';dom.append(r); });
-                        } catch (e) {
-                            console.error("Error when parsing node:", dom, e);
-                        } 
-                    }
-                } 
-
-                let init = function () {
-                    for (let i = 0; i < graphviz_engines.length; i++) {
-                        doGraphviz(graphviz_engines[i]);
-                    }
-                };
-                if (typeof window.addEventListener != "undefined") {
-                    window.addEventListener("load", init, false);
-                } else {
-                    window.attachEvent("onload", init);
+                    try {
+                       let viz = new Viz();
+                         viz.renderSVGElement(graphSource, {engine: engine})
+                             .then(r =&gt; {
+                        dom.innerHTML =&#39;&#39;;dom.append(r); });
+                    } catch (e) {
+                        console.error(&quot;Error when parsing node:&quot;, dom, e);
+                    } 
                 }
-                </script>
+            } 
+
+            let init = function () {
+                for (let i = 0; i &lt; graphviz_engines.length; i++) {
+                    doGraphviz(graphviz_engines[i]);
+                }
+            };
+            if (typeof window.addEventListener != &quot;undefined&quot;) {
+                window.addEventListener(&quot;load&quot;, init, false);
+            } else {
+                window.attachEvent(&quot;onload&quot;, init);
+            }
+            &lt;/script&gt;
+</code></pre></script></p></blockquote>
     </div>
 
     
