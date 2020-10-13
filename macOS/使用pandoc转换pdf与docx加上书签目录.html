@@ -50,14 +50,14 @@
   <meta name="description" content="在文章 几种绘图语法的比较 中，我说了我想要的一个 markdown 编辑器， typora 实际上非常优秀，但不开源。 Macdown 非常不错，开源。通过将其 mermaid 进行升级，viz.js 进行升级后，感觉非常不错了，唯一还有一点，就是导出 pdf 没有 Toc，而只能在页内设置 Toc，所以来研究一下用 pandoc 来进行转换看看效果如何。">
 <meta name="keywords" content="macOS,Pandoc">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用pandoc转换pdf加上书签目录">
+<meta property="og:title" content="使用pandoc转换pdf与docx加上书签目录">
 <meta property="og:url" content="https://gowa.club/macOS/使用pandoc转换pdf与docx加上书签目录.html">
 <meta property="og:site_name" content="退思园">
 <meta property="og:description" content="在文章 几种绘图语法的比较 中，我说了我想要的一个 markdown 编辑器， typora 实际上非常优秀，但不开源。 Macdown 非常不错，开源。通过将其 mermaid 进行升级，viz.js 进行升级后，感觉非常不错了，唯一还有一点，就是导出 pdf 没有 Toc，而只能在页内设置 Toc，所以来研究一下用 pandoc 来进行转换看看效果如何。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2019-12-31T14:28:56.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用pandoc转换pdf加上书签目录">
+<meta name="twitter:title" content="使用pandoc转换pdf与docx加上书签目录">
 <meta name="twitter:description" content="在文章 几种绘图语法的比较 中，我说了我想要的一个 markdown 编辑器， typora 实际上非常优秀，但不开源。 Macdown 非常不错，开源。通过将其 mermaid 进行升级，viz.js 进行升级后，感觉非常不错了，唯一还有一点，就是导出 pdf 没有 Toc，而只能在页内设置 Toc，所以来研究一下用 pandoc 来进行转换看看效果如何。">
 
 <link rel="canonical" href="https://gowa.club/macOS/使用pandoc转换pdf与docx加上书签目录.html">
@@ -74,7 +74,7 @@
   };
 </script>
 
-  <title>使用pandoc转换pdf加上书签目录 | 退思园</title>
+  <title>使用pandoc转换pdf与docx加上书签目录 | 退思园</title>
   
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
     <script>
@@ -243,7 +243,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          使用pandoc转换pdf加上书签目录
+          使用pandoc转换pdf与docx加上书签目录
         </h1>
 
         <div class="post-meta">
@@ -371,7 +371,7 @@
 <p>下面，其中使用的就是 CJKmainfont 这个变量来设置字体的。</p>
 <p>至此，如何将 md 转换为 pdf 就已经是完成了。但遗留的问题就是：</p>
 <p><strong>对于我 md 里面使用的 graphviz , mermaid 图表，如何才能给我在 PDF 中转换出来呢？</strong></p>
-<h2 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h2><p>当使用 <code>-s/--standalone</code> 选项的时候，pandoc 会在自表示的文档在中，在需要时使用一个模板来添加页眉和页脚。如果要查看默认的模板，键入：</p>
+<h2 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h2><p>当使用 <code>-s/--standalone</code> 选项的时候，pandoc 会在自表示的文档在中，在需要时使用一个模板来<strong>添加页眉和页脚</strong>。如果要查看默认的模板，键入：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pandoc -D *FORMAT*</span><br></pre></td></tr></table></figure>
 <ul>
 <li>FORMAT 输出文档的格式。</li>
@@ -383,19 +383,127 @@
 <ul>
 <li>odt 自定义 default.opendocument 模板</li>
 <li>pdf 自定义 defaut.latex 模板（或 在使用 -t context 时修改 default.context ，使用 ms 的时候自定义 default.ms，或在使用 -t html 的时候定义  -t html ）</li>
-<li>docx pptx 没有模板。</li>
+<li>docx pptx 没有模板。他们叫做参考文件。主要是参考 word 文件中的样式来进行设置格式。</li>
 </ul>
-<p>模板会包含变量，我们可以通过命令行的 <code>-V/--variable</code> 来进行设置。</p>
-<h2 id="latex-模板语法"><a href="#latex-模板语法" class="headerlink" title="latex 模板语法"></a>latex 模板语法</h2><h2 id="封面"><a href="#封面" class="headerlink" title="封面"></a>封面</h2><h2 id="页眉页脚"><a href="#页眉页脚" class="headerlink" title="页眉页脚"></a>页眉页脚</h2><h1 id="过滤器-Filter"><a href="#过滤器-Filter" class="headerlink" title="过滤器 Filter"></a>过滤器 Filter</h1><p>Pandoc 提供了一个接口，用户可以用这个接口来编写程序（叫做过滤器）来在 pandoc 上的  AST （抽象语法树）进行操作。</p>
-<p>Pandoc 由一系列的 读入器(Reader) 和写出器（Writer）组成。当我们将一个文档从一种格式转换为另外一种格式的时候，首先会由 pandoc 将输入文档转换为解析为 pandoc 的中间格式——abstract syntax tree（抽象语法树），然后由 Writer 来进行输出。AST 定义在 <a href="https://hackage.haskell.org/package/pandoc-types/docs/Text-Pandoc-Definition.html" target="_blank" rel="noopener"><code>Text.Pandoc.Definition</code> in the <code>pandoc-types</code>package</a>. 模块中。</p>
-<p>一个 Filter 就是一个修改  AST 的程序：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">INPUT --reader--&gt; AST --filter--&gt; AST --writer--&gt; OUTPUT</span><br></pre></td></tr></table></figure>
-<p>Filter 被看成是一个管道，其从标准输入读入，然后输出到标准输出。其会消耗，然后产生一个 pandoc 的 AST  JSON 表示。Filter 可以用任何的程序写成。我们只需要在命令行中指定过滤器就行：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">pandoc -s input.txt --filter pandoc-citeproc -o output.htl</span><br></pre></td></tr></table></figure>
-<p>有 一些第三方的过滤器： <a href="https://github.com/jgm/pandoc/wiki/Pandoc-Filters" target="_blank" rel="noopener">list of third party filters on the wiki</a>.</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">   source format</span><br><span class="line">        ↓</span><br><span class="line">     (pandoc)</span><br><span class="line">        ↓</span><br><span class="line">JSON-formatted AST</span><br><span class="line">        ↓</span><br><span class="line">     (filter)</span><br><span class="line">        ↓</span><br><span class="line">JSON-formatted AST</span><br><span class="line">        ↓</span><br><span class="line">     (pandoc)</span><br><span class="line">        ↓</span><br><span class="line">  target format</span><br></pre></td></tr></table></figure>
-<p>如果我们要用 python 来编写 Filter 的话，可以使用  <em>pandocfilters</em> 这个包：</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pip install pandocfilters</span><br></pre></td></tr></table></figure>
+<p>模板会包含变量，我们可以通过命令行的 <code>-V/--variable</code> 来进行设置。如果一个变量没有设置，那么就会在文档的元数据内进行搜索，文档的元数据可以用 YAML 或者是 <code>-M/--metadata</code> 来设置。有些变量会被 pandoc 赋予默认值。我们可以在变量一节进行查看。</p>
+<h2 id="latex-模板语法"><a href="#latex-模板语法" class="headerlink" title="latex 模板语法"></a>latex 模板语法</h2><h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>以 <code>$--</code> 开始的行都是注释</p>
+<h3 id="分隔符"><a href="#分隔符" class="headerlink" title="分隔符"></a>分隔符</h3><p>在模板中，我们可以使用  <script type="math/tex">...</script> 或者  <code>${...}</code> 作为分隔符来标识变量和控制结构。两种风格可以混用，但是开始和结尾必须一致。开始的分隔符可能会跟随空白符或 Tab，这些会被忽略。</p>
+<h1 id="PDF幻灯片"><a href="#PDF幻灯片" class="headerlink" title="PDF幻灯片"></a>PDF幻灯片</h1><p>在转换 PDF 的时候加上 <code>-t beamer</code> 就行了。</p>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><h2 id="元数据变量"><a href="#元数据变量" class="headerlink" title="元数据变量"></a>元数据变量</h2><ul>
+<li><code>title, author, date</code> 文档的基本标识信息。通过 LaTex 和 ConTeXt 来包含在 PDF 元数据中。可以通过 <a href="https://www.pandoc.org/MANUAL.html#extension-pandoc_title_block" target="_blank" rel="noopener">pandoc title block </a> 或者一个 YAML 的元数据块来实现。</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">author:</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Aristotle</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">Peter</span> <span class="string">Abelard</span></span><br><span class="line"><span class="string">...</span></span><br></pre></td></tr></table></figure>
+<p>注意：如果我们只是想设置 PDF 或 HTML 的元数据，我们可以不用在文档中包含这样的块，而只需要设置 <code>title-meta</code>, <code>author-meta</code>, 和 <code>date-meta</code> 变量就行了(默认情况下，这几个变量的默认值是通过 author, title, date 自动设置的)</p>
+<ul>
+<li><code>subtitle</code> HTML, EPUB, LaTeX, ConTeXt, and docx 中会用到的子标题</li>
+<li><code>abstract</code> LaTeX, ConTeXt, AsciiDoc, and docx 文档中的摘要</li>
+<li><code>keywords</code> HTML, PDF, ODT, pptx, docx and AsciiDoc 文档中的关键词</li>
+<li><code>subject</code> ODT, PDF, docx and pptx  中的科目</li>
+<li><code>description</code> ODT, docx and pptx metadata. 中的描述</li>
+<li><code>category</code> docx and pptx  文档分类</li>
+</ul>
+<h2 id="语言变量"><a href="#语言变量" class="headerlink" title="语言变量"></a>语言变量</h2><ul>
+<li><code>lang</code> 一个BCP 47 的语言标识</li>
+<li><code>dir</code> 文字方向。 rtl 或者是 ltr</li>
+</ul>
+<h2 id="Beamer-slides-变量"><a href="#Beamer-slides-变量" class="headerlink" title="Beamer slides 变量"></a>Beamer slides 变量</h2><p>这些变量改变一个使用 <code>beamer</code>  的 PDF 幻灯片的外观。</p>
+<ul>
+<li><code>aspectratio</code> 比例（43 for 4:3 [default], 169 for 16:9, 1610 for 16:10, 149 for 14:9, 141 for 1.41:1, 54 for 5:4, 32 for 3:2）</li>
+<li><code>beamerarticle</code> 从 Beamer slides 产生一个文章</li>
+<li><code>beameroption</code> 通过 <code>\setbeameroption{}</code> 来添加额外的 beamer 选项。</li>
+<li><code>institute</code> 作者附属信息；多个作者时可以是一个列表</li>
+<li><code>logo</code>幻灯片的LOGO</li>
+<li><code>navigation</code> 控制导航符号（没有导航符号就是空；其他值是 frame, vertical, horizontal）</li>
+<li><code>section-titles</code> 对新的节启用一个新的页。默认开启。</li>
+<li><code>theme, colortheme, fonttheme, innertheme, outertheme</code>主题</li>
+<li><code>themeoptions</code>  LaTeX beamer themes 选项（一个列表）</li>
+<li><code>titlegraphic</code> 标题幻灯片的图片</li>
+</ul>
+<h2 id="latex-变量"><a href="#latex-变量" class="headerlink" title="latex 变量"></a>latex 变量</h2><h3 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h3><ul>
+<li><p><code>block-headings</code> make <code>\paragraph</code> and <code>\subparagraph</code> (fourth- and fifth-level headings, or fifth- and sixth-level with book classes) free-standing rather than run-in; requires further formatting to distinguish from <code>\subsubsection</code> (third- or fourth-level headings). Instead of using this option, <a href="https://ctan.org/pkg/koma-script" target="_blank" rel="noopener">KOMA-Script</a> can adjust headings more extensively:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">documentclass: scrartcl</span><br><span class="line">header-includes: |</span><br><span class="line">  \RedeclareSectionCommand[</span><br><span class="line">    beforeskip=-10pt plus -2pt minus -1pt,</span><br><span class="line">    afterskip=1sp plus -1sp minus 1sp,</span><br><span class="line">    font=\normalfont\itshape]&#123;paragraph&#125;</span><br><span class="line">  \RedeclareSectionCommand[</span><br><span class="line">    beforeskip=-10pt plus -2pt minus -1pt,</span><br><span class="line">    afterskip=1sp plus -1sp minus 1sp,</span><br><span class="line">    font=\normalfont\scshape,</span><br><span class="line">    indent=0pt]&#123;subparagraph&#125;</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>classoption</code> 文档类 class 选项。如：<code>oneside</code>，多个选项进行重复就行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">classoption:</span><br><span class="line">- twocolumn</span><br><span class="line">- landscape</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>documentclass</code> 通常是 <code>book, article, report</code> 之一；the <a href="https://ctan.org/pkg/koma-script" target="_blank" rel="noopener">KOMA-Script</a> equivalents, <code>scrartcl</code>, <code>scrbook</code>, and <code>scrreprt</code>, which default to smaller margins; or <a href="https://ctan.org/pkg/memoir" target="_blank" rel="noopener"><code>memoir</code></a></p>
+</li>
+<li><p><code>geometry</code> <a href="https://ctan.org/pkg/geometry" target="_blank" rel="noopener">geometry</a> 包的选项。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">geometry:</span><br><span class="line">- top=30mm</span><br><span class="line">- left=20mm</span><br><span class="line">- heightrounded</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>hyperrefoptions</code> <a href="https://ctan.org/pkg/hyperref" target="_blank" rel="noopener">hyperref</a> 包的选项。如:<code>linktoc=all</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">hyperrefoptions:</span><br><span class="line">- linktoc=all</span><br><span class="line">- pdfwindowui</span><br><span class="line">- pdfpagemode=FullScreen</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>indent</code> 使用文档类的缩进设置（默认的 LaTeX 模板会移除缩进，并在段落间添加空白）</p>
+</li>
+<li><p><code>linestretch</code> 使用 <code>[</code>setspace<code>](https://ctan.org/pkg/setspace)</code> 报设置行间距。如：1.25，1.5</p>
+</li>
+<li><p><code>margin-left,margin-right,marigin-top,margin-bottom</code> 如果没有使用的 <code>geometry</code> 的话，那么就使用这些设置。</p>
+</li>
+<li><p><code>pagestyle</code> 控制 <code>\pagestyle{}</code>：默认的文章类支持 <code>plain</code>（默认），<code>empty</code>（没有页眉和页码）和 <code>headings</code>（在页眉有节标题）</p>
+</li>
+<li><p><code>papersize</code> 如 <code>letter, a4</code></p>
+</li>
+<li><p><code>secnumdepth</code> 节的深度（需要传递 <code>--number-sections/-N</code>，或者设置 <code>numbersections</code> 变量）</p>
+</li>
+</ul>
+<h3 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h3><ul>
+<li><p><code>fontenc</code> 通过 fontenc 包来指定字体的编码（<code>pdflatex</code>）；默认是 T1，参考<a href="https://ctan.org/pkg/encguide" target="_blank" rel="noopener">LaTeX font encodings guide</a></p>
+</li>
+<li><p><code>fontfamily</code> pdflatex 中要使用的字体包。<a href="https://www.tug.org/texlive/" target="_blank" rel="noopener">TeX Live</a> 包含了很多的选项, 文档参考 <a href="https://ctan.org/pkg/lm" target="_blank" rel="noopener">LaTeX Font Catalogue](https://tug.org/FontCatalogue/). 默认是 Latin Modern</a>.</p>
+</li>
+<li><p><code>fontfamilyoptions</code> 用做 <code>fontfamily</code> 的包的选项</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">fontfamily: libertinus</span><br><span class="line">fontfamilyoptions:</span><br><span class="line">- osf</span><br><span class="line">- p</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>fontsize</code> 字体正文大小。标准的值有：<code>10pt, 11pt, 12pt</code>。要使用其他尺寸，将 <code>documentclass</code> 设置成<a href="https://ctan.org/pkg/koma-script" target="_blank" rel="noopener">KOMA-Script</a> 类，如<code>scrartcl</code> 或者 <code>scrbook</code>。</p>
+</li>
+<li><p><code>mainfont,sansfont,monofont,mathfont,CJKmainfont</code> xelatex 和 lualatex 使用的字体：任何系统字体的名字，通过 <code>fontspec</code> 包来实现。<code>CJKmainfont</code> 使用  <code>xecjk</code> 包。</p>
+</li>
+<li><p><code>mainfontoptions, sansfontoptions, monofontoptions, mathfontoptions, CJKoptions</code> 上述字体在的选项。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">---</span><br><span class="line">mainfont: TeX Gyre Pagella</span><br><span class="line">mainfontoptions:</span><br><span class="line">- Numbers=Lowercase</span><br><span class="line">- Numbers=Proportional</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>microtypeoptions</code> 传递给 microtype 包的选项。</p>
+</li>
+</ul>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><ul>
+<li><code>colorlinks</code> 连接文本加色；如果 <code>linkcolor, filecolor, citecolor, urlcolor, or toccolor</code> 中任意一个被设置，那么这个变量会自动设置。</li>
+<li><code>linkcolor, filecolor, citecolor, urlcolor, toccolor</code> 也是链接颜色，不过针对的是内部链接、外部链接、引用链接、URLS、到TOC的链接。</li>
+<li><code>links-as-notes</code> 链接打印为脚注</li>
+</ul>
+<h2 id="扉页Front-matter"><a href="#扉页Front-matter" class="headerlink" title="扉页Front matter"></a>扉页Front matter</h2><ul>
+<li><code>lof, lot</code> 包含图片和表格的列表</li>
+<li><code>thanks</code> 文档标题下的的一些脚注。</li>
+<li><code>toc</code> 目录。也可通过 <code>--toc/--table-of-contents</code>。</li>
+<li><code>toc-depth</code> 需要包含节的深度。</li>
+</ul>
+<h2 id="BibLaTeX-Bibliographies"><a href="#BibLaTeX-Bibliographies" class="headerlink" title="BibLaTeX Bibliographies"></a>BibLaTeX Bibliographies</h2><p>当用 BibLaTeX 来进行文献引用渲染时生效。</p>
+<ul>
+<li><code>biblatexoptions</code> biblatex 的选项列表</li>
+<li><code>biblio-style</code> bibliography 风格, when used with —natbib and —biblatex.</li>
+<li><code>biblio-title</code> bibliography 标题, when used with —natbib and —biblatex.</li>
+<li><code>bibliography</code> bibliography to use for resolving references</li>
+<li>`natbiboptions list of options for natbib</li>
+</ul>
+<h1 id="raw-attribute"><a href="#raw-attribute" class="headerlink" title="raw attribute"></a>raw attribute</h1><p>这是一个扩展：<code>raw_attribute</code></p>
+<p>在一些代码块内，我们用特定的形式进行操作的话，那么将会被识别为 raw 内容。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">​```&#123;=openxml&#125;</span><br><span class="line">&lt;w:p&gt;</span><br><span class="line">  &lt;w:r&gt;</span><br><span class="line">    &lt;w:br w:type=&quot;page&quot;/&gt;</span><br><span class="line">  &lt;/w:r&gt;</span><br><span class="line">&lt;/w:p&gt;</span><br><span class="line">​</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">上面的代码会在 docx 里面插入一个分页符。</span><br><span class="line"></span><br><span class="line">openxml 必须和输出的格式一致。对应的关系如下：</span><br><span class="line"></span><br><span class="line">- docx -&gt; openxml</span><br><span class="line">- opendocument -&gt; odt</span><br><span class="line">- html5 -&gt; epub3</span><br><span class="line">- html4 -&gt; epub2</span><br><span class="line">- latex/beamer/ms/html5 -&gt; pdf （这依赖于我们使用的 --pdf-engine）</span><br><span class="line"></span><br><span class="line">&gt; RAW 属性不可与常规的属性混合使用</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 过滤器 Filter</span><br><span class="line"></span><br><span class="line">Pandoc 提供了一个接口，用户可以用这个接口来编写程序（叫做过滤器）来在 pandoc 上的  AST （抽象语法树）进行操作。</span><br><span class="line"></span><br><span class="line">Pandoc 由一系列的 读入器(Reader) 和写出器（Writer）组成。当我们将一个文档从一种格式转换为另外一种格式的时候，首先会由 pandoc 将输入文档转换为解析为 pandoc 的中间格式——abstract syntax tree（抽象语法树），然后由 Writer 来进行输出。AST 定义在 [`Text.Pandoc.Definition` in the `pandoc-types`package](https://hackage.haskell.org/package/pandoc-types/docs/Text-Pandoc-Definition.html). 模块中。</span><br><span class="line"></span><br><span class="line">一个 Filter 就是一个修改  AST 的程序：</span><br></pre></td></tr></table></figure>
+<p>INPUT —reader—&gt; AST —filter—&gt; AST —writer—&gt; OUTPUT<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">Filter 被看成是一个管道，其从标准输入读入，然后输出到标准输出。其会消耗，然后产生一个 pandoc 的 AST  JSON 表示。Filter 可以用任何的程序写成。我们只需要在命令行中指定过滤器就行：</span><br></pre></td></tr></table></figure></p>
+<p>pandoc -s input.txt —filter pandoc-citeproc -o output.htl<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">有 一些第三方的过滤器： [list of third party filters on the wiki](https://github.com/jgm/pandoc/wiki/Pandoc-Filters).</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">`</span><br></pre></td></tr></table></figure></p>
+<pre><code>                     source format
+                          ↓
+                       (pandoc)
+                          ↓
+                  JSON-formatted AST
+                          ↓
+                       (filter)
+                          ↓
+                  JSON-formatted AST
+                          ↓
+                       (pandoc)
+                          ↓
+                    target format
+</code></pre><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">如果我们要用 python 来编写 Filter 的话，可以使用  *pandocfilters* 这个包：</span><br><span class="line"></span><br><span class="line">```sh</span><br><span class="line">pip install pandocfilters</span><br></pre></td></tr></table></figure>
 <p>在最开头的例子中，我们可以来写一个过滤器：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">Pandoc filter to convert all level 2+ headers to paragraphs with</span></span><br><span class="line"><span class="string">emphasized text.</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pandocfilters <span class="keyword">import</span> toJSONFilter, Emph, Para</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">behead</span><span class="params">(key, value, format, meta)</span>:</span></span><br><span class="line">  <span class="keyword">if</span> key == <span class="string">'CodeBlock'</span>:</span><br><span class="line">    value[<span class="number">1</span>] = <span class="string">'code'</span></span><br><span class="line">    <span class="keyword">return</span> CodeBlock(value[<span class="number">0</span>],value[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">  toJSONFilter(behead)</span><br></pre></td></tr></table></figure>
 <p><code>toJSONFilter(behead)</code> 会遍历 AST，然后对每个元素应用 <em>behead</em>  action。如果 <em>behead</em> 没有返回值，那么这个节点就不会被改变；如果其返回一个对象，那么这个节点就会被替换；如果其返回一个列表，新的列表就会被拼接在一起。</p>
@@ -411,6 +519,130 @@
 <h2 id="Lua-filters"><a href="#Lua-filters" class="headerlink" title="Lua filters"></a>Lua filters</h2><p>传统的 pandoc filters 操作的是 JSON 表示的 AST，可以用任何语言来编写 filter 。</p>
 <p>尽管我们可以使用任何语言来编写 filter ，但其拥有很多不好的地方。首先，读入 JSON 和写出 JSON 都是有开销的（每个 filter 一对，两次）。其次，一个 filter 是否工作依赖用户的环境是否安装了 filter 的依赖。</p>
 <p>因此，从2.0 开始，就开始支持用 lua 来编写 filter 了，这样不需要任何额外的依赖。pandoc 内置了一个 5.3 版本的 lua 解释器。pandoc 的所有数据类型都已经注入到这个 Lua 环境中了</p>
+<p>下面就是一个简单的例子：</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">return</span> &#123;</span><br><span class="line">  &#123;</span><br><span class="line">    Strong = <span class="function"><span class="keyword">function</span> <span class="params">(elem)</span></span></span><br><span class="line">      <span class="keyword">return</span> pandoc.SmallCaps(elem.c)</span><br><span class="line">    <span class="keyword">end</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>或者下面这样</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Strong</span><span class="params">(elem)</span></span></span><br><span class="line">  <span class="keyword">return</span> pandoc.SmallCaps(elem.c)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>这些 Lua 代码表达的意思是：遍历 AST 抽象语法树，当我们找到一个 Strong 元素，把它用一个 SmallCaps 进行替换。</p>
+<h3 id="Lua-过滤器结构"><a href="#Lua-过滤器结构" class="headerlink" title="Lua 过滤器结构"></a>Lua 过滤器结构</h3><p>Lua 过滤器其实是一个 Lua 表，使用元素名作为键，值是要在这些元素上进行执行的动作的 Lua 函数。</p>
+<p>过滤器期待是放在不同的文件中，然后逐个通过 <code>--lua-filter</code> 传递给 pandoc 命令行。例如：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">pandoc --lua-filter=current-date.lua -f markdown MANUAL.txt</span><br></pre></td></tr></table></figure>
+<p>Pandoc 期待每个 Lua 文件返回一个过滤器的列表。这个列表中的过滤器被叫做 <strong>序列</strong>，每个都在前一个过滤器的结果上运行。如果过滤器脚本没有返回任何值， pandoc 会通过搜集所有和 pandoc 元素同名的顶级函数来生成单个过滤器。</p>
+<p>过滤器函数的返回值必须是以下几个之一：</p>
+<ul>
+<li><code>nil</code>：保持对象不改变</li>
+<li>一个 pandoc 对象：这必须和输入的对象相同，同时替换原来的对象</li>
+<li>一个 pandoc 对象列表：替换原始对象；返回一个空列表会删除对象</li>
+</ul>
+<p>也就是说过滤器函数的输入和输出类型必须相同，如果是列表，列表的元素类型也必须一致。</p>
+<p>如果找不到和元素同名的过滤器函数，那么就会回退到使用通用的函数。    有两个回退函数被支持，<code>Inline</code>和 <code>Word</code>。</p>
+<h3 id="处理元素序列的过滤器"><a href="#处理元素序列的过滤器" class="headerlink" title="处理元素序列的过滤器"></a>处理元素序列的过滤器</h3><p>对于某些过滤器任务，知道文档中元素出现的顺序是很有必要的。但一次仅检查一个元素是不够的。</p>
+<p>有两个特殊的函数名称，可用于在块列表或内联列表上定义过滤器。</p>
+<ul>
+<li><strong>Inlines (inlines)</strong> 如果在过滤器中出现，这个函数会在所有 inline 元素列表上调用，例如 一个 <code>Para</code> 元素的内容，或者 <code>Image</code> 的描述。<code>inlines</code> 参数是一个由 <code>Inline</code> 元素组成的列表</li>
+<li><strong>Blocks (blocks)</strong> 意思差不多同上。</li>
+</ul>
+<p>这两个过滤器函数特殊的地方在于，它们的返回值只能是 <code>nil</code> 或者是元素列表，不允许弹不元素出现，且类型必须和输入相同。</p>
+<h3 id="执行顺序"><a href="#执行顺序" class="headerlink" title="执行顺序"></a>执行顺序</h3><p>在一个过滤器集合中，函数的执行有一个固定的顺序，没有出现的就会跳过：</p>
+<ol>
+<li><code>Inline</code> 元素的函数</li>
+<li><code>Inlines</code> 过滤器函数</li>
+<li><code>Block</code> 元素函数</li>
+<li><code>Block()</code> 过滤器函数</li>
+<li><code>Meta</code> 过滤器函数</li>
+<li><code>Pandoc</code> 过滤器函数</li>
+</ol>
+<p>当然，强制使用一个不同的顺序也是可以的，我们可以通过显式的返回多个过滤器集合来实现。例如：</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- ... filter definitions ...</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> &#123;</span><br><span class="line">  &#123; Meta = Meta &#125;,  <span class="comment">-- (1)</span></span><br><span class="line">  &#123; Str = Str &#125;     <span class="comment">-- (2)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这就会让 <code>Meta</code> 的过滤器在 <code>Str</code> 的过滤器之前执行。</p>
+<h3 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h3><p>有几个全局变量</p>
+<ul>
+<li><strong>FORMAT</strong> 输出格式，这样使我们可以根据输入的格式来让过滤器执行不同的操作</li>
+<li><strong>PANDOC_READER_OPTIONS</strong> 传递给解释器的选项组成的表</li>
+<li><strong>PANDOC_VERSION</strong> 版本号。</li>
+<li><strong>PANDOC_API_VERSION</strong> API版本号</li>
+<li><strong>PANDOC_SCRIPT_FILE</strong> 过滤器文件名</li>
+<li><strong>PANDOC_STATE</strong> 被所有读入器和写出器共享的状态信息</li>
+</ul>
+<h3 id="导出的-Pandoc-函数"><a href="#导出的-Pandoc-函数" class="headerlink" title="导出的 Pandoc 函数"></a>导出的 Pandoc 函数</h3><p>有几个函数已经导出来了</p>
+<ul>
+<li><a href="https://pandoc.org/lua-filters.html#pandoc.walk_block" target="_blank" rel="noopener"><code>walk_block</code></a> and <a href="https://pandoc.org/lua-filters.html#pandoc.walk_inline" target="_blank" rel="noopener"><code>walk_inline</code></a> allow filters to be applied inside specific block or inline elements;</li>
+<li><a href="https://pandoc.org/lua-filters.html#pandoc.read" target="_blank" rel="noopener"><code>read</code></a> allows filters to parse strings into pandoc documents;</li>
+<li><a href="https://pandoc.org/lua-filters.html#pandoc.pipe" target="_blank" rel="noopener"><code>pipe</code></a> runs an external command with input from and output to strings;</li>
+<li>the <a href="https://pandoc.org/lua-filters.html#module-pandoc.mediabag" target="_blank" rel="noopener"><code>pandoc.mediabag</code></a> module allows access to the “mediabag,” which stores binary content such as images that may be included in the final document;</li>
+<li>the <a href="https://pandoc.org/lua-filters.html#module-pandoc.utils" target="_blank" rel="noopener"><code>pandoc.utils</code></a> module contains various utility functions.</li>
+</ul>
+<h3 id="元素创建"><a href="#元素创建" class="headerlink" title="元素创建"></a>元素创建</h3><p>元素创建函数如 <code>Str, Para, Pandoc</code> 被设计来能够很容易的创建能够很简单进行使用的元素，同时这些元素又能被读回 Lua 环境。在内部，pandoc 使用这些函数来创建传递给过滤器函数的对象。这就意味着通过这些模块创建的元素和通过参数传递过来的是一样的。</p>
+<h3 id="Lua-初始化"><a href="#Lua-初始化" class="headerlink" title="Lua 初始化"></a>Lua 初始化</h3><p>可以通过在 pandoc 的数据目录中添加一个 <code>init.lua</code> 来进行初始化 Lua 环境。一个常用的情况就是加载额外的模块，或是修改默认的模块。</p>
+<p>下面的代码片段添加了所有在 <code>text</code> 模块中定义的 <code>unicode</code> 敏感的函数到默认的 <code>string</code> 模块中，以 <code>uc_</code> 为前缀。</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> name, fn <span class="keyword">in</span> <span class="built_in">pairs</span>(<span class="built_in">require</span> <span class="string">'text'</span>) <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">string</span>[<span class="string">'uc_'</span> .. name] = fn</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>这使我们可以用冒号的形式来调用这些函数 <code>mystring:uc_upper()</code>。</p>
+<h3 id="Lua类型参考"><a href="#Lua类型参考" class="headerlink" title="Lua类型参考"></a>Lua类型参考</h3><h4 id="共享属性"><a href="#共享属性" class="headerlink" title="共享属性"></a>共享属性</h4><p><strong>clone()</strong></p>
+<p>所有的类型，除了只读的，都可以通过 <code>clone()</code> 方法来复制</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">local emph = pandoc.Emph &#123;pandoc.Str &apos;important&apos;&#125;</span><br><span class="line">local cloned_emph = emph:clone()  -- note the colon</span><br></pre></td></tr></table></figure>
+<h4 id="Pandoc"><a href="#Pandoc" class="headerlink" title="Pandoc"></a>Pandoc</h4><p>Pancod 文档。可以通过 <code>pandoc.Pandoc</code> 构造器创建。对象的相等性通过 <code>pandoc.utils.equals</code> 来比较。</p>
+<ul>
+<li><code>blocks</code> 文档内容（<code>Blocks</code> 元素的列表）</li>
+<li><code>meta</code> 文档元数据信息（<code>Meta</code> 对象）</li>
+</ul>
+<h4 id="Meta"><a href="#Meta" class="headerlink" title="Meta"></a>Meta</h4><p>文档元数据信息；字符串索引的 <code>MetaValues</code> 集合。</p>
+<p><code>[</code>pandoc.Meta<code>](https://pandoc.org/lua-filters.html#pandoc.meta)</code>  创建</p>
+<p><a href="https://pandoc.org/lua-filters.html#pandoc.utils.equals" target="_blank" rel="noopener"><code>pandoc.utils.equals</code></a> 判断相等性</p>
+<h4 id="MetaValue"><a href="#MetaValue" class="headerlink" title="MetaValue"></a>MetaValue</h4><p>文档元数据信息项。</p>
+<p><a href="https://pandoc.org/lua-filters.html#pandoc.utils.equals" target="_blank" rel="noopener"><code>pandoc.utils.equals</code></a> 相等性判断</p>
+<h4 id="MetaBlocks"><a href="#MetaBlocks" class="headerlink" title="MetaBlocks"></a>MetaBlocks</h4><p>一个用做 meta 值的块列表（<code>Blocks</code> 列表）</p>
+<p>字段：</p>
+<ul>
+<li><code>tag, t</code>：<code>MetaBlocks</code> 字面值。</li>
+</ul>
+<h4 id="MetaBool"><a href="#MetaBool" class="headerlink" title="MetaBool"></a>MetaBool</h4><p>Lua 布尔值别名。true /false.</p>
+<h4 id="MetaInlines"><a href="#MetaInlines" class="headerlink" title="MetaInlines"></a>MetaInlines</h4><p>一个用做 meta 值的内联列表（<code>Inlines</code> 列表）</p>
+<p>可通过 <a href="https://pandoc.org/lua-filters.html#pandoc.metainlines" target="_blank" rel="noopener"><code>pandoc.MetaInlines</code></a> 创建</p>
+<p>字段：</p>
+<ul>
+<li><code>tag, t</code>：<code>MetaInlines</code> 字面值。</li>
+</ul>
+<h4 id="MetaList"><a href="#MetaList" class="headerlink" title="MetaList"></a>MetaList</h4><p>其他 metadata values 列表(<a href="https://pandoc.org/lua-filters.html#type-list" target="_blank" rel="noopener">List</a> of <a href="https://pandoc.org/lua-filters.html#type-metavalue" target="_blank" rel="noopener">MetaValues</a>).</p>
+<p> <a href="https://pandoc.org/lua-filters.html#pandoc.metalist" target="_blank" rel="noopener"><code>pandoc.MetaList</code></a> 创建</p>
+<p>字段:</p>
+<ul>
+<li><p><code>tag</code>, <code>t</code></p>
+<p> <code>MetaList</code> (string) 字面值</p>
+</li>
+</ul>
+<p>All methods available for <a href="https://pandoc.org/lua-filters.html#type-list" target="_blank" rel="noopener">List</a>s can be used on this type as well.</p>
+<h4 id="MetaMap"><a href="#MetaMap" class="headerlink" title="MetaMap"></a>MetaMap</h4><p>字符串索的 meta-values字典. (table).</p>
+<p><a href="https://pandoc.org/lua-filters.html#pandoc.metamap" target="_blank" rel="noopener"><code>pandoc.MetaMap</code></a> 创建</p>
+<p>字段:</p>
+<ul>
+<li><p><code>tag</code>, <code>t</code></p>
+<p><code>MetaMap</code> (string)字面值</p>
+</li>
+</ul>
+<p><em>Note</em>: The fields will be shadowed if the map contains a field with the same name as those listed.</p>
+<h4 id="MetaString"><a href="#MetaString" class="headerlink" title="MetaString"></a>MetaString</h4><p>Plain Lua string value (string).</p>
+<h4 id="Block"><a href="#Block" class="headerlink" title="Block"></a>Block</h4><p><a href="https://pandoc.org/lua-filters.html#pandoc.utils.equals" target="_blank" rel="noopener"><code>pandoc.utils.equals</code></a> 相等性判断</p>
+<h4 id="BlockQuote"><a href="#BlockQuote" class="headerlink" title="BlockQuote"></a>BlockQuote</h4><p>块引用元素。</p>
+<p><a href="https://pandoc.org/lua-filters.html#pandoc.blockquote" target="_blank" rel="noopener"><code>pandoc.BlockQuote</code></a> 创建</p>
+<p>字段：</p>
+<ul>
+<li><code>content</code>：块内容（<code>Blocks</code> 列表）</li>
+<li><code>tag, t</code>：<code>BlockQuote</code> 字面值</li>
+</ul>
+<h4 id="BulletList"><a href="#BulletList" class="headerlink" title="BulletList"></a>BulletList</h4><p>项目符号列表。<a href="https://pandoc.org/lua-filters.html#pandoc.bulletlist" target="_blank" rel="noopener"><code>pandoc.BulletList</code></a> 创建</p>
+<ul>
+<li><code>content</code> 列表 (<code>Blocks</code> 列表的列表)</li>
+<li><code>tag, t</code><br>BulletList (string) 字面值</li>
+</ul>
+<h4 id="CodeBlock"><a href="#CodeBlock" class="headerlink" title="CodeBlock"></a>CodeBlock</h4><p>代码块。<a href="https://pandoc.org/lua-filters.html#pandoc.codeblock" target="_blank" rel="noopener"><code>pandoc.CodeBlock</code></a> 创建</p>
+<ul>
+<li><code>text</code> 代码</li>
+<li><code>attr</code> 元素属性(<code>Attr</code>)</li>
+<li><code>identifier</code> <code>attr.identifier</code> 别名（String）</li>
+<li><code>classes</code>  <code>attr.classes</code> 别名 (列表 of strings)</li>
+<li><code>attributes</code> <code>attr.attributes</code> 别名（<a href="https://pandoc.org/lua-filters.html#type-attributes" target="_blank" rel="noopener">Attributes</a>）</li>
+<li><code>tag, t</code> CodeBlock 字面值</li>
+</ul>
 <h2 id="图表"><a href="#图表" class="headerlink" title="图表"></a>图表</h2><p>并不是非常好和统一的方式，准备自己研究一个比较好的办法来实现他。</p>
 <h3 id="mermaid"><a href="#mermaid" class="headerlink" title="mermaid"></a>mermaid</h3><p>需要通过装过滤器来完成，当前能看到有两个过滤器：</p>
 <ul>
@@ -508,7 +740,7 @@
 <li><a href="https://github.com/Gowa2017/pandoc-graphviz-filter" target="_blank" rel="noopener">pandoc-graphviz-filter</a> 自己写了个，用的是 viz.js@1.8.2 版本。</li>
 </ul>
 <p>这样实际上是可以达到与 我在  macdown 内进行编辑的时候的效果是一致的。</p>
-<h2 id="字体"><a href="#字体" class="headerlink" title="字体"></a>字体</h2><ul>
+<h2 id="字体-1"><a href="#字体-1" class="headerlink" title="字体"></a>字体</h2><ul>
 <li>中文字体 使用 adobe 开源字体 <a href="https://github.com/adobe-fonts" target="_blank" rel="noopener">adobe-fonts</a></li>
 <li>英文字体</li>
 </ul>
@@ -591,7 +823,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pandoc"><span class="nav-number">1.</span> <span class="nav-text">pandoc</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#抽象语法树"><span class="nav-number">2.</span> <span class="nav-text">抽象语法树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本语法"><span class="nav-number">3.</span> <span class="nav-text">基本语法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#建立-PDF"><span class="nav-number">4.</span> <span class="nav-text">建立 PDF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#—pdf-engine"><span class="nav-number">4.1.</span> <span class="nav-text">—pdf-engine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#—toc-—table-of-contents"><span class="nav-number">4.2.</span> <span class="nav-text">—toc, —table-of-contents</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#—toc-depth-NUMBER"><span class="nav-number">4.3.</span> <span class="nav-text">—toc-depth=NUMBER</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mactex"><span class="nav-number">4.4.</span> <span class="nav-text">mactex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BasicTex"><span class="nav-number">4.5.</span> <span class="nav-text">BasicTex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中文字体"><span class="nav-number">4.6.</span> <span class="nav-text">中文字体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例"><span class="nav-number">4.7.</span> <span class="nav-text">使用示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模板"><span class="nav-number">4.8.</span> <span class="nav-text">模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#latex-模板语法"><span class="nav-number">4.9.</span> <span class="nav-text">latex 模板语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#封面"><span class="nav-number">4.10.</span> <span class="nav-text">封面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#页眉页脚"><span class="nav-number">4.11.</span> <span class="nav-text">页眉页脚</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#过滤器-Filter"><span class="nav-number">5.</span> <span class="nav-text">过滤器 Filter</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lua-filters"><span class="nav-number">5.1.</span> <span class="nav-text">Lua filters</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图表"><span class="nav-number">5.2.</span> <span class="nav-text">图表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mermaid"><span class="nav-number">5.2.1.</span> <span class="nav-text">mermaid</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#graphviz"><span class="nav-number">5.2.2.</span> <span class="nav-text">graphviz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#plantUML"><span class="nav-number">5.2.3.</span> <span class="nav-text">plantUML</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DOCX"><span class="nav-number">6.</span> <span class="nav-text">DOCX</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于表格无边框的解决办法"><span class="nav-number">6.1.</span> <span class="nav-text">关于表格无边框的解决办法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于标题没有自动编号"><span class="nav-number">6.2.</span> <span class="nav-text">关于标题没有自动编号</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#我的解决方案"><span class="nav-number">7.</span> <span class="nav-text">我的解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pdf-模板"><span class="nav-number">7.1.</span> <span class="nav-text">pdf 模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#markdown-解析器"><span class="nav-number">7.2.</span> <span class="nav-text">markdown 解析器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#graphviz-mermaid-filter"><span class="nav-number">7.3.</span> <span class="nav-text">graphviz mermaid filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字体"><span class="nav-number">7.4.</span> <span class="nav-text">字体</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#pandoc"><span class="nav-number">1.</span> <span class="nav-text">pandoc</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#抽象语法树"><span class="nav-number">2.</span> <span class="nav-text">抽象语法树</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本语法"><span class="nav-number">3.</span> <span class="nav-text">基本语法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#建立-PDF"><span class="nav-number">4.</span> <span class="nav-text">建立 PDF</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#—pdf-engine"><span class="nav-number">4.1.</span> <span class="nav-text">—pdf-engine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#—toc-—table-of-contents"><span class="nav-number">4.2.</span> <span class="nav-text">—toc, —table-of-contents</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#—toc-depth-NUMBER"><span class="nav-number">4.3.</span> <span class="nav-text">—toc-depth=NUMBER</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mactex"><span class="nav-number">4.4.</span> <span class="nav-text">mactex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BasicTex"><span class="nav-number">4.5.</span> <span class="nav-text">BasicTex</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中文字体"><span class="nav-number">4.6.</span> <span class="nav-text">中文字体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用示例"><span class="nav-number">4.7.</span> <span class="nav-text">使用示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模板"><span class="nav-number">4.8.</span> <span class="nav-text">模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#latex-模板语法"><span class="nav-number">4.9.</span> <span class="nav-text">latex 模板语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#注释"><span class="nav-number">4.9.1.</span> <span class="nav-text">注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分隔符"><span class="nav-number">4.9.2.</span> <span class="nav-text">分隔符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PDF幻灯片"><span class="nav-number">5.</span> <span class="nav-text">PDF幻灯片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量"><span class="nav-number">6.</span> <span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#元数据变量"><span class="nav-number">6.1.</span> <span class="nav-text">元数据变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#语言变量"><span class="nav-number">6.2.</span> <span class="nav-text">语言变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Beamer-slides-变量"><span class="nav-number">6.3.</span> <span class="nav-text">Beamer slides 变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#latex-变量"><span class="nav-number">6.4.</span> <span class="nav-text">latex 变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#布局"><span class="nav-number">6.4.1.</span> <span class="nav-text">布局</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字体"><span class="nav-number">6.4.2.</span> <span class="nav-text">字体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接"><span class="nav-number">6.4.3.</span> <span class="nav-text">链接</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扉页Front-matter"><span class="nav-number">6.5.</span> <span class="nav-text">扉页Front matter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BibLaTeX-Bibliographies"><span class="nav-number">6.6.</span> <span class="nav-text">BibLaTeX Bibliographies</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#raw-attribute"><span class="nav-number">7.</span> <span class="nav-text">raw attribute</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lua-filters"><span class="nav-number">7.1.</span> <span class="nav-text">Lua filters</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua-过滤器结构"><span class="nav-number">7.1.1.</span> <span class="nav-text">Lua 过滤器结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#处理元素序列的过滤器"><span class="nav-number">7.1.2.</span> <span class="nav-text">处理元素序列的过滤器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行顺序"><span class="nav-number">7.1.3.</span> <span class="nav-text">执行顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全局变量"><span class="nav-number">7.1.4.</span> <span class="nav-text">全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#导出的-Pandoc-函数"><span class="nav-number">7.1.5.</span> <span class="nav-text">导出的 Pandoc 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#元素创建"><span class="nav-number">7.1.6.</span> <span class="nav-text">元素创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua-初始化"><span class="nav-number">7.1.7.</span> <span class="nav-text">Lua 初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua类型参考"><span class="nav-number">7.1.8.</span> <span class="nav-text">Lua类型参考</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#共享属性"><span class="nav-number">7.1.8.1.</span> <span class="nav-text">共享属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pandoc"><span class="nav-number">7.1.8.2.</span> <span class="nav-text">Pandoc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Meta"><span class="nav-number">7.1.8.3.</span> <span class="nav-text">Meta</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MetaValue"><span class="nav-number">7.1.8.4.</span> <span class="nav-text">MetaValue</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MetaBlocks"><span class="nav-number">7.1.8.5.</span> <span class="nav-text">MetaBlocks</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MetaBool"><span class="nav-number">7.1.8.6.</span> <span class="nav-text">MetaBool</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MetaInlines"><span class="nav-number">7.1.8.7.</span> <span class="nav-text">MetaInlines</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MetaList"><span class="nav-number">7.1.8.8.</span> <span class="nav-text">MetaList</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MetaMap"><span class="nav-number">7.1.8.9.</span> <span class="nav-text">MetaMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MetaString"><span class="nav-number">7.1.8.10.</span> <span class="nav-text">MetaString</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Block"><span class="nav-number">7.1.8.11.</span> <span class="nav-text">Block</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BlockQuote"><span class="nav-number">7.1.8.12.</span> <span class="nav-text">BlockQuote</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#BulletList"><span class="nav-number">7.1.8.13.</span> <span class="nav-text">BulletList</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CodeBlock"><span class="nav-number">7.1.8.14.</span> <span class="nav-text">CodeBlock</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#图表"><span class="nav-number">7.2.</span> <span class="nav-text">图表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#mermaid"><span class="nav-number">7.2.1.</span> <span class="nav-text">mermaid</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#graphviz"><span class="nav-number">7.2.2.</span> <span class="nav-text">graphviz</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#plantUML"><span class="nav-number">7.2.3.</span> <span class="nav-text">plantUML</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DOCX"><span class="nav-number">8.</span> <span class="nav-text">DOCX</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于表格无边框的解决办法"><span class="nav-number">8.1.</span> <span class="nav-text">关于表格无边框的解决办法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关于标题没有自动编号"><span class="nav-number">8.2.</span> <span class="nav-text">关于标题没有自动编号</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#我的解决方案"><span class="nav-number">9.</span> <span class="nav-text">我的解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#pdf-模板"><span class="nav-number">9.1.</span> <span class="nav-text">pdf 模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#markdown-解析器"><span class="nav-number">9.2.</span> <span class="nav-text">markdown 解析器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#graphviz-mermaid-filter"><span class="nav-number">9.3.</span> <span class="nav-text">graphviz mermaid filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字体-1"><span class="nav-number">9.4.</span> <span class="nav-text">字体</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -605,7 +837,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">366</span>
+          <span class="site-state-item-count">367</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -618,7 +850,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">154</span>
+        <span class="site-state-item-count">155</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -751,7 +983,7 @@
         config: {page: {
             url: "https://gowa.club/macOS/使用pandoc转换pdf与docx加上书签目录.html",
             identifier: "macOS/使用pandoc转换pdf与docx加上书签目录.html",
-            title: "使用pandoc转换pdf加上书签目录"
+            title: "使用pandoc转换pdf与docx加上书签目录"
           }
         }
       });
