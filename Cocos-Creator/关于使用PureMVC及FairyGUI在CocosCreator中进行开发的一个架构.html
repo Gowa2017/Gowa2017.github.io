@@ -292,9 +292,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>是时候做一个总结了。之前一直抱怨 Cocos Creator 的 UI 实在是太难用了，因此再找到了 PureMVC 和 FairyGUI 后，发现进行整合以后，虽然说代码的量会进行增加，但是进行了相当程度的解耦了。在文章 <a href="/JavaScript/PureMVC在JavaScript的实现.html" title="PureMVC在JavaScript的实现">PureMVC在JavaScript的实现</a> 及 <a href="/Cocos-Creator/关于Fairygui的实现机制了解.html" title="关于Fairygui的实现机制了解">关于Fairygui的实现机制了解</a> 分别做了详细的介绍。<br><a id="more"></a></p>
+        <p>是时候做一个总结了。之前一直抱怨 Cocos Creator 的 UI 实在是太难用了，因此再找到了 PureMVC 和 FairyGUI 后，发现进行整合以后，虽然说代码的量会进行增加，但是进行了相当程度的解耦了。在文章 <a href="/JavaScript/PureMVC在JavaScript的实现.html" title="PureMVC在JavaScript的实现">PureMVC在JavaScript的实现</a> 及 <a href="/Cocos-Creator/关于Fairygui的实现机制了解.html" title="关于Fairygui的实现机制了解">关于Fairygui的实现机制了解</a> 分别做了详细的介绍。</p>
+<a id="more"></a>
 <h1 id="Cocos-Creator-本身的架构"><a href="#Cocos-Creator-本身的架构" class="headerlink" title="Cocos Creator 本身的架构"></a>Cocos Creator 本身的架构</h1><p>Cocos Creator 本身是一个 ECS 系统，以每个 cc.Node 节点作为容器（Entity），然后在每个 节点 上挂上不同的组件，来实现不同的功能。如 Cocos Creator 本身内置提供的 Label，Button，Layout 等都是这样做的。</p>
-<p>我们可以在 Node 上挂载需要进行渲染的组件，或者单纯的逻辑组件，这些组件只有都是继承自 <code>cc.Component</code> 就行。事实上 Cocos Creator 本身，也是节点上承载的组件的不同，进行了分类：<strong>UI节点，渲染节点</strong>。渲染节点包括：<strong>Sprite，Label，ParticleSystem</strong>，其他的都是 UI 节点了。</p>
+<p>我们可以在 Node 上挂载需要进行渲染的组件，或者单纯的逻辑组件，这些组件只有都是继承自 <code>cc.Component</code> 就行。事实上 Cocos Creator 本身，也是节点上承载的组件的不同，进行了分类：<strong>UI 节点，渲染节点</strong>。渲染节点包括：<strong>Sprite，Label，ParticleSystem</strong>，其他的都是 UI 节点了。</p>
 <div class="language-dot">
 digraph {
 subgraph cluster_scene{
@@ -335,7 +336,7 @@ digraph {
 Core[label="PureMVC CORE"]
 F[label=Facade]
 P[label=Proxy]
-M[label="Mediator\n调用Proxy\n调用UIComponent更新方法\n为UIComponent绑定事件"]
+M[label="Mediator\n调用Proxy\n调用UIComponent更新方法"]
 C[label=Command]
 UIComponent[label="UIComponent\n根据数据更新UI方法"]
 F -> Core[dir=both]
@@ -352,6 +353,37 @@ M -> UIComponent -> "FairyGUI bin 文件"
 <li>Mediaotr 负责关注相应的通知类型，进行响应，最终会调用到 UIComponent 中的关于 UI 逻辑的部分。</li>
 <li>UIComponent 负责加载 FairyGUI 发布的 bin 文件，构造 UI。</li>
 </ul>
+<h1 id="一些需要了解和注意的要点"><a href="#一些需要了解和注意的要点" class="headerlink" title="一些需要了解和注意的要点"></a>一些需要了解和注意的要点</h1><ol>
+<li>cocos creator 中的所有内容（脚本，渲染对象）都是挂在节点上的</li>
+<li>一个 UI 脚本组件，我们将其挂在节点上，当其也对自己添加组件的时候，实际上是添加到自身所属的节点上的。</li>
+<li>fairygui 就是利用了第 2 点，将一个 GRoot 挂在了 Scenet 场景节点上。</li>
+</ol>
+<p>因此，我们可以按照这么一个逻辑来进行开发。</p>
+<ol>
+<li>cocos creator 启动，加载场景</li>
+<li>在场景上挂一个组件脚本，此脚本负责<ol>
+<li>初始化 puremvc</li>
+<li>创建 fairygui.GRoot</li>
+<li>加载 UI 组件，而 UI 组件又需要</li>
+</ol>
+</li>
+<li>向 Facade 注册 Mediator</li>
+</ol>
+<p>我们使用 FairyGUI 来做 UI 的话，渲染的速度应该是会比直接在 cocos creator 上挂再来慢一些。因为对于已经编辑好的场景，是直接读取文件进行渲染了；而 Fairy 还需要解析了它自身定义格式的二进制文件后，再转换到 cocos creator 上来进行渲染。</p>
+<h1 id="逻辑工作流程图"><a href="#逻辑工作流程图" class="headerlink" title="逻辑工作流程图"></a>逻辑工作流程图</h1><div class="language-dot">
+digraph {
+  Scene
+  LC[label="逻辑组件"]
+  UI[label="fairygui组件"]
+  Mediator
+  Facade
+
+  Scene -> LC -> {Facade UI}
+  UI -> Mediator[label=Facade]
+
+
+}
+</div>
 <script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
                 // graphviz init
                 let graphviz_engines = ["circo",
@@ -463,7 +495,7 @@ M -> UIComponent -> "FairyGUI bin 文件"
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Cocos-Creator-本身的架构"><span class="nav-number">1.</span> <span class="nav-text">Cocos Creator 本身的架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PureMVC"><span class="nav-number">2.</span> <span class="nav-text">PureMVC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PureMVC-FairyGUI"><span class="nav-number">3.</span> <span class="nav-text">PureMVC FairyGUI</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Cocos-Creator-本身的架构"><span class="nav-number">1.</span> <span class="nav-text">Cocos Creator 本身的架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PureMVC"><span class="nav-number">2.</span> <span class="nav-text">PureMVC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PureMVC-FairyGUI"><span class="nav-number">3.</span> <span class="nav-text">PureMVC FairyGUI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一些需要了解和注意的要点"><span class="nav-number">4.</span> <span class="nav-text">一些需要了解和注意的要点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#逻辑工作流程图"><span class="nav-number">5.</span> <span class="nav-text">逻辑工作流程图</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

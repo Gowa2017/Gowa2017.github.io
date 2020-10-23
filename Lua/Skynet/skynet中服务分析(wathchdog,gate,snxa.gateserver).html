@@ -300,22 +300,21 @@
       
         <p>其实对于服务还是有些迷惑。比如在 skynet.wiki 中说到，<em>gate</em>服务，是<em>snax.gateserver</em>的一个实现，然后 watchdog 又是 gate 的一个使用。看了一下代码确实有点头疼，现在来从头分析一下。</p>
 <a id="more"></a>
-<h1 id="启动-watchdog"><a href="#启动-watchdog" class="headerlink" title="启动 watchdog"></a>启动 watchdog</h1><p><em>main.lua</em>中：</p>
+<h1 id="watchdog"><a href="#watchdog" class="headerlink" title="watchdog"></a>watchdog</h1><p>每种服务，都要定义他要对消息的处理方式，也及对一些指令的响应方式。</p>
+<p>先看一下 watchdog 定义了两种消息类型：</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">SOCKET =&#123;<span class="built_in">open</span>, <span class="built_in">close</span>,<span class="built_in">error</span>, warning, data&#125;</span><br><span class="line">CMD = &#123; start, <span class="built_in">close</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>通过 <code>skynet.start()</code> API 来初始化和注册消息处理函数</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">skynet.start(<span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">	skynet.dispatch(<span class="string">"lua"</span>, <span class="function"><span class="keyword">function</span><span class="params">(session, source, cmd, subcmd, ...)</span></span></span><br><span class="line">		<span class="keyword">if</span> cmd == <span class="string">"socket"</span> <span class="keyword">then</span></span><br><span class="line">			<span class="keyword">local</span> f = SOCKET[subcmd]</span><br><span class="line">			f(...)</span><br><span class="line">			<span class="comment">-- socket api don't need return</span></span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="keyword">local</span> f = <span class="built_in">assert</span>(CMD[cmd])</span><br><span class="line">			skynet.ret(skynet.pack(f(subcmd, ...)))</span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span>)</span><br><span class="line"></span><br><span class="line">	gate = skynet.newservice(<span class="string">"gate"</span>)</span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></table></figure>
+<p>我们看到，它在初始化的完后，就启动了 <code>gata</code> 服务</p>
+<h2 id="启动-watchdog"><a href="#启动-watchdog" class="headerlink" title="启动 watchdog"></a>启动 watchdog</h2><p><em>main.lua</em>中：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- examples/main.lua</span></span><br><span class="line">		<span class="keyword">local</span> watchdog = skynet.newservice(<span class="string">"watchdog"</span>)</span><br><span class="line">        skynet.call(watchdog, <span class="string">"lua"</span>, <span class="string">"start"</span>, &#123;</span><br><span class="line">                port = <span class="number">8888</span>,</span><br><span class="line">                maxclient = max_client,</span><br><span class="line">                nodelay = <span class="literal">true</span>,</span><br><span class="line">        &#125;)</span><br></pre></td></tr></table></figure>
 <p>这里先，启动了 <em>watchdog</em> 服务，然后随即对 <em>watchdog</em> 发送了一个 <em>start</em> 命令的 <em>lua</em> 消息。</p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- examples/wathchdog.lua</span></span><br><span class="line">skynet.start(<span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">        skynet.dispatch(<span class="string">"lua"</span>, <span class="function"><span class="keyword">function</span><span class="params">(session, source, cmd, subcmd, ...)</span></span></span><br><span class="line">                <span class="keyword">if</span> cmd == <span class="string">"socket"</span> <span class="keyword">then</span></span><br><span class="line">                        <span class="keyword">local</span> f = SOCKET[subcmd]</span><br><span class="line">                        f(...)</span><br><span class="line">                        <span class="comment">-- socket api don't need return</span></span><br><span class="line">                <span class="keyword">else</span></span><br><span class="line">                        <span class="keyword">local</span> f = <span class="built_in">assert</span>(CMD[cmd])</span><br><span class="line">                        skynet.ret(skynet.pack(f(subcmd, ...)))</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span>)</span><br><span class="line"></span><br><span class="line">        gate = skynet.newservice(<span class="string">"gate"</span>)</span><br><span class="line"><span class="keyword">end</span>)</span><br></pre></td></tr></table></figure>
-<p>每个服务的都分成三步：</p>
-<ol>
-<li>加载</li>
-<li>初始化 <code>skynet.start</code> 开始初始化</li>
-<li>工作</li>
-</ol>
-<p>我们看到，<em>watchdog</em> 在初始化的时候，会启动 <em>gate</em> 服务。</p>
 <p>在初始化后，收到 <code>start</code> 指令，那么就会让 <em>gate</em> 服务，来启动网络服务。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">CMD.start</span><span class="params">(conf)</span></span></span><br><span class="line">	skynet.call(gate, <span class="string">"lua"</span>, <span class="string">"open"</span> , conf)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
 <h1 id="启动-gate"><a href="#启动-gate" class="headerlink" title="启动 gate"></a>启动 gate</h1><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- service/gate.lua</span></span><br><span class="line"><span class="keyword">local</span> gateserver = <span class="built_in">require</span> <span class="string">"snax.gateserver"</span></span><br><span class="line">gateserver.start(handler)</span><br></pre></td></tr></table></figure>
 <p>其本质，是把 <em>snax.gateserver.lua</em>加载到了 <em>gate</em>服务的虚拟机内，然后执行。</p>
 <p>那么，背后的意义就是，<em>wathchdog</em>服务启动了一个<em>gate</em>服务，而且两者之间建立了联系。</p>
+<p><code>gate</code> 只是 <code>gateserver</code> 的一个使用，定义了对于 <code>gateserver</code> 处理的哪些消息要发到 <code>gate</code> 来进行处理。服务真正的启动，还是在 <code>gateserver</code> 模块内。</p>
 <p>这样，消息在 <em>snax.gateserver.lua</em>代码中的 <code>open</code>处执行，开始监听端口。</p>
 <p>在这里，<em>snax.gateserver.lua</em>中的代码已经加载到了 <em>gate</em>服务中，由其进行执行对应的代码。</p>
 <p><em>gate</em>服务启动后主要做了两件事情：</p>
@@ -369,7 +368,7 @@ digraph {
 
         Client -> GateServer[label=Net]
         GateServer -> Gate[label=handler]
-        Gate  -> WatchDog -> Agent
+        Gate  -> WatchDog
 
 }
 </div>
@@ -495,7 +494,7 @@ digraph {
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#启动-watchdog"><span class="nav-number">1.</span> <span class="nav-text">启动 watchdog</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动-gate"><span class="nav-number">2.</span> <span class="nav-text">启动 gate</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#handler"><span class="nav-number">2.1.</span> <span class="nav-text">handler</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息处理流程"><span class="nav-number">3.</span> <span class="nav-text">消息处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#处理方法"><span class="nav-number">3.1.</span> <span class="nav-text">处理方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构图"><span class="nav-number">4.</span> <span class="nav-text">架构图</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#watchdog"><span class="nav-number">1.</span> <span class="nav-text">watchdog</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动-watchdog"><span class="nav-number">1.1.</span> <span class="nav-text">启动 watchdog</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动-gate"><span class="nav-number">2.</span> <span class="nav-text">启动 gate</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#handler"><span class="nav-number">2.1.</span> <span class="nav-text">handler</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息处理流程"><span class="nav-number">3.</span> <span class="nav-text">消息处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#处理方法"><span class="nav-number">3.1.</span> <span class="nav-text">处理方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构图"><span class="nav-number">4.</span> <span class="nav-text">架构图</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
