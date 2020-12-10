@@ -354,7 +354,7 @@
 <p>我们可以用 curl 开测试一下：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">curl -x socks://localhost:8888 http://172.230.0.30/main/</span><br></pre></td></tr></table></figure>
 <p>果然是能正常访问的。</p>
-<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p>有的时候，开启反向代理，会发现无论怎么设置，其监听的 IP 都是 <em>127.0.0.1</em>，这个需要我们对 sshd 服务进行配置：</p>
+<h1 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h1><p>有的时候，开启反向代理，会发现无论怎么设置，其监听的 IP 都是 <em>127.0.0.1</em>（层在 Ubuntu 20，OpenSSH 7.1p3 上发现），这个需要我们对 sshd 服务进行配置：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GatewayPorts yes</span><br></pre></td></tr></table></figure>
 <h1 id="sequel-pro-的-ssh-正向代理"><a href="#sequel-pro-的-ssh-正向代理" class="headerlink" title="sequel pro 的 ssh 正向代理"></a>sequel pro 的 ssh 正向代理</h1><p>我们在设置连接数据库的时候可以设置 ssh host，实际上这个连接过程也是利用了正向代理。我们查看一下连接的日志就能发现端倪：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">Used <span class="built_in">command</span>:  /usr/bin/ssh -v -N -S none -o ControlMaster=no -o ExitOnForwardFailure=yes -o ConnectTimeout=30 -o NumberOfPasswordPrompts=3 -i /Users/gowa/.config/ssh/server -o TCPKeepAlive=no -o ServerAliveInterval=60 -o ServerAliveCountMax=1 -p 8022 user@111.111.111.111 -L 52723:222.222.222.222:13221</span><br></pre></td></tr></table></figure>
@@ -448,7 +448,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">368</span>
+          <span class="site-state-item-count">370</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

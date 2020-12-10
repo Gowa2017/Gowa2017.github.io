@@ -295,13 +295,13 @@
         <p>说实话，本来是非常不想用 Python2 的，但是架不住服务器上大多都是自带的 Python2，而且还是内网环境，想要到处部署 Python3 的话，再加上装依赖的话，是比较麻烦的。所以不得不用。但是 Python2 的字符集处理也是非常让人头疼的内容。</p>
 <a id="more"></a>
 <h1 id="字符集与编码"><a href="#字符集与编码" class="headerlink" title="字符集与编码"></a>字符集与编码</h1><p>字符集，指的是一组符合的集合。在 <a href="/Windows/MFC中的字符宏与CString.html" title="MFC中的字符宏与CString">MFC中的字符宏与CString</a> 已有很多说明了。</p>
-<p>但是我们常说到一些字符集或者编码的时候，由于其编码和字符集是一个名称，所以常常会因此而混淆。</p>
-<p>字符集中，每个符号都会有一个整数表示的，这个整数，我们叫它为字符的 <strong>码点</strong>，将符号用一个整数码点来表示，这一过程叫做字符编码。</p>
-<p>不同的字符集中，相同的符号，拥有不同的 <strong>码点</strong></p>
+<p>通常，我们在提到一种编码的时候，实际上指的是编码集，Code Pages，隐含的也表示了它的字符集，比如：utf8，gbk，ascii 等。</p>
+<p>码表中，每个符号都会有一个整数表示的，这个整数，我们叫它为字符的 <strong>码点</strong>。</p>
+<p>不同的字符集中，相同的符号，可能拥有不同的 <strong>码点</strong></p>
 <p>对于计算机来说，其实他不认识符号，所以我们的符号最终都是，通过存储在计算机的字节中来表示的。</p>
-<p>因此，对于一个符号，想要让计算机正确的进行存储和表示，我们需要指定一个符号采用哪一个字符集编码。</p>
-<p>比如说对汉字 <strong>中</strong>，其 Unicode 编码是 4e2d，而在 GBK 字符集中，却是 d6d0</p>
-<p>所以，如果我们不对符号指定正确的字符集，那么肯定就会出错了。</p>
+<p>因此，对于一个符号，在不同的编码集中，有着不同的码点，我们需要指定一个符号采用哪一个字符集编码。</p>
+<p>比如说对汉字 <strong>中</strong>，其 Unicode 码点是 4e2d，而在 GBK 中，却是 d6d0</p>
+<p>所以，如果我们不对符号指定正确的编码，那么肯定就会出错了。</p>
 <h1 id="Unicode-与-UTF-8"><a href="#Unicode-与-UTF-8" class="headerlink" title="Unicode 与 UTF_8"></a>Unicode 与 UTF_8</h1><p>Unicode 是对字符到整数代码的编码表示，而 UTF-8，则是如何将这个整数编码在计算机进行存储，理解这点很重要。</p>
 <h1 id="Python2"><a href="#Python2" class="headerlink" title="Python2"></a>Python2</h1><p>在 Python2 中，默认使用的是 ASCII 编码，而是，Python2 中的字符串实际上是 <code>bytes</code> ，字节序列。</p>
 <p>提前注意：</p>
@@ -317,7 +317,7 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s.decode(<span class="string">'utf-8'</span>).encode(<span class="string">'gbk'</span>)</span><br><span class="line"><span class="string">'\xd6\xd0'</span></span><br></pre></td></tr></table></figure>
 <p>再次重申一点，对于 Python2 ，默认是 ASCII 编码，当遇到识别不了的的符号时，在交互式运行解释器的情况下，可能会应用系统的编码来处理。之所以这样说，是因为如果我们以脚本的形式执行的话，如果不指定编码，就会报错。</p>
 <p>对一个符号，实际上 Python2 已经用他自己认为的方式，转换成了字节序列存在在内存中，我们必须首先将其转换成 Unicode 码点，再进行转换到其他编码。</p>
-<h1 id="Python3"><a href="#Python3" class="headerlink" title="Python3"></a>Python3</h1><p>Python3 有所不同，所有的符号都存储为 Unicode 码点，因此，他已经不再拥有  <code>decode</code> 方法，而只有 <code>encode</code> 方法。</p>
+<h1 id="Python3"><a href="#Python3" class="headerlink" title="Python3"></a>Python3</h1><p>Python3 有所不同，所有的符号都存储为 Unicode 码点，因此，他已经不再拥有 <code>decode</code> 方法，而只有 <code>encode</code> 方法。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = <span class="string">'中'</span></span><br><span class="line">repr(s)</span><br><span class="line"><span class="string">"'中'"</span></span><br></pre></td></tr></table></figure>
 <p>计算机已经能直接识别这个符号了。这个时候，字符的操作和处理方式，就没有 Python2 这么繁琐了。但我们同样看出他存储的内容是什么：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">hex(ord(s))</span><br><span class="line"><span class="string">'0x4e2d'</span></span><br></pre></td></tr></table></figure>
@@ -344,7 +344,7 @@
 <li><code>f</code>,<code>F</code> 格式化字符串。可以 <code>r</code>,<code>R</code> 连用，但是不能与 <code>b</code>,<code>B</code>,<code>u</code>,<code>U</code> 连用</li>
 </ul>
 <h2 id="整字字面值"><a href="#整字字面值" class="headerlink" title="整字字面值"></a>整字字面值</h2><ul>
-<li>0{ b | B | o | O | x | X} 二进制，8进制，16进制值</li>
+<li>0{ b | B | o | O | x | X} 二进制，8 进制，16 进制值</li>
 <li><code>77e10</code> 这种是浮点字面值</li>
 </ul>
 <h1 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h1><h2 id="int"><a href="#int" class="headerlink" title="int"></a>int</h2><p>从字符串构建整数。</p>
@@ -355,7 +355,7 @@
 <h2 id="hex"><a href="#hex" class="headerlink" title="hex"></a>hex</h2><p>将整数转换成 16 进制字符串：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hex(12)</span><br><span class="line">&apos;0xc&apos;</span><br></pre></td></tr></table></figure>
 <h1 id="位操作"><a href="#位操作" class="headerlink" title="位操作"></a>位操作</h1><p>位操作之前我还纠结了很久，其实直接用整型进行操作就行了。</p>
-<p>缘由是我们要和一个打印机通讯获取其状态，不过通过 SNMP 获取的他的状态，有的时候是 <code>0x00</code> 这样表示正常，但是返回的的异常状态却可能会是 <code>A</code>,<code>B</code> 这样的情况，是将一个16进制的值，解释成了字符串。返回的是一个16bit，2字节的值，每一位代表一个信息位。因此，最终我研究出来的办法是，先将此字符串，转换成其代表的值，然后进行相关的与或操作。</p>
+<p>缘由是我们要和一个打印机通讯获取其状态，不过通过 SNMP 获取的他的状态，有的时候是 <code>0x00</code> 这样表示正常，但是返回的的异常状态却可能会是 <code>A</code>,<code>B</code> 这样的情况，是将一个 16 进制的值，解释成了字符串。返回的是一个 16bit，2 字节的值，每一位代表一个信息位。因此，最终我研究出来的办法是，先将此字符串，转换成其代表的值，然后进行相关的与或操作。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">st = snmp.get() <span class="comment"># 位代码</span></span><br><span class="line">mask = <span class="number">0b00000001</span></span><br><span class="line">sti = ord(st)</span><br><span class="line">sti &amp; mask</span><br><span class="line">sti &amp; mask &lt;&lt; <span class="number">1</span></span><br></pre></td></tr></table></figure>
 
     </div>
@@ -443,7 +443,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">368</span>
+          <span class="site-state-item-count">370</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
