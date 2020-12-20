@@ -389,45 +389,53 @@ Mediator -> UI: onRegister回调中初始化 UI
 
 
 </div>
+<h1 id="关于-JS-与-TS"><a href="#关于-JS-与-TS" class="headerlink" title="关于 JS 与 TS"></a>关于 JS 与 TS</h1><p> FairyGUI 生成的代码 是 TS 实现的，Cocos Creator 支持 TS，按照官方给的配置来看，是支持编译成 ES5 标准的 JS 代码，支持的特性包含： </p>
+<ul>
+<li>es2015</li>
+<li>es2017</li>
+<li><p>dom</p>
+<p>而对于 JS 的支持，集成了 babel 编译器，会将一部分的 ES6 特性翻译为 ES5，具体支持可参考：<a href="https://babeljs.io/docs/learn-es2015/" target="_blank" rel="noopener">https://babeljs.io/docs/learn-es2015/</a></p>
 <script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js">
- mermaid.initialize({startOnLoad:true}); 
+mermaid.initialize({startOnLoad:true}); 
 </script><script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
-                // graphviz init
-                let graphviz_engines = ["circo",
-                    "dot",
-                    "fdp",
-                    "neato",
-                    "osage",
-                    "twopi"];
+             // graphviz init
+             let graphviz_engines = ["circo",
+                 "dot",
+                 "fdp",
+                 "neato",
+                 "osage",
+                 "twopi"];
 
-                function doGraphviz(engine) {
-                    let domAllDot = document.querySelectorAll('.language-' + engine);
-                    for (let i = 0; i < domAllDot.length; i++) {
-                        let dom = domAllDot[i];
-                        let graphSource = dom.innerText || dom.textContent;
+             function doGraphviz(engine) {
+                 let domAllDot = document.querySelectorAll('.language-' + engine);
+                 for (let i = 0; i < domAllDot.length; i++) {
+                     let dom = domAllDot[i];
+                     let graphSource = dom.innerText || dom.textContent;
 
-                        try {
-                           let viz = new Viz();
-                             viz.renderSVGElement(graphSource, {engine: engine})
-                                 .then(r => {
-                            dom.innerHTML ='';dom.append(r); });
-                        } catch (e) {
-                            console.error("Error when parsing node:", dom, e);
-                        } 
-                    }
-                } 
+                     try {
+                        let viz = new Viz();
+                          viz.renderSVGElement(graphSource, {engine: engine})
+                              .then(r => {
+                         dom.innerHTML ='';dom.append(r); });
+                     } catch (e) {
+                         console.error("Error when parsing node:", dom, e);
+                     } 
+                 }
+             } 
 
-                let init = function () {
-                    for (let i = 0; i < graphviz_engines.length; i++) {
-                        doGraphviz(graphviz_engines[i]);
-                    }
-                };
-                if (typeof window.addEventListener != "undefined") {
-                    window.addEventListener("load", init, false);
-                } else {
-                    window.attachEvent("onload", init);
-                }
-                </script>
+             let init = function () {
+                 for (let i = 0; i < graphviz_engines.length; i++) {
+                     doGraphviz(graphviz_engines[i]);
+                 }
+             };
+             if (typeof window.addEventListener != "undefined") {
+                 window.addEventListener("load", init, false);
+             } else {
+                 window.attachEvent("onload", init);
+             }
+             </script></li>
+</ul>
+
     </div>
 
     
@@ -502,7 +510,7 @@ Mediator -> UI: onRegister回调中初始化 UI
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Cocos-Creator-本身的架构"><span class="nav-number">1.</span> <span class="nav-text">Cocos Creator 本身的架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PureMVC"><span class="nav-number">2.</span> <span class="nav-text">PureMVC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PureMVC-FairyGUI"><span class="nav-number">3.</span> <span class="nav-text">PureMVC FairyGUI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一些需要了解和注意的要点"><span class="nav-number">4.</span> <span class="nav-text">一些需要了解和注意的要点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#逻辑工作流程图"><span class="nav-number">5.</span> <span class="nav-text">逻辑工作流程图</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Cocos-Creator-本身的架构"><span class="nav-number">1.</span> <span class="nav-text">Cocos Creator 本身的架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PureMVC"><span class="nav-number">2.</span> <span class="nav-text">PureMVC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PureMVC-FairyGUI"><span class="nav-number">3.</span> <span class="nav-text">PureMVC FairyGUI</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一些需要了解和注意的要点"><span class="nav-number">4.</span> <span class="nav-text">一些需要了解和注意的要点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#逻辑工作流程图"><span class="nav-number">5.</span> <span class="nav-text">逻辑工作流程图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于-JS-与-TS"><span class="nav-number">6.</span> <span class="nav-text">关于 JS 与 TS</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
