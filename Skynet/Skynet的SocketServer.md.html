@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Skynet 中，其实提供了常规的 套接字 功能，如监听，连接，发送数据等，其中包含了几个模块，现在我们就来看一下它是如何实现的。比如snax.gateserver 就是利用这个功能来实现的。">
+<meta name="keywords" content="Lua,Skynet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Skynet的SocketServer.md">
+<meta property="og:url" content="https://gowa.club/Skynet/Skynet的SocketServer.md.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="Skynet 中，其实提供了常规的 套接字 功能，如监听，连接，发送数据等，其中包含了几个模块，现在我们就来看一下它是如何实现的。比如snax.gateserver 就是利用这个功能来实现的。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-12-26T16:35:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Skynet的SocketServer.md">
+<meta name="twitter:description" content="Skynet 中，其实提供了常规的 套接字 功能，如监听，连接，发送数据等，其中包含了几个模块，现在我们就来看一下它是如何实现的。比如snax.gateserver 就是利用这个功能来实现的。">
+
+<link rel="canonical" href="https://gowa.club/Skynet/Skynet的SocketServer.md.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Skynet的SocketServer.md | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Skynet/Skynet的SocketServer.md.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Skynet的SocketServer.md
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-12-27 00:35:26" itemprop="dateCreated datePublished" datetime="2020-12-27T00:35:26+08:00">2020-12-27</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Skynet/" itemprop="url" rel="index">
+                    <span itemprop="name">Skynet</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Skynet/Skynet的SocketServer.md.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Skynet/Skynet的SocketServer.md.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Skynet 中，其实提供了常规的 套接字 功能，如监听，连接，发送数据等，其中包含了几个模块，现在我们就来看一下它是如何实现的。比如<code>snax.gateserver</code> 就是利用这个功能来实现的。</p>
+<a id="more"></a>
+<h1 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h1><div class="language-dot">
+digraph {
+  SS[label="{SOCKET_SERVER|<efd>event_fd|<ctlr>recvctrl_fd|<ctls>sendctrl_fd}",shape=record]
+  THREAD_SOCKET
+  Service[label="{Context|<mq>MQ|<l>LUA}",shape=record]
+
+  SS:efd:e -> THREAD_SOCKET -> Service:mq[label=消息入服务队列]
+  Service:mq:w-> THREAD_WORKER:w[label="工作线程派发消息"]
+  THREAD_WORKER:e-> Service:l[label="工作线程派发消息"]
+
+}
+</l></mq></ctls></ctlr></efd></div>
+<h1 id="SOCKET-SERVER"><a href="#SOCKET-SERVER" class="headerlink" title="SOCKET_SERVER"></a>SOCKET_SERVER</h1><p>引擎初始化的时候建立 SOCKET_SERVER，由它来对外进行与 socket 相关的功能。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// skynet_start.c</span></span><br><span class="line"><span class="keyword">void</span></span><br><span class="line">skynet_start(struct skynet_config * <span class="built_in">config</span>) &#123;</span><br><span class="line"></span><br><span class="line">  ...</span><br><span class="line">	skynet_socket_init();</span><br><span class="line">	start(<span class="built_in">config</span>-&gt;thread);</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">void</span></span><br><span class="line">start(<span class="keyword">int</span> thread) &#123;</span><br><span class="line">  ...</span><br><span class="line">	create_thread(&amp;pid[<span class="number">0</span>], thread_monitor, m);</span><br><span class="line">	create_thread(&amp;pid[<span class="number">1</span>], thread_timer, m);</span><br><span class="line">	create_thread(&amp;pid[<span class="number">2</span>], thread_socket, m);</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// socket_server.c</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">socket_server</span> &#123;</span></span><br><span class="line">	<span class="keyword">volatile</span> <span class="keyword">uint64_t</span> time;</span><br><span class="line">	<span class="keyword">int</span> recvctrl_fd;</span><br><span class="line">	<span class="keyword">int</span> sendctrl_fd;</span><br><span class="line">	<span class="keyword">int</span> checkctrl;</span><br><span class="line">	poll_fd event_fd;</span><br><span class="line">	<span class="keyword">int</span> alloc_id;</span><br><span class="line">	<span class="keyword">int</span> event_n;</span><br><span class="line">	<span class="keyword">int</span> event_index;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket_object_interface</span> <span class="title">soi</span>;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">event</span> <span class="title">ev</span>[<span class="title">MAX_EVENT</span>];</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> <span class="title">slot</span>[<span class="title">MAX_SOCKET</span>];</span></span><br><span class="line">	<span class="keyword">char</span> <span class="built_in">buffer</span>[MAX_INFO];</span><br><span class="line">	<span class="keyword">uint8_t</span> udpbuffer[MAX_UDP_PACKAGE];</span><br><span class="line">	fd_set rfds;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">void</span></span><br><span class="line">skynet_socket_init() &#123;</span><br><span class="line">	SOCKET_SERVER = socket_server_create(skynet_now());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">socket_server</span> *</span></span><br><span class="line"><span class="class"><span class="title">socket_server_create</span>(<span class="title">uint64_t</span> <span class="title">time</span>) &#123;</span></span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">int</span> fd[<span class="number">2</span>];</span><br><span class="line">	poll_fd efd = sp_create(); <span class="comment">// poll fd ，套接字线程会轮询这上面的事件</span></span><br><span class="line">	<span class="keyword">if</span> (sp_invalid(efd)) &#123;</span><br><span class="line">		skynet_error(<span class="literal">NULL</span>, <span class="string">"socket-server: create event pool failed."</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (pipe(fd)) &#123; <span class="comment">// 一个管道，用来发送控制命令，套接字线程会先处理这上面的指令</span></span><br><span class="line">		sp_release(efd);</span><br><span class="line">		skynet_error(<span class="literal">NULL</span>, <span class="string">"socket-server: create socket pair failed."</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (sp_add(efd, fd[<span class="number">0</span>], <span class="literal">NULL</span>)) &#123;</span><br><span class="line">		<span class="comment">// add recvctrl_fd to event poll</span></span><br><span class="line">		skynet_error(<span class="literal">NULL</span>, <span class="string">"socket-server: can't add server fd to event pool."</span>);</span><br><span class="line">		<span class="built_in">close</span>(fd[<span class="number">0</span>]);</span><br><span class="line">		<span class="built_in">close</span>(fd[<span class="number">1</span>]);</span><br><span class="line">		sp_release(efd);</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket_server</span> *<span class="title">ss</span> = <span class="title">MALLOC</span>(<span class="title">sizeof</span>(*<span class="title">ss</span>));</span></span><br><span class="line">	ss-&gt;time = time;</span><br><span class="line">	ss-&gt;event_fd = efd;</span><br><span class="line">	ss-&gt;recvctrl_fd = fd[<span class="number">0</span>];</span><br><span class="line">	ss-&gt;sendctrl_fd = fd[<span class="number">1</span>];</span><br><span class="line">	ss-&gt;checkctrl = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;MAX_SOCKET;i++) &#123;</span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> *<span class="title">s</span> = &amp;<span class="title">ss</span>-&gt;<span class="title">slot</span>[<span class="title">i</span>];</span></span><br><span class="line">		s-&gt;type = SOCKET_TYPE_INVALID;</span><br><span class="line">		clear_wb_list(&amp;s-&gt;high);</span><br><span class="line">		clear_wb_list(&amp;s-&gt;low);</span><br><span class="line">		spinlock_init(&amp;s-&gt;dw_lock);</span><br><span class="line">	&#125;</span><br><span class="line">	ss-&gt;alloc_id = <span class="number">0</span>;</span><br><span class="line">	ss-&gt;event_n = <span class="number">0</span>;</span><br><span class="line">	ss-&gt;event_index = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">memset</span>(&amp;ss-&gt;soi, <span class="number">0</span>, <span class="keyword">sizeof</span>(ss-&gt;soi));</span><br><span class="line">	FD_ZERO(&amp;ss-&gt;rfds);</span><br><span class="line">	assert(ss-&gt;recvctrl_fd &lt; FD_SETSIZE);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> ss;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="启动套接字"><a href="#启动套接字" class="headerlink" title="启动套接字"></a>启动套接字</h1><p>我们以 connect 一个服务来看一下这个过程，对 skynet 内 SOCKET_SERVER 的操作，其实在 <code>lua_socket.c</code> 里面进行了封装。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// lua_socket.c</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span></span><br><span class="line">lconnect(lua_State *L) &#123;</span><br><span class="line">	<span class="keyword">size_t</span> sz = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">char</span> * addr = luaL_checklstring(L,<span class="number">1</span>,&amp;sz);</span><br><span class="line">	<span class="keyword">char</span> tmp[sz];</span><br><span class="line">	<span class="keyword">int</span> port = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">const</span> <span class="keyword">char</span> * host = address_port(L, tmp, addr, <span class="number">2</span>, &amp;port);</span><br><span class="line">	<span class="keyword">if</span> (port == <span class="number">0</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> luaL_error(L, <span class="string">"Invalid port"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">skynet_context</span> * <span class="title">ctx</span> = <span class="title">lua_touserdata</span>(<span class="title">L</span>, <span class="title">lua_upvalueindex</span>(1));</span></span><br><span class="line">	<span class="keyword">int</span> id = skynet_socket_connect(ctx, host, port);</span><br><span class="line">	lua_pushinteger(L, id);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看到，实际上，我们在打开一个套接字的时候，实际上把一个服务的上下文 <code>skynet_context</code> 也传递了过去，这样，在有消息到来的时候，才知道把消息派发到哪一个服务去。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// skynet_socket.c</span></span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">skynet_socket_connect(struct skynet_context *ctx, <span class="keyword">const</span> <span class="keyword">char</span> *host, <span class="keyword">int</span> port) &#123;</span><br><span class="line">	<span class="keyword">uint32_t</span> source = skynet_context_handle(ctx);</span><br><span class="line">	<span class="keyword">return</span> socket_server_connect(SOCKET_SERVER, source, host, port);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">这里，会向 SOCKET_SERVER 的控制命令管道发送指令。</span><br><span class="line"><span class="keyword">int</span></span><br><span class="line">socket_server_connect(struct socket_server *ss, <span class="keyword">uintptr_t</span> opaque, <span class="keyword">const</span> <span class="keyword">char</span> * addr, <span class="keyword">int</span> port) &#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">request_package</span> <span class="title">request</span>;</span></span><br><span class="line">	<span class="keyword">int</span> len = open_request(ss, &amp;request, opaque, addr, port);</span><br><span class="line">	<span class="keyword">if</span> (len &lt; <span class="number">0</span>)</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	send_request(ss, &amp;request, <span class="string">'O'</span>, <span class="keyword">sizeof</span>(request.u.<span class="built_in">open</span>) + len);</span><br><span class="line">	<span class="keyword">return</span> request.u.<span class="built_in">open</span>.id;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="套接字线程工作"><a href="#套接字线程工作" class="headerlink" title="套接字线程工作"></a>套接字线程工作</h1><p>在套接字线程中，会调用 epoll 来查看文件描述符上面发生的事件。<br>这个函数做的事情有点多，我们一个一个来看。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span></span><br><span class="line">socket_server_poll(struct socket_server *ss, struct socket_message * result, <span class="keyword">int</span> * more) &#123;</span><br><span class="line">	<span class="keyword">for</span> (;;) &#123;</span><br><span class="line">		<span class="keyword">if</span> (ss-&gt;checkctrl) &#123;</span><br><span class="line">			<span class="keyword">if</span> (has_cmd(ss)) &#123;</span><br><span class="line">				<span class="keyword">int</span> type = ctrl_cmd(ss, result); <span class="comment">// 执行控制指令</span></span><br><span class="line">				<span class="keyword">if</span> (type != <span class="number">-1</span>) &#123;</span><br><span class="line">					clear_closed_event(ss, result, type);</span><br><span class="line">					<span class="keyword">return</span> type;</span><br><span class="line">				&#125; <span class="keyword">else</span></span><br><span class="line">					<span class="keyword">continue</span>;</span><br><span class="line">			&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">				ss-&gt;checkctrl = <span class="number">0</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (ss-&gt;event_index == ss-&gt;event_n) &#123;</span><br><span class="line">			ss-&gt;event_n = sp_wait(ss-&gt;event_fd, ss-&gt;ev, MAX_EVENT);</span><br><span class="line">			ss-&gt;checkctrl = <span class="number">1</span>;</span><br><span class="line">			<span class="keyword">if</span> (more) &#123;</span><br><span class="line">				*more = <span class="number">0</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			ss-&gt;event_index = <span class="number">0</span>;</span><br><span class="line">			<span class="keyword">if</span> (ss-&gt;event_n &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">				ss-&gt;event_n = <span class="number">0</span>;</span><br><span class="line">				<span class="keyword">if</span> (errno == EINTR) &#123;</span><br><span class="line">					<span class="keyword">continue</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">event</span> *<span class="title">e</span> = &amp;<span class="title">ss</span>-&gt;<span class="title">ev</span>[<span class="title">ss</span>-&gt;<span class="title">event_index</span>++];</span></span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> *<span class="title">s</span> = <span class="title">e</span>-&gt;<span class="title">s</span>;</span></span><br><span class="line">		<span class="keyword">if</span> (s == <span class="literal">NULL</span>) &#123;</span><br><span class="line">			<span class="comment">// dispatch pipe message at beginning</span></span><br><span class="line">			<span class="keyword">continue</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="class"><span class="keyword">struct</span> <span class="title">socket_lock</span> <span class="title">l</span>;</span></span><br><span class="line">		socket_lock_init(s, &amp;l);</span><br><span class="line">		<span class="keyword">switch</span> (s-&gt;type) &#123;</span><br><span class="line">		<span class="keyword">case</span> SOCKET_TYPE_CONNECTING:</span><br><span class="line">			<span class="keyword">return</span> report_connect(ss, s, &amp;l, result);</span><br><span class="line">		<span class="keyword">case</span> SOCKET_TYPE_LISTEN: &#123;</span><br><span class="line">			<span class="keyword">int</span> ok = report_accept(ss, s, result);</span><br><span class="line">			<span class="keyword">if</span> (ok &gt; <span class="number">0</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span> SOCKET_ACCEPT;</span><br><span class="line">			&#125; <span class="keyword">if</span> (ok &lt; <span class="number">0</span> ) &#123;</span><br><span class="line">				<span class="keyword">return</span> SOCKET_ERR;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="comment">// when ok == 0, retry</span></span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">case</span> SOCKET_TYPE_INVALID:</span><br><span class="line">			skynet_error(<span class="literal">NULL</span>, <span class="string">"socket-server: invalid socket"</span>);</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			<span class="keyword">if</span> (e-&gt;<span class="built_in">read</span>) &#123;</span><br><span class="line">				<span class="keyword">int</span> type;</span><br><span class="line">				<span class="keyword">if</span> (s-&gt;protocol == PROTOCOL_TCP) &#123;</span><br><span class="line">					type = forward_message_tcp(ss, s, &amp;l, result);</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					type = forward_message_udp(ss, s, &amp;l, result);</span><br><span class="line">					<span class="keyword">if</span> (type == SOCKET_UDP) &#123;</span><br><span class="line">						<span class="comment">// try read again</span></span><br><span class="line">						--ss-&gt;event_index;</span><br><span class="line">						<span class="keyword">return</span> SOCKET_UDP;</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (e-&gt;<span class="built_in">write</span> &amp;&amp; type != SOCKET_CLOSE &amp;&amp; type != SOCKET_ERR) &#123;</span><br><span class="line">					<span class="comment">// Try to dispatch write message next step if write flag set.</span></span><br><span class="line">					e-&gt;<span class="built_in">read</span> = <span class="literal">false</span>;</span><br><span class="line">					--ss-&gt;event_index;</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">if</span> (type == <span class="number">-1</span>)</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">return</span> type;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (e-&gt;<span class="built_in">write</span>) &#123;</span><br><span class="line">				<span class="keyword">int</span> type = send_buffer(ss, s, &amp;l, result);</span><br><span class="line">				<span class="keyword">if</span> (type == <span class="number">-1</span>)</span><br><span class="line">					<span class="keyword">break</span>;</span><br><span class="line">				<span class="keyword">return</span> type;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (e-&gt;error) &#123;</span><br><span class="line">				<span class="comment">// close when error</span></span><br><span class="line">				<span class="keyword">int</span> error;</span><br><span class="line">				<span class="keyword">socklen_t</span> len = <span class="keyword">sizeof</span>(error);</span><br><span class="line">				<span class="keyword">int</span> code = getsockopt(s-&gt;fd, SOL_SOCKET, SO_ERROR, &amp;error, &amp;len);</span><br><span class="line">				<span class="keyword">const</span> <span class="keyword">char</span> * err = <span class="literal">NULL</span>;</span><br><span class="line">				<span class="keyword">if</span> (code &lt; <span class="number">0</span>) &#123;</span><br><span class="line">					err = strerror(errno);</span><br><span class="line">				&#125; <span class="keyword">else</span> <span class="keyword">if</span> (error != <span class="number">0</span>) &#123;</span><br><span class="line">					err = strerror(error);</span><br><span class="line">				&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">					err = <span class="string">"Unknown error"</span>;</span><br><span class="line">				&#125;</span><br><span class="line">				force_close(ss, s, &amp;l, result);</span><br><span class="line">				result-&gt;data = (<span class="keyword">char</span> *)err;</span><br><span class="line">				<span class="keyword">return</span> SOCKET_ERR;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span>(e-&gt;eof) &#123;</span><br><span class="line">				force_close(ss, s, &amp;l, result);</span><br><span class="line">				<span class="keyword">return</span> SOCKET_CLOSE;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">break</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="控制指令"><a href="#控制指令" class="headerlink" title="控制指令"></a>控制指令</h2><p><code>ctrl_cmd</code> 就会执行我们的控制指令了，对于我们的 <code>connect</code> 请求，会打开一个套接字，具体指令过程不说，而要关注在套接字打开后，会将此套接字封装在一个 skyent_socket 结构中，同时添加到 pollfd 中去：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// socket_server.c</span></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">socket</span> *</span></span><br><span class="line"><span class="class"><span class="title">new_fd</span>(<span class="title">struct</span> <span class="title">socket_server</span> *<span class="title">ss</span>, <span class="title">int</span> <span class="title">id</span>, <span class="title">int</span> <span class="title">fd</span>, <span class="title">int</span> <span class="title">protocol</span>, <span class="title">uintptr_t</span> <span class="title">opaque</span>, <span class="title">bool</span> <span class="title">reading</span>) &#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> * <span class="title">s</span> = &amp;<span class="title">ss</span>-&gt;<span class="title">slot</span>[<span class="title">HASH_ID</span>(<span class="title">id</span>)];</span></span><br><span class="line">	assert(s-&gt;type == SOCKET_TYPE_RESERVE);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (sp_add(ss-&gt;event_fd, fd, s)) &#123; <span class="comment">// 就是这里了添加到了 polldf 中去</span></span><br><span class="line">		s-&gt;type = SOCKET_TYPE_INVALID;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	s-&gt;id = id;</span><br><span class="line">	s-&gt;fd = fd;</span><br><span class="line">	s-&gt;reading = <span class="literal">true</span>;</span><br><span class="line">	s-&gt;writing = <span class="literal">false</span>;</span><br><span class="line">	s-&gt;sending = ID_TAG16(id) &lt;&lt; <span class="number">16</span> | <span class="number">0</span>;</span><br><span class="line">	s-&gt;protocol = protocol;</span><br><span class="line">	s-&gt;p.<span class="built_in">size</span> = MIN_READ_BUFFER;</span><br><span class="line">	s-&gt;opaque = opaque; <span class="comment">// 套接字与一个服务ID相关联</span></span><br><span class="line">	s-&gt;wb_size = <span class="number">0</span>;</span><br><span class="line">	s-&gt;warn_size = <span class="number">0</span>;</span><br><span class="line">	check_wb_list(&amp;s-&gt;high);</span><br><span class="line">	check_wb_list(&amp;s-&gt;low);</span><br><span class="line">	s-&gt;dw_buffer = <span class="literal">NULL</span>;</span><br><span class="line">	s-&gt;dw_size = <span class="number">0</span>;</span><br><span class="line">	<span class="built_in">memset</span>(&amp;s-&gt;stat, <span class="number">0</span>, <span class="keyword">sizeof</span>(s-&gt;stat));</span><br><span class="line">	<span class="keyword">if</span> (enable_read(ss, s, reading)) &#123;</span><br><span class="line">		s-&gt;type = SOCKET_TYPE_INVALID;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> s;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们看到 <code>sp_add(ss-&gt;event_fd, fd, s)</code> 将文件描述符，以及 skynet 自己封装的一个数据结构传递给了 pollfd 相关的一些操作。</p>
+<h2 id="套接字消息的取出"><a href="#套接字消息的取出" class="headerlink" title="套接字消息的取出"></a>套接字消息的取出</h2><p>我们在 <code>socket_server_poll</code> 函数中看到，会调用 <code>sp_wait()</code> 来检查一下套接字上发生的事件。不过，它将事件转换成了 skynet 自己的包装，返回事件中包含了一个 <code>skynet_socket</code> 结构。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//socket_kqueue.h</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span></span><br><span class="line">sp_wait(<span class="keyword">int</span> kfd, struct event *e, <span class="keyword">int</span> <span class="built_in">max</span>) &#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">kevent</span> <span class="title">ev</span>[<span class="title">max</span>];</span></span><br><span class="line">	<span class="keyword">int</span> n = kevent(kfd, <span class="literal">NULL</span>, <span class="number">0</span>, ev, <span class="built_in">max</span>, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;i++) &#123;</span><br><span class="line">		e[i].s = ev[i].udata;</span><br><span class="line">		<span class="keyword">unsigned</span> filter = ev[i].filter;</span><br><span class="line">		<span class="keyword">bool</span> eof = (ev[i].flags &amp; EV_EOF) != <span class="number">0</span>;</span><br><span class="line">		e[i].<span class="built_in">write</span> = (filter == EVFILT_WRITE) &amp;&amp; (!eof);</span><br><span class="line">		e[i].<span class="built_in">read</span> = (filter == EVFILT_READ);</span><br><span class="line">		e[i].error = (ev[i].flags &amp; EV_ERROR) != <span class="number">0</span>;</span><br><span class="line">		e[i].eof = eof;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后根据这个套接字结构中的 opaque 就知道是与哪个服务相关联的消息了，就可以放到消息队列去，交给工作线程派发过去了。</p>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
+
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
+
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
+                }
+                </script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Lua/" rel="tag"># Lua</a>
+              <a href="/tags/Skynet/" rel="tag"># Skynet</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Python/关于Python连接数据库的一些选择.html" rel="next" title="关于Python连接数据库的一些选择">
+                  <i class="fa fa-chevron-left"></i> 关于Python连接数据库的一些选择
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#整体架构"><span class="nav-number">1.</span> <span class="nav-text">整体架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SOCKET-SERVER"><span class="nav-number">2.</span> <span class="nav-text">SOCKET_SERVER</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动套接字"><span class="nav-number">3.</span> <span class="nav-text">启动套接字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#套接字线程工作"><span class="nav-number">4.</span> <span class="nav-text">套接字线程工作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#控制指令"><span class="nav-number">4.1.</span> <span class="nav-text">控制指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#套接字消息的取出"><span class="nav-number">4.2.</span> <span class="nav-text">套接字消息的取出</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">370</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">155</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Skynet/Skynet的SocketServer.md.html",
+            identifier: "Skynet/Skynet的SocketServer.md.html",
+            title: "Skynet的SocketServer.md"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>

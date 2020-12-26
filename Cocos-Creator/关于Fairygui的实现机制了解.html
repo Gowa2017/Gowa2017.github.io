@@ -394,6 +394,7 @@ CLogic -> GRoot[label="fgui.GRoot.create()"]
 GRoot -> CUI[dir=back,label="addChild"]
 }
 </div>
+<p>操作方式一般是在 Cocos Creator 的场景中挂一个逻辑节点，用来加载 FairyGUI 的内容，构造 UI 等，这样就将控制权递交给了 FairyGUI 去了。</p>
 <p>我们重点需要完成的，就是对于 UI 组件如何来利用 FairyGUI 的 UI 包了。</p>
 <h1 id="Controler-控制器"><a href="#Controler-控制器" class="headerlink" title="Controler 控制器"></a>Controler 控制器</h1><p>GObject 没有 控制器，而 GComponent 有控制器。话说，这个是 FairyGUI 的核心，用其来实现一些比较复杂的功能。虽然，可以从 UI 编辑上来大体的看一下控制器的结构和内容，不过我还是更喜欢从代码上来查看。</p>
 <p>粗略的来说，控制器可以用来让子元素根据统一的状态进行相应的改变。控制器只会引用 GComponent 的状态信息和控制器本身的页信息（ID，页名称），而对于每页内容的显示，交给子元件进行定义。</p>
@@ -572,14 +573,14 @@ on -> GearText -> cn
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">369</span>
+          <span class="site-state-item-count">370</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">31</span>
+        <span class="site-state-item-count">32</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
