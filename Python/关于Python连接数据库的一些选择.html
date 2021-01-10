@@ -297,6 +297,7 @@
 <blockquote>
 <p>cx_Oracle 7.3 是最后一个支持 python 2  版本。<br>11.2 的 Client 才能连接 11 以后的数据库哦。比如我们用的 9i 。</p>
 </blockquote>
+<a id="more"></a>
 <p>安装就没有什么好说的：</p>
 <ol>
 <li><code>pip install cx_oracle</code>，安装后你会发现，其实它就是一个动态库。因此想要补全什么的，都是不能的。</li>
@@ -320,46 +321,46 @@ Users -> Program -> Python -> cx_Oracle -> "Oracle Client Librarys" -> "Oracle D
 <ul>
 <li>SQLalchemy 很重的东西，用起来麻烦哦。</li>
 <li>DJango 这个是是 Django 框架自带的 ORM，用起来简单些。</li>
-<li><p>Peewee 和 DJango 类似，但不支持表单迁移。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script></p>
-<pre><code>          // graphviz init
-          let graphviz_engines = [&quot;circo&quot;,
-              &quot;dot&quot;,
-              &quot;fdp&quot;,
-              &quot;neato&quot;,
-              &quot;osage&quot;,
-              &quot;twopi&quot;];
+<li><p>Peewee 和 DJango 类似，但不支持表单迁移。</p>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+              // graphviz init
+              let graphviz_engines = ["circo",
+                  "dot",
+                  "fdp",
+                  "neato",
+                  "osage",
+                  "twopi"];
 
-          function doGraphviz(engine) {
-              let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
-              for (let i = 0; i &lt; domAllDot.length; i++) {
-                  let dom = domAllDot[i];
-                  let graphSource = dom.innerText || dom.textContent;
+              function doGraphviz(engine) {
+                  let domAllDot = document.querySelectorAll('.language-' + engine);
+                  for (let i = 0; i < domAllDot.length; i++) {
+                      let dom = domAllDot[i];
+                      let graphSource = dom.innerText || dom.textContent;
 
-                  try {
-                     let viz = new Viz();
-                       viz.renderSVGElement(graphSource, {engine: engine})
-                           .then(r =&gt; {
-                      dom.innerHTML =&#39;&#39;;dom.append(r); });
-                  } catch (e) {
-                      console.error(&quot;Error when parsing node:&quot;, dom, e);
-                  } 
+                      try {
+                         let viz = new Viz();
+                           viz.renderSVGElement(graphSource, {engine: engine})
+                               .then(r => {
+                          dom.innerHTML ='';dom.append(r); });
+                      } catch (e) {
+                          console.error("Error when parsing node:", dom, e);
+                      } 
+                  }
+              } 
+
+              let init = function () {
+                  for (let i = 0; i < graphviz_engines.length; i++) {
+                      doGraphviz(graphviz_engines[i]);
+                  }
+              };
+              if (typeof window.addEventListener != "undefined") {
+                  window.addEventListener("load", init, false);
+              } else {
+                  window.attachEvent("onload", init);
               }
-          } 
-
-          let init = function () {
-              for (let i = 0; i &lt; graphviz_engines.length; i++) {
-                  doGraphviz(graphviz_engines[i]);
-              }
-          };
-          if (typeof window.addEventListener != &quot;undefined&quot;) {
-              window.addEventListener(&quot;load&quot;, init, false);
-          } else {
-              window.attachEvent(&quot;onload&quot;, init);
-          }
-          &lt;/script&gt;
-</code></pre></li>
+              </script></li>
 </ul>
-</script></p></li></ul>
+
     </div>
 
     
@@ -446,20 +447,20 @@ Users -> Program -> Python -> cx_Oracle -> "Oracle Client Librarys" -> "Oracle D
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">370</span>
+          <span class="site-state-item-count">371</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">33</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">155</span>
+        <span class="site-state-item-count">156</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -497,7 +498,7 @@ Users -> Program -> Python -> cx_Oracle -> "Oracle Client Librarys" -> "Oracle D
 <div class="copyright">
   
   &copy; 2016 – 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
