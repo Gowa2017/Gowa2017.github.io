@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="C++ 中的 IO 用起来很简单，全局的 std::cin, std::cout，我们直接用 &amp;lt;&amp;lt; 操作符就可以写出东西了，而不需要像 C 那样调用函数来进行写出读入等，非常的灵活。很多人都多，C++ 的成功，这个流式 IO 起了很大的作用。C++ 包含了两个 I/O 库：现代的、基于流的 I/O 库和标准的 C 风格的 I/O 函数。">
+<meta name="keywords" content="Cpp,Stream IO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++中的流式IO-StreamIO">
+<meta property="og:url" content="https://gowa.club/Cpp/C++中的流式IO-StreamIO.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="C++ 中的 IO 用起来很简单，全局的 std::cin, std::cout，我们直接用 &amp;lt;&amp;lt; 操作符就可以写出东西了，而不需要像 C 那样调用函数来进行写出读入等，非常的灵活。很多人都多，C++ 的成功，这个流式 IO 起了很大的作用。C++ 包含了两个 I/O 库：现代的、基于流的 I/O 库和标准的 C 风格的 I/O 函数。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://upload.cppreference.com/mwiki/images/0/06/std-io-complete-inheritance.svg">
+<meta property="og:updated_time" content="2021-01-15T15:43:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C++中的流式IO-StreamIO">
+<meta name="twitter:description" content="C++ 中的 IO 用起来很简单，全局的 std::cin, std::cout，我们直接用 &amp;lt;&amp;lt; 操作符就可以写出东西了，而不需要像 C 那样调用函数来进行写出读入等，非常的灵活。很多人都多，C++ 的成功，这个流式 IO 起了很大的作用。C++ 包含了两个 I/O 库：现代的、基于流的 I/O 库和标准的 C 风格的 I/O 函数。">
+<meta name="twitter:image" content="https://upload.cppreference.com/mwiki/images/0/06/std-io-complete-inheritance.svg">
+
+<link rel="canonical" href="https://gowa.club/Cpp/C++中的流式IO-StreamIO.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>C++中的流式IO-StreamIO | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cpp/C++中的流式IO-StreamIO.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++中的流式IO-StreamIO
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-15 23:43:15" itemprop="dateCreated datePublished" datetime="2021-01-15T23:43:15+08:00">2021-01-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cpp/" itemprop="url" rel="index">
+                    <span itemprop="name">Cpp</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Cpp/C++中的流式IO-StreamIO.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cpp/C++中的流式IO-StreamIO.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>C++ 中的 IO 用起来很简单，全局的 std::cin, std::cout，我们直接用 <code>&lt;&lt;</code> 操作符就可以写出东西了，而不需要像 C 那样调用函数来进行写出读入等，非常的灵活。很多人都多，C++ 的成功，这个流式 IO 起了很大的作用。C++ 包含了两个 I/O 库：现代的、基于流的 I/O 库和标准的 C 风格的 I/O 函数。</p>
+<a id="more"></a>
+<p>基于流的 I/O 库围绕对输入输出设备的抽象组织。这些抽象的设备，允许同样的代码来处理输入输出到文件、内存流、或者自定义的适配器能进行任何操作的设备。</p>
+<p>大部分的类都是模板类，所以它们能适配使用任何字符类型。对于最基本的字符类型（<code>char</code>，<code>wchar_t</code>）提供了 typedefs。它们按如下层级进行组织。</p>
+<p><img src="https://upload.cppreference.com/mwiki/images/0/06/std-io-complete-inheritance.svg" alt></p>
+<p>而我们的 <code>cin, cout</code> 则是一个全局的定义：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="built_in">std</span>::istream <span class="built_in">cin</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="built_in">std</span>::ostream <span class="built_in">cout</span>;</span><br></pre></td></tr></table></figure>
+<h1 id="各类的作用"><a href="#各类的作用" class="headerlink" title="各类的作用"></a>各类的作用</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Abstraction</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Defined in header <code>&lt;ios&gt;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/ios_base" target="_blank" rel="noopener">ios_base</a></td>
+<td>管理格式化标志和输入/输出异常（class）</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_ios" target="_blank" rel="noopener">basic_ios</a><br>Defined in header <code>&lt;streambuf&gt;</code></td>
+<td>管理一个任意的流式缓冲区。 (class template)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_streambuf" target="_blank" rel="noopener">basic_streambuf</a><br>Defined in header <code>&lt;ostream&gt;</code></td>
+<td>抽象一个裸设备。 (class template)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_ostream" target="_blank" rel="noopener">basic_ostream</a><br>Defined in header <code>&lt;istream&gt;</code></td>
+<td>包装一个给定的抽象设备(<a href="https://en.cppreference.com/w/cpp/io/basic_streambuf" target="_blank" rel="noopener">std::basic_streambuf</a>) ，提供高级的输出接口。 (class template)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_istream" target="_blank" rel="noopener">basic_istream</a></td>
+<td>包装一个给定的抽象设备(<a href="https://en.cppreference.com/w/cpp/io/basic_streambuf" target="_blank" rel="noopener">std::basic_streambuf</a>) ，提供高级的输入接口。 (class template)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_iostream" target="_blank" rel="noopener">basic_iostream</a></td>
+<td>包装一个给定的抽象设备(<a href="https://en.cppreference.com/w/cpp/io/basic_streambuf" target="_blank" rel="noopener">std::basic_streambuf</a>) ，提供高级的输入/输出接口。 (class template)</td>
+</tr>
+<tr>
+<td><strong>File I/O implementation</strong><br>Defined in header <code>&lt;fstream&gt;</code></td>
+<td>文件IO实现</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_filebuf" target="_blank" rel="noopener">basic_filebuf</a></td>
+<td>实现一个裸文件设备。 (class template)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_ifstream" target="_blank" rel="noopener">basic_ifstream</a></td>
+<td>实现高级的文件流输入操作。 (class template)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_ofstream" target="_blank" rel="noopener">basic_ofstream</a></td>
+<td>实现高级的文件流输出操作 (class template)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_fstream" target="_blank" rel="noopener">basic_fstream</a></td>
+<td>实现高级文件流输入/输出操作。 (class template)</td>
+</tr>
+<tr>
+<td><strong>String I/O implementation</strong><br>Defined in header <code>&lt;sstream&gt;</code></td>
+<td>字符串 I/O 实现</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_stringbuf" target="_blank" rel="noopener">basic_stringbuf</a></td>
+<td>实现裸字符串设备。 (class template)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_istringstream" target="_blank" rel="noopener">basic_istringstream</a></td>
+<td>实现高级的字符流输入操作。 (class template)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_ostringstream" target="_blank" rel="noopener">basic_ostringstream</a></td>
+<td>实现高级的字符流输出操作。 (class template)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_stringstream" target="_blank" rel="noopener">basic_stringstream</a></td>
+<td>实现高级的字符流输入/输出操作。 (class template)</td>
+</tr>
+<tr>
+<td><strong>Array I/O implementations</strong><br>Defined in header <code>&lt;strstream&gt;</code></td>
+<td>数组 I/O 实现</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/strstreambuf" target="_blank" rel="noopener">strstreambuf</a>(deprecated in C++98)</td>
+<td>implements raw character array device (class)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/istrstream" target="_blank" rel="noopener">istrstream</a>(deprecated in C++98)</td>
+<td>implements character array input operations (class)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/ostrstream" target="_blank" rel="noopener">ostrstream</a>(deprecated in C++98)</td>
+<td>implements character array output operations (class)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/strstream" target="_blank" rel="noopener">strstream</a>(deprecated in C++98)</td>
+<td>implements character array input/output operations (class)</td>
+</tr>
+<tr>
+<td><strong>Synchronized output</strong><br>Defined in header <code>&lt;syncstream&gt;</code></td>
+<td>同步输出</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_syncbuf" target="_blank" rel="noopener">basic_syncbuf</a>(C++20)</td>
+<td>同步输出设备封装。 (class template)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_osyncstream" target="_blank" rel="noopener">basic_osyncstream</a>(C++20)</td>
+<td>同部输出流封装 (class template)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="Typedefs"><a href="#Typedefs" class="headerlink" title="Typedefs"></a>Typedefs</h1><p>The following typedefs for common character types are provided:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">typedef basic_ios&lt;char&gt;                ios;</span><br><span class="line">typedef basic_ios&lt;wchar_t&gt;            wios;</span><br><span class="line"> </span><br><span class="line">typedef basic_streambuf&lt;char&gt;     streambuf;</span><br><span class="line">typedef basic_streambuf&lt;wchar_t&gt; wstreambuf;</span><br><span class="line">typedef basic_filebuf&lt;char&gt;         filebuf;</span><br><span class="line">typedef basic_filebuf&lt;wchar_t&gt;     wfilebuf;</span><br><span class="line">typedef basic_stringbuf&lt;char&gt;     stringbuf;</span><br><span class="line">typedef basic_stringbuf&lt;wchar_t&gt; wstringbuf;</span><br><span class="line">typedef basic_syncbuf&lt;char&gt;         syncbuf;</span><br><span class="line">typedef basic_syncbuf&lt;wchar_t&gt;     wsyncbuf;</span><br><span class="line"> </span><br><span class="line">typedef basic_istream&lt;char&gt;         istream;</span><br><span class="line">typedef basic_istream&lt;wchar_t&gt;     wistream;</span><br><span class="line">typedef basic_ostream&lt;char&gt;         ostream;</span><br><span class="line">typedef basic_ostream&lt;wchar_t&gt;     wostream;</span><br><span class="line">typedef basic_iostream&lt;char&gt;       iostream;</span><br><span class="line">typedef basic_iostream&lt;wchar_t&gt;   wiostream;</span><br><span class="line"> </span><br><span class="line">typedef basic_ifstream&lt;char&gt;       ifstream;</span><br><span class="line">typedef basic_ifstream&lt;wchar_t&gt;   wifstream;</span><br><span class="line">typedef basic_ofstream&lt;char&gt;       ofstream;</span><br><span class="line">typedef basic_ofstream&lt;wchar_t&gt;   wofstream;</span><br><span class="line">typedef basic_fstream&lt;char&gt;         fstream;</span><br><span class="line">typedef basic_fstream&lt;wchar_t&gt;     wfstream;</span><br><span class="line"> </span><br><span class="line">typedef basic_istringstream&lt;char&gt;     istringstream;</span><br><span class="line">typedef basic_istringstream&lt;wchar_t&gt; wistringstream;</span><br><span class="line">typedef basic_ostringstream&lt;char&gt;     ostringstream;</span><br><span class="line">typedef basic_ostringstream&lt;wchar_t&gt; wostringstream;</span><br><span class="line">typedef basic_stringstream&lt;char&gt;       stringstream;</span><br><span class="line">typedef basic_stringstream&lt;wchar_t&gt;   wstringstream;</span><br><span class="line"> </span><br><span class="line">typedef basic_osyncstream&lt;char&gt;     osyncstream;</span><br><span class="line">typedef basic_osyncstream&lt;wchar_t&gt; wosyncstream;</span><br></pre></td></tr></table></figure>
+<h1 id="预定义的标准流对象"><a href="#预定义的标准流对象" class="headerlink" title="预定义的标准流对象"></a>预定义的标准流对象</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Defined in header <code>&lt;iostream&gt;</code></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/cin" target="_blank" rel="noopener">cinwcin</a></td>
+<td>reads from the standard C input stream <a href="https://en.cppreference.com/w/cpp/io/c" target="_blank" rel="noopener">stdin</a> (global object)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/cout" target="_blank" rel="noopener">coutwcout</a></td>
+<td>writes to the standard C output stream <a href="https://en.cppreference.com/w/cpp/io/c" target="_blank" rel="noopener">stdout</a> (global object)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/cerr" target="_blank" rel="noopener">cerrwcerr</a></td>
+<td>writes to the standard C error stream <a href="https://en.cppreference.com/w/cpp/io/c" target="_blank" rel="noopener">stderr</a>, unbuffered (global object)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/clog" target="_blank" rel="noopener">clogwclog</a></td>
+<td>writes to the standard C error stream <a href="https://en.cppreference.com/w/cpp/io/c" target="_blank" rel="noopener">stderr</a> (global object)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="I-O-操作"><a href="#I-O-操作" class="headerlink" title="I/O 操作"></a><a href="https://en.cppreference.com/w/cpp/io/manip" target="_blank" rel="noopener">I/O 操作</a></h1><p>这些基于流 I/O 库使用 <a href="https://en.cppreference.com/w/cpp/io/manip" target="_blank" rel="noopener">I/O manipulators</a> (e.g. <a href="https://en.cppreference.com/w/cpp/io/manip/boolalpha" target="_blank" rel="noopener">std::boolalpha</a>, <a href="https://en.cppreference.com/w/cpp/io/manip/hex" target="_blank" rel="noopener">std::hex</a>, etc.) 来控制流的表现。</p>
+<h1 id="Types"><a href="#Types" class="headerlink" title="Types"></a>Types</h1><p>下面是一些定义的辅助类型。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Defined in header <code>&lt;ios&gt;</code></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/streamoff" target="_blank" rel="noopener">streamoff</a></td>
+<td>表示相对的文件/流位置（从 fpos 处的偏移），足够用来表示任意文件大小。 (typedef)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/streamsize" target="_blank" rel="noopener">streamsize</a></td>
+<td>表示在一个I/O 操作中传输的字符数量或一个 I/O 缓冲区的大小。(typedef)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/fpos" target="_blank" rel="noopener">fpos</a></td>
+<td>代表一个流或者文件中的绝对位置。(class template)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>提供了下面这两个特殊的 <a href="https://en.cppreference.com/w/cpp/io/fpos" target="_blank" rel="noopener">std::fpos</a> :</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Defined in header <code>&lt;ios&gt;</code></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Type</td>
+<td>Definition</td>
+</tr>
+<tr>
+<td><code>streampos</code></td>
+<td><a href="http://en.cppreference.com/w/cpp/io/fpos" target="_blank" rel="noopener">std::fpos</a><a href="[std::char_traits](http://en.cppreference.com/w/cpp/string/char_traits)&lt;char">[std::char_traits](http://en.cppreference.com/w/cpp/string/char_traits)&lt;char</a>::state_type&gt;</td>
+</tr>
+<tr>
+<td><code>wstreampos</code></td>
+<td><a href="http://en.cppreference.com/w/cpp/io/fpos" target="_blank" rel="noopener">std::fpos</a><a href="[std::char_traits](http://en.cppreference.com/w/cpp/string/char_traits)&lt;wchar_t">[std::char_traits](http://en.cppreference.com/w/cpp/string/char_traits)&lt;wchar_t</a>::state_type&gt;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h4 id="Error-category-interface"><a href="#Error-category-interface" class="headerlink" title="Error category interface"></a>Error category interface</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Defined in header <code>&lt;ios&gt;</code></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/io_errc" target="_blank" rel="noopener">io_errc</a>(C++11)</td>
+<td>the IO stream error codes (enum)</td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/iostream_category" target="_blank" rel="noopener">iostream_category</a>(C++11)</td>
+<td>identifies the iostream error category (function)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="std-cin"><a href="#std-cin" class="headerlink" title="std::cin"></a>std::cin</h1><p>这是一个预定义的流:</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// &lt;iostream&gt;</span></span><br><span class="line"><span class="keyword">extern</span> istream <span class="built_in">cin</span>;		<span class="comment">/// Linked to standard input</span></span><br></pre></td></tr></table></figure>
+<p>输入流：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// &lt;istream&gt;</span></span><br><span class="line"><span class="keyword">typedef</span> basic_istream&lt;<span class="keyword">char</span>&gt; 		istream;</span><br></pre></td></tr></table></figure>
+<p>基本输入流：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// &lt;istream&gt;</span></span><br><span class="line"> <span class="keyword">template</span>&lt;<span class="keyword">typename</span> _CharT, <span class="keyword">typename</span> _Traits&gt;</span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">basic_istream</span> :</span> <span class="keyword">virtual</span> <span class="keyword">public</span> basic_ios&lt;_CharT, _Traits&gt;</span><br><span class="line">   &#123;</span><br><span class="line">     </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p><code>basic_istream</code> 是一个模板类，需要两个类型参数：</p>
+<ul>
+<li>_CharT 代表了字符的类型</li>
+<li>_Traits 类型的特性</li>
+</ul>
+<p>而我们看到，默认情况下，是没有传入 <code>_Traits</code> 类型参数的。那么，这到底是个什么东西呢。</p>
+<h1 id="Traits"><a href="#Traits" class="headerlink" title="Traits"></a>Traits</h1><p>这个意思呢，就是相当于特性萃取了，按照 C++ 发明者的说法：</p>
+<blockquote>
+<p><em>Think of a trait as a small object whose main purpose is to carry information used by another object or algorithm to determine “policy” or “implementation details”. - Bjarne Stroustrup</em></p>
+<p>将 trait 看成一个小小的对象，它的主要用途是用来携带一些被其他对象或者算法进行使用以决定 <code>策略</code> 或 <code>实现细节</code>。</p>
+</blockquote>
+<p>通常，他们会被实现为 <code>struct</code>。</p>
+<h2 id="std-basic-string"><a href="#std-basic-string" class="headerlink" title="std::basic_string"></a>std::basic_string</h2><p>比如我们的这个字符串的模板类。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">CharT</span>, </span></span><br><span class="line"><span class="class">    <span class="title">class</span> <span class="title">Traits</span> = <span class="title">std</span>:</span>:char_traits&lt;CharT&gt;, </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Allocator</span> = <span class="title">std</span>:</span>:allocator&lt;CharT&gt;</span><br><span class="line">&gt; <span class="class"><span class="keyword">class</span> <span class="title">basic_string</span>;</span></span><br></pre></td></tr></table></figure>
+<p>他就有一个类型参数，<code>std::char_traits</code> ，我们看看它的 GCC 实现：</p>
+<h2 id="std-char-traits"><a href="#std-char-traits" class="headerlink" title="std::char_traits"></a>std::char_traits</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> _<span class="title">CharT</span>&gt;</span></span><br><span class="line"><span class="class">  <span class="title">struct</span> <span class="title">char_traits</span> :</span> <span class="keyword">public</span> __gnu_cxx::char_traits&lt;_CharT&gt;</span><br><span class="line">  &#123; &#125;;</span><br></pre></td></tr></table></figure>
+<p>traits，特性，定义了一组操作和类型：</p>
+<h3 id="Member-types"><a href="#Member-types" class="headerlink" title="Member types"></a>Member types</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>char_type</code></td>
+<td><code>CharT</code></td>
+</tr>
+<tr>
+<td><code>int_type</code></td>
+<td>an integer type that can hold all values of <code>char_type</code> plus <code>EOF</code></td>
+</tr>
+<tr>
+<td><code>off_type</code></td>
+<td><em>implementation-defined</em></td>
+</tr>
+<tr>
+<td><code>pos_type</code></td>
+<td><em>implementation-defined</em></td>
+</tr>
+<tr>
+<td><code>state_type</code></td>
+<td><em>implementation-defined</em></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Member-functions"><a href="#Member-functions" class="headerlink" title="Member functions"></a>Member functions</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th><a href="./char_traits/assign.html">assign</a>[static]</th>
+<th>assigns a character  (public static member function)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="./char_traits/cmp.html">eq<br>lt</a>[static]</td>
+<td>compares two characters  (public static member function)</td>
+</tr>
+<tr>
+<td><a href="./char_traits/move.html">move</a>[static]</td>
+<td>moves one character sequence onto another  (public static member function)</td>
+</tr>
+<tr>
+<td><a href="./char_traits/copy.html">copy</a>[static]</td>
+<td>copies a character sequence  (public static member function)</td>
+</tr>
+<tr>
+<td><a href="./char_traits/compare.html">compare</a>[static]</td>
+<td>lexicographically compares two character sequences  (public static member function)</td>
+</tr>
+<tr>
+<td><a href="./char_traits/length.html">length</a>[static]</td>
+<td>returns the length of a character sequence  (public static member function)</td>
+</tr>
+<tr>
+<td><a href="./char_traits/find.html">find</a>[static]</td>
+<td>finds a character in a character sequence  (public static member function)</td>
+</tr>
+<tr>
+<td><a href="./char_traits/to_char_type.html">to_char_type</a>[static]</td>
+<td>converts <code>int_type</code> to equivalent <code>char_type</code>  (public static member function)</td>
+</tr>
+<tr>
+<td><a href="./char_traits/to_int_type.html">to_int_type</a>[static]</td>
+<td>converts <code>char_type</code> to equivalent <code>int_type</code>  (public static member function)</td>
+</tr>
+<tr>
+<td><a href="./char_traits/eq_int_type.html">eq_int_type</a>[static]</td>
+<td>compares two <code>int_type</code> values  (public static member function)</td>
+</tr>
+<tr>
+<td><a href="./char_traits/eof.html">eof</a>[static]</td>
+<td>returns an <em>eof</em> value  (public static member function)</td>
+</tr>
+<tr>
+<td><a href="./char_traits/not_eof.html">not_eof</a>[static]</td>
+<td>checks whether a character is <em>eof</em> value  (public static member function)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="标准的-traits："><a href="#标准的-traits：" class="headerlink" title="标准的 traits："></a>标准的 traits：</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>std::string</strong></td>
+<td>std::basic_string<char></char></td>
+</tr>
+<tr>
+<td><strong>std::wstring</strong></td>
+<td>std::basic_string<wchar_t></wchar_t></td>
+</tr>
+<tr>
+<td>std::u8string (C++20)</td>
+<td>std::basic_string<char8_t></char8_t></td>
+</tr>
+<tr>
+<td><strong>std::u16string</strong> (C++11)</td>
+<td>std::basic_string<char16_t></char16_t></td>
+</tr>
+<tr>
+<td><strong>std::u32string</strong> (C++11)</td>
+<td>std::basic_string<char32_t></char32_t></td>
+</tr>
+<tr>
+<td><strong>std::pmr::string</strong> (C++17)</td>
+<td>std::pmr::basic_string<char></char></td>
+</tr>
+<tr>
+<td><strong>std::pmr::wstring</strong> (C++17)</td>
+<td>std::pmr::basic_string<wchar_t></wchar_t></td>
+</tr>
+<tr>
+<td>std::pmr::u8string (C++20)</td>
+<td>std::pmr::basic_string<char8_t></char8_t></td>
+</tr>
+<tr>
+<td><strong>std::pmr::u16string</strong> (C++17)</td>
+<td>std::pmr::basic_string<char16_t></char16_t></td>
+</tr>
+<tr>
+<td><strong>std::pmr::u32string</strong> (C++17)</td>
+<td>std::pmr::basic_string<char32_t></char32_t></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Template-parameters"><a href="#Template-parameters" class="headerlink" title="Template parameters"></a>Template parameters</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>CharT</th>
+<th>-</th>
+<th>character type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Traits</td>
+<td>-</td>
+<td>traits class specifying the operations on the character type</td>
+</tr>
+<tr>
+<td>Allocator</td>
+<td>-</td>
+<td><a href="https://en.cppreference.com/w/cpp/named_req/Allocator" target="_blank" rel="noopener"><em>Allocator</em></a> type used to allocate internal storage</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="终于"><a href="#终于" class="headerlink" title="终于"></a>终于</h2><p>我们可以把 traits 看成一些可对类型进行的操作，已经一些内部使用的类型，会被其他的对象或者算法用到的地方，实际上，通常我们使用的时候，可能并不需要关注这些内容。</p>
+<p>比如：<code>std::string</code>。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Cpp/" rel="tag"># Cpp</a>
+              <a href="/tags/Stream-IO/" rel="tag"># Stream IO</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Cpp/使用OpenSSL进行编程.html" rel="next" title="使用OpenSSL进行编程">
+                  <i class="fa fa-chevron-left"></i> 使用OpenSSL进行编程
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/Cpp/RSA及相关库实现.html" rel="prev" title="RSA及相关库实现">
+                  RSA及相关库实现 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#各类的作用"><span class="nav-number">1.</span> <span class="nav-text">各类的作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Typedefs"><span class="nav-number">2.</span> <span class="nav-text">Typedefs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#预定义的标准流对象"><span class="nav-number">3.</span> <span class="nav-text">预定义的标准流对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#I-O-操作"><span class="nav-number">4.</span> <span class="nav-text">I/O 操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Types"><span class="nav-number">5.</span> <span class="nav-text">Types</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Error-category-interface"><span class="nav-number">5.0.0.1.</span> <span class="nav-text">Error category interface</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#std-cin"><span class="nav-number">6.</span> <span class="nav-text">std::cin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Traits"><span class="nav-number">7.</span> <span class="nav-text">Traits</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#std-basic-string"><span class="nav-number">7.1.</span> <span class="nav-text">std::basic_string</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#std-char-traits"><span class="nav-number">7.2.</span> <span class="nav-text">std::char_traits</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Member-types"><span class="nav-number">7.2.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Member-functions"><span class="nav-number">7.2.2.</span> <span class="nav-text">Member functions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准的-traits："><span class="nav-number">7.3.</span> <span class="nav-text">标准的 traits：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Template-parameters"><span class="nav-number">7.3.1.</span> <span class="nav-text">Template parameters</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#终于"><span class="nav-number">7.4.</span> <span class="nav-text">终于</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">375</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">158</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Cpp/C++中的流式IO-StreamIO.html",
+            identifier: "Cpp/C++中的流式IO-StreamIO.html",
+            title: "C++中的流式IO-StreamIO"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>

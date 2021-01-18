@@ -225,6 +225,376 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/dom4j来解析xml-省市区-三级联动选择.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Java/dom4j来解析xml-省市区-三级联动选择.html" class="post-title-link" itemprop="url">dom4j来解析xml-省市区-三级联动选择</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-24 15:55:42" itemprop="dateCreated datePublished" datetime="2018-08-24T15:55:42+08:00">2018-08-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Java/dom4j来解析xml-省市区-三级联动选择.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/dom4j来解析xml-省市区-三级联动选择.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本来一直没有用到过xml，也从来不知道为什么xml/json应用会这么广，谁让我是一个水逼代码货。但是果然就是与到了，从别人的网站上扒下来需要用到的xml行政区域代码，然后要做一个三级联动选择器。于是github，谷歌开始。</p>
+<h1 id="Android-PickerView"><a href="#Android-PickerView" class="headerlink" title="Android-PickerView"></a>Android-PickerView</h1><p><a href="https://github.com/Bigkoo/Android-PickerView" target="_blank" rel="noopener">android-pickerview项目地址</a></p>
+<p>据说这个可以，但用起来看了一下果然应该是可以的。懒得自己去适配wheelview了，就打算用这个吧。这个需要三个列表。一个列表保存的是省级数据，一个保存市级数据，一个保存区县的数据。我们就需要把我们的xml文档给解析过来。</p>
+<h1 id="dom4j"><a href="#dom4j" class="headerlink" title="dom4j"></a>dom4j</h1><p>我的文档格式类似下面：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">r</span> <span class="attr">tm</span>=<span class="string">"2018/08/01 14:29:46"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110000"</span>&gt;</span>北京<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">t</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110100"</span>&gt;</span>北京-北京市<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110101"</span>&gt;</span>北京-北京市-东城区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110102"</span>&gt;</span>北京-北京市-西城区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110103"</span>&gt;</span>北京-北京市-崇文区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110104"</span>&gt;</span>北京-北京市-宣武区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110105"</span>&gt;</span>北京-北京市-朝阳区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110106"</span>&gt;</span>北京-北京市-丰台区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110107"</span>&gt;</span>北京-北京市-石景山区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110108"</span>&gt;</span>北京-北京市-海淀区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110109"</span>&gt;</span>北京-北京市-门头沟区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110111"</span>&gt;</span>北京-北京市-房山区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110112"</span>&gt;</span>北京-北京市-通州区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110113"</span>&gt;</span>北京-北京市-顺义区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110114"</span>&gt;</span>北京-北京市-昌平区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110115"</span>&gt;</span>北京-北京市-大兴区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110116"</span>&gt;</span>北京-北京市-怀柔区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110117"</span>&gt;</span>北京-北京市-平谷区<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110200"</span>&gt;</span>北京-县<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110228"</span>&gt;</span>北京-县-密云县<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"110229"</span>&gt;</span>北京-县-延庆县<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">t</span> <span class="attr">c</span>=<span class="string">"120000"</span>&gt;</span>天津<span class="tag">&lt;/<span class="name">t</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">t</span>&gt;</span></span><br><span class="line">  ....</span><br></pre></td></tr></table></figure>
+<p>比较简单，开始的时候我是准备用map来搞的，但是不好适配上面的那个选择器，最后还是麻烦点，效率低点的用list来适配了。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>dom 把xml文档内的标签都当做元素，有一个根元素，我们文档内就是 <code>r</code> 这个元素。然后其有很多子节点，有的节点有属性 <code>c</code>，而有的没有。没有 <code>c</code> 属性的，则其具有子节点。理解后解析过程就很简单了。</p>
+<h2 id="代码解析"><a href="#代码解析" class="headerlink" title="代码解析"></a>代码解析</h2><p>我首先构造出省，市，区县的实体类：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Province</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String code;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> List&lt;City&gt; citys;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">City</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String code;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Zone&gt; zones;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Zone</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String code;</span><br><span class="line">    <span class="keyword">private</span> String value;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>最后我们得出的是一个<em>List\<province></province></em>数据结构。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AreaDataModel</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 需要一个安卓的上下文来获取assets目录</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Province&gt; <span class="title">getData</span><span class="params">(Context ctx)</span></span>&#123;</span><br><span class="line">        List&lt;Province&gt; provinces = <span class="keyword">new</span> ArrayList&lt;Province&gt;();</span><br><span class="line">        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            DocumentBuilder builder = factory.newDocumentBuilder();</span><br><span class="line">            Document document = builder.parse(ctx.getAssets().open(<span class="string">"area.xml"</span>));</span><br><span class="line">            Element root = document.getDocumentElement();</span><br><span class="line">            NodeList items = root.getChildNodes();</span><br><span class="line">            <span class="comment">// 根节点的子节点，一级节点，我这样称呼它，是为省份信息</span></span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; items.getLength(); i++) &#123;</span><br><span class="line">                Node node = items.item(i);</span><br><span class="line">                <span class="keyword">if</span> (node.getNodeType() == Node.ELEMENT_NODE) &#123;</span><br><span class="line">                    Element e = (Element) node;</span><br><span class="line">                    <span class="keyword">if</span> (e.hasAttribute(<span class="string">"c"</span>)) &#123;</span><br><span class="line">                        Province province = <span class="keyword">new</span> Province();</span><br><span class="line">                        province.setCode(e.getAttribute(<span class="string">"c"</span>).substring(<span class="number">0</span>,<span class="number">2</span>));</span><br><span class="line">                        province.setName(e.getTextContent());</span><br><span class="line">                        province.setCitys(<span class="keyword">new</span> ArrayList&lt;City&gt;());</span><br><span class="line">                        provinces.add(province);</span><br><span class="line">                     <span class="comment">// 如果没有`c`属性，那么这个拥有子节点，是市级数据。</span></span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        addCitysToProvince(e, provinces);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            System.out.println(provinces.size());</span><br><span class="line">            <span class="keyword">int</span> n1 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">int</span> n2 = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; provinces.size(); i++) &#123;</span><br><span class="line">                Province province =  provinces.get(i);</span><br><span class="line">                n1 += province.getCitys().size();</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; province.getCitys().size(); j++) &#123;</span><br><span class="line">                    n2 += province.getCitys().get(j).getZones().size();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(n1);</span><br><span class="line">            System.out.println(n2);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            System.out.println(e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> provinces;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 把市级数据添加到省级数据内</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">addCitysToProvince</span><span class="params">(Element element, List&lt;Province&gt; provinces)</span> </span>&#123;</span><br><span class="line">        NodeList nodeList  = element.getChildNodes();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nodeList.getLength(); i++) &#123;</span><br><span class="line">            Node node = nodeList.item(i);</span><br><span class="line">            <span class="keyword">if</span> (node.getNodeType() == Node.ELEMENT_NODE)&#123;</span><br><span class="line">                Element e = (Element) node;</span><br><span class="line">                <span class="comment">// 有 `c` 属性的，是市级数据。</span></span><br><span class="line">                <span class="keyword">if</span> (e.hasAttribute(<span class="string">"c"</span>))&#123;</span><br><span class="line">                    Province province  = findProvinceByCode(e.getAttribute(<span class="string">"c"</span>).substring(<span class="number">0</span>,<span class="number">2</span>),provinces);</span><br><span class="line">                    <span class="keyword">if</span> (province!=<span class="keyword">null</span>)&#123;</span><br><span class="line">                        City city = <span class="keyword">new</span> City();</span><br><span class="line">                        city.setCode(e.getAttribute(<span class="string">"c"</span>).substring(<span class="number">2</span>,<span class="number">4</span>));</span><br><span class="line">                        String name = e.getTextContent();</span><br><span class="line">                        city.setName(name.substring(name.lastIndexOf(<span class="string">"-"</span>)+<span class="number">1</span>));</span><br><span class="line">                        city.setZones(<span class="keyword">new</span> ArrayList&lt;Zone&gt;());</span><br><span class="line">                        province.getCitys().add(city);</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        System.out.printf(<span class="string">"%s,%s\n"</span>,e.getAttribute(<span class="string">"c"</span>),e.getTextContent());</span><br><span class="line">                    &#125;</span><br><span class="line">                   <span class="comment">// 否则的话，是区县数据，</span></span><br><span class="line">                &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">                    addZonesToProvince(e,provinces);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 通过省分代码找到对应的省级数据</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> Province <span class="title">findProvinceByCode</span><span class="params">(String code, List&lt;Province&gt; provinces)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; provinces.size(); i++) &#123;</span><br><span class="line">            Province province =  provinces.get(i);</span><br><span class="line">            <span class="keyword">if</span> (province.getCode().equals(code))&#123;</span><br><span class="line">                <span class="keyword">return</span> province;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 把区县数据添加到省内</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">addZonesToProvince</span><span class="params">(Element element, List&lt;Province&gt; provinces)</span></span>&#123;</span><br><span class="line">        NodeList nodeList  = element.getChildNodes();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nodeList.getLength(); i++) &#123;</span><br><span class="line">            Node node = nodeList.item(i);</span><br><span class="line">            <span class="keyword">if</span> (node.getNodeType() == Node.ELEMENT_NODE)&#123;</span><br><span class="line">                Element e = (Element) node;</span><br><span class="line">                String code = e.getAttribute(<span class="string">"c"</span>);</span><br><span class="line">                String pro = code.substring(<span class="number">0</span>,<span class="number">2</span>);</span><br><span class="line">                String cityCode = code.substring(<span class="number">2</span>,<span class="number">4</span>);</span><br><span class="line">                String zoneCode = code.substring(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line">                Province province = findProvinceByCode(pro,provinces);</span><br><span class="line">                City city = findCityByCode(cityCode,province.getCitys());</span><br><span class="line">                <span class="keyword">if</span> (city == <span class="keyword">null</span>)&#123;</span><br><span class="line">                    System.out.printf(<span class="string">"%s,%s\n"</span>,code,e.getTextContent());</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    Zone zone = <span class="keyword">new</span> Zone();</span><br><span class="line">                    zone.setCode(zoneCode);</span><br><span class="line">                    String name = e.getTextContent();</span><br><span class="line">                    zone.setValue(name.substring(name.lastIndexOf(<span class="string">"-"</span>)+<span class="number">1</span>));</span><br><span class="line">                    city.getZones().add(zone);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 根据区域代码找出归属的城市</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> City <span class="title">findCityByCode</span><span class="params">(String code, List&lt;City&gt; cities)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; cities.size(); i++) &#123;</span><br><span class="line">            City city =  cities.get(i);</span><br><span class="line">            <span class="keyword">if</span> (city.getCode().equals(code))&#123;</span><br><span class="line">                <span class="keyword">return</span> city;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当我们得出了我们想要的数据结构，那我们要适配选择器了。</p>
+<h1 id="实现选择代码"><a href="#实现选择代码" class="headerlink" title="实现选择代码"></a>实现选择代码</h1><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 分别省，市，县的列表</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;Province&gt; mProvinces = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> List&lt;List&lt;City&gt;&gt; mCities = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> List&lt;List&lt;List&lt;Zone&gt;&gt;&gt; mZones = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br></pre></td></tr></table></figure>
+<p>通过我们解析的数据来初始化这三个列表：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">    mProvinces = AreaDataModel.getData(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; mProvinces.size(); i++) &#123;</span><br><span class="line">        Province province = mProvinces.get(i);</span><br><span class="line">        <span class="comment">// 如果省份的城市为空，为了避免NPE错误，给他加上一个空的市，空的区</span></span><br><span class="line">        <span class="keyword">if</span> (province.getCitys().isEmpty()) &#123;</span><br><span class="line">            City newCity = <span class="keyword">new</span> City();</span><br><span class="line">            newCity.setName(<span class="string">""</span>);</span><br><span class="line">            newCity.setCode(<span class="string">"00"</span>);</span><br><span class="line">            List&lt;Zone&gt; tmp = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">            tmp.add(<span class="keyword">new</span> Zone(<span class="string">"00"</span>, <span class="string">""</span>));</span><br><span class="line">            newCity.setZones(tmp);</span><br><span class="line">            province.getCitys().add(newCity);</span><br><span class="line">        &#125;</span><br><span class="line">        mCities.add(province.getCitys());</span><br><span class="line">        List&lt;List&lt;Zone&gt;&gt; cityZone = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; province.getCitys().size(); j++) &#123;</span><br><span class="line">        <span class="comment">//没有区县的市给他加一个空的。</span></span><br><span class="line">            <span class="keyword">if</span> (province.getCitys().get(j).getZones().isEmpty())&#123;</span><br><span class="line">                province.getCitys().get(j).getZones().add(<span class="keyword">new</span> Zone(<span class="string">"00"</span>,<span class="string">""</span>));</span><br><span class="line">            &#125;</span><br><span class="line">            cityZone.add(province.getCitys().get(j).getZones());</span><br><span class="line">        &#125;</span><br><span class="line">        mZones.add(cityZone);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后把数据绑定到我们的选择器上：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">final</span> OptionsPickerView pvOptions = <span class="keyword">new</span> OptionsPickerBuilder(<span class="keyword">this</span>, <span class="keyword">new</span> OnOptionsSelectListener() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onOptionsSelect</span><span class="params">(<span class="keyword">int</span> options1, <span class="keyword">int</span> options2, <span class="keyword">int</span> options3, View v)</span> </span>&#123;</span><br><span class="line">        StringBuffer sb = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">        sb.append(mProvinces.get(options1).getName());</span><br><span class="line">        sb.append(<span class="string">"-"</span>);</span><br><span class="line">        sb.append(mCities.get(options1).get(options2).getName());</span><br><span class="line">        sb.append(<span class="string">"-"</span>);</span><br><span class="line">        sb.append(mZones.get(options1).get(options2).get(options3).getValue());</span><br><span class="line">        String areazone = sb.toString().replace(<span class="string">"--"</span>,<span class="string">""</span>);</span><br><span class="line">        idcardAddress.setTvContent(areazone);</span><br><span class="line">        areaCode = String.format(<span class="string">"%s%s%s"</span>, mProvinces.get(options1).getCode(),</span><br><span class="line">                                        mCities.get(options1).get(options2).getCode(),</span><br><span class="line">                                        mZones.get(options1).get(options2).get(options3).getCode());</span><br><span class="line">        showToast(areazone);</span><br><span class="line">        Log.d(TAG, <span class="string">"onOptionsSelect: "</span> + areaCode);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line">        .setTitleText(<span class="string">"城市选择"</span>)</span><br><span class="line">        .setDividerColor(Color.BLACK)</span><br><span class="line">        .setTextColorCenter(Color.BLACK) <span class="comment">//设置选中项文字颜色</span></span><br><span class="line">        .setContentTextSize(<span class="number">20</span>)</span><br><span class="line">        .build();</span><br><span class="line"></span><br><span class="line">pvOptions.setPicker(mProvinces, mCities, mZones);<span class="comment">//三级选择器</span></span><br><span class="line">pvOptions.show();</span><br></pre></td></tr></table></figure>
+<p>这样就大功告成了。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/理解MySQL的查询执行计划.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/数据库/理解MySQL的查询执行计划.html" class="post-title-link" itemprop="url">理解MySQL的查询执行计划</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-22 13:09:25" itemprop="dateCreated datePublished" datetime="2018-08-22T13:09:25+08:00">2018-08-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/数据库/理解MySQL的查询执行计划.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/理解MySQL的查询执行计划.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>根据表，列，索引和WHERE子句中的条件的详细信息，MySQL优化器会考虑许多技术来有效地执行SQ​​L查询中涉及的查找。可以在不读取所有行的情况下执行对巨大表的查询;可以在不比较每个行组合的情况下执行涉及多个表的连接。优化程序选择执行最有效查询的操作集称为“查询执行计划”，也称为EXPLAIN计划。您的目标是识别EXPLAIN计划中表明查询已经过优化的方面，并了解SQL语法和索引技术，以便在看到一些低效的操作时改进计划。<br>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/数据库/理解MySQL的查询执行计划.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/一次惨痛的数据库恢复经历.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/数据库/一次惨痛的数据库恢复经历.html" class="post-title-link" itemprop="url">一次惨痛的数据库恢复经历</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-21 17:44:33" itemprop="dateCreated datePublished" datetime="2018-08-21T17:44:33+08:00">2018-08-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/数据库/一次惨痛的数据库恢复经历.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/一次惨痛的数据库恢复经历.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>后台在测试的时候，不小心把数据库备份导入了原来的库。这别，用mysqldump导出的语句会一个个的把表给drop调，然后重新建表，再插入数据。而这个时候，服务是没有停机的，有的业务表依然在有数据的写入，这样很可能造成数据的不一致问题。
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/数据库/一次惨痛的数据库恢复经历.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/建立一个可持续发展的安卓Client.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Android/建立一个可持续发展的安卓Client.html" class="post-title-link" itemprop="url">建立一个可持续发展的安卓Client</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-08-16 21:43:44" itemprop="dateCreated datePublished" datetime="2018-08-16T21:43:44+08:00">2018-08-16</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Android/建立一个可持续发展的安卓Client.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/建立一个可持续发展的安卓Client.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Retrofit提供了广泛的功能，并且有许多可能的配置。 许多较大的应用程序需要一些特定的设置，例如OAuth身份验证。 为了实现一个干净和稳定的项目，我们将向您介绍我们对可持续Android客户端的想法：ServiceGenerator。本文是译文：<a href="https://futurestud.io/tutorials/retrofit-2-creating-a-sustainable-android-client" target="_blank" rel="noopener">原文地址</a><br>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/Android/建立一个可持续发展的安卓Client.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/android集成腾讯X5内核浏览office文件.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -826,399 +1196,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/android使用poi生成文书出错解决.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Java/android使用poi生成文书出错解决.html" class="post-title-link" itemprop="url">android使用poi生成文书出错解决</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-07-20 09:04:40" itemprop="dateCreated datePublished" datetime="2018-07-20T09:04:40+08:00">2018-07-20</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Java/android使用poi生成文书出错解决.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/android使用poi生成文书出错解决.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>本来事情一切正常，使用的是poi来生成docx的文档。但是偶然间不知道在什么版本的时候，生成的时候会报错。提示是某个类没有实现List接口，但是非常明显的，之前都正常，并没有做什么特别的操作为什么会出现这样的问题呢？<br>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Java/android使用poi生成文书出错解决.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/vnc在CentOS的开启相关知识.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Linux-Unix/vnc在CentOS的开启相关知识.html" class="post-title-link" itemprop="url">vnc在CentOS的开启相关知识</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-07-18 10:02:22" itemprop="dateCreated datePublished" datetime="2018-07-18T10:02:22+08:00">2018-07-18</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux/Unix</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Linux-Unix/vnc在CentOS的开启相关知识.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/vnc在CentOS的开启相关知识.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>自己用才MAC，但是公司用的VPN是网御星云的，必须在windows下用，但是服务器配置还可以，单独用的话有点浪费。于是装了CentOS，KVM布置了一个虚拟机，然后准备开启VNC来支持。另外，所使用的idea也需要在图形化的界面下进行调试，也需要开启VNC。</p>
-<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><p>简单来说，就是我们在服务器上启动一个 vnc服务器，CentOS的叫做 <strong>Xvnc</strong>，此服务器会接受我们 我们的连接，然后监控窗口系统的信息发送给我们，再把我们的操作反馈到服务器的窗口信息。 所以，使用 vnc 的前提是，我们开启了窗口系统，怎么开启，这里不赘述，自行谷歌。</p>
-<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><p>先安装 gnome 桌面环境:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum groupinstall &quot;GNOME Desktop&quot;</span><br></pre></td></tr></table></figure>
-<p>CentOS上的安装，非常简单：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">yum install vncserver</span><br></pre></td></tr></table></figure>
-<p>就OK了，然后，直接在当前用户下执行命令：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">vncserver</span><br></pre></td></tr></table></figure>
-<p>就OK了，但是这里有很多细节其实我们还不知道的。</p>
-<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><p>执行 <code>vncserver</code> 命令的时候，我们可以指定很多选项，如果不指定任何选项的话，会默认使用第一个可用的 显示ID，通常是 1。用这个显示ID启动  Xvnc，在Xvnc会话里启动窗口管理器。我们可以以 <code>vncserver :13</code>这样的形式指定显示ID。</p>
-<ol>
-<li><code>$HOME/.vnc/xstartup</code> 一个shell脚本，指定当VNC桌面开始时执行的 X 程序。如果这文件不存在，vncserver会建立一个默认的 xstartup 脚本，此脚本尝试 启动你选择的窗口管理器。</li>
-<li><code>/etc/tigervnc/vncserver-config-defaults</code> 这是一个可选的，系统层面的文件与<code>$HOME/.vnc/config</code>相等。如果此文件存在并定义了传递给Xvnc的选项，所有用户都会默认使用这些选项。<code>$HOME/.vnc/config</code>会重写这个文件内设置。文件的加载顺序是：<code>/etc/tigervnc/vncserver-config-defaults, $HOME/.vnc/config,  /etc/tigervnc/vncserver-config-mandatory</code>所有文件都不一定要求必须存在。</li>
-<li><code>/etc/tigervnc/vncserver-config-mandatory</code>系统层面与<code>$HOME/.vnc/config</code>想等的配置文件。如果这个文件定义了参数，那么就其会覆盖 <code>$HOME/.vnc/config</code>内定义的对应参数。</li>
-<li><code>$HOME/.vnc/config</code> 用户的配置文件</li>
-<li><code>$HOME/.vnc/passwd</code> 密码文件</li>
-<li><code>$HOME/.vnc/host:display#.log</code> 日志文件</li>
-<li><code>$HOME/.vnc/host:display#.pid</code> pid文件</li>
-</ol>
-<h1 id="以服务的形式启动CentOS-7"><a href="#以服务的形式启动CentOS-7" class="headerlink" title="以服务的形式启动CentOS 7"></a>以服务的形式启动CentOS 7</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp /lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@.service</span><br></pre></td></tr></table></figure>
-<p>把此文件中的 <user> 一用户名替代 。</user></p>
-<p>执行 <code>systemctl daemon-reload</code></p>
-<p>执行 <code>systemctl enable vncserver@&lt;display&gt;.service</code></p>
-<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>以服务的形式启动失败了，最后是以命令的形式进行启动的。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/利用idea调试maven项目.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Java/利用idea调试maven项目.html" class="post-title-link" itemprop="url">利用idea调试maven项目</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-07-17 16:37:41" itemprop="dateCreated datePublished" datetime="2018-07-17T16:37:41+08:00">2018-07-17</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Java/利用idea调试maven项目.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/利用idea调试maven项目.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>事情是这样的，之前曾经idea上调试过项目，但是出现一个很头疼的问题是，后面再调用哪个API都会直接跳转到到了登录界面。而如果将环境部署以后，则正常，谷歌良久，终于找到了解决办法，但是，之前的疑问依然没有解决。为什么开始的时候同样的操作是可以的，而后就不行了呢。</p>
-<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><ul>
-<li>OS: CentOS 7.5 x86_64</li>
-<li>IDE: ideaU</li>
-<li>开发语言: Java</li>
-<li>框架：jeeplus</li>
-<li>编译：maven-&gt;war</li>
-<li>中间件： tomcat 7.0.94</li>
-</ul>
-<p>开始的时候，直接导入项目，编译，然后在idea的 <code>Run/Debug Configration</code> 处添加好 tomcatserver local项目，指定好我的tomcat 路径，然后直接小臭虫就开始debug了。</p>
-<p>可是后面换了个机器，重新装一一下系统就坑了，不行了。谷歌才找到了解决的办法</p>
-<h1 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h1><p>ideaU -&gt; edit configration -&gt; 添加 maven -&gt; command line 输入 <code>tomcat7:run</code> 然后保存好后。</p>
-<p>点小臭虫居然就可以了，这是为什么呢？</p>
-<h1 id="另外一种办法"><a href="#另外一种办法" class="headerlink" title="另外一种办法"></a>另外一种办法</h1><p>在 idea 有了 tomcat server 插件集成的情况下。<br>按如下步骤进行：</p>
-<ol>
-<li>选择 Edit Configurations</li>
-<li>点 + 号，添加一个 Tomcat Server Local 配置</li>
-<li>在新添加的配置的 标签 Server 下指定自己的 Tomcat 程序位置</li>
-<li>在 Deployment 标签下，点 + 号添加我们的 smart.war exploded 。</li>
-<li>运行即可</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/CentOS中的ip命令.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Linux-Unix/CentOS中的ip命令.html" class="post-title-link" itemprop="url">CentOS中的ip命令</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-07-14 11:07:19" itemprop="dateCreated datePublished" datetime="2018-07-14T11:07:19+08:00">2018-07-14</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
-                    <span itemprop="name">Linux/Unix</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Linux-Unix/CentOS中的ip命令.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/CentOS中的ip命令.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>据说ifconfig命令已经过时了，而且都比较推荐转移到ip命令。虽然好久不接触运维但是还是需要了解一下。</p>
-<h1 id="基本格式"><a href="#基本格式" class="headerlink" title="基本格式"></a>基本格式</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ip help</span><br><span class="line">Usage: ip [ OPTIONS ] OBJECT &#123; COMMAND | help &#125;</span><br><span class="line">       ip [ -force ] -batch filename</span><br><span class="line">where  OBJECT := &#123; link | address | addrlabel | route | rule | neigh | ntable |</span><br><span class="line">                   tunnel | tuntap | maddress | mroute | mrule | monitor | xfrm |</span><br><span class="line">                   netns | l2tp | macsec | tcp_metrics | token &#125;</span><br><span class="line">       OPTIONS := &#123; -V[ersion] | -s[tatistics] | -d[etails] | -r[esolve] |</span><br><span class="line">                    -h[uman-readable] | -iec |</span><br><span class="line">                    -f[amily] &#123; inet | inet6 | ipx | dnet | bridge | link &#125; |</span><br><span class="line">                    -4 | -6 | -I | -D | -B | -0 |</span><br><span class="line">                    -l[oops] &#123; maximum-addr-flush-attempts &#125; |</span><br><span class="line">                    -o[neline] | -t[imestamp] | -ts[hort] | -b[atch] [filename] |</span><br><span class="line">                    -rc[vbuf] [size] | -n[etns] name | -a[ll] &#125;</span><br></pre></td></tr></table></figure>
-<p>可以看到，其基本格式是 <code>ip 选项 操纵对象 操纵命令</code> 的形式，而其可以操纵的对象还有点多啊</p>
-<h1 id="操作对象"><a href="#操作对象" class="headerlink" title="操作对象"></a>操作对象</h1><h2 id="link-链路层"><a href="#link-链路层" class="headerlink" title="link 链路层"></a>link 链路层</h2><p>多数时候我们应该不会操纵这些东西，所以只看一下基本的命令格式就算了：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ip link help</span><br><span class="line">Usage: ip link add [link DEV] [ name ] NAME</span><br><span class="line">                   [ txqueuelen PACKETS ]</span><br><span class="line">                   [ address LLADDR ]</span><br><span class="line">                   [ broadcast LLADDR ]</span><br><span class="line">                   [ mtu MTU ]</span><br><span class="line">                   [ numtxqueues QUEUE_COUNT ]</span><br><span class="line">                   [ numrxqueues QUEUE_COUNT ]</span><br><span class="line">                   type TYPE [ ARGS ]</span><br><span class="line">       ip link delete &#123; DEVICE | dev DEVICE | group DEVGROUP &#125; type TYPE [ ARGS ]</span><br><span class="line"></span><br><span class="line">       ip link set &#123; DEVICE | dev DEVICE | group DEVGROUP &#125;</span><br><span class="line">	                  [ &#123; up | down &#125; ]</span><br><span class="line">	                  [ type TYPE ARGS ]</span><br><span class="line">	                  [ arp &#123; on | off &#125; ]</span><br><span class="line">	                  [ dynamic &#123; on | off &#125; ]</span><br><span class="line">	                  [ multicast &#123; on | off &#125; ]</span><br><span class="line">	                  [ allmulticast &#123; on | off &#125; ]</span><br><span class="line">	                  [ promisc &#123; on | off &#125; ]</span><br><span class="line">	                  [ trailers &#123; on | off &#125; ]</span><br><span class="line">	                  [ txqueuelen PACKETS ]</span><br><span class="line">	                  [ name NEWNAME ]</span><br><span class="line">	                  [ address LLADDR ]</span><br><span class="line">	                  [ broadcast LLADDR ]</span><br><span class="line">	                  [ mtu MTU ]</span><br><span class="line">	                  [ netns &#123; PID | NAME &#125; ]</span><br><span class="line">	                  [ link-netnsid ID ]</span><br><span class="line">			  [ alias NAME ]</span><br><span class="line">	                  [ vf NUM [ mac LLADDR ]</span><br><span class="line">				   [ vlan VLANID [ qos VLAN-QOS ] ]</span><br><span class="line">				   [ rate TXRATE ]</span><br><span class="line">				   [ max_tx_rate TXRATE ]</span><br><span class="line">				   [ min_tx_rate TXRATE ]</span><br><span class="line">				   [ spoofchk &#123; on | off&#125; ]</span><br><span class="line">				   [ query_rss &#123; on | off&#125; ]</span><br><span class="line">				   [ state &#123; auto | enable | disable&#125; ] ]</span><br><span class="line">				   [ trust &#123; on | off&#125; ] ]</span><br><span class="line">			  [ master DEVICE ]</span><br><span class="line">			  [ nomaster ]</span><br><span class="line">			  [ addrgenmode &#123; eui64 | none &#125; ]</span><br><span class="line">	                  [ protodown &#123; on | off &#125; ]</span><br><span class="line">       ip link show [ DEVICE | group GROUP ] [up] [master DEV] [type TYPE]</span><br><span class="line">       ip link help [ TYPE ]</span><br><span class="line"></span><br><span class="line">TYPE := &#123; vlan | veth | vcan | dummy | ifb | macvlan | macvtap |</span><br><span class="line">          bridge | bond | ipoib | ip6tnl | ipip | sit | vxlan |</span><br><span class="line">          gre | gretap | ip6gre | ip6gretap | vti | nlmon |</span><br><span class="line">          bond_slave | geneve | bridge_slave | macsec &#125;</span><br></pre></td></tr></table></figure>
-<p>基本的命令有 <code>add/set/delete/show</code>，根据链路层的定义，链路层的设备有多种类型，还可以设置各种属性，如MTU，IPV6地址等。</p>
-<p>我们可能会用到的应该就是  <code>ip link set eth0 down</code> 这样的了，开启或者关闭网卡。</p>
-<h2 id="addr-网络层"><a href="#addr-网络层" class="headerlink" title="addr 网络层"></a>addr 网络层</h2><p>这个可能是用得最多的一个命令了，先看一下命令格式：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ip addr help</span><br><span class="line">Usage: ip address &#123;add|change|replace&#125; IFADDR dev IFNAME [ LIFETIME ]</span><br><span class="line">                                                      [ CONFFLAG-LIST ]</span><br><span class="line">       ip address del IFADDR dev IFNAME [mngtmpaddr]</span><br><span class="line">       ip address &#123;save|flush&#125; [ dev IFNAME ] [ scope SCOPE-ID ]</span><br><span class="line">                            [ to PREFIX ] [ FLAG-LIST ] [ label LABEL ] [up]</span><br><span class="line">       ip address [ show [ dev IFNAME ] [ scope SCOPE-ID ] [ master DEVICE ]</span><br><span class="line">                         [ type TYPE ] [ to PREFIX ] [ FLAG-LIST ]</span><br><span class="line">                         [ label LABEL ] [up] ]</span><br><span class="line">       ip address &#123;showdump|restore&#125;</span><br><span class="line">IFADDR := PREFIX | ADDR peer PREFIX</span><br><span class="line">          [ broadcast ADDR ] [ anycast ADDR ]</span><br><span class="line">          [ label IFNAME ] [ scope SCOPE-ID ]</span><br><span class="line">SCOPE-ID := [ host | link | global | NUMBER ]</span><br><span class="line">FLAG-LIST := [ FLAG-LIST ] FLAG</span><br><span class="line">FLAG  := [ permanent | dynamic | secondary | primary |</span><br><span class="line">           [-]tentative | [-]deprecated | [-]dadfailed | temporary |</span><br><span class="line">           CONFFLAG-LIST ]</span><br><span class="line">CONFFLAG-LIST := [ CONFFLAG-LIST ] CONFFLAG</span><br><span class="line">CONFFLAG  := [ home | nodad | mngtmpaddr | noprefixroute | autojoin ]</span><br><span class="line">LIFETIME := [ valid_lft LFT ] [ preferred_lft LFT ]</span><br><span class="line">LFT := forever | SECONDS</span><br><span class="line">TYPE := &#123; vlan | veth | vcan | dummy | ifb | macvlan | macvtap |</span><br><span class="line">          bridge | bond | ipoib | ip6tnl | ipip | sit | vxlan |</span><br><span class="line">          gre | gretap | ip6gre | ip6gretap | vti | nlmon |</span><br><span class="line">          bond_slave | ipvlan | geneve | bridge_slave | vrf | macsec &#125;</span><br></pre></td></tr></table></figure>
-<h3 id="add"><a href="#add" class="headerlink" title="add"></a>add</h3><p><code>ip addr add 192.168.1.2/24 dev lo</code></p>
-<h3 id="del"><a href="#del" class="headerlink" title="del"></a>del</h3><p><code>ip addr del 192.168.1.2/24 dev lo</code></p>
-<h2 id="route-路由"><a href="#route-路由" class="headerlink" title="route 路由"></a>route 路由</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ip route help</span><br><span class="line">Usage: ip route &#123; list | flush &#125; SELECTOR</span><br><span class="line">       ip route save SELECTOR</span><br><span class="line">       ip route restore</span><br><span class="line">       ip route showdump</span><br><span class="line">       ip route get ADDRESS [ from ADDRESS iif STRING ]</span><br><span class="line">                            [ oif STRING ]  [ tos TOS ]</span><br><span class="line">                            [ mark NUMBER ]</span><br><span class="line">       ip route &#123; add | del | change | append | replace &#125; ROUTE</span><br><span class="line">SELECTOR := [ root PREFIX ] [ match PREFIX ] [ exact PREFIX ]</span><br><span class="line">            [ table TABLE_ID ] [ proto RTPROTO ]</span><br><span class="line">            [ type TYPE ] [ scope SCOPE ]</span><br><span class="line">ROUTE := NODE_SPEC [ INFO_SPEC ]</span><br><span class="line">NODE_SPEC := [ TYPE ] PREFIX [ tos TOS ]</span><br><span class="line">             [ table TABLE_ID ] [ proto RTPROTO ]</span><br><span class="line">             [ scope SCOPE ] [ metric METRIC ]</span><br><span class="line">INFO_SPEC := NH OPTIONS FLAGS [ nexthop NH ]...</span><br><span class="line">NH := [ via ADDRESS ] [ dev STRING ] [ weight NUMBER ] NHFLAGS</span><br><span class="line">OPTIONS := FLAGS [ mtu NUMBER ] [ advmss NUMBER ]</span><br><span class="line">           [ rtt TIME ] [ rttvar TIME ] [reordering NUMBER ]</span><br><span class="line">           [ window NUMBER ] [ cwnd NUMBER ] [ initcwnd NUMBER ]</span><br><span class="line">           [ ssthresh NUMBER ] [ realms REALM ] [ src ADDRESS ]</span><br><span class="line">           [ rto_min TIME ] [ hoplimit NUMBER ] [ initrwnd NUMBER ]</span><br><span class="line">           [ features FEATURES ] [ quickack BOOL ] [ congctl NAME ]</span><br><span class="line">           [ expires TIME ]</span><br><span class="line">TYPE := &#123; unicast | local | broadcast | multicast | throw |</span><br><span class="line">          unreachable | prohibit | blackhole | nat &#125;</span><br><span class="line">TABLE_ID := [ local | main | default | all | NUMBER ]</span><br><span class="line">SCOPE := [ host | link | global | NUMBER ]</span><br><span class="line">NHFLAGS := [ onlink | pervasive ]</span><br><span class="line">RTPROTO := [ kernel | boot | static | NUMBER ]</span><br><span class="line">TIME := NUMBER[s|ms]</span><br><span class="line">BOOL := [1|0]</span><br><span class="line">FEATURES := ecn</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1267,7 +1244,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">371</span>
+          <span class="site-state-item-count">375</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1280,7 +1257,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">156</span>
+        <span class="site-state-item-count">158</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

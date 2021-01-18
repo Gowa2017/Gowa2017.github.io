@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="本篇文章来自 使用 OpenSSL API 进程安全编程。因为突然有一个项目需要用到相关的东西，而之前都是使用的高级语言，如 Python 这些，所以需要从头来了解一下这个东西。更何况，提供的 API 太多，不是很清楚到底是用来干什么的。">
+<meta name="keywords" content="Cpp,OpenSSL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用OpenSSL进行编程">
+<meta property="og:url" content="https://gowa.club/Cpp/使用OpenSSL进行编程.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="本篇文章来自 使用 OpenSSL API 进程安全编程。因为突然有一个项目需要用到相关的东西，而之前都是使用的高级语言，如 Python 这些，所以需要从头来了解一下这个东西。更何况，提供的 API 太多，不是很清楚到底是用来干什么的。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-01-15T06:07:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用OpenSSL进行编程">
+<meta name="twitter:description" content="本篇文章来自 使用 OpenSSL API 进程安全编程。因为突然有一个项目需要用到相关的东西，而之前都是使用的高级语言，如 Python 这些，所以需要从头来了解一下这个东西。更何况，提供的 API 太多，不是很清楚到底是用来干什么的。">
+
+<link rel="canonical" href="https://gowa.club/Cpp/使用OpenSSL进行编程.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>使用OpenSSL进行编程 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cpp/使用OpenSSL进行编程.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          使用OpenSSL进行编程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-15 14:07:59" itemprop="dateCreated datePublished" datetime="2021-01-15T14:07:59+08:00">2021-01-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cpp/" itemprop="url" rel="index">
+                    <span itemprop="name">Cpp</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Cpp/使用OpenSSL进行编程.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cpp/使用OpenSSL进行编程.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本篇文章来自 <a href="https://developer.ibm.com/solutions/security/tutorials/l-openssl/" target="_blank" rel="noopener">使用 OpenSSL API 进程安全编程</a>。因为突然有一个项目需要用到相关的东西，而之前都是使用的高级语言，如 Python 这些，所以需要从头来了解一下这个东西。更何况，提供的 API 太多，不是很清楚到底是用来干什么的。</p>
+<a id="more"></a>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这篇文章对于  OpenSSL API 来说还是有点模糊的。在  OpenSSL API 的使用上，并没有太多的文档，因此想在一个应用程序里面使用它的时候可能会遇到麻烦。因此，你会如何使用  OpenSSL 来实现一个安全的连接呢？这边文章就是解决这个问题。</p>
+<p>学习如何实现 OpenSSL 的一部分问题是：文档是不完全的。一个不完整的 API 文档会让开发者不会去使用那些 API，但 OpenSSL 还是这么的强壮和流行，为何？</p>
+<p>OpenSSL 是最为知名的关于安全连接的开源库。它自 1998 年从 Eric Young 和 Tim Hudson 开发的 <code>SSLeay</code> 库开始开发。其他的 SLL 工具集包括 GNU TLS，使用 GPL 许可发布；还有 Mozilla 的 NSS。</p>
+<p>那是什么东西让 OpenSSL 比 GNU TLS，Mozilla NSS，或者其他的库更好呢？许可证是一个原因。GNU TLS 只支持 TLS v1.0 和 SSL v3.0.</p>
+<p>Mozilla NSS 在 Mozilla Public License 和 GPL 许可下发布，开着了可以自由选择。但是 NSS 需要其他更多的外部库，而 OpenSSL 完全是一个自包含的库。同时，和 OpenSSL 一样， NSS 的文档也是不完整的。 NSS 有 PKCS #11 的支持，这是用来加密加密 Token 的，OpenSSL  没有这个支持。</p>
+<h1 id="SSL-是什么"><a href="#SSL-是什么" class="headerlink" title="SSL 是什么"></a>SSL 是什么</h1><p>SSL 是 Secure Sockets Layer 的简写，也就是安全套接字层的意思。它是在互联网上进行安全传输的标准，其将数据加密在协议中。数据在离开主机前会被加密，同时只会数据到达目标主机前被解密一次。证书和加密算法在后面进行支持，使用 OpenSSL  ，对于证书和加密我们都可以进行操作。</p>
+<p>理论上，在数据到达目标主机前被拦截或者窃听，但没有什么机会破解这些数据。但随者计算机的速度越来越快，破解 SSL 加密数据的可能性也在增大。</p>
+<p>SSL 和安全连接可以应用在网络上的任何协议，如 HTTP，POP3，FTP。SSL 也能用来加密 Telnet 会话。虽然任何连接都能使用 SSL，但并没有这个必要。只要在连接会携带敏感数据的时候才需要使用。</p>
+<h1 id="OpenSSL-是什么"><a href="#OpenSSL-是什么" class="headerlink" title="OpenSSL 是什么"></a>OpenSSL 是什么</h1><p>OpenSSL 不止是 SSL。它是信息摘要 、文件加解密、数据证书、数字签名、随机数的综合体。想要把 OpenSSL 放在一篇文章中，那是非常困难的。</p>
+<p>OpenSSL 也止是 API，它也有一个命令行工具。命令行工具可以做和 API 一样的事情，但是走得更远一点，允许测试 SSL 服务器和客户端。</p>
+<h1 id="头文件和初始化"><a href="#头文件和初始化" class="headerlink" title="头文件和初始化"></a>头文件和初始化</h1><p>本篇文章中只需要三个头文件：<code>ssl.h, bio.h, err.h</code>。所有三个文件都在 openssl 的子目录中。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* OpenSSL headers */</span></span><br><span class="line"></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span>  <span class="meta-string">"openssl/bio.h"</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span>  <span class="meta-string">"openssl/ssl.h"</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span>  <span class="meta-string">"openssl/err.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Initializing OpenSSL */</span></span><br><span class="line"></span><br><span class="line">SSL_load_error_strings();</span><br><span class="line">ERR_load_BIO_strings();</span><br><span class="line">OpenSSL_add_all_algorithms();</span><br></pre></td></tr></table></figure>
+<h1 id="不安全连接"><a href="#不安全连接" class="headerlink" title="不安全连接"></a>不安全连接</h1><p>OpenSSL 使用了一个抽象的库，BIO，来处理多中类型的通信，包括文件和套接字，安全与不安全的。它也可以被当做一个过滤器，比如 UU 或 Base64 编码。</p>
+<p>BIO 完全解释起来很复杂，我们只会在需要的时候对其介绍逐步的介绍。首先，我们展示一下如何设置一个标准的套接字连接。这只需要几行 BSD 套接字库写几行代码。</p>
+<p>当我们设置一个连接的时候，无论安全与否，一个指向 BIO 对象的指针都是必须的。这就像是标准 C 的 文件流对象 FILE 一样。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* OpenSSL headers */</span></span><br><span class="line"></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span>  <span class="meta-string">"openssl/bio.h"</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span>  <span class="meta-string">"openssl/ssl.h"</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span>  <span class="meta-string">"openssl/err.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* Initializing OpenSSL */</span></span><br><span class="line"></span><br><span class="line">SSL_load_error_strings();</span><br><span class="line">ERR_load_BIO_strings();</span><br><span class="line">OpenSSL_add_all_algorithms();</span><br></pre></td></tr></table></figure>
+<h2 id="打开一个连接"><a href="#打开一个连接" class="headerlink" title="打开一个连接"></a>打开一个连接</h2><p>我们需要使用 <code>BIO_new_connect()</code> 来打开一个新的连接。我们可以在这个调用中指定主机名和端口，这将会尝试打开连接。也可以将这两个步骤分开：<code>BIO_new_connect</code> 来建立一个连接和设置主机名，使用 <code>BIO_set_conn_port（BIO_set_conn_int_port）</code>来设置端口号。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">bio = BIO_new_connect(<span class="string">"hostname:port"</span>);</span><br><span class="line"><span class="keyword">if</span>(bio == <span class="literal">NULL</span>)</span><br><span class="line">&#123;</span><br><span class="line">    / Handle the failure /</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(BIO_do_connect(bio) &lt;= <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    / Handle failed connection /</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>无论怎么搞，只要主机名和端口都给 BIO 对象设置了，它就会尝试打开连接。没有其他方式。如果在建立 BIO 对象的过程中出现了问题，返回的指针会是 <code>NULL</code>。我们必须调用 <code>BIO_do_connect</code> 来验证连接是否成功。</p>
+<p>在上面的例子中，第一行用特定的主机和端口来建立一个新的 BIO 对象。<code>BIO_do_connect</code> 检查连接是否成功建立，它会返回 0, -1 或者 错误。</p>
+<h2 id="与服务器通信"><a href="#与服务器通信" class="headerlink" title="与服务器通信"></a>与服务器通信</h2><p>无论是套接字还是文件，当我们读写BIO 对象的时候，都会用到两个函数：<code>BIO_read, BIO_write</code>。很简单是吧。</p>
+<p><code>BIO_read</code> 会尝试从服务器读取指定长度的字节，返回独到的字节数，或者 0， -1。在一个阻塞的连接上，0 表示连接已经关闭，-1 表示发生了错误。在一个非阻塞的端口上，0 表示没有数据，-1 表示发生了错误。要判断错误是否是可恢复的，使用 <code>BIO_should_retry</code>。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> x = BIO_read(bio, buf, len);</span><br><span class="line"><span class="keyword">if</span>(x == <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    / Handle closed connection /</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span>(x &lt; <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">   <span class="keyword">if</span>(! BIO_should_retry(bio))</span><br><span class="line">    &#123;</span><br><span class="line">        / Handle failed <span class="built_in">read</span> here /</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    / Do something to handle the retry /</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>BIO_write</code> 会将字节写到套接字，返回它真正写进去的字节数，0，或者 -1.和 <code>BIO_read</code> 一样，0 和 -1 并不必须用来表示一个错误。<code>BIO_should_retry</code> 才是正确的使用方式。如果写操作需要重做，那么参数必须和上一次相同。</p>
+<h2 id="关闭连接"><a href="#关闭连接" class="headerlink" title="关闭连接"></a>关闭连接</h2><p>关闭连接就很简单了。我们可以使用两者方式：<code>BIO_reset, BIO_free_all</code>。如果我们要重用 BIO 对象的话，那就使用第一种。</p>
+<p><code>BIO_rese</code> 会关闭连接，重置 BIO 对象的内部状态，以便复用。</p>
+<p><code>BIO_free_all</code> 则会释放所有的内部结构和内存，关闭相关的套接字。如果 BIO 是在 类里面使用，这应该放在析构函数里面。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">/ To reuse the connection, use <span class="keyword">this</span> <span class="built_in">line</span> /</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BIO_reset(bio);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/ To <span class="built_in">free</span> it from memory, use <span class="keyword">this</span> <span class="built_in">line</span> /</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BIO_free_all(bio);</span><br></pre></td></tr></table></figure>
+<h1 id="安全连接"><a href="#安全连接" class="headerlink" title="安全连接"></a>安全连接</h1><p>现在是开始关注在设置安全连接的时候需要什么了。不同之处在于我们如何设置和建立连接。其他都是一样的。</p>
+<p>安全连接需要在连接建立后进行一个握手，handshake。在握手中，服务器发送证书到客户端，客户端使用一些受信任的证书进行验证。它也会检查证书是否过期。检查一个证书是否受信任的需要我们在建立连接前就加载一个受信任的证书集。</p>
+<p>客户端只会在服务器需要的时候发送一个证书。这被叫做客户端验证。使用这些证书，加密参数在服务器和客户端传输来建立安全连接。尽管握手是在连接建立后进行，但是客户端和服务器都可以随时请求一个新的握手。</p>
+<h2 id="设置一个安全连接"><a href="#设置一个安全连接" class="headerlink" title="设置一个安全连接"></a>设置一个安全连接</h2><p>设置一个安全连接就需要更多的代码了。另外一个需要的指针就是 <code>SSL_CTX</code>。这是一个用来引用 SSL 信息的结构。它也被用来通过 BIO 库设置 SSL 连接。这个结构通过 <code>SSL_CTX_new</code>来建立，同时还需要给他提供一个 SSL 方法函数，典型的是 <code>SSLv23_client_method</code>。</p>
+<p>另外一个指针，<code>SSL</code> 用来引用 SSL 连接结构（这在某些会在段时间完成的事情是必须的）。这个 SSL 后面可以用来测试连接的信息或者设置 额外的SSL参数。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">SSL_CTX  ctx = SSL_CTX_new(SSLv23_client_method());</span><br><span class="line">SSL  ssl;</span><br></pre></td></tr></table></figure>
+<h2 id="设置受信任证书"><a href="#设置受信任证书" class="headerlink" title="设置受信任证书"></a>设置受信任证书</h2><p>在 SSL_CTX 建立后，就必须加载受信任的证书集了。这对成功验证对端证书来说是非常必要的。如果证书不能被验证或者信任，OpenSSL 将会将把证书标记为不可用的（但是连接依然继续）。</p>
+<p>OpenSSL 本身就有一个受信任的证书集。他们在 <code>certs</code> 目录中。每个证书都是一个独立的文件，因此我们必须单独加载每个证书。在<code>certs</code> 目录下有一个目录用来保存过期的证书。加载他们会报错。</p>
+<p>如果我们愿意，我们可以单独加再每个证书，但是为了简单， OpenSSL 发布的时候将证书打包在了一个文件中，<code>TrustStore.pem</code>。如果我们已经有一个受信任的证书集文件了，那我们简单的替换它就是了。</p>
+<p><code>SSL_CTX_load_verify_locations</code> 用来加载信任存储文件。需要三个参数： CTX 指针，信任存储路径，证书的目录。后两个参数我们必须指定一个。成功返回 1， 有问题返回 0.</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">SSL_CTX_load_verify_locations</span><br></pre></td></tr></table></figure>
+<p>如果我们使用一个目录来存储信任存储，那么这些文件必须用一个特定的方式命名。OpenSSL 文档中说明了是什么方式，但是这里有一个工具，用来将一个目录准备为一个路径参数。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">/ Use <span class="keyword">this</span> at the command <span class="built_in">line</span> /</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">c_rehash /path/to/certfolder</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/ Then call <span class="keyword">this</span> from within the application /</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(! SSL_CTX_load_verify_locations(ctx, <span class="literal">NULL</span>, <span class="string">"/path/to/certfolder"</span>))</span><br><span class="line">&#123;</span><br><span class="line">    / Handle error here /</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="建立连接"><a href="#建立连接" class="headerlink" title="建立连接"></a>建立连接</h2><p>BIO 对象使用 <code>BIO_new_ssl_connect</code> 来建立，使用 <code>CTX</code>作为它的唯一参数。 SSL 结构的指针需要进行获取。在这个文章中，SSL 指针只是在 <code>SSL_set_mode</code> 函数中用到。这个函数用来设置 <code>SSL_MODE_AUTO_RETRY</code> 标志。设置了这个标志后，如果服务器需要一个新的握手， OpenSSL 会在后台进行处理。没有这个选项，那么在服务器需要一个新的握手时，在设置重试标志时，任何读写操作都会返回一个错误</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">bio = BIO_new_ssl_connect(ctx);</span><br><span class="line">BIO_get_ssl(bio, &amp; ssl);</span><br><span class="line">SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);</span><br></pre></td></tr></table></figure>
+<p>在 CTX 结构建立后，连接可以被建立。主机使用 <code>BIO_set_conn_hostname</code>函数。主机和端口与上面相同的方式来指定。这个函数也会打开到主机的连接。<code>BIO_do_connect</code> 也是必须的。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">/ Attempt to <span class="built_in">connect</span> /</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BIO_set_conn_hostname(bio, <span class="string">"hostname:port"</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/ Verify the connection opened <span class="keyword">and</span> perform the handshake /</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(BIO_do_connect(bio) &lt;= <span class="number">0</span>)</span><br><span class="line">&#123;</span><br><span class="line">    / Handle failed connection /</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>连接一旦建立，就需要验证证书是否有效。实际上，OpenSSL 给我们做了这个事情。如果证书有严重问题——比如，hash 值无效——这个连接就不会发生。但是如果不是严重的错误——比如当过期—那连接依然可用。</p>
+<p>我们可以使用  <code>SSL_get_verify_result</code> 来看看证书检查是否 OK。如果证书通过了 OpenSSL 的内部检查，包括检查是否信任，那么就会返回 <code>X509_V_OK</code>。如果有什么错误发生，就会返回一个错误代码。</p>
+<p>需要注意的是，一个失败的校验并不代表着连接不可用。连接是否可用要看校验的结果和安全性设置。例如，证书信任校验可能只是简单的意味着受信任证书不可用。连接依然可用，只是有安全问题。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(SSL_get_verify_result(ssl) != X509_V_OK)</span><br><span class="line">&#123;</span><br><span class="line">    / Handle the failed verification /</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这就是全部了。所有的通信现在都可以使用 <code>BIO_read, BIO_write</code> 进行了。关闭也是。</p>
+<p>最后， CTX 结构也必须释放</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">SSL_CTX_free(ctx);</span><br></pre></td></tr></table></figure>
+<h1 id="错误检查"><a href="#错误检查" class="headerlink" title="错误检查"></a>错误检查</h1><p>OpenSSL 会抛出某些类型 的错误。它是什么意思？首先，我们需要获取错误码，<code>ERR_get_error</code> 做这个事情。然后，我们要让这个错误码转换成一个字符串，这些字符已经被 <code>SSL_load_error_strings</code> or <code>ERR_load_BIO_strings</code> 加载到内存了。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">ERR_reason_error_string</th>
+<th style="text-align:left">Returns a pointer to a static string, which can then be displayed on the screen, written to a file, or whatever you wish to do with it.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>ERR_lib_error_string</code></td>
+<td style="text-align:left">Tells in which library the error occurred.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>ERR_func_error_string</code></td>
+<td style="text-align:left">Returns the OpenSSL function that caused the error.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">"Error: %s\n"</span>, ERR_reason_error_string(ERR_get_error()));</span><br></pre></td></tr></table></figure>
+<p>我们也可以使用库给我们一个预格式化后的字符串，调用 <code>ERR_error_string</code> 来做这个事情。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="built_in">printf</span>(<span class="string">"%s\n"</span>, ERR_error_string(ERR_get_error(), <span class="literal">NULL</span>));</span><br></pre></td></tr></table></figure>
+<p>我们也可以 dump 所有的错误队列到一个文件或者 BIO。这通过 <code>ERR_print_errors</code> or <code>ERR_print_errors_fp</code>。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[pid]:error:[error code]:[library name]:[function name]:[reason string]:[file name]:[line]:[optional text message]</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">ERR_print_errors_fp(FILE );</span><br><span class="line">ERR_print_errors(BIO );</span><br></pre></td></tr></table></figure>
+<h1 id="完整例子"><a href="#完整例子" class="headerlink" title="完整例子"></a>完整例子</h1>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Cpp/" rel="tag"># Cpp</a>
+              <a href="/tags/OpenSSL/" rel="tag"># OpenSSL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Lua/关于lua-MUD的探究.html" rel="next" title="关于lua-MUD的探究">
+                  <i class="fa fa-chevron-left"></i> 关于lua-MUD的探究
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/Cpp/C++中的流式IO-StreamIO.html" rel="prev" title="C++中的流式IO-StreamIO">
+                  C++中的流式IO-StreamIO <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SSL-是什么"><span class="nav-number">2.</span> <span class="nav-text">SSL 是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OpenSSL-是什么"><span class="nav-number">3.</span> <span class="nav-text">OpenSSL 是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#头文件和初始化"><span class="nav-number">4.</span> <span class="nav-text">头文件和初始化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#不安全连接"><span class="nav-number">5.</span> <span class="nav-text">不安全连接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#打开一个连接"><span class="nav-number">5.1.</span> <span class="nav-text">打开一个连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与服务器通信"><span class="nav-number">5.2.</span> <span class="nav-text">与服务器通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭连接"><span class="nav-number">5.3.</span> <span class="nav-text">关闭连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安全连接"><span class="nav-number">6.</span> <span class="nav-text">安全连接</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#设置一个安全连接"><span class="nav-number">6.1.</span> <span class="nav-text">设置一个安全连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置受信任证书"><span class="nav-number">6.2.</span> <span class="nav-text">设置受信任证书</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立连接"><span class="nav-number">6.3.</span> <span class="nav-text">建立连接</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#错误检查"><span class="nav-number">7.</span> <span class="nav-text">错误检查</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#完整例子"><span class="nav-number">8.</span> <span class="nav-text">完整例子</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">375</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">158</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Cpp/使用OpenSSL进行编程.html",
+            identifier: "Cpp/使用OpenSSL进行编程.html",
+            title: "使用OpenSSL进行编程"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
