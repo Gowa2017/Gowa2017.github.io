@@ -296,13 +296,15 @@
 <a id="more"></a>
 <h1 id="字符集与编码"><a href="#字符集与编码" class="headerlink" title="字符集与编码"></a>字符集与编码</h1><p>字符集，指的是一组符合的集合。在 <a href="/Windows/MFC中的字符宏与CString.html" title="MFC中的字符宏与CString">MFC中的字符宏与CString</a> 已有很多说明了。</p>
 <p>通常，我们在提到一种编码的时候，实际上指的是编码集，Code Pages，隐含的也表示了它的字符集，比如：utf8，gbk，ascii 等。</p>
-<p>码表中，每个符号都会有一个整数表示的，这个整数，我们叫它为字符的 <strong>码点</strong>。</p>
+<p>码表中，每个符号都会有一个整数表示的，这个整数，我们叫它为字符的 <strong>码点</strong>, CodePoints。</p>
 <p>不同的字符集中，相同的符号，可能拥有不同的 <strong>码点</strong></p>
 <p>对于计算机来说，其实他不认识符号，所以我们的符号最终都是，通过存储在计算机的字节中来表示的。</p>
 <p>因此，对于一个符号，在不同的编码集中，有着不同的码点，我们需要指定一个符号采用哪一个字符集编码。</p>
 <p>比如说对汉字 <strong>中</strong>，其 Unicode 码点是 4e2d，而在 GBK 中，却是 d6d0</p>
 <p>所以，如果我们不对符号指定正确的编码，那么肯定就会出错了。</p>
 <h1 id="Unicode-与-UTF-8"><a href="#Unicode-与-UTF-8" class="headerlink" title="Unicode 与 UTF_8"></a>Unicode 与 UTF_8</h1><p>Unicode 是对字符到整数代码的编码表示，而 UTF-8，则是如何将这个整数编码在计算机进行存储，理解这点很重要。</p>
+<p>你可能会奇怪，码点，与编码有什么区别呢？有区别，很多的时候，你可能看不出什么来，但是当你用一个比较不常见的字的时候，就会发现了。</p>
+<p>比如 <code>扊</code> 字，它的码点是 <code>25162</code>，16 进制就是 <code>0x624a</code>，而他的 UTF-8 编码则是 <code>\xe6\x89\x8a</code>，使用了三个字节。</p>
 <h1 id="Python2"><a href="#Python2" class="headerlink" title="Python2"></a>Python2</h1><p>在 Python2 中，默认使用的是 ASCII 编码，而是，Python2 中的字符串实际上是 <code>bytes</code> ，字节序列。</p>
 <p>提前注意：</p>
 <ul>
@@ -456,7 +458,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">158</span>
+        <span class="site-state-item-count">159</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
