@@ -225,6 +225,119 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cpp/OpenSSL的Lua绑定与使用.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Cpp/OpenSSL的Lua绑定与使用.html" class="post-title-link" itemprop="url">OpenSSL的Lua绑定与使用</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-21 14:10:07" itemprop="dateCreated datePublished" datetime="2021-01-21T14:10:07+08:00">2021-01-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cpp/" itemprop="url" rel="index">
+                    <span itemprop="name">Cpp</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Cpp/OpenSSL的Lua绑定与使用.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cpp/OpenSSL的Lua绑定与使用.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>OpenSSL 提供的 API 还是比较复杂，不过还好有人做了一个 Lua 的绑定。<a href="https://github.com/zhaozg/lua-openssl" target="_blank" rel="noopener">https://github.com/zhaozg/lua-openssl</a>，同时对一些 C 的 API 进行了封装，用起来就简单多了。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><p>安装官方的说明，如下即可：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --recurse https://github.com/zhaozg/lua-openssl.git lua-openssl</span><br><span class="line"><span class="built_in">cd</span> lua-openssl</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line">make clean</span><br></pre></td></tr></table></figure>
+<p>不过我在安装的过程中，会遇到几个问题，我在 Ubuntu 下，用 apt 安装了 Lua/OpenSSL 均找不到相关的头文件。</p>
+<p>而我采用两者源代码编译后进行安装，可以在 /usr/local 下找到对应的库文件和头文件就可以使用了。</p>
+<h2 id="MacOS"><a href="#MacOS" class="headerlink" title="MacOS"></a>MacOS</h2><figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">brew install openssl lua</span><br></pre></td></tr></table></figure>
+<p>在编译过程中，会查找 Lua 命令的存在，查找对应的库。</p>
+<p>而对于 OpenSSL 需要执行以下命令：</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> PKG_CONFIG_PATH=<span class="string">"/usr/local/opt/openssl@1.1/lib/pkgconfig"</span></span><br></pre></td></tr></table></figure>
+<p>这样直接 make 就可以安装了。</p>
+<h1 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h1><p>因为我只要涉及到使用  RSA 的密钥和，所以只展示这里的用法。</p>
+<p>首先使用 openssl 命令生成一个 RSA 的密钥。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">openssl genrsa -out rsa-openssl.pem 2048</span><br></pre></td></tr></table></figure>
+<p>这样生成的是一个私钥（实际私钥中可以提取出公钥信息），这是一个 pem 格式的 RSA 密钥文件：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-----BEGIN RSA PRIVATE KEY-----</span><br><span class="line">MIIEogIBAAKCAQEAoCYVdJFC9XYtCyd6kzr5yn1+rhPEtqIdV4KKnRYAVN53dZ2g</span><br><span class="line">WYKoHCc9AYXJQqNRmLCvyE6ZEGly4vLUxgcJgv2avE6/YyDkgzoGzHIAGhnuIt1a</span><br><span class="line">tVI96amLNtYcecThN0HPePdHeWbpS4LwlgIjaTADHem2LfmwY1Dtrwsmla3WwM6P</span><br><span class="line">948hJRih+189p80OpkEQ86h61yB4rY9QYwJaZbaLFdiAV6Ln4woIHi+1OY7BQify</span><br><span class="line">t874QZCac/2Nz2DjWlUqbg5jPt7tCL5/aTWfyL1GHWBMs7x8BnYHp1w9RVnTsDpe</span><br><span class="line">oEZdRx8NP+WhQV/ddmXQUVFr6i3YJk4SgttupwIDAQABAoIBAG5kMg/q/aPjtQLm</span><br><span class="line">ULjiQ0MQJF1sJQHbV6x1wIStoMbfnqrFX72zsZvOdF/zT5sOpvVAfbruatYESfwk</span><br><span class="line">dQSX3zebBqldAtIa30mRmxQcVPOpAhyoRpmMOj8x7lN7XZ+WVcRYKeJxWaRWiuPR</span><br><span class="line">O3O7v5sHTG63Jiwk3DBpnZ02a39qgODTThRjmb8F8JUr9sEco9F7eg95jU4sQXWg</span><br><span class="line">t1JXVo0qgm6ALEA0RRO9tSatTDCFkN2tgvJ4Td0COe+MHtlHvE+mzdj3yLMUZRAL</span><br><span class="line">WKZb7zOT0S6qqMfEZEDuE6v4ZLFjKZBaqQENGhczBmJt5P9ZxSOSH9X0Y3jQ3bF8</span><br><span class="line">DmjhImECgYEAzFCI4Vwky7aQgjG5f4xGBQGxzM9cFV4SrioBHbRQz2A48cx54le0</span><br><span class="line">YOC2ldZLanrwebjlAaT9ZfskZS2mfMxEMwnFyJ2enLLDqDPGXO9giM2T36VFihhk</span><br><span class="line">4pIbpsx81d8dcptOprAKUPyF6AM2/PkNKSL1LTaoapQblWvf8Hih5vECgYEAyKlb</span><br><span class="line">6HHYXEvkXaEgWGjn9sEnI+/2KkdLtYwVRIV1MRMHRBARknRH1Ga1tF2PK8PT1x8Y</span><br><span class="line">uFkzEsZbZRZXcC9FQR4XKDHolsyWzjAvrtEwcpPCMmqYfPKMYtMBLEtu1uhAUWYL</span><br><span class="line">0EMeCRrcKfu4tCGdNw121wvKAazRTHTMH7vgnxcCgYA9/HT6wkTblSDUjxdzLfCU</span><br><span class="line">VkZGF+cdCHRsaIv8IheeQtgj6+BSnj84YRSj8ubggDnzA/heflrulLofBDGNjT9n</span><br><span class="line">qKBb1A4qBkY8ArE8wtcrygsCABdP5US+RIulGEcLb+x0N9At3BzVIzfRAyCssTaf</span><br><span class="line">814lAH8qDpMryxWe1EpyUQKBgChAIJl9zKKm7oYBfhV95ZnPoORKjBxq9LrUAKgg</span><br><span class="line">BSP05y418vBntsjaWXR2l/N1cpbiO/kum1oWw9qBIsT0FnY7bPW5HSiynUV60PXG</span><br><span class="line">LGuvS/MFAtV9ab+hB8k00GT3bX9mctQxwmKdKrCZN7GaVIjogIAec0Tmv40QmKl8</span><br><span class="line">7E+9AoGAeG9MsNzouEceokO8pRIvrVPvjSVEE+oGdPw9AXqxzV0b1NFlMuCYReqN</span><br><span class="line">LdkcJH8lIKopnOU+uXGm3h2PswSf1W9NcnDGDN11G0bjgpS/ghrS+Ewi+qApKeNe</span><br><span class="line">BIs5ELvpl+5fqcyvsvm9ZDTMe94VRUMnyMTWNPviDjGtpL7JGns=</span><br><span class="line">-----END RSA PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
+<h2 id="读取"><a href="#读取" class="headerlink" title="读取"></a>读取</h2><p>读取使用的是 Lua 绑定中的 <code>openssl.pkey</code> 来进行读取的，它的 <a href="https://zhaozg.github.io/lua-openssl/modules/pkey.html" target="_blank" rel="noopener">API 在里</a>。不过，它不能读取文件，只能读取字符串，所以我们要使用  Lua 自己的 IO 库来读取成为字符进行读取：</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="built_in">read</span> (<span class="built_in">input</span>[, priv=<span class="literal">false</span>[, <span class="built_in">format</span>=<span class="string">'auto'</span>[, passhprase]]])</span><br></pre></td></tr></table></figure>
+<p>三个参数方便是：输入（字符串或者BIO对象）、是否私钥、格式（der，pem）、密码。</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> pkey  = <span class="built_in">require</span> <span class="string">'openssl'</span>.pkey</span><br><span class="line"><span class="keyword">local</span> file = <span class="built_in">io</span>.<span class="built_in">open</span>(<span class="string">'./rsa-openssl.pem'</span>,<span class="string">'r'</span>):<span class="built_in">read</span>(<span class="string">'*a'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 读取后的密钥对象，读取后返回的是一个 pkey 对象</span></span><br><span class="line"><span class="keyword">local</span> key = pkey.<span class="built_in">read</span>(file, <span class="literal">true</span>)</span><br><span class="line"><span class="keyword">local</span> params = key:parse()</span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> <span class="built_in">pairs</span>(params) <span class="keyword">do</span> <span class="built_in">print</span>(k, v) <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">type	rsa</span><br><span class="line">rsa	openssl.rsa: 0x7fb558d00948</span><br><span class="line">bits	2048</span><br><span class="line">size	256</span><br></pre></td></tr></table></figure>
+<p>接下来我们解析和  RSA 相关的参数，比如：<code>n, e, p, q, d</code> 等。</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> rsa = key:parse().rsa</span><br><span class="line"><span class="keyword">local</span> rsa_params = rsa:parse()</span><br><span class="line"><span class="keyword">for</span> k, v <span class="keyword">in</span> <span class="built_in">pairs</span>(rsa_params) <span class="keyword">do</span> <span class="built_in">print</span>(k, v) <span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">p	143474583331419867830562744660438510286015562299102553985627632512512583822740177904056516815190873109230049903987915310389156124434466941185638919163185903601523390513344140836690989199412995255185487799294977031490478168007553781534162882533049402556998644029553047215723632060092994322355253408945202652913</span><br><span class="line">q	140909338446924385769069804035851642429757637984920583137521396992286965747594955575490977795105115601880479171874275162381208540904328052730351954850972035633266069196024154417733083506255498864594785158535609304132452167552279233260937451257639704420206214670926065473953266618923458962324893693514839269143</span><br><span class="line">n	20216908621178498204920137811341508388900484323393782530910996775497866613781744423255159400952471020143706423402858610017877944319356867483294568447383341717624035601428904173159314521244110931670984951774144939173254872362257039974231171172944322722321006625420197699875532838548699813278176103570786084219789033309162245722957052130238378463144025402561390577240433224866889133637304672114032432176736213365428175753805911558486773599252789881671688951163343771673506382049610885317695581908726556103268585116032473028770304372464218227585670524797638956188402540501508797897253106491558592312209210070753619963559</span><br><span class="line">d	13935621816099892524944187644038522383822564037250928877335005864368465512269257126822280939591801247157970881749609193395450449892838343051372997384844324001612307678022349909554481186157479154343908711054778180678880462318460744019956561297248268596073233048558179823487147656765453317436587049739998189642738034027725830429806390734946119587768684761857882937993779293002157513469114376730897921091352017162195396320797528114610659224400944795373051263182850450591559530749354700491452010745809969179304583696946308670871913913013345163614660548678440566979200379562102568461361600133231474290379868159858742207073</span><br><span class="line">e	65537</span><br><span class="line">size	256</span><br><span class="line">bits	2048</span><br><span class="line">dmp1	43528161807507533638632818897470114592014395306362147808050936375578493128271708458830213830911395548023575724262503930855357908084448573959657271918483075534569625914778240570302683037855388325050781297791812690802526472290373252334463899681166688604006958500383039165513114366706272885719357058303820198481</span><br><span class="line">iqmp	84572167331770707180976675336691177811651921878501742590348918966472216855434936147554743962831318290039939947146211490896065085877354521089720045770790645669113891846273623657936024439340654182981811057834667458160772923788214342319848078936037805610273259192846464333122568255165940096509982299062524254843</span><br><span class="line">dmq1	28264860509685642847859859985280157641967040129236400597004078381076406483633417550321259656292656815269554285265715874767892449741799236785223717876480131535390935588307880036857334265731339366677801023759237070847387219351545887063006908070752880881151576942246273963113808123233712124734471405388499275709</span><br></pre></td></tr></table></figure>
+<p>这样我们就拿到了私钥相关的的信息了。</p>
+<h2 id="公钥提取"><a href="#公钥提取" class="headerlink" title="公钥提取"></a>公钥提取</h2><p>我们可以在 <code>pkey</code> 返回的 <code>key</code> 中提取公钥，这也是一个 <code>pkey</code> 对象。</p>
+<p>然后我们还可以将其导出为 PEM 字符串：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">local public = key:get_public():export()</span><br><span class="line">print(public)</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-----BEGIN PUBLIC KEY-----</span><br><span class="line">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoCYVdJFC9XYtCyd6kzr5</span><br><span class="line">yn1+rhPEtqIdV4KKnRYAVN53dZ2gWYKoHCc9AYXJQqNRmLCvyE6ZEGly4vLUxgcJ</span><br><span class="line">gv2avE6/YyDkgzoGzHIAGhnuIt1atVI96amLNtYcecThN0HPePdHeWbpS4LwlgIj</span><br><span class="line">aTADHem2LfmwY1Dtrwsmla3WwM6P948hJRih+189p80OpkEQ86h61yB4rY9QYwJa</span><br><span class="line">ZbaLFdiAV6Ln4woIHi+1OY7BQifyt874QZCac/2Nz2DjWlUqbg5jPt7tCL5/aTWf</span><br><span class="line">yL1GHWBMs7x8BnYHp1w9RVnTsDpeoEZdRx8NP+WhQV/ddmXQUVFr6i3YJk4Sgttu</span><br><span class="line">pwIDAQAB</span><br><span class="line">-----END PUBLIC KEY-----</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Cpp/RSA及相关库实现.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1038,96 +1151,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/macOS/pandoc一个比较经典的latex模板.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/macOS/pandoc一个比较经典的latex模板.html" class="post-title-link" itemprop="url">pandoc一个比较经典的latex模板</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-10-10 22:41:06" itemprop="dateCreated datePublished" datetime="2020-10-10T22:41:06+08:00">2020-10-10</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/macOS/" itemprop="url" rel="index">
-                    <span itemprop="name">macOS</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/macOS/pandoc一个比较经典的latex模板.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="macOS/pandoc一个比较经典的latex模板.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>pandoc 确实是神器啊。加上对 docx 的支持也很棒了，现在来仔细阅读一番 <a href="https://github.com/Wandmalfarbe/pandoc-latex-template" target="_blank" rel="noopener">Eisvogel</a> latex 模板的使用了。比 docx  的操作更加的灵活。关于 pandoc 的基本相关知识见 <a href="/macOS/使用pandoc转换pdf与docx加上书签目录.html" title="使用pandoc转换pdf与docx加上书签目录">使用pandoc转换pdf与docx加上书签目录</a></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/macOS/pandoc一个比较经典的latex模板.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1176,7 +1199,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">375</span>
+          <span class="site-state-item-count">376</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
