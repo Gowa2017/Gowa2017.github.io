@@ -47,18 +47,18 @@
   };
 </script>
 
-  <meta name="description" content="一直在找寻一个比较好用，现代的 MUD 服务端，LPCMUD 不错，但是相对于现代的工具和语言而说，还是有点不行了。我看上了 skynet，所以就想找一个 lua 的实现，这不，就找到了 lua-MUD。 前言就我而言，其实 LPMUD 中的 es2 那种，将标准对象，实现为一些特性的组合，有点  ECS 的样子。但是在其中，每个特性都是方法和数据的结合，并不是纯粹的 ECS。另外，想要将其进行">
+  <meta name="description" content="一直在找寻一个比较好用，现代的 MUD 服务端，LPCMUD 不错，但是相对于现代的工具和语言而说，还是有点不行了。我看上了 skynet，所以就想找一个 lua 的实现，这不，就找到了 lua-MUD。">
 <meta name="keywords" content="Lua,MUD">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于lua-MUD的探究">
 <meta property="og:url" content="https://gowa.club/Lua/关于lua-MUD的探究.html">
 <meta property="og:site_name" content="退思园">
-<meta property="og:description" content="一直在找寻一个比较好用，现代的 MUD 服务端，LPCMUD 不错，但是相对于现代的工具和语言而说，还是有点不行了。我看上了 skynet，所以就想找一个 lua 的实现，这不，就找到了 lua-MUD。 前言就我而言，其实 LPMUD 中的 es2 那种，将标准对象，实现为一些特性的组合，有点  ECS 的样子。但是在其中，每个特性都是方法和数据的结合，并不是纯粹的 ECS。另外，想要将其进行">
+<meta property="og:description" content="一直在找寻一个比较好用，现代的 MUD 服务端，LPCMUD 不错，但是相对于现代的工具和语言而说，还是有点不行了。我看上了 skynet，所以就想找一个 lua 的实现，这不，就找到了 lua-MUD。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2021-01-10T07:08:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于lua-MUD的探究">
-<meta name="twitter:description" content="一直在找寻一个比较好用，现代的 MUD 服务端，LPCMUD 不错，但是相对于现代的工具和语言而说，还是有点不行了。我看上了 skynet，所以就想找一个 lua 的实现，这不，就找到了 lua-MUD。 前言就我而言，其实 LPMUD 中的 es2 那种，将标准对象，实现为一些特性的组合，有点  ECS 的样子。但是在其中，每个特性都是方法和数据的结合，并不是纯粹的 ECS。另外，想要将其进行">
+<meta name="twitter:description" content="一直在找寻一个比较好用，现代的 MUD 服务端，LPCMUD 不错，但是相对于现代的工具和语言而说，还是有点不行了。我看上了 skynet，所以就想找一个 lua 的实现，这不，就找到了 lua-MUD。">
 
 <link rel="canonical" href="https://gowa.club/Lua/关于lua-MUD的探究.html">
 
@@ -292,7 +292,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>一直在找寻一个比较好用，现代的 MUD 服务端，LPCMUD 不错，但是相对于现代的工具和语言而说，还是有点不行了。我看上了 skynet，所以就想找一个 lua 的实现，这不，就找到了 <a href="https://github.com/DeltaF1/Lua-MUD.git" target="_blank" rel="noopener">lua-MUD</a>。</p>
+        <p>一直在找寻一个比较好用，现代的 MUD 服务端，LPCMUD 不错，但是相对于现代的工具和语言而说，还是有点不行了。我看上了 skynet，所以就想找一个 lua 的实现，这不，就找到了 <a href="https://github.com/DeltaF1/Lua-MUD.git" target="_blank" rel="noopener">lua-MUD</a>。<br><a id="more"></a></p>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>就我而言，其实 LPMUD 中的 es2 那种，将标准对象，实现为一些特性的组合，有点  ECS 的样子。但是在其中，每个特性都是方法和数据的结合，并不是纯粹的 ECS。另外，想要将其进行 JSON 化，比较头疼。再者，开发的效率比较低。所以打算放弃。</p>
 <h1 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h1><p>lua-MUD，将所有的数据结构，抽象了一个根，<code>Object</code>，它实现组合的方法是通过对 Object 的元表的 <code>__index</code> 方法来访问其内部的一个名叫 <code>__middleware</code> 属性进行调用各种方法。</p>
 <p>然后会为 Object 新建的对象，挂上 <code>scripts</code>。</p>

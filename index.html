@@ -468,7 +468,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>OpenSSL 提供的 API 还是比较复杂，不过还好有人做了一个 Lua 的绑定。<a href="https://github.com/zhaozg/lua-openssl" target="_blank" rel="noopener">https://github.com/zhaozg/lua-openssl</a>，同时对一些 C 的 API 进行了封装，用起来就简单多了。</p>
+          <p>OpenSSL 提供的 API 还是比较复杂，不过还好有人做了一个 Lua 的绑定。<a href="https://github.com/zhaozg/lua-openssl" target="_blank" rel="noopener">https://github.com/zhaozg/lua-openssl</a>，同时对一些 C 的 API 进行了封装，用起来就简单多了。<br>&lt;!-more—&gt;</p>
 <h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><p>安装官方的说明，如下即可：</p>
 <figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --recurse https://github.com/zhaozg/lua-openssl.git lua-openssl</span><br><span class="line"><span class="built_in">cd</span> lua-openssl</span><br><span class="line">make</span><br><span class="line">make install</span><br><span class="line">make clean</span><br></pre></td></tr></table></figure>
 <p>不过我在安装的过程中，会遇到几个问题，我在 Ubuntu 下，用 apt 安装了 Lua/OpenSSL 均找不到相关的头文件。</p>
@@ -851,18 +851,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>一直在找寻一个比较好用，现代的 MUD 服务端，LPCMUD 不错，但是相对于现代的工具和语言而说，还是有点不行了。我看上了 skynet，所以就想找一个 lua 的实现，这不，就找到了 <a href="https://github.com/DeltaF1/Lua-MUD.git" target="_blank" rel="noopener">lua-MUD</a>。</p>
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>就我而言，其实 LPMUD 中的 es2 那种，将标准对象，实现为一些特性的组合，有点  ECS 的样子。但是在其中，每个特性都是方法和数据的结合，并不是纯粹的 ECS。另外，想要将其进行 JSON 化，比较头疼。再者，开发的效率比较低。所以打算放弃。</p>
-<h1 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h1><p>lua-MUD，将所有的数据结构，抽象了一个根，<code>Object</code>，它实现组合的方法是通过对 Object 的元表的 <code>__index</code> 方法来访问其内部的一个名叫 <code>__middleware</code> 属性进行调用各种方法。</p>
-<p>然后会为 Object 新建的对象，挂上 <code>scripts</code>。</p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">Object.new = <span class="function"><span class="keyword">function</span><span class="params">(self,o)</span></span></span><br><span class="line">	<span class="comment">-- Either create a new object, or turn existing table into an instance</span></span><br><span class="line">	<span class="keyword">local</span> o = o <span class="keyword">or</span> &#123;&#125;</span><br><span class="line">  <span class="built_in">setmetatable</span>(o, self)	</span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">not</span> o.identifier <span class="keyword">then</span></span><br><span class="line">    o.identifier = db.reserve_id() </span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">  <span class="keyword">if</span> <span class="keyword">not</span> o.scripts <span class="keyword">then</span></span><br><span class="line">    o.scripts = &#123;<span class="string">"object"</span>&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  o:updateScripts()</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> o  </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Object:updateScripts</span><span class="params">()</span></span></span><br><span class="line">  self.__middleware = Middleware()</span><br><span class="line">  <span class="keyword">local</span> <span class="built_in">loaded</span> = &#123;&#125;</span><br><span class="line">  <span class="keyword">for</span> i = <span class="number">1</span>, #self.scripts <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">local</span> k = self.scripts[i]</span><br><span class="line">    self:loadScript(k, <span class="built_in">loaded</span>)</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">--[[</span></span><br><span class="line"><span class="comment">  if exists("scripts.objscripts."..id) then</span></span><br><span class="line"><span class="comment">    self:loadScript("objscripts."..id, loaded)</span></span><br><span class="line"><span class="comment">  end</span></span><br><span class="line"><span class="comment">  ]]</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Object:loadScript</span><span class="params">(scriptName, loaded)</span></span></span><br><span class="line">  <span class="built_in">loaded</span> = <span class="built_in">loaded</span> <span class="keyword">or</span> &#123;&#125;</span><br><span class="line">  <span class="keyword">if</span> <span class="built_in">loaded</span>[scriptName] <span class="keyword">then</span> <span class="keyword">return</span> <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">local</span> success, script = <span class="built_in">pcall</span>(<span class="built_in">require</span>, <span class="string">"scripts."</span>..scriptName)</span><br><span class="line">  <span class="keyword">if</span> <span class="keyword">not</span> success <span class="keyword">then</span></span><br><span class="line">	<span class="built_in">print</span>(<span class="string">"Error loading script \""</span>..scriptName..<span class="string">'"'</span>)</span><br><span class="line">	<span class="built_in">print</span>(<span class="built_in">tostring</span>(script))</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  <span class="comment">-- 这会将脚本的依赖，以加载进来，放到 loaded 表中。</span></span><br><span class="line">  <span class="built_in">loaded</span>[scriptName] = script </span><br><span class="line">  <span class="keyword">if</span> script.dependencies <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">for</span> j = <span class="number">1</span>, #script.dependencies <span class="keyword">do</span></span><br><span class="line">      self:loadScript(script.dependencies[j], <span class="built_in">loaded</span>)</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">-- 这里是一个数据项的遍历</span></span><br><span class="line">  <span class="keyword">for</span> k,v <span class="keyword">in</span> <span class="built_in">pairs</span>(script.data <span class="keyword">or</span> &#123;&#125;) <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">local</span> t, key = utils.resolve(self, k)</span><br><span class="line">    <span class="keyword">if</span> t <span class="keyword">then</span></span><br><span class="line">      <span class="keyword">if</span> t[key] == <span class="literal">nil</span> <span class="keyword">then</span></span><br><span class="line">        t[key] = utils.deepcopy(v)</span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">-- 将 insert 中的内容，放到  __middleware 的前面</span></span><br><span class="line">  <span class="keyword">for</span> methodName,middleware <span class="keyword">in</span> <span class="built_in">pairs</span>(script.<span class="built_in">insert</span> <span class="keyword">or</span> &#123;&#125;) <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">for</span> j = <span class="number">1</span>, #middleware <span class="keyword">do</span></span><br><span class="line">      <span class="keyword">local</span> func, pos = <span class="built_in">unpack</span>(middleware[j])</span><br><span class="line">      <span class="keyword">if</span> pos &lt; <span class="number">0</span> <span class="keyword">then</span></span><br><span class="line">        pos = #(self.__middleware[methodName] <span class="keyword">or</span> &#123;&#125;) + pos + <span class="number">1</span></span><br><span class="line">      <span class="keyword">end</span></span><br><span class="line">      self.__middleware:insert_middleware(methodName, func, pos)</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">-- 将 script 的方法，放在  __middleware 的后方，这里需要注意的是，middler 都可能有多个方法，都会添加进去。</span></span><br><span class="line">  <span class="keyword">for</span> methodName,middleware <span class="keyword">in</span> <span class="built_in">pairs</span>(script.methods <span class="keyword">or</span> &#123;&#125;) <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">for</span> j = <span class="number">1</span>, #middleware <span class="keyword">do</span></span><br><span class="line">      <span class="keyword">local</span> func = middleware[j]</span><br><span class="line">      self.__middleware:append_middleware(methodName, func)</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<p>因此，就可以将多个特性或者脚本，挂到一个对象上了。</p>
-<h1 id="方法的调用"><a href="#方法的调用" class="headerlink" title="方法的调用"></a>方法的调用</h1><p>我们在 调用  <code>Object.new()</code> 的时候，将新对象的元表设置为了 Object，当访问不到新对象中的键时，就会访问元表中的 <code>__index</code> 元方法，也就是 <code>Object.__index()</code>。</p>
-<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">Object.<span class="built_in">__index</span> = <span class="function"><span class="keyword">function</span><span class="params">(self, key)</span></span></span><br><span class="line">    <span class="keyword">local</span> v = Object[key]</span><br><span class="line">    <span class="keyword">if</span> v <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> v</span><br><span class="line">    <span class="keyword">elseif</span> <span class="built_in">rawget</span>(self, <span class="string">"__middleware"</span>) <span class="keyword">and</span> <span class="built_in">rawget</span>(self.__middleware, key) <span class="keyword">then</span></span><br><span class="line">        <span class="comment">-- <span class="doctag">TODO:</span> Should calls to nonexistent</span></span><br><span class="line">        <span class="comment">-- methods error or just do nothing?</span></span><br><span class="line">        <span class="comment">-- Polymorphism vs. ease of debugging</span></span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">(self, ...)</span></span></span><br><span class="line">            <span class="keyword">return</span> self.__middleware:call(self, key, &#123;...&#125;)</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">elseif</span> key:<span class="built_in">match</span>(<span class="string">"^get"</span>) <span class="keyword">then</span></span><br><span class="line">        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span><span class="params">(self)</span></span></span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">rawget</span>(self, key:<span class="built_in">sub</span>(<span class="number">4</span>, <span class="number">4</span>):<span class="built_in">lower</span>() .. key:<span class="built_in">sub</span>(<span class="number">5</span>, <span class="number">-1</span>))</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<p>在元方法中，如果访问不到当前键，那么就会采用  <code>rawget</code> 的形式来在 <code>__middleware</code> 里面查找，不会触发元方法。</p>
-<p>另外，还对 <code>get</code> 开头的方法做了一个假设。如我们调用 <code>getRoom</code> 时，会将第 4 个字符变成小写来在 <code>__middler</code> 里面进行查找。</p>
-
+          <p>一直在找寻一个比较好用，现代的 MUD 服务端，LPCMUD 不错，但是相对于现代的工具和语言而说，还是有点不行了。我看上了 skynet，所以就想找一个 lua 的实现，这不，就找到了 <a href="https://github.com/DeltaF1/Lua-MUD.git" target="_blank" rel="noopener">lua-MUD</a>。<br>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/Lua/关于lua-MUD的探究.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -971,7 +968,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Skynet/Skynet的SocketServer.md.html">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/Skynet/Skynet的SocketServer.md.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -985,7 +982,7 @@
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
           
-            <a href="/Skynet/Skynet的SocketServer.md.html" class="post-title-link" itemprop="url">Skynet的SocketServer.md</a>
+            <a href="/Lua/Skynet/Skynet的SocketServer.md.html" class="post-title-link" itemprop="url">Skynet的SocketServer.md</a>
         </h1>
 
         <div class="post-meta">
@@ -1003,7 +1000,13 @@
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Skynet/" itemprop="url" rel="index">
+                  <a href="/categories/Lua/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua</span>
+                  </a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua/Skynet/" itemprop="url" rel="index">
                     <span itemprop="name">Skynet</span>
                   </a>
                 </span>
@@ -1018,8 +1021,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/Skynet/Skynet的SocketServer.md.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Skynet/Skynet的SocketServer.md.html" itemprop="commentCount"></span>
+    <a title="disqus" href="/Lua/Skynet/Skynet的SocketServer.md.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/Skynet/Skynet的SocketServer.md.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -1037,7 +1040,7 @@
           <p>Skynet 中，其实提供了常规的 套接字 功能，如监听，连接，发送数据等，其中包含了几个模块，现在我们就来看一下它是如何实现的。比如<code>snax.gateserver</code> 就是利用这个功能来实现的。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/Skynet/Skynet的SocketServer.md.html#more" rel="contents">
+              <a class="btn" href="/Lua/Skynet/Skynet的SocketServer.md.html#more" rel="contents">
                 Read more &raquo;
               </a>
             </div>
