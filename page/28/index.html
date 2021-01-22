@@ -225,6 +225,245 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/Word-OOXML中的drawingML.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Java/Word-OOXML中的drawingML.html" class="post-title-link" itemprop="url">Word-OOXML中的drawingML</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-10 21:06:34" itemprop="dateCreated datePublished" datetime="2018-07-10T21:06:34+08:00">2018-07-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Java/Word-OOXML中的drawingML.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/Word-OOXML中的drawingML.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>DrawingML中的所有媒体对象都存储在一个<strong>图片形状</strong>中。这个图片形状使用一个 <code>blipFill</code> 元素来显示媒体对象。如果是音频的情况下，使用的是图标；在视频情况下，使用的是一个一帧来显示。</p>
+<h1 id="简单例子"><a href="#简单例子" class="headerlink" title="简单例子"></a>简单例子</h1><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">  <span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span> ...<span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId4"</span> <span class="attr">r:link</span>=<span class="string">""</span> /&gt;</span> <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:fillRect</span> /&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span> ... <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><code>blipFill</code>元素用来引用图片文件，因为引用的是这个文件包内的文件，所以使用了一个 关联ID（relationship ID）。</p>
+<h1 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h1><p>DrawingML 文件格式被分解为下面的三个部分：</p>
+<ul>
+<li>指定基本图片</li>
+<li>指定图片属性</li>
+<li>转换图标</li>
+</ul>
+<p>下面一个一个的来看这个。</p>
+<h2 id="指定基本图片"><a href="#指定基本图片" class="headerlink" title="指定基本图片"></a>指定基本图片</h2><p>图片通过 <code>pic</code> 元素插入文档中，这与 <code>shape</code> 元素类似，但有一些关键的不同，这些关键的不同使图片信息保存得更加完整。基本的图片会包含一个 <code>blipfill</code> 元素和一些基本的 <code>non-visual</code>（不可见）属性 。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPr</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">name</span>=<span class="string">"St_Patrick's_Day.jpg"</span>/&gt;</span> <span class="tag">&lt;<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"1"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:nvPr</span>/&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId2"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1346200"</span> <span class="attr">y</span>=<span class="string">"914400"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"3657600"</span> <span class="attr">cy</span>=<span class="string">"2743200"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a:ln</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">a:ln</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="给图片指定属性"><a href="#给图片指定属性" class="headerlink" title="给图片指定属性"></a>给图片指定属性</h2><p>现在基本的图片已经指定了，我们可以可以把注意力转移到更复杂的属性上面，比如重新着色，图片描述等。下面的例子中，把 绿色 转变成了紫色。这可以通过 <code>duotone</code> 元素来实现，这个元素允许两个基本的颜色来重新着色整个图片。一个用于在图片的暗色部分，一个用于图片的亮色部分。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPr</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">name</span>=<span class="string">"St_Patrick's_Day.jpg"</span> <span class="attr">descr</span>=<span class="string">"This is a Saint Patrick's day picture"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">p:nvPr</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId2"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:duotone</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">a:srgbClr</span> <span class="attr">val</span>=<span class="string">"000000"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:schemeClr</span> <span class="attr">val</span>=<span class="string">"accent4"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">a:duotone</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:blip</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1346200"</span> <span class="attr">y</span>=<span class="string">"914400"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"3657600"</span> <span class="attr">cy</span>=<span class="string">"2743200"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:ln</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:ln</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="转换图片"><a href="#转换图片" class="headerlink" title="转换图片"></a>转换图片</h2><p>现在，基本属性和附加属性都已经指定了，现在我们可以配合形状属性来使用了。下面的例子用同一张图片，加上了3D视角，一个简单的阴影，一个边框。这些形状属性可以同样使用到<code>shape</code>元素。一个图片特定的不同就是，边框。形状的边框只会向外，而图片是内外都会扩张。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:pic</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPr</span> <span class="attr">id</span>=<span class="string">"4"</span> <span class="attr">name</span>=<span class="string">"St_Patrick's_Day.jpg"</span> <span class="attr">descr</span>=<span class="string">"This is a Saint Patrick's day picture"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:picLocks</span> <span class="attr">noChangeAspect</span>=<span class="string">"1"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">p:cNvPicPr</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">p:nvPr</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:nvPicPr</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:blip</span> <span class="attr">r:embed</span>=<span class="string">"rId2"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:duotone</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:srgbClr</span> <span class="attr">val</span>=<span class="string">"000000"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:schemeClr</span> <span class="attr">val</span>=<span class="string">"accent4"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:duotone</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:blip</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:fillRect</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:stretch</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:blipFill</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1346200"</span> <span class="attr">y</span>=<span class="string">"914400"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"3657600"</span> <span class="attr">cy</span>=<span class="string">"2743200"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rect"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:avLst</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:noFill</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:ln</span> <span class="attr">w</span>=<span class="string">"57150"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:solidFill</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a:schemeClr</span> <span class="attr">val</span>=<span class="string">"bg1"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:solidFill</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:ln</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:effectLst</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:outerShdw</span> <span class="attr">blurRad</span>=<span class="string">"50800"</span> <span class="attr">dist</span>=<span class="string">"50800"</span> <span class="attr">dir</span>=<span class="string">"2700000"</span> <span class="attr">algn</span>=<span class="string">"tl"</span> <span class="attr">rotWithShape</span>=<span class="string">"0"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:srgbClr</span> <span class="attr">val</span>=<span class="string">"7D7D7D"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">a:alpha</span> <span class="attr">val</span>=<span class="string">"65000"</span>/&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">a:srgbClr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:outerShdw</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:effectLst</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:scene3d</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:camera</span> <span class="attr">prst</span>=<span class="string">"perspectiveRelaxedModerately"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:lightRig</span> <span class="attr">rig</span>=<span class="string">"threePt"</span> <span class="attr">dir</span>=<span class="string">"t"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:rot</span> <span class="attr">lat</span>=<span class="string">"0"</span> <span class="attr">lon</span>=<span class="string">"0"</span> <span class="attr">rev</span>=<span class="string">"18900000"</span>/&gt;</span> <span class="tag">&lt;/<span class="name">a:lightRig</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:scene3d</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:pic</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="坐标系统及变换"><a href="#坐标系统及变换" class="headerlink" title="坐标系统及变换"></a>坐标系统及变换</h1><h2 id="坐标系统"><a href="#坐标系统" class="headerlink" title="坐标系统"></a>坐标系统</h2><p>所有的 drawingML形状都位于一个2D的笛卡尔空间内，原点是（0，0），原点位于左上角。坐标的单位以 <strong>EMU（914400EMUS 1 英寸）</strong>，可为正也可为负。</p>
+<h2 id="形状变换"><a href="#形状变换" class="headerlink" title="形状变换"></a>形状变换</h2><p>一个 形状变换 可以总结为下面的连续操作：</p>
+<ol>
+<li>变换 和 缩放需要了解 原始的 边界盒子成为一个矩形，这通过 <code>offset, extents</code>来指定。</li>
+<li>在中心点 和 <code>flipH, flipV</code> 之间进行翻转。</li>
+<li>根据 <code>rot</code> 属性 围绕中心点进行旋转。</li>
+</ol>
+<p>为了渲染不在一个组内的形状，渲染器简单的对原始形状应用形状变换。</p>
+<h3 id="缩放和转换形状"><a href="#缩放和转换形状" class="headerlink" title="缩放和转换形状"></a>缩放和转换形状</h3><p>形状可以水平缩放，垂直缩放，尺寸转换或者填充一个给定的边界盒子。边界盒子通过指定 <code>offset</code> 的 x,y 来指定（<code>a:off</code> 的 x,y 属性）以及 <code>extents</code> x,y （<code>a:ext</code>的 x,y，两者都必须大于或者等于0）。边界盒子的左上角位于 offset指定的，边界盒子的右下角位于 offset + extent。</p>
+<p>如果开始的形状 宽度为0（垂直线）， <code>cx</code> 和 <code>a:ext</code> 属性会被忽略，水平缩放被跳过。类似，如果 开始形状的高度为0，<code>cy, a:ext</code>都会被忽略，然后垂直缩放被跳过。</p>
+<p> <img src="../res/drawingML01.png" alt></p>
+<p> 上面的形状可以如下表示：</p>
+ <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1866680"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1371600"</span> <span class="attr">cy</span>=<span class="string">"1371600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在上面的例子中，当转换这个形状来填充指定的边界盒子的时候，任何给这个形状的效果都会消失。</p>
+</blockquote>
+<p>这个例子显示了，在缩放形状的时候，不需要任何额外的参数。边界盒子用来表示缩放已经足够了。下面的XML片段表示了一个 星形 的 <code>offset, extents</code>在缩放前后的效果。在这个实际的例子中，边界盒子被选择来具有相同的左上角，也就是同样的<code>offset</code>。</p>
+<p><img src="../res/drawingML02.png" alt></p>
+<p>缩放前：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1066800"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1371600"</span> <span class="attr">cy</span>=<span class="string">"1371600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>缩放后：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1066800"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"2438400"</span> <span class="attr">cy</span>=<span class="string">"2133600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="形状旋转"><a href="#形状旋转" class="headerlink" title="形状旋转"></a>形状旋转</h3><p>通过 <code>rot</code> 属性来表示旋转。形状会围绕 边界盒子的中心顺时针旋转，角度由 <code>rot</code> 指定。每个单位是 1/1000 弧分（1/60000 度）。</p>
+<p>上面例子中小的个星星经过 45度顺时针旋转后，就变成了下面这样。</p>
+<p><img src="../res/drawingML03.png" alt></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span> <span class="attr">rot</span>=<span class="string">"2700000"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1066800"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1371600"</span> <span class="attr">cy</span>=<span class="string">"1371600"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="翻转形状"><a href="#翻转形状" class="headerlink" title="翻转形状"></a>翻转形状</h3><p>翻转，是在一个 水平线，和垂直线，于中心点相交 处进行反射。<code>flipH, flipV</code> 属性控制水平和垂直翻转。这两个数值都可以没有，也可以都等于0 ，这个时候表明不需要进行翻转，都等于1表示需要进行翻转。</p>
+<p>下面的例子就是水平和垂直进行了翻转。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span> <span class="attr">flipH</span>=<span class="string">"1"</span> <span class="attr">flipV</span>=<span class="string">"1"</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"3964937"</span> <span class="attr">y</span>=<span class="string">"2652643"</span>/&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"168838"</span> <span class="attr">cy</span>=<span class="string">"1219199"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="../res/drawingML04.png" alt></p>
+<h1 id="形状定义和属性"><a href="#形状定义和属性" class="headerlink" title="形状定义和属性"></a>形状定义和属性</h1><p>DrawingML我使用一般就是针对形状和属性进行，这包括两个方便的主题：</p>
+<ol>
+<li>预定义的形状</li>
+<li>自定义形状和属性</li>
+</ol>
+<h2 id="坐标系统-1"><a href="#坐标系统-1" class="headerlink" title="坐标系统"></a>坐标系统</h2><p>为了指定一个形状，我们要先了解一些高等级的系统，就叫做坐标系统吧。这就是文档，形状，和路径的坐标系统，下面我们会介绍。</p>
+<h3 id="文档坐标系统"><a href="#文档坐标系统" class="headerlink" title="文档坐标系统"></a>文档坐标系统</h3><p>为了在文档内指定一个形状，我们必须要先了解文档坐标系统。这个系统也拥有 <strong>x, y</strong>组件，而且从 (0,0)开始，位于 左上角。这个坐标向右，向下增长。文档的坐标的单位是 <strong>EMU（ 91440 EMUs /英寸，36000 EMUs/cm）</strong>。还有，为了给形状指定一个位置，还要指定形状的宽高，这也叫做形状的 <code>extent</code>。这个值的单位也是 EMU。为了指定这两个值，可以如下面这样：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:sp</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"3200400"</span> <span class="attr">y</span>=<span class="string">"1600200"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1200000"</span> <span class="attr">cy</span>=<span class="string">"1000000"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">p:sp</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里我们会看到，新形状被放在 文档中(3200400, 1600200）位置。其大小为 1200000 EMUs，1000000 EMUs。</p>
+<p>宽高就设置了形状包含的边界盒子。</p>
+<h3 id="形状坐标系统"><a href="#形状坐标系统" class="headerlink" title="形状坐标系统"></a>形状坐标系统</h3><p>现在我们有了形状，我们可以进入形状内部的坐标系了。形状坐标系也有 <code>x,y</code> 组件，（0，0）位于左上角。 宽高通过 extent来指定，单位也是EMU。这个坐标系用来定义 很多形状属性的位置。</p>
+<h3 id="路径坐标系"><a href="#路径坐标系" class="headerlink" title="路径坐标系"></a>路径坐标系</h3><p>这坐标系的 x,y 也是从 (0,0） 左上角开始的。特别的是，这个坐标系内的其单位是相对于 坐标空间内的值。这与形状坐标系有相同的规格但是不同的单位。形状坐标系使用  EMUs，路径坐标系使用（1/width）作为 x 的单位，(1/height）作为 y 的单位。这就是说，如果路径指定为 宽高 (2, 1），那么，路径坐标（1,1）就在形状坐标系内等于 (6000000,1000000）。路径坐标会会更容易理解些，后面会看到，<code>path</code> 元素描述的时候会说到。</p>
+<blockquote>
+<p>所有的规格和坐标都必须用全部数字来指定。</p>
+</blockquote>
+<h2 id="指定一个预定义形状"><a href="#指定一个预定义形状" class="headerlink" title="指定一个预定义形状"></a>指定一个预定义形状</h2><p>准确来说，有187个预定义的形状可以使用。</p>
+<h3 id="使用预定义形状"><a href="#使用预定义形状" class="headerlink" title="使用预定义形状"></a>使用预定义形状</h3><p>指定一个预定义形状非常的简单，下面我们来指定一个星形：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">p:sp</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"1981200"</span> <span class="attr">y</span>=<span class="string">"533400"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"1143000"</span> <span class="attr">cy</span>=<span class="string">"1066800"</span>/&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"heart"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:sp</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="调整一个预定义形状"><a href="#调整一个预定义形状" class="headerlink" title="调整一个预定义形状"></a>调整一个预定义形状</h3><p>有的时候预定义形状也不是很够用我们就需要进行一些调整。预定义的形状使用  线，曲线，就和一个自定义形状被定义时一样。为了允许调整这样预定义形状，我们定义了一些属性，而不是关注规格。</p>
+<p>下面的代码可以指定一个形状：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p:sp</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p:spPr</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:off</span> <span class="attr">x</span>=<span class="string">"3276600"</span> <span class="attr">y</span>=<span class="string">"990600"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:ext</span> <span class="attr">cx</span>=<span class="string">"978408"</span> <span class="attr">cy</span>=<span class="string">"484632"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">a:xfrm</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:prstGeom</span> <span class="attr">prst</span>=<span class="string">"rightArrow"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:avLst</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a:gd</span> <span class="attr">name</span>=<span class="string">"adj1"</span> <span class="attr">fmla</span>=<span class="string">"val 50000"</span>/&gt;</span> <span class="tag">&lt;<span class="name">a:gd</span> <span class="attr">name</span>=<span class="string">"adj2"</span> <span class="attr">fmla</span>=<span class="string">"val 50000"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">a:avLst</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">a:prstGeom</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">p:spPr</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">p:sp</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/升级glibc到2.18及出现的问题.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Linux-Unix/升级glibc到2.18及出现的问题.html" class="post-title-link" itemprop="url">升级glibc到2.18及出现的问题</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-07-09 22:52:07" itemprop="dateCreated datePublished" datetime="2018-07-09T22:52:07+08:00">2018-07-09</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/升级glibc到2.18及出现的问题.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/升级glibc到2.18及出现的问题.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>同时要用个mol_node这个东西来挂挖矿的钱包，但是libc库要求最低是2.18，但是我这个最低的是2.17的，当然不能用了，还好，gcc 4.8.5的，直接用来编译升级就好了。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/Linux-Unix/升级glibc到2.18及出现的问题.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/SpringMVC工作流程.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1047,186 +1286,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Java/word2007文档格式.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Java/word2007文档格式.html" class="post-title-link" itemprop="url">word2007文档格式</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-05-16 23:10:53" itemprop="dateCreated datePublished" datetime="2018-05-16T23:10:53+08:00">2018-05-16</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Java/word2007文档格式.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Java/word2007文档格式.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>对于文书来说，有很多需要生成的，一直以来用的是POI，但是似乎对文档的控制粒度粗了一下，所以潜心下来看一下怎么样操作docx4j。<br>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Java/word2007文档格式.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Git/Git命令-stash.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Git/Git命令-stash.html" class="post-title-link" itemprop="url">Git命令-stash</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-05-15 11:18:14" itemprop="dateCreated datePublished" datetime="2018-05-15T11:18:14+08:00">2018-05-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Git/Git命令-stash.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Git/Git命令-stash.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>事情是这样的，用git在版本管理，经常是切换到其他分支去开发新功能。但是，经常有些BUG需要修补，而新功能某些文件没有进行跟踪就 stash了。等到我过几天回去再修改了些文件。又stash了。反正，问题就是，我用stash把我修改过的东西，覆盖回来了。产生冲突，很恶心。所以不能不仔细看一下这个到底是个什么原因，有什么办法来解决没有？</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Git/Git命令-stash.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1275,7 +1334,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">376</span>
+          <span class="site-state-item-count">378</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1288,7 +1347,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">159</span>
+        <span class="site-state-item-count">160</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

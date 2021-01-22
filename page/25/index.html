@@ -225,6 +225,278 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/pandas.DataFrame的使用.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Python/pandas.DataFrame的使用.html" class="post-title-link" itemprop="url">pandas.DataFrame的使用</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-10-14 15:03:59" itemprop="dateCreated datePublished" datetime="2018-10-14T15:03:59+08:00">2018-10-14</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Python/pandas.DataFrame的使用.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/pandas.DataFrame的使用.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>pandas.DataFram 提供了一下很好的封装好了方法给我们，可以很容易的筛选，获取，变更数据。根据官方文档来看一下顺便翻译 。<a href="https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html" target="_blank" rel="noopener">原文地址</a></p>
+<h1 id="DataFrame"><a href="#DataFrame" class="headerlink" title="DataFrame"></a>DataFrame</h1><p>DataFrame是一个二维标记数据结构，具有可能不同类型的列。您可以将其视为电子表格或SQL表，或Series对象的字典。它通常是最常用的pandas对象。与Series类似，DataFrame接受许多不同类型的输入：</p>
+<ul>
+<li>Dict of 1D ndarrays, lists, dicts, or Series</li>
+<li>2-D numpy.ndarray</li>
+<li>Structured or record ndarray</li>
+<li>A series</li>
+<li>另一个数据帧<br>除了数据，您还可以选择传递索引（行标签）和列（列标签）参数。如果传递索引和/或列，则可以保证生成的DataFrame的索引和/或列。因此，系列的字典加上特定索引将丢弃与传递的索引不匹配的所有数据。</li>
+</ul>
+<p>如果未传递轴标签，则将根据常识规则从输入数据构造它们。</p>
+<h1 id="原型"><a href="#原型" class="headerlink" title="原型"></a>原型</h1><figure class="highlight py"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">pandas</span>.<span class="title">DataFrame</span><span class="params">(data=None, index=None, columns=None, dtype=None, copy=False)</span></span></span><br></pre></td></tr></table></figure>
+<p>这个类会返回一个二维，尺寸可变，具有行、列标记轴的表格数据结构。算术运算在行标签和列标签上对齐。可以被认为是Series对象的类似dict的容器。 pandas 最基本的数据结构。</p>
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><ul>
+<li><strong>data</strong>: <em>numpy ndarray (structured or homogeneous), dict, or DataFrame</em>  numpy 数组，字典，或数据帧。Dict 可以包含系列，数组，常量或 类似列表的对象。如果数据是字典，在 Python3.6 以上会维护一个参数顺序。</li>
+<li><strong>index</strong>:<em>Index or array-like 索引或类数组</em>。用来构成帧数据的索引。默认是范围索引。</li>
+<li><strong>columns</strong>:<em>Index or array-like 索引或类数组</em>。用来构帧数据的列标签。默认是 (0,1,2,….n)。</li>
+<li><strong>dtype</strong>: <em>dtype, 默认 None</em>。强制为某一数据类型。只允许单一 dtype，如果是 Node，则会进行推断。</li>
+<li><strong>copy</strong>: <em>boolean Default False</em> 从数据复制数据。只会影响数据帧/2D ndarray 输入 。</li>
+</ul>
+<h2 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h2><p><strong>从字典构建数据帧</strong></p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">In [<span class="number">1</span>]: d = &#123;<span class="string">'col1'</span>: [<span class="number">1</span>, <span class="number">2</span>], <span class="string">'col2'</span>: [<span class="number">3</span>, <span class="number">4</span>]&#125;</span><br><span class="line"></span><br><span class="line">In [<span class="number">2</span>]: df = pd.DataFrame(data=d)</span><br><span class="line"></span><br><span class="line">In [<span class="number">3</span>]: df</span><br><span class="line">Out[<span class="number">3</span>]:</span><br><span class="line">   col1  col2</span><br><span class="line"><span class="number">0</span>     <span class="number">1</span>     <span class="number">3</span></span><br><span class="line"><span class="number">1</span>     <span class="number">2</span>     <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<p>注意这个推断出来的 dtype 是 int64：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">In [<span class="number">7</span>]: df.dtypes</span><br><span class="line">Out[<span class="number">7</span>]:</span><br><span class="line">col1    int64</span><br><span class="line">col2    int64</span><br><span class="line">dtype: object</span><br></pre></td></tr></table></figure>
+<p>为了强制使用一个 dtype：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">In [<span class="number">10</span>]: df = pd.DataFrame(data=d, dtype=np.int8)</span><br><span class="line"></span><br><span class="line">In [<span class="number">11</span>]: df.dtypes</span><br><span class="line">Out[<span class="number">11</span>]:</span><br><span class="line">col1    int8</span><br><span class="line">col2    int8</span><br><span class="line">dtype: object</span><br></pre></td></tr></table></figure>
+<p>从 numpy 数组构建数据帧：</p>
+<figure class="highlight py"><table><tr><td class="code"><pre><span class="line">In [<span class="number">12</span>]:  df2 = pd.DataFrame(np.random.randint(low=<span class="number">0</span>, high=<span class="number">10</span>, size=(<span class="number">5</span>, <span class="number">5</span>)),               columns=[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>])</span><br><span class="line"></span><br><span class="line">In [<span class="number">13</span>]: df2</span><br><span class="line">Out[<span class="number">13</span>]:</span><br><span class="line">   a  b  c  d  e</span><br><span class="line"><span class="number">0</span>  <span class="number">5</span>  <span class="number">3</span>  <span class="number">3</span>  <span class="number">6</span>  <span class="number">5</span></span><br><span class="line"><span class="number">1</span>  <span class="number">4</span>  <span class="number">0</span>  <span class="number">8</span>  <span class="number">6</span>  <span class="number">3</span></span><br><span class="line"><span class="number">2</span>  <span class="number">3</span>  <span class="number">5</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">9</span></span><br><span class="line"><span class="number">3</span>  <span class="number">2</span>  <span class="number">7</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">8</span></span><br><span class="line"><span class="number">4</span>  <span class="number">1</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<h1 id="属性（以上面的df2为例）"><a href="#属性（以上面的df2为例）" class="headerlink" title="属性（以上面的df2为例）"></a>属性（以上面的df2为例）</h1><ul>
+<li><strong>T</strong>：行列转置</li>
+<li><strong>at</strong>：从 「行，列」 对访问一个唯一值</li>
+<li><strong>axes</strong>：返回代表了数据帧轴的列表。[RangeIndex(start=0, stop=5, step=1),<br>Index([u’a’, u’b’, u’c’, u’d’, u’e’], dtype=’object’)]</li>
+<li><strong>columns</strong>：列标签 Index([u’a’, u’b’, u’c’, u’d’, u’e’], dtype=’object’)</li>
+<li><strong>dtypes</strong>：数据类型</li>
+<li><strong>empty</strong>：表示数据是否为空</li>
+<li><strong>ftypes</strong>：返回DataFrame中的ftypes（稀疏/密集和dtype的指示）a    int64:dense<br>b    int64:dense<br>c    int64:dense<br>d    int64:dense<br>e    int64:dense<br>dtype: object</li>
+<li><strong>iat</strong>：通过整数表示位置的 「行，列」 对来访问唯一值。df2.iat[1,2]</li>
+<li><strong>iloc</strong>：只通过整型位置为基础的索引来选择数据。</li>
+<li><strong>index</strong>：数据帧的索引（行标签）RangeIndex(start=0, stop=5, step=1)</li>
+<li><strong>ix</strong>：主要基于标签位置的索引器，具有整数位置回退。</li>
+<li><strong>loc</strong>：通过标签或者布尔数组来访问一组行列值。</li>
+<li><strong>ndim</strong>：数据帧维数。</li>
+<li><strong>shape</strong>：数据帧形状。</li>
+<li><strong>size</strong>：元素总数。</li>
+<li><strong>style</strong>：Property returning a Styler object containing methods for building a styled HTML representation fo the DataFrame.</li>
+<li><strong>values</strong>：返回数据帧的 numpy 表示。</li>
+</ul>
+<h1 id="变换"><a href="#变换" class="headerlink" title="变换"></a>变换</h1><ul>
+<li><strong>DataFrame.astype(dtype[, copy=True, errors=’raise’, **kwargs])</strong> 这个函数实际上是对系列进行操作的。把某一系列的类型进行转换。 <em>copy=True/False</em> 表示是返回一个新的副本还是就在原来的数据上进行修改。</li>
+<li><strong>DataFrame.infer_objects()</strong> 对于 <em>对象</em> 类型的列推测一个更好的数据类型。可用 <code>df.infer_objects().dtypes</code> 进行测试</li>
+<li><strong>DataFrame.copy([deep=True])</strong> 复制出来一个对象。 <em>deep=True/False</em> 决定了是产生一个全新的对象，还是只是引用原来的对象。</li>
+<li><strong>DataFrame.isna()</strong> 检测遗失值</li>
+<li><strong>DataFrame.notna()</strong> 同上，意义相反。</li>
+<li><strong>DataFrame.bool()</strong><h1 id="索引，遍历"><a href="#索引，遍历" class="headerlink" title="索引，遍历"></a>索引，遍历</h1></li>
+<li><strong>DataFrame.head(n)</strong> 显示前 <em>n</em> 行。</li>
+<li><strong>DataFrame.at</strong> 访问一个唯一值。这通过一个 行/列 对来标识。但这个采用的是标签来访问。</li>
+<li><strong>DataFrame.iat</strong> 同上。但是是通过数位置来访问。</li>
+<li><strong>DataFrame.loc</strong> 通过标签(s)或布尔数组来访问很多行。</li>
+<li><strong>DataFrame.iloc</strong> 同上，不过是通过整型的位置索引来访问。</li>
+<li><strong>DataFrame.insert(loc, column, value[, allow_duplicates=False])</strong> 在指定的位置插入列</li>
+<li><strong>DataFrame.<strong>iter</strong>()</strong> 列标签迭代器</li>
+<li><strong>DataFrame.items()</strong> 在（列标签，系列）对上的迭代器。实际上是一列一列的迭代。</li>
+<li><strong>DataFrame.keys()</strong> 所有的列标签</li>
+<li><strong>DataFrame.iteritems()</strong> 在（列标签，系列）对上的迭代器。实际上是一列一列的迭代。</li>
+<li><strong>DataFrame.iterrows()</strong> 通过（索引，系列）对遍历行。一行一行迭代。</li>
+<li><strong>DataFrame.itertuples([index, name])</strong>将DataFrame行作为命名元组迭代，索引值作为元组的第一个元素。</li>
+<li><strong>DataFrame.lookup(row_lables, col_labels)</strong> </li>
+<li><strong>DataFrame.pop(item)</strong> 从 frame 删除 列 并返回。</li>
+<li><strong>DataFrame.tail(n)</strong> 返回后面几行</li>
+<li><strong>DataFrame.xs(key[, axis, level, drop_level])</strong> 返回一个交叉区域（多行 或多列）。这个有点难以理解，好像是多用于多索引的时候。</li>
+<li><strong>DataFrame.get(key[, default])</strong> 根据 key(列表） 获取给定项。</li>
+<li><strong>DataFrame.isin(values)</strong> 返回一个 布尔数据帧。这个帧表示了 <em>DataFrame</em> 内的每个元素是否被包含在value内。</li>
+<li><strong>DataFrame.where(crond[, other=nan, inplace=False, axis=None, level=None, errors=’raise’, try_cast=False, raise_on_error=None])</strong> 返回一个形状与自己一样的对象。其中 <em>crond</em> 条件为 <em>True</em> 的地方数据来源于自身，否则的话就从其他地方来。这个的意思就是，选择出 条件crond 为真的地方的数据一样。</li>
+<li><strong>DataFrame.mask(cond[other=nan, inplace=False, axis=None, level=None, errors=’raise’, try_cast=False, raise_on_error=None])</strong> 这个与上面操作相同，只是返回的数据相反。就相当于盖住条件为真的元素。</li>
+<li><strong>DataFrame.query(expr[, inplace])</strong> 通过布尔表达式查询帧列。<h1 id="二元操作"><a href="#二元操作" class="headerlink" title="二元操作"></a>二元操作</h1><h1 id="函数应用，分组和窗口"><a href="#函数应用，分组和窗口" class="headerlink" title="函数应用，分组和窗口"></a>函数应用，分组和窗口</h1></li>
+<li><strong>DataFrame.apply(func[, axis=0, broadcast=None, raw=False, reduce=None, result_type=None, args=(), **kwds])</strong> 沿某一轴应用一个函数。传递给这个函数的对象是 系列对象，其索引要么是 数据帧 的索引(axis =0)，或者数据帧的列( axis=1 )。默认情况下返回的值类型根据 函数的返回值推测，不然的话就根据 <em>result_type</em> 来返回。这里非常要明白一个问题，通过 axis 来指定 传递数据的索引，也就决定了函数从沿哪个方向应用。</li>
+<li><strong>DataFrame.applymap(func)</strong> 对每个元素应用函数。如 df.applymap(lambda x: len(x))</li>
+<li><strong>DataFrame.pipe(func, *args, **kwargs)</strong> 当想链式调用这个函数的话就非常的有用了。</li>
+<li><strong>DataFrame.agg(func[, axis])</strong> 通过指定轴上的一个或多个操作来聚合。也即是可对特定的行或者列进行对应的函数操作。</li>
+<li><strong>DataFrame.transform(func, *args, **kwargs)</strong> 调用函数生成类似索引的NDFrame并返回带有转换值的NDFrame</li>
+<li><strong>DataFrame.groupby([by=None, axis=0, level=None, as_index=True, sort=True, group_keys=True, squeeze=False, observed=False, **kwargs])</strong> 使用映射（字典或关键函数，对分组应用给定函数，返回系列结果）或一系列列来分组。</li>
+<li>DataFrame.rolling(window[, min_periods, …])    Provides rolling window calculations.</li>
+<li>DataFrame.expanding([min_periods, center, axis])    Provides expanding transformations.</li>
+<li>DataFrame.ewm([com, span, halflife, alpha, …])    Provides exponential weighted functions</li>
+</ul>
+<h1 id="计算，状态描述"><a href="#计算，状态描述" class="headerlink" title="计算，状态描述"></a>计算，状态描述</h1><h1 id="重新索引-选择-标签操作"><a href="#重新索引-选择-标签操作" class="headerlink" title="重新索引/选择/标签操作"></a>重新索引/选择/标签操作</h1><h1 id="缺失数据操作"><a href="#缺失数据操作" class="headerlink" title="缺失数据操作"></a>缺失数据操作</h1><h1 id="reshaping，排序，置换"><a href="#reshaping，排序，置换" class="headerlink" title="reshaping，排序，置换"></a>reshaping，排序，置换</h1><h1 id="结合-联合-合并"><a href="#结合-联合-合并" class="headerlink" title="结合/联合/合并"></a>结合/联合/合并</h1><h1 id="时间系列相关"><a href="#时间系列相关" class="headerlink" title="时间系列相关"></a>时间系列相关</h1><h1 id="绘图"><a href="#绘图" class="headerlink" title="绘图"></a>绘图</h1><h1 id="序列号-IO-变换"><a href="#序列号-IO-变换" class="headerlink" title="序列号/IO/变换"></a>序列号/IO/变换</h1>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/安装instantclient连接oracle数据库.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/数据库/安装instantclient连接oracle数据库.html" class="post-title-link" itemprop="url">安装instantclient连接oracle数据库</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-09-26 13:08:44" itemprop="dateCreated datePublished" datetime="2018-09-26T13:08:44+08:00">2018-09-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/数据库/安装instantclient连接oracle数据库.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/安装instantclient连接oracle数据库.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>很久没有用。对接上级数据需要用到 Oracle，没法，只能重新捡起来了。 Oracle 官方的文档还是比较完善的，看起来就是比较麻烦。方便下次吧。</p>
+<h1 id="客户端下载"><a href="#客户端下载" class="headerlink" title="客户端下载"></a>客户端下载</h1><p>在页面 <a href="https://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html" target="_blank" rel="noopener">https://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html</a> 下载好对于的 instant 与 sqlplus 版本。我下载的是 12.2 版本。</p>
+<p>我下载的是当前用户的 Home 目录下，也就是 <code>~</code>。把他们解压到一起：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd</span><br><span class="line">unzip instantclient-basic-linux.x64-12.2.0.1.0.zip</span><br><span class="line">unzip instantclient-sqlplus-linux.x64-12.2.0.1.0.zip</span><br></pre></td></tr></table></figure>
+<p>下载完毕后可以看一下都有些什么文件：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ls -1 instantclient_12_2</span><br><span class="line">adrci</span><br><span class="line">BASIC_README</span><br><span class="line">genezi</span><br><span class="line">glogin.sql</span><br><span class="line">libclntshcore.so.12.1</span><br><span class="line">libclntsh.so</span><br><span class="line">libclntsh.so.12.1</span><br><span class="line">libipc1.so</span><br><span class="line">libmql1.so</span><br><span class="line">libnnz12.so</span><br><span class="line">libocci.so.12.1</span><br><span class="line">libociei.so</span><br><span class="line">libocijdbc12.so</span><br><span class="line">libons.so</span><br><span class="line">liboramysql12.so</span><br><span class="line">libsqlplusic.so</span><br><span class="line">libsqlplus.so</span><br><span class="line">ojdbc8.jar</span><br><span class="line">sqlplus</span><br><span class="line">SQLPLUS_README</span><br><span class="line">uidrvci</span><br><span class="line">xstreams.jar</span><br></pre></td></tr></table></figure>
+<p>安装官方文档上的说明还有一些后续步骤需要做： <a href="https://www.oracle.com/technetwork/database/features/instant-client/sqlplus-cloud-3080557.html" target="_blank" rel="noopener">https://www.oracle.com/technetwork/database/features/instant-client/sqlplus-cloud-3080557.html</a></p>
+<p><strong>动态连接库</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd instantclient_12_2</span><br><span class="line">ln -s libclntsh.so.12.1 libclntsh.so</span><br></pre></td></tr></table></figure>
+<p>建立这么一个软连接后，需要在动态库寻找路径里面加入这个。有两种方法可以做到。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export LD_LIBRARY_PATH=~/instantclient_12_2:$LD_LIBRARY_PATH</span><br></pre></td></tr></table></figure>
+<p>或者在配置文件内指定：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">echo /home/myuser/instantclient_12_2 &gt; /etc/ld.so.conf.d/oic.conf</span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure>
+<p>相关环境变量设置：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export ORACLE_HOME=~/instantclient_12_2</span><br><span class="line">export TNS_ADMIN=~/instantclient_12_2</span><br><span class="line">export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME</span><br><span class="line">export PATH=$PATH:$ORACLE_HOME</span><br><span class="line">export NLS_LANG="AMERICAN_AMERICA.AL32UTF8"  #这个是为了防止乱码</span><br></pre></td></tr></table></figure>
+<h1 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h1><p>我们可以采用  tnsname.ora 来连接，或者直接用命令行连接：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd instantclient_12_2</span><br><span class="line">touch tnsname.ora</span><br></pre></td></tr></table></figure>
+<p><strong>命令行连接</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sqlplus user/password@//172.230.1.11:1521/topicis</span><br></pre></td></tr></table></figure>
+<h1 id="数据导出为csv"><a href="#数据导出为csv" class="headerlink" title="数据导出为csv"></a>数据导出为csv</h1><p>因为想要将数据导出，然后装到 MySQL 去，所以选择了以 csv 的形式，可更方便一些。关于数据的导出， Oracle 很多都是用的 pl/sql 或者现在新出品的 sql developer，但是我需要的是定时任务自动执行这样，所以只能使用 sqlplus 来进行导出来。</p>
+<p>主要就是利用 sqlplus 的 spool 命令来把显示内容转存到文件中。我们可以用一个简单的示例来展示：</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlplus user/password@//172.230.1.11:1521/topicis &lt;&lt; EOF</span><br><span class="line">spool test.csv</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">sysdate</span> <span class="keyword">from</span> dual;</span><br><span class="line">spool off;</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+<p>事实上我们可以把想要执行的命令放到一个 sql 文件中，然后以 @filename 的形式来调用。比如上面的语句我们就可以放在一个文件 test.sql 中：<br><figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">spool test.csv</span><br><span class="line"><span class="keyword">select</span> <span class="keyword">sysdate</span> <span class="keyword">from</span> dual;</span><br><span class="line">spool off;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line">sqlplus user/password@//172.230.1.11:1521/topicis &lt;&lt; EOF</span><br><span class="line">@test</span><br><span class="line">EOF</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/FloatingActionButton在安卓6.0上崩溃的问题.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1716,182 +1988,6 @@ y' = b + w_1x_1</script><p><em>b, w1</em> 我们可以随便选一个初值。�
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos-Creator/Cocos-Creator浏览器正常，打包apk错误的问题.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Cocos-Creator/Cocos-Creator浏览器正常，打包apk错误的问题.html" class="post-title-link" itemprop="url">Cocos-Creator浏览器正常，打包apk错误的问题</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-09-01 12:02:48" itemprop="dateCreated datePublished" datetime="2018-09-01T12:02:48+08:00">2018-09-01</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Cocos-Creator/" itemprop="url" rel="index">
-                    <span itemprop="name">Cocos Creator</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Cocos-Creator/Cocos-Creator浏览器正常，打包apk错误的问题.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cocos-Creator/Cocos-Creator浏览器正常，打包apk错误的问题.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>拷了份代码，浏览器，模拟器都正常预览，使用。而一打包到安卓下就不行了。具体的表现形式是，一直黑屏，用adb 查看 logcat 的话，是js_polyfill 报出了一个错误，调用 <code>startPhase</code>失败。搜索良久找不到方案。</p>
-<h1 id="资源缺失"><a href="#资源缺失" class="headerlink" title="资源缺失"></a>资源缺失</h1><p>偶尔发现一个问题就是，当我进入一个Prefab的时候，会提示这个Prefab内使用的资源丢失了。而我看我场景内，有这个Prefab实例的又显示正常，于是进行了一下同步，再进行打包。</p>
-<p>居然就OK了。。</p>
-<p>实在是坑爹了。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Android/关于fab会报错及popmenu背景是黑色的问题.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Android/关于fab会报错及popmenu背景是黑色的问题.html" class="post-title-link" itemprop="url">关于fab会报错及popmenu背景是黑色的问题</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-08-31 18:51:45" itemprop="dateCreated datePublished" datetime="2018-08-31T18:51:45+08:00">2018-08-31</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android/" itemprop="url" rel="index">
-                    <span itemprop="name">Android</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Android/关于fab会报错及popmenu背景是黑色的问题.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Android/关于fab会报错及popmenu背景是黑色的问题.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>遇到一个问题，就是我以前用的是Activity继承的是 FragmentActivit，然后可以使用 getActivity()函数。而我换成AppCompactActivity后，就不能使用这个了，我就打算用this,或者getBaseContext来做上下文，结果就是popMenu居然背景变成黑色了，换了多个主题还是一样。后面发现了问题。<br>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Android/关于fab会报错及popmenu背景是黑色的问题.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1940,7 +2036,7 @@ y' = b + w_1x_1</script><p><em>b, w1</em> 我们可以随便选一个初值。�
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">376</span>
+          <span class="site-state-item-count">378</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1953,7 +2049,7 @@ y' = b + w_1x_1</script><p><em>b, w1</em> 我们可以随便选一个初值。�
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">159</span>
+        <span class="site-state-item-count">160</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

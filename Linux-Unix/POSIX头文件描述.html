@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="最近在用 C 做 Socket 编程的时候，看到需要很多分散在各处的头文件，为什么就不能放在一起呢？因为 Socket 大多是系统提供的 API，而不是 C 标准库提供的 API，很是纳闷，因此来仔细的了解一下先。">
+<meta name="keywords" content="Cpp,Linux&#x2F;Unix,Posix">
+<meta property="og:type" content="article">
+<meta property="og:title" content="POSIX头文件描述">
+<meta property="og:url" content="https://gowa.club/Linux-Unix/POSIX头文件描述.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="最近在用 C 做 Socket 编程的时候，看到需要很多分散在各处的头文件，为什么就不能放在一起呢？因为 Socket 大多是系统提供的 API，而不是 C 标准库提供的 API，很是纳闷，因此来仔细的了解一下先。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-01-22T05:27:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="POSIX头文件描述">
+<meta name="twitter:description" content="最近在用 C 做 Socket 编程的时候，看到需要很多分散在各处的头文件，为什么就不能放在一起呢？因为 Socket 大多是系统提供的 API，而不是 C 标准库提供的 API，很是纳闷，因此来仔细的了解一下先。">
+
+<link rel="canonical" href="https://gowa.club/Linux-Unix/POSIX头文件描述.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>POSIX头文件描述 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Linux-Unix/POSIX头文件描述.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          POSIX头文件描述
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-22 13:27:22" itemprop="dateCreated datePublished" datetime="2021-01-22T13:27:22+08:00">2021-01-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Linux-Unix/" itemprop="url" rel="index">
+                    <span itemprop="name">Linux/Unix</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Linux-Unix/POSIX头文件描述.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Linux-Unix/POSIX头文件描述.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>最近在用 C 做 Socket 编程的时候，看到需要很多分散在各处的头文件，为什么就不能放在一起呢？因为 Socket 大多是系统提供的 API，而不是 C 标准库提供的 API，很是纳闷，因此来仔细的了解一下先。</p>
+<a id="more"></a>
+<h1 id="定义机构"><a href="#定义机构" class="headerlink" title="定义机构"></a>定义机构</h1><p>在 <a href="http://www.opengroup.org/onlinepubs/9699919799/idx/head.html" target="_blank" rel="noopener">http://www.opengroup.org/onlinepubs/9699919799/idx/head.html</a> 对这些头文件进行了定义，同时我们在 wiki 也能看到。<a href="https://en.wikibooks.org/wiki/C_Programming/POSIX_Reference" target="_blank" rel="noopener">https://en.wikibooks.org/wiki/C_Programming/POSIX_Reference</a>。</p>
+<h1 id="头文件列表"><a href="#头文件列表" class="headerlink" title="头文件列表"></a>头文件列表</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>头文件</th>
+<th>英文描述</th>
+<th>中文描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>aio.h</strong></td>
+<td>Asynchronous input and output.</td>
+<td>异步 IO</td>
+</tr>
+<tr>
+<td><strong>arpa/inet.h</strong></td>
+<td>Definitions for internet operations.</td>
+<td>网络操作定义。主要定义了 <code>in_port_t, in_addr_t,INET_ADDRSTRLEN,INET6_ADDRSTRLEN</code>，这几个在 <code>&lt;netinet.in.h&gt;</code> 中需要。定义宏或函数 <code>uint32_t htonl(uint32_t); uint16_t htons(uint16_t); uint32_t ntohl(uint32_t); uint16_t ntohs(uint16_t);</code> 定义 <code>&lt;inttypes.h&gt;</code> 中需要的 <code>uint32_t, uint16_t</code>。定义函数 <code>in_addr_t inet_addr(const char *); char *inet_ntoa(struct in_addr); const char *inet_ntop(int, const void *restrict, char *restrict, socklen_t); int inet_pton(int, const char *restrict, void *restrict);</code>。Include 了此文件也就包含了 <code>&lt;netinet/in.h&gt;、&lt;inttypes.h&gt;</code>。</td>
+</tr>
+<tr>
+<td><strong>cpio.h</strong></td>
+<td>Magic numbers for the cpio archive format.</td>
+<td>cpio 归档格式的幻数。</td>
+</tr>
+<tr>
+<td><strong>dirent.h</strong></td>
+<td>Allows the opening and listing of directories.</td>
+<td>打开和列出目录</td>
+</tr>
+<tr>
+<td><strong>fcntl.h</strong></td>
+<td>File opening, locking and other operations.</td>
+<td>文件打开、锁定和其他操作。</td>
+</tr>
+<tr>
+<td><strong>fmtmsg.h</strong></td>
+<td>Message display structures.</td>
+<td>消息显示结构。</td>
+</tr>
+<tr>
+<td><strong>fnmatch.h</strong></td>
+<td>Filename-matching types.</td>
+<td>文件名匹配类型</td>
+</tr>
+<tr>
+<td><strong>ftw.h</strong></td>
+<td>File tree traversal.</td>
+<td>文件树遍历</td>
+</tr>
+<tr>
+<td><strong>glob.h</strong></td>
+<td>Pathname pattern-matching types.</td>
+<td>路径名模式匹配类型</td>
+</tr>
+<tr>
+<td><strong>grp.h</strong></td>
+<td>User group information and control.</td>
+<td>用户组信息和控制</td>
+</tr>
+<tr>
+<td><strong>iconv.h</strong></td>
+<td>Codeset conversion facility.</td>
+<td>编码转换特性。</td>
+</tr>
+<tr>
+<td><strong>langinfo.h</strong></td>
+<td>Language information constants.</td>
+<td>语言信息常量</td>
+</tr>
+<tr>
+<td><strong>libgen.h</strong></td>
+<td>Definitions for pattern matching functions.</td>
+<td>模式匹配函数的定义。</td>
+</tr>
+<tr>
+<td><strong>monetary.h</strong></td>
+<td>Monetary types.</td>
+<td>货币类型。</td>
+</tr>
+<tr>
+<td><strong>mqueue.h</strong></td>
+<td>Message queues (REALTIME).</td>
+<td>消息队列（实时）</td>
+</tr>
+<tr>
+<td><strong>ndbm.h</strong></td>
+<td>Definitions for ndbm database operations.</td>
+<td>ndbm 数据库操作定义。</td>
+</tr>
+<tr>
+<td><strong>net/if.h</strong></td>
+<td>Sockets local interfaces.</td>
+<td>套接字本地接口。定义 <code>**if_nameindex**</code> 结构，定义 <code>IF_NAMESIZE</code> 常量， 定义函数 <code>void if_freenameindex(struct if_nameindex *); char *if_indextoname(unsigned, char *); struct if_nameindex *if_nameindex(void); unsigned if_nametoindex(const char *);</code>。</td>
+</tr>
+<tr>
+<td><strong>netdb.h</strong></td>
+<td>Definitions for network database operations.</td>
+<td>网络数据库操作定义。</td>
+</tr>
+<tr>
+<td><strong>netinet/in.h</strong></td>
+<td>Internet address family.</td>
+<td>网络地址族定义。定义 <code>**in_port_t**, in_addr_t</code>（与 <code>&lt;inttypes.h&gt;</code> 中的 <code>uint16_t, uint32_t</code> 相等。定义 <code>**sa_family_t**</code>（<code>&lt;sys/socket.h&gt;</code> 需要）。定义 <code>uint8_t, uint32_t</code> 这和<code>&lt;inttypes.h&gt;</code> 中的一致。包含 <code>&lt;netinet/in.h&gt;</code> 会让 <code>&lt;sys/socket.h&gt;, &lt;inttypes.h&gt;</code> 中的符号都可用。定义 <code>in_addr</code> 结构，它最少包含了 <code>in_addr_t s_addr</code> 成员。定义 <code>sockaddr_in</code> 结构，最少包含成员：<code>sa_family_t sin_family AF_INET. in_port_t sin_port Port number. struct in_addr sin_addr IP address.</code> <code>sin_port, sin_addr</code> 都应该是网络字节序。定义结构 <code>**in6_addr**， **sockaddr_in6**</code>。定义常量：<code>IPPROTO_IP, IPPROTO_IPV6, IPPROTO_ICMP, IPPROTO_RAW, IPPROTO_TCP, IPPROTO_UDP, INADDR_ANY, INADDR_BROADCAST, INET_ADDRSTRLEN,INET6_ADDRSTRLEN, IPV6_JOIN_GROUP等</code>。包含这个文件，让 <code>&lt;arpa/inet.h&gt;</code> 可用。</td>
+</tr>
+<tr>
+<td><strong>netinet/tcp.h</strong></td>
+<td>Definitions for the Internet Transmission Control Protocol (TCP).</td>
+<td>TCP 协议的一些定义。其实就定义了一个 <code>TCP_NODELAY</code>。</td>
+</tr>
+<tr>
+<td><strong>nl_types.h</strong></td>
+<td>Data types.</td>
+<td>数据类型。</td>
+</tr>
+<tr>
+<td><strong>poll.h</strong></td>
+<td>Definitions for the poll() function.</td>
+<td>定义 <code>poll</code> 函数。</td>
+</tr>
+<tr>
+<td><strong>pthread.h</strong></td>
+<td>Defines an API for creating and manipulating POSIX threads.</td>
+<td>定义 POSIX 线程相关东西。</td>
+</tr>
+<tr>
+<td><strong>pwd.h</strong></td>
+<td>Passwd (user information) access and control.</td>
+<td>密码（用户信息）访问和控制。</td>
+</tr>
+<tr>
+<td><strong>regex.h</strong></td>
+<td>Regular expression matching types.</td>
+<td>正则式匹配类型</td>
+</tr>
+<tr>
+<td><strong>sched.h</strong></td>
+<td>Execution scheduling.</td>
+<td>执行调度</td>
+</tr>
+<tr>
+<td><strong>search.h</strong></td>
+<td>Search tables.</td>
+<td>搜索表。</td>
+</tr>
+<tr>
+<td><strong>semaphore.h</strong></td>
+<td>Semaphores.</td>
+<td>信号量</td>
+</tr>
+<tr>
+<td><strong>spawn.h</strong></td>
+<td>Create a new process to run an executable program.</td>
+<td>建立一个新进程来执行程序。</td>
+</tr>
+<tr>
+<td><strong>strings.h</strong></td>
+<td>String operations.</td>
+<td>字符串操作。C 标准中是 <string.h><code>int ffs(int); int strcasecmp(const char *, const char *); int strcasecmp_l(const char *, const char *, locale_t); int strncasecmp(const char *, const char *, size_t); int strncasecmp_l(const char *, const char *, size_t, locale_t);</code></string.h></td>
+</tr>
+<tr>
+<td><strong>stropts.h</strong></td>
+<td>STREAMS interface (STREAMS).</td>
+<td>流接口。</td>
+</tr>
+<tr>
+<td><strong>sys/ipc.h</strong></td>
+<td>Inter-process communication (IPC).</td>
+<td>进程间通信</td>
+</tr>
+<tr>
+<td><strong>sys/mman.h</strong></td>
+<td>POSIX memory management declarations.</td>
+<td>POSIX 内存管理声明</td>
+</tr>
+<tr>
+<td><strong>sys/msg.h</strong></td>
+<td>POSIX message queues.</td>
+<td>POSIX 消息队列</td>
+</tr>
+<tr>
+<td><strong>sys/resource.h</strong></td>
+<td>Definitions for XSI resource operations.</td>
+<td>XSI 资源操作定义</td>
+</tr>
+<tr>
+<td><strong>sys/select.h</strong></td>
+<td>Select types.</td>
+<td>select 操作。</td>
+</tr>
+<tr>
+<td><strong>sys/sem.h</strong></td>
+<td>POSIX semaphores.</td>
+<td>POSIX 信号量</td>
+</tr>
+<tr>
+<td><strong>sys/shm.h</strong></td>
+<td>XSI shared memory facility.</td>
+<td>XSI 共享内存特性。</td>
+</tr>
+<tr>
+<td><strong>sys/socket.h</strong></td>
+<td>Main sockets header.</td>
+<td>主要的套接字头文件。</td>
+</tr>
+<tr>
+<td><strong>sys/stat.h</strong></td>
+<td>File information (stat et al.).</td>
+<td>文件信息。</td>
+</tr>
+<tr>
+<td><strong>sys/statvfs.h</strong></td>
+<td>VFS File System information structure.</td>
+<td>VFS 文件系统信息结构。</td>
+</tr>
+<tr>
+<td><strong>sys/time.h</strong></td>
+<td>Time and date functions and structures.</td>
+<td>时间和日期函数与结构</td>
+</tr>
+<tr>
+<td><strong>sys/times.h</strong></td>
+<td>File access and modification times structure.</td>
+<td>文件访问和修改的时间结构</td>
+</tr>
+<tr>
+<td><strong>sys/types.h</strong></td>
+<td>Various data types used elsewhere.</td>
+<td>很多的数据类型。</td>
+</tr>
+<tr>
+<td><strong>sys/uio.h</strong></td>
+<td>Definitions for vector I/O operations.</td>
+<td>向量 I/O 操作定义</td>
+</tr>
+<tr>
+<td><strong>sys/un.h</strong></td>
+<td>Definitions for UNIX domain sockets.</td>
+<td>UNIX 域套接字定义</td>
+</tr>
+<tr>
+<td><strong>sys/utsname.h</strong></td>
+<td>uname and related structures.</td>
+<td>uname 和相关的结构</td>
+</tr>
+<tr>
+<td><strong>sys/wait.h</strong></td>
+<td>Status of terminated child processes.</td>
+<td>结束子进程的状态。</td>
+</tr>
+<tr>
+<td><strong>syslog.h</strong></td>
+<td>Definitions for system error logging.</td>
+<td>系统错误日志定义。</td>
+</tr>
+<tr>
+<td><strong>tar.h</strong></td>
+<td>Magic numbers for the tar archive format.</td>
+<td>tar 归档格式幻数定义</td>
+</tr>
+<tr>
+<td><strong>termios.h</strong></td>
+<td>Allows terminal I/O interfaces.</td>
+<td>允许终端 I/O 接口</td>
+</tr>
+<tr>
+<td><strong>trace.h</strong></td>
+<td>Tracing.</td>
+<td>跟踪</td>
+</tr>
+<tr>
+<td><strong>ulimit.h</strong></td>
+<td>ulimit commands.</td>
+<td>ulimit 命令</td>
+</tr>
+<tr>
+<td><strong>unistd.h</strong></td>
+<td>Various essential POSIX functions and constants.</td>
+<td>很多重要的 POSIX 函数和常量，如 <code>read, write</code>。</td>
+</tr>
+<tr>
+<td><strong>utime.h</strong></td>
+<td>File access and modification times.</td>
+<td>文件访问和修改时间</td>
+</tr>
+<tr>
+<td><strong>utmpx.h</strong></td>
+<td>User accounting database definitions.</td>
+<td>用户审计数据库定义</td>
+</tr>
+<tr>
+<td><strong>wordexp.h</strong></td>
+<td>Word-expansion types.</td>
+<td>单词扩展类型。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="与-C-重叠或相关的头文件"><a href="#与-C-重叠或相关的头文件" class="headerlink" title="与 C 重叠或相关的头文件"></a>与 C 重叠或相关的头文件</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>头文件</th>
+<th>英文描述</th>
+<th>中文描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>assert.h</strong></td>
+<td>Verify program assertion.</td>
+<td>断言</td>
+</tr>
+<tr>
+<td><strong>complex.h</strong></td>
+<td>Complex arithmetic.</td>
+<td>复数</td>
+</tr>
+<tr>
+<td><strong>ctype.h</strong></td>
+<td>Character types.</td>
+<td>字符类型</td>
+</tr>
+<tr>
+<td><strong>fenv.h</strong></td>
+<td>Floating-point environment.</td>
+<td>浮点数环境</td>
+</tr>
+<tr>
+<td><strong>float.h</strong></td>
+<td>Floating types.</td>
+<td>浮点类型</td>
+</tr>
+<tr>
+<td><strong>inttypes.h</strong></td>
+<td>Fixed size integer types.</td>
+<td>定长整型</td>
+</tr>
+<tr>
+<td><strong>iso646.h</strong></td>
+<td>Alternative spellings.</td>
+<td>可选的单词</td>
+</tr>
+<tr>
+<td><strong>limits.h</strong></td>
+<td>Implementation-defined constants.</td>
+<td>实现定义的常量</td>
+</tr>
+<tr>
+<td><strong>locale.h</strong></td>
+<td>Category macros.</td>
+<td>区域宏</td>
+</tr>
+<tr>
+<td><strong>math.h</strong></td>
+<td>Mathematical declarations.</td>
+<td>数学声明</td>
+</tr>
+<tr>
+<td><strong>setjmp.h</strong></td>
+<td>Stack environment declarations.</td>
+<td>栈环境声明</td>
+</tr>
+<tr>
+<td><strong>signal.h</strong></td>
+<td>Signals.</td>
+<td>信号</td>
+</tr>
+<tr>
+<td><strong>stdarg.h</strong></td>
+<td>Handle variable argument list.</td>
+<td>变长参数列表</td>
+</tr>
+<tr>
+<td><strong>stdbool.h</strong></td>
+<td>Boolean type and values.</td>
+<td>布尔类型和值</td>
+</tr>
+<tr>
+<td><strong>stddef.h</strong></td>
+<td>Standard type definitions.</td>
+<td>标准类型定义</td>
+</tr>
+<tr>
+<td><strong>stdint.h</strong></td>
+<td>Integer types.</td>
+<td>整型</td>
+</tr>
+<tr>
+<td><strong>stdio.h</strong></td>
+<td>Standard buffered input/output.</td>
+<td>标准缓冲 I/O</td>
+</tr>
+<tr>
+<td><strong>stdlib.h</strong></td>
+<td>Standard library definitions.</td>
+<td>标准库定义</td>
+</tr>
+<tr>
+<td><strong>string.h</strong></td>
+<td>String operations.</td>
+<td>字符串操作</td>
+</tr>
+<tr>
+<td><strong>tgmath.h</strong></td>
+<td>Type-generic macros.</td>
+<td>泛型宏</td>
+</tr>
+<tr>
+<td><strong>time.h</strong></td>
+<td>Time types.</td>
+<td>时间类型</td>
+</tr>
+<tr>
+<td><strong>wchar.h</strong></td>
+<td>Wide-character handling.</td>
+<td>宽字符操作</td>
+</tr>
+<tr>
+<td><strong>wctype.h</strong></td>
+<td>Wide-character classification and mapping utilities</td>
+<td>宽字符分类和映射工具集</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="网络编程相关的几个头文件"><a href="#网络编程相关的几个头文件" class="headerlink" title="网络编程相关的几个头文件"></a>网络编程相关的几个头文件</h1><div class="language-dot">
+digraph{
+  "<arpa inet.h>"
+  "<net if.h>"
+  "<netinet in.h>"
+  "<sys socket.h>"
+  "<inttypes.h>"
+
+  "<netinet in.h>" -> "<arpa inet.h>"
+  "<inttypes.h>" ->  "<arpa inet.h>"
+  "<sys socket.h>" -> "<netinet in.h>"
+
+}
+</netinet></sys></arpa></inttypes.h></arpa></netinet></inttypes.h></sys></netinet></net></arpa></div>
+<p>实际上，套接字相关的，我们只需要包含 <code>&lt;arpa/inet.h&gt;</code> 就行了哦。</p>
+<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
+                // graphviz init
+                let graphviz_engines = ["circo",
+                    "dot",
+                    "fdp",
+                    "neato",
+                    "osage",
+                    "twopi"];
+
+                function doGraphviz(engine) {
+                    let domAllDot = document.querySelectorAll('.language-' + engine);
+                    for (let i = 0; i < domAllDot.length; i++) {
+                        let dom = domAllDot[i];
+                        let graphSource = dom.innerText || dom.textContent;
+
+                        try {
+                           let viz = new Viz();
+                             viz.renderSVGElement(graphSource, {engine: engine})
+                                 .then(r => {
+                            dom.innerHTML ='';dom.append(r); });
+                        } catch (e) {
+                            console.error("Error when parsing node:", dom, e);
+                        } 
+                    }
+                } 
+
+                let init = function () {
+                    for (let i = 0; i < graphviz_engines.length; i++) {
+                        doGraphviz(graphviz_engines[i]);
+                    }
+                };
+                if (typeof window.addEventListener != "undefined") {
+                    window.addEventListener("load", init, false);
+                } else {
+                    window.attachEvent("onload", init);
+                }
+                </script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Cpp/" rel="tag"># Cpp</a>
+              <a href="/tags/Linux-Unix/" rel="tag"># Linux/Unix</a>
+              <a href="/tags/Posix/" rel="tag"># Posix</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Cpp/RC4算法的C实现.html" rel="next" title="RC4算法的C实现">
+                  <i class="fa fa-chevron-left"></i> RC4算法的C实现
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#定义机构"><span class="nav-number">1.</span> <span class="nav-text">定义机构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#头文件列表"><span class="nav-number">2.</span> <span class="nav-text">头文件列表</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#与-C-重叠或相关的头文件"><span class="nav-number">3.</span> <span class="nav-text">与 C 重叠或相关的头文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络编程相关的几个头文件"><span class="nav-number">4.</span> <span class="nav-text">网络编程相关的几个头文件</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">160</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Linux-Unix/POSIX头文件描述.html",
+            identifier: "Linux-Unix/POSIX头文件描述.html",
+            title: "POSIX头文件描述"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>
