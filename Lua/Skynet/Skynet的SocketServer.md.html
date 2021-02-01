@@ -332,43 +332,43 @@ digraph {
 <h2 id="套接字消息的取出"><a href="#套接字消息的取出" class="headerlink" title="套接字消息的取出"></a>套接字消息的取出</h2><p>我们在 <code>socket_server_poll</code> 函数中看到，会调用 <code>sp_wait()</code> 来检查一下套接字上发生的事件。不过，它将事件转换成了 skynet 自己的包装，返回事件中包含了一个 <code>skynet_socket</code> 结构。</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//socket_kqueue.h</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">int</span></span><br><span class="line">sp_wait(<span class="keyword">int</span> kfd, struct event *e, <span class="keyword">int</span> <span class="built_in">max</span>) &#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">kevent</span> <span class="title">ev</span>[<span class="title">max</span>];</span></span><br><span class="line">	<span class="keyword">int</span> n = kevent(kfd, <span class="literal">NULL</span>, <span class="number">0</span>, ev, <span class="built_in">max</span>, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="comment">// 在 macOS 上，将 kevent 转成 skynet 自己的 event 结构出去</span></span><br><span class="line">	<span class="comment">// 这里的 ev[i].udata 是我们之前用 sp_add 添加过去的 skynet 的 socket ，一个对 文件描述符的包装</span></span><br><span class="line">	<span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;n;i++) &#123;</span><br><span class="line">		e[i].s = ev[i].udata;</span><br><span class="line">		<span class="keyword">unsigned</span> filter = ev[i].filter;</span><br><span class="line">		<span class="keyword">bool</span> eof = (ev[i].flags &amp; EV_EOF) != <span class="number">0</span>;</span><br><span class="line">		e[i].<span class="built_in">write</span> = (filter == EVFILT_WRITE) &amp;&amp; (!eof);</span><br><span class="line">		e[i].<span class="built_in">read</span> = (filter == EVFILT_READ);</span><br><span class="line">		e[i].error = (ev[i].flags &amp; EV_ERROR) != <span class="number">0</span>;</span><br><span class="line">		e[i].eof = eof;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> n;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>然后根据这个套接字结构中的 opaque 就知道是与哪个服务相关联的消息了，就可以放到消息队列去，交给工作线程派发过去了。</p>
-<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
-                // graphviz init
-                let graphviz_engines = ["circo",
-                    "dot",
-                    "fdp",
-                    "neato",
-                    "osage",
-                    "twopi"];
+<h1 id="socketchannel"><a href="#socketchannel" class="headerlink" title="socketchannel                "></a>socketchannel<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script></h1><pre><code>            // graphviz init
+            let graphviz_engines = [&quot;circo&quot;,
+                &quot;dot&quot;,
+                &quot;fdp&quot;,
+                &quot;neato&quot;,
+                &quot;osage&quot;,
+                &quot;twopi&quot;];
 
-                function doGraphviz(engine) {
-                    let domAllDot = document.querySelectorAll('.language-' + engine);
-                    for (let i = 0; i < domAllDot.length; i++) {
-                        let dom = domAllDot[i];
-                        let graphSource = dom.innerText || dom.textContent;
+            function doGraphviz(engine) {
+                let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
+                for (let i = 0; i &lt; domAllDot.length; i++) {
+                    let dom = domAllDot[i];
+                    let graphSource = dom.innerText || dom.textContent;
 
-                        try {
-                           let viz = new Viz();
-                             viz.renderSVGElement(graphSource, {engine: engine})
-                                 .then(r => {
-                            dom.innerHTML ='';dom.append(r); });
-                        } catch (e) {
-                            console.error("Error when parsing node:", dom, e);
-                        } 
-                    }
-                } 
-
-                let init = function () {
-                    for (let i = 0; i < graphviz_engines.length; i++) {
-                        doGraphviz(graphviz_engines[i]);
-                    }
-                };
-                if (typeof window.addEventListener != "undefined") {
-                    window.addEventListener("load", init, false);
-                } else {
-                    window.attachEvent("onload", init);
+                    try {
+                       let viz = new Viz();
+                         viz.renderSVGElement(graphSource, {engine: engine})
+                             .then(r =&gt; {
+                        dom.innerHTML =&#39;&#39;;dom.append(r); });
+                    } catch (e) {
+                        console.error(&quot;Error when parsing node:&quot;, dom, e);
+                    } 
                 }
-                </script>
+            } 
+
+            let init = function () {
+                for (let i = 0; i &lt; graphviz_engines.length; i++) {
+                    doGraphviz(graphviz_engines[i]);
+                }
+            };
+            if (typeof window.addEventListener != &quot;undefined&quot;) {
+                window.addEventListener(&quot;load&quot;, init, false);
+            } else {
+                window.attachEvent(&quot;onload&quot;, init);
+            }
+            &lt;/script&gt;
+</code></pre></script></h1>
     </div>
 
     
@@ -441,7 +441,43 @@ digraph {
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#整体架构"><span class="nav-number">1.</span> <span class="nav-text">整体架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SOCKET-SERVER"><span class="nav-number">2.</span> <span class="nav-text">SOCKET_SERVER</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动套接字"><span class="nav-number">3.</span> <span class="nav-text">启动套接字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#套接字线程工作"><span class="nav-number">4.</span> <span class="nav-text">套接字线程工作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#控制指令"><span class="nav-number">4.1.</span> <span class="nav-text">控制指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#套接字消息的取出"><span class="nav-number">4.2.</span> <span class="nav-text">套接字消息的取出</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#整体架构"><span class="nav-number">1.</span> <span class="nav-text">整体架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SOCKET-SERVER"><span class="nav-number">2.</span> <span class="nav-text">SOCKET_SERVER</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#启动套接字"><span class="nav-number">3.</span> <span class="nav-text">启动套接字</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#套接字线程工作"><span class="nav-number">4.</span> <span class="nav-text">套接字线程工作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#控制指令"><span class="nav-number">4.1.</span> <span class="nav-text">控制指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#套接字消息的取出"><span class="nav-number">4.2.</span> <span class="nav-text">套接字消息的取出</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#socketchannel"><span class="nav-number">5.</span> <span class="nav-text">socketchannel                &lt;/h1&gt;&lt;pre&gt;&lt;code&gt;            // graphviz init
+            let graphviz_engines = [&amp;quot;circo&amp;quot;,
+                &amp;quot;dot&amp;quot;,
+                &amp;quot;fdp&amp;quot;,
+                &amp;quot;neato&amp;quot;,
+                &amp;quot;osage&amp;quot;,
+                &amp;quot;twopi&amp;quot;];
+
+            function doGraphviz(engine) {
+                let domAllDot = document.querySelectorAll(&amp;#39;.language-&amp;#39; + engine);
+                for (let i = 0; i &amp;lt; domAllDot.length; i++) {
+                    let dom = domAllDot[i];
+                    let graphSource = dom.innerText || dom.textContent;
+
+                    try {
+                       let viz = new Viz();
+                         viz.renderSVGElement(graphSource, {engine: engine})
+                             .then(r =&amp;gt; {
+                        dom.innerHTML =&amp;#39;&amp;#39;;dom.append(r); });
+                    } catch (e) {
+                        console.error(&amp;quot;Error when parsing node:&amp;quot;, dom, e);
+                    } 
+                }
+            } 
+
+            let init = function () {
+                for (let i = 0; i &amp;lt; graphviz_engines.length; i++) {
+                    doGraphviz(graphviz_engines[i]);
+                }
+            };
+            if (typeof window.addEventListener != &amp;quot;undefined&amp;quot;) {
+                window.addEventListener(&amp;quot;load&amp;quot;, init, false);
+            } else {
+                window.attachEvent(&amp;quot;onload&amp;quot;, init);
+            }
+            &amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

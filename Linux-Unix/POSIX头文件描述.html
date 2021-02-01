@@ -723,18 +723,19 @@
 </div>
 <h1 id="网络编程相关的几个头文件"><a href="#网络编程相关的几个头文件" class="headerlink" title="网络编程相关的几个头文件"></a>网络编程相关的几个头文件</h1><div class="language-dot">
 digraph{
-  "<arpa inet.h>"
-  "<net if.h>"
-  "<netinet in.h>"
-  "<sys socket.h>"
-  "<inttypes.h>"
 
-  "<netinet in.h>" -> "<arpa inet.h>"
-  "<inttypes.h>" ->  "<arpa inet.h>"
-  "<sys socket.h>" -> "<netinet in.h>"
+  "arpa/inet.h"
+  "net/if.h"
+  "netinet/in.h"
+  "sys/socket.h"
+  "inttypes.h"
+
+  "netinet/in.h" -> "arpa/inet.h"
+  "inttypes.h" ->  "arpa/inet.h"
+  "sys/socket.h" -> "netinet/in.h"
 
 }
-</netinet></sys></arpa></inttypes.h></arpa></netinet></inttypes.h></sys></netinet></net></arpa></div>
+</div>
 <p>实际上，套接字相关的，我们只需要包含 <code>&lt;arpa/inet.h&gt;</code> 就行了哦。</p>
 <script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
                 // graphviz init
