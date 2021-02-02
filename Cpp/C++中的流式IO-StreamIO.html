@@ -301,17 +301,17 @@
 <p><img src="https://upload.cppreference.com/mwiki/images/0/06/std-io-complete-inheritance.svg" alt></p>
 <p>而我们的 <code>cin, cout</code> 则是一个全局的定义：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="built_in">std</span>::istream <span class="built_in">cin</span>;</span><br><span class="line"><span class="keyword">extern</span> <span class="built_in">std</span>::ostream <span class="built_in">cout</span>;</span><br></pre></td></tr></table></figure>
-<h1 id="各类的作用"><a href="#各类的作用" class="headerlink" title="各类的作用"></a>各类的作用</h1><div class="table-container">
+<h1 id="抽象"><a href="#抽象" class="headerlink" title="抽象"></a>抽象</h1><div class="table-container">
 <table>
 <thead>
 <tr>
-<th>Abstraction</th>
+<th>抽象</th>
 <th></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Defined in header <code>&lt;ios&gt;</code></td>
+<td><code>&lt;ios&gt;</code></td>
 <td></td>
 </tr>
 <tr>
@@ -319,16 +319,28 @@
 <td>管理格式化标志和输入/输出异常（class）</td>
 </tr>
 <tr>
-<td><a href="https://en.cppreference.com/w/cpp/io/basic_ios" target="_blank" rel="noopener">basic_ios</a><br>Defined in header <code>&lt;streambuf&gt;</code></td>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_ios" target="_blank" rel="noopener">basic_ios</a></td>
 <td>管理一个任意的流式缓冲区。 (class template)</td>
 </tr>
 <tr>
-<td><a href="https://en.cppreference.com/w/cpp/io/basic_streambuf" target="_blank" rel="noopener">basic_streambuf</a><br>Defined in header <code>&lt;ostream&gt;</code></td>
+<td><code>&lt;streambuf&gt;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_streambuf" target="_blank" rel="noopener">basic_streambuf</a></td>
 <td>抽象一个裸设备。 (class template)</td>
 </tr>
 <tr>
-<td><a href="https://en.cppreference.com/w/cpp/io/basic_ostream" target="_blank" rel="noopener">basic_ostream</a><br>Defined in header <code>&lt;istream&gt;</code></td>
+<td><code>&lt;ostream&gt;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://en.cppreference.com/w/cpp/io/basic_ostream" target="_blank" rel="noopener">basic_ostream</a></td>
 <td>包装一个给定的抽象设备(<a href="https://en.cppreference.com/w/cpp/io/basic_streambuf" target="_blank" rel="noopener">std::basic_streambuf</a>) ，提供高级的输出接口。 (class template)</td>
+</tr>
+<tr>
+<td><code>&lt;istream&gt;</code></td>
+<td></td>
 </tr>
 <tr>
 <td><a href="https://en.cppreference.com/w/cpp/io/basic_istream" target="_blank" rel="noopener">basic_istream</a></td>
@@ -338,10 +350,18 @@
 <td><a href="https://en.cppreference.com/w/cpp/io/basic_iostream" target="_blank" rel="noopener">basic_iostream</a></td>
 <td>包装一个给定的抽象设备(<a href="https://en.cppreference.com/w/cpp/io/basic_streambuf" target="_blank" rel="noopener">std::basic_streambuf</a>) ，提供高级的输入/输出接口。 (class template)</td>
 </tr>
+</tbody>
+</table>
+</div>
+<h1 id="文件IO实现"><a href="#文件IO实现" class="headerlink" title="文件IO实现"></a>文件IO实现</h1><div class="table-container">
+<table>
+<thead>
 <tr>
-<td><strong>File I/O implementation</strong><br>Defined in header <code>&lt;fstream&gt;</code></td>
-<td>文件IO实现</td>
+<th><code>&lt;fstream&gt;</code></th>
+<th></th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td><a href="https://en.cppreference.com/w/cpp/io/basic_filebuf" target="_blank" rel="noopener">basic_filebuf</a></td>
 <td>实现一个裸文件设备。 (class template)</td>
@@ -358,10 +378,18 @@
 <td><a href="https://en.cppreference.com/w/cpp/io/basic_fstream" target="_blank" rel="noopener">basic_fstream</a></td>
 <td>实现高级文件流输入/输出操作。 (class template)</td>
 </tr>
+</tbody>
+</table>
+</div>
+<h1 id="字符串IO实现"><a href="#字符串IO实现" class="headerlink" title="字符串IO实现"></a>字符串IO实现</h1><div class="table-container">
+<table>
+<thead>
 <tr>
-<td><strong>String I/O implementation</strong><br>Defined in header <code>&lt;sstream&gt;</code></td>
-<td>字符串 I/O 实现</td>
+<th><code>&lt;sstream&gt;</code></th>
+<th>字符串 I/O 实现</th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td><a href="https://en.cppreference.com/w/cpp/io/basic_stringbuf" target="_blank" rel="noopener">basic_stringbuf</a></td>
 <td>实现裸字符串设备。 (class template)</td>
@@ -378,10 +406,18 @@
 <td><a href="https://en.cppreference.com/w/cpp/io/basic_stringstream" target="_blank" rel="noopener">basic_stringstream</a></td>
 <td>实现高级的字符流输入/输出操作。 (class template)</td>
 </tr>
+</tbody>
+</table>
+</div>
+<h1 id="数组IO实现"><a href="#数组IO实现" class="headerlink" title="数组IO实现"></a>数组IO实现</h1><div class="table-container">
+<table>
+<thead>
 <tr>
-<td><strong>Array I/O implementations</strong><br>Defined in header <code>&lt;strstream&gt;</code></td>
-<td>数组 I/O 实现</td>
+<th><code>&lt;strstream&gt;</code></th>
+<th>数组 I/O 实现</th>
 </tr>
+</thead>
+<tbody>
 <tr>
 <td><a href="https://en.cppreference.com/w/cpp/io/strstreambuf" target="_blank" rel="noopener">strstreambuf</a>(deprecated in C++98)</td>
 <td>implements raw character array device (class)</td>
@@ -413,8 +449,8 @@
 </tbody>
 </table>
 </div>
-<h1 id="Typedefs"><a href="#Typedefs" class="headerlink" title="Typedefs"></a>Typedefs</h1><p>The following typedefs for common character types are provided:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">typedef basic_ios&lt;char&gt;                ios;</span><br><span class="line">typedef basic_ios&lt;wchar_t&gt;            wios;</span><br><span class="line"> </span><br><span class="line">typedef basic_streambuf&lt;char&gt;     streambuf;</span><br><span class="line">typedef basic_streambuf&lt;wchar_t&gt; wstreambuf;</span><br><span class="line">typedef basic_filebuf&lt;char&gt;         filebuf;</span><br><span class="line">typedef basic_filebuf&lt;wchar_t&gt;     wfilebuf;</span><br><span class="line">typedef basic_stringbuf&lt;char&gt;     stringbuf;</span><br><span class="line">typedef basic_stringbuf&lt;wchar_t&gt; wstringbuf;</span><br><span class="line">typedef basic_syncbuf&lt;char&gt;         syncbuf;</span><br><span class="line">typedef basic_syncbuf&lt;wchar_t&gt;     wsyncbuf;</span><br><span class="line"> </span><br><span class="line">typedef basic_istream&lt;char&gt;         istream;</span><br><span class="line">typedef basic_istream&lt;wchar_t&gt;     wistream;</span><br><span class="line">typedef basic_ostream&lt;char&gt;         ostream;</span><br><span class="line">typedef basic_ostream&lt;wchar_t&gt;     wostream;</span><br><span class="line">typedef basic_iostream&lt;char&gt;       iostream;</span><br><span class="line">typedef basic_iostream&lt;wchar_t&gt;   wiostream;</span><br><span class="line"> </span><br><span class="line">typedef basic_ifstream&lt;char&gt;       ifstream;</span><br><span class="line">typedef basic_ifstream&lt;wchar_t&gt;   wifstream;</span><br><span class="line">typedef basic_ofstream&lt;char&gt;       ofstream;</span><br><span class="line">typedef basic_ofstream&lt;wchar_t&gt;   wofstream;</span><br><span class="line">typedef basic_fstream&lt;char&gt;         fstream;</span><br><span class="line">typedef basic_fstream&lt;wchar_t&gt;     wfstream;</span><br><span class="line"> </span><br><span class="line">typedef basic_istringstream&lt;char&gt;     istringstream;</span><br><span class="line">typedef basic_istringstream&lt;wchar_t&gt; wistringstream;</span><br><span class="line">typedef basic_ostringstream&lt;char&gt;     ostringstream;</span><br><span class="line">typedef basic_ostringstream&lt;wchar_t&gt; wostringstream;</span><br><span class="line">typedef basic_stringstream&lt;char&gt;       stringstream;</span><br><span class="line">typedef basic_stringstream&lt;wchar_t&gt;   wstringstream;</span><br><span class="line"> </span><br><span class="line">typedef basic_osyncstream&lt;char&gt;     osyncstream;</span><br><span class="line">typedef basic_osyncstream&lt;wchar_t&gt; wosyncstream;</span><br></pre></td></tr></table></figure>
+<h1 id="Typedefs"><a href="#Typedefs" class="headerlink" title="Typedefs"></a>Typedefs</h1><p>常用字符类型的 typedefs。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">typedef</span> basic_ios&lt;<span class="keyword">char</span>&gt;                ios;</span><br><span class="line"><span class="keyword">typedef</span> basic_ios&lt;<span class="keyword">wchar_t</span>&gt;            wios;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> basic_streambuf&lt;<span class="keyword">char</span>&gt;     streambuf;</span><br><span class="line"><span class="keyword">typedef</span> basic_streambuf&lt;<span class="keyword">wchar_t</span>&gt; wstreambuf;</span><br><span class="line"><span class="keyword">typedef</span> basic_filebuf&lt;<span class="keyword">char</span>&gt;         filebuf;</span><br><span class="line"><span class="keyword">typedef</span> basic_filebuf&lt;<span class="keyword">wchar_t</span>&gt;     wfilebuf;</span><br><span class="line"><span class="keyword">typedef</span> basic_stringbuf&lt;<span class="keyword">char</span>&gt;     stringbuf;</span><br><span class="line"><span class="keyword">typedef</span> basic_stringbuf&lt;<span class="keyword">wchar_t</span>&gt; wstringbuf;</span><br><span class="line"><span class="keyword">typedef</span> basic_syncbuf&lt;<span class="keyword">char</span>&gt;         syncbuf;</span><br><span class="line"><span class="keyword">typedef</span> basic_syncbuf&lt;<span class="keyword">wchar_t</span>&gt;     wsyncbuf;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> basic_istream&lt;<span class="keyword">char</span>&gt;         istream;</span><br><span class="line"><span class="keyword">typedef</span> basic_istream&lt;<span class="keyword">wchar_t</span>&gt;     wistream;</span><br><span class="line"><span class="keyword">typedef</span> basic_ostream&lt;<span class="keyword">char</span>&gt;         ostream;</span><br><span class="line"><span class="keyword">typedef</span> basic_ostream&lt;<span class="keyword">wchar_t</span>&gt;     wostream;</span><br><span class="line"><span class="keyword">typedef</span> basic_iostream&lt;<span class="keyword">char</span>&gt;       iostream;</span><br><span class="line"><span class="keyword">typedef</span> basic_iostream&lt;<span class="keyword">wchar_t</span>&gt;   wiostream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> basic_ifstream&lt;<span class="keyword">char</span>&gt;       ifstream;</span><br><span class="line"><span class="keyword">typedef</span> basic_ifstream&lt;<span class="keyword">wchar_t</span>&gt;   wifstream;</span><br><span class="line"><span class="keyword">typedef</span> basic_ofstream&lt;<span class="keyword">char</span>&gt;       ofstream;</span><br><span class="line"><span class="keyword">typedef</span> basic_ofstream&lt;<span class="keyword">wchar_t</span>&gt;   wofstream;</span><br><span class="line"><span class="keyword">typedef</span> basic_fstream&lt;<span class="keyword">char</span>&gt;         fstream;</span><br><span class="line"><span class="keyword">typedef</span> basic_fstream&lt;<span class="keyword">wchar_t</span>&gt;     wfstream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> basic_istringstream&lt;<span class="keyword">char</span>&gt;     <span class="built_in">istringstream</span>;</span><br><span class="line"><span class="keyword">typedef</span> basic_istringstream&lt;<span class="keyword">wchar_t</span>&gt; wistringstream;</span><br><span class="line"><span class="keyword">typedef</span> basic_ostringstream&lt;<span class="keyword">char</span>&gt;     <span class="built_in">ostringstream</span>;</span><br><span class="line"><span class="keyword">typedef</span> basic_ostringstream&lt;<span class="keyword">wchar_t</span>&gt; wostringstream;</span><br><span class="line"><span class="keyword">typedef</span> basic_stringstream&lt;<span class="keyword">char</span>&gt;       <span class="built_in">stringstream</span>;</span><br><span class="line"><span class="keyword">typedef</span> basic_stringstream&lt;<span class="keyword">wchar_t</span>&gt;   wstringstream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> basic_osyncstream&lt;<span class="keyword">char</span>&gt;     osyncstream;</span><br><span class="line"><span class="keyword">typedef</span> basic_osyncstream&lt;<span class="keyword">wchar_t</span>&gt; wosyncstream;</span><br></pre></td></tr></table></figure>
 <h1 id="预定义的标准流对象"><a href="#预定义的标准流对象" class="headerlink" title="预定义的标准流对象"></a>预定义的标准流对象</h1><div class="table-container">
 <table>
 <thead>
@@ -425,19 +461,19 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="https://en.cppreference.com/w/cpp/io/cin" target="_blank" rel="noopener">cinwcin</a></td>
+<td><a href="https://en.cppreference.com/w/cpp/io/cin" target="_blank" rel="noopener">cin<br>wcin</a></td>
 <td>reads from the standard C input stream <a href="https://en.cppreference.com/w/cpp/io/c" target="_blank" rel="noopener">stdin</a> (global object)</td>
 </tr>
 <tr>
-<td><a href="https://en.cppreference.com/w/cpp/io/cout" target="_blank" rel="noopener">coutwcout</a></td>
+<td><a href="https://en.cppreference.com/w/cpp/io/cout" target="_blank" rel="noopener">cout<br>wcout</a></td>
 <td>writes to the standard C output stream <a href="https://en.cppreference.com/w/cpp/io/c" target="_blank" rel="noopener">stdout</a> (global object)</td>
 </tr>
 <tr>
-<td><a href="https://en.cppreference.com/w/cpp/io/cerr" target="_blank" rel="noopener">cerrwcerr</a></td>
+<td><a href="https://en.cppreference.com/w/cpp/io/cerr" target="_blank" rel="noopener">cerr<br>wcerr</a></td>
 <td>writes to the standard C error stream <a href="https://en.cppreference.com/w/cpp/io/c" target="_blank" rel="noopener">stderr</a>, unbuffered (global object)</td>
 </tr>
 <tr>
-<td><a href="https://en.cppreference.com/w/cpp/io/clog" target="_blank" rel="noopener">clogwclog</a></td>
+<td><a href="https://en.cppreference.com/w/cpp/io/clog" target="_blank" rel="noopener">clog<br>wclog</a></td>
 <td>writes to the standard C error stream <a href="https://en.cppreference.com/w/cpp/io/c" target="_blank" rel="noopener">stderr</a> (global object)</td>
 </tr>
 </tbody>
@@ -460,7 +496,7 @@
 </tr>
 <tr>
 <td><a href="https://en.cppreference.com/w/cpp/io/streamsize" target="_blank" rel="noopener">streamsize</a></td>
-<td>表示在一个I/O 操作中传输的字符数量或一个 I/O 缓冲区的大小。(typedef)</td>
+<td>表示在一个 I/O 操作中传输的字符数量或一个 I/O 缓冲区的大小。(typedef)</td>
 </tr>
 <tr>
 <td><a href="https://en.cppreference.com/w/cpp/io/fpos" target="_blank" rel="noopener">fpos</a></td>
@@ -519,7 +555,7 @@
 <p>输入流：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// &lt;istream&gt;</span></span><br><span class="line"><span class="keyword">typedef</span> basic_istream&lt;<span class="keyword">char</span>&gt; 		istream;</span><br></pre></td></tr></table></figure>
 <p>基本输入流：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// &lt;istream&gt;</span></span><br><span class="line"> <span class="keyword">template</span>&lt;<span class="keyword">typename</span> _CharT, <span class="keyword">typename</span> _Traits&gt;</span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">basic_istream</span> :</span> <span class="keyword">virtual</span> <span class="keyword">public</span> basic_ios&lt;_CharT, _Traits&gt;</span><br><span class="line">   &#123;</span><br><span class="line">     </span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// &lt;istream&gt;</span></span><br><span class="line"> <span class="keyword">template</span>&lt;<span class="keyword">typename</span> _CharT, <span class="keyword">typename</span> _Traits&gt;</span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">basic_istream</span> :</span> <span class="keyword">virtual</span> <span class="keyword">public</span> basic_ios&lt;_CharT, _Traits&gt;</span><br><span class="line">   &#123;</span><br><span class="line"></span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 <p><code>basic_istream</code> 是一个模板类，需要两个类型参数：</p>
 <ul>
 <li>_CharT 代表了字符的类型</li>
@@ -533,7 +569,7 @@
 </blockquote>
 <p>通常，他们会被实现为 <code>struct</code>。</p>
 <h2 id="std-basic-string"><a href="#std-basic-string" class="headerlink" title="std::basic_string"></a>std::basic_string</h2><p>比如我们的这个字符串的模板类。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">CharT</span>, </span></span><br><span class="line"><span class="class">    <span class="title">class</span> <span class="title">Traits</span> = <span class="title">std</span>:</span>:char_traits&lt;CharT&gt;, </span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Allocator</span> = <span class="title">std</span>:</span>:allocator&lt;CharT&gt;</span><br><span class="line">&gt; <span class="class"><span class="keyword">class</span> <span class="title">basic_string</span>;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">CharT</span>,</span></span><br><span class="line"><span class="class">    <span class="title">class</span> <span class="title">Traits</span> = <span class="title">std</span>:</span>:char_traits&lt;CharT&gt;,</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Allocator</span> = <span class="title">std</span>:</span>:allocator&lt;CharT&gt;</span><br><span class="line">&gt; <span class="class"><span class="keyword">class</span> <span class="title">basic_string</span>;</span></span><br></pre></td></tr></table></figure>
 <p>他就有一个类型参数，<code>std::char_traits</code> ，我们看看它的 GCC 实现：</p>
 <h2 id="std-char-traits"><a href="#std-char-traits" class="headerlink" title="std::char_traits"></a>std::char_traits</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="class"><span class="keyword">class</span> _<span class="title">CharT</span>&gt;</span></span><br><span class="line"><span class="class">  <span class="title">struct</span> <span class="title">char_traits</span> :</span> <span class="keyword">public</span> __gnu_cxx::char_traits&lt;_CharT&gt;</span><br><span class="line">  &#123; &#125;;</span><br></pre></td></tr></table></figure>
 <p>traits，特性，定义了一组操作和类型：</p>
@@ -574,53 +610,53 @@
 <thead>
 <tr>
 <th><a href="./char_traits/assign.html">assign</a>[static]</th>
-<th>assigns a character  (public static member function)</th>
+<th>assigns a character (public static member function)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><a href="./char_traits/cmp.html">eq<br>lt</a>[static]</td>
-<td>compares two characters  (public static member function)</td>
+<td>compares two characters (public static member function)</td>
 </tr>
 <tr>
 <td><a href="./char_traits/move.html">move</a>[static]</td>
-<td>moves one character sequence onto another  (public static member function)</td>
+<td>moves one character sequence onto another (public static member function)</td>
 </tr>
 <tr>
 <td><a href="./char_traits/copy.html">copy</a>[static]</td>
-<td>copies a character sequence  (public static member function)</td>
+<td>copies a character sequence (public static member function)</td>
 </tr>
 <tr>
 <td><a href="./char_traits/compare.html">compare</a>[static]</td>
-<td>lexicographically compares two character sequences  (public static member function)</td>
+<td>lexicographically compares two character sequences (public static member function)</td>
 </tr>
 <tr>
 <td><a href="./char_traits/length.html">length</a>[static]</td>
-<td>returns the length of a character sequence  (public static member function)</td>
+<td>returns the length of a character sequence (public static member function)</td>
 </tr>
 <tr>
 <td><a href="./char_traits/find.html">find</a>[static]</td>
-<td>finds a character in a character sequence  (public static member function)</td>
+<td>finds a character in a character sequence (public static member function)</td>
 </tr>
 <tr>
 <td><a href="./char_traits/to_char_type.html">to_char_type</a>[static]</td>
-<td>converts <code>int_type</code> to equivalent <code>char_type</code>  (public static member function)</td>
+<td>converts <code>int_type</code> to equivalent <code>char_type</code> (public static member function)</td>
 </tr>
 <tr>
 <td><a href="./char_traits/to_int_type.html">to_int_type</a>[static]</td>
-<td>converts <code>char_type</code> to equivalent <code>int_type</code>  (public static member function)</td>
+<td>converts <code>char_type</code> to equivalent <code>int_type</code> (public static member function)</td>
 </tr>
 <tr>
 <td><a href="./char_traits/eq_int_type.html">eq_int_type</a>[static]</td>
-<td>compares two <code>int_type</code> values  (public static member function)</td>
+<td>compares two <code>int_type</code> values (public static member function)</td>
 </tr>
 <tr>
 <td><a href="./char_traits/eof.html">eof</a>[static]</td>
-<td>returns an <em>eof</em> value  (public static member function)</td>
+<td>returns an <em>eof</em> value (public static member function)</td>
 </tr>
 <tr>
 <td><a href="./char_traits/not_eof.html">not_eof</a>[static]</td>
-<td>checks whether a character is <em>eof</em> value  (public static member function)</td>
+<td>checks whether a character is <em>eof</em> value (public static member function)</td>
 </tr>
 </tbody>
 </table>
@@ -702,6 +738,153 @@
 </div>
 <h2 id="终于"><a href="#终于" class="headerlink" title="终于"></a>终于</h2><p>我们可以把 traits 看成一些可对类型进行的操作，已经一些内部使用的类型，会被其他的对象或者算法用到的地方，实际上，通常我们使用的时候，可能并不需要关注这些内容。</p>
 <p>比如：<code>std::string</code>。</p>
+<h1 id="I-Omanipulators-操纵器"><a href="#I-Omanipulators-操纵器" class="headerlink" title="I/Omanipulators 操纵器"></a>I/Omanipulators 操纵器</h1><p>manipulators (操纵器) 是一些帮助函数，这些函数让使用 <code>&lt;&lt;, &gt;&gt;</code> 来控制输入/输出成为可能。</p>
+<p>调用的时候没有参数的 manipulators （如 <code>std::cout &lt;&lt; std::boolalpha</code>或者 <code>std::cin &gt;&gt; std::hex</code>） 被实现为使用到一个流的引用作为他们的唯一参数的函数。<code>basic_ostream::operator &lt;&lt;</code> 和 <code>basic_istream::opeartor&gt;&gt;</code> 的特殊重载接收指针。</p>
+<p>至于调用的时候有参数的 manipulators （<code>std::cout &lt;&lt; std::setw(10)</code>）被实现为返回不特定类型的对象的函数。这些 manipulators  定义了他们自己的 <code>&lt;&lt;, &gt;&gt;</code>。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Defined in header <code>&lt;ios&gt;</code></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="./manip/boolalpha.html">boolalpha<br>noboolalpha</a></td>
+<td>switches between textual and numeric representation of booleans  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/showbase.html">showbase<br>noshowbase</a></td>
+<td>controls whether prefix is used to indicate numeric base  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/showpoint.html">showpoint<br>noshowpoint</a></td>
+<td>controls whether decimal point is always included in floating-point representation  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/showpos.html">showpos<br>noshowpos</a></td>
+<td>controls whether the <code>+</code> sign used with non-negative numbers  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/skipws.html">skipws<br>noskipws</a></td>
+<td>controls whether leading whitespace is skipped on input  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/uppercase.html">uppercase<br>nouppercase</a></td>
+<td>controls whether uppercase characters are used with some output formats  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/unitbuf.html">unitbuf<br>nounitbuf</a></td>
+<td>controls whether output is flushed after each operation  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/left.html">internal<br>left<br>right</a></td>
+<td>sets the placement of fill characters  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/hex.html">dec<br>hex<br>oct</a></td>
+<td>changes the base used for integer I/O  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/fixed.html">fixed<br>scientific<br>hexfloat<br>defaultfloat</a>(C++11)(C++11)</td>
+<td>changes formatting used for floating-point I/O  (function)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Defined in header <code>&lt;istream&gt;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="./manip/ws.html">ws</a></td>
+<td>consumes whitespace  (function template)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Defined in header <code>&lt;ostream&gt;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="./manip/ends.html">ends</a></td>
+<td>outputs ‘<strong>\0</strong>‘  (function template)</td>
+</tr>
+<tr>
+<td><a href="./manip/flush.html">flush</a></td>
+<td>flushes the output stream  (function template)</td>
+</tr>
+<tr>
+<td><a href="./manip/endl.html">endl</a></td>
+<td>outputs ‘<strong>\n</strong>‘ and flushes the output stream  (function template)</td>
+</tr>
+<tr>
+<td><a href="./manip/emit_on_flush.html">emit_on_flush<br>no_emit_on_flush</a>(C++20)</td>
+<td>controls whether a stream’s <a href="./basic_syncbuf.html"><code>basic_syncbuf</code></a> emits on flush  (function template)</td>
+</tr>
+<tr>
+<td><a href="./manip/flush_emit.html">flush_emit</a>(C++20)</td>
+<td>flushes a stream and emits the content if it is using a <a href="./basic_syncbuf.html"><code>basic_syncbuf</code></a>  (function template)</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Defined in header <code>&lt;iomanip&gt;</code></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="./manip/resetiosflags.html">resetiosflags</a></td>
+<td>clears the specified ios_base flags  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/setiosflags.html">setiosflags</a></td>
+<td>sets the specified ios_base flags  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/setbase.html">setbase</a></td>
+<td>changes the base used for integer I/O  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/setfill.html">setfill</a></td>
+<td>changes the fill character  (function template)</td>
+</tr>
+<tr>
+<td><a href="./manip/setprecision.html">setprecision</a></td>
+<td>changes floating-point precision  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/setw.html">setw</a></td>
+<td>changes the width of the next input/output field  (function)</td>
+</tr>
+<tr>
+<td><a href="./manip/get_money.html">get_money</a>(C++11)</td>
+<td>parses a monetary value  (function template)</td>
+</tr>
+<tr>
+<td><a href="./manip/put_money.html">put_money</a>(C++11)</td>
+<td>formats and outputs a monetary value  (function template)</td>
+</tr>
+<tr>
+<td><a href="./manip/get_time.html">get_time</a>(C++11)</td>
+<td>parses a date/time value of specified format  (function template)</td>
+</tr>
+<tr>
+<td><a href="./manip/put_time.html">put_time</a>(C++11)</td>
+<td>formats and outputs a date/time value according to the specified format  (function template)</td>
+</tr>
+<tr>
+<td><a href="./manip/quoted.html">quoted</a>(C++14)</td>
+<td>inserts and extracts quoted strings with embedded spaces  (function template)</td>
+</tr>
+</tbody>
+</table>
+</div>
 
     </div>
 
@@ -775,7 +958,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#各类的作用"><span class="nav-number">1.</span> <span class="nav-text">各类的作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Typedefs"><span class="nav-number">2.</span> <span class="nav-text">Typedefs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#预定义的标准流对象"><span class="nav-number">3.</span> <span class="nav-text">预定义的标准流对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#I-O-操作"><span class="nav-number">4.</span> <span class="nav-text">I/O 操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Types"><span class="nav-number">5.</span> <span class="nav-text">Types</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Error-category-interface"><span class="nav-number">5.0.0.1.</span> <span class="nav-text">Error category interface</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#std-cin"><span class="nav-number">6.</span> <span class="nav-text">std::cin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Traits"><span class="nav-number">7.</span> <span class="nav-text">Traits</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#std-basic-string"><span class="nav-number">7.1.</span> <span class="nav-text">std::basic_string</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#std-char-traits"><span class="nav-number">7.2.</span> <span class="nav-text">std::char_traits</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Member-types"><span class="nav-number">7.2.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Member-functions"><span class="nav-number">7.2.2.</span> <span class="nav-text">Member functions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准的-traits："><span class="nav-number">7.3.</span> <span class="nav-text">标准的 traits：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Template-parameters"><span class="nav-number">7.3.1.</span> <span class="nav-text">Template parameters</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#终于"><span class="nav-number">7.4.</span> <span class="nav-text">终于</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#抽象"><span class="nav-number">1.</span> <span class="nav-text">抽象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件IO实现"><span class="nav-number">2.</span> <span class="nav-text">文件IO实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串IO实现"><span class="nav-number">3.</span> <span class="nav-text">字符串IO实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#数组IO实现"><span class="nav-number">4.</span> <span class="nav-text">数组IO实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Typedefs"><span class="nav-number">5.</span> <span class="nav-text">Typedefs</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#预定义的标准流对象"><span class="nav-number">6.</span> <span class="nav-text">预定义的标准流对象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#I-O-操作"><span class="nav-number">7.</span> <span class="nav-text">I/O 操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Types"><span class="nav-number">8.</span> <span class="nav-text">Types</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Error-category-interface"><span class="nav-number">8.0.0.1.</span> <span class="nav-text">Error category interface</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#std-cin"><span class="nav-number">9.</span> <span class="nav-text">std::cin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Traits"><span class="nav-number">10.</span> <span class="nav-text">Traits</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#std-basic-string"><span class="nav-number">10.1.</span> <span class="nav-text">std::basic_string</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#std-char-traits"><span class="nav-number">10.2.</span> <span class="nav-text">std::char_traits</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Member-types"><span class="nav-number">10.2.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Member-functions"><span class="nav-number">10.2.2.</span> <span class="nav-text">Member functions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#标准的-traits："><span class="nav-number">10.3.</span> <span class="nav-text">标准的 traits：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Template-parameters"><span class="nav-number">10.3.1.</span> <span class="nav-text">Template parameters</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#终于"><span class="nav-number">10.4.</span> <span class="nav-text">终于</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#I-Omanipulators-操纵器"><span class="nav-number">11.</span> <span class="nav-text">I/Omanipulators 操纵器</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

@@ -313,10 +313,10 @@
 <p>它在初始化的完后，就启动了 <code>gate</code> 服务</p>
 <h2 id="启动-watchdog"><a href="#启动-watchdog" class="headerlink" title="启动 watchdog"></a>启动 watchdog</h2><p><em>main.lua</em>中：</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- examples/main.lua</span></span><br><span class="line">		<span class="keyword">local</span> watchdog = skynet.newservice(<span class="string">"watchdog"</span>)</span><br><span class="line">        skynet.call(watchdog, <span class="string">"lua"</span>, <span class="string">"start"</span>, &#123;</span><br><span class="line">                port = <span class="number">8888</span>,</span><br><span class="line">                maxclient = max_client,</span><br><span class="line">                nodelay = <span class="literal">true</span>,</span><br><span class="line">        &#125;)</span><br></pre></td></tr></table></figure>
-<p>这里先，启动了 <em>watchdog</em> 服务，然后随即对 <em>watchdog</em> 发送了一个 <code>lua</code> 类型的的消息，消息包含指令为 <code>start</code>。</p>
+<p>这里先，启动了 <em>watchdog</em> 服务，然后随即对 <em>watchdog</em> 发送了一个 <code>lua</code>  类型的的消息，消息包含指令为 <code>start</code>。</p>
 <p>在初始化后，收到 <code>start</code> 指令，那么就会让 <em>gate</em> 服务，来启动网络服务。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">CMD.start</span><span class="params">(conf)</span></span></span><br><span class="line">	skynet.call(gate, <span class="string">"lua"</span>, <span class="string">"open"</span> , conf)</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-<h1 id="gate"><a href="#gate" class="headerlink" title="gate"></a>gate</h1><p> watchdog 初始化后，即启动了 <code>gate</code> 服务；在收到 <code>main</code> 中的 <code>start</code> 指令后，它也会向 <code>gate</code> 发送一个 <code>lua</code> 消息，指令 <code>open</code>。</p>
+<h1 id="gate"><a href="#gate" class="headerlink" title="gate"></a>gate</h1><p>watchdog 初始化后，即启动了 <code>gate</code>  服务；在收到 <code>main</code>  中的 <code>start</code>  指令后，它也会向 <code>gate</code>  发送一个 <code>lua</code>  消息，指令 <code>open</code>。</p>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- service/gate.lua</span></span><br><span class="line"><span class="keyword">local</span> gateserver = <span class="built_in">require</span> <span class="string">"snax.gateserver"</span></span><br><span class="line">gateserver.start(handler)</span><br></pre></td></tr></table></figure>
 <p>其本质，是把 <em>snax.gateserver.lua</em>加载到了 <em>gate</em>服务的虚拟机内，然后执行。</p>
 <p>那么，背后的意义就是，<em>wathchdog</em>服务启动了一个<em>gate</em>服务，而且两者之间建立了联系。</p>
@@ -326,7 +326,7 @@
 <p><em>gate</em> 大概代码如下：</p>
 <ol>
 <li>在加载阶段即注册了 <code>socket</code> 消息的处理逻辑。</li>
-<li>在初始化阶段，注册了 <code>lua</code> 类消息的处理逻辑。</li>
+<li>在初始化阶段，注册了 <code>lua</code>  类消息的处理逻辑。</li>
 </ol>
 <figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- lualib/snax/gateserver.lua</span></span><br><span class="line">	skynet.register_protocol &#123;</span><br><span class="line">		name = <span class="string">"socket"</span>,</span><br><span class="line">		id = skynet.PTYPE_SOCKET,	<span class="comment">-- PTYPE_SOCKET = 6</span></span><br><span class="line">		<span class="built_in">unpack</span> = <span class="function"><span class="keyword">function</span> <span class="params">( msg, sz )</span></span></span><br><span class="line">			<span class="keyword">return</span> netpack.filter( queue, msg, sz)</span><br><span class="line">		<span class="keyword">end</span>,</span><br><span class="line">		dispatch = <span class="function"><span class="keyword">function</span> <span class="params">(_, _, q, type, ...)</span></span></span><br><span class="line">			queue = q</span><br><span class="line">			<span class="keyword">if</span> <span class="built_in">type</span> <span class="keyword">then</span></span><br><span class="line">				MSG[<span class="built_in">type</span>](...)</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	skynet.start(<span class="function"><span class="keyword">function</span><span class="params">()</span></span></span><br><span class="line">		skynet.dispatch(<span class="string">"lua"</span>, <span class="function"><span class="keyword">function</span> <span class="params">(_, address, cmd, ...)</span></span></span><br><span class="line">			<span class="keyword">local</span> f = CMD[cmd]</span><br><span class="line">			<span class="keyword">if</span> f <span class="keyword">then</span></span><br><span class="line">				skynet.ret(skynet.pack(f(address, ...)))</span><br><span class="line">			<span class="keyword">else</span></span><br><span class="line">				skynet.ret(skynet.pack(handler.command(cmd, address, ...)))</span><br><span class="line">			<span class="keyword">end</span></span><br><span class="line">		<span class="keyword">end</span>)</span><br><span class="line">	<span class="keyword">end</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="handler"><a href="#handler" class="headerlink" title="handler"></a>handler</h2><p>我们知道，对于 <em>gateserver</em>，实际上是一个为了方便我们使用的封装，我们只需要对特定的消息定义相关的 <em>handler</em>，就能使用网络服务了。<br>具体参考<a href="https://github.com/cloudwu/skynet/wiki/GateServer" target="_blank" rel="noopener">https://github.com/cloudwu/skynet/wiki/GateServer</a></p>
@@ -372,8 +372,9 @@ digraph {
         Client
 
         Client -> GateServer[label=Net]
-        GateServer -> Gate[label=handler]
+        GateServer -> Gate[label=handler,style=dashed]
         Gate  -> WatchDog
+        Gate -> Agent
 
 }
 </div>
@@ -390,6 +391,7 @@ digraph {
 }
 </div>
 <p>之后，如果是有消息到达，都会由 Gate 重定向到 Agent 去。</p>
+<h1 id="需要注意的问题"><a href="#需要注意的问题" class="headerlink" title="需要注意的问题"></a>需要注意的问题</h1><p>在 <a href="https://github.com/cloudwu/skynet/wiki/GateServer" target="_blank" rel="noopener">官方文档中</a> 有说明，所有发送过来的数据，都应该是用大端字节序来序列化后的数据。2 字节的大小，加上内容。如果我们自己写一个客户端的话，那么就需要按这样的格式进行操作，否则不合法的包会被丢弃的。</p>
 <script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
                 // graphviz init
                 let graphviz_engines = ["circo",
@@ -499,7 +501,7 @@ digraph {
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#服务的三个阶段"><span class="nav-number">1.</span> <span class="nav-text">服务的三个阶段</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#watchdog-初始化逻辑"><span class="nav-number">2.</span> <span class="nav-text">watchdog 初始化逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动-watchdog"><span class="nav-number">2.1.</span> <span class="nav-text">启动 watchdog</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gate"><span class="nav-number">3.</span> <span class="nav-text">gate</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#handler"><span class="nav-number">3.1.</span> <span class="nav-text">handler</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息处理流程"><span class="nav-number">4.</span> <span class="nav-text">消息处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#处理方法"><span class="nav-number">4.1.</span> <span class="nav-text">处理方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#agent"><span class="nav-number">5.</span> <span class="nav-text">agent</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构图"><span class="nav-number">6.</span> <span class="nav-text">架构图</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#服务的三个阶段"><span class="nav-number">1.</span> <span class="nav-text">服务的三个阶段</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#watchdog-初始化逻辑"><span class="nav-number">2.</span> <span class="nav-text">watchdog 初始化逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#启动-watchdog"><span class="nav-number">2.1.</span> <span class="nav-text">启动 watchdog</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gate"><span class="nav-number">3.</span> <span class="nav-text">gate</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#handler"><span class="nav-number">3.1.</span> <span class="nav-text">handler</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消息处理流程"><span class="nav-number">4.</span> <span class="nav-text">消息处理流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#处理方法"><span class="nav-number">4.1.</span> <span class="nav-text">处理方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#agent"><span class="nav-number">5.</span> <span class="nav-text">agent</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构图"><span class="nav-number">6.</span> <span class="nav-text">架构图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#需要注意的问题"><span class="nav-number">7.</span> <span class="nav-text">需要注意的问题</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
