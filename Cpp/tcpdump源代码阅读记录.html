@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="LibPcap 和 Tcpdump  是一个很好用的抓包工具，不过，做得是比较复杂。当我们需要在一些特性场景的项目上进行使用的话，直接使用  LibPcap 又未免太过低级了些，而直接使用  TcpDump 的话又太重了一些。因此，当我只需在 以太网上捕捉 IP 报文进行分析的话，就有必要对 Tcpdump 进行一些裁剪，而在此之前，了解一下 TcpDump 的实现，就非常的有必要到了。">
+<meta name="keywords" content="Cpp,Tcpdump">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tcpdump源代码阅读记录">
+<meta property="og:url" content="https://gowa.club/Cpp/tcpdump源代码阅读记录.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="LibPcap 和 Tcpdump  是一个很好用的抓包工具，不过，做得是比较复杂。当我们需要在一些特性场景的项目上进行使用的话，直接使用  LibPcap 又未免太过低级了些，而直接使用  TcpDump 的话又太重了一些。因此，当我只需在 以太网上捕捉 IP 报文进行分析的话，就有必要对 Tcpdump 进行一些裁剪，而在此之前，了解一下 TcpDump 的实现，就非常的有必要到了。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-02-11T17:01:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tcpdump源代码阅读记录">
+<meta name="twitter:description" content="LibPcap 和 Tcpdump  是一个很好用的抓包工具，不过，做得是比较复杂。当我们需要在一些特性场景的项目上进行使用的话，直接使用  LibPcap 又未免太过低级了些，而直接使用  TcpDump 的话又太重了一些。因此，当我只需在 以太网上捕捉 IP 报文进行分析的话，就有必要对 Tcpdump 进行一些裁剪，而在此之前，了解一下 TcpDump 的实现，就非常的有必要到了。">
+
+<link rel="canonical" href="https://gowa.club/Cpp/tcpdump源代码阅读记录.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>tcpdump源代码阅读记录 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Cpp/tcpdump源代码阅读记录.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          tcpdump源代码阅读记录
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-02-12 01:01:54" itemprop="dateCreated datePublished" datetime="2021-02-12T01:01:54+08:00">2021-02-12</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Cpp/" itemprop="url" rel="index">
+                    <span itemprop="name">Cpp</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Cpp/tcpdump源代码阅读记录.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Cpp/tcpdump源代码阅读记录.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><a href="http://www.tcpdump.org" target="_blank" rel="noopener">LibPcap 和 Tcpdump </a> 是一个很好用的抓包工具，不过，做得是比较复杂。当我们需要在一些特性场景的项目上进行使用的话，直接使用  LibPcap 又未免太过低级了些，而直接使用  TcpDump 的话又太重了一些。因此，当我只需在 以太网上捕捉 IP 报文进行分析的话，就有必要对 Tcpdump 进行一些裁剪，而在此之前，了解一下 TcpDump 的实现，就非常的有必要到了。</p>
+<a id="more"></a>
+<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><p>Tcpdump 是使用  libpacap 来进行捕获报文的，具体如何，且不必谈，但不外乎是用到了下面几个API：</p>
+<ul>
+<li><code>pcap_lookupdev</code>,<code>pcap_findalldevs</code> 来查找设备，当然，前一个已经被标记为弃用了。</li>
+<li><code>pcap_open_live</code> 打开一个设备</li>
+<li><code>pcap_loop</code> 开始进行循环捕捉，然后在回调中进行处理了。</li>
+</ul>
+<h1 id="Tcpdump"><a href="#Tcpdump" class="headerlink" title="Tcpdump"></a>Tcpdump</h1><p>Tcpdump 就是这样做的，不过他提供了很多的选项来让我们设置以进行不同的捕捉和分析选项。具体而言，对于捕获到的报文是如何处理，如何打印，存储到文件等，都提供了选项，我们只关注一些比较核心的问题。</p>
+<ul>
+<li>当我们提供了 <code>-w</code> 选项，将捕捉的报文存储到文件时，指定了 <code>-c count</code> 或 <code>-G seconds</code> 时，会使用 <code>dump_packet_and_trunc</code> 回调；否则使用 <code>dump_packet</code> 回调。</li>
+<li>未指定 <code>-w</code> 则会使用 <code>print_packet</code> 回调。</li>
+</ul>
+<p>Tcpdump 有一个 <code>netdissect_options</code> 结构，用来指定我们需要进行分析的报文标志，其中还保留了一些函数指针。当确定回调的时候，就会根据我们打开的设备类型来查找对应的 <code>if_printer</code>，可以叫它接口打印器：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// tcpdump.c</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (WFileName) &#123;</span><br><span class="line">		<span class="comment">/* Do not exceed the default PATH_MAX for files. */</span></span><br><span class="line">		dumpinfo.CurrentFileName = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(PATH_MAX + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (dumpinfo.CurrentFileName == <span class="literal">NULL</span>)</span><br><span class="line">			error(<span class="string">"malloc of dumpinfo.CurrentFileName"</span>);</span><br><span class="line"></span><br><span class="line">		<span class="comment">/* We do not need numbering for dumpfiles if Cflag isn't set. */</span></span><br><span class="line">		<span class="keyword">if</span> (Cflag != <span class="number">0</span>)</span><br><span class="line">		  MakeFilename(dumpinfo.CurrentFileName, WFileName, <span class="number">0</span>, WflagChars);</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">		  MakeFilename(dumpinfo.CurrentFileName, WFileName, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">		pdd = pcap_dump_open(pd, dumpinfo.CurrentFileName);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> HAVE_LIBCAP_NG</span></span><br><span class="line">		<span class="comment">/* Give up CAP_DAC_OVERRIDE capability.</span></span><br><span class="line"><span class="comment">		 * Only allow it to be restored if the -C or -G flag have been</span></span><br><span class="line"><span class="comment">		 * set since we may need to create more files later on.</span></span><br><span class="line"><span class="comment">		 */</span></span><br><span class="line">		capng_update(</span><br><span class="line">			CAPNG_DROP,</span><br><span class="line">			(Cflag || Gflag ? <span class="number">0</span> : CAPNG_PERMITTED)</span><br><span class="line">				| CAPNG_EFFECTIVE,</span><br><span class="line">			CAP_DAC_OVERRIDE</span><br><span class="line">			);</span><br><span class="line">		capng_apply(CAPNG_SELECT_BOTH);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* HAVE_LIBCAP_NG */</span></span></span><br><span class="line">		<span class="keyword">if</span> (pdd == <span class="literal">NULL</span>)</span><br><span class="line">			error(<span class="string">"%s"</span>, pcap_geterr(pd));</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> HAVE_CAPSICUM</span></span><br><span class="line">		set_dumper_capsicum_rights(pdd);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">		<span class="keyword">if</span> (Cflag != <span class="number">0</span> || Gflag != <span class="number">0</span>) &#123;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> HAVE_CAPSICUM</span></span><br><span class="line">			dumpinfo.WFileName = strdup(basename(WFileName));</span><br><span class="line">			<span class="keyword">if</span> (dumpinfo.WFileName == <span class="literal">NULL</span>) &#123;</span><br><span class="line">				error(<span class="string">"Unable to allocate memory for file %s"</span>,</span><br><span class="line">				    WFileName);</span><br><span class="line">			&#125;</span><br><span class="line">			dumpinfo.dirfd = <span class="built_in">open</span>(dirname(WFileName),</span><br><span class="line">			    O_DIRECTORY | O_RDONLY);</span><br><span class="line">			<span class="keyword">if</span> (dumpinfo.dirfd &lt; <span class="number">0</span>) &#123;</span><br><span class="line">				error(<span class="string">"unable to open directory %s"</span>,</span><br><span class="line">				    dirname(WFileName));</span><br><span class="line">			&#125;</span><br><span class="line">			cap_rights_init(&amp;rights, CAP_CREATE, CAP_FCNTL,</span><br><span class="line">			    CAP_FTRUNCATE, CAP_LOOKUP, CAP_SEEK, CAP_WRITE);</span><br><span class="line">			<span class="keyword">if</span> (cap_rights_limit(dumpinfo.dirfd, &amp;rights) &lt; <span class="number">0</span> &amp;&amp;</span><br><span class="line">			    errno != ENOSYS) &#123;</span><br><span class="line">				error(<span class="string">"unable to limit directory rights"</span>);</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (cap_fcntls_limit(dumpinfo.dirfd, CAP_FCNTL_GETFL) &lt; <span class="number">0</span> &amp;&amp;</span><br><span class="line">			    errno != ENOSYS) &#123;</span><br><span class="line">				error(<span class="string">"unable to limit dump descriptor fcntls"</span>);</span><br><span class="line">			&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span>	<span class="comment">/* !HAVE_CAPSICUM */</span></span></span><br><span class="line">			dumpinfo.WFileName = WFileName;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">			callback = dump_packet_and_trunc;</span><br><span class="line">			dumpinfo.pd = pd;</span><br><span class="line">			dumpinfo.pdd = pdd;</span><br><span class="line">			pcap_userdata = (u_char *)&amp;dumpinfo;</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			callback = dump_packet;</span><br><span class="line">			dumpinfo.WFileName = WFileName;</span><br><span class="line">			dumpinfo.pd = pd;</span><br><span class="line">			dumpinfo.pdd = pdd;</span><br><span class="line">			pcap_userdata = (u_char *)&amp;dumpinfo;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> (<span class="built_in">print</span>) &#123;</span><br><span class="line">			dlt = pcap_datalink(pd);</span><br><span class="line">			ndo-&gt;ndo_if_printer = get_if_printer(dlt);</span><br><span class="line">			dumpinfo.ndo = ndo;</span><br><span class="line">		&#125; <span class="keyword">else</span></span><br><span class="line">			dumpinfo.ndo = <span class="literal">NULL</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> HAVE_PCAP_DUMP_FLUSH</span></span><br><span class="line">		<span class="keyword">if</span> (Uflag)</span><br><span class="line">			pcap_dump_flush(pdd);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		dlt = pcap_datalink(pd);</span><br><span class="line">		ndo-&gt;ndo_if_printer = get_if_printer(dlt);</span><br><span class="line">		callback = print_packet;</span><br><span class="line">		pcap_userdata = (u_char *)ndo;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以用 <code>pcap_datalink</code> 来获取到链路层的类型，然后用 <code>pcap_datalink_val_to_name</code> 来获取链路层的名称化显示，如以太网的话会显示<code>EN10MB</code>。</p>
+<p>在 <code>print.c</code> 文件中，定义了所有的链路层类型的打印函数 <code>printers</code>，如我们的的 <code>DLT_EN10MB</code> 就定义为：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">&#123; ether_if_print,	DLT_EN10MB &#125;,</span><br></pre></td></tr></table></figure>
+<p>我们在回调的 <code>print_packet</code> 中就会调用这个函数来进行打印信息。</p>
+<h1 id="ehter-if-print"><a href="#ehter-if-print" class="headerlink" title="ehter_if_print"></a>ehter_if_print</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">// print-ehtner.c</span><br><span class="line">void</span><br><span class="line">ether_if_print(netdissect_options *ndo, const struct pcap_pkthdr *h,</span><br><span class="line">	       const u_char *p)</span><br><span class="line">&#123;</span><br><span class="line">	ndo-&gt;ndo_protocol = &quot;ether&quot;;</span><br><span class="line">	ndo-&gt;ndo_ll_hdr_len +=</span><br><span class="line">		ether_print(ndo, p, h-&gt;len, h-&gt;caplen, NULL, NULL);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">u_int</span><br><span class="line">ether_print(netdissect_options *ndo,</span><br><span class="line">	    const u_char *p, u_int length, u_int caplen,</span><br><span class="line">	    void (*print_encap_header)(netdissect_options *ndo, const u_char *),</span><br><span class="line">	    const u_char *encap_header_arg)</span><br><span class="line">&#123;</span><br><span class="line">	ndo-&gt;ndo_protocol = &quot;ether&quot;;</span><br><span class="line">	return ether_common_print(ndo, p, length, caplen, NULL, 0,</span><br><span class="line">				  print_encap_header, encap_header_arg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>ehter_common_print</code> 函数的定义在 <a href="https://github.com/the-tcpdump-group/tcpdump/blob/master/print-ether.c#L138" target="_blank" rel="noopener">这里</a>，太长，我就不贴了。</p>
+<p>具体而言其工作过程如下：</p>
+<ol>
+<li><p><code>ether_addresses_print</code> 来打印出链路层地址（src/dst）</p>
+</li>
+<li><p><code>ether_type_print</code> 来打印出链路层承载的协议信息。如我们的 IP 报文，就会调用到 <code>print-ip.c</code> 中的 <code>ip_print</code>。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span></span><br><span class="line">ethertype_print(netdissect_options *ndo,</span><br><span class="line">		u_short ether_type, <span class="keyword">const</span> u_char *p,</span><br><span class="line">		u_int length, u_int caplen,</span><br><span class="line">		<span class="keyword">const</span> struct lladdr_info *src, <span class="keyword">const</span> struct lladdr_info *dst)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">switch</span> (ether_type) &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">case</span> ETHERTYPE_IP:</span><br><span class="line">		ip_print(ndo, p, length);</span><br><span class="line">		<span class="keyword">return</span> (<span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>在 <code>ip_print</code> 中，就会分析 IP 层承载的协议信息了</p>
+<h1 id="ip-print"><a href="#ip-print" class="headerlink" title="ip_print"></a>ip_print</h1><p>在这里面打印了 IP 层相关的信息后，就会打印其上承载的协议信息，这就调用到了 <code>ip_demux_print</code> 函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> ((off &amp; IP_OFFMASK) == <span class="number">0</span>) &#123;</span><br><span class="line">	<span class="keyword">uint8_t</span> nh = GET_U_1(ip-&gt;ip_p);</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (nh != IPPROTO_TCP &amp;&amp; nh != IPPROTO_UDP &amp;&amp;</span><br><span class="line">	    nh != IPPROTO_SCTP &amp;&amp; nh != IPPROTO_DCCP) &#123;</span><br><span class="line">		ND_PRINT(<span class="string">"%s &gt; %s: "</span>,</span><br><span class="line">			     GET_IPADDR_STRING(ip-&gt;ip_src),</span><br><span class="line">			     GET_IPADDR_STRING(ip-&gt;ip_dst));</span><br><span class="line">	&#125;</span><br><span class="line">	ip_demux_print(ndo, (<span class="keyword">const</span> u_char *)ip + hlen, len, <span class="number">4</span>,</span><br><span class="line">	    off &amp; IP_MF, GET_U_1(ip-&gt;ip_ttl), nh, bp);</span><br></pre></td></tr></table></figure>
+<h1 id="ip-demux-print"><a href="#ip-demux-print" class="headerlink" title="ip_demux_print"></a>ip_demux_print</h1><p><a href="https://github.com/the-tcpdump-group/tcpdump/blob/master/print-ip-demux.c#L38" target="_blank" rel="noopener">这是一个 IPv4/IPv6 的载荷打印器</a>。</p>
+<p>代码不贴了。很容易理解。</p>
+<p>根据承载协议类型进行打印。如果是TCP 则调用 <code>tcp_print</code> ，UDP 则调用 <code>udp_print</code> 等等。</p>
+<p>需要注意的是，在 <code>tcp_print</code>内，无法判断更多的协议类型了，而是使用对应的端口来判断调用什么打印器：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (IS_SRC_OR_DST_PORT(TELNET_PORT)) &#123;</span><br><span class="line">        telnet_print(ndo, bp, length);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (IS_SRC_OR_DST_PORT(SMTP_PORT)) &#123;</span><br><span class="line">        ND_PRINT(<span class="string">": "</span>);</span><br><span class="line">        smtp_print(ndo, bp, length);</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (IS_SRC_OR_DST_PORT(WHOIS_PORT)) &#123;</span><br><span class="line">        ND_PRINT(<span class="string">": "</span>);</span><br><span class="line">        ndo-&gt;ndo_protocol = <span class="string">"whois"</span>;	<span class="comment">/* needed by txtproto_print() */</span></span><br><span class="line">        txtproto_print(ndo, bp, length, <span class="literal">NULL</span>, <span class="number">0</span>); <span class="comment">/* RFC 3912 */</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (IS_SRC_OR_DST_PORT(BGP_PORT))</span><br><span class="line">        bgp_print(ndo, bp, length);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (IS_SRC_OR_DST_PORT(PPTP_PORT))</span><br><span class="line">        pptp_print(ndo, bp);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (IS_SRC_OR_DST_PORT(REDIS_PORT))</span><br><span class="line">        resp_print(ndo, bp, length);</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (IS_SRC_OR_DST_PORT(SSH_PORT))</span><br><span class="line">        ssh_print(ndo, bp, length);</span><br></pre></td></tr></table></figure>
+<p>OK，基本上就可以到此为止了。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Cpp/" rel="tag"># Cpp</a>
+              <a href="/tags/Tcpdump/" rel="tag"># Tcpdump</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Linux-Unix/POSIX头文件描述.html" rel="next" title="POSIX头文件描述">
+                  <i class="fa fa-chevron-left"></i> POSIX头文件描述
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基础"><span class="nav-number">1.</span> <span class="nav-text">基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tcpdump"><span class="nav-number">2.</span> <span class="nav-text">Tcpdump</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ehter-if-print"><span class="nav-number">3.</span> <span class="nav-text">ehter_if_print</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ip-print"><span class="nav-number">4.</span> <span class="nav-text">ip_print</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ip-demux-print"><span class="nav-number">5.</span> <span class="nav-text">ip_demux_print</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">379</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">161</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Cpp/tcpdump源代码阅读记录.html",
+            identifier: "Cpp/tcpdump源代码阅读记录.html",
+            title: "tcpdump源代码阅读记录"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>

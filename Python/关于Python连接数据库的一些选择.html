@@ -48,7 +48,7 @@
 </script>
 
   <meta name="description" content="由于工作中经常需要到查询 MySQL 的操作，有的时候，把固定的操作做成命令行的话就会方便多了。不过，我们涉及的数据库多为 Oracle 和 MySQL。因此只需要在这两种之中进行选择就行了。 Oracle这个没有什么好讲的，采用 cx_oracle 就行了，官方出品，就是精品了。但是需要注意的是，对于高版本版本，库已经不带 native 的代码了，需要你自己去安装 oracle instant">
-<meta name="keywords" content="Python,数据库">
+<meta name="keywords" content="Python,数据库,Sqlalchemy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="关于Python连接数据库的一些选择">
 <meta property="og:url" content="https://gowa.club/Python/关于Python连接数据库的一些选择.html">
@@ -295,7 +295,7 @@
         <p>由于工作中经常需要到查询 MySQL 的操作，有的时候，把固定的操作做成命令行的话就会方便多了。不过，我们涉及的数据库多为 Oracle 和 MySQL。因此只需要在这两种之中进行选择就行了。</p>
 <h1 id="Oracle"><a href="#Oracle" class="headerlink" title="Oracle"></a>Oracle</h1><p>这个没有什么好讲的，采用 <a href="https://github.com/oracle/python-cx_Oracle" target="_blank" rel="noopener">cx_oracle</a> 就行了，官方出品，就是精品了。但是需要注意的是，对于高版本版本，库已经不带 native 的代码了，需要你自己去安装 oracle instant client。</p>
 <blockquote>
-<p>cx_Oracle 7.3 是最后一个支持 python 2  版本。<br>11.2 的 Client 才能连接 11 以后的数据库哦。比如我们用的 9i 。</p>
+<p>cx_Oracle 7.3 是最后一个支持 python 2  版本。<br>11.2 的 Client 才能连接 11 以后的数据库哦。比如我们用的 9i 。<br>因此，instantclient 选择 11.2 好了</p>
 </blockquote>
 <a id="more"></a>
 <p>安装就没有什么好说的：</p>
@@ -371,6 +371,7 @@ Users -> Program -> Python -> cx_Oracle -> "Oracle Client Librarys" -> "Oracle D
           <div class="post-tags">
               <a href="/tags/Python/" rel="tag"># Python</a>
               <a href="/tags/数据库/" rel="tag"># 数据库</a>
+              <a href="/tags/Sqlalchemy/" rel="tag"># Sqlalchemy</a>
           </div>
 
         
@@ -447,7 +448,7 @@ Users -> Program -> Python -> cx_Oracle -> "Oracle Client Librarys" -> "Oracle D
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">378</span>
+          <span class="site-state-item-count">379</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -460,7 +461,7 @@ Users -> Program -> Python -> cx_Oracle -> "Oracle Client Librarys" -> "Oracle D
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">160</span>
+        <span class="site-state-item-count">161</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
