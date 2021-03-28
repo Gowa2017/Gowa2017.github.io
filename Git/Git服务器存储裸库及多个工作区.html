@@ -294,7 +294,7 @@
       
         <p>在用 gitbook 部署的时候才发现的一个很不错的操作，此操作将版本库与工作区分开，实在是非常不错的东西。</p>
 <a id="more"></a>
-<h1 id="初始化裸库"><a href="#初始化裸库" class="headerlink" title="初始化裸库"></a>初始化裸库</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git init myrepo.git --bare</span><br></pre></td></tr></table></figure>
+<h1 id="初始化裸库"><a href="#初始化裸库" class="headerlink" title="初始化裸库"></a>初始化裸库</h1><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git init myrepo.git --bare --shared</span><br></pre></td></tr></table></figure>
 <p>查看 myrepo 目录，我们可以看到，和我们不加 <code>--bare</code> 的不同，其直接存储的就是通常目录下的 <strong>.git</strong> 下的内容。</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ls -1 myrepo.git</span><br><span class="line">HEAD</span><br><span class="line">branches</span><br><span class="line">config</span><br><span class="line">description</span><br><span class="line">hooks</span><br><span class="line">info</span><br><span class="line">objects</span><br><span class="line">refs</span><br></pre></td></tr></table></figure>
 <p>不过在裸仓库内我们是无法进行任何变更操作，执行任何 git 命令的，实际上其就是单纯的做一个存储作用而已了。下面我们来看看怎么样提交内容。</p>
