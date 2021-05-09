@@ -225,6 +225,116 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/触动精灵相关资料.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/Lua/触动精灵相关资料.html" class="post-title-link" itemprop="url">触动精灵相关资料</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-07-05 21:08:26" itemprop="dateCreated datePublished" datetime="2020-07-05T21:08:26+08:00">2020-07-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Lua/" itemprop="url" rel="index">
+                    <span itemprop="name">Lua</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Lua/触动精灵相关资料.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/触动精灵相关资料.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="库路径"><a href="#库路径" class="headerlink" title="库路径"></a>库路径</h1><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">dialog(<span class="built_in">package</span>.<span class="built_in">path</span>)</span><br><span class="line">dialog(<span class="built_in">package</span>.<span class="built_in">cpath</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/data/data/?.lua;</span><br><span class="line">/sdcard/TouchSprite/lua/?.lua;</span><br><span class="line">/sdcard/TouchSprite/lua/?.luac;</span><br><span class="line">/data/data/com.touchsprite.android/TouchSprite/?.lua;</span><br><span class="line">/data/data/com.touchsprite.android/files/tslibs/?.lua;</span><br><span class="line">/data/data/com.touchsprite.android/files/tslibs/?/?.lua;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">/data/data/?.so;</span><br><span class="line">/data/data/com.touchsprite.android/files/tslibs/?.so;</span><br><span class="line">/data/data/com.touchsprite.android/files/plugin/?.so;</span><br><span class="line">/data/data/?.so;</span><br><span class="line">/sdcard/TouchSprite/lua/?.so;</span><br></pre></td></tr></table></figure>
+<h1 id="关于http-post-文件"><a href="#关于http-post-文件" class="headerlink" title="关于http.post 文件"></a>关于http.post 文件</h1><p>触动有三个地方提供了 http 相关的操作。</p>
+<h2 id="TSLib"><a href="#TSLib" class="headerlink" title="TSLib"></a>TSLib</h2><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line">str = httpPost(url,data,options)</span><br><span class="line">``` </span><br><span class="line">遗憾的是，这里只能传输 data 为字符串类型的数据。</span><br><span class="line"></span><br><span class="line">```lua</span><br><span class="line"><span class="keyword">local</span> url = <span class="string">'http://www.baidu.com'</span></span><br><span class="line">data = <span class="string">"hello world"</span>,</span><br><span class="line">options = &#123;</span><br><span class="line">    tstab = <span class="number">1</span>,</span><br><span class="line">    timeOut = <span class="number">10</span>,</span><br><span class="line">    urlEnCode = <span class="literal">true</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">local</span> str = httpPost(url, data, options)</span><br></pre></td></tr></table></figure>
+<p>这个生成的内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Content-Length: 11</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">TE: trailers</span><br><span class="line">Host: 42.192.43.15:8989</span><br><span class="line">Connection: close, TE</span><br><span class="line">User-Agent: LuaSocket 3.0-rc1</span><br><span class="line"></span><br><span class="line">hello world</span><br></pre></td></tr></table></figure>
+<p>很遗憾，我们不能指定头部等信息，<code>Content-Type</code> 也是固定的。</p>
+<h2 id="ts-so"><a href="#ts-so" class="headerlink" title="ts.so"></a>ts.so</h2><p>这个就可以指定头部，和直接用 lua 表来进行作为参数了。<br>但是 body 必须是 table 类型，会转换成 query 形式，那我要传 json 的话怎么办？没办法。</p>
+<p>函数签名：</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- ios</span></span><br><span class="line">status_resp, header_resp,body_resp = ts.httpPost(url,header_send,body_send,encode)</span><br><span class="line"></span><br><span class="line"><span class="comment">-- android</span></span><br><span class="line">status_resp, header_resp,body_resp = ts.httpPost(url,tab)</span><br></pre></td></tr></table></figure>
+<p>安卓是把几个参数放在了一个 table 处理，这里 header_send, body_send 都是表。</p>
+<h3 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h3><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> ts = <span class="built_in">require</span>(<span class="string">"ts"</span>)</span><br><span class="line">header_send = &#123;typeget = <span class="string">"iOS"</span>&#125;</span><br><span class="line">body_send = &#123;</span><br><span class="line">    [<span class="string">"username"</span>] = <span class="string">"aa"</span>,</span><br><span class="line">    [<span class="string">"password"</span>] = <span class="string">"1234"</span></span><br><span class="line">&#125;</span><br><span class="line">ts.setHttpsTimeOut(<span class="number">60</span>)</span><br><span class="line">code, status_resp, body_resp = ts.httpsPost(<span class="string">"https://www.baidu.com"</span>, header_send, body_send)</span><br></pre></td></tr></table></figure>
+<h3 id="Android"><a href="#Android" class="headerlink" title="Android"></a>Android</h3><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">--Android 脚本实例</span></span><br><span class="line"><span class="keyword">local</span> ts = <span class="built_in">require</span>(<span class="string">"ts"</span>)</span><br><span class="line">data = &#123;</span><br><span class="line">    tstab = <span class="string">"tstab"</span>,</span><br><span class="line">    header_send = &#123;typeget = <span class="string">"android"</span>&#125;,</span><br><span class="line">    body_send = &#123;id = <span class="string">"687"</span>&#125;,</span><br><span class="line">    <span class="built_in">format</span> = <span class="string">"gbk"</span></span><br><span class="line">&#125;</span><br><span class="line">code, header_resp, body_resp = ts.httpsPost(<span class="string">"http://whois.pconline.com.cn/ip.jsp"</span>, data)</span><br></pre></td></tr></table></figure>
+<p>但是这个函数生成的内容，也是坑的，字段信息居然莫名其妙：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST / HTTP/1.1</span><br><span class="line">Host: 42.192.43.15:8989</span><br><span class="line">Accept: */*</span><br><span class="line">typeget: android</span><br><span class="line">t-Type:application/x-www-form-urlencoded;charset=UTF-8;Content-Length:</span><br><span class="line">Content-Length: 6</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line"></span><br><span class="line">id=687</span><br></pre></td></tr></table></figure>
+<p>我们可以指定头信息，但指定 <code>Content-Type</code> 没有卵用的；但是 body_send 却无法变更，只能是 table 格式，如果不是 table 格式，那就会给你变成 GET 请求，坑吧？</p>
+<h2 id="tsnet-so"><a href="#tsnet-so" class="headerlink" title="tsnet.so"></a>tsnet.so</h2><p>这个高级库，需要购买VIP才能用，或者是IOS 专业版，放弃他。</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">"tsnet"</span>)</span><br><span class="line"><span class="built_in">status</span>, header, content =</span><br><span class="line">    http.post(</span><br><span class="line">    <span class="string">"https://whois.pconline.com.cn/ip.jsp"</span>,</span><br><span class="line">    &#123;</span><br><span class="line">        headers = &#123;aaa = <span class="number">123</span>, cd = <span class="number">12</span>&#125;,</span><br><span class="line">        params = &#123;aaa = <span class="number">111</span>, bbb = <span class="number">222</span>&#125;,</span><br><span class="line">        opts = &#123;charset = <span class="string">"gbk"</span>&#125;</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>这个也是把 params 转成 query 形式，我要传 json 怎么办呢？</p>
+<p>这个就只能是不带 params 参数，postdata 来手撸格式了。</p>
+<p>但这几个都没有解决一个问题：对于文件是如何处理的？是将文件直接传递文件描述符，还是需要手动进行转换成分段的形式进行传输呢？</p>
+<h2 id="问题的解决"><a href="#问题的解决" class="headerlink" title="问题的解决"></a>问题的解决</h2><h2 id="tsnet-so-1"><a href="#tsnet-so-1" class="headerlink" title="tsnet.so"></a>tsnet.so</h2><p>使用 ltn12, multipart-post 来解决。</p>
+<p>multipart-post 用来将文件封装成 multipart 格式，然后调用  tsnet 的API进行上传：</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">"tsnet"</span>)</span><br><span class="line"><span class="keyword">local</span> enc = (<span class="built_in">require</span> <span class="string">"multipart-post"</span>).encode</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">uploadfile</span><span class="params">(url, filepath)</span></span></span><br><span class="line">    <span class="keyword">local</span> body, boundary = enc &#123;file = &#123;data = <span class="built_in">io</span>.<span class="built_in">open</span>(filepath)&#125;&#125;</span><br><span class="line">    <span class="keyword">local</span> headers = &#123;</span><br><span class="line">        [<span class="string">"content-length"</span>] = #body,</span><br><span class="line">        [<span class="string">"content-type"</span>] = <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"multipart/form-data; boundary=%s"</span>, boundary)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">print</span>(body)</span><br><span class="line">    <span class="keyword">return</span> http.post(</span><br><span class="line">        url,</span><br><span class="line">        &#123;</span><br><span class="line">            headers = headers,</span><br><span class="line">            params = body,</span><br><span class="line">            opts = &#123;charset = <span class="string">"gbk"</span>&#125;</span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">status</span>, header, content = uploadfile(<span class="string">"http://oss.888ce.cn:8081/mz/oss/pic/upload/scriptImg"</span>, <span class="string">"1.png"</span>)</span><br><span class="line">dialog(<span class="built_in">status</span>)</span><br><span class="line">dialog(content)</span><br></pre></td></tr></table></figure>
+<h2 id="ts-so-1"><a href="#ts-so-1" class="headerlink" title="ts.so"></a>ts.so</h2><p>这个其实也无法解决问题，用 body_send 必须是 table 格式。</p>
+<figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">"ts"</span>)</span><br><span class="line"><span class="keyword">local</span> enc = (<span class="built_in">require</span> <span class="string">"multipart-post"</span>).encode</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">uploadfile</span><span class="params">(url, filepath)</span></span></span><br><span class="line">    <span class="keyword">local</span> body, boundary = enc &#123;file = &#123;data = <span class="built_in">io</span>.<span class="built_in">open</span>(filepath)&#125;&#125;</span><br><span class="line">    <span class="keyword">local</span> headers = &#123;</span><br><span class="line">    		typeget=<span class="string">'android'</span>,</span><br><span class="line">        [<span class="string">"content-length"</span>] = #body,</span><br><span class="line">        [<span class="string">"content-type"</span>] = <span class="built_in">string</span>.<span class="built_in">format</span>(<span class="string">"multipart/form-data; boundary=%s"</span>, boundary)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> ts.httpPost(</span><br><span class="line">        url,</span><br><span class="line">        &#123;</span><br><span class="line">      		tstab=<span class="string">'tstab'</span>,</span><br><span class="line">            header_send = headers,</span><br><span class="line">            body_send = body,</span><br><span class="line">            <span class="built_in">format</span> = <span class="string">'gbk'</span></span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"><span class="built_in">status</span>, header, content = uploadfile(<span class="string">"http://oss.888ce.cn:8081/mz/oss/pic/upload/scriptImg"</span>, <span class="string">"1.png"</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="Socket-模块"><a href="#Socket-模块" class="headerlink" title="Socket 模块"></a>Socket 模块</h1><p>没办法了，手撸吧。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/macOS/Parallels虚拟机无法使用lt2p网络的问题.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1038,96 +1148,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/FairyGUI/FairyGUI对于列表和窗口的使用.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/FairyGUI/FairyGUI对于列表和窗口的使用.html" class="post-title-link" itemprop="url">FairyGUI对于列表和窗口的使用</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-05-06 22:11:20" itemprop="dateCreated datePublished" datetime="2020-05-06T22:11:20+08:00">2020-05-06</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/FairyGUI/" itemprop="url" rel="index">
-                    <span itemprop="name">FairyGUI</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/FairyGUI/FairyGUI对于列表和窗口的使用.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="FairyGUI/FairyGUI对于列表和窗口的使用.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>这两者其实理解起来并不难，难的是在用起来的时候不熟悉背后的逻辑也有一脸懵逼的。因为 FairyGUI 很多地方都提供了直接编辑 UI 和使用代码来控制的方式，当然，直接编辑 UI 是最简单的，但是使用代码的话，是最灵活的。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/FairyGUI/FairyGUI对于列表和窗口的使用.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1176,7 +1196,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">381</span>
+          <span class="site-state-item-count">382</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1189,7 +1209,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">163</span>
+        <span class="site-state-item-count">164</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

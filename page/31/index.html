@@ -225,6 +225,106 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/数据库/MySQL二进制日志格式.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          
+            <a href="/数据库/MySQL二进制日志格式.html" class="post-title-link" itemprop="url">MySQL二进制日志格式</a>
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-03-08 23:45:43" itemprop="dateCreated datePublished" datetime="2018-03-08T23:45:43+08:00">2018-03-08</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/数据库/MySQL二进制日志格式.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="数据库/MySQL二进制日志格式.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>我们都知道二进制日志是一个非常好的习惯和工具。其可以用来进行恢复数据到某一时间点，或重放整个数据的变更过程，但其实这里面还有不少学问。</p>
+<h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>二进制日志包含的是描述数据库改变（比如表建立或表数据修改）的事件。在使用 <strong>基于行</strong> 的日志格式时也会包含可能会改变数据的事件（如 <code>DELETE</code>语句，但并无匹配行）。二进制日志也会记录每个语句更新数据所消耗的时间。二进制日志的设计，有两个重要的目标：</p>
+<ul>
+<li>复制，二进制日志记录了在主服务器上数据变更记录，用来发送给从服务器。主服务器会把二进制日志中的事件发送给从服务器，然后在从服务器上再次执行。</li>
+<li>一些数据恢复操作需要二进制日志。在一个备份恢复后，二进制日志中在此备份后的事件可以被重新执行。这能保证让数据库从备份时恢复到最新状态。</li>
+</ul>
+<p>二进制日志并不会记录类似 <code>select, show</code>这些不会改变数据的语句。</p>
+<p>开启二进制日志会使服务器性能轻微下降，但开启这个日志来设置从服务器和数据恢复的好处远远大过了性能的降低。</p>
+<p>要保护好二进制日志，因为记录的语句中可能会含有密码。</p>
+<h1 id="二进制日志格式"><a href="#二进制日志格式" class="headerlink" title="二进制日志格式"></a>二进制日志格式</h1><p>二进制日志有几种格式。</p>
+<ul>
+<li>基于语句的日志格式。选项 <code>--binlog-format=STATEMENT</code></li>
+<li>基于行的格式。主服务器将表示每个单独表行受影响的事件写入二进制日志。选项<code>--binlog-format=ROW</code></li>
+<li>混合格式。当设置这个选项<code>--bilong-format=MIXED</code>，默认会使用 基于行的格式，但在某些情况下会自动切换为基于语句的格式。</li>
+</ul>
+<p>在MySQL5.5中，默认的二进制日志格式是 STATEMET。</p>
+<p>日志格式可以被存储引擎设置或限制。这用来避免在使用不同存储引擎的主从服务器在执行特定语句时的问题。</p>
+<p>在基于语句的复制中，<strong>在复制非确定性的语句时可能会出现问题</strong>。在确定一个语句使用基于语句的复制是否安全时，MySQL会确定能不能保证这个语句可以用基于语句的格式进行复制。如果不能保证，则会抛出警告。为了避免这个问题，可以采用基于行的复制。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+        
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="https://gowa.club/Cocos2d-X/cocos2dx-lua中关于类的实现及使用.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1099,96 +1199,6 @@
   
   
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="https://gowa.club/Lua/PIL.9Lua中的闭包.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Gowa2017 Zhang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="退思园">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/Lua/PIL.9Lua中的闭包.html" class="post-title-link" itemprop="url">PIL.9Lua中的闭包</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2018-02-12 09:14:15" itemprop="dateCreated datePublished" datetime="2018-02-12T09:14:15+08:00">2018-02-12</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Lua/" itemprop="url" rel="index">
-                    <span itemprop="name">Lua</span>
-                  </a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="fa fa-comment-o"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/Lua/PIL.9Lua中的闭包.html#comments" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Lua/PIL.9Lua中的闭包.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Lua中的函数是 <strong>第一类</strong>的值加上合适的<strong>词法域</strong>。那么，函数是<strong>第一类值</strong>意味着什么呢？这是说，在Lua中，一个函数，就是一个和 数字或字符串一样具有某些权限的值。一个程序可以把函数存储在变量中（全局或者局部都可以）和表中，把函数作为参数传递给其他函数，或者以函数作为值返回。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Lua/PIL.9Lua中的闭包.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
   </div>
 
   
@@ -1237,7 +1247,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">381</span>
+          <span class="site-state-item-count">382</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -1250,7 +1260,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">163</span>
+        <span class="site-state-item-count">164</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
