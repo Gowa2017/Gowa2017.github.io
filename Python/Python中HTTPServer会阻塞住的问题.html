@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="因为是简单的业务，并发不高，所以就用 Python 的 HTTP Server 来做了一个简单的接口。但是在使用的过程中，会发现接口会时不时的阻塞住，甚至于将其他线程与阻塞住了，用 CTRL+C 可以结束阻塞，并抛出一个异常，然后可继续往下执行。">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python中HTTPServer会阻塞住的问题">
+<meta property="og:url" content="https://gowa.club/Python/Python中HTTPServer会阻塞住的问题.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="因为是简单的业务，并发不高，所以就用 Python 的 HTTP Server 来做了一个简单的接口。但是在使用的过程中，会发现接口会时不时的阻塞住，甚至于将其他线程与阻塞住了，用 CTRL+C 可以结束阻塞，并抛出一个异常，然后可继续往下执行。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-05-05T14:51:49.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python中HTTPServer会阻塞住的问题">
+<meta name="twitter:description" content="因为是简单的业务，并发不高，所以就用 Python 的 HTTP Server 来做了一个简单的接口。但是在使用的过程中，会发现接口会时不时的阻塞住，甚至于将其他线程与阻塞住了，用 CTRL+C 可以结束阻塞，并抛出一个异常，然后可继续往下执行。">
+
+<link rel="canonical" href="https://gowa.club/Python/Python中HTTPServer会阻塞住的问题.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Python中HTTPServer会阻塞住的问题 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/Python中HTTPServer会阻塞住的问题.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python中HTTPServer会阻塞住的问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-05-05 22:51:49" itemprop="dateCreated datePublished" datetime="2021-05-05T22:51:49+08:00">2021-05-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Python/Python中HTTPServer会阻塞住的问题.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/Python中HTTPServer会阻塞住的问题.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>因为是简单的业务，并发不高，所以就用 Python 的 HTTP Server 来做了一个简单的接口。但是在使用的过程中，会发现接口会时不时的阻塞住，甚至于将其他线程与阻塞住了，用 CTRL+C 可以结束阻塞，并抛出一个异常，然后可继续往下执行。</p>
+<a id="more"></a>
+<h1 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h1><p>整个程序阻塞，<code>CTRL+C</code> 结束线程后继续往下执行。此时会抛出异常：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ConnectionAbortedError: [WinError 10053] 你的主机中的软件中止了一个已建立的连接。</span><br></pre></td></tr></table></figure>
+<p>这个报告的意思是，我们的程序，中止了一个已建立的连接。</p>
+<h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>通过这个原因推测，是我们的 <code>CTRL+C</code> 中止了一个连接。我查看了一下代码，可能阻塞的地方在于：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data = self.rfile.read(length)</span><br></pre></td></tr></table></figure>
+<h1 id="先从工作的机制说起"><a href="#先从工作的机制说起" class="headerlink" title="先从工作的机制说起"></a>先从工作的机制说起</h1><p>首先，我们的 <code>HTTPServer</code> 来作为服务器的，它的继承线如下：</p>
+<div class="language-dot">
+digraph {
+  HTTPServer -> "socketserver.TCPServer" -> BaseServer
+  BaseHTTPRequestHandler -> "socketserver.StreamRequestHandler" -> "BaseRequestHandler"
+}
+</div>
+<p>实际上，就是一个 TCPServer，它需要一个 Hanlder 来处理连接上的数据：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, server_address, RequestHandlerClass, bind_and_activate=True)</span>:</span></span><br><span class="line">    <span class="string">"""Constructor.  May be extended, do not override."""</span></span><br><span class="line">    BaseServer.__init__(self, server_address, RequestHandlerClass)</span><br><span class="line">    self.socket = socket.socket(self.address_family,</span><br><span class="line">                                self.socket_type)</span><br><span class="line">    <span class="keyword">if</span> bind_and_activate:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self.server_bind()</span><br><span class="line">            self.server_activate()</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            self.server_close()</span><br><span class="line">            <span class="keyword">raise</span></span><br></pre></td></tr></table></figure>
+<p>在构造的时候，我传递了一个 <code>BaseHTTPRequestHandler</code> 过去。</p>
+<p>之后，我就使用了 <code>APISERVER.serve_forever()</code> 来开始服务。</p>
+<p>当有连接过来的时候，就会将请求交给处理器去处理：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># BaseServer</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_handle_request_noblock</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Handle one request, without blocking.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        I assume that selector.select() has returned that the socket is</span></span><br><span class="line"><span class="string">        readable before this function was called, so there should be no risk of</span></span><br><span class="line"><span class="string">        blocking in get_request().</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            request, client_address = self.get_request()</span><br><span class="line">        <span class="keyword">except</span> OSError:</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">if</span> self.verify_request(request, client_address):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                self.process_request(request, client_address)</span><br><span class="line">            <span class="keyword">except</span> Exception:</span><br><span class="line">                self.handle_error(request, client_address)</span><br><span class="line">                self.shutdown_request(request)</span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                self.shutdown_request(request)</span><br><span class="line">                <span class="keyword">raise</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.shutdown_request(request)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">process_request</span><span class="params">(self, request, client_address)</span>:</span></span><br><span class="line">        <span class="string">"""Call finish_request.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Overridden by ForkingMixIn and ThreadingMixIn.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        self.finish_request(request, client_address)</span><br><span class="line">        self.shutdown_request(request)</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">finish_request</span><span class="params">(self, request, client_address)</span>:</span></span><br><span class="line">        <span class="string">"""Finish one request by instantiating RequestHandlerClass."""</span></span><br><span class="line">        self.RequestHandlerClass(request, client_address, self)</span><br></pre></td></tr></table></figure>
+<p>对于 TCPServer 来说，它的 <code>get_request</code> 返回的是一个套接字，和客户端的地址：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#TCPServer</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_request</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Get the request and client address from the socket.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        May be overridden.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">return</span> self.socket.accept()</span><br></pre></td></tr></table></figure>
+<h2 id="BaseRequestHandler"><a href="#BaseRequestHandler" class="headerlink" title="BaseRequestHandler"></a>BaseRequestHandler</h2><p>这一个做的事情比较简单，设置一个处置的逻辑过程，具体的实现细节就交给了子类去实现：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">// BaseRequestHandler</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, request, client_address, server)</span>:</span></span><br><span class="line">        self.request = request</span><br><span class="line">        self.client_address = client_address</span><br><span class="line">        self.server = server</span><br><span class="line">        self.setup()</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self.handle()</span><br><span class="line">        <span class="keyword">finally</span>:</span><br><span class="line">            self.finish()</span><br></pre></td></tr></table></figure>
+<h2 id="StreamRequestHandler"><a href="#StreamRequestHandler" class="headerlink" title="StreamRequestHandler"></a>StreamRequestHandler</h2><p>对于流式的请求处理，在获得了 <code>accept</code> 返回的套接字后，会设置一下超时（可选），在套接字上建立读写缓冲。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># StreamRequestHandler</span></span><br><span class="line">    rbufsize = <span class="number">-1</span></span><br><span class="line">    wbufsize = <span class="number">0</span></span><br><span class="line">    <span class="comment"># A timeout to apply to the request socket, if not None.</span></span><br><span class="line">    timeout = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Disable nagle algorithm for this socket, if True.</span></span><br><span class="line">    <span class="comment"># Use only when wbufsize != 0, to avoid small packets.</span></span><br><span class="line">    disable_nagle_algorithm = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">setup</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.connection = self.request</span><br><span class="line">        <span class="keyword">if</span> self.timeout <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            self.connection.settimeout(self.timeout)</span><br><span class="line">        <span class="keyword">if</span> self.disable_nagle_algorithm:</span><br><span class="line">            self.connection.setsockopt(socket.IPPROTO_TCP,</span><br><span class="line">                                       socket.TCP_NODELAY, <span class="literal">True</span>)</span><br><span class="line">        self.rfile = self.connection.makefile(<span class="string">'rb'</span>, self.rbufsize)</span><br><span class="line">        <span class="keyword">if</span> self.wbufsize == <span class="number">0</span>:</span><br><span class="line">            self.wfile = _SocketWriter(self.connection)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.wfile = self.connection.makefile(<span class="string">'wb'</span>, self.wbufsize)</span><br></pre></td></tr></table></figure>
+<h3 id="socket-makefile"><a href="#socket-makefile" class="headerlink" title="socket.makefile"></a>socket.makefile</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># socket</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">makefile</span><span class="params">(self, mode=<span class="string">"r"</span>, buffering=None, *,</span></span></span><br><span class="line"><span class="function"><span class="params">                 encoding=None, errors=None, newline=None)</span>:</span></span><br><span class="line">        <span class="string">"""makefile(...) -&gt; an I/O stream connected to the socket</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        The arguments are as for io.open() after the filename, except the only</span></span><br><span class="line"><span class="string">        supported mode values are 'r' (default), 'w' and 'b'.</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="comment"># XXX refactor to share code?</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> set(mode) &lt;= &#123;<span class="string">"r"</span>, <span class="string">"w"</span>, <span class="string">"b"</span>&#125;:</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">"invalid mode %r (only r, w, b allowed)"</span> % (mode,))</span><br><span class="line">        writing = <span class="string">"w"</span> <span class="keyword">in</span> mode</span><br><span class="line">        reading = <span class="string">"r"</span> <span class="keyword">in</span> mode <span class="keyword">or</span> <span class="keyword">not</span> writing</span><br><span class="line">        <span class="keyword">assert</span> reading <span class="keyword">or</span> writing</span><br><span class="line">        binary = <span class="string">"b"</span> <span class="keyword">in</span> mode</span><br><span class="line">        rawmode = <span class="string">""</span></span><br><span class="line">        <span class="keyword">if</span> reading:</span><br><span class="line">            rawmode += <span class="string">"r"</span></span><br><span class="line">        <span class="keyword">if</span> writing:</span><br><span class="line">            rawmode += <span class="string">"w"</span></span><br><span class="line">        raw = SocketIO(self, rawmode)</span><br><span class="line">        self._io_refs += <span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> buffering <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            buffering = <span class="number">-1</span></span><br><span class="line">        <span class="keyword">if</span> buffering &lt; <span class="number">0</span>:</span><br><span class="line">            buffering = io.DEFAULT_BUFFER_SIZE</span><br><span class="line">        <span class="keyword">if</span> buffering == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> binary:</span><br><span class="line">                <span class="keyword">raise</span> ValueError(<span class="string">"unbuffered streams must be binary"</span>)</span><br><span class="line">            <span class="keyword">return</span> raw</span><br><span class="line">        <span class="keyword">if</span> reading <span class="keyword">and</span> writing:</span><br><span class="line">            buffer = io.BufferedRWPair(raw, raw, buffering)</span><br><span class="line">        <span class="keyword">elif</span> reading:</span><br><span class="line">            buffer = io.BufferedReader(raw, buffering)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">assert</span> writing</span><br><span class="line">            buffer = io.BufferedWriter(raw, buffering)</span><br><span class="line">        <span class="keyword">if</span> binary:</span><br><span class="line">            <span class="keyword">return</span> buffer</span><br><span class="line">        text = io.TextIOWrapper(buffer, encoding, errors, newline)</span><br><span class="line">        text.mode = mode</span><br><span class="line">        <span class="keyword">return</span> text</span><br></pre></td></tr></table></figure>
+<p>这个方法的作用，是将一个套接字与一个流相关联。</p>
+<p>对于我们在<code>StreamRequestHandler</code> 里面返回的将会是：</p>
+<ul>
+<li>rfile: io.BufferedReader</li>
+<li>wfile: io.BufferedWriter</li>
+</ul>
+<h2 id="BaseHTTPRequestHandler"><a href="#BaseHTTPRequestHandler" class="headerlink" title="BaseHTTPRequestHandler"></a>BaseHTTPRequestHandler</h2><p>对于请求的处理逻辑，是放在此类的 <code>handle</code> 方法内：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># BaseHTTPRequestHandler</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Handle multiple requests if necessary."""</span></span><br><span class="line">        self.close_connection = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">        self.handle_one_request()</span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.close_connection:</span><br><span class="line">            self.handle_one_request()</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle_one_request</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Handle a single HTTP request.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        You normally don't need to override this method; see the class</span></span><br><span class="line"><span class="string">        __doc__ string for information on how to handle specific HTTP</span></span><br><span class="line"><span class="string">        commands such as GET and POST.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self.raw_requestline = self.rfile.readline(<span class="number">65537</span>)</span><br><span class="line">            <span class="keyword">if</span> len(self.raw_requestline) &gt; <span class="number">65536</span>:</span><br><span class="line">                self.requestline = <span class="string">''</span></span><br><span class="line">                self.request_version = <span class="string">''</span></span><br><span class="line">                self.command = <span class="string">''</span></span><br><span class="line">                self.send_error(HTTPStatus.REQUEST_URI_TOO_LONG)</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> self.raw_requestline:</span><br><span class="line">                self.close_connection = <span class="literal">True</span></span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> self.parse_request():</span><br><span class="line">                <span class="comment"># An error code has been sent, just exit</span></span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            mname = <span class="string">'do_'</span> + self.command</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> hasattr(self, mname):</span><br><span class="line">                self.send_error(</span><br><span class="line">                    HTTPStatus.NOT_IMPLEMENTED,</span><br><span class="line">                    <span class="string">"Unsupported method (%r)"</span> % self.command)</span><br><span class="line">                <span class="keyword">return</span></span><br><span class="line">            method = getattr(self, mname)</span><br><span class="line">            method()</span><br><span class="line">            self.wfile.flush() <span class="comment">#actually send the response if not already done.</span></span><br><span class="line">        <span class="keyword">except</span> socket.timeout <span class="keyword">as</span> e:</span><br><span class="line">            <span class="comment">#a read or a write timed out.  Discard this connection</span></span><br><span class="line">            self.log_error(<span class="string">"Request timed out: %r"</span>, e)</span><br><span class="line">            self.close_connection = <span class="literal">True</span></span><br><span class="line">            <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+<p>我们看到，在此，先解析了请求的头信息，然后就把剩下的交给了对应的方法响应函数来处理，如 <code>do_POST</code>。</p>
+<p>我们在方法内调用了类似：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">self.rfile.readline(65537)</span><br><span class="line">self.rfile.read(buff)</span><br><span class="line">self.wfile.write(buff)</span><br></pre></td></tr></table></figure>
+<p>这样的处理，这有可能会造成阻塞。</p>
+<p>那么，在 <code>self.rfile.readline(65537)</code> 这个获取 HTTP 请求第一行的时候也可能会阻塞。</p>
+<p>同时，在 <code>parse_requests</code> 中，会调用 </p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">self.headers = http.client.parse_headers(self.rfile,</span><br><span class="line">                                         _class=self.MessageClass)</span><br></pre></td></tr></table></figure>
+<p>来解析流上的头，这也有可能会阻塞。</p>
+<p>最后，<code>read</code> 消息体也会阻塞，这就很蛋疼了。<script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script><br>                // graphviz init<br>                let graphviz_engines = [“circo”,<br>                    “dot”,<br>                    “fdp”,<br>                    “neato”,<br>                    “osage”,<br>                    “twopi”];</p>
+<pre><code>            function doGraphviz(engine) {
+                let domAllDot = document.querySelectorAll(&#39;.language-&#39; + engine);
+                for (let i = 0; i &lt; domAllDot.length; i++) {
+                    let dom = domAllDot[i];
+                    let graphSource = dom.innerText || dom.textContent;
+
+                    try {
+                       let viz = new Viz();
+                         viz.renderSVGElement(graphSource, {engine: engine})
+                             .then(r =&gt; {
+                        dom.innerHTML =&#39;&#39;;dom.append(r); });
+                    } catch (e) {
+                        console.error(&quot;Error when parsing node:&quot;, dom, e);
+                    } 
+                }
+            } 
+
+            let init = function () {
+                for (let i = 0; i &lt; graphviz_engines.length; i++) {
+                    doGraphviz(graphviz_engines[i]);
+                }
+            };
+            if (typeof window.addEventListener != &quot;undefined&quot;) {
+                window.addEventListener(&quot;load&quot;, init, false);
+            } else {
+                window.attachEvent(&quot;onload&quot;, init);
+            }
+            &lt;/script&gt;
+</code></pre></script></p>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Python/数据库/使用cx_Oracle与Sqlalchemy连接Oracle出现的一个Number精度问题.html" rel="next" title="使用cx_Oracle与SQLAlchemy连接Oracle出现的一个Number精度问题">
+                  <i class="fa fa-chevron-left"></i> 使用cx_Oracle与SQLAlchemy连接Oracle出现的一个Number精度问题
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/Windows/关于使用LT2P会出现无法拨号的问题.html" rel="prev" title="关于使用LT2P会出现无法拨号的问题">
+                  关于使用LT2P会出现无法拨号的问题 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#现象"><span class="nav-number">1.</span> <span class="nav-text">现象</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#原因"><span class="nav-number">2.</span> <span class="nav-text">原因</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#先从工作的机制说起"><span class="nav-number">3.</span> <span class="nav-text">先从工作的机制说起</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#BaseRequestHandler"><span class="nav-number">3.1.</span> <span class="nav-text">BaseRequestHandler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StreamRequestHandler"><span class="nav-number">3.2.</span> <span class="nav-text">StreamRequestHandler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#socket-makefile"><span class="nav-number">3.2.1.</span> <span class="nav-text">socket.makefile</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BaseHTTPRequestHandler"><span class="nav-number">3.3.</span> <span class="nav-text">BaseHTTPRequestHandler</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">388</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">164</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Python/Python中HTTPServer会阻塞住的问题.html",
+            identifier: "Python/Python中HTTPServer会阻塞住的问题.html",
+            title: "Python中HTTPServer会阻塞住的问题"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>

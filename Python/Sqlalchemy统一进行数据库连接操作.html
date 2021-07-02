@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 3.9.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <link rel="alternate" href="/atom.xml" title="退思园" type="application/atom+xml">
+  <meta name="google-site-verification" content="EDvvZZUFkxy_QUzZTaqwsG_9VHqFthY-NhQE4j6WL-s">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"right","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: 'LHD9LWONQ3',
+      apiKey: '23a113c49e36d8cc93f61239cb530b43',
+      indexName: 'gowa.club',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: 'search.xml',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="SQLAlchemy SQL 工具集和 ORM 是 Python 与数据库进行交互的综合性工具。它有几个不同的区域和功能，可以单独使用，也可以结合起来使用。它的主要组件按如下进行分层组织。">
+<meta name="keywords" content="Python,SQLAlchemy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQLAlchemy统一进行数据库连接操作">
+<meta property="og:url" content="https://gowa.club/Python/Sqlalchemy统一进行数据库连接操作.html">
+<meta property="og:site_name" content="退思园">
+<meta property="og:description" content="SQLAlchemy SQL 工具集和 ORM 是 Python 与数据库进行交互的综合性工具。它有几个不同的区域和功能，可以单独使用，也可以结合起来使用。它的主要组件按如下进行分层组织。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://docs.sqlalchemy.org/en/13/_images/sqla_arch_small.png">
+<meta property="og:updated_time" content="2021-02-05T00:13:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SQLAlchemy统一进行数据库连接操作">
+<meta name="twitter:description" content="SQLAlchemy SQL 工具集和 ORM 是 Python 与数据库进行交互的综合性工具。它有几个不同的区域和功能，可以单独使用，也可以结合起来使用。它的主要组件按如下进行分层组织。">
+<meta name="twitter:image" content="https://docs.sqlalchemy.org/en/13/_images/sqla_arch_small.png">
+
+<link rel="canonical" href="https://gowa.club/Python/Sqlalchemy统一进行数据库连接操作.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>SQLAlchemy统一进行数据库连接操作 | 退思园</title>
+  
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-137245514-1"></script>
+    <script>
+      var host = window.location.hostname;
+      if (host !== "localhost" || !true) {
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-137245514-1');
+      }
+    </script>
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">退思园</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">烦恼一般都是想太多了。</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-soft">
+
+    <a href="/soft/" rel="section"><i class="fa fa-fw fa-rocket"></i>soft</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="popup search-popup">
+    <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input" id="search-input"></div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="algolia-results">
+  <div id="algolia-stats"></div>
+  <div id="algolia-hits"></div>
+  <div id="algolia-pagination" class="algolia-pagination"></div>
+</div>
+
+  
+</div>
+<div class="search-pop-overlay"></div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://gowa.club/Python/Sqlalchemy统一进行数据库连接操作.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Gowa2017 Zhang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="退思园">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SQLAlchemy统一进行数据库连接操作
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-02-05 08:13:55" itemprop="dateCreated datePublished" datetime="2021-02-05T08:13:55+08:00">2021-02-05</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="fa fa-comment-o"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/Python/Sqlalchemy统一进行数据库连接操作.html#comments" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="Python/Sqlalchemy统一进行数据库连接操作.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>SQLAlchemy SQL 工具集和 ORM 是 Python 与数据库进行交互的综合性工具。它有几个不同的区域和功能，可以单独使用，也可以结合起来使用。它的主要组件按如下进行分层组织。</p>
+<a id="more"></a>
+<h1 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h1><p><img src="https://docs.sqlalchemy.org/en/13/_images/sqla_arch_small.png" alt></p>
+<p>上图中，最重要的两部分就是 ORM 和 SQL Expression Language。SQL Expression 可以独立于 ORM 使用。</p>
+<p>SQLAlchemy  的官方文档也分成了三部分：</p>
+<ul>
+<li>ORM。介绍了对象关系映射。如果我们想要使用自动构建的高级 API，就看这部分文档。</li>
+<li>CORE。介绍了 SQLAlchemy SQL 和数据库集成，核心就是 SQL Expression Language，它可以独立使用来构建可操纵的 SQL 表达式（如修改执行返回等）。和 ORM 的以域为中心模式不同，它使用了以 Schema 为中心的使用模式。</li>
+<li>Dialects。支持的数据库和 DBAPI 后端。</li>
+</ul>
+<p>我暂时不做编程开发，只做数据查询修改相关的，所以看看第二部分。</p>
+<h1 id="SQL-Expression-Language"><a href="#SQL-Expression-Language" class="headerlink" title="SQL Expression Language"></a>SQL Expression Language</h1><p>SQLAlchemy Expression Language 展示了一个表现关系数据库结构和使用 Python 构建的表达式系统。 Python 构建被模仿来尽可能的接近底层数据库，但在不同数据库后端的实现上提供了一些抽象。尽管这个构建尝试在不同的后端间用一致的结构来表示相同的概念，但不能隐藏在不同后端间的特定概念。因此 Expression Language 展示了一个撰写后端中立的 SQL 表达式，但并不强制要表达式后端中立的。</p>
+<p>Expression Language 和 ORM 形成了对照，ORM 是构建在 Expression Language 上的一个 API。ORM 是一个高级和抽象的使用模式，也是一个 Expression Language 的实际应用。</p>
+<p>在 Expression Language 和 ORM 的使用模式上会有重叠的地方，第一眼看起来可能会觉得非常相似。ORM 通过 <em>用户dkyid域MODEl</em> 来组织数据的内容，这个 model 透明的持久化并被底层的存储 MOdel更新。Expression Language 从字面的 schem 和 SQL 表达式来组织数据的内容。</p>
+<h2 id="版本检查"><a href="#版本检查" class="headerlink" title="版本检查"></a>版本检查</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> sqlalchemy</span><br><span class="line">sqlalchemy.__version__</span><br></pre></td></tr></table></figure>
+<h2 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h2><p>这里我们只使用 SQLite 内存库。这会简化我们的操作。要连接我们使用  <code>create_engine</code></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> create_engine</span><br><span class="line">engine = create_engine(<span class="string">'sqlite:///:memory:'</span>, echo=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p><em>echo</em> 标志是设置 SQLALchemy 日志（通过 Python 的标准 <em>logging</em> 模块实现）的快速方式。开了这个，我们可以看到所有的产生的 SQL。</p>
+<p><code>create_engine</code> 返回的是一个 <em>Engine</em> 实例，代表了到数据库的核心接口，通过操纵数据库细节和DBAPI的 <em>dialect</em> 来适配。在这个例子中，SQLite dialect 将会解释到 Python 内建的 <em>sqlite3</em> 模块。</p>
+<p>当第一次执行类似 <code>Engine.execute, Engine.connect</code> 这样的方法时，<em>Engine</em> 才会真正建立与数据库的 DBAPI 连接。</p>
+<h2 id="定义和建立表"><a href="#定义和建立表" class="headerlink" title="定义和建立表"></a>定义和建立表</h2><p>SQL Expression Language 大多数时候通过表的列来构建表达式。在 SQLALchemy 中，列常通过对象 <em>Column</em> 来表示，而 <em>Column</em> 与 <em>Table</em> 相关联。一系列的 <em>Table</em> 与他们相关的子对象被叫做 <strong>数据库 metadata</strong>。这个例子中我们就用到了几个表对象，但实际上 SA 可以导入一个数据库的所有表（叫做表反射）。</p>
+<p>我们在一个 <em>Metadata</em> 内定义我们的表，使用 <em>Table</em> 来构建，这将会生成常规的 <code>CREATE TABLE</code> 语句。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> Table, Column, Integer, String, MetaData, ForeignKey</span><br><span class="line">metadata = MetaData()</span><br><span class="line">users = Table(<span class="string">'users'</span>, metadata,</span><br><span class="line">     Column(<span class="string">'id'</span>, Integer, primary_key=<span class="literal">True</span>),</span><br><span class="line">     Column(<span class="string">'name'</span>, String),</span><br><span class="line">     Column(<span class="string">'fullname'</span>, String),</span><br><span class="line"> )</span><br><span class="line"></span><br><span class="line">addresses = Table(<span class="string">'addresses'</span>, metadata,</span><br><span class="line">   Column(<span class="string">'id'</span>, Integer, primary_key=<span class="literal">True</span>),</span><br><span class="line">   Column(<span class="string">'user_id'</span>, <span class="literal">None</span>, ForeignKey(<span class="string">'users.id'</span>)),</span><br><span class="line">   Column(<span class="string">'email_address'</span>, String, nullable=<span class="literal">False</span>)</span><br><span class="line">  )</span><br></pre></td></tr></table></figure>
+<p>选择就是告诉 <em>Metadata</em> 我们需要建立表了。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">metadata.create_all(engine)</span><br></pre></td></tr></table></figure>
+<p>输出:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">2021-02-05 08:55:17,545 INFO sqlalchemy.engine.base.Engine SELECT CAST(&apos;test plain returns&apos; AS VARCHAR(60)) AS anon_1</span><br><span class="line">2021-02-05 08:55:17,545 INFO sqlalchemy.engine.base.Engine ()</span><br><span class="line">2021-02-05 08:55:17,545 INFO sqlalchemy.engine.base.Engine SELECT CAST(&apos;test unicode returns&apos; AS VARCHAR(60)) AS anon_1</span><br><span class="line">2021-02-05 08:55:17,545 INFO sqlalchemy.engine.base.Engine ()</span><br><span class="line">2021-02-05 08:55:17,546 INFO sqlalchemy.engine.base.Engine PRAGMA main.table_info(&quot;users&quot;)</span><br><span class="line">2021-02-05 08:55:17,546 INFO sqlalchemy.engine.base.Engine ()</span><br><span class="line">2021-02-05 08:55:17,546 INFO sqlalchemy.engine.base.Engine PRAGMA temp.table_info(&quot;users&quot;)</span><br><span class="line">2021-02-05 08:55:17,547 INFO sqlalchemy.engine.base.Engine ()</span><br><span class="line">2021-02-05 08:55:17,547 INFO sqlalchemy.engine.base.Engine PRAGMA main.table_info(&quot;addresses&quot;)</span><br><span class="line">2021-02-05 08:55:17,547 INFO sqlalchemy.engine.base.Engine ()</span><br><span class="line">2021-02-05 08:55:17,547 INFO sqlalchemy.engine.base.Engine PRAGMA temp.table_info(&quot;addresses&quot;)</span><br><span class="line">2021-02-05 08:55:17,547 INFO sqlalchemy.engine.base.Engine ()</span><br><span class="line">2021-02-05 08:55:17,548 INFO sqlalchemy.engine.base.Engine</span><br><span class="line">CREATE TABLE users (</span><br><span class="line">	id INTEGER NOT NULL,</span><br><span class="line">	name VARCHAR,</span><br><span class="line">	fullname VARCHAR,</span><br><span class="line">	PRIMARY KEY (id)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2021-02-05 08:55:17,548 INFO sqlalchemy.engine.base.Engine ()</span><br><span class="line">2021-02-05 08:55:17,548 INFO sqlalchemy.engine.base.Engine COMMIT</span><br><span class="line">2021-02-05 08:55:17,548 INFO sqlalchemy.engine.base.Engine</span><br><span class="line">CREATE TABLE addresses (</span><br><span class="line">	id INTEGER NOT NULL,</span><br><span class="line">	user_id INTEGER,</span><br><span class="line">	email_address VARCHAR NOT NULL,</span><br><span class="line">	PRIMARY KEY (id),</span><br><span class="line">	FOREIGN KEY(user_id) REFERENCES users (id)</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">2021-02-05 08:55:17,549 INFO sqlalchemy.engine.base.Engine ()</span><br><span class="line">2021-02-05 08:55:17,549 INFO sqlalchemy.engine.base.Engine COMMIT</span><br></pre></td></tr></table></figure>
+<h2 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ins = users.insert()</span><br><span class="line">str(ins)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&apos;INSERT INTO users (id, name, fullname) VALUES (:id, :name, :fullname)&apos;</span><br></pre></td></tr></table></figure>
+<p>我们可以插入指定字段：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ins = users.insert().values(name=<span class="string">'jack'</span>, fullname=<span class="string">'Jack Jones'</span>)</span><br><span class="line">str(ins)</span><br><span class="line"><span class="string">'INSERT INTO users (name, fullname) VALUES (:name, :fullname)'</span></span><br></pre></td></tr></table></figure>
+<p>上面 <code>valus</code> 方法限制了 VALUES 语句到两个列上，我们实际放入的值并没有渲染到字符串中，我们得到的是绑定变量。这就证明，我们的数据是存储在 <em>Insert</em> 构建中，但典型的是在语句真正执行后才会打印出来；因为数据是由字面值组成，SQLALchemy 自动的对他们生成了绑定变量。我们可以就一下编译后的格式来查看数据。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="string">'name'</span>: <span class="string">'jack'</span>, <span class="string">'fullname'</span>: <span class="string">'Jack Jones'</span>&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h2><p><em>Insert</em> 的有意义部分在于执行它。在这个例子中，我们关注于显式执行一个 SQL 构建的方法，后面会关注一些更简单的方式。<em>engine</em> 对象是一个数据库连接资源并能向数据库提交 SQL。使用 <em>Engine.connect</em> 来获取一个数据库连接：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conn = engine.connect()</span><br><span class="line">conn</span><br><span class="line">&lt;sqlalchemy.engine.base.Connection object at <span class="number">0x10e067fd0</span>&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = conn.execute(ins)</span><br><span class="line">2021-02-05 09:03:44,526 INFO sqlalchemy.engine.base.Engine INSERT INTO users (name, fullname) VALUES (?, ?)</span><br><span class="line"><span class="number">2021</span><span class="number">-02</span><span class="number">-05</span> <span class="number">09</span>:<span class="number">03</span>:<span class="number">44</span>,<span class="number">526</span> INFO sqlalchemy.engine.base.Engine (<span class="string">'jack'</span>, <span class="string">'Jack Jones'</span>)</span><br><span class="line"><span class="number">2021</span><span class="number">-02</span><span class="number">-05</span> <span class="number">09</span>:<span class="number">03</span>:<span class="number">44</span>,<span class="number">526</span> INFO sqlalchemy.engine.base.Engine COMMIT</span><br></pre></td></tr></table></figure>
+<p>现在 INSERT 语句提交到数据库了。但我们先得到的是 <code>?</code> 而不是命名的绑定变量。为何？因为在执行时，<em>Connection</em> 使用 SQLite 的 <strong>dialect</strong> 来帮助生成语句；而当我们使用 <code>str()</code> 的时候，这个语句并不知道 dialect ，因此回退到使用默认的命名参数。我们可以通过手动来查看：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ins.bind = engine</span><br><span class="line">str(ins)</span><br><span class="line"><span class="string">'INSERT INTO users (name, fullname) VALUES (?, ?)'</span></span><br></pre></td></tr></table></figure>
+<p>那么 <em>result</em> 又是什么样的呢？<em>Connection</em> 对象引用一个 DBAPI 连接，这个结果，<em>ResultProxy</em>，类似于 DBAPI 游标对象。在 INSERT 的情况下，我们可以获取重要的信息比如主键：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result.inserted_primary_key</span><br><span class="line">[<span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<p>主键 1 是 SQLite 自动生成的，但这只是我们没有指定 <code>id</code> 列在 <em>Insert</em> 语句的情况下。SQLALchemy 总是知道如何获取一个新生成的主键值，即使在不同的数据库间获取的方式并不相同；因为每个数据库的 <em>Dialect</em> 知道获取正确值的特定步骤（注意 <em>ReslultProxy.inserted_primary_key</em> 返回的是一个列表，这可以支持组合的主键）。这些方法，从使用<code>cursor.lastrowid</code> 到选择一个数据库特定的函数，到使用 <code>INSERT .. RETURING</code> 语法，这些都是透明的。</p>
+<h2 id="执行多个语句"><a href="#执行多个语句" class="headerlink" title="执行多个语句"></a>执行多个语句</h2><p>上面的例子对于显示 expression language 构建的多种行为有点不够。通常，<em>Insert</em> 会与参数一起编译后送到 <em>Connection</em> 的 <em>execute</em> 方法，这里就没必要使用 <em>values</em> 关键词了。现在我们建立一个通用的 <em>Insert</em> 语句，并进行通常的使用方式：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">ins = users.insert()</span><br><span class="line">conn.execute(ins, id=<span class="number">2</span>, name=<span class="string">'wendy'</span>, fullname=<span class="string">'Wendy Williams'</span>)</span><br><span class="line">2021-02-05 09:15:52,805 INFO sqlalchemy.engine.base.Engine INSERT INTO users (id, name, fullname) VALUES (?, ?, ?)</span><br><span class="line"><span class="number">2021</span><span class="number">-02</span><span class="number">-05</span> <span class="number">09</span>:<span class="number">15</span>:<span class="number">52</span>,<span class="number">806</span> INFO sqlalchemy.engine.base.Engine (<span class="number">2</span>, <span class="string">'wendy'</span>, <span class="string">'Wendy Williams'</span>)</span><br><span class="line"><span class="number">2021</span><span class="number">-02</span><span class="number">-05</span> <span class="number">09</span>:<span class="number">15</span>:<span class="number">52</span>,<span class="number">806</span> INFO sqlalchemy.engine.base.Engine COMMIT</span><br><span class="line">&lt;sqlalchemy.engine.result.ResultProxy object at <span class="number">0x10e08e710</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>要执行多个插入的话，我们使用 DBAPI 的 <code>executemany</code> 方法，我们可以发送一个字典列表，每个字典包含了一系列需要插入的参数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">conn.execute(addresses.insert(), [</span><br><span class="line">   &#123;<span class="string">'user_id'</span>: <span class="number">1</span>, <span class="string">'email_address'</span> : <span class="string">'jack@yahoo.com'</span>&#125;,</span><br><span class="line">   &#123;<span class="string">'user_id'</span>: <span class="number">1</span>, <span class="string">'email_address'</span> : <span class="string">'jack@msn.com'</span>&#125;,</span><br><span class="line">   &#123;<span class="string">'user_id'</span>: <span class="number">2</span>, <span class="string">'email_address'</span> : <span class="string">'www@www.org'</span>&#125;,</span><br><span class="line">   &#123;<span class="string">'user_id'</span>: <span class="number">2</span>, <span class="string">'email_address'</span> : <span class="string">'wendy@aol.com'</span>&#125;,</span><br><span class="line">])</span><br><span class="line">2021-02-05 09:17:32,799 INFO sqlalchemy.engine.base.Engine INSERT INTO addresses (user_id, email_address) VALUES (?, ?)</span><br><span class="line"><span class="number">2021</span><span class="number">-02</span><span class="number">-05</span> <span class="number">09</span>:<span class="number">17</span>:<span class="number">32</span>,<span class="number">799</span> INFO sqlalchemy.engine.base.Engine ((<span class="number">1</span>, <span class="string">'jack@yahoo.com'</span>), (<span class="number">1</span>, <span class="string">'jack@msn.com'</span>), (<span class="number">2</span>, <span class="string">'www@www.org'</span>), (<span class="number">2</span>, <span class="string">'wendy@aol.com'</span>))</span><br><span class="line"><span class="number">2021</span><span class="number">-02</span><span class="number">-05</span> <span class="number">09</span>:<span class="number">17</span>:<span class="number">32</span>,<span class="number">799</span> INFO sqlalchemy.engine.base.Engine COMMIT</span><br><span class="line">&lt;sqlalchemy.engine.result.ResultProxy object at <span class="number">0x10e08ebd0</span>&gt;</span><br></pre></td></tr></table></figure>
+<p>当执行多个参数集时，每个字典必须有相同的键集合。这是因为，<em>Insert</em> 语句会和第一个字段进行编译，并假设所有接下来的参数字典都与此语句兼容。</p>
+<p>类似 <code>executemany</code> 风格的调用对每个 <code>insert(), update(), delete()</code> 都可用。</p>
+<h2 id="选择"><a href="#选择" class="headerlink" title="选择"></a>选择</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.sql <span class="keyword">import</span> select</span><br><span class="line">s = select([users])</span><br><span class="line">result = conn.execute(s)</span><br><span class="line"><span class="number">2021</span><span class="number">-02</span><span class="number">-05</span> <span class="number">09</span>:<span class="number">20</span>:<span class="number">06</span>,<span class="number">092</span> INFO sqlalchemy.engine.base.Engine SELECT users.id, users.name, users.fullname</span><br><span class="line">FROM users</span><br><span class="line"><span class="number">2021</span><span class="number">-02</span><span class="number">-05</span> <span class="number">09</span>:<span class="number">20</span>:<span class="number">06</span>,<span class="number">092</span> INFO sqlalchemy.engine.base.Engine ()</span><br></pre></td></tr></table></figure>
+<p>上面例子中，我们使用了 <code>select()</code>，不过我们将 <code>users</code> 表放到了列参数位置，并进行执行。SQLALchemy 会将表扩展为它的列集合，然后生成一个 FROM 语句。返回的结果再次是一个 <em>ResultProxy</em> 对象，类似 DBAPI 的游标，包含了如 <code>fetchone(), fetchall()</code> 等dhfa。这些方法返回 行对象，通过 <em>RowProxy</em> 类提供。 <em>result</em> 对象可以直接遍历：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> result:</span><br><span class="line">  print(row)</span><br><span class="line">(<span class="number">1</span>, <span class="string">'jack'</span>, <span class="string">'Jack Jones'</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="string">'wendy'</span>, <span class="string">'Wendy Williams'</span>)</span><br></pre></td></tr></table></figure>
+<p>我们看到，每个 <em>RowProxy</em> 产生一个类似元组的结果。<em>RowProxy</em> 行为就像一个 Python 字典和元组的混合，但包含了几个获取每个列的方法。一个方法就是使用 Python 的字典访问语法，使用列表：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = conn.execute(s)</span><br><span class="line">row = result.fetchone()</span><br><span class="line">print(<span class="string">"name:"</span>, row[<span class="string">'name'</span>], <span class="string">"; fullname:"</span>, row[<span class="string">'fullname'</span>])</span><br><span class="line">name: jack ; fullname: Jack Jones</span><br></pre></td></tr></table></figure>
+<p>再就是使用 Python 的序列方式，整型索引：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">row = result.fetchone()</span><br><span class="line">print(<span class="string">"name:"</span>, row[<span class="number">1</span>], <span class="string">"; fullname:"</span>, row[<span class="number">2</span>])</span><br><span class="line">name: wendy ; fullname: Wendy Williams</span><br></pre></td></tr></table></figure>
+<p>一个更特殊的列访问方法是使用直接对应到一个特定列的 SQL 构建作为字典键；</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> conn.execute(s):</span><br><span class="line">    print(<span class="string">"name:"</span>, row[users.c.name], <span class="string">"; fullname:"</span>, row[users.c.fullname])</span><br><span class="line"><span class="number">2021</span><span class="number">-02</span><span class="number">-05</span> <span class="number">09</span>:<span class="number">28</span>:<span class="number">28</span>,<span class="number">761</span> INFO sqlalchemy.engine.base.Engine SELECT users.id, users.name, users.fullname</span><br><span class="line">FROM users</span><br><span class="line"><span class="number">2021</span><span class="number">-02</span><span class="number">-05</span> <span class="number">09</span>:<span class="number">28</span>:<span class="number">28</span>,<span class="number">761</span> INFO sqlalchemy.engine.base.Engine ()</span><br><span class="line">name: jack ; fullname: Jack Jones</span><br><span class="line">name: wendy ; fullname: Wendy Williams</span><br></pre></td></tr></table></figure>
+<p><em>ResultProxy</em> 的自动关闭行为 会在所有挂起的结果行被取走后关闭 DBAPI 的 <em>cursor</em>  对象。如果在还有数据时我们想要关闭，可以手动：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result.close()</span><br></pre></td></tr></table></figure>
+<h3 id="特定行选择"><a href="#特定行选择" class="headerlink" title="特定行选择"></a>特定行选择</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = select([users.c.name, users.c.fullname])</span><br><span class="line">result = conn.execute(s)</span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> result:</span><br><span class="line">     print(row)</span><br><span class="line">    </span><br><span class="line"><span class="number">2021</span><span class="number">-02</span><span class="number">-05</span> <span class="number">09</span>:<span class="number">32</span>:<span class="number">20</span>,<span class="number">303</span> INFO sqlalchemy.engine.base.Engine SELECT users.name, users.fullname</span><br><span class="line">FROM users</span><br><span class="line"><span class="number">2021</span><span class="number">-02</span><span class="number">-05</span> <span class="number">09</span>:<span class="number">32</span>:<span class="number">20</span>,<span class="number">303</span> INFO sqlalchemy.engine.base.Engine ()</span><br></pre></td></tr></table></figure>
+<p>我们观察一下 FROM。生成的语句中包含两个唯一的区域，SELECT 的列 和 FROM 的表，我们的 <code>select</code> 只有一个列的序列。这是如何工作的。我们放两个表到 <code>select</code> 中去：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> conn.execute(select([users, addresses])):</span><br><span class="line">    print(row)</span><br><span class="line">    </span><br><span class="line">(<span class="number">1</span>, <span class="string">'jack'</span>, <span class="string">'Jack Jones'</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="string">'jack@yahoo.com'</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="string">'jack'</span>, <span class="string">'Jack Jones'</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="string">'jack@msn.com'</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="string">'jack'</span>, <span class="string">'Jack Jones'</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="string">'www@www.org'</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="string">'jack'</span>, <span class="string">'Jack Jones'</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="string">'wendy@aol.com'</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="string">'wendy'</span>, <span class="string">'Wendy Williams'</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="string">'jack@yahoo.com'</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="string">'wendy'</span>, <span class="string">'Wendy Williams'</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="string">'jack@msn.com'</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="string">'wendy'</span>, <span class="string">'Wendy Williams'</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="string">'www@www.org'</span>)</span><br><span class="line">(<span class="number">2</span>, <span class="string">'wendy'</span>, <span class="string">'Wendy Williams'</span>, <span class="number">4</span>, <span class="number">2</span>, <span class="string">'wendy@aol.com'</span>)</span><br></pre></td></tr></table></figure>
+<p>这将两个表都放到了 FROM 中。但是，也混乱了起来。这和 SQL 的 join 相似，做了一个笛卡尔积。因此，我们需要一个 WHERE。我们通过 <code>Select.where</code> 来实现：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">s = select([users, addresses]).where(users.c.id == addresses.c.user_id)</span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> conn.execute(s):</span><br><span class="line">     print(row)</span><br></pre></td></tr></table></figure>
+<p><code>users.c.id == addresses.c.user_id</code> 只是简单使用了 Python 的 <code>==</code> 操作符在列上，但这不是应该返回  True 或者  False 么？</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">users.c.id == addresses.c.user_id</span><br><span class="line">&lt;sqlalchemy.sql.elements.BinaryExpression object at <span class="number">0x10e08e290</span>&gt;</span><br><span class="line">str(users.c.id == addresses.c.user_id)</span><br><span class="line"><span class="string">'users.id = addresses.user_id'</span></span><br></pre></td></tr></table></figure>
+<p>这是因为 <code>__eq__()</code>  的重载了。</p>
+<h2 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h2><h1 id="表映射"><a href="#表映射" class="headerlink" title="表映射"></a>表映射</h1><p>SQLAlchemy 历史上有两种风格的表映射。原来的映射 API 通常被叫做 ‘传统风格’，现在更自动的被叫做 ‘声明式’ 风格。SQLAlchemy 把它们叫做 <strong>命令式映射</strong> 和 <strong>声明式映射</strong>。</p>
+<p>两种风格可以交换使用，且结果相同：一个用户定义的类，它拥有一个 Mapper 配置到一个可选择的单元，通常，用一个 <code>Table</code> 对象表示。</p>
+<p>声明和命令式的映射都以一个 ORM 的 <code>registry</code> 对象开始，它维护了一系列被映射的类。所有的映射都会存在这个 <code>registry</code>。</p>
+<h2 id="声明式"><a href="#声明式" class="headerlink" title="声明式"></a>声明式</h2><p>当前，声明式是最典型的用法。最常用的形式是：首先用 <code>declarative_base()</code> 函数来构造一个基类，这将会从其衍生的所有子类应用声明映射过程。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> Column, Integer, String, ForeignKey</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> declarative_base</span><br><span class="line"></span><br><span class="line"><span class="comment"># declarative base class</span></span><br><span class="line">Base = declarative_base()</span><br><span class="line"></span><br><span class="line"><span class="comment"># an example mapping using the base</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span><span class="params">(Base)</span>:</span></span><br><span class="line">    __tablename__ = <span class="string">'user'</span></span><br><span class="line"></span><br><span class="line">    id = Column(Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    name = Column(String)</span><br><span class="line">    fullname = Column(String)</span><br><span class="line">    nickname = Column(String)</span><br></pre></td></tr></table></figure>
+<p>基类引用了一个维护一系列相关映射类的 <code>registry</code> 对象。<code>declarative_base()</code> 实际上可以看成是首先构造 <code>registry</code>，然后调用生成基类方法：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> registry</span><br><span class="line"></span><br><span class="line"><span class="comment"># equivalent to Base = declarative_base()</span></span><br><span class="line"></span><br><span class="line">mapper_registry = registry()</span><br><span class="line">Base = mapper_registry.generate_base()</span><br></pre></td></tr></table></figure>
+<p>直接应用 <code>registry</code> 来访问不同使用场景下的多种映射形式。</p>
+<ul>
+<li><a href="#orm-declarative-decorator">Declarative Mapping using a Decorator (no declarative base)</a> - declarative mapping using a decorator, rather than a base class.</li>
+<li><a href="#orm-imperative-mapping">Imperative (a.k.a. Classical) Mappings</a> - imperative mapping, specifying all mapping arguments directly rather than scanning a class.</li>
+</ul>
+<h2 id="反射表"><a href="#反射表" class="headerlink" title="反射表"></a>反射表</h2><p>一个简单的使用将一个从数据库反射出来的表到一个类的方法是使用混合映射，将 <code>Table.autoload_with</code> 传递到 <code>Table</code>。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">engine = create_engine(<span class="string">"postgresql://user:pass@hostname/my_existing_database"</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyClass</span><span class="params">(Base)</span>:</span></span><br><span class="line">    __table__ = Table(</span><br><span class="line">        <span class="string">'mytable'</span>,</span><br><span class="line">        Base.metadata,</span><br><span class="line">        autoload_with=engine</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p>上面这个例子的劣势在于，它期待一个活跃的数据库连接。</p>
+<h3 id="延迟反射"><a href="#延迟反射" class="headerlink" title="延迟反射"></a>延迟反射</h3><p>为了解决上面的情况，一个叫 <code>DeferredReflection</code> 的扩展可用，这将推迟到一个显示的 <code>DeferredReflection.prepare()</code> 被调用的时候再执行映射。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> declarative_base</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.declarative <span class="keyword">import</span> DeferredReflection</span><br><span class="line"></span><br><span class="line">Base = declarative_base()</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Reflected</span><span class="params">(DeferredReflection)</span>:</span></span><br><span class="line">    __abstract__ = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(Reflected, Base)</span>:</span></span><br><span class="line">    __tablename__ = <span class="string">'foo'</span></span><br><span class="line">    bars = relationship(<span class="string">"Bar"</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar</span><span class="params">(Reflected, Base)</span>:</span></span><br><span class="line">    __tablename__ = <span class="string">'bar'</span></span><br><span class="line"></span><br><span class="line">    foo_id = Column(Integer, ForeignKey(<span class="string">'foo.id'</span>))</span><br><span class="line">engine = create_engine(<span class="string">"postgresql://user:pass@hostname/my_existing_database"</span>)</span><br><span class="line">Reflected.prepare(engine)</span><br></pre></td></tr></table></figure>
+<h2 id="自动映射"><a href="#自动映射" class="headerlink" title="自动映射"></a>自动映射</h2><p>为 <code>sqlalchemy.ext.declarative</code> 定义了一个扩展来自动的生成映射类和关系表。</p>
+<h3 id="基本应用"><a href="#基本应用" class="headerlink" title="基本应用"></a>基本应用</h3><p>最简单的用法是将数据库反射到一个新的 Model，我们使用  <code>automap_base()</code> 来生成一个基类，然后调用  <code>AutomapBase.prepare()</code> 来让它进行反射被产生映射表：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy.ext.automap <span class="keyword">import</span> automap_base</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.orm <span class="keyword">import</span> Session</span><br><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> create_engine</span><br><span class="line"></span><br><span class="line">Base = automap_base()</span><br><span class="line"></span><br><span class="line"><span class="comment"># engine, suppose it has two tables 'user' and 'address' set up</span></span><br><span class="line">engine = create_engine(<span class="string">"sqlite:///mydatabase.db"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># reflect the tables</span></span><br><span class="line">Base.prepare(engine, reflect=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># mapped classes are now created with names by default</span></span><br><span class="line"><span class="comment"># matching that of the table name.</span></span><br><span class="line">User = Base.classes.user</span><br><span class="line">Address = Base.classes.address</span><br><span class="line"></span><br><span class="line">session = Session(engine)</span><br><span class="line"></span><br><span class="line"><span class="comment"># rudimentary relationships are produced</span></span><br><span class="line">session.add(Address(email_address=<span class="string">"foo@bar.com"</span>, user=User(name=<span class="string">"foo"</span>)))</span><br><span class="line">session.commit()</span><br><span class="line"></span><br><span class="line"><span class="comment"># collection-based relationships are by default named</span></span><br><span class="line"><span class="comment"># "&lt;classname&gt;_collection"</span></span><br><span class="line"><span class="keyword">print</span> (u1.address_collection)</span><br></pre></td></tr></table></figure>
+<h3 id="从-MetaData-生成映射"><a href="#从-MetaData-生成映射" class="headerlink" title="从 MetaData 生成映射"></a>从 MetaData 生成映射</h3><p>我们可以传递一个预定义的 <code>MetaData</code> 对象到 <code>automap_base()</code>。这个对象可以用多种方式来构造：通过代码、序列化文件或者是从使用  <code>MetaData.reflect()</code> 得来的结果。下面我们会展示一下反射和显式表声明：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> sqlalchemy <span class="keyword">import</span> create_engine, MetaData, Table, Column, ForeignKey</span><br><span class="line"><span class="keyword">from</span> sqlalchemy.ext.automap <span class="keyword">import</span> automap_base</span><br><span class="line">engine = create_engine(<span class="string">"sqlite:///mydatabase.db"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># produce our own MetaData object</span></span><br><span class="line">metadata = MetaData()</span><br><span class="line"></span><br><span class="line"><span class="comment"># we can reflect it ourselves from a database, using options</span></span><br><span class="line"><span class="comment"># such as 'only' to limit what tables we look at...</span></span><br><span class="line">metadata.reflect(engine, only=[<span class="string">'user'</span>, <span class="string">'address'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># ... or just define our own Table objects with it (or combine both)</span></span><br><span class="line">Table(<span class="string">'user_order'</span>, metadata,</span><br><span class="line">                Column(<span class="string">'id'</span>, Integer, primary_key=<span class="literal">True</span>),</span><br><span class="line">                Column(<span class="string">'user_id'</span>, ForeignKey(<span class="string">'user.id'</span>))</span><br><span class="line">            )</span><br><span class="line"></span><br><span class="line"><span class="comment"># we can then produce a set of mappings from this MetaData.</span></span><br><span class="line">Base = automap_base(metadata=metadata)</span><br><span class="line"></span><br><span class="line"><span class="comment"># calling prepare() just sets up mapped classes and relationships.</span></span><br><span class="line">Base.prepare()</span><br><span class="line"></span><br><span class="line"><span class="comment"># mapped classes are ready</span></span><br><span class="line">User, Address, Order = Base.classes.user, Base.classes.address,\</span><br><span class="line">    Base.classes.user_order</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/SQLAlchemy/" rel="tag"># SQLAlchemy</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/Linux-Unix/POSIX头文件描述.html" rel="next" title="POSIX头文件描述">
+                  <i class="fa fa-chevron-left"></i> POSIX头文件描述
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/Cpp/tcpdump源代码阅读记录.html" rel="prev" title="tcpdump源代码阅读记录">
+                  tcpdump源代码阅读记录 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments" id="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#架构"><span class="nav-number">1.</span> <span class="nav-text">架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SQL-Expression-Language"><span class="nav-number">2.</span> <span class="nav-text">SQL Expression Language</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#版本检查"><span class="nav-number">2.1.</span> <span class="nav-text">版本检查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接"><span class="nav-number">2.2.</span> <span class="nav-text">连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定义和建立表"><span class="nav-number">2.3.</span> <span class="nav-text">定义和建立表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入"><span class="nav-number">2.4.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行"><span class="nav-number">2.5.</span> <span class="nav-text">执行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行多个语句"><span class="nav-number">2.6.</span> <span class="nav-text">执行多个语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#选择"><span class="nav-number">2.7.</span> <span class="nav-text">选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特定行选择"><span class="nav-number">2.7.1.</span> <span class="nav-text">特定行选择</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作符"><span class="nav-number">2.8.</span> <span class="nav-text">操作符</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#表映射"><span class="nav-number">3.</span> <span class="nav-text">表映射</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#声明式"><span class="nav-number">3.1.</span> <span class="nav-text">声明式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#反射表"><span class="nav-number">3.2.</span> <span class="nav-text">反射表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#延迟反射"><span class="nav-number">3.2.1.</span> <span class="nav-text">延迟反射</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自动映射"><span class="nav-number">3.3.</span> <span class="nav-text">自动映射</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本应用"><span class="nav-number">3.3.1.</span> <span class="nav-text">基本应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#从-MetaData-生成映射"><span class="nav-number">3.3.2.</span> <span class="nav-text">从 MetaData 生成映射</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Gowa2017 Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">388</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">164</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="feed-link motion-element">
+    <a href="/atom.xml" rel="alternate">
+      <i class="fa fa-rss"></i>RSS
+    </a>
+  </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/gowa2017" title="GitHub → https://github.com/gowa2017" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:shouzheng.zhang@gmail.com" title="E-Mail → mailto:shouzheng.zhang@gmail.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-json"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Gowa2017 Zhang</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> v3.9.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">Theme – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> v7.5.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+  
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.css">
+<script src="//cdn.jsdelivr.net/npm/instantsearch.js@2/dist/instantsearch.min.js"></script><script src="/js/algolia-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://gowa-1.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  function loadComments() {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: {page: {
+            url: "https://gowa.club/Python/Sqlalchemy统一进行数据库连接操作.html",
+            identifier: "Python/Sqlalchemy统一进行数据库连接操作.html",
+            title: "SQLAlchemy统一进行数据库连接操作"
+          }
+        }
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://gowa-1.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  }
+    window.addEventListener('load', loadComments, false);
+</script>
+
+</body>
+</html>

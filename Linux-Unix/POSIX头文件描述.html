@@ -721,7 +721,25 @@
 </tbody>
 </table>
 </div>
-<h1 id="网络编程相关的几个头文件"><a href="#网络编程相关的几个头文件" class="headerlink" title="网络编程相关的几个头文件"></a>网络编程相关的几个头文件</h1><div class="language-dot">
+<h1 id="网络编程相关的几个头文件"><a href="#网络编程相关的几个头文件" class="headerlink" title="网络编程相关的几个头文件"></a>网络编程相关的几个头文件</h1><ul>
+<li><p><code>arpa/inet.h</code> 网络操作的定义。主要定义几个函数：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">uint32_t</span> htonl(<span class="keyword">uint32_t</span>);</span><br><span class="line"><span class="keyword">uint16_t</span> htons(<span class="keyword">uint16_t</span>);</span><br><span class="line"><span class="keyword">uint32_t</span> ntohl(<span class="keyword">uint32_t</span>);</span><br><span class="line"><span class="keyword">uint16_t</span> ntohs(<span class="keyword">uint16_t</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">in_addr_t</span>    inet_addr(<span class="keyword">const</span> <span class="keyword">char</span> *);</span><br><span class="line"><span class="function"><span class="keyword">char</span>        *<span class="title">inet_ntoa</span><span class="params">(struct in_addr)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="keyword">char</span>  *<span class="title">inet_ntop</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">const</span> <span class="keyword">void</span> *<span class="keyword">restrict</span>, <span class="keyword">char</span> *<span class="keyword">restrict</span>,</span></span></span><br><span class="line"><span class="function"><span class="params">                 <span class="keyword">socklen_t</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span>          <span class="title">inet_pton</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span>, <span class="keyword">void</span> *<span class="keyword">restrict</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p><code>net/if.h</code> 套接字本地接口，但是一般我们都不会用这个。</p>
+</li>
+<li><p><code>netinet/in.h</code> 网络地址族。定义了和网络地址相关的内容如地址结构、端口结构等。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">in_port_t</span></span><br><span class="line"><span class="keyword">in_addr_t</span></span><br><span class="line"><span class="keyword">sa_family_t</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span>&#123;</span></span><br><span class="line">  <span class="keyword">in_addr_t</span>  s_addr</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span>&#123;</span></span><br><span class="line"><span class="keyword">sa_family_t</span>     sin_family   AF_INET. </span><br><span class="line"><span class="keyword">in_port_t</span>       sin_port     Port number. </span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">in_addr</span>  <span class="title">sin_addr</span>     <span class="title">IP</span> <span class="title">address</span>. </span></span><br><span class="line"><span class="class">&#125;</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">struct</span> <span class="title">in6_addr</span>&#123;</span></span><br><span class="line">  <span class="keyword">uint8_t</span> s6_addr[<span class="number">16</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in6</span>&#123;</span></span><br><span class="line"><span class="keyword">sa_family_t</span>      sin6_family    AF_INET6. </span><br><span class="line"><span class="keyword">in_port_t</span>        sin6_port      Port number. </span><br><span class="line"><span class="keyword">uint32_t</span>         sin6_flowinfo  IPv6 traffic <span class="class"><span class="keyword">class</span> <span class="title">and</span> <span class="title">flow</span> <span class="title">information</span>. </span></span><br><span class="line"><span class="class"><span class="title">struct</span> <span class="title">in6_addr</span>  <span class="title">sin6_addr</span>      <span class="title">IPv6</span> <span class="title">address</span>. </span></span><br><span class="line"><span class="class"><span class="title">uint32_t</span>         <span class="title">sin6_scope_id</span>  <span class="title">Set</span> <span class="title">of</span> <span class="title">interfaces</span> <span class="title">for</span> <span class="title">a</span> <span class="title">scope</span>. </span></span><br><span class="line"><span class="class">&#125;</span></span><br><span class="line"><span class="class">还会定义给 `<span class="title">setsockopt</span>()` `<span class="title">getsockopt</span>()` 使用的常量：</span></span><br><span class="line"><span class="class"><span class="title">IPPROTO_IP</span></span></span><br><span class="line"><span class="class"><span class="title">IPPROTO_IPV6</span></span></span><br><span class="line"><span class="class"><span class="title">IPPROTO_ICMP</span></span></span><br><span class="line"><span class="class"><span class="title">IPPROTO_RAW</span></span></span><br><span class="line"><span class="class"><span class="title">IPPROTO_TCP</span></span></span><br><span class="line"><span class="class"><span class="title">IPPROTO_UDP</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p><code>sys/socket.h</code> 套接字的主要头文件。</p>
+</li>
+<li><p><code>inttypes.h</code> 定义一些基本类型。</p>
+</li>
+</ul>
+<div class="language-dot">
 digraph{
 
   "arpa/inet.h"
@@ -737,6 +755,14 @@ digraph{
 }
 </div>
 <p>实际上，套接字相关的，我们只需要包含 <code>&lt;arpa/inet.h&gt;</code> 就行了哦。</p>
+<p>有几个比较蛋疼的结构：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Socket address, internet style.</span></span><br><span class="line"><span class="comment"> * 套接字地址，网络风格。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> &#123;</span></span><br><span class="line">	<span class="keyword">__uint8_t</span>       sin_len;</span><br><span class="line">	<span class="keyword">sa_family_t</span>     sin_family;</span><br><span class="line">	<span class="keyword">in_port_t</span>       sin_port;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span>  <span class="title">in_addr</span> <span class="title">sin_addr</span>;</span></span><br><span class="line">	<span class="keyword">char</span>            sin_zero[<span class="number">8</span>];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * [XSI] Structure used by kernel to store most addresses.</span></span><br><span class="line"><span class="comment"> * [XSI] 内核用来存储大多数地址的结构</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr</span> &#123;</span></span><br><span class="line">	<span class="keyword">__uint8_t</span>       sa_len;         <span class="comment">/* total length */</span></span><br><span class="line">	<span class="keyword">sa_family_t</span>     sa_family;      <span class="comment">/* [XSI] address family */</span></span><br><span class="line">	<span class="keyword">char</span>            sa_data[<span class="number">14</span>];    <span class="comment">/* [XSI] addr value (actually larger) */</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>sockaddr</code> 和 <code>sockaddr_in</code> 实际上字节数一样的，不过因为历史原因，内核用 <code>sockaddr</code> 来保存很多类型的地址，而不仅仅是网络地址，所以对于有些函数，我们必须得强制转换过去才能使用。</p>
+<p>一般情况下，我们如果要系统调用返回的结构都是 sockaddr 类型，传递的时候也需要传递这个类型，如：</p>
+<p><code>getaddrinfo</code> 返回的 <code>addrinfo</code> 结构中就是 <code>sockaddr</code> 结构，</p>
+<p><code>connect</code> 函数需要接收的也是一个 <code>sockaddr</code> 结构。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span></span><br><span class="line">     <span class="built_in">connect</span>(<span class="keyword">int</span> socket, <span class="keyword">const</span> struct sockaddr *address, <span class="keyword">socklen_t</span> address_len);</span><br></pre></td></tr></table></figure>
 <script src="https://unpkg.com/viz.js@2.1.2/viz.js"></script><script src="https://unpkg.com/viz.js@2.1.2/full.render.js"></script>                <script>
                 // graphviz init
                 let graphviz_engines = ["circo",
@@ -799,8 +825,8 @@ digraph{
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/Cpp/tcpdump源代码阅读记录.html" rel="prev" title="tcpdump源代码阅读记录">
-                  tcpdump源代码阅读记录 <i class="fa fa-chevron-right"></i>
+                <a href="/Python/Sqlalchemy统一进行数据库连接操作.html" rel="prev" title="SQLAlchemy统一进行数据库连接操作">
+                  SQLAlchemy统一进行数据库连接操作 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -861,7 +887,7 @@ digraph{
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">382</span>
+          <span class="site-state-item-count">388</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
